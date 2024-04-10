@@ -6,6 +6,7 @@ package buildcraft.lib.registry;
 
 import buildcraft.api.core.BCDebugging;
 import buildcraft.api.transport.pipe.IItemPipe;
+import buildcraft.core.BCCoreConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -141,12 +142,23 @@ public class RegistryConfig
     // Calen: Thread Safety
     private static ConcurrentHashMap<ModContainer, ModContainer> moduleConfigMapping = new ConcurrentHashMap<>();
 
+    // Calen
+    private static Map<ModContainer, Configuration> getModObjectConfigs()
+    {
+        // just ensure Core Config loaded
+        BCCoreConfig.getConfig(false);
+        // ret
+        return modObjectConfigs;
+    }
+
     private static boolean isEnabled(ModContainer activeMod, String category, String resourcePath, String langKey)
     {
-        Configuration config = modObjectConfigs.get(activeMod);
+//        Configuration config = modObjectConfigs.get(activeMod);
+        Configuration config = getModObjectConfigs().get(activeMod);
         if (config == null)
         {
-            config = modObjectConfigs.get(moduleConfigMapping.get(activeMod));
+//            config = modObjectConfigs.get(moduleConfigMapping.get(activeMod));
+            config = getModObjectConfigs().get(moduleConfigMapping.get(activeMod));
             if (config == null)
             {
                 throw new RuntimeException("No config exists for the mod " + activeMod.getModId());
