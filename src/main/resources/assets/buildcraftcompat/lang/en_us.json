@@ -1,0 +1,45 @@
+{
+    //###################
+    // APIARIST'S PIPE
+    //###################
+
+    "item.buildcraftPipe.pipeitemspropolis.name": "Apiarist's Pipe",
+
+    "for.gui.pipe.filter.anything": "Anything",
+    "for.gui.pipe.filter.bee": "Any Bees",
+    "for.gui.pipe.filter.cave": "Cave-Dwellers",
+    "for.gui.pipe.filter.closed": "Closed",
+    "for.gui.pipe.filter.drone": "Drones",
+    "for.gui.pipe.filter.flyer": "Strong Flyers",
+    "for.gui.pipe.filter.item": "Items",
+    "for.gui.pipe.filter.natural": "Natural Origin",
+    "for.gui.pipe.filter.nocturnal": "Nocturnal Bees",
+    "for.gui.pipe.filter.princess": "Princesses",
+    "for.gui.pipe.filter.pure_breed": "Pure-Bred Bees",
+    "for.gui.pipe.filter.pure_cave": "Pure Cave-Dwellers",
+    "for.gui.pipe.filter.pure_flyer": "Pure Flyers",
+    "for.gui.pipe.filter.pure_nocturnal": "Pure Nocturnal Bees",
+    "for.gui.pipe.filter.queen": "Queen",
+
+    "gate.trigger.mfr.backstuffed": "Has Drops",
+    "gate.trigger.mfr.conreversed": "Conveyor Reversed",
+    "gate.trigger.mfr.conrunning": "Conveyor Running",
+
+    // Calen 1.18.2
+    // JEI
+    "buildcraft.jei.title.heatable_fluids": "Heatable Fluids",
+    "buildcraft.jei.title.coolable_fluids": "Coolable Fluids",
+    "buildcraft.jei.title.distillable_fluids": "Distillable Fluids",
+    "buildcraft.jei.title.combustion_engine_fuels": "Combustion Engine Fuels",
+    "buildcraft.jei.title.combustion_engine_fuels.burn_time": "Burns for %ds",
+    "buildcraft.jei.title.combustion_engine_fuels.burn_speed": " at %s MJ/t",
+    "buildcraft.jei.title.combustion_engine_fuels.burn_total": " total %s MJ",
+
+    // Waila
+    "buildcraft.waila.crafting": "§fMaking: ",
+    "buildcraft.waila.no_recipe": "§7No recipe",
+    "buildcraft.waila.crafting_from": "§fFrom: ",
+    "buildcraft.waila.waiting_for_laser": "§fWaiting from laser: §b%s MJ",
+
+    "null": "=w="
+}

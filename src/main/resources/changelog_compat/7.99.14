@@ -1,0 +1,8 @@
+Additions:
+
+* Added a bee handler for lists.
+* Ported the apiarist's pipe (Thanks to Nedelosk for adding the relevent code to forestry)
+  * This is only present if forestry 5.7.0.236 or later is installed.
+  * This is *mostly* identical to forestry's new genetic filter, with a few exceptions:
+    * This pipe doesn't have a buffer.
+    * If a rule is "anything" then that direction has a lower priority.

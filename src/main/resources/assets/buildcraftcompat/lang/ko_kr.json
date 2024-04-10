@@ -1,0 +1,24 @@
+{
+    //###################
+    // APIARIST'S PIPE
+    //###################
+
+    "item.buildcraftPipe.pipeitemspropolis.name": "양봉업자의 파이프",
+
+    "for.gui.pipe.filter.anything": "모든 아이템과 벌을 통과",
+    "for.gui.pipe.filter.bee": "모든 벌들",
+    "for.gui.pipe.filter.cave": "동굴 속에서도 작업 가능",
+    "for.gui.pipe.filter.closed": "아이템을 받지 않음",
+    "for.gui.pipe.filter.drone": "일벌",
+    "for.gui.pipe.filter.flyer": "우천시에도 작업 가능",
+    "for.gui.pipe.filter.item": "아이템만",
+    "for.gui.pipe.filter.nocturnal": "야행성 벌",
+    "for.gui.pipe.filter.princess": "공주벌",
+    "for.gui.pipe.filter.pure_breed": "공주벌",
+    "for.gui.pipe.filter.pure_cave": "동굴 속에서도 작업 가능한 순종 벌",
+    "for.gui.pipe.filter.pure_flyer": "우천시에도 작업 가능한 순종 벌",
+    "for.gui.pipe.filter.pure_nocturnal": "순종 야행성 벌",
+    "for.gui.pipe.filter.queen": "여왕벌",
+
+    "null": "=w="
+}

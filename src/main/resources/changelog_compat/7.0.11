@@ -1,0 +1,10 @@
+Additions:
+
+* Support for Big Reactors reactors, turbines, etc. (asie)
+* Support for most of Factorization (excluding sculptures and hinges - including barrels though!) (asie)
+* Support for (small, single-block) parts of Immersive Engineering (connectors, structural arms, other minor things) (asie)
+* Support for RedLogic lamps and buttons (asie)
+
+Improvements:
+
+* Speed up Immibis' Microblocks builder support loading (asie)
