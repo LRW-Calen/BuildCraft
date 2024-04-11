@@ -27,10 +27,10 @@ public class BCLibRegistries
 {
     public static void fmlPreInit()
     {
-        BuildcraftRecipeRegistry.integrationRecipes = IntegrationRecipeRegistry.INSTANCE;
-        BuildcraftRecipeRegistry.refineryRecipes = RefineryRecipeRegistry.INSTANCE;
-        BuildcraftFuelRegistry.fuel = FuelRegistry.INSTANCE;
-        BuildcraftFuelRegistry.coolant = CoolantRegistry.INSTANCE;
+//        BuildcraftRecipeRegistry.integrationRecipes = IntegrationRecipeRegistry.INSTANCE;
+//        BuildcraftRecipeRegistry.refineryRecipes = RefineryRecipeRegistry.INSTANCE;
+//        BuildcraftFuelRegistry.fuel = FuelRegistry.INSTANCE;
+//        BuildcraftFuelRegistry.coolant = CoolantRegistry.INSTANCE;
         BuildCraftAPI.fakePlayerProvider = FakePlayerProvider.INSTANCE;
         PipeApi.pluggableRegistry = PluggableRegistry.INSTANCE;
 

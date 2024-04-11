@@ -30,11 +30,11 @@ public enum RefineryRecipeRegistry implements IRefineryRecipeManager
     INSTANCE;
 
     //    public final IRefineryRegistry<IDistillationRecipe> distillationRegistry = new SingleRegistry<>();
-    public final IRefineryRegistry<IDistillationRecipe> distillationRegistry = new SingleRegistry(DistillationRecipe.TYPE);
+    public final IRefineryRegistry<IDistillationRecipe> distillationRegistry = new SingleRegistry(IDistillationRecipe.TYPE);
     //    public final IRefineryRegistry<IHeatableRecipe> heatableRegistry = new SingleRegistry<>();
-    public final IRefineryRegistry<IHeatableRecipe> heatableRegistry = new SingleRegistry(HeatableRecipe.TYPE);
+    public final IRefineryRegistry<IHeatableRecipe> heatableRegistry = new SingleRegistry(IHeatableRecipe.TYPE);
     //    public final IRefineryRegistry<ICoolableRecipe> coolableRegistry = new SingleRegistry<>();
-    public final IRefineryRegistry<ICoolableRecipe> coolableRegistry = new SingleRegistry(CoolableRecipe.TYPE);
+    public final IRefineryRegistry<ICoolableRecipe> coolableRegistry = new SingleRegistry(ICoolableRecipe.TYPE);
 
     @Override
 //    public IHeatableRecipe createHeatingRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo)
