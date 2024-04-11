@@ -1,0 +1,59 @@
+~{buildcraft/json/insn}
+
+import "buildcraftlib:util" "buildcraftcore:main"
+
+alias pipei 1 `pipe_item "%0" "buildcrafttransport:pipe_%0_colorless"`
+alias pipef 1 `pipe_fluid "%0" "buildcrafttransport:pipe_%0_colorless"`
+alias pipes 1 `pipe_structure "%0" "buildcrafttransport:pipe_%0_colorless"`
+
+pipes "structure_cobblestone"
+
+pipei "items_wood"
+pipei "items_cobblestone"
+pipei "items_stone"
+pipei "items_quartz"
+pipei "items_iron"
+pipei "items_gold"
+pipei "items_diamond"
+pipei "items_obsidian"
+pipei "items_sandstone"
+pipei "items_clay"
+pipei "items_void"
+pipei "items_stripes"
+pipei "items_diamond_wood"
+pipei "items_lapis"
+pipei "items_daizuli"
+pipei "items_emzuli"
+
+pipef "fluids_wood"
+pipef "fluids_cobblestone"
+pipef "fluids_stone"
+pipef "fluids_quartz"
+pipef "fluids_iron"
+pipef "fluids_gold"
+pipef "fluids_diamond"
+pipef "fluids_sandstone"
+pipef "fluids_clay"
+pipef "fluids_void"
+pipef "fluids_diamond_wood"
+
+plug "wire"
+plug "plug_power_adaptor"
+plug "plug_blocker"
+
+trigger "pipe_item" "items_traversing" "buildcraft:pipe_contains_items"
+trigger "pipe_fluid" "fluids_traversing" "buildcraft:pipe_contains_fluids"
+trigger "pipe_item" "pipe_empty" "buildcraft:pipe_empty"
+trigger "pipe_plug" "pipe_signal_active" "buildcraft.pipe.wire.input.black.active"
+trigger "pipe_plug" "pipe_signal_inactive" "buildcraft.pipe.wire.input.black.inactive"
+
+action "pipe_item" "pipe_direction_north" "buildcraft:pipe.dir.north"
+action "pipe_item" "pipe_direction_east" "buildcraft:pipe.dir.east"
+action "pipe_item" "pipe_direction_south" "buildcraft:pipe.dir.south"
+action "pipe_item" "pipe_direction_west" "buildcraft:pipe.dir.west"
+action "pipe_item" "pipe_direction_above" "buildcraft:pipe.dir.up"
+action "pipe_item" "pipe_direction_below" "buildcraft:pipe.dir.down"
+
+action "pipe_plug" "pipe_signal_active" "buildcraft:pipe.wire.output.black"
+action "pipe_item" "pipe_colour" "buildcraft:pipe.color.black"
+action "pipe_item" "extraction_preset" "buildcraft:extraction.preset.red"

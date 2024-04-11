@@ -1,0 +1,24 @@
+{
+    //###################
+    // APIARIST'S PIPE
+    //###################
+
+    "item.buildcraftPipe.pipeitemspropolis.name": "Bienenrohr",
+
+    "for.gui.pipe.filter.anything": "Alles",
+    "for.gui.pipe.filter.bee": "Alle Bienen",
+    "for.gui.pipe.filter.cave": "Höhlenbewohner",
+    "for.gui.pipe.filter.closed": "Geschlossen",
+    "for.gui.pipe.filter.drone": "Dronen",
+    "for.gui.pipe.filter.flyer": "Starke Flieger",
+    "for.gui.pipe.filter.item": "Gegenstände",
+    "for.gui.pipe.filter.nocturnal": "Nachtaktive",
+    "for.gui.pipe.filter.princess": "Prinzessinnen",
+    "for.gui.pipe.filter.pure_breed": "Reinrassige",
+    "for.gui.pipe.filter.pure_cave": "Reinrassige Höhlenbewohner",
+    "for.gui.pipe.filter.pure_flyer": "Reinrassig starke Flieger",
+    "for.gui.pipe.filter.pure_nocturnal": "Reinrassig nachtaktive",
+    "for.gui.pipe.filter.queen": "Königinnen",
+
+    "null": "=w="
+}

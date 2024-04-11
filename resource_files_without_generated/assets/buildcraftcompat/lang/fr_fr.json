@@ -1,0 +1,24 @@
+{
+    //###################
+    // APIARIST'S PIPE
+    //###################
+
+    "item.buildcraftPipe.pipeitemspropolis.name": "Tuyau de transport d'apiculteur",
+
+    "for.gui.pipe.filter.anything": "Tout",
+    "for.gui.pipe.filter.bee": "Toutes abeilles",
+    "for.gui.pipe.filter.cave": "De cave",
+    "for.gui.pipe.filter.closed": "Rien",
+    "for.gui.pipe.filter.drone": "Ouvrières",
+    "for.gui.pipe.filter.flyer": "Les volantes",
+    "for.gui.pipe.filter.item": "Éléments",
+    "for.gui.pipe.filter.nocturnal": "Les noctures",
+    "for.gui.pipe.filter.princess": "Princesses",
+    "for.gui.pipe.filter.pure_breed": "Pures races",
+    "for.gui.pipe.filter.pure_cave": "De cave pures",
+    "for.gui.pipe.filter.pure_flyer": "Volantes pures",
+    "for.gui.pipe.filter.pure_nocturnal": "Nocturne pures",
+    "for.gui.pipe.filter.queen": "Reines",
+
+    "null": "=w="
+}

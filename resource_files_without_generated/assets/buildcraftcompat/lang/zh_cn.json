@@ -1,0 +1,40 @@
+{
+    //###################
+    // APIARIST'S PIPE
+    //###################
+
+    "item.buildcraftPipe.pipeitemspropolis.name": "养蜂员管道",
+
+    "for.gui.pipe.filter.anything": "任意物品",
+    "for.gui.pipe.filter.bee": "任意蜜蜂",
+    "for.gui.pipe.filter.cave": "穴居蜂",
+    "for.gui.pipe.filter.closed": "已关闭",
+    "for.gui.pipe.filter.drone": "雄蜂",
+    "for.gui.pipe.filter.flyer": "强壮飞蜂",
+    "for.gui.pipe.filter.item": "物品",
+    "for.gui.pipe.filter.nocturnal": "夜行蜜蜂",
+    "for.gui.pipe.filter.princess": "公主蜂",
+    "for.gui.pipe.filter.pure_breed": "纯种蜜蜂",
+    "for.gui.pipe.filter.pure_cave": "纯种穴居蜂",
+    "for.gui.pipe.filter.pure_flyer": "纯种飞蜂",
+    "for.gui.pipe.filter.pure_nocturnal": "纯种夜行蜜蜂",
+    "for.gui.pipe.filter.queen": "蜂后",
+
+    // Calen 1.18.2
+    // JEI
+    "buildcraft.jei.title.heatable_fluids": "加热流体",
+    "buildcraft.jei.title.coolable_fluids": "冷却流体",
+    "buildcraft.jei.title.distillable_fluids": "蒸馏",
+    "buildcraft.jei.title.combustion_engine_fuels": "燃油引擎燃料",
+    "buildcraft.jei.title.combustion_engine_fuels.burn_time": "燃烧时间 %ds",
+    "buildcraft.jei.title.combustion_engine_fuels.burn_speed": " 产能速率 %s MJ/t",
+    "buildcraft.jei.title.combustion_engine_fuels.burn_total": " 产能总计 %s MJ",
+
+    // Waila
+    "buildcraft.waila.crafting": "§f正在合成: ",
+    "buildcraft.waila.no_recipe": "§7当前没有配方正在合成",
+    "buildcraft.waila.crafting_from": "§f使用: ",
+    "buildcraft.waila.waiting_for_laser": "§f还需要能量: §b%s MJ",
+
+    "null": "=w="
+}

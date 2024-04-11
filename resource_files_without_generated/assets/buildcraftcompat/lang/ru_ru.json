@@ -1,0 +1,29 @@
+{
+    //###################
+    // APIARIST'S PIPE
+    //###################
+
+    "item.buildcraftPipe.pipeitemspropolis.name": "Труба пчеловода",
+
+    "for.gui.pipe.filter.anything": "Всё",
+    "for.gui.pipe.filter.bee": "Любые пчелы",
+    "for.gui.pipe.filter.cave": "Пещерные",
+    "for.gui.pipe.filter.closed": "Закрыт",
+    "for.gui.pipe.filter.drone": "Трутни",
+    "for.gui.pipe.filter.flyer": "Летуны",
+    "for.gui.pipe.filter.item": "Предметы",
+    "for.gui.pipe.filter.natural": "Естественного происх.",
+    "for.gui.pipe.filter.nocturnal": "Ночные",
+    "for.gui.pipe.filter.princess": "Принцессы",
+    "for.gui.pipe.filter.pure_breed": "Чистопородные",
+    "for.gui.pipe.filter.pure_cave": "Породистые пещерные",
+    "for.gui.pipe.filter.pure_flyer": "Породистые летуны",
+    "for.gui.pipe.filter.pure_nocturnal": "Породистые ночные",
+    "for.gui.pipe.filter.queen": "Матки",
+
+    "gate.trigger.mfr.backstuffed": "Есть предметы",
+    "gate.trigger.mfr.conreversed": "Конвейер реверсирован",
+    "gate.trigger.mfr.conrunning": "Конвейер работает",
+
+    "null": "=w="
+}

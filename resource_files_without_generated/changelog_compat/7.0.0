@@ -1,0 +1,6 @@
+Added:
+
+* [AppleMilkTea 2] Stripes Pipes and Robots can now harvest tea.
+* [NEI] Better Integration Table support.
+* [WAILA] More informative tooltips for Robots.
+* Proper modularization and refactoring.
