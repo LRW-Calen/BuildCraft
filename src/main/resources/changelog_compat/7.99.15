@@ -1,3 +1,0 @@
-Bug fixes:
-
-* [#80] Recipes aren't registered properly which breaks a few things when connecting to a server without buildcraftcompat.
