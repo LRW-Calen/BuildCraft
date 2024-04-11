@@ -22,7 +22,6 @@ import buildcraft.lib.expression.Tokenizer.ResultConsume;
 import buildcraft.lib.expression.Tokenizer.TokenResult;
 import buildcraft.lib.expression.TokenizerDefaults;
 import buildcraft.lib.gui.ISimpleDrawable;
-import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.misc.data.ProfilerBC;
 import buildcraft.lib.misc.data.ProfilerBC.IProfilerSection;
 import com.google.common.collect.ImmutableList;

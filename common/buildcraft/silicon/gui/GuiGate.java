@@ -8,7 +8,6 @@ import buildcraft.lib.gui.json.BuildCraftJsonGui;
 import buildcraft.lib.misc.collect.TypedKeyMap;
 import buildcraft.silicon.container.ContainerGate;
 import buildcraft.silicon.gate.GateLogic;
-import buildcraft.silicon.plug.PluggableGate;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;

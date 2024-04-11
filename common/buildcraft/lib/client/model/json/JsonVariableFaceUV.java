@@ -8,9 +8,9 @@ package buildcraft.lib.client.model.json;
 
 import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.expression.FunctionContext;
-import buildcraft.lib.expression.api.IExpressionNode.*;
 import buildcraft.lib.expression.node.value.NodeConstantBoolean;
 import buildcraft.lib.expression.node.value.NodeConstantLong;
+import buildcraft.lib.expression.api.IExpressionNode.*;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

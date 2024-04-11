@@ -7,8 +7,6 @@
 package buildcraft.lib.client.model;
 
 import buildcraft.api.core.BCLog;
-import buildcraft.lib.client.model.ModelHolderVariable;
-import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.expression.info.ContextInfo;
 import buildcraft.lib.expression.info.VariableInfo;
 
