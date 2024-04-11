@@ -83,6 +83,6 @@ public class GuideSmeltingFactory implements GuidePartFactory
 //        return ItemStack.areItemStacksEqual(input, other.input)//
         return input.equals(other.input)//
 //                && ItemStack.areItemStacksEqual(output, other.output);
-                && ItemStack.isSameItemSameTags(output, other.output);
+                && ItemStack.matches(output, other.output);
     }
 }

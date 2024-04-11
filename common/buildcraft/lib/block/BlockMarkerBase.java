@@ -15,6 +15,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -145,7 +146,7 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
         return state;
     }
 
-    // TODO Calen canPlaceBlockOnSide???
+    // TODO Calen canPlaceBlockOnSide??? canSurvive?
 //    @Override
     public boolean canPlaceBlockOnSide(Level world, BlockPos pos, Direction side)
     {

@@ -48,7 +48,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
             ItemStack original = stack.copy();
             stack = tile.tankFuel.transferStackToTank(this, stack);
 //            if (!ItemStack.areItemStacksEqual(stack, original))
-            if (!ItemStack.isSameItemSameTags(stack, original))
+            if (!ItemStack.matches(stack, original))
             {
 //                slot.putStack(stack);
                 slot.set(stack);
@@ -58,7 +58,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
             }
             stack = tile.tankCoolant.transferStackToTank(this, stack);
 //            if (!ItemStack.areItemStacksEqual(stack, original))
-            if (!ItemStack.isSameItemSameTags(stack, original))
+            if (!ItemStack.matches(stack, original))
             {
 //                slot.putStack(stack);
                 slot.set(stack);
@@ -68,7 +68,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
             }
             stack = tile.tankResidue.transferStackToTank(this, stack);
 //            if (!ItemStack.areItemStacksEqual(stack, original))
-            if (!ItemStack.isSameItemSameTags(stack, original))
+            if (!ItemStack.matches(stack, original))
             {
 //                slot.putStack(stack);
                 slot.set(stack);
