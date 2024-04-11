@@ -7,16 +7,13 @@
 package buildcraft.api.recipes;
 
 import buildcraft.api.core.BuildCraftAPI;
-import buildcraft.lib.misc.StackUtil;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
 
 import javax.annotation.Nonnull;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 

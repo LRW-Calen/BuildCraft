@@ -3,8 +3,6 @@ package buildcraft.api;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.ModLoadingStage;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;

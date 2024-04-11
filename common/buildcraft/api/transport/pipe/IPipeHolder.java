@@ -16,7 +16,6 @@ import net.minecraftforge.common.capabilities.Capability;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.LinkedList;
 
 /**
  * Designates a tile that can contain a pipe, up to 6 sided pluggables.

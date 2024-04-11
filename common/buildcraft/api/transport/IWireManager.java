@@ -1,6 +1,5 @@
 package buildcraft.api.transport;
 
-import buildcraft.api.enums.EnumWirePart;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import net.minecraft.world.item.DyeColor;
 

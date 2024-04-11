@@ -1,14 +1,10 @@
 package buildcraft.api.transport.pipe;
 
-import buildcraft.transport.item.ItemPipeHolder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.RegistryObject;
 
-import javax.annotation.Nullable;
 import java.util.Map;
-import java.util.function.Consumer;
 
 public interface IPipeRegistry
 {

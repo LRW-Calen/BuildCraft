@@ -1,6 +1,5 @@
 package buildcraft.api.enums;
 
-import buildcraft.api.properties.BuildCraftProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Blocks;

@@ -1,7 +1,6 @@
 package buildcraft.api.recipes;
 
 import buildcraft.api.BCModules;
-import buildcraft.lib.recipe.RefineryRecipeRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;

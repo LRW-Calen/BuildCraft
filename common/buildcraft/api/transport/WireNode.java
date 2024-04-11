@@ -1,6 +1,5 @@
 package buildcraft.api.transport;
 
-import buildcraft.api.enums.EnumWirePart;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.AxisDirection;

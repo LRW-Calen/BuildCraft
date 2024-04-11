@@ -2,9 +2,7 @@ package buildcraft.api.core;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
 
-import javax.annotation.Nonnull;
 import java.util.concurrent.Callable;
 
 /**

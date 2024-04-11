@@ -1,0 +1,331 @@
+buildscript {
+    repositories {
+        // These repositories are only for Gradle plugins, put any other repositories in the repository core further below
+        maven { url = 'https://maven.minecraftforge.net' }
+//        maven { url = 'https://maven.parchmentmc.org' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        // Mixin
+        //classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
+        classpath 'org.spongepowered:mixingradle:0.7.+'
+        classpath 'javax.vecmath:vecmath:1.5.2'
+    }
+}
+// Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+//    id 'net.minecraftforge.gradle' version '5.+'
+//    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+apply plugin: 'net.minecraftforge.gradle'
+//
+////apply plugin: 'org.parchmentmc.librarian.forgegradle' version '1.+'
+//
+// Mixin
+apply plugin: 'org.spongepowered.mixin'
+
+
+version = mod_version
+//version = mod_version + "-" + new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+group = "com.mod-buildcraft"
+archivesBaseName = "buildcraft" // the name that all artifacts will use as a base. artifacts names follow this pattern: [baseName]-[appendix]-[version]-[classifier].[extension]
+
+// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
+minecraft {
+    // The mappings can be changed at any time and must be in the following format.
+    // Channel:   Version:
+    // official   MCVersion             Official field/method names from Mojang mapping files
+    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
+    //
+    // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
+    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
+    //
+    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
+    // Additional setup is needed to use their mappings: https://github.com/ParchmentMC/Parchment/wiki/Getting-Started
+    //
+    // Use non-default mappings at your own risk. They may not always work.
+    // Simply re-run your setup task after changing the mappings to update your workspace.
+
+    mappings channel: 'official', version: '1.18.2'
+//    mappings channel: 'parchment', version: '2022.08.07-1.18.2'
+
+//    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    accessTransformer = file('buildcraft_resources/META-INF/accesstransformer.cfg')
+    // Currently, this location cannot be changed from the default.
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'buildcraftcore,buildcraftenergy,buildcraftfactory,buildcraftlib'
+
+            // Mixin
+            arg "-mixin.config=mixins.buildcraft.json"
+
+            mods {
+                buildcraftcore {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'buildcraftcore'
+
+            // Mixin
+            arg "-mixin.config=mixins.buildcraft.json"
+
+            mods {
+                buildcraftcore {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            workingDirectory project.file('run')
+
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            property 'forge.logging.console.level', 'debug'
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'buildcraftcore'
+
+            mods {
+                buildcraftcore {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+
+            property 'forge.logging.markers', 'REGISTRIES'
+
+            property 'forge.logging.console.level', 'debug'
+
+//            property 'forge.enabledGameTestNamespaces', 'buildcraftcore,buildcraftenergy,buildcraftfactory,buildcraftlib'
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            args '--mod', 'buildcraftcore', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+
+            mods {
+                buildcraftcore {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+// Include resources generated by data generators.
+sourceSets {
+    main {
+        java {
+            srcDir "api"
+        }
+    }
+}
+
+
+repositories {
+    // Put repositories for dependencies here
+    // ForgeGradle automatically adds the Forge maven and Maven Central for you
+
+    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
+    flatDir {
+        dir 'libs'
+    }
+
+//    maven { url = 'https://mvnrepository.com/artifact/net.sf.trove4j/trove4j' }
+
+    maven {
+        name 'prog'
+        url 'https://dvs1.progwml6.com/files/maven'
+        content {
+            includeGroup 'mezz.jei'
+        }
+    }
+    maven {
+        name 'CurseMaven'
+        url 'https://www.cursemaven.com'
+        content {
+            includeGroup 'curse.maven'
+        }
+    }
+    // JEI
+    maven {
+        // location of the maven that hosts JEI files before January 2023
+        name = "Progwml6's maven"
+        url = "https://dvs1.progwml6.com/files/maven/"
+    }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven {
+        // location of a maven mirror for JEI files, as a fallback
+        name = "ModMaven"
+        url = "https://modmaven.dev"
+    }
+    // crafttweaker
+    maven {
+        url = 'https://maven.blamejared.com'
+        name = 'BlameJared Maven'
+    }
+    // TOP
+    maven {
+        url "https://maven.k-4u.nl/"
+        content {
+            includeGroup "mcjty"
+        }
+    }
+}
+
+// Mixin
+mixin {
+    add sourceSets.main, "refmap.buildcraft.json"
+    config 'mixins.buildcraft.json'
+    mixin.env.remapRefMap = true
+    debug = true
+    debug.verbose = true
+    debug.export = true
+}
+
+dependencies {
+    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
+    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
+    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
+
+//    minecraft 'net.minecraftforge:forge:1.18.2-40.1.0'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.2.14'
+
+    // Examples using mod jars from ./libs
+
+    compileOnly fg.deobf("javax.vecmath:vecmath:1.5.2")
+    runtimeOnly fg.deobf("javax.vecmath:vecmath:1.5.2")
+    compileOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
+    runtimeOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
+
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+
+    compileOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
+
+//    compileOnly fg.deobf("blank:ae2-${mc_version}:11.7.6")
+//    runtimeOnly fg.deobf("blank:ae2-${mc_version}:11.7.6")
+
+    compileOnly(fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_version}:${crafttweaker_version}"))
+    runtimeOnly(fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_version}:${crafttweaker_version}"))
+
+    compileOnly(fg.deobf("curse.maven:the-one-probe-245211:3965688"))
+    runtimeOnly(fg.deobf("curse.maven:the-one-probe-245211:3965688"))
+
+    jarJar(group: 'net.sf.trove4j', name: 'trove4j', version: '[3.0.3,)') {
+        jarJar.pin(it, '3.0.3')
+    }
+    jarJar(group: 'javax.vecmath', name: 'vecmath', version: '[1.5.2,)') {
+        jarJar.pin(it, '1.5.2')
+    }
+
+    // Testing
+    testCompileOnly "junit:junit:4.12"
+
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    // For more info...
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+}
+
+// Example for how to get properties into the manifest for reading at runtime.
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "BuildCraft",
+                "Specification-Vendor"    : "BuildCraft Team",
+                "Specification-Version"   : project.version,
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : project.jar.archiveVersion,
+                "Implementation-Vendor"   : "BuildCraft Team",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "mixins.buildcraft.json"
+        ])
+    }
+    include '**/**/**/libs/*'
+}
+
+// Example configuration to allow publishing using the maven-publish plugin
+// This is the preferred method to reobfuscate your jar file
+jar.finalizedBy('reobfJar')
+// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
+// publish.dependsOn('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+jar.enabled = true
+
+// enable Jar-in-Jar
+jarJar.enable()
+
+tasks.named('jarJar') {
+    // ...
+}

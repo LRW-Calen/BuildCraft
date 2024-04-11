@@ -166,23 +166,48 @@ sourceSets {
         java {
             srcDir "common"
 //            srcDir "common_old_license"
-//            srcDir "sub_projects/expression/src/main/java"
-//            srcDir "sub_projects/expression/src/autogen/java"
+            srcDir "sub_projects/expression/src/main/java"
+            srcDir "sub_projects/expression/src/autogen/java"
             // srcDir "src_old_license"
         }
         resources {
-//            include '**/**/**/libs/*'
             srcDir "buildcraft_resources"
-//            srcDir "BuildCraft-Localization"
-//            srcDir "BuildCraftGuide/guide_resources"
+            srcDir "BuildCraft-Localization"
+            exclude "**/.md" // exclude readme from localization repo
+            srcDir "BuildCraftGuide/guide_resources"
             srcDir 'src/generated/resources'
-//            exclude "**/.md" // exclude readme from localization repo
-//            exclude "pack.png" // exclude from the guide repo
-//            exclude "pack.mcmeta" // exclude from the guide repo
+            exclude "pack.png" // exclude from the guide repo
+            exclude "pack.mcmeta" // exclude from the guide repo
+        }
+    }
+    api {
+        java {
+            srcDir "BuildCraftAPI/api"
+        }
+    }
+    test {
+        java {
+            srcDir "src/test/java"
+            srcDir "sub_projects/expression/src/test/java"
         }
     }
 }
 
+
+task setupSubProjects(dependsOn: "sub_projects:expression:generateSources") {
+    // Just an inter-dependency task
+}
+
+//eclipseClasspath.dependsOn setupSubProjects
+//ideaModule.dependsOn setupSubProjects
+//compileJava.dependsOn setupSubProjects
+
+//runClient.jvmArgs += "-Dbuildcraft.dev=true"
+//runData.jvmArgs += "-Dbuildcraft.dev=true"
+//runServer.jvmArgs += "-Dbuildcraft.dev=true"
+
+//// Add API dir to the IDEA module
+//idea.module.sourceDirs += sourceSets.api.java.srcDirs
 
 repositories {
     // Put repositories for dependencies here

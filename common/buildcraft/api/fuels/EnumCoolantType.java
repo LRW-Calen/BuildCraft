@@ -1,7 +1,5 @@
 package buildcraft.api.fuels;
 
-import buildcraft.factory.recipe.EnumHeatExchangeRecipeType;
-
 import java.util.Locale;
 
 // Calen
