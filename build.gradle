@@ -170,6 +170,7 @@ sourceSets {
             srcDir "sub_projects/expression/src/main/java"
             srcDir "sub_projects/expression/src/autogen/java"
             // srcDir "src_old_license"
+
         }
         resources {
             srcDir "buildcraft_resources"
@@ -178,7 +179,8 @@ sourceSets {
             srcDir "BuildCraftGuide/guide_resources"
             exclude "**/.md" // exclude readme from localization repo
             exclude "pack.png" // exclude from the guide repo
-            exclude "pack.mcmeta" // exclude from the guide repo
+            // Calen: we should not exclude the pack.mcmeta file in buildcraft_resources, or all the resources will be lost
+//            exclude "pack.mcmeta" // exclude from the guide repo
         }
     }
     api {
@@ -265,6 +267,7 @@ repositories {
     }
 }
 
+// Calen: I tried to avoid using mixin to ensure the compatibility
 // Mixin
 mixin {
     add sourceSets.main, "refmap.buildcraft.json"
@@ -313,7 +316,9 @@ dependencies {
     }
 
     // Testing
-    testCompileOnly "junit:junit:4.12"
+    testImplementation "junit:junit:4.12"
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+//    compileOnly "junit:junit:4.12"
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     // For more info...
