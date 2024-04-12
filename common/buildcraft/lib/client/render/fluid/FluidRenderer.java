@@ -155,7 +155,7 @@ public class FluidRenderer
                 if (still == null || flowing == null)
                 {
                     // Calen: for uncompleted fluid, continue
-                    BCLog.logger.warn("[lib.fluid.renderder] Found fluid ["+fluid.getRegistryName()+"] has no still or flow textuer ResourceLocation, unable to get sprite.");
+                    BCLog.logger.warn("[lib.fluid.renderder] Found fluid [" + fluid.getRegistryName() + "] has no still or flow textuer ResourceLocation, unable to get sprite.");
                     continue;
                 }
                 fluidSprites.get(FluidSpriteType.STILL).put(fluid.getRegistryName().toString(), map.getSprite(still));
@@ -175,7 +175,7 @@ public class FluidRenderer
      * @param bbIn       The {@link BufferBuilder} that the fluid will be rendered into.
      * @param sideRender A size 6 boolean array that determines if the face will be rendered. If it is null then all
      *                   faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns.
-     * @see #renderFluid(FluidSpriteType, FluidStack, double, double, Vec3, Vec3, BufferBuilder, boolean[])
+     * @see #renderFluid(FluidSpriteType, FluidStack, double, double, Vec3, Vec3, PoseStack.Pose, VertexConsumer, boolean[])
      */
     public static void renderFluid(FluidSpriteType type, IFluidTank tank, Vec3 min, Vec3 max, PoseStack.Pose pose, VertexConsumer bbIn,
                                    boolean[] sideRender)
@@ -222,7 +222,8 @@ public class FluidRenderer
      * @param cap        The maximum amount of fluid that could be in the stack. Usually the capacity of the tank.
      * @param min        The minimum coordinate that the tank should be rendered from
      * @param max        The maximum coordinate that the tank will be rendered to.
-     * @param poseStack  The {@link BufferBuilder} that the fluid will be rendered into.
+     * @param pose       The {@link PoseStack.Pose}
+     * @param bb         The {@link VertexConsumer} that the fluid will be rendered into.
      * @param sideRender A size 6 boolean array that determines if the face will be rendered. If it is null then all
      *                   faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns.
      */
@@ -233,7 +234,6 @@ public class FluidRenderer
             double cap,
             Vec3 min,
             Vec3 max,
-//            BufferBuilder bbIn,
             PoseStack.Pose pose,
             VertexConsumer bb,
             boolean[] sideRender

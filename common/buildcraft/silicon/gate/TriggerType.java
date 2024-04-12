@@ -55,7 +55,7 @@ public class TriggerType extends StatementType<TriggerWrapper> {
         if (slot == null) {
             return nbt;
         }
-        nbt.putString("kind", slot.getUniqueTag().getString());
+        nbt.putString("kind", slot.getUniqueTag());
         nbt.putByte("side", (byte) slot.sourcePart.getIndex());
         return nbt;
     }
@@ -82,7 +82,7 @@ public class TriggerType extends StatementType<TriggerWrapper> {
             buffer.writeBoolean(false);
         } else {
             buffer.writeBoolean(true);
-            buffer.writeUtf(slot.getUniqueTag().getString());
+            buffer.writeUtf(slot.getUniqueTag());
             buffer.writeEnum(slot.sourcePart);
         }
     }

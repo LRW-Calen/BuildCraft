@@ -17,7 +17,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 public class TriggerFluidsTraversing extends BCStatement implements ITriggerInternal {
 
     public TriggerFluidsTraversing() {
-        super(new TextComponent("buildcraft:pipe_contains_fluids"));
+        super("buildcraft:pipe_contains_fluids");
     }
 
     @Override

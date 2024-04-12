@@ -15,8 +15,10 @@ import gnu.trove.set.hash.TIntHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -24,29 +26,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A gui element that allows for easy implementation of an actual {@link Gui} class.
+ * A gui element that allows for easy implementation of an actual {@link Screen} class.
  * <p>
  * This isn't final, although you should generally only subclass this for additional library functionality, not to
  * render out a particular gui.
  * <p>
- * Classes extending {@link Gui} (either directly or indirectly) need to call the following methods:
+ * Classes extending {@link Screen} (either directly or indirectly) need to call the following methods:
  * <ul>
- * <li>{@link #tick()} once per tick (usually in {@link Gui#updateScreen()}</li>
- * <li>{@link #drawBackgroundLayer(float, int, int, Runnable)} before drawing anything else, except for your own
+ * <li>{@link #tick()} once per tick (usually in {@link Screen#tick()}</li>
+ * <li>{@link #drawBackgroundLayer(PoseStack, float, int, int, Runnable)} before drawing anything else, except for your own
  * backgrounds</li>
- * <li>{@link #drawElementBackgrounds()} after {@link #drawBackgroundLayer(float, int, int, Runnable)},but before
+ * <li>{@link #drawElementBackgrounds(PoseStack)} after {@link #drawBackgroundLayer(PoseStack, float, int, int, Runnable)},but before
  * sub-display backgrounds</li>
- * <li>{@link #drawElementForegrounds(Runnable)} after drawing everything else.</li>
- * <li>{@link #preDrawForeground()} if your base gui class offsets the call to drawing the foreground by the gui's
- * position, for example, {@link GuiContainer}.</li>
- * <li>{@link #postDrawForeground()} after {@link #preDrawForeground()} (and the same rules apply). These two calls
+ * <li>{@link #drawElementForegrounds(Runnable, PoseStack)} after drawing everything else.</li>
+ * <li>{@link #preDrawForeground(PoseStack)} if your base gui class offsets the call to drawing the foreground by the gui's
+ * position, for example, {@link AbstractContainerScreen}.</li>
+ * <li>{@link #postDrawForeground(PoseStack)} after {@link #preDrawForeground(PoseStack)} (and the same rules apply). These two calls
  * should wrap around and calls to this that occur while the gl state is translated.
- * <li>{@link #onMouseClicked(int, int, int)} whenever the mouse is clicked. If this returns true you shouldn't do any
+ * <li>{@link #onMouseClicked(double, double, int)} whenever the mouse is clicked. If this returns true you shouldn't do any
  * other mouse click handling.</li>
- * <li>{@link #onMouseReleased(int, int, int)} whenever the mouse is released.</li>
- * <li>{@link #onMouseDragged(int, int, int, long)} whenever the mouse is dragged.</li>
+ * <li>{@link #onMouseReleased(double, double, int)} whenever the mouse is released.</li>
+ * <li>{@link #onMouseDragged(double, double, int)} whenever the mouse is dragged.</li>
  * </ul>
- * For both {@link #drawBackgroundLayer(float, int, int, Runnable)} and {@link #drawElementForegrounds(Runnable)} the
+ * For both {@link #drawBackgroundLayer(PoseStack, float, int, int, Runnable)} and {@link #drawElementForegrounds(Runnable, PoseStack)} the
  * {@link Runnable} passed will only be called once, and it's call time will differ based on the
  * {@link #currentMenu}.
  */
@@ -125,7 +127,7 @@ public class BuildCraftGui
     }
 
     /**
-     * Creates a new {@link BuildCraftGui} that takes it's {@link #rootElement} from the {@link GuiContainer}'s
+     * Creates a new {@link BuildCraftGui} that takes it's {@link #rootElement} from the {@link AbstractContainerMenu}'s
      * size.
      */
 //    public static IGuiArea createWindowedArea(GuiContainer gui)

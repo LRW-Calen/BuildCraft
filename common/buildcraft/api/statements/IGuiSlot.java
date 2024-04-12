@@ -18,7 +18,7 @@ public interface IGuiSlot extends IConvertable
      *
      * @return the unique id
      */
-    BaseComponent getUniqueTag();
+    String getUniqueTag();
 
     /**
      * Return the description in the UI. Note that this should NEVER be called directly, instead this acts as a bridge

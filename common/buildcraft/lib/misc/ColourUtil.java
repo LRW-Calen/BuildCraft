@@ -216,13 +216,23 @@ public class ColourUtil
     }
 
     // Calen
-    public static MutableComponent getTextFullTooltipComponent(MutableComponent base, DyeColor colour)
+    public static MutableComponent getTextFullTooltipComponent(MutableComponent base, @Nullable DyeColor colour)
     {
         if (BCLibConfig.useColouredLabels)
         {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
-            return base.append(new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour))).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
-                    .append(new TextComponent(ChatFormatting.RESET.toString()));
+//            return base.append(new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour))).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
+//                    .append(new TextComponent(ChatFormatting.RESET.toString()));
+            if (formatColour == null)
+            {
+                return base.append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
+                        .append(new TextComponent(ChatFormatting.RESET.toString()));
+            }
+            else
+            {
+                return base.append(new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour))).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
+                        .append(new TextComponent(ChatFormatting.RESET.toString()));
+            }
         }
         else
         {
@@ -438,9 +448,12 @@ public class ColourUtil
     /**
      * Converts an {@link DyeColor} into an equivalent {@link ChatFormatting} for display.
      */
-    public static ChatFormatting convertColourToTextFormat(DyeColor colour)
+//    public static ChatFormatting convertColourToTextFormat(DyeColor colour)
+    public static ChatFormatting convertColourToTextFormat(@Nullable DyeColor colour)
     {
-        return COLOUR_TO_FORMAT[colour.ordinal()];
+//        return COLOUR_TO_FORMAT[colour.ordinal()];
+        // Calen
+        return colour == null ? null : COLOUR_TO_FORMAT[colour.ordinal()];
     }
 
     /**

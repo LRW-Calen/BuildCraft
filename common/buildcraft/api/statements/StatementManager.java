@@ -55,7 +55,7 @@ public final class StatementManager
     }
 
     public static void registerStatement(IStatement statement) {
-        statements.put(statement.getUniqueTag().getString(), statement);
+        statements.put(statement.getUniqueTag(), statement);
     }
 
     public static void registerParameter(IParameterReader reader) {
@@ -63,17 +63,17 @@ public final class StatementManager
     }
 
     public static void registerParameter(IParameterReader reader, IParamReaderBuf bufReader) {
-        Component name = reader.readFromNbt(new CompoundTag()).getUniqueTag();
+        String name = reader.readFromNbt(new CompoundTag()).getUniqueTag();
         registerParameter(name, reader);
         registerParameter(name, bufReader);
     }
 
-    public static void registerParameter(Component name, IParameterReader reader) {
-        parameters.put(name.getString(), reader);
+    public static void registerParameter(String name, IParameterReader reader) {
+        parameters.put(name, reader);
     }
 
-    public static void registerParameter(Component name, IParamReaderBuf reader) {
-        paramsBuf.put(name.getString(), reader);
+    public static void registerParameter(String name, IParamReaderBuf reader) {
+        paramsBuf.put(name, reader);
     }
 
     public static List<ITriggerExternal> getExternalTriggers(Direction side, BlockEntity entity) {

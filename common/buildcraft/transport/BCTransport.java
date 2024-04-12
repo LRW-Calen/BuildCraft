@@ -12,15 +12,14 @@ import buildcraft.api.facades.FacadeAPI;
 import buildcraft.api.imc.BcImcMessage;
 import buildcraft.api.schematics.SchematicBlockFactoryRegistry;
 import buildcraft.core.BCCore;
-import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.registry.CreativeTabManager;
 import buildcraft.lib.registry.CreativeTabManager.CreativeTabBC;
 import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.registry.TagManager;
 import buildcraft.lib.registry.TagManager.*;
-import buildcraft.silicon.BCSiliconMenuTypes;
 import buildcraft.silicon.plug.FacadeStateManager;
+import buildcraft.transport.client.render.PipeTabButton;
 import buildcraft.transport.pipe.PipeRegistry;
 import buildcraft.transport.pipe.SchematicBlockPipe;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -116,6 +115,7 @@ public class BCTransport
         BCTransportProxy.getProxy().fmlPreInit();
 //
         MinecraftForge.EVENT_BUS.register(BCTransportEventDist.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(PipeTabButton.class);
     }
 
     @SubscribeEvent

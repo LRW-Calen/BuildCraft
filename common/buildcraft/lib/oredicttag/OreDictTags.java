@@ -3,10 +3,16 @@ package buildcraft.lib.oredicttag;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class OreDictTags
 {
@@ -44,6 +50,14 @@ public class OreDictTags
     // pipe plugs
     public static final TagKey<Item> waterproof = itemTag("buildcraft:waterproof");
     // pipes
+    public static final Map<DyeColor, TagKey<Item>> pipeColorTags = new HashMap<>();
+
+    static
+    {
+        Arrays.stream(DyeColor.values()).forEach(c -> pipeColorTags.put(c, itemTag("buildcraft:pipe/" + c.name().toLowerCase(Locale.ROOT))));
+        pipeColorTags.put(null, itemTag("buildcraft:pipe/colorless"));
+    }
+
     public static final TagKey<Item> pipeStructure = itemTag("buildcraft:pipe/structure_cobblestone");
 
     public static final TagKey<Item> pipeItemWood = itemTag("buildcraft:pipe/items_wood");

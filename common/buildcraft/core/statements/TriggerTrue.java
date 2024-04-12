@@ -19,7 +19,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 public class TriggerTrue extends BCStatement implements ITriggerInternal
 {
     public TriggerTrue() {
-        super(new TextComponent("buildcraftcore:trigger.true"));
+        super("buildcraftcore:trigger.true");
     }
 
     @Override

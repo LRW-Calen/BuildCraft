@@ -31,9 +31,6 @@ public interface ILocalBlockUpdateSubscriber
      *
      * @param world    from the core update event
      * @param eventPos from the core update event
-     * @param oldState from the core update event
-     * @param newState from the core update event
-     * @param flags    from the core update event
      */
 //    void setWorldUpdated(Level world, BlockPos eventPos, BlockState oldState, BlockState newState, int flags);
     void setWorldUpdated(Level world, BlockPos eventPos);

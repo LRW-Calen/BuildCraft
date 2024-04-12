@@ -25,7 +25,7 @@ public class TriggerEnginePowerStage extends BCStatement implements ITriggerExte
     public final EnumPowerStage stage;
 
     public TriggerEnginePowerStage(EnumPowerStage stage) {
-        super(new TextComponent("buildcraft:engine.stage." + stage.name().toLowerCase(Locale.ROOT)));
+        super("buildcraft:engine.stage." + stage.name().toLowerCase(Locale.ROOT));
         this.stage = stage;
     }
 

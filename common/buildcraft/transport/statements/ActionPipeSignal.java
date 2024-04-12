@@ -30,8 +30,8 @@ public class ActionPipeSignal extends BCStatement implements IActionInternal
 
     public ActionPipeSignal(DyeColor colour)
     {
-        super(new TextComponent("buildcraft:pipe.wire.output." + colour.name().toLowerCase(Locale.ROOT)), //
-                new TextComponent("buildcraft.pipe.wire.output." + colour.name().toLowerCase(Locale.ROOT)));
+        super("buildcraft:pipe.wire.output." + colour.name().toLowerCase(Locale.ROOT), //
+                "buildcraft.pipe.wire.output." + colour.name().toLowerCase(Locale.ROOT));
 
         this.colour = colour;
     }
@@ -43,11 +43,12 @@ public class ActionPipeSignal extends BCStatement implements IActionInternal
 //        return new TranslatableComponent("gate.action.pipe.wire", ColourUtil.getTextFullTooltip(colour)).getString();
         return new TranslatableComponent("gate.action.pipe.wire", ColourUtil.getTextFullTooltipComponent(colour));
     }
+
     @Override
     public String getDescriptionKey()
     {
 //        return String.format(LocaleUtil.localize("gate.action.pipe.wire"), ColourUtil.getTextFullTooltip(colour));
-        return "gate.action.pipe.wire."+colour.getName();
+        return "gate.action.pipe.wire." + colour.getName();
     }
 
     @Override

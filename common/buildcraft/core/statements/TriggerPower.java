@@ -27,7 +27,7 @@ public class TriggerPower extends BCStatement implements ITriggerInternal, ITrig
 
     public TriggerPower(boolean high)
     {
-        super(new TextComponent("buildcraft:energyStored" + (high ? "high" : "low")));
+        super("buildcraft:energyStored" + (high ? "high" : "low"));
         this.high = high;
     }
 

@@ -51,8 +51,8 @@ public enum PatternParameterRotation implements IStatementParameter {
     }
 
     @Override
-    public BaseComponent getUniqueTag() {
-        return new TextComponent("buildcraft:fillerParameterRotation");
+    public String getUniqueTag() {
+        return "buildcraft:fillerParameterRotation";
     }
 
     @Override

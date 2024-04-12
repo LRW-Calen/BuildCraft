@@ -103,9 +103,9 @@ public enum StatementParamGateSideOnly implements IStatementParameter
     }
 
     @Override
-    public BaseComponent getUniqueTag()
+    public String getUniqueTag()
     {
-        return new TextComponent("buildcraft:redstoneGateSideOnly");
+        return "buildcraft:redstoneGateSideOnly";
     }
 
     @Override

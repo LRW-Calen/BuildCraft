@@ -104,9 +104,6 @@ public class BCCoreConfig
         }
     }
 
-//    public static synchronized Configuration getOrSetObjConfig(boolean get, Configuration objConfig)
-//    {
-//    }
     // JADE
 
     public static final JsonConfig<WailaConfig> CONFIG =

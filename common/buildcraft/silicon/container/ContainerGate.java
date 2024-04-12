@@ -192,13 +192,13 @@ public class ContainerGate extends ContainerPipe
                 buffer.writeInt(possibleActions.size());
                 for (TriggerWrapper wrapper : possibleTriggers)
                 {
-                    buffer.writeUtf(wrapper.getUniqueTag().getString());
+                    buffer.writeUtf(wrapper.getUniqueTag());
                     buffer.writeEnum(wrapper.sourcePart);
                 }
 
                 for (ActionWrapper wrapper : possibleActions)
                 {
-                    buffer.writeUtf(wrapper.getUniqueTag().getString());
+                    buffer.writeUtf(wrapper.getUniqueTag());
                     buffer.writeEnum(wrapper.sourcePart);
                 }
             }

@@ -21,7 +21,7 @@ public abstract class Pattern extends BCStatement implements IFillerPattern, IAc
 
     public Pattern(String tag)
     {
-        super(new TextComponent("buildcraft:" + tag));
+        super("buildcraft:" + tag);
         desc = "fillerpattern." + tag;
         FillerManager.registry.addPattern(this);
     }

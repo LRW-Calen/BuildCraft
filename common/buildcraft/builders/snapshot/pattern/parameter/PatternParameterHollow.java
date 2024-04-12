@@ -58,8 +58,8 @@ public enum PatternParameterHollow implements IStatementParameter {
     }
 
     @Override
-    public BaseComponent getUniqueTag() {
-        return new TextComponent("buildcraft:fillerParameterHollow");
+    public String getUniqueTag() {
+        return "buildcraft:fillerParameterHollow";
     }
 
     @Override

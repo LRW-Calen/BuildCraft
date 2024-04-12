@@ -119,7 +119,7 @@ public abstract class GuidePart
     public abstract PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index);
 
     /**
-     * Like {@link #renderIntoArea(int, int, int, int, PagePosition, int)} but for a mouse click.
+     * Like {@link #renderIntoArea(PoseStack, int, int, int, int, PagePosition, int)} but for a mouse click.
      */
     public abstract PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
                                                   double mouseX, double mouseY);

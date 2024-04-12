@@ -184,9 +184,9 @@ public class StatementParameterItemStack implements IStatementParameter
     }
 
     @Override
-    public BaseComponent getUniqueTag()
+    public String getUniqueTag()
     {
-        return new TextComponent("buildcraft:stack");
+        return "buildcraft:stack";
     }
 
     @Override

@@ -28,8 +28,8 @@ public class ActionPowerPulsar extends BCStatement implements IActionInternalSid
     public ActionPowerPulsar(boolean constant)
     {
         super(
-                new TextComponent("buildcraft:pulsar." + (constant ? "constant" : "single")),
-                new TextComponent("buildcraft.pulsar.constant" + (constant ? "constant" : "single"))
+                "buildcraft:pulsar." + (constant ? "constant" : "single"),
+                "buildcraft.pulsar.constant" + (constant ? "constant" : "single")
         );
         this.constant = constant;
     }

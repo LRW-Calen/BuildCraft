@@ -174,9 +174,9 @@ public class TriggerParameterSignal implements IStatementParameter
     }
 
     @Override
-    public BaseComponent getUniqueTag()
+    public String getUniqueTag()
     {
-        return new TextComponent("buildcraft:pipeWireTrigger");
+        return "buildcraft:pipeWireTrigger";
     }
 
     @Override

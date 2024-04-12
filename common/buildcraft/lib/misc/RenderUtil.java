@@ -207,7 +207,7 @@ public class RenderUtil
 
     /**
      * @return True if the given {@link BufferBuilder} is currently in the middle of drawing. Essentially returns true
-     * if {@link BufferBuilder#begin(int, VertexFormat)} would throw an exception.
+     * if {@link BufferBuilder#begin(VertexFormat.Mode, VertexFormat)} would throw an exception.
      */
     public static boolean isDrawing(BufferBuilder bb)
     {

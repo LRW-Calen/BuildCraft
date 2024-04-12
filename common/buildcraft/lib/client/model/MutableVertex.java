@@ -228,9 +228,9 @@ public class MutableVertex
 
     /**
      * Renders this vertex into the given {@link BufferBuilder}, assuming that the {@link VertexFormat} is
-     * {@link DefaultVertexFormats#BLOCK}.
+     * {@link DefaultVertexFormat#BLOCK}.
      * <p>
-     * Slight performance increase over {@link #render(BufferBuilder)}.
+     * Slight performance increase over {@link #render(PoseStack.Pose, VertexConsumer)}.
      */
 //    public void renderAsBlock(BufferBuilder bb)
     public void renderAsBlock(PoseStack.Pose lastMatrix, VertexConsumer buffer)

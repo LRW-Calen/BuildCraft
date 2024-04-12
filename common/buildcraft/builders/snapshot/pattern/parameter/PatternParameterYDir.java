@@ -50,8 +50,8 @@ public enum PatternParameterYDir implements IStatementParameter {
     }
 
     @Override
-    public BaseComponent getUniqueTag() {
-        return new TextComponent("buildcraft:fillerParameterYDir");
+    public String getUniqueTag() {
+        return "buildcraft:fillerParameterYDir";
     }
 
     @Nonnull

@@ -29,8 +29,8 @@ public class TriggerFluidContainerLevel extends BCStatement implements ITriggerE
     public TriggerFluidContainerLevel(TriggerType type)
     {
         super(
-                new TextComponent("buildcraft:fluid." + type.name().toLowerCase(Locale.ROOT)),
-                new TextComponent("buildcraft.fluid." + type.name().toLowerCase(Locale.ROOT))
+                "buildcraft:fluid." + type.name().toLowerCase(Locale.ROOT),
+                "buildcraft.fluid." + type.name().toLowerCase(Locale.ROOT)
         );
         this.type = type;
     }

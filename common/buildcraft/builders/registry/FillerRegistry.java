@@ -26,7 +26,7 @@ public enum FillerRegistry implements IFillerRegistry {
 
     @Override
     public void addPattern(IFillerPattern pattern) {
-        patterns.put(pattern.getUniqueTag().getString(), pattern);
+        patterns.put(pattern.getUniqueTag(), pattern);
     }
 
     @Override

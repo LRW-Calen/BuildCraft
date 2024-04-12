@@ -7,6 +7,7 @@
 package buildcraft.lib.net.cache;
 
 import buildcraft.api.core.BCLog;
+import buildcraft.lib.misc.ItemStackKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModLoadingContext;

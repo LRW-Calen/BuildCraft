@@ -33,8 +33,8 @@ public class ActionPipeDirection extends BCStatement implements IActionInternal
     public ActionPipeDirection(Direction direction)
     {
         super(
-                new TextComponent("buildcraft:pipe.dir." + direction.name().toLowerCase(Locale.ROOT)),
-                new TextComponent("buildcraft.pipe.dir." + direction.name().toLowerCase(Locale.ROOT))
+                "buildcraft:pipe.dir." + direction.name().toLowerCase(Locale.ROOT),
+                "buildcraft.pipe.dir." + direction.name().toLowerCase(Locale.ROOT)
         );
         this.direction = direction;
     }

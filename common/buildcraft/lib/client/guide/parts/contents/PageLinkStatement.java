@@ -33,11 +33,11 @@ public class PageLinkStatement extends PageLink
         List<Component> tip = statement.getTooltip();
         if (tip.isEmpty())
         {
-            BaseComponent uniqueTag = statement.getUniqueTag();
-            this.tooltip = ImmutableList.of(uniqueTag);
+            String uniqueTag = statement.getUniqueTag();
+            this.tooltip = ImmutableList.of(new TextComponent(uniqueTag));
 //            this.searchText = uniqueTag.getString().toLowerCase(Locale.ROOT);
 //            this.searchText = new TextComponent(uniqueTag.getContents().toLowerCase(Locale.ROOT));
-            this.searchText = uniqueTag;
+            this.searchText = new TextComponent(uniqueTag);
 //            this.textKey = uniqueTag.getContents().toLowerCase(Locale.ROOT);
             this.textKey = statement.getDescriptionKey().toLowerCase(Locale.ROOT);
         }
@@ -69,7 +69,7 @@ public class PageLinkStatement extends PageLink
 
         List<Component> tooltip = statement.getTooltip();
         List<String> tooltipKeys = statement.getTooltipKey();
-        Component title = tooltip.isEmpty() ? statement.getUniqueTag() : tooltip.get(0);
+        Component title = tooltip.isEmpty() ? new TextComponent(statement.getUniqueTag()) : tooltip.get(0);
         String titleKey = tooltipKeys.isEmpty() ? statement.getDescriptionKey() : tooltipKeys.get(0);
 //        return new PageLine(icon, icon, 2, (BaseComponent) title, true);
         return new PageLine(icon, icon, 2, titleKey, title, true);

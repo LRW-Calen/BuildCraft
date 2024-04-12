@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 public class TriggerPowerRequested extends BCStatement implements ITriggerInternal {
 
     public TriggerPowerRequested() {
-        super(new TextComponent("buildcraft:powerRequested"));
+        super("buildcraft:powerRequested");
     }
 
     @Override

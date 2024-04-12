@@ -27,43 +27,52 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Locale;
 
-public class ActionMachineControl extends BCStatement implements IActionExternal {
+public class ActionMachineControl extends BCStatement implements IActionExternal
+{
     public final Mode mode;
 
-    public ActionMachineControl(Mode mode) {
+    public ActionMachineControl(Mode mode)
+    {
         super(
-            new TextComponent("buildcraft:machine." + mode.name().toLowerCase(Locale.ROOT)),
-            new TextComponent("buildcraft.machine." + mode.name().toLowerCase(Locale.ROOT))
+                "buildcraft:machine." + mode.name().toLowerCase(Locale.ROOT),
+                "buildcraft.machine." + mode.name().toLowerCase(Locale.ROOT)
         );
         this.mode = mode;
     }
 
     @Override
-    public Component getDescription() {
+    public Component getDescription()
+    {
 //        return LocaleUtil.localize("gate.action.machine." + mode.name().toLowerCase(Locale.ROOT));
         return new TranslatableComponent("gate.action.machine." + mode.name().toLowerCase(Locale.ROOT));
     }
+
     @Override
-    public String getDescriptionKey() {
+    public String getDescriptionKey()
+    {
         return "gate.action.machine." + mode.name().toLowerCase(Locale.ROOT);
     }
 
     @Override
-    public void actionActivate(BlockEntity target, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
-        IControllable controllable = target.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElseGet(()->null);
-        if (controllable != null && controllable.acceptsControlMode(mode)) {
+    public void actionActivate(BlockEntity target, Direction side, IStatementContainer source, IStatementParameter[] parameters)
+    {
+        IControllable controllable = target.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElseGet(() -> null);
+        if (controllable != null && controllable.acceptsControlMode(mode))
+        {
             controllable.setControlMode(mode);
         }
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public SpriteHolder getSprite() {
+    public SpriteHolder getSprite()
+    {
         return BCCoreSprites.ACTION_MACHINE_CONTROL.get(mode);
     }
 
     @Override
-    public IStatement[] getPossible() {
+    public IStatement[] getPossible()
+    {
         return BCCoreStatements.ACTION_MACHINE_CONTROL;
     }
 }

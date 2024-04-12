@@ -3,6 +3,7 @@ package buildcraft.test;
 import java.io.InputStream;
 import java.io.PrintStream;
 
+import net.minecraft.SharedConstants;
 import net.minecraft.server.Bootstrap;
 import org.junit.BeforeClass;
 
@@ -14,6 +15,7 @@ public class VanillaSetupBaseTester {
         InputStream sysIn = System.in;
 
 //        Bootstrap.register();
+        SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
 
         System.setIn(sysIn);

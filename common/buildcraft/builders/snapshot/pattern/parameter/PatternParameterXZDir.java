@@ -98,9 +98,9 @@ public enum PatternParameterXZDir implements IStatementParameter
     }
 
     @Override
-    public BaseComponent getUniqueTag()
+    public String getUniqueTag()
     {
-        return new TextComponent("buildcraft:fillerParameterXZDir");
+        return "buildcraft:fillerParameterXZDir";
     }
 
     @Override

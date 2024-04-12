@@ -73,20 +73,13 @@ public class BCSilicon
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event)
     {
-        // 小桌子
         ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.assemblyTable.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.advancedCraftingTable.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.integrationTable.get(), RenderType.cutout());
-        // Calen: 1.12.2没有实现……
+        // Calen: 1.12.2 not impl……
         ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.chargingTable.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.programmingTable.get(), RenderType.cutout());
 
-        // GUI
-//        event.enqueueWork(
-//                // Assume RegistryObject<MenuType<MyMenu>> MY_MENU
-//                // Assume MyContainerScreen<MyMenu> which takes in three parameters
-//                () -> MenuScreens.register(BCSiliconMenuTypes.ASSEMBLY_TABLE.get(), BCSiliconScreenConstructors.ASSEMBLY_TABLE)
-//        );
     }
 
     @SubscribeEvent

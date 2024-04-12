@@ -62,8 +62,8 @@ public enum PatternParameterCenter implements IStatementParameter {
     }
 
     @Override
-    public BaseComponent getUniqueTag() {
-        return new TextComponent("buildcraft:fillerParameterCenter");
+    public String getUniqueTag() {
+        return "buildcraft:fillerParameterCenter";
     }
 
     @Override

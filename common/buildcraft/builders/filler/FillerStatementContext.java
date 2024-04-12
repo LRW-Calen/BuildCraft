@@ -2,6 +2,7 @@ package buildcraft.builders.filler;
 
 import buildcraft.api.filler.FillerManager;
 import buildcraft.api.filler.IFillerPattern;
+import buildcraft.api.statements.IGuiSlot;
 import buildcraft.builders.BCBuildersStatements;
 import buildcraft.builders.snapshot.pattern.PatternShape2d;
 import buildcraft.lib.gui.ISimpleDrawable;
@@ -43,8 +44,7 @@ public enum FillerStatementContext implements StatementContext<IFillerPattern>
         }
         for (Group group : Group.values())
         {
-//            group.patterns.sort(Comparator.comparing(IFillerPattern::getUniqueTag));
-            group.patterns.sort(Comparator.comparing((fillerPattern)->fillerPattern.getUniqueTag().getString()));
+            group.patterns.sort(Comparator.comparing(IFillerPattern::getUniqueTag));
         }
         if (Group.DEFAULT.patterns.remove(BCBuildersStatements.PATTERN_NONE))
         {

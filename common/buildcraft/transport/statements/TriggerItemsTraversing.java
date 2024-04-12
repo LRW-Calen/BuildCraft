@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class TriggerItemsTraversing extends BCStatement implements ITriggerInternal {
 
     public TriggerItemsTraversing() {
-        super(new TextComponent("buildcraft:pipe_contains_items"));
+        super("buildcraft:pipe_contains_items");
     }
 
     @Override

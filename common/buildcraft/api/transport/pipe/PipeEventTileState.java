@@ -8,14 +8,14 @@ public abstract class PipeEventTileState extends PipeEvent {
         super(holder);
     }
 
-    /** Fired in {@link BlockEntity#invalidate()} */
+    /** Fired in {@link BlockEntity#setRemoved()} */
     public static class Invalidate extends PipeEventTileState {
         public Invalidate(IPipeHolder holder) {
             super(holder);
         }
     }
 
-    /** Fired in {@link BlockEntity#validate()} */
+    /** Fired in {@link BlockEntity#clearRemoved()} */
     public static class Validate extends PipeEventTileState {
         public Validate(IPipeHolder holder) {
             super(holder);

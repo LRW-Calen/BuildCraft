@@ -38,7 +38,7 @@ public class StatementTypeParam extends StatementType<IStatementParameter> {
         CompoundTag nbt = new CompoundTag();
         if (slot != null) {
             slot.writeToNbt(nbt);
-            nbt.putString("kind", slot.getUniqueTag().getString());
+            nbt.putString("kind", slot.getUniqueTag());
         }
         return nbt;
     }
@@ -63,7 +63,7 @@ public class StatementTypeParam extends StatementType<IStatementParameter> {
             buffer.writeBoolean(false);
         } else {
             buffer.writeBoolean(true);
-            buffer.writeUtf(slot.getUniqueTag().getString());
+            buffer.writeUtf(slot.getUniqueTag());
             slot.writeToBuf(buffer);
         }
     }

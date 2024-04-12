@@ -201,6 +201,83 @@ task setupSubProjects(dependsOn: "sub_projects:expression:generateSources") {
     // Just an inter-dependency task
 }
 
+compileJava {
+    options.compilerArgs << "-Xmaxerrs" << "2000"
+    options.compilerArgs << "-Xmaxwarns" << "2"
+    options.compilerArgs << "-Xlint:all"
+    options.compilerArgs << "-Xdiags:verbose"
+    options.compilerArgs << "-encoding" << "UTF-8"
+}
+
+javadoc {
+    options.setUse(true)
+    options.addStringsOption("Xmaxerrs").setValue(["2000"])
+    options.addStringsOption("Xmaxwarns").setValue(["2000"])
+    options.addStringsOption("Xdoclint:all")
+    options.setEncoding("UTF-8")
+}
+
+def unzippedSourceJar = new File("$projectDir/build/processing/tasks/unzipped_src_jar/unzip")
+def libsDir = new File(System.getenv("LIBS_DIR") ?: "$projectDir/build/libs/", version)
+def modulesDir = new File(libsDir, "modules")
+def modulesDirSrc = new File(modulesDir, "src")
+
+//// forge (or gradle?) creates a special sourceJar which has been processed
+//// This task unzips that created jar, so that partial source jars can be created.
+//task unzipSourceJar(type: Copy, dependsOn: sourceJar) {
+//    from (zipTree(sourceJar.archivePath)) {
+//        include "**"
+//    }
+//    into unzippedSourceJar
+//}
+
+// add api classes to javadoc
+javadoc {
+    source += sourceSets.api.allSource
+}
+
+// add a javadoc jar
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    destinationDir = libsDir
+    appendix = "main"
+    classifier = 'javadoc'
+    from '$projectDir/build/docs/javadoc'
+}
+
+// because the normal output has been made to be obfuscated
+task deobfJar(type: Jar) {
+    destinationDir = libsDir
+    appendix = "main"
+    from sourceSets.main.output
+    from sourceSets.api.output
+    classifier = 'dev'
+}
+
+//task apiSrcJar(type: Jar, dependsOn: [build, unzipSourceJar]) {
+//    destinationDir = modulesDirSrc
+//    appendix = "api"
+//    classifier = 'sources'
+//    from sourceSets.api.allSource
+//}
+// specify artifacts to be uploaded
+//artifacts {
+//    // the default jar is already here by default
+//    archives sourceJar
+//    archives javadocJar
+//
+//    // Modules
+//    archives apiJar
+//    archives libJar
+//    archives coreJar
+//    archives buildersJar
+//    archives energyJar
+//    archives factoryJar
+//    archives siliconJar
+//    archives transportJar
+//    archives roboticsJar
+//    archives mainJar
+//}
+
 //eclipseClasspath.dependsOn setupSubProjects
 //ideaModule.dependsOn setupSubProjects
 //compileJava.dependsOn setupSubProjects
@@ -267,7 +344,6 @@ repositories {
     }
 }
 
-// Calen: I tried to avoid using mixin to ensure the compatibility
 // Mixin
 mixin {
     add sourceSets.main, "refmap.buildcraft.json"

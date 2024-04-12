@@ -31,8 +31,8 @@ public class ActionExtractionPreset extends BCStatement implements IActionIntern
     public ActionExtractionPreset(SlotIndex index)
     {
         super(
-                new TextComponent("buildcraft:extraction.preset." + index.colour.getName()),
-                new TextComponent("buildcraft.extraction.preset." + index.colour.getName())
+                "buildcraft:extraction.preset." + index.colour.getName(),
+                "buildcraft.extraction.preset." + index.colour.getName()
         );
 
         this.index = index;

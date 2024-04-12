@@ -151,9 +151,9 @@ public class ActionParameterSignal implements IStatementParameter
     }
 
     @Override
-    public BaseComponent getUniqueTag()
+    public String getUniqueTag()
     {
-        return new TextComponent("buildcraft:pipeWireAction");
+        return "buildcraft:pipeWireAction";
     }
 
     @Override

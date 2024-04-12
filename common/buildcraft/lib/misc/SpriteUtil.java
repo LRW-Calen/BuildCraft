@@ -53,7 +53,7 @@ public class SpriteUtil
 
     /**
      * Transforms the given {@link ResourceLocation}, adding ".png" to the end and prepending that
-     * {@link ResourceLocation#getPath()} with "textures/", just like what {@link TextureMap} does.
+     * {@link ResourceLocation#getPath()} with "textures/", just like what {@link TextureAtlas} does.
      */
     public static ResourceLocation transformLocation(ResourceLocation location)
     {

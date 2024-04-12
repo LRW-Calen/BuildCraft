@@ -39,7 +39,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#getUniqueTag()
      */
     @Override
-    public BaseComponent getUniqueTag()
+    public String getUniqueTag()
     {
         return this.delegate.getUniqueTag();
     }
@@ -211,7 +211,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
                 }
             }
         }
-        return getUniqueTag().getString().compareTo(o.getUniqueTag().getString());
+        return getUniqueTag().compareTo(o.getUniqueTag());
     }
 
     @Override

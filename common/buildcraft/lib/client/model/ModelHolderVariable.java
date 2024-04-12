@@ -12,6 +12,7 @@ import buildcraft.lib.client.model.json.JsonVariableModel;
 import buildcraft.lib.expression.FunctionContext;
 import buildcraft.lib.expression.node.value.ITickableNode;
 import buildcraft.lib.misc.SpriteUtil;
+import buildcraft.transport.BCTransportModels;
 import com.google.gson.JsonParseException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;

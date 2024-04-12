@@ -10,6 +10,7 @@ import buildcraft.lib.client.model.ResourceLoaderContext;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 
@@ -17,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-/** {@link ModelBlock} but with different/additional features */
+/** {@link BlockModel} but with different/additional features */
 public class JsonModel {
     public final boolean ambientOcclusion;
     public final Map<String, String> textures;

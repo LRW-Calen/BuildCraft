@@ -48,8 +48,8 @@ public enum PatternParameterAxis implements IStatementParameter {
     }
 
     @Override
-    public BaseComponent getUniqueTag() {
-        return new TextComponent("buildcraft:filler_parameter_axis");
+    public String getUniqueTag() {
+        return "buildcraft:filler_parameter_axis";
     }
 
     @Override

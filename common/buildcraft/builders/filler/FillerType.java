@@ -32,7 +32,7 @@ public class FillerType extends StatementType<IFillerPattern> {
     @Override
     public CompoundTag writeToNbt(IFillerPattern slot) {
         CompoundTag nbt = new CompoundTag();
-        nbt.putString("kind", slot.getUniqueTag().getString());
+        nbt.putString("kind", slot.getUniqueTag());
         return nbt;
     }
 
@@ -48,6 +48,6 @@ public class FillerType extends StatementType<IFillerPattern> {
 
     @Override
     public void writeToBuffer(PacketBufferBC buffer, IFillerPattern slot) {
-        buffer.writeUtf(slot.getUniqueTag().getString());
+        buffer.writeUtf(slot.getUniqueTag());
     }
 }

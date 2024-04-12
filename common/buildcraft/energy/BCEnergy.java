@@ -76,7 +76,6 @@ public class BCEnergy
         BCEnergyBlocks.preInit();
         BCEnergyItems.preInit();
         BCEnergyFluids.preInit();
-        // 推迟加载 不然总是比core先加载配置 然后炸……
 //        BCEnergyBlocks.preInit();
 //        EnumSpring.OIL.liquidBlock = BCEnergyFluids.crudeOil[0].getBlock().getDefaultState();
 

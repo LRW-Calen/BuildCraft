@@ -4,9 +4,11 @@ import buildcraft.api.BCModules;
 import buildcraft.core.BCCoreItems;
 import buildcraft.lib.oredicttag.OreDictTags;
 import buildcraft.transport.BCTransportItems;
+import buildcraft.transport.pipe.PipeRegistry;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BlockTagsProvider;
 import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
@@ -73,6 +75,12 @@ public class BCItemTagsProvider extends ItemTagsProvider
         // pipe plugs
         tag(OreDictTags.waterproof).add(BCTransportItems.waterproof.get());
         // pipes
+        OreDictTags.pipeColorTags.forEach((c, t) ->
+        {
+            TagsProvider.TagAppender<Item> tagProvider = tag(t);
+            PipeRegistry.INSTANCE.getAllRegisteredPipes().forEach(d -> tagProvider.add((Item) PipeRegistry.INSTANCE.getItemForPipe(d, c)));
+        });
+
         tag(OreDictTags.pipeStructure).add(BCTransportItems.pipeStructure.values().stream().map(r -> (Item) r.get()).toArray(Item[]::new));
         tag(OreDictTags.pipeItemWood).add(BCTransportItems.pipeItemWood.values().stream().map(r -> (Item) r.get()).toArray(Item[]::new));
         tag(OreDictTags.pipeFluidWood).add(BCTransportItems.pipeFluidWood.values().stream().map(r -> (Item) r.get()).toArray(Item[]::new));

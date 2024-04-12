@@ -35,7 +35,7 @@ public interface IScriptableRegistry<E> extends IReloadableRegistry<E> {
     }
 
     /** @return A {@link Set} (likely unmodifiable) that contains all of the
-     *         {@link ResourceLocation#getResourceDomain()}'s that had added entries to this registry through
+     *         {@link ResourceLocation#getNamespace()}'s that had added entries to this registry through
      *         scripts. */
     Set<String> getSourceDomains();
 

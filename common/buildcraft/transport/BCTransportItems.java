@@ -43,6 +43,8 @@ public class BCTransportItems
 
     public static RegistryObject<ItemBC_Neptune> waterproof;
 
+    public static Map<PipeDefinition, Map<DyeColor, RegistryObject<? extends IItemPipe>>> allPipes;
+
     public static Map<DyeColor, RegistryObject<? extends IItemPipe>> pipeStructure;
 
     public static Map<DyeColor, RegistryObject<? extends IItemPipe>> pipeItemWood;
@@ -158,7 +160,7 @@ public class BCTransportItems
         wire = HELPER.addItem("item.wire", BC_TRANSPORT_PLUG_PROP, ItemWire::new);
     }
 
-//    public static RegistryObject<ItemPipeHolder> makePipeItem(PipeDefinition def)
+    //    public static RegistryObject<ItemPipeHolder> makePipeItem(PipeDefinition def)
     public static Map<DyeColor, RegistryObject<? extends IItemPipe>> makePipeItem(PipeDefinition def)
     {
         return PipeRegistry.INSTANCE.createItemForPipe(def);

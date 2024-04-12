@@ -107,7 +107,7 @@ public class RegistryConfig
     }
 
     /**
-     * @return True if the given location has been passed to {@link #isEnabled(Block)}, {@link #isEnabled(Item)}, or
+     * @return True if the given location has been passed to {@link #isEnabledBlock(String)}, {@link #isEnabledItem(String)}, or
      * {@link #isEnabled(String, String, String)}, and it returned false (because it has been disabled in the
      * appropriate mod's config)
      */

@@ -142,7 +142,9 @@ public class LocaleUtil
     public static String getColorTranslateKey(DyeColor colour)
     {
 //        return localize("item.fireworksCharge." + colour.getName());
-        return "item.minecraft.firework_star." + colour.getName();
+//        return "item.minecraft.firework_star." + colour.getName();
+        // Calen
+        return "item.minecraft.firework_star." + (colour == null ? "colorless" : colour.getName());
     }
 
     /**
@@ -313,6 +315,7 @@ public class LocaleUtil
         mj = BCLibConfig.displayTimeGap.convertTicksToGap(mj);
         return localize(localeKeyMjFlow, MjAPI.formatMj(mj));
     }
+
     // Calen
     public static TranslatableComponent localizeMjFlowComponent(long mj)
     {

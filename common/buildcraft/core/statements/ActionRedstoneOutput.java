@@ -26,7 +26,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 public class ActionRedstoneOutput extends BCStatement implements IActionInternal
 {
 
-    protected ActionRedstoneOutput(BaseComponent s)
+    protected ActionRedstoneOutput(String s)
     {
         // Used by fader output
         super(s);
@@ -35,8 +35,8 @@ public class ActionRedstoneOutput extends BCStatement implements IActionInternal
     public ActionRedstoneOutput()
     {
         super(
-                new TextComponent("buildcraft:redstone.output"),
-                new TextComponent("buildcraft.redstone.output")
+                "buildcraft:redstone.output",
+                "buildcraft.redstone.output"
         );
     }
 

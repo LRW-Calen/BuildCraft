@@ -20,11 +20,13 @@
 package buildcraft.lib.net;
 
 
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 /**
  * A message handler based on {@link IMessage}. Implement and override {@link #onMessage(IMessage, NetworkEvent.Context)} to
- * process your packet. Supply the class to {@link SimpleNetworkWrapper#registerMessage(Class, Class, int, net.minecraftforge.fml.relauncher.Side)}
+ * process your packet. Supply the class to {@link SimpleChannel#messageBuilder(Class, int, NetworkDirection)}
  * to register both the message type and it's associated handler.
  *
  * @author cpw

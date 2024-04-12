@@ -506,7 +506,7 @@ public class TileHeatExchange extends TileBC_Neptune implements ITickable, IDebu
     }
 
     /**
-     * Called by {@link Block#rotateBlock(net.minecraft.world.level.Level, BlockPos, Direction)} and
+     * Called by {@link Block#rotateBlock(Level, BlockPos, Direction)} and
      * {@link ICustomRotationHandler#attemptRotation(Level, BlockPos, BlockState, Direction)} when the
      * {@link Direction} is {@link Direction#UP} or {@link Direction#DOWN}.
      * <p>

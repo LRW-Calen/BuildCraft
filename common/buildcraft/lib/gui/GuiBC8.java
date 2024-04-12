@@ -224,7 +224,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
     // Other
 
     /**
-     * @deprecated Use {@link GuiUtil#drawItemStackAt(ItemStack, int, int)} instead
+     * @deprecated Use {@link GuiUtil#drawItemStackAt(ItemStack, PoseStack, int, int)} instead
      */
     @Deprecated
     public static void drawItemStackAt(ItemStack stack, PoseStack poseStack, int x, int y)

@@ -28,8 +28,8 @@ public class TriggerInventory extends BCStatement implements ITriggerExternal {
 
     public TriggerInventory(State state) {
         super(
-            new TextComponent("buildcraft:inventory." + state.name().toLowerCase(Locale.ROOT)),
-            new TextComponent("buildcraft.inventory." + state.name().toLowerCase(Locale.ROOT))
+            "buildcraft:inventory." + state.name().toLowerCase(Locale.ROOT),
+            "buildcraft.inventory." + state.name().toLowerCase(Locale.ROOT)
         );
         this.state = state;
     }

@@ -32,7 +32,7 @@ public class TriggerLightSensor extends BCStatement implements ITriggerInternalS
 
     public TriggerLightSensor(boolean bright)
     {
-        super(new TextComponent("buildcraft:light_" + (bright ? "bright" : "dark")));
+        super("buildcraft:light_" + (bright ? "bright" : "dark"));
         this.bright = bright;
     }
 

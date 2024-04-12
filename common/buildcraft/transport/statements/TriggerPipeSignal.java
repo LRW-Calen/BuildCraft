@@ -34,12 +34,12 @@ public class TriggerPipeSignal extends BCStatement implements ITriggerInternal
     public TriggerPipeSignal(boolean active, DyeColor colour)
     {
         super(
-                new TextComponent(
-                        "buildcraft:pipe.wire.input." + colour.getName().toLowerCase(Locale.ROOT)
-                                + (active ? ".active" : ".inactive")), //
-                new TextComponent("buildcraft.pipe.wire.input." + colour.getName().toLowerCase(Locale.ROOT)
+
+                "buildcraft:pipe.wire.input." + colour.getName().toLowerCase(Locale.ROOT)
+                        + (active ? ".active" : ".inactive"), //
+                "buildcraft.pipe.wire.input." + colour.getName().toLowerCase(Locale.ROOT)
                         + (active ? ".active" : ".inactive")
-                )
+
         );
 
         this.active = active;

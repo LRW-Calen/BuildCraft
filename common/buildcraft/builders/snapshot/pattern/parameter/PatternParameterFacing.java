@@ -66,8 +66,8 @@ public enum PatternParameterFacing implements IStatementParameter {
     }
 
     @Override
-    public BaseComponent getUniqueTag() {
-        return new TextComponent("buildcraft:fillerParameterFacing");
+    public String getUniqueTag() {
+        return "buildcraft:fillerParameterFacing";
     }
 
     @Override

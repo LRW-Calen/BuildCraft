@@ -198,7 +198,7 @@ public class LaserRenderer_BC8
 //    }
 
     /**
-     * Assumes the buffer uses {@link DefaultVertexFormats#BLOCK}
+     * Assumes the buffer uses {@link DefaultVertexFormat#BLOCK}
      */
     public static void renderLaserDynamic(LaserData_BC8 data, PoseStack.Pose pose, VertexConsumer buffer)
     {

@@ -31,8 +31,8 @@ public class ActionPipeColor extends BCStatement implements IActionInternal
     public ActionPipeColor(DyeColor color)
     {
         super(
-                new TextComponent("buildcraft:pipe.color." + color.getName()),
-                new TextComponent("buildcraft.pipe." + color.getName())
+                "buildcraft:pipe.color." + color.getName(),
+                "buildcraft.pipe." + color.getName()
         );
         this.color = color;
     }

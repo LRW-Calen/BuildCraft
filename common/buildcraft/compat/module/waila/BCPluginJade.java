@@ -7,7 +7,7 @@ import mcp.mobius.waila.api.*;
 @WailaPlugin
 public class BCPluginJade implements IWailaPlugin
 {
-    // Calen: in 1.18.2 here should use Block or TE class instead of interface, it's too difficult to get all matched if allowing some BC module absent,
+    // Calen: in 1.18.2 here should use Block or TE class instead of interface, it's too difficult to get all matched if allowing some BC modules absent,
     // so just use TileBC_Neptune and BlockBCTile_Neptune
     @Override
     public void register(IWailaCommonRegistration registrar)

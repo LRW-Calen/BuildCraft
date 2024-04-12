@@ -46,14 +46,14 @@ public abstract class PipeEventFluid extends PipeEvent {
         /** The maximum amount of fluid that the centre pipe could accept. */
         public final int totalAcceptable;
 
-        /** Array of {@link Direction#getIndex()} to the maximum amount of fluid that a given side can offer. DO NOT
+        /** Array of {@link Direction#get3DDataValue()} to the maximum amount of fluid that a given side can offer. DO NOT
          * CHANGE THIS! */
         public final int[] totalOffered;
 
         // Used for checking the state
         private final int[] totalOfferedCheck;
 
-        /** Array of {@link Direction#getIndex()} to the amount of fluid that the given side will actually offer to the
+        /** Array of {@link Direction#get3DDataValue()} to the amount of fluid that the given side will actually offer to the
          * centre. This should *never* be larger than */
         public final int[] actuallyOffered;
 

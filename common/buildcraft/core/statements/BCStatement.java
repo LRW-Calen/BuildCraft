@@ -14,21 +14,21 @@ import net.minecraft.network.chat.BaseComponent;
 public abstract class BCStatement implements IStatement
 {
 
-    protected final BaseComponent uniqueTag;
+    protected final String uniqueTag;
 
     /** UniqueTag accepts multiple possible tags, use this feature to migrate to more standardised tags if needed,
      * otherwise just pass a single string. The first passed string will be the one used when saved to disk.
      *
      * @param uniqueTag */
-    public BCStatement(BaseComponent... uniqueTag) {
+    public BCStatement(String... uniqueTag) {
         this.uniqueTag = uniqueTag[0];
-        for (BaseComponent tag : uniqueTag) {
-            StatementManager.statements.put(tag.getString(), this);
+        for (String tag : uniqueTag) {
+            StatementManager.statements.put(tag, this);
         }
     }
 
     @Override
-    public BaseComponent getUniqueTag() {
+    public String getUniqueTag() {
         return uniqueTag;
     }
 
