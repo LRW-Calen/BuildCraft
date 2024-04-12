@@ -20,7 +20,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public enum ActionProviderPipes implements IActionProvider {
+public enum ActionProviderPipes implements IActionProvider
+{
     INSTANCE;
 
     @Override
@@ -42,7 +43,7 @@ public enum ActionProviderPipes implements IActionProvider {
 
     @Override
     public void addInternalSidedActions(Collection<IActionInternalSided> actions, IStatementContainer container,
-        @Nonnull Direction side) {
+                                        @Nonnull Direction side) {
         if (container instanceof IGate) {
             IGate gate = (IGate) container;
             IPipeHolder holder = gate.getPipeHolder();

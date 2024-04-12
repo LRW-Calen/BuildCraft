@@ -7,7 +7,7 @@
 package buildcraft.transport.client.render;
 
 import buildcraft.api.core.render.ISprite;
-import buildcraft.api.enums.EnumWirePart;
+import buildcraft.api.transport.EnumWirePart;
 import buildcraft.transport.tile.TilePipeHolder;
 import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.client.model.ModelUtil.UvFaceData;
@@ -17,6 +17,7 @@ import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.VecUtil;
 import buildcraft.transport.wire.EnumWireBetween;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;

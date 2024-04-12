@@ -9,7 +9,7 @@ package buildcraft.transport.block;
 import buildcraft.api.blocks.ICustomPaintHandler;
 import buildcraft.api.core.BCLog;
 import buildcraft.api.core.EnumPipePart;
-import buildcraft.api.enums.EnumWirePart;
+import buildcraft.api.transport.EnumWirePart;
 import buildcraft.api.transport.IItemPluggable;
 import buildcraft.api.transport.WireNode;
 import buildcraft.api.transport.pipe.IPipeHolder;

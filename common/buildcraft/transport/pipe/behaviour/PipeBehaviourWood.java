@@ -6,10 +6,7 @@
 
 package buildcraft.transport.pipe.behaviour;
 
-import buildcraft.api.mj.IMjConnector;
-import buildcraft.api.mj.IMjRedstoneReceiver;
-import buildcraft.api.mj.MjAPI;
-import buildcraft.api.mj.MjCapabilityHelper;
+import buildcraft.api.mj.*;
 import buildcraft.api.tiles.IDebuggable;
 import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pipe.IPipe.ConnectedType;

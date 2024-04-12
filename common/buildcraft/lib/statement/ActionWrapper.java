@@ -15,7 +15,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ActionWrapper extends StatementWrapper implements IActionInternal {
+public abstract class ActionWrapper extends StatementWrapper implements IActionInternal
+{
 
     protected boolean isActive = false;
 

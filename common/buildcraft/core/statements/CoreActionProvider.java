@@ -17,7 +17,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public enum CoreActionProvider implements IActionProvider {
+public enum CoreActionProvider implements IActionProvider
+{
     INSTANCE;
 
     @Override

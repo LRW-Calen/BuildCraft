@@ -6,11 +6,10 @@
 
 package buildcraft.transport.wire;
 
-import buildcraft.api.enums.EnumWirePart;
+import buildcraft.api.transport.EnumWirePart;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 

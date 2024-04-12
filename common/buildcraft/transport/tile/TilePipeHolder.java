@@ -10,6 +10,7 @@ import buildcraft.api.BCModules;
 import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.tiles.IDebuggable;
+import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.lib.registry.TagManager;
@@ -627,7 +628,7 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
     }
 
     @Override
-    public void scheduleNetworkUpdate(PipeMessageReceiver... parts)
+    public void scheduleNetworkUpdate(IPipeHolder.PipeMessageReceiver... parts)
     {
         Collections.addAll(networkUpdates, parts);
     }

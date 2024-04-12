@@ -91,7 +91,7 @@ minecraft {
         }
 
         server {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run_server')
 
             property 'forge.logging.markers', 'REGISTRIES'
 
@@ -148,7 +148,8 @@ minecraft {
 //            property 'forge.enabledGameTestNamespaces', 'buildcraftcore,buildcraftenergy,buildcraftfactory,buildcraftlib'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'buildcraftcore', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+//            args '--mod', 'buildcraftcore', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'buildcraftcore', '--all', '--output', file('buildcraft_resources_generated/'), '--existing', file('buildcraft_resources/')
 
 
             mods {
@@ -172,10 +173,10 @@ sourceSets {
         }
         resources {
             srcDir "buildcraft_resources"
+            srcDir 'buildcraft_resources_generated'
             srcDir "BuildCraft-Localization"
-            exclude "**/.md" // exclude readme from localization repo
             srcDir "BuildCraftGuide/guide_resources"
-            srcDir 'src/generated/resources'
+            exclude "**/.md" // exclude readme from localization repo
             exclude "pack.png" // exclude from the guide repo
             exclude "pack.mcmeta" // exclude from the guide repo
         }

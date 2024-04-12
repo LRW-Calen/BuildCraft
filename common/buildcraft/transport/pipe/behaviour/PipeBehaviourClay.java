@@ -6,8 +6,8 @@
 
 package buildcraft.transport.pipe.behaviour;
 
-import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pipe.IPipe.ConnectedType;
+import buildcraft.api.transport.pipe.*;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 

@@ -7,8 +7,8 @@
 package buildcraft.transport.pipe.behaviour;
 
 import buildcraft.api.core.EnumPipePart;
-import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
+import buildcraft.api.transport.pipe.*;
 import buildcraft.lib.misc.EntityUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.transport.BCTransportStatements;

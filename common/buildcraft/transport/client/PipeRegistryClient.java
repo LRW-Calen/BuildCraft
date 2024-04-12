@@ -6,12 +6,12 @@
 
 package buildcraft.transport.client;
 
-import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pipe.PipeApiClient.IClientRegistry;
 import buildcraft.api.transport.pluggable.IPlugDynamicRenderer;
 import buildcraft.api.transport.pluggable.IPluggableStaticBaker;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableModelKey;
+import buildcraft.api.transport.pipe.*;
 
 import java.util.HashMap;
 import java.util.Map;

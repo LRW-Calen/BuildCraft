@@ -7,7 +7,7 @@
 package buildcraft.transport.wire;
 
 import buildcraft.api.core.BCLog;
-import buildcraft.api.enums.EnumWirePart;
+import buildcraft.api.transport.EnumWirePart;
 import buildcraft.api.transport.IWireEmitter;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pluggable.PipePluggable;

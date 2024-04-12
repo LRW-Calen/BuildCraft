@@ -6,7 +6,7 @@
 
 package buildcraft.transport.wire;
 
-import buildcraft.api.enums.EnumWirePart;
+import buildcraft.api.transport.EnumWirePart;
 import buildcraft.api.transport.IWireEmitter;
 import buildcraft.api.transport.WireNode;
 import buildcraft.api.transport.pipe.IPipe;

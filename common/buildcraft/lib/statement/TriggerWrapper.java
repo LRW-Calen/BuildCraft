@@ -15,7 +15,8 @@ import javax.annotation.Nonnull;
 
 /** Wrapper class around ITriggerInternal to allow for treating all triggers as internal triggers. It also provides the
  * background colour for sides. */
-public abstract class TriggerWrapper extends StatementWrapper implements ITriggerInternal {
+public abstract class TriggerWrapper extends StatementWrapper implements ITriggerInternal
+{
 
     public TriggerWrapper(IStatement delegate, EnumPipePart sourcePart) {
         super(delegate, sourcePart);

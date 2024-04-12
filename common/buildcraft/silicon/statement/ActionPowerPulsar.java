@@ -12,7 +12,6 @@ import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.core.statements.BCStatement;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
-import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.silicon.BCSiliconSprites;
 import buildcraft.silicon.BCSiliconStatements;
 import buildcraft.silicon.plug.PluggablePulsar;
