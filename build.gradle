@@ -29,7 +29,7 @@ apply plugin: 'org.spongepowered.mixin'
 
 
 version = mod_version
-//version = mod_version + "-" + new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+// version = mod_version + "-" + new Date().format("yyyy-MM-dd'T'HH-mm-ssZ")
 group = "com.mod-buildcraft"
 archivesBaseName = "buildcraft" // the name that all artifacts will use as a base. artifacts names follow this pattern: [baseName]-[appendix]-[version]-[classifier].[extension]
 
@@ -171,7 +171,6 @@ sourceSets {
             srcDir "sub_projects/expression/src/main/java"
             srcDir "sub_projects/expression/src/autogen/java"
             // srcDir "src_old_license"
-
         }
         resources {
             srcDir "buildcraft_resources"
@@ -370,20 +369,20 @@ dependencies {
     compileOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
     runtimeOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
 
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+//     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+//     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
-    compileOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
-    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
+//     compileOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
+//     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_id}")
 
-//    compileOnly fg.deobf("blank:ae2-${mc_version}:11.7.6")
-//    runtimeOnly fg.deobf("blank:ae2-${mc_version}:11.7.6")
+// //    compileOnly fg.deobf("blank:ae2-${mc_version}:11.7.6")
+// //    runtimeOnly fg.deobf("blank:ae2-${mc_version}:11.7.6")
 
-    compileOnly(fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_version}:${crafttweaker_version}"))
-    runtimeOnly(fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_version}:${crafttweaker_version}"))
+//     compileOnly(fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_version}:${crafttweaker_version}"))
+//     runtimeOnly(fg.deobf("com.blamejared.crafttweaker:CraftTweaker-forge-${mc_version}:${crafttweaker_version}"))
 
-    compileOnly(fg.deobf("curse.maven:the-one-probe-245211:3965688"))
-    runtimeOnly(fg.deobf("curse.maven:the-one-probe-245211:3965688"))
+//     compileOnly(fg.deobf("curse.maven:the-one-probe-245211:3965688"))
+//     runtimeOnly(fg.deobf("curse.maven:the-one-probe-245211:3965688"))
 
     jarJar(group: 'net.sf.trove4j', name: 'trove4j', version: '[3.0.3,)') {
         jarJar.pin(it, '3.0.3')
