@@ -5,6 +5,7 @@ import org.jetbrains.annotations.MustBeInvokedByOverriders;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -40,8 +41,8 @@ public interface ITickable
     {
         if (forceDelay || getLevel() == null)
         {
-            LinkedList<Runnable> taskOfCurrentTile = tasks.computeIfAbsent(this, k -> new LinkedList<>());
-            taskOfCurrentTile.add(task);
+            List<Runnable> tasksOfCurrentTile = tasks.computeIfAbsent(this, k -> new LinkedList<>());
+            tasksOfCurrentTile.add(task);
         }
         else
         {

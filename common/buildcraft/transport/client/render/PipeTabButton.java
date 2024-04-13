@@ -68,7 +68,7 @@ public class PipeTabButton
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onDrawScreenEventPost(ScreenEvent.DrawScreenEvent.Post event)
+    public static void onDrawScreenEventPre(ScreenEvent.DrawScreenEvent.Pre event)
     {
         try
         {

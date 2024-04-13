@@ -34,20 +34,20 @@ public class BCBuildersBlocks
 
     public static void fmlPreInit()
     {
-        filler = HELPER.addBlockAndItem("block.filler", BlockPropertiesCreater.createDefaultProperties(Material.METAL),  BlockFiller::new);
-        builder = HELPER.addBlockAndItem("block.builder",BlockPropertiesCreater.createDefaultProperties(Material.METAL) , BlockBuilder::new);
-        architect = HELPER.addBlockAndItem("block.architect",BlockPropertiesCreater.createDefaultProperties(Material.METAL) ,  BlockArchitectTable::new);
+        filler = HELPER.addBlockAndItem("block.filler", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFiller::new);
+        builder = HELPER.addBlockAndItem("block.builder", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockBuilder::new);
+        architect = HELPER.addBlockAndItem("block.architect", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockArchitectTable::new);
         library = HELPER.addBlockAndItem("block.library", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockElectronicLibrary::new);
         replacer = HELPER.addBlockAndItem("block.replacer", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockReplacer::new);
 
-        frame = HELPER.addBlockAndItem("block.frame",BlockPropertiesCreater.createDefaultProperties(Material.METAL) ,  BlockFrame::new);
-        quarry = HELPER.addBlockAndItem("block.quarry",BlockPropertiesCreater.createDefaultProperties(Material.METAL) ,  BlockQuarry::new);
+        frame = HELPER.addBlockAndItem("block.frame", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFrame::new);
+        quarry = HELPER.addBlockAndItem("block.quarry", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockQuarry::new);
 
-        fillerTile = HELPER.registerTile("tile.filler",TileFiller::new, filler);
+        fillerTile = HELPER.registerTile("tile.filler", TileFiller::new, filler);
         builderTile = HELPER.registerTile("tile.builder", TileBuilder::new, builder);
         architectTile = HELPER.registerTile("tile.architect", TileArchitectTable::new, architect);
         libraryTile = HELPER.registerTile("tile.library", TileElectronicLibrary::new, library);
-        replacerTile = HELPER.registerTile("tile.replacer",  TileReplacer::new, replacer);
+        replacerTile = HELPER.registerTile("tile.replacer", TileReplacer::new, replacer);
         quarryTile = HELPER.registerTile("tile.quarry", TileQuarry::new, quarry);
     }
 }

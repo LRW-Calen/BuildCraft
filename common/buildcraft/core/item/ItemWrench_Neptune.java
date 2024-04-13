@@ -84,9 +84,6 @@ public class ItemWrench_Neptune extends ItemBC_Neptune implements IToolWrench
         InteractionResult result = CustomRotationHelper.INSTANCE.attemptRotateBlock(world, pos, state, side);
 
 
-//        // debug
-//        player.sendMessage(new TextComponent(result.name()), UUID.randomUUID());
-
         if (result == InteractionResult.SUCCESS)
         {
             wrenchUsed(player, hand, player.getItemInHand(hand), new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false));
