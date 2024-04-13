@@ -51,18 +51,29 @@ public class PipeTabButton
     private static Method m_removeWidget;
     private static Method m_addRenderableWidget;
 
+
     static
     {
         try
         {
-            m_removeWidget = Screen.class.getDeclaredMethod("removeWidget", GuiEventListener.class);
+            // srg
+            m_removeWidget = Screen.class.getDeclaredMethod("m_169411_", GuiEventListener.class);
             m_removeWidget.setAccessible(true);
-            m_addRenderableWidget = Screen.class.getDeclaredMethod("addRenderableWidget", GuiEventListener.class);
+            m_addRenderableWidget = Screen.class.getDeclaredMethod("m_142416_", GuiEventListener.class);
             m_addRenderableWidget.setAccessible(true);
         }
-        catch (Exception e)
+        catch (NoSuchMethodException e)
         {
-            BCLog.logger.error(e);
+            try {
+                // official
+                m_removeWidget = Screen.class.getDeclaredMethod("removeWidget", GuiEventListener.class);
+                m_removeWidget.setAccessible(true);
+                m_addRenderableWidget = Screen.class.getDeclaredMethod("addRenderableWidget", GuiEventListener.class);
+                m_addRenderableWidget.setAccessible(true);
+            }
+            catch (NoSuchMethodException ex) {
+                BCLog.logger.error(e);
+            }
         }
     }
 
@@ -99,7 +110,8 @@ public class PipeTabButton
                     // window size changed
                     else if (screen.renderables.contains(button) && (button.x != (screen.getGuiLeft() + LEFT_POS_ADD) || button.y != (screen.getGuiTop() + TOP_POS_ADD)))
                     {
-                        // Calen: accesstransformer doesn't work for removeWidget & addWidget
+                        // Calen: accesstransformer doesn't work for removeWidget & addRenderableWidget
+                        // When gradle refreshed, runClient will be not able to launch mc
                         m_removeWidget.invoke(screen, button);
                         button = newButton(screen);
                         m_addRenderableWidget.invoke(screen, button);

@@ -17,7 +17,8 @@ import buildcraft.lib.registry.CreativeTabManager;
 import buildcraft.lib.registry.CreativeTabManager.CreativeTabBC;
 import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.registry.TagManager;
-import buildcraft.lib.registry.TagManager.*;
+import buildcraft.lib.registry.TagManager.EnumTagType;
+import buildcraft.lib.registry.TagManager.TagEntry;
 import buildcraft.silicon.plug.FacadeStateManager;
 import buildcraft.transport.client.render.PipeTabButton;
 import buildcraft.transport.pipe.PipeRegistry;
@@ -48,8 +49,7 @@ import java.util.function.Consumer;
 @Mod(BCTransport.MOD_ID)
 @Mod.EventBusSubscriber(modid = BCTransport.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 //@formatter:on
-public class BCTransport
-{
+public class BCTransport {
     public static final String MOD_ID = "buildcrafttransport";
 
     //    @Mod.Instance(MOD_ID)
@@ -58,8 +58,7 @@ public class BCTransport
     private static CreativeTabBC tabPipes;
     private static CreativeTabBC tabPlugs;
 
-    public BCTransport()
-    {
+    public BCTransport() {
         INSTANCE = this;
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 //        BCTransportBlockEntities.BLOCK_ENTITIES.register(modEventBus);
@@ -70,8 +69,7 @@ public class BCTransport
 //        BCTransportItems.preInit();
         PipeRegistry.PIPE_ITEMS.register(modEventBus);
 
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.register(BCTransportModels.class);
         }
         modEventBus.addGenericListener(MenuType.class, BCTransportMenuTypes::registerAll);
@@ -80,14 +78,12 @@ public class BCTransport
     // Calen
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event)
-    {
+    public static void clientSetup(FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(BCTransportBlocks.pipeHolder.get(), RenderType.translucent());
     }
 
     @SubscribeEvent
-    public static void preInit(FMLConstructModEvent evt)
-    {
+    public static void preInit(FMLConstructModEvent evt) {
         RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
 
         tabPipes = CreativeTabManager.createTab("buildcraft.pipes");
@@ -115,12 +111,13 @@ public class BCTransport
         BCTransportProxy.getProxy().fmlPreInit();
 //
         MinecraftForge.EVENT_BUS.register(BCTransportEventDist.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(PipeTabButton.class);
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            MinecraftForge.EVENT_BUS.register(PipeTabButton.class);
+        }
     }
 
     @SubscribeEvent
-    public static void init(FMLCommonSetupEvent evt)
-    {
+    public static void init(FMLCommonSetupEvent evt) {
         BCTransportProxy.getProxy().fmlInit();
         BCTransportRegistries.init();
     }
@@ -131,16 +128,13 @@ public class BCTransport
 
     @SubscribeEvent
 //    public static void onImcEvent(IMCEvent imc)
-    public static void onImcEvent(InterModProcessEvent imc)
-    {
+    public static void onImcEvent(InterModProcessEvent imc) {
 //        for (InterModComms.IMCMessage message : imc.getMessages())
         InterModComms.getMessages(MOD_ID).forEach(message ->
         {
-            if (message.messageSupplier().get() instanceof BcImcMessage bcImcMessage)
-            {
+            if (message.messageSupplier().get() instanceof BcImcMessage bcImcMessage) {
 //                if (FacadeAPI.isFacadeMessageId(message.key))
-                if (FacadeAPI.isFacadeMessageId(bcImcMessage.key))
-                {
+                if (FacadeAPI.isFacadeMessageId(bcImcMessage.key)) {
                     // As this used to be in transport we will need to
                     // pass messages on to silicon
 
@@ -154,32 +148,26 @@ public class BCTransport
                     {
                         // and a tantrum
                         int time = 1000;
-                        if (time + totalTantrumTime > 15000)
-                        {
+                        if (time + totalTantrumTime > 15000) {
                             time = 0;
                         }
-                        else
-                        {
+                        else {
                             totalTantrumTime += time;
-                            try
-                            {
+                            try {
                                 Thread.sleep(time);
                             }
-                            catch (InterruptedException ignored)
-                            {
+                            catch (InterruptedException ignored) {
                                 // We don't really care about this error
                             }
                         }
                     }
                     // Ok, tantrum over
-                    if (BCModules.SILICON.isLoaded())
-                    {
+                    if (BCModules.SILICON.isLoaded()) {
 //                        FacadeStateManager.receiveInterModComms(message);
                         FacadeStateManager.receiveInterModComms(message, bcImcMessage);
                     }
                 }
-                else
-                {
+                else {
                     BCLog.logger.error("[transport.imc] Unknown IMC message type: " + bcImcMessage.getClass().getName());
                 }
             }
@@ -187,16 +175,14 @@ public class BCTransport
     }
 
     @SubscribeEvent
-    public static void postInit(FMLLoadCompleteEvent evt)
-    {
+    public static void postInit(FMLLoadCompleteEvent evt) {
         BCTransportProxy.getProxy().fmlPostInit();
     }
 
 
     private static final TagManager tagManager = new TagManager();
 
-    static
-    {
+    static {
 
         startBatch();
         // Items
@@ -278,20 +264,17 @@ public class BCTransport
 
     }
 
-    private static TagEntry registerTag(String id)
-    {
+    private static TagEntry registerTag(String id) {
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
 //        TagManager.startBatch();
         tagManager.startBatch();
     }
 
-    private static void endBatch(Consumer<TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagEntry> consumer) {
 //        TagManager.endBatch(consumer);
         tagManager.endBatch(consumer);
     }
