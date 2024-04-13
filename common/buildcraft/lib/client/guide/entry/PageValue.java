@@ -4,7 +4,6 @@ import buildcraft.lib.client.guide.GuideManager;
 import buildcraft.lib.gui.ISimpleDrawable;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.gson.JsonObject;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;

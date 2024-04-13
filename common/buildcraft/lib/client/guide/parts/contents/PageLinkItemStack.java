@@ -7,7 +7,6 @@ import buildcraft.lib.client.guide.parts.GuidePageFactory;
 import buildcraft.lib.gui.GuiStack;
 import buildcraft.lib.gui.ISimpleDrawable;
 import buildcraft.lib.misc.GuiUtil;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -37,7 +36,7 @@ public final class PageLinkItemStack extends PageLink
         prof.popPush("create_line");
         ISimpleDrawable icon = new GuiStack(stack);
 //        PageLine text = new PageLine(icon, icon, 2, (BaseComponent) tooltip.get(0), true);
-        PageLine text = new PageLine(icon, icon, 2, tooltip.get(0).getString(), (BaseComponent) tooltip.get(0), true);
+        PageLine text = new PageLine(icon, icon, 2, tooltip.get(0).getString(), tooltip.get(0), true);
         prof.pop();
         PageLinkItemStack page = new PageLinkItemStack(text, startVisible, stack, tooltip, searchText);
         prof.pop();

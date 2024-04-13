@@ -7,7 +7,6 @@
 package buildcraft.lib.client.guide;
 
 import buildcraft.lib.gui.ISimpleDrawable;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 
 import javax.annotation.Nullable;

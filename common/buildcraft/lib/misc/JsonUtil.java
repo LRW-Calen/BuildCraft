@@ -19,7 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 import net.minecraft.nbt.*;
-import net.minecraft.network.chat.BaseComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
@@ -284,7 +284,7 @@ public class JsonUtil
      * Tries to get a translatable text component from the json as a string. This will either get the prefix directly
      * for a {@link TranslatableComponent}, or the prefix plus "_raw" for a raw {@link TextComponent}.
      */
-    public static BaseComponent getTextComponent(JsonObject json, String subPrefix, String localePrefix)
+    public static MutableComponent getTextComponent(JsonObject json, String subPrefix, String localePrefix)
     {
         if (json.has(subPrefix))
         {

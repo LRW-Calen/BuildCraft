@@ -9,7 +9,6 @@ package buildcraft.core.statements;
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.StatementManager;
-import net.minecraft.network.chat.BaseComponent;
 
 public abstract class BCStatement implements IStatement
 {

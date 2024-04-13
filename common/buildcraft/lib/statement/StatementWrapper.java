@@ -9,7 +9,6 @@ import buildcraft.api.core.render.ISprite;
 import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.statements.*;
 import buildcraft.lib.misc.ColourUtil;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;

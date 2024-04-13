@@ -166,6 +166,7 @@ sourceSets {
     main {
         java {
             srcDir "common"
+            srcDir "BuildCraftAPI/api"
 //            srcDir "common_old_license"
             srcDir "sub_projects/expression/src/main/java"
             srcDir "sub_projects/expression/src/autogen/java"

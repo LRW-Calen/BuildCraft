@@ -9,7 +9,6 @@ package buildcraft.lib.client.guide.parts;
 import buildcraft.lib.client.guide.GuiGuide;
 import buildcraft.lib.client.guide.PageLine;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;

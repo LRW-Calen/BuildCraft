@@ -9,7 +9,6 @@ import buildcraft.lib.client.guide.ref.GuideGroupSet;
 import buildcraft.lib.client.guide.ref.GuideGroupSet.GroupDirection;
 import buildcraft.lib.gui.ISimpleDrawable;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.network.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 
 import java.util.List;
