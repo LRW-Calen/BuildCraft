@@ -10,36 +10,27 @@ import net.minecraftforge.client.model.generators.loaders.DynamicBucketModelBuil
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-public class EnergyOilModelProvider extends ItemModelProvider
-{
-    public EnergyOilModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
-    {
+public class EnergyOilBucketModelProvider extends ItemModelProvider {
+    public EnergyOilBucketModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
         super(generator, modid, existingFileHelper);
     }
 
     @Override
-    protected void registerModels()
-    {
+    protected void registerModels() {
         registerBuckets();
     }
 
-    protected void registerBuckets()
-    {
-
-//        for (FluidRegistryObject<?, ?, ?, ?> fluidRegistryObject : register.getAllFluids())
-        for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill)
-        {
+    protected void registerBuckets() {
+        for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill) {
             registerBucket(fluid.get());
         }
     }
 
-    protected void registerBucket(BCFluid.Source fluid)
-    {
+    protected void registerBucket(BCFluid.Source fluid) {
         int density = fluid.getAttributes().getDensity();
         boolean isGaseous = ChristmasHandler.isEnabled() ? (density > 0) : (density < 0);
         withExistingParent(
                 fluid.getReg().getBucket().getRegistryName().toString(),
-//                new ResourceLocation("forge", "item/bucket")
                 new ResourceLocation("forge", "item/bucket_drip")
         )
                 .customLoader(DynamicBucketModelBuilder::begin)
@@ -48,7 +39,6 @@ public class EnergyOilModelProvider extends ItemModelProvider
         ;
         withExistingParent(
                 fluid.getReg().getBucket().getRegistryName().toString() + "_christmas",
-//                new ResourceLocation("forge", "item/bucket")
                 new ResourceLocation("forge", "item/bucket_drip")
         )
                 .customLoader(DynamicBucketModelBuilder::begin)

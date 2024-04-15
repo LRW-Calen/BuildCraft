@@ -64,9 +64,6 @@ public class BCSiliconItems
 
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCSilicon.MOD_ID);
 
-    // Calen
-    public static final Map<GateVariant, RegistryObject<ItemPluggableGate>> variantGateMap = new HashMap<>();
-
     public static RegistryObject<Item> chipsetRedstone;
     public static RegistryObject<Item> chipsetIron;
     public static RegistryObject<Item> chipsetGold;
@@ -75,6 +72,7 @@ public class BCSiliconItems
 
     public static RegistryObject<ItemGateCopier> gateCopier;
 //    public static RegistryObject<ItemPluggableGate> plugGate;
+public static final Map<GateVariant, RegistryObject<ItemPluggableGate>> variantGateMap = new HashMap<>();
     public static RegistryObject<ItemPluggableLens> plugLens;
     public static RegistryObject<Item> plugPulsar;
     public static RegistryObject<Item> plugLightSensor;
@@ -82,7 +80,6 @@ public class BCSiliconItems
 
 
     public static void preInit()
-//    static
     {
 //        redstoneChipset = HELPER.addItem(new ItemRedstoneChipset("item.redstone_chipset"));
         chipsetRedstone = HELPER.addItem("item.chipset.redstone", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.RED));

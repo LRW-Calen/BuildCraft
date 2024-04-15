@@ -13,46 +13,37 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
-public class LootConditionSpreading implements LootItemCondition
-{
+public class LootConditionSpreading implements LootItemCondition {
     public static LootItemConditionType TYPE;
 
-    public static void reg()
-    {
-        TYPE = Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(BCFactory.MOD_ID, "spreading"), new LootItemConditionType(new ConditionSerializer())); //ILootCondition registry
+    public static void reg() {
+        TYPE = Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(BCFactory.MOD_ID, "spreading"), new LootItemConditionType(new ConditionSerializer()));
     }
 
-    public LootConditionSpreading()
-    {
+    public LootConditionSpreading() {
     }
 
     @Override
-    public LootItemConditionType getType()
-    {
+    public LootItemConditionType getType() {
         return TYPE;
     }
 
     @Override
-    public boolean test(LootContext context)
-    {
+    public boolean test(LootContext context) {
         return context.getParam(LootContextParams.BLOCK_STATE).getValue(BlockWaterGel.PROP_STAGE).spreading;
     }
 
-    public static LootItemCondition.Builder builder()
-    {
+    public static LootItemCondition.Builder builder() {
         return () -> new LootConditionSpreading();
     }
 
-    public static class ConditionSerializer implements Serializer<LootConditionSpreading>
-    {
+    public static class ConditionSerializer implements Serializer<LootConditionSpreading> {
         @Override
-        public void serialize(JsonObject json, LootConditionSpreading value, JsonSerializationContext context)
-        {
+        public void serialize(JsonObject json, LootConditionSpreading value, JsonSerializationContext context) {
         }
 
         @Override
-        public LootConditionSpreading deserialize(JsonObject json, JsonDeserializationContext context)
-        {
+        public LootConditionSpreading deserialize(JsonObject json, JsonDeserializationContext context) {
             return new LootConditionSpreading();
         }
     }

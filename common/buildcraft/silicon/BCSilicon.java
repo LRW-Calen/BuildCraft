@@ -87,16 +87,11 @@ public class BCSilicon
     {
         RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
 
-        evt.enqueueWork(
-                () ->
-                {
-                    BCSiliconConfig.preInit();
-                }
-        );
-
         tabPlugs = CreativeTabManager.createTab("buildcraft.plugs");
         tabFacades = CreativeTabManager.createTab("buildcraft.facades");
         FacadeAPI.registry = FacadeStateManager.INSTANCE;
+
+        BCSiliconConfig.preInit();
         BCSiliconBlocks.preInit();
         BCSiliconPlugs.preInit();
         BCSiliconItems.preInit();

@@ -13,7 +13,6 @@ import buildcraft.datagen.energy.*;
 import buildcraft.datagen.factory.FactoryBlockStateProvider;
 import buildcraft.datagen.factory.FactoryItemModelProvider;
 import buildcraft.datagen.factory.FactoryRecipeGenerator;
-import buildcraft.datagen.energy.EnergyCustomRecipeGenerator;
 import buildcraft.datagen.lib.LibItemModelProvider;
 import buildcraft.datagen.lib.LibRecipeGenerator;
 import buildcraft.datagen.robotics.RoboticsBlockStateProvider;
@@ -25,7 +24,6 @@ import buildcraft.datagen.silicon.SiliconRecipeGenerator;
 import buildcraft.datagen.transport.TransportAssemblyRecipeGenerator;
 import buildcraft.datagen.transport.TransportBlockStateProvider;
 import buildcraft.datagen.transport.TransportItemModelProvider;
-import buildcraft.datagen.energy.EnergyBiomeTagsProvider;
 import buildcraft.datagen.transport.TransportRecipeGenerator;
 import buildcraft.energy.BCEnergy;
 import buildcraft.factory.BCFactory;
@@ -41,15 +39,13 @@ import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
 // Calen add
 @Mod.EventBusSubscriber(modid = BCCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCDataGenerators
-{
+public class BCDataGenerators {
     @SubscribeEvent
-    public static void onGatherData(GatherDataEvent event)
-    {
+    public static void onGatherData(GatherDataEvent event) {
         DataGenerator generator = event.getGenerator();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
-        // oil texture
+        // Oil Texture
         generator.addProvider(new EnergyOilTextureProvider(generator, existingFileHelper));
 
 //        // frozen fluid texture
@@ -91,7 +87,7 @@ public class BCDataGenerators
         generator.addProvider(new RoboticsBlockStateProvider(generator, BCRobotics.MOD_ID, existingFileHelper));
 
         // Item Model
-        generator.addProvider(new EnergyOilModelProvider(generator, BCEnergy.MOD_ID, existingFileHelper));
+        generator.addProvider(new EnergyOilBucketModelProvider(generator, BCEnergy.MOD_ID, existingFileHelper));
 
         generator.addProvider(new CoreItemModelProvider(generator, BCCore.MOD_ID, existingFileHelper));
         generator.addProvider(new EnergyItemModelProvider(generator, BCEnergy.MOD_ID, existingFileHelper));

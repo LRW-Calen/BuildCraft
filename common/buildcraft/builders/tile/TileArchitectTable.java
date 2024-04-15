@@ -173,7 +173,6 @@ public class TileArchitectTable extends TileBC_Neptune implements ITickable, IDe
     }
 
     @Override
-//    public void update()
     public void update()
     {
         ITickable.super.update();

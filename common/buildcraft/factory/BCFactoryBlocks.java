@@ -10,12 +10,11 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCFactoryBlocks
-{
+public class BCFactoryBlocks {
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCFactory.MOD_ID);
 
     public static RegistryObject<BlockAutoWorkbenchItems> autoWorkbenchItems;
-    public static RegistryObject<BlockAutoWorkbenchFluids> autoWorkbenchFluids;
+    //    public static RegistryObject<BlockAutoWorkbenchFluids> autoWorkbenchFluids;
     public static RegistryObject<BlockMiningWell> miningWell;
     public static RegistryObject<BlockPump> pump;
     public static RegistryObject<BlockTube> tube;
@@ -37,8 +36,7 @@ public class BCFactoryBlocks
     public static RegistryObject<BlockEntityType<TileDistiller_BC8>> distillerTile;
     public static RegistryObject<BlockEntityType<TileHeatExchange>> heatExchangeTile;
 
-    static
-    {
+    static {
         autoWorkbenchItems = HELPER.addBlockAndItem("block.autoworkbench.item", BlockPropertiesCreater.createDefaultProperties(Material.STONE), BlockAutoWorkbenchItems::new);
 //        autoWorkbenchFluids = HELPER.addBlockAndItem("block.autoworkbench.fluid", BlockPropertiesCreater.createDefaultProperties(Material.STONE), BlockAutoWorkbenchFluids::new);
         miningWell = HELPER.addBlockAndItem("block.mining_well", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockMiningWell::new);
@@ -107,8 +105,7 @@ public class BCFactoryBlocks
         heatExchangeTile = HELPER.registerTile("tile.heat_exchange", TileHeatExchange::new, heatExchange);
     }
 
-    public static void init()
-    {
+    public static void init() {
 
     }
 

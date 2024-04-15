@@ -216,7 +216,7 @@ public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer
         }
     }
 
-    private final LazyLoadedValue<TextureAtlasSprite> white = new LazyLoadedValue<>(SpriteUtil::white);
+//    private final LazyLoadedValue<TextureAtlasSprite> white = new LazyLoadedValue<>(SpriteUtil::white);
     private final int COLOUR = (15 << 20) | (15 << 4);
     private VertexConsumer buffer = null;
     private PoseStack.Pose pose = null;

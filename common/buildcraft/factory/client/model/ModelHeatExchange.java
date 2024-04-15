@@ -112,7 +112,15 @@ public class ModelHeatExchange extends ModelItemSimple
 //    public List<BakedQuad> getQuads(BlockState state, Direction side, long rand)
     public List<BakedQuad> getQuads(BlockState state, Direction side, Random random)
     {
-        if (side != null)
+        // Calen: state == null
+        // NullPointerException: Cannot invoke "net.minecraft.world.level.block.state.BlockState.m_61143_(net.minecraft.world.level.block.state.properties.Property)" because "state" is null
+        // at buildcraft.factory.client.model.ModelHeatExchange.getIndexOf(ModelHeatExchange.java:124)
+        // at buildcraft.factory.client.model.ModelHeatExchange.m_6840_(ModelHeatExchange.java:119)
+        // at net.minecraft.client.renderer.entity.ItemRenderer.m_115189_(ItemRenderer.java:105)
+        // ...
+        // at mezz.jei.common.render.ItemStackRenderer.render(ItemStackRenderer.java:41)
+//        if (side != null)
+        if (side != null || state == null)
         {
             return ImmutableList.of();
         }

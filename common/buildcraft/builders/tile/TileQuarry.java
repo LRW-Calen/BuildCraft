@@ -816,7 +816,8 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
                     {
 //                        AxisAlignedBB box = miningBox.getBoundingBox();
                         AABB box = miningBox.getBoundingBox();
-                        if (box.maxX - box.minX == 63 && box.maxZ - box.minZ == 63)
+//                        if (box.maxX - box.minX == 63 && box.maxZ - box.minZ == 63)
+                        if ((box.maxX - box.minX == 63 || box.maxX - box.minX == 64) && (box.maxZ - box.minZ == 63 || box.maxZ - box.minZ == 64))
                         {
                             AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT_COMPLETE);
                         }

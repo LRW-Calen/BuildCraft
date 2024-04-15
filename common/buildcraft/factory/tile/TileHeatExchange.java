@@ -67,10 +67,8 @@ public class TileHeatExchange extends TileBC_Neptune implements ITickable, IDebu
     public static final int NET_ID_TANK_OUT = IDS.allocId("TANK_OUT");
     public static final int NET_ID_STATE = IDS.allocId("STATE");
 
-    /**
-     * the maximum amount of fluid that can be transferred per tick for each number of middle sections. numbers need to
-     * be divisors of 1000
-     */
+    /** the maximum amount of fluid that can be transferred per tick for each number of middle sections. numbers need to
+     * be divisors of 1000 */
     private static final int[] FLUID_MULT = {5, 10, 20};
 
     public TileHeatExchange(BlockPos pos, BlockState blockState)
@@ -209,18 +207,18 @@ public class TileHeatExchange extends TileBC_Neptune implements ITickable, IDebu
                     for (TileHeatExchange exchange : exchangers)
                     {
                         exchange.sendNetworkUpdate(NET_ID_CHANGE_SECTION);
-                        // Calen
-                        Level exchangeWorld = exchange.level;
-                        BlockPos exchangePos = exchange.worldPosition;
-                        BlockState state = exchangeWorld.getBlockState(exchange.worldPosition);
-                        if (state.getBlock() instanceof BlockHeatExchange heatExchangeBlock)
-                        {
-                            BlockState newState = heatExchangeBlock.getActualState(state, exchangeWorld, exchangePos, exchange);
-                            if (!newState.equals(state))
-                            {
-                                exchangeWorld.setBlockAndUpdate(exchangePos, newState);
-                            }
-                        }
+//                        // Calen
+//                        Level exchangeWorld = exchange.level;
+//                        BlockPos exchangePos = exchange.worldPosition;
+//                        BlockState state = exchangeWorld.getBlockState(exchangePos);
+//                        if (state.getBlock() instanceof BlockHeatExchange heatExchangeBlock)
+//                        {
+//                            BlockState newState = heatExchangeBlock.getActualState(state, exchangeWorld, exchangePos, exchange);
+//                            if (!newState.equals(state))
+//                            {
+//                                exchangeWorld.setBlockAndUpdate(exchangePos, newState);
+//                            }
+//                        }
                     }
                 }
             }
@@ -361,6 +359,18 @@ public class TileHeatExchange extends TileBC_Neptune implements ITickable, IDebu
                     buffer.writeBoolean(true);
                     buffer.writeBoolean(section instanceof ExchangeSectionStart);
                     section.writePayload(id, buffer, side);
+                }
+                // Calen
+                Level exchangeWorld = this.level;
+                BlockPos exchangePos = this.worldPosition;
+                BlockState state = exchangeWorld.getBlockState(exchangePos);
+                if (state.getBlock() instanceof BlockHeatExchange heatExchangeBlock)
+                {
+                    BlockState newState = heatExchangeBlock.getActualState(state, exchangeWorld, exchangePos, this);
+                    if (!newState.equals(state))
+                    {
+                        exchangeWorld.setBlockAndUpdate(exchangePos, newState);
+                    }
                 }
             }
             else if (section != null)

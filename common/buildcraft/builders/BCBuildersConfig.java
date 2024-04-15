@@ -108,7 +108,8 @@ public class BCBuildersConfig
         internalStencilCrashTest.setComment("Use display.enableStencil instead of this!");
         none.setTo(internalStencilCrashTest);
 //        BCCoreConfig.config.getCategory("internal").setShowInGui(false);
-        BCCoreConfig.getConfig(true).getCategory("internal").setShowInGui(false);
+//        BCCoreConfig.getConfig(true).getCategory("internal").setShowInGui(false);
+        BCCoreConfig.getConfig(true).getCategory("internal");
         BCCoreConfig.saveConfigs();
 
         reloadConfig(EnumRestartRequirement.GAME);
