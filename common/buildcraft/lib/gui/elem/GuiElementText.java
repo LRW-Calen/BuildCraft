@@ -22,8 +22,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public class GuiElementText extends GuiElementSimple
-{
+public class GuiElementText extends GuiElementSimple {
     public boolean dropShadow = false;
     public boolean foreground = false;
     public boolean centered = false;
@@ -32,82 +31,68 @@ public class GuiElementText extends GuiElementSimple
     private final IntSupplier colour;
     private final DoubleSupplier scale;// TODO: Use this and then use this for the guide!
 
-    public GuiElementText(BuildCraftGui gui, IGuiPosition parent, Supplier<String> text, IntSupplier colour)
-    {
+    public GuiElementText(BuildCraftGui gui, IGuiPosition parent, Supplier<String> text, IntSupplier colour) {
         this(gui, parent, text, colour, NodeConstantDouble.ONE);
     }
 
     public GuiElementText(BuildCraftGui gui, IGuiPosition parent, Supplier<String> text, IntSupplier colour,
-                          DoubleSupplier scale)
-    {
+                          DoubleSupplier scale) {
         super(gui, GuiRectangle.ZERO.offset(parent));// TODO: link this up like in GuidePageContents!
         this.text = text;
         this.colour = colour;
         this.scale = scale;
     }
 
-    public GuiElementText(BuildCraftGui gui, IGuiPosition parent, Supplier<String> text, int colour)
-    {
+    public GuiElementText(BuildCraftGui gui, IGuiPosition parent, Supplier<String> text, int colour) {
         this(gui, parent, text, () -> colour);
     }
 
-    public GuiElementText(BuildCraftGui gui, IGuiPosition parent, String text, int colour)
-    {
+    public GuiElementText(BuildCraftGui gui, IGuiPosition parent, String text, int colour) {
         this(gui, parent, new NodeConstantObject<>(String.class, text), () -> colour);
     }
 
-    public GuiElementText setDropShadow(boolean value)
-    {
+    public GuiElementText setDropShadow(boolean value) {
         dropShadow = value;
         return this;
     }
 
-    public GuiElementText setForeground(boolean value)
-    {
+    public GuiElementText setForeground(boolean value) {
         foreground = value;
         return this;
     }
 
-    public GuiElementText setCentered(boolean centered)
-    {
+    public GuiElementText setCentered(boolean centered) {
         this.centered = centered;
         return this;
     }
 
     @Override
-    public double getWidth()
-    {
+    public double getWidth() {
         Font fr = Minecraft.getInstance().font;
         return fr.width(text.get());
     }
 
     @Override
-    public double getHeight()
-    {
+    public double getHeight() {
         Font fr = Minecraft.getInstance().font;
         return fr.lineHeight;
     }
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
-        if (!foreground)
-        {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
+        if (!foreground) {
             draw(poseStack);
         }
     }
 
     @Override
-    public void drawForeground(PoseStack poseStack, float partialTicks)
-    {
-        if (foreground)
-        {
+    public void drawForeground(PoseStack poseStack, float partialTicks) {
+        if (foreground) {
             draw(poseStack);
         }
     }
 
-    private void draw(PoseStack poseStack)
-    {
+    private void draw(PoseStack poseStack) {
         MinecraftFont.INSTANCE.drawString(poseStack, text.get(), (int) getX(), (int) getY(), colour.getAsInt(), dropShadow,
                 centered, (float) scale.getAsDouble());
         // Calen: 原来就是注释
@@ -130,8 +115,7 @@ public class GuiElementText extends GuiElementSimple
     }
 
     @Override
-    public String getDebugInfo(List<String> info)
-    {
+    public String getDebugInfo(List<String> info) {
         info.add("text = " + text);
         return super.getDebugInfo(info);
     }

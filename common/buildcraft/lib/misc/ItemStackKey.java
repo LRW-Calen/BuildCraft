@@ -10,43 +10,35 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class ItemStackKey
-{
+public class ItemStackKey {
     public static final ItemStackKey EMPTY = new ItemStackKey(StackUtil.EMPTY);
 
     public final @Nonnull ItemStack baseStack;
     private final int hash;
 
-    public ItemStackKey(@Nonnull ItemStack stack)
-    {
-        if (stack.isEmpty())
-        {
+    public ItemStackKey(@Nonnull ItemStack stack) {
+        if (stack.isEmpty()) {
             baseStack = StackUtil.EMPTY;
             hash = 0;
-        }
-        else
-        {
+        } else {
             this.baseStack = stack.copy();
             this.hash = StackUtil.hash(baseStack);
         }
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null) return false;
         if (obj.getClass() != this.getClass()) return false;
         ItemStackKey other = (ItemStackKey) obj;
         if (hash != other.hash) return false;
-        if (baseStack.getItem() != other.baseStack.getItem())
-        {
+        if (baseStack.getItem() != other.baseStack.getItem()) {
             return false;
         }
 //        if (baseStack.getMetadata() != other.baseStack.getMetadata()) {
@@ -56,8 +48,7 @@ public class ItemStackKey
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[ItemStackKey " + baseStack + "]";
     }
 }

@@ -8,8 +8,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCLibItems
-{
+public class BCLibItems {
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCLib.MODID);
     public static Item.Properties BC_LIB_ITEM_DEFAULT_PROP =
             new Item.Properties()
@@ -19,23 +18,19 @@ public class BCLibItems
 
     private static boolean enableGuide, enableDebugger;
 
-    public static void enableGuide()
-    {
+    public static void enableGuide() {
         enableGuide = true;
     }
 
-    public static void enableDebugger()
-    {
+    public static void enableDebugger() {
         enableDebugger = true;
     }
 
-    public static boolean isGuideEnabled()
-    {
+    public static boolean isGuideEnabled() {
         return enableGuide;
     }
 
-    public static boolean isDebuggerEnabled()
-    {
+    public static boolean isDebuggerEnabled() {
         return enableDebugger;
     }
 
@@ -46,15 +41,12 @@ public class BCLibItems
 
 
     // Calen: 不能statc 因为要在主类static里enable 触发这里的static
-    public static void fmlPreInit()
-    {
-        if (isGuideEnabled())
-        {
+    public static void fmlPreInit() {
+        if (isGuideEnabled()) {
             guide = HELPER.addForcedItem("item.guide", BC_LIB_ITEM_DEFAULT_PROP, ItemGuide::new);
-            guideNote = HELPER.addForcedItem("item.guide.note", BC_LIB_ITEM_DEFAULT_PROP,  ItemGuideNote::new);
+            guideNote = HELPER.addForcedItem("item.guide.note", BC_LIB_ITEM_DEFAULT_PROP, ItemGuideNote::new);
         }
-        if (isDebuggerEnabled())
-        {
+        if (isDebuggerEnabled()) {
             debugger = HELPER.addForcedItem("item.debugger", BC_LIB_ITEM_DEFAULT_PROP, ItemDebugger::new);
         }
     }

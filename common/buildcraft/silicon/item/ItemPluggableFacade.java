@@ -6,7 +6,6 @@
 
 package buildcraft.silicon.item;
 
-import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
 import buildcraft.api.facades.FacadeType;
 import buildcraft.api.facades.IFacade;
@@ -44,39 +43,32 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggable, IFacadeItem
-{
-    public ItemPluggableFacade(String idBC, Item.Properties properties)
-    {
+public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggable, IFacadeItem {
+    public ItemPluggableFacade(String idBC, Item.Properties properties) {
         super(idBC, properties);
 //        setMaxDamage(0);
 //        setHasSubtypes(true);
     }
 
     @Nonnull
-    public ItemStack createItemStack(FacadeInstance state)
-    {
+    public ItemStack createItemStack(FacadeInstance state) {
         ItemStack item = new ItemStack(this);
         CompoundTag nbt = NBTUtilBC.getItemData(item);
         nbt.put("facade", state.writeToNbt());
         return item;
     }
 
-    public static FacadeInstance getStates(@Nonnull ItemStack item)
-    {
+    public static FacadeInstance getStates(@Nonnull ItemStack item) {
         CompoundTag nbt = NBTUtilBC.getItemData(item);
 
         String strPreview = nbt.getString("preview");
-        if ("basic".equalsIgnoreCase(strPreview))
-        {
+        if ("basic".equalsIgnoreCase(strPreview)) {
             return FacadeInstance.createSingle(FacadeStateManager.previewState, false);
         }
 
-        if (!nbt.contains("facade") && nbt.contains("states"))
-        {
+        if (!nbt.contains("facade") && nbt.contains("states")) {
             ListTag states = nbt.getList("states", Tag.TAG_COMPOUND);
-            if (states.size() > 0)
-            {
+            if (states.size() > 0) {
                 // Only migrate if we actually have a facade to migrate.
                 boolean isHollow = states.getCompound(0).getBoolean("isHollow");
                 CompoundTag tagFacade = new CompoundTag();
@@ -91,40 +83,32 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
 
     @Nonnull
     @Override
-    public ItemStack getFacadeForBlock(BlockState state)
-    {
+    public ItemStack getFacadeForBlock(BlockState state) {
         FacadeBlockStateInfo info = FacadeStateManager.validFacadeStates.get(state);
-        if (info == null)
-        {
+        if (info == null) {
             return StackUtil.EMPTY;
-        }
-        else
-        {
+        } else {
             return createItemStack(FacadeInstance.createSingle(info, false));
         }
     }
 
     @Override
     public PipePluggable onPlace(@Nonnull ItemStack stack, IPipeHolder holder, Direction side, Player player,
-                                 InteractionHand hand)
-    {
+                                 InteractionHand hand) {
         FacadeInstance fullState = getStates(stack);
         SoundUtil.playBlockPlace(holder.getPipeWorld(), holder.getPipePos(), fullState.phasedStates[0].stateInfo.state);
         return new PluggableFacade(BCSiliconPlugs.facade, holder, side, fullState);
     }
 
     @Override
-    public void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems)
-    {
+    public void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
         // Calen
         Stopwatch watch = Stopwatch.createStarted();
-        try
-        {
+        try {
             // Add a single phased facade as a default
             // check if the data is present as we only process in post-init
             FacadeBlockStateInfo stone = FacadeStateManager.getInfoForBlock(Blocks.STONE);
-            if (stone != null)
-            {
+            if (stone != null) {
                 FacadePhasedState[] states = { //
                         FacadeStateManager.getInfoForBlock(Blocks.STONE).createPhased(null), //
                         FacadeStateManager.getInfoForBlock(Blocks.OAK_PLANKS).createPhased(DyeColor.RED), //
@@ -133,29 +117,24 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
                 FacadeInstance inst = new FacadeInstance(states, false);
                 subItems.add(createItemStack(inst));
 
-                for (FacadeBlockStateInfo info : FacadeStateManager.validFacadeStates.values())
-                {
-                    if (!ForgeRegistries.BLOCKS.containsValue(info.state.getBlock()))
-                    {
+                for (FacadeBlockStateInfo info : FacadeStateManager.validFacadeStates.values()) {
+                    if (!ForgeRegistries.BLOCKS.containsValue(info.state.getBlock())) {
                         // Forge can de-register blocks if the server a client is connected to
                         // doesn't have the mods that created them.
                         continue;
                     }
-                    if (info.isVisible)
-                    {
+                    if (info.isVisible) {
                         subItems.add(createItemStack(FacadeInstance.createSingle(info, false)));
                         subItems.add(createItemStack(FacadeInstance.createSingle(info, true)));
                     }
                 }
             }
         }
-        finally
-        {
+        finally {
             // Calen
             watch.stop();
             long time = watch.elapsed(TimeUnit.MICROSECONDS);
-            if (FacadeStateManager.DEBUG)
-            {
+            if (FacadeStateManager.DEBUG) {
                 BCLog.logger.info("[silicon.facade] Created ItemStacks for CreativeModeTab. (" + time / 1000 + "ms)");
             }
         }
@@ -163,25 +142,20 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
 
     @Override
 //    public String getItemStackDisplayName(ItemStack stack)
-    public Component getName(ItemStack stack)
-    {
+    public Component getName(ItemStack stack) {
         FacadeInstance fullState = getStates(stack);
-        if (fullState.type == FacadeType.Basic)
-        {
+        if (fullState.type == FacadeType.Basic) {
 //            String displayName = getFacadeStateDisplayName(fullState.phasedStates[0]);
             Component displayName = getFacadeStateDisplayName(fullState.phasedStates[0]);
 //            return super.getItemStackDisplayName(stack) + ": " + displayName;
             return ((MutableComponent) super.getName(stack)).append(": ").append(displayName);
-        }
-        else
-        {
+        } else {
             return new TextComponent(LocaleUtil.localize("item.FacadePhased.name"));
         }
     }
 
     //    public static String getFacadeStateDisplayName(FacadePhasedState state)
-    public static Component getFacadeStateDisplayName(FacadePhasedState state)
-    {
+    public static Component getFacadeStateDisplayName(FacadePhasedState state) {
         ItemStack assumedStack = state.stateInfo.requiredStack;
         return assumedStack.getDisplayName();
     }
@@ -189,33 +163,25 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
     @OnlyIn(Dist.CLIENT)
     @Override
 //    public void addInformation(ItemStack stack, Level world, List<String> tooltip, ITooltipFlag flag)
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
         FacadeInstance states = getStates(stack);
-        if (states.type == FacadeType.Phased)
-        {
+        if (states.type == FacadeType.Phased) {
 //            String stateString = LocaleUtil.localize("item.FacadePhased.state");
             FacadePhasedState defaultState = null;
-            for (FacadePhasedState state : states.phasedStates)
-            {
-                if (state.activeColour == null)
-                {
+            for (FacadePhasedState state : states.phasedStates) {
+                if (state.activeColour == null) {
                     defaultState = state;
                     continue;
                 }
 //                tooltip.add(String.format(stateString, LocaleUtil.localizeColour(state.activeColour), getFacadeStateDisplayName(state)));
                 tooltip.add(new TranslatableComponent("item.FacadePhased.state", LocaleUtil.localizeColour(state.activeColour), getFacadeStateDisplayName(state)));
             }
-            if (defaultState != null)
-            {
+            if (defaultState != null) {
 //                tooltip.add(1, String.format(LocaleUtil.localize("item.FacadePhased.state_default"), getFacadeStateDisplayName(defaultState)));
                 tooltip.add(1, new TranslatableComponent("item.FacadePhased.state_default", getFacadeStateDisplayName(defaultState)));
             }
-        }
-        else
-        {
-            if (flag.isAdvanced())
-            {
+        } else {
+            if (flag.isAdvanced()) {
                 tooltip.add(new TextComponent(states.phasedStates[0].stateInfo.state.getBlock().getRegistryName().toString()));
             }
             String propertiesStart = ChatFormatting.GRAY + "" + ChatFormatting.ITALIC;
@@ -228,14 +194,12 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
     // IFacadeItem
 
     @Override
-    public ItemStack createFacadeStack(IFacade facade)
-    {
+    public ItemStack createFacadeStack(IFacade facade) {
         return createItemStack((FacadeInstance) facade);
     }
 
     @Override
-    public IFacade getFacade(ItemStack facade)
-    {
+    public IFacade getFacade(ItemStack facade) {
         return getStates(facade);
     }
 }

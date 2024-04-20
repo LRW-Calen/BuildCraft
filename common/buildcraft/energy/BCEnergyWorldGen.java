@@ -12,21 +12,17 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod.EventBusSubscriber(modid = BCEnergy.MOD_ID)
-public class BCEnergyWorldGen
-{
+@Mod.EventBusSubscriber(modid = BCEnergy.MODID)
+public class BCEnergyWorldGen {
 
-    public static <FC extends FeatureConfiguration, F extends Feature<FC>> Holder<ConfiguredFeature<FC, ?>> register(String name, F feature, FC featureConfiguration)
-    {
-        return BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(BCEnergy.MOD_ID, name).toString(), new ConfiguredFeature<>(feature, featureConfiguration));
+    public static <FC extends FeatureConfiguration, F extends Feature<FC>> Holder<ConfiguredFeature<FC, ?>> register(String name, F feature, FC featureConfiguration) {
+        return BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, new ResourceLocation(BCEnergy.MODID, name).toString(), new ConfiguredFeature<>(feature, featureConfiguration));
     }
 
     //    static
-    public static void init()
-    {
+    public static void init() {
         // 注册油泉结构
-        if (BCEnergyConfig.enableOilOceanBiome || BCEnergyConfig.enableOilDesertBiome)
-        {
+        if (BCEnergyConfig.enableOilOceanBiome || BCEnergyConfig.enableOilDesertBiome) {
             IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
             modEventBus.addGenericListener(StructureFeature.class, BCStructures::register);
         }

@@ -9,18 +9,14 @@ package buildcraft.silicon;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCSiliconProxy implements IGuiHandler
-public abstract class BCSiliconProxy
-{
+public abstract class BCSiliconProxy {
     //    @SidedProxy(modId = BCSilicon.MODID)
     private static BCSiliconProxy proxy;
 
-    public static BCSiliconProxy getProxy()
-    {
-        if (proxy == null)
-        {
-            switch (FMLLoader.getDist())
-            {
-                case  CLIENT:
+    public static BCSiliconProxy getProxy() {
+        if (proxy == null) {
+            switch (FMLLoader.getDist()) {
+                case CLIENT:
                     proxy = new BCSiliconProxy.ClientProxy();
                     break;
                 case DEDICATED_SERVER:
@@ -89,47 +85,39 @@ public abstract class BCSiliconProxy
 //        return null;
 //    }
 
-    public void fmlPreInit()
-    {
+    public void fmlPreInit() {
     }
 
-    public void fmlInit()
-    {
+    public void fmlInit() {
     }
 
-    public void fmlPostInit()
-    {
+    public void fmlPostInit() {
     }
 
     @SuppressWarnings("unused")
 //    @SideOnly(Side.SERVER)
-    public static class ServerProxy extends BCSiliconProxy
-    {
+    public static class ServerProxy extends BCSiliconProxy {
     }
 
     @SuppressWarnings("unused")
 //    @SideOnly(Side.CLIENT)
-    public static class ClientProxy extends BCSiliconProxy
-    {
+    public static class ClientProxy extends BCSiliconProxy {
 
         @Override
-        public void fmlPreInit()
-        {
+        public void fmlPreInit() {
             super.fmlPreInit();
             BCSiliconSprites.fmlPreInit();
             BCSiliconModels.fmlPreInit();
         }
 
         @Override
-        public void fmlInit()
-        {
+        public void fmlInit() {
             super.fmlInit();
             BCSiliconModels.fmlInit();
         }
 
         @Override
-        public void fmlPostInit()
-        {
+        public void fmlPostInit() {
             super.fmlPostInit();
             BCSiliconModels.fmlPostInit();
         }

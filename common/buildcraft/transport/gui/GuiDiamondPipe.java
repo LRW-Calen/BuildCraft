@@ -17,11 +17,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.items.IItemHandler;
 
-public class GuiDiamondPipe extends GuiBC8<ContainerDiamondPipe>
-{
+public class GuiDiamondPipe extends GuiBC8<ContainerDiamondPipe> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("buildcrafttransport:textures/gui/filter.png");
     private static final ResourceLocation TEXTURE_CB = new ResourceLocation("buildcrafttransport:textures/gui/filter_cb.png");
     private static final int SIZE_X = 175, SIZE_Y = 225;
@@ -32,16 +30,15 @@ public class GuiDiamondPipe extends GuiBC8<ContainerDiamondPipe>
     Container playerInventory;
     IItemHandler filterInventory;
 
-//    public GuiDiamondPipe(Player player, PipeBehaviourDiamond pipe, Inventory inventory, Component component)
-    public GuiDiamondPipe(ContainerDiamondPipe container, Inventory inventory, Component component)
-    {
+    //    public GuiDiamondPipe(Player player, PipeBehaviourDiamond pipe, Inventory inventory, Component component)
+    public GuiDiamondPipe(ContainerDiamondPipe container, Inventory inventory, Component component) {
 //        super(new ContainerDiamondPipe(null, -1, player, pipe), inventory, component);
         super(container, inventory, component);
 //        this.playerInventory = player.inventory;
 //        this.playerInventory = player.getInventory();
         this.playerInventory = inventory;
 //        this.filterInventory = pipe.filters;
-        this.filterInventory = ((PipeBehaviourDiamond)container.pipeHolder.getPipe().getBehaviour()).filters;
+        this.filterInventory = ((PipeBehaviourDiamond) container.pipeHolder.getPipe().getBehaviour()).filters;
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
 //        ySize = SIZE_Y;
@@ -50,8 +47,7 @@ public class GuiDiamondPipe extends GuiBC8<ContainerDiamondPipe>
 
     @Override
 //    protected void drawForegroundLayer()
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
         String string = LocaleUtil.localize("gui.pipes.emerald.title");
         double titleX = mainGui.rootElement.getX() + 8;
         double titleY = mainGui.rootElement.getY() + 6;
@@ -65,14 +61,10 @@ public class GuiDiamondPipe extends GuiBC8<ContainerDiamondPipe>
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
-        if (BCLibConfig.colourBlindMode)
-        {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
+        if (BCLibConfig.colourBlindMode) {
             ICON_GUI_CB.drawAt(mainGui.rootElement, poseStack);
-        }
-        else
-        {
+        } else {
             ICON_GUI.drawAt(mainGui.rootElement, poseStack);
         }
     }

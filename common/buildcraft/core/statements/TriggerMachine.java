@@ -15,22 +15,18 @@ import buildcraft.api.tiles.TilesAPI;
 import buildcraft.core.BCCoreSprites;
 import buildcraft.core.BCCoreStatements;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
-import buildcraft.lib.misc.LocaleUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class TriggerMachine extends BCStatement implements ITriggerExternal
-{
+public class TriggerMachine extends BCStatement implements ITriggerExternal {
 
     public final boolean active;
 
-    public TriggerMachine(boolean active)
-    {
+    public TriggerMachine(boolean active) {
         super(
                 "buildcraft:work." + (active ? "scheduled" : "done"),
                 "buildcraft.work." + (active ? "scheduled" : "done")
@@ -39,31 +35,26 @@ public class TriggerMachine extends BCStatement implements ITriggerExternal
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return LocaleUtil.localize("gate.trigger.machine." + (active ? "scheduled" : "done"));
         return new TranslatableComponent("gate.trigger.machine." + (active ? "scheduled" : "done"));
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return "gate.trigger.machine." + (active ? "scheduled" : "done");
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return active ? BCCoreSprites.TRIGGER_MACHINE_ACTIVE : BCCoreSprites.TRIGGER_MACHINE_INACTIVE;
     }
 
     @Override
-    public boolean isTriggerActive(BlockEntity tile, Direction side, IStatementContainer container, IStatementParameter[] parameters)
-    {
+    public boolean isTriggerActive(BlockEntity tile, Direction side, IStatementContainer container, IStatementParameter[] parameters) {
         IHasWork hasWork = tile.getCapability(TilesAPI.CAP_HAS_WORK, side.getOpposite()).orElse(null);
-        if (hasWork == null)
-        {
+        if (hasWork == null) {
             return false;
         }
         return hasWork.hasWork() == active;
@@ -71,8 +62,7 @@ public class TriggerMachine extends BCStatement implements ITriggerExternal
     }
 
     @Override
-    public IStatement[] getPossible()
-    {
+    public IStatement[] getPossible() {
         return new IStatement[]{BCCoreStatements.TRIGGER_MACHINE_ACTIVE, BCCoreStatements.TRIGGER_MACHINE_INACTIVE};
     }
 }

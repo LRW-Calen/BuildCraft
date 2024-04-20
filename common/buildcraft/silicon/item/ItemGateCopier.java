@@ -4,8 +4,6 @@ import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.StackUtil;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -24,12 +22,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemGateCopier extends ItemBC_Neptune
-{
+public class ItemGateCopier extends ItemBC_Neptune {
     private static final String NBT_DATA = "gate_data";
 
-    public ItemGateCopier(String idBC, Item.Properties properties)
-    {
+    public ItemGateCopier(String idBC, Item.Properties properties) {
         super(idBC, properties);
 //        setMaxStackSize(1);
     }
@@ -45,60 +41,49 @@ public class ItemGateCopier extends ItemBC_Neptune
     @Override
     @OnlyIn(Dist.CLIENT)
 //    public void addInformation(ItemStack stack, Level world, List<String> tooltip, ITooltipFlag flag)
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
-        if (getMetadata(stack) != 0)
-        {
+        if (getMetadata(stack) != 0) {
             tooltip.add(new TextComponent(LocaleUtil.localize("buildcraft.item.nonclean.usage")));
         }
     }
 
     @Override
 //    public InteractionResultHolder<ItemStack> onItemRightClick(Level world, Player player, InteractionHand hand)
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
-    {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (world.isClientSide)
-        {
+        if (world.isClientSide) {
             return new InteractionResultHolder<>(InteractionResult.PASS, stack);
         }
-        if (player.isShiftKeyDown())
-        {
+        if (player.isShiftKeyDown()) {
             return clearData(StackUtil.asNonNull(stack));
         }
         return new InteractionResultHolder<>(InteractionResult.PASS, stack);
     }
 
-    private InteractionResultHolder<ItemStack> clearData(@Nonnull ItemStack stack)
-    {
-        if (getMetadata(stack) == 0)
-        {
+    private InteractionResultHolder<ItemStack> clearData(@Nonnull ItemStack stack) {
+        if (getMetadata(stack) == 0) {
             return new InteractionResultHolder<>(InteractionResult.PASS, stack);
         }
         CompoundTag nbt = NBTUtilBC.getItemData(stack);
         nbt.remove(NBT_DATA);
-        if (nbt.isEmpty())
-        {
+        if (nbt.isEmpty()) {
             stack.setTag(null);
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
-//    @Override
+    //    @Override
 //    public int getMetadata(ItemStack stack)
-    public static int getMetadata(ItemStack stack)
-    {
+    public static int getMetadata(ItemStack stack) {
         return getCopiedGateData(stack) != null ? 1 : 0;
     }
 
-    public static CompoundTag getCopiedGateData(ItemStack stack)
-    {
+    public static CompoundTag getCopiedGateData(ItemStack stack) {
         return stack.getTagElement(NBT_DATA);
     }
 
-    public static void setCopiedGateData(ItemStack stack, CompoundTag nbt)
-    {
+    public static void setCopiedGateData(ItemStack stack, CompoundTag nbt) {
         NBTUtilBC.getItemData(stack).put(NBT_DATA, nbt);
     }
 }

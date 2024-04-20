@@ -13,40 +13,33 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public enum BCTransportEventDist
-{
+public enum BCTransportEventDist {
     INSTANCE;
 
     @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event)
-    {
+    public void onWorldTick(TickEvent.WorldTickEvent event) {
 //        if (!event.world.isRemote && event.world.getMinecraftServer() != null)
-        if (!event.world.isClientSide && event.world.getServer() != null)
-        {
+        if (!event.world.isClientSide && event.world.getServer() != null) {
             WorldSavedDataWireSystems.get(event.world).tick();
         }
     }
 
     @SubscribeEvent
-    public void onServerTick(TickEvent.ServerTickEvent event)
-    {
+    public void onServerTick(TickEvent.ServerTickEvent event) {
         PipeItemMessageQueue.serverTick();
     }
 
     @SubscribeEvent
-    public void onChunkWatch(ChunkWatchEvent event)
-    {
+    public void onChunkWatch(ChunkWatchEvent event) {
         WorldSavedDataWireSystems.get(event.getPlayer().level).changedPlayers.add(event.getPlayer());
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public void onTextureStitch(TextureStitchEvent.Post event)
-    {
+    public void onTextureStitch(TextureStitchEvent.Post event) {
         PipeWireRenderer.clearWireCache();
     }
 

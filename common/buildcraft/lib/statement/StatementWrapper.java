@@ -5,8 +5,8 @@
  */
 package buildcraft.lib.statement;
 
-import buildcraft.api.core.render.ISprite;
 import buildcraft.api.core.EnumPipePart;
+import buildcraft.api.core.render.ISprite;
 import buildcraft.api.statements.*;
 import buildcraft.lib.misc.ColourUtil;
 import net.minecraft.network.chat.Component;
@@ -19,8 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class StatementWrapper implements IStatement, Comparable<StatementWrapper>
-{
+public abstract class StatementWrapper implements IStatement, Comparable<StatementWrapper> {
     public final IStatement delegate;
 
     /**
@@ -28,8 +27,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      */
     public final EnumPipePart sourcePart;
 
-    public StatementWrapper(IStatement delegate, EnumPipePart sourcePart)
-    {
+    public StatementWrapper(IStatement delegate, EnumPipePart sourcePart) {
         this.delegate = delegate;
         this.sourcePart = sourcePart;
     }
@@ -38,8 +36,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#getUniqueTag()
      */
     @Override
-    public String getUniqueTag()
-    {
+    public String getUniqueTag() {
         return this.delegate.getUniqueTag();
     }
 
@@ -47,8 +44,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#maxParameters()
      */
     @Override
-    public int maxParameters()
-    {
+    public int maxParameters() {
         return this.delegate.maxParameters();
     }
 
@@ -56,8 +52,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#minParameters()
      */
     @Override
-    public int minParameters()
-    {
+    public int minParameters() {
         return this.delegate.minParameters();
     }
 
@@ -65,15 +60,13 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#getDescription()
      */
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
         return this.delegate.getDescription();
     }
 
     // Calen
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return this.delegate.getDescriptionKey();
     }
 
@@ -81,8 +74,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#createParameter(int)
      */
     @Override
-    public IStatementParameter createParameter(int index)
-    {
+    public IStatementParameter createParameter(int index) {
         return this.delegate.createParameter(index);
     }
 
@@ -90,8 +82,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#rotateLeft()
      */
     @Override
-    public IStatement rotateLeft()
-    {
+    public IStatement rotateLeft() {
         return this.delegate.rotateLeft();
     }
 
@@ -99,13 +90,11 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
      * @see IStatement#getSprite()
      */
     @Override
-    public ISprite getSprite()
-    {
+    public ISprite getSprite() {
         return this.delegate.getSprite();
     }
 
-    public BlockEntity getNeighbourTile(IStatementContainer source)
-    {
+    public BlockEntity getNeighbourTile(IStatementContainer source) {
         return source.getNeighbourTile(sourcePart.face);
     }
 
@@ -113,17 +102,14 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
     public abstract StatementWrapper[] getPossible();
 
     @Override
-    public boolean isPossibleOrdered()
-    {
+    public boolean isPossibleOrdered() {
         return delegate.isPossibleOrdered();
     }
 
     @Override
-    public List<Component> getTooltip()
-    {
+    public List<Component> getTooltip() {
         List<Component> list = delegate.getTooltip();
-        if (sourcePart != EnumPipePart.CENTER)
-        {
+        if (sourcePart != EnumPipePart.CENTER) {
             list = new ArrayList<>(list);
             Component translated = new TextComponent(ColourUtil.getTextFullTooltip(sourcePart.face));
 //            list.add(new TextComponent(LocaleUtil.localize("gate.side", translated)));
@@ -133,11 +119,9 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
     }
 
     @Override
-    public List<String> getTooltipKey()
-    {
+    public List<String> getTooltipKey() {
         List<String> list = delegate.getTooltipKey();
-        if (sourcePart != EnumPipePart.CENTER)
-        {
+        if (sourcePart != EnumPipePart.CENTER) {
             list = new ArrayList<>(list);
             list.add("gate.side" + ColourUtil.getTextFullTooltip(sourcePart.face));
         }
@@ -145,29 +129,22 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
     }
 
     @Override
-    public <T> T convertTo(Class<T> clazz)
-    {
+    public <T> T convertTo(Class<T> clazz) {
         T t = delegate.convertTo(clazz);
-        if (t != null)
-        {
+        if (t != null) {
             return t;
         }
         // As we need to keep the wrapper it's not quite as simple as "return t;"
-        if (clazz.isAssignableFrom(TriggerWrapper.class))
-        {
+        if (clazz.isAssignableFrom(TriggerWrapper.class)) {
 
             ITrigger trigger = delegate.convertTo(ITrigger.class);
-            if (trigger != null)
-            {
+            if (trigger != null) {
                 return clazz.cast(TriggerWrapper.wrap(trigger, sourcePart.face));
             }
-        }
-        else if (clazz.isAssignableFrom(ActionWrapper.class))
-        {
+        } else if (clazz.isAssignableFrom(ActionWrapper.class)) {
 
             IAction action = delegate.convertTo(IAction.class);
-            if (action != null)
-            {
+            if (action != null) {
                 return clazz.cast(ActionWrapper.wrap(action, sourcePart.face));
             }
         }
@@ -175,37 +152,28 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
     }
 
     @Override
-    public int compareTo(StatementWrapper o)
-    {
-        if (sourcePart != o.sourcePart)
-        {
+    public int compareTo(StatementWrapper o) {
+        if (sourcePart != o.sourcePart) {
             return Integer.compare(o.sourcePart.getIndex(), sourcePart.getIndex());
         }
-        if (delegate == o.delegate)
-        {
+        if (delegate == o.delegate) {
             return 0;
         }
-        if (delegate.getClass() == o.delegate.getClass())
-        {
+        if (delegate.getClass() == o.delegate.getClass()) {
             IStatement[] poss = delegate.getPossible();
             IStatement[] oPoss = o.delegate.getPossible();
-            if (Arrays.equals(poss, oPoss))
-            {
+            if (Arrays.equals(poss, oPoss)) {
                 int idxThis = -1;
                 int idxThat = -1;
-                for (int i = 0; i < poss.length; i++)
-                {
-                    if (poss[i] == delegate)
-                    {
+                for (int i = 0; i < poss.length; i++) {
+                    if (poss[i] == delegate) {
                         idxThis = i;
                     }
-                    if (poss[i] == o.delegate)
-                    {
+                    if (poss[i] == o.delegate) {
                         idxThat = i;
                     }
                 }
-                if (idxThis != idxThat && idxThis != -1 && idxThat != -1)
-                {
+                if (idxThis != idxThat && idxThis != -1 && idxThat != -1) {
                     return Integer.compare(idxThis, idxThat);
                 }
             }
@@ -214,18 +182,15 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(sourcePart, getUniqueTag());
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null) return false;
-        if (obj.getClass() != getClass())
-        {
+        if (obj.getClass() != getClass()) {
             return false;
         }
         StatementWrapper other = (StatementWrapper) obj;

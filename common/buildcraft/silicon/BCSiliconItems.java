@@ -19,8 +19,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BCSiliconItems
-{
+public class BCSiliconItems {
     public static Item.Properties BC_SILICON_ITEM_DEFAULT_PROP =
             new Item.Properties()
 //                    .tab(BCCreativeTab.BC_MAIN_TAB)
@@ -62,7 +61,7 @@ public class BCSiliconItems
                     .stacksTo(64) // 堆叠
             ;
 
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCSilicon.MOD_ID);
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCSilicon.MODID);
 
     public static RegistryObject<Item> chipsetRedstone;
     public static RegistryObject<Item> chipsetIron;
@@ -71,16 +70,15 @@ public class BCSiliconItems
     public static RegistryObject<Item> chipsetDiamond;
 
     public static RegistryObject<ItemGateCopier> gateCopier;
-//    public static RegistryObject<ItemPluggableGate> plugGate;
-public static final Map<GateVariant, RegistryObject<ItemPluggableGate>> variantGateMap = new HashMap<>();
+    //    public static RegistryObject<ItemPluggableGate> plugGate;
+    public static final Map<GateVariant, RegistryObject<ItemPluggableGate>> variantGateMap = new HashMap<>();
     public static RegistryObject<ItemPluggableLens> plugLens;
     public static RegistryObject<Item> plugPulsar;
     public static RegistryObject<Item> plugLightSensor;
     public static RegistryObject<ItemPluggableFacade> plugFacade;
 
 
-    public static void preInit()
-    {
+    public static void preInit() {
 //        redstoneChipset = HELPER.addItem(new ItemRedstoneChipset("item.redstone_chipset"));
         chipsetRedstone = HELPER.addItem("item.chipset.redstone", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.RED));
         chipsetIron = HELPER.addItem("item.chipset.iron", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.IRON));
@@ -93,21 +91,17 @@ public static final Map<GateVariant, RegistryObject<ItemPluggableGate>> variantG
 //        plugGate = HELPER.addItem("item.plug.gate", BC_SILICON_PLUG_PROP, ItemPluggableGate::new);
 
         GateVariant gateVariant = new GateVariant(new CompoundTag());
-        String registryId = TagManager.getTag("item.plug.gate", TagManager.EnumTagType.REGISTRY_NAME).replace(BCSilicon.MOD_ID + ":", "");
+        String registryId = TagManager.getTag("item.plug.gate", TagManager.EnumTagType.REGISTRY_NAME).replace(BCSilicon.MODID + ":", "");
         RegistryObject<ItemPluggableGate> plug = HELPER.addItem("item.plug.gate", registryId, BC_SILICON_PLUG_PROP, (idBC, prop) -> new ItemPluggableGate(idBC, prop, gateVariant));
         variantGateMap.put(gateVariant, plug);
-        for (EnumGateMaterial material : EnumGateMaterial.VALUES)
-        {
-            if (!material.canBeModified)
-            {
+        for (EnumGateMaterial material : EnumGateMaterial.VALUES) {
+            if (!material.canBeModified) {
                 continue;
             }
-            for (EnumGateLogic logic : EnumGateLogic.VALUES)
-            {
-                for (EnumGateModifier modifier : EnumGateModifier.VALUES)
-                {
+            for (EnumGateLogic logic : EnumGateLogic.VALUES) {
+                for (EnumGateModifier modifier : EnumGateModifier.VALUES) {
                     GateVariant gateVariant_i = new GateVariant(logic, material, modifier);
-                    String registryId_i = TagManager.getTag("item.plug.gate", TagManager.EnumTagType.REGISTRY_NAME).replace(BCSilicon.MOD_ID + ":", "") + "_" + gateVariant_i.getVariantName();
+                    String registryId_i = TagManager.getTag("item.plug.gate", TagManager.EnumTagType.REGISTRY_NAME).replace(BCSilicon.MODID + ":", "") + "_" + gateVariant_i.getVariantName();
                     RegistryObject<ItemPluggableGate> plug_i = HELPER.addItem("item.plug.gate", registryId_i, BC_SILICON_PLUG_PROP, (idBC, prop) -> new ItemPluggableGate(idBC, prop, gateVariant_i));
                     variantGateMap.put(gateVariant_i, plug_i);
                 }

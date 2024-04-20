@@ -23,8 +23,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -48,8 +46,7 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
     //    private static final AABB BOUNDING_BOX = new AABB(2 / 16D, 0 / 16D, 2 / 16D, 14 / 16D, 16 / 16D, 14 / 16D);
     private static final VoxelShape AABB = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
-    public BlockTank(String idBC, BlockBehaviour.Properties props)
-    {
+    public BlockTank(String idBC, BlockBehaviour.Properties props) {
         super(idBC, props);
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(JOINED_BELOW, false)
@@ -58,14 +55,12 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return BCFactoryBlocks.tankTile.get().create(pos, state);
     }
 
     @Override
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(BuildCraftProperties.JOINED_BELOW);
         builder.add(BlockStateProperties.WATERLOGGED);
@@ -73,8 +68,7 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
         BlockState oldState = world.getBlockState(pos);
@@ -86,23 +80,20 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
 
     // 根据附近方块状态更新
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
-    {
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
         state = super.updateShape(state, facing, facingState, world, pos, facingPos);
         return getActualState(state, world, pos, null);
     }
 
     @Override
-    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile)
-    {
+    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
         boolean isTankBelow = world.getBlockState(pos.below()).getBlock() instanceof ITankBlockConnector;
         return state.setValue(JOINED_BELOW, isTankBelow);
     }
 
     // 含水
     @Override
-    public FluidState getFluidState(BlockState state)
-    {
+    public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
@@ -127,10 +118,8 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
     @Override
     // Calen ret opposite value to 1.12.2!
 //    public boolean shouldSideBeRendered(IBlockAccess world, BlockPos pos, EnumFacing side)
-    public boolean skipRendering(BlockState thisState, BlockState otherState, Direction side)
-    {
-        if (otherState.is(this))
-        {
+    public boolean skipRendering(BlockState thisState, BlockState otherState, Direction side) {
+        if (otherState.is(this)) {
             return !(side.getAxis() != Axis.Y || !(otherState.getBlock() instanceof ITankBlockConnector));
         }
         return super.skipRendering(thisState, otherState, side);
@@ -138,18 +127,15 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
 
     @Override
 //    public boolean hasComparatorInputOverride(BlockState state)
-    public boolean hasAnalogOutputSignal(BlockState state)
-    {
+    public boolean hasAnalogOutputSignal(BlockState state) {
         return true;
     }
 
     @Override
 //    public int getComparatorInputOverride(BlockState blockState, Level world, BlockPos pos)
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
-    {
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         BlockEntity tile = level.getBlockEntity(pos);
-        if (tile instanceof TileTank)
-        {
+        if (tile instanceof TileTank) {
             return ((TileTank) tile).getComparatorLevel();
         }
         return 0;
@@ -163,8 +149,7 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
 //    }
 
     @Override
-    public float getExtension(Level world, BlockPos pos, Direction face, BlockState state)
-    {
+    public float getExtension(Level world, BlockPos pos, Direction face, BlockState state) {
         return face.getAxis() == Axis.Y ? 0 : 2 / 16f;
     }
 
@@ -172,8 +157,7 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
 
     @Override
     @Deprecated
-    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         return AABB;
     }
 

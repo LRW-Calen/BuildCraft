@@ -18,6 +18,7 @@ import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.collect.OrderedEnumMap;
 import buildcraft.lib.misc.data.ModelVariableData;
 import buildcraft.lib.net.PacketBufferBC;
+import buildcraft.lib.tile.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +33,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import buildcraft.lib.tile.ITickable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -44,12 +44,9 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITickable, IDebuggable
-{
+public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITickable, IDebuggable {
 
-    /**
-     * Heat per {@link MjAPI#MJ}.
-     */
+    /** Heat per {@link MjAPI#MJ}. */
     public static final double HEAT_PER_MJ = 0.0023;
 
     public static final double MIN_HEAT = 20;
@@ -63,38 +60,31 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     protected double heat = MIN_HEAT;// TODO: sync gui data
     protected long power = 0;// TODO: sync gui data
     private long lastPower = 0;
-    /**
-     * Increments from 0 to 1. Above 0.5 all of the held power is emitted.
-     */
+    /** Increments from 0 to 1. Above 0.5 all of the held power is emitted. */
     private float progress, lastProgress;
     private int progressPart = 0;
 
     protected EnumPowerStage powerStage = EnumPowerStage.BLUE;
     protected Direction currentDirection = Direction.UP;
 
-    public long currentOutput;// TODO: sync gui data
+    public long currentOutput; // TODO: sync gui data
     public boolean isRedstonePowered = false;
     protected boolean isPumping = false;
 
-    /**
-     * The model variables, used to keep track of the various state-based variables.
-     */
+    /** The model variables, used to keep track of the various state-based variables. */
     public final ModelVariableData clientModelData = new ModelVariableData();
 
     // Needed: Power stored
 
-    public TileEngineBase_BC8(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState)
-    {
+    public TileEngineBase_BC8(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
         super(blockEntityType, pos, blockState);
     }
 
     @Override
-    public void load(CompoundTag nbt)
-    {
+    public void load(CompoundTag nbt) {
         super.load(nbt);
         currentDirection = NBTUtilBC.readEnum(nbt.get("currentDirection"), Direction.class);
-        if (currentDirection == null)
-        {
+        if (currentDirection == null) {
             currentDirection = Direction.UP;
         }
         isRedstonePowered = nbt.getBoolean("isRedstonePowered");
@@ -105,8 +95,7 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
-    {
+    public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         nbt.put("currentDirection", NBTUtilBC.writeEnum(currentDirection));
         nbt.putBoolean("isRedstonePowered", isRedstonePowered);
@@ -117,74 +106,54 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     }
 
     @Override
-    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == NET_RENDER_DATA)
-            {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == NET_RENDER_DATA) {
                 isPumping = buffer.readBoolean();
                 currentDirection = buffer.readEnum(Direction.class);
                 powerStage = buffer.readEnum(EnumPowerStage.class);
                 progress = buffer.readFloat();
-            }
-            else if (id == NET_GUI_DATA)
-            {
+            } else if (id == NET_GUI_DATA) {
                 heat = buffer.readFloat();
                 currentOutput = buffer.readLong();
                 power = buffer.readLong();
-            }
-            else if (id == NET_GUI_TICK)
-            {
+            } else if (id == NET_GUI_TICK) {
                 heat = buffer.readFloat();
                 currentOutput = buffer.readLong();
                 power = buffer.readLong();
-
             }
         }
     }
 
     @Override
-    public void writePayload(int id, PacketBufferBC buffer, Dist side)
-    {
+    public void writePayload(int id, PacketBufferBC buffer, Dist side) {
         super.writePayload(id, buffer, side);
-        if (side == Dist.DEDICATED_SERVER)
-        {
-            if (id == NET_RENDER_DATA)
-            {
+        if (side == Dist.DEDICATED_SERVER) {
+            if (id == NET_RENDER_DATA) {
                 buffer.writeBoolean(isPumping);
                 buffer.writeEnum(currentDirection);
                 buffer.writeEnum(powerStage);
                 buffer.writeFloat(progress);
-            }
-            else if (id == NET_GUI_DATA)
-            {
+            } else if (id == NET_GUI_DATA) {
                 buffer.writeFloat((float) heat);
                 buffer.writeLong(currentOutput);
                 buffer.writeLong(power);
-            }
-            else if (id == NET_GUI_TICK)
-            {
+            } else if (id == NET_GUI_TICK) {
                 buffer.writeFloat((float) heat);
                 buffer.writeLong(currentOutput);
                 buffer.writeLong(power);
-
             }
         }
     }
 
-    public InteractionResult attemptRotation()
-    {
+    public InteractionResult attemptRotation() {
         OrderedEnumMap<Direction> possible = VanillaRotationHandlers.ROTATE_FACING;
         Direction current = currentDirection;
-        for (int i = 0; i < 6; i++)
-        {
+        for (int i = 0; i < 6; i++) {
             current = possible.next(current);
-            if (isFacingReceiver(current))
-            {
-                if (currentDirection != current)
-                {
+            if (isFacingReceiver(current)) {
+                if (currentDirection != current) {
                     currentDirection = current;
                     // makeTileCache();
                     sendNetworkUpdate(NET_RENDER_DATA);
@@ -200,81 +169,53 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         return InteractionResult.FAIL;
     }
 
-    private boolean isFacingReceiver(Direction dir)
-    {
+    private boolean isFacingReceiver(Direction dir) {
         return getReceiverToPower(dir) != null;
     }
 
-    protected final boolean canChain()
-    {
+    protected final boolean canChain() {
         return getMaxChainLength() > 0;
     }
 
-    /**
-     * @return The number of additional engines that this engine can send power through.
-     */
-    protected int getMaxChainLength()
-    {
+    /** @return The number of additional engines that this engine can send power through. */
+    protected int getMaxChainLength() {
         return 2;
     }
 
-    public void rotateIfInvalid()
-    {
-        if (currentDirection != null && isFacingReceiver(currentDirection))
-        {
+    public void rotateIfInvalid() {
+        if (currentDirection != null && isFacingReceiver(currentDirection)) {
             return;
         }
         attemptRotation();
-        if (currentDirection == null)
-        {
+        if (currentDirection == null) {
             currentDirection = Direction.UP;
         }
     }
 
     @Override
-    public void onPlacedBy(LivingEntity placer, ItemStack stack)
-    {
+    public void onPlacedBy(LivingEntity placer, ItemStack stack) {
         super.onPlacedBy(placer, stack);
-        currentDirection = null;// Force rotateIfInvalid to always attempt to rotate
+        currentDirection = null; // Force rotateIfInvalid to always attempt to rotate
         rotateIfInvalid();
     }
 
-    protected Biome getBiome()
-    {
+    protected Biome getBiome() {
         // TODO: Cache this!
         return level.getBiome(getBlockPos()).value();
     }
 
-    /**
-     * @return The heat of the current biome, in celsius.
-     */
-    protected float getBiomeHeat()
-    {
+    /** @return The heat of the current biome, in celsius. */
+    protected float getBiomeHeat() {
         Biome biome = getBiome();
-//        float temp = 0;
-//        try
-//        {
-//            Method biome_getTemperature = Biome.class.getDeclaredMethod("getTemperature", BlockPos.class);
-//            biome_getTemperature.setAccessible(true);
-//            temp = (float) biome_getTemperature.invoke(biome, getBlockPos());
-//        }
-//        catch (Exception e)
-//        {
-//            e.printStackTrace();
-////            throw new Exception("Reflect Get Temperature Failed!");
-//        }
-////        float temp = biome.getTemperature(getBlockPos());
         float temp = biome.getTemperature(getBlockPos());
         return Math.max(0, Math.min(30, temp * 15f));
     }
 
-    public double getPowerLevel()
-    {
+    public double getPowerLevel() {
         return power / (double) getMaxPower();
     }
 
-    protected EnumPowerStage computePowerStage()
-    {
+    protected EnumPowerStage computePowerStage() {
         double heatLevel = getHeatLevel();
         if (heatLevel < 0.25f) return EnumPowerStage.BLUE;
         else if (heatLevel < 0.5f) return EnumPowerStage.GREEN;
@@ -283,14 +224,11 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         else return EnumPowerStage.OVERHEAT;
     }
 
-    public final EnumPowerStage getPowerStage()
-    {
-        if (!level.isClientSide)
-        {
+    public final EnumPowerStage getPowerStage() {
+        if (!level.isClientSide) {
             EnumPowerStage newStage = computePowerStage();
 
-            if (powerStage != newStage)
-            {
+            if (powerStage != newStage) {
                 powerStage = newStage;
                 sendNetworkUpdate(NET_RENDER_DATA);
             }
@@ -299,30 +237,24 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         return powerStage;
     }
 
-    public void updateHeatLevel()
-    {
+    public void updateHeatLevel() {
         heat = ((MAX_HEAT - MIN_HEAT) * getPowerLevel()) + MIN_HEAT;
     }
 
-    public double getHeatLevel()
-    {
+    public double getHeatLevel() {
         return (heat - MIN_HEAT) / (MAX_HEAT - MIN_HEAT);
     }
 
-    public double getIdealHeatLevel()
-    {
+    public double getIdealHeatLevel() {
         return heat / IDEAL_HEAT;
     }
 
-    public double getHeat()
-    {
+    public double getHeat() {
         return heat;
     }
 
-    public double getPistonSpeed()
-    {
-        switch (getPowerStage())
-        {
+    public double getPistonSpeed() {
+        switch (getPowerStage()) {
             case BLUE:
                 return 0.02;
             case GREEN:
@@ -340,35 +272,30 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     protected abstract IMjConnector createConnector();
 
     @Override
-    public void onNeighbourBlockChanged(Block block, BlockPos nehighbour)
-    {
+    public void onNeighbourBlockChanged(Block block, BlockPos nehighbour) {
         super.onNeighbourBlockChanged(block, nehighbour);
+//        isRedstonePowered = world.isBlockIndirectlyGettingPowered(getPos()) > 0;
         isRedstonePowered = level.hasNeighborSignal(getBlockPos());
     }
 
-    public void update()
-    {
+    @Override
+    public void update() {
         ITickable.super.update();
         deltaManager.tick();
         if (cannotUpdate()) return;
 
         boolean overheat = getPowerStage() == EnumPowerStage.OVERHEAT;
 
-        if (level.isClientSide)
-        {
+        if (level.isClientSide) {
             lastProgress = progress;
 
-            if (isPumping)
-            {
+            if (isPumping) {
                 progress += getPistonSpeed();
 
-                if (progress >= 1)
-                {
+                if (progress >= 1) {
                     progress = 0;
                 }
-            }
-            else if (progress > 0)
-            {
+            } else if (progress > 0) {
                 progress -= 0.01f;
             }
             clientModelData.tick();
@@ -377,14 +304,10 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
 
         lastPower = 0;
 
-        if (!isRedstonePowered)
-        {
-            if (power > MjAPI.MJ)
-            {
+        if (!isRedstonePowered) {
+            if (power > MjAPI.MJ) {
                 power -= MjAPI.MJ;
-            }
-            else if (power > 0)
-            {
+            } else if (power > 0) {
                 power = 0;
             }
         }
@@ -393,35 +316,24 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         getPowerStage();
         engineUpdate();
 
-        if (progressPart != 0)
-        {
+        if (progressPart != 0) {
             progress += getPistonSpeed();
 
-            if (progress > 0.5 && progressPart == 1)
-            {
+            if (progress > 0.5 && progressPart == 1) {
                 progressPart = 2;
                 sendPower(); // Comment out for constant power
-            }
-            else if (progress >= 1)
-            {
+            } else if (progress >= 1) {
                 progress = 0;
                 progressPart = 0;
             }
-        }
-        else if (isRedstonePowered && isActive())
-        {
-            if (getPowerToExtract(false) > 0)
-            {
+        } else if (isRedstonePowered && isActive()) {
+            if (getPowerToExtract(false) > 0) {
                 progressPart = 1;
                 setPumping(true);
-            }
-            else
-            {
+            } else {
                 setPumping(false);
             }
-        }
-        else
-        {
+        } else {
             setPumping(false);
         }
 
@@ -430,19 +342,16 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         // sendPower();
         // } else currentOutput = 0;
 
-        if (!overheat)
-        {
+        if (!overheat) {
             burn();
         }
 
         markChunkDirty();
     }
 
-    private long getPowerToExtract(boolean doExtract)
-    {
+    private long getPowerToExtract(boolean doExtract) {
         IMjReceiver receiver = getReceiverToPower(currentDirection);
-        if (receiver == null)
-        {
+        if (receiver == null) {
             return 0;
         }
 
@@ -455,14 +364,11 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         // return extractEnergy(0, getActualOutput(), false); // Uncomment for constant power
     }
 
-    private void sendPower()
-    {
+    private void sendPower() {
         IMjReceiver receiver = getReceiverToPower(currentDirection);
-        if (receiver != null)
-        {
+        if (receiver != null) {
             long extracted = getPowerToExtract(true);
-            if (extracted > 0)
-            {
+            if (extracted > 0) {
                 long excess = receiver.receivePower(extracted, false);
                 extractPower(extracted - excess, extracted - excess, true); // Comment out for constant power
                 // currentOutput = extractEnergy(0, needed, true); // Uncomment for constant power
@@ -475,34 +381,25 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     // float heatLevel = getIdealHeatLevel();
     // return getCurrentOutput() * heatLevel;
     // }
-    protected void burn()
-    {
+    protected void burn() {
     }
 
-    protected void engineUpdate()
-    {
-        if (!isRedstonePowered)
-        {
-            if (power >= 1)
-            {
+    protected void engineUpdate() {
+        if (!isRedstonePowered) {
+            if (power >= 1) {
                 power -= 1;
-            }
-            else if (power < 1)
-            {
+            } else if (power < 1) {
                 power = 0;
             }
         }
     }
 
-    public boolean isActive()
-    {
+    public boolean isActive() {
         return true;
     }
 
-    protected final void setPumping(boolean isActive)
-    {
-        if (this.isPumping == isActive)
-        {
+    protected final void setPumping(boolean isActive) {
+        if (this.isPumping == isActive) {
             return;
         }
 
@@ -512,35 +409,26 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
 
     // TEMP
     @FunctionalInterface
-    public interface ITileBuffer
-    {
+    public interface ITileBuffer {
         BlockEntity getTile();
     }
 
-    /**
-     * Temp! This should be replaced with a tile buffer!
-     */
-    public ITileBuffer getTileBuffer(Direction side)
-    {
+    /** Temp! This should be replaced with a tile buffer! */
+    public ITileBuffer getTileBuffer(Direction side) {
         BlockEntity tile = level.getBlockEntity(getBlockPos().relative(side));
         return () -> tile;
     }
 
-    // 来自cap provider?
     @Override
-    public void setRemoved()
-    {
+    public void setRemoved() {
         super.setRemoved();
-        // BC 原本就是注释
         // tileCache = null;
         // checkOrientation = true;
     }
 
     @Override
-    public void clearRemoved()
-    {
+    public void clearRemoved() {
         super.clearRemoved();
-        // BC 原本就是注释
         // tileCache = null;
         // checkOrientation = true;
     }
@@ -563,64 +451,50 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     // addEnergy(powerHandler.useEnergy(1, maxEnergyReceived(), true) * 0.95F);
     // }
 
-    public void addPower(long microJoules)
-    {
+    public void addPower(long microJoules) {
         power += microJoules;
         lastPower += microJoules;
 
-        if (getPowerStage() == EnumPowerStage.OVERHEAT)
-        {
+        if (getPowerStage() == EnumPowerStage.OVERHEAT) {
             // TODO: turn engine off
             // worldObj.createExplosion(null, xCoord, yCoord, zCoord, explosionRange(), true);
             // worldObj.setBlockToAir(xCoord, yCoord, zCoord);
         }
 
-        if (power > getMaxPower())
-        {
+        if (power > getMaxPower()) {
             power = getMaxPower();
         }
     }
 
-    public long extractPower(long min, long max, boolean doExtract)
-    {
-        if (power < min)
-        {
+    public long extractPower(long min, long max, boolean doExtract) {
+        if (power < min) {
             return 0;
         }
 
         long actualMax;
 
-        if (max > maxPowerExtracted())
-        {
+        if (max > maxPowerExtracted()) {
             actualMax = maxPowerExtracted();
-        }
-        else
-        {
+        } else {
             actualMax = max;
         }
 
-        if (actualMax < min)
-        {
+        if (actualMax < min) {
             return 0;
         }
 
         long extracted;
 
-        if (power >= actualMax)
-        {
+        if (power >= actualMax) {
             extracted = actualMax;
 
-            if (doExtract)
-            {
+            if (doExtract) {
                 power -= actualMax;
             }
-        }
-        else
-        {
+        } else {
             extracted = power;
 
-            if (doExtract)
-            {
+            if (doExtract) {
                 power = 0;
             }
         }
@@ -628,104 +502,78 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         return extracted;
     }
 
-    public final boolean isPoweredTile(BlockEntity tile, Direction side)
-    {
+    public final boolean isPoweredTile(BlockEntity tile, Direction side) {
         if (tile == null) return false;
-        if (tile.getClass() == getClass())
-        {
+        if (tile.getClass() == getClass()) {
             TileEngineBase_BC8 other = (TileEngineBase_BC8) tile;
             return other.currentDirection == currentDirection;
         }
         return getReceiverToPower(tile, side) != null;
     }
 
-    /**
-     * @deprecated Replaced with {@link #getReceiverToPower(Direction)}.
-     */
+    /** @deprecated Replaced with {@link #getReceiverToPower(Direction)}. */
     @Deprecated
-    public IMjReceiver getReceiverToPower(BlockEntity tile, Direction side)
-    {
+    public IMjReceiver getReceiverToPower(BlockEntity tile, Direction side) {
         if (tile == null) return null;
         IMjReceiver rec = tile.getCapability(MjAPI.CAP_RECEIVER, side.getOpposite()).orElseGet(null);
-        if (rec != null && rec.canConnect(mjConnector) && mjConnector.canConnect(rec))
-        {
+        if (rec != null && rec.canConnect(mjConnector) && mjConnector.canConnect(rec)) {
             return rec;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public IMjReceiver getReceiverToPower(Direction side)
-    {
+    public IMjReceiver getReceiverToPower(Direction side) {
         TileEngineBase_BC8 engine = this;
         BlockEntity next = null;
 
-        for (int len = 0; len <= getMaxChainLength(); len++)
-        {
+        for (int len = 0; len <= getMaxChainLength(); len++) {
             next = engine.getTileBuffer(side).getTile();
 
-            if (next == null)
-            {
+            if (next == null) {
                 return null;
             }
 
-            if (next.getClass() == getClass())
-            {
-                if (side != ((TileEngineBase_BC8) next).currentDirection)
-                {
+            if (next.getClass() == getClass()) {
+                if (side != ((TileEngineBase_BC8) next).currentDirection) {
                     return null;
                 }
             }
 
-            if (next instanceof TileEngineBase_BC8)
-            {
-                if (next.getClass() != getClass())
-                {
+            if (next instanceof TileEngineBase_BC8) {
+                if (next.getClass() != getClass()) {
                     return null;
                 }
                 engine = (TileEngineBase_BC8) next;
-            }
-            else
-            {
+            } else {
                 break;
             }
         }
 
-        if (next == null || next instanceof TileEngineBase_BC8)
-        {
+        if (next == null || next instanceof TileEngineBase_BC8) {
             return null;
         }
 
         IMjReceiver recv = next.getCapability(MjAPI.CAP_RECEIVER, side.getOpposite()).orElse(null);
-        if (recv != null && recv.canConnect(mjConnector) && mjConnector.canConnect(recv))
-        {
+        if (recv != null && recv.canConnect(mjConnector) && mjConnector.canConnect(recv)) {
             return recv;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing)
-    {
-        if (facing == currentDirection)
-        {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
+        if (facing == currentDirection) {
             return mjCaps.getCapability(capability, facing);
-        }
-        else
-        {
+        } else {
             return super.getCapability(capability, facing);
         }
     }
 
     public abstract long getMaxPower();
 
-    public long minPowerReceived()
-    {
+    public long minPowerReceived() {
         return 2 * MjAPI.MJ;
     }
 
@@ -735,25 +583,21 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
 
     public abstract float explosionRange();
 
-    public long getEnergyStored()
-    {
+    public long getEnergyStored() {
         return power;
     }
 
     public abstract long getCurrentOutput();
 
-    public boolean isEngineOn()
-    {
+    public boolean isEngineOn() {
         return isPumping;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public float getProgressClient(float partialTicks)
-    {
+    public float getProgressClient(float partialTicks) {
         float last = lastProgress;
         float now = progress;
-        if (last > 0.5 && now < 0.5)
-        {
+        if (last > 0.5 && now < 0.5) {
             // we just returned
             now += 1;
         }
@@ -761,15 +605,13 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         return interp % 1;
     }
 
-    public Direction getCurrentFacing()
-    {
+    public Direction getCurrentFacing() {
         return currentDirection;
     }
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
 //        left.add("facing = " + currentDirection);
 //        left.add("heat = " + LocaleUtil.localizeHeat(heat) + " -- " + String.format("%.2f %%", getHeatLevel()));
 //        left.add("power = " + LocaleUtil.localizeMj(power));
@@ -777,7 +619,7 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
 //        left.add("progress = " + progress);
 //        left.add("last = " + LocaleUtil.localizeMjFlow(lastPower));
         left.add(new TextComponent("facing = " + currentDirection));
-        left.add(new TextComponent("heat = ").append(new TextComponent(LocaleUtil.localizeHeat(heat))).append(new TextComponent(" -- " + String.format("%.2f %%", getHeatLevel()))));
+        left.add(new TextComponent("heat = ").append(new TextComponent(LocaleUtil.localizeHeat(heat) + " -- " + String.format("%.2f %%", getHeatLevel()))));
         left.add(new TextComponent("power = ").append(LocaleUtil.localizeMjComponent(power)));
         left.add(new TextComponent("stage = " + powerStage));
         left.add(new TextComponent("progress = " + progress));
@@ -786,16 +628,14 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void getClientDebugInfo(List<String> left, List<String> right, Direction side)
-    {
+    public void getClientDebugInfo(List<String> left, List<String> right, Direction side) {
         left.add("Current Model Variables:");
         clientModelData.addDebugInfo(left);
     }
 
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public boolean hasFastRenderer()
-//    {
+//    public boolean hasFastRenderer() {
 //        return true;
 //    }
 }

@@ -19,7 +19,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
@@ -28,17 +27,18 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-public class BlockFrame extends BlockBCBase_Neptune
-{
+public class BlockFrame extends BlockBCBase_Neptune {
     public static final Map<Direction, Property<Boolean>> CONNECTED_MAP = BuildCraftProperties.CONNECTED_MAP;
 
     public static final VoxelShape BASE_AABB = Shapes.box(4 / 16D, 4 / 16D, 4 / 16D, 12 / 16D, 12 / 16D, 12 / 16D);
     public static final VoxelShape CONNECTION_AABB = Shapes.box(4 / 16D, 0 / 16D, 4 / 16D, 12 / 16D, 4 / 16D, 12 / 16D);
 
-    public BlockFrame(String idBC, BlockBehaviour.Properties properties)
-    {
+    public BlockFrame(String idBC, BlockBehaviour.Properties properties) {
         super(idBC, properties);
         this.registerDefaultState(
                 this.getStateDefinition().any()
@@ -53,8 +53,7 @@ public class BlockFrame extends BlockBCBase_Neptune
 
     @Override
 //    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
 //        super.addProperties(properties);
         super.createBlockStateDefinition(builder);
 //        properties.addAll(CONNECTED_MAP.values());
@@ -62,23 +61,20 @@ public class BlockFrame extends BlockBCBase_Neptune
     }
 
     @Override
-    public BlockState updateShape(BlockState thisState, Direction direction, BlockState otherState, LevelAccessor world, BlockPos thisPos, BlockPos otherPos)
-    {
+    public BlockState updateShape(BlockState thisState, Direction direction, BlockState otherState, LevelAccessor world, BlockPos thisPos, BlockPos otherPos) {
         return getActualState(thisState, world, thisPos);
     }
 
     //    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
-    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos)
-    {
-        for (Direction side : CONNECTED_MAP.keySet())
-        {
+    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos) {
+        for (Direction side : CONNECTED_MAP.keySet()) {
             Block block = world.getBlockState(pos.relative(side)).getBlock();
             state = state.setValue(CONNECTED_MAP.get(side), block instanceof BlockFrame || block instanceof BlockQuarry);
         }
         return state;
     }
 
-    // Calen: moved to BuildCraftBuilders::onRenderRegister
+    // Calen: moved to BuildCraftBuilders#onRenderRegister
 //    @Override
 //    public BlockRenderLayer getBlockLayer()
 //    {
@@ -92,19 +88,17 @@ public class BlockFrame extends BlockBCBase_Neptune
 //    }
 
     @Override
-    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter world, BlockPos pos)
-    {
+    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter world, BlockPos pos) {
         return false;
     }
 
-//    @Override
+    //    @Override
 //    public boolean isOpaqueCube(IBlockState state)
 //    {
 //        return false;
 //    }
     @Override
-    public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos)
-    {
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
         return true;
     }
 
@@ -112,20 +106,16 @@ public class BlockFrame extends BlockBCBase_Neptune
     @Override
     // Calen ret opposite value to 1.12.2!
 //    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, Direction side)
-    public boolean skipRendering(BlockState thisState, BlockState otherState, Direction side)
-    {
+    public boolean skipRendering(BlockState thisState, BlockState otherState, Direction side) {
 //        BlockState actualState = thisState.getActualState(world, pos);
         BlockState actualState = thisState;
         Direction[] facings = CONNECTED_MAP.keySet().stream()
                 .filter(facing -> actualState.getValue(CONNECTED_MAP.get(facing)))
                 .toArray(Direction[]::new);
-        if (facings.length == 1)
-        {
+        if (facings.length == 1) {
 //            return side != facings[0];
             return side == facings[0];
-        }
-        else if (facings.length == 2 && facings[0] == facings[1].getOpposite())
-        {
+        } else if (facings.length == 2 && facings[0] == facings[1].getOpposite()) {
 //            return side != facings[0] && side != facings[1];
             return side == facings[0] || side == facings[1];
         }
@@ -149,14 +139,12 @@ public class BlockFrame extends BlockBCBase_Neptune
 //    }
 
     @Override
-    public VoxelShape getShape(BlockState actualState, BlockGetter world, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getShape(BlockState actualState, BlockGetter world, BlockPos pos, CollisionContext context) {
 //        AtomicReference<AABB> box = new AtomicReference<>(BASE_AABB.bounds());
         List<VoxelShape> shapes = new ArrayList<>();
         CONNECTED_MAP.forEach((side, property) ->
         {
-            if (actualState.getValue(property))
-            {
+            if (actualState.getValue(property)) {
 //                box.set(box.get().minmax(RotationUtil.rotateAABB(CONNECTION_AABB.bounds(), side)));
                 shapes.add(Shapes.create(RotationUtil.rotateAABB(CONNECTION_AABB.bounds(), side)));
             }
@@ -177,8 +165,7 @@ public class BlockFrame extends BlockBCBase_Neptune
 //    }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState actualState, BlockGetter world, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getCollisionShape(BlockState actualState, BlockGetter world, BlockPos pos, CollisionContext context) {
         VoxelShape shape = super.getCollisionShape(actualState, world, pos, context);
         List<VoxelShape> shapes = new ArrayList<>();
         CONNECTED_MAP.keySet().stream()
@@ -192,8 +179,7 @@ public class BlockFrame extends BlockBCBase_Neptune
 
     @Override
 //    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
-    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-    {
+    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder) {
         return Collections.emptyList();
     }
 }

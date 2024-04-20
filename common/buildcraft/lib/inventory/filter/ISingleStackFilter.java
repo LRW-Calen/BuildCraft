@@ -10,7 +10,6 @@ package buildcraft.lib.inventory.filter;
 import net.minecraft.world.item.ItemStack;
 
 @FunctionalInterface
-public interface ISingleStackFilter
-{
+public interface ISingleStackFilter {
     boolean matches(ItemStack target, ItemStack toTest);
 }

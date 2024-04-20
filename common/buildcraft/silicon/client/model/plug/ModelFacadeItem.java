@@ -7,10 +7,10 @@
 package buildcraft.silicon.client.model.plug;
 
 import buildcraft.api.BCModules;
-import buildcraft.silicon.item.ItemPluggableFacade;
 import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.silicon.client.model.key.KeyPlugFacade;
+import buildcraft.silicon.item.ItemPluggableFacade;
 import buildcraft.silicon.plug.FacadeInstance;
 import buildcraft.silicon.plug.FacadePhasedState;
 import buildcraft.transport.BCTransportModels;
@@ -40,32 +40,26 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public enum ModelFacadeItem implements BakedModel
-{
+public enum ModelFacadeItem implements BakedModel {
     INSTANCE;
 
     private static final LoadingCache<KeyPlugFacade, BakedModel> cache = CacheBuilder.newBuilder()//
             .expireAfterAccess(1, TimeUnit.MINUTES)//
             .build(CacheLoader.from(key -> new ModelItemSimple(bakeForKey(key), ModelItemSimple.TRANSFORM_PLUG_AS_BLOCK, false)));
 
-    public static void onModelBake()
-    {
+    public static void onModelBake() {
         cache.invalidateAll();
     }
 
-    private static List<BakedQuad> bakeForKey(KeyPlugFacade key)
-    {
+    private static List<BakedQuad> bakeForKey(KeyPlugFacade key) {
         List<BakedQuad> quads = new ArrayList<>();
-        for (MutableQuad quad : PlugBakerFacade.INSTANCE.bakeForKey(key))
-        {
+        for (MutableQuad quad : PlugBakerFacade.INSTANCE.bakeForKey(key)) {
             quads.add(quad.toBakedItem());
         }
 
 //        if (BCModules.TRANSPORT.isLoaded() && key.state.isFullBlock() && !key.isHollow)
-        if (BCModules.TRANSPORT.isLoaded() && key.state.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == Shapes.block() && !key.isHollow)
-        {
-            for (MutableQuad quad : BCTransportModels.BLOCKER.getCutoutQuads())
-            {
+        if (BCModules.TRANSPORT.isLoaded() && key.state.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO) == Shapes.block() && !key.isHollow) {
+            for (MutableQuad quad : BCTransportModels.BLOCKER.getCutoutQuads()) {
                 quads.add(quad.toBakedItem());
             }
         }
@@ -75,64 +69,54 @@ public enum ModelFacadeItem implements BakedModel
     @NotNull
     @Override
 //    public List<BakedQuad> getQuads(BlockState state, Direction side, long rand)
-    public List<BakedQuad> getQuads(@Nullable BlockState p_119123_, @Nullable Direction p_119124_, Random rand)
-    {
+    public List<BakedQuad> getQuads(@Nullable BlockState p_119123_, @Nullable Direction p_119124_, Random rand) {
         return ImmutableList.of();
     }
 
     @Override
 //    public boolean isAmbientOcclusion()
-    public boolean useAmbientOcclusion()
-    {
+    public boolean useAmbientOcclusion() {
         return false;
     }
 
     @Override
-    public boolean isGui3d()
-    {
+    public boolean isGui3d() {
         return false;
     }
 
     @Override
 //    public boolean isBuiltInRenderer()
-    public boolean isCustomRenderer()
-    {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
 //    public TextureAtlasSprite getParticleTexture()
-    public TextureAtlasSprite getParticleIcon()
-    {
+    public TextureAtlasSprite getParticleIcon() {
         return null;
     }
 
     @Override
 //    public ItemCameraTransforms getItemCameraTransforms()
-    public ItemTransforms getTransforms()
-    {
+    public ItemTransforms getTransforms() {
         return ModelItemSimple.TRANSFORM_PLUG_AS_BLOCK;
     }
 
     @Override
-    public ItemOverrides getOverrides()
-    {
+    public ItemOverrides getOverrides() {
         return FacadeOverride.FACADE_OVERRIDE;
     }
 
-    public static class FacadeOverride extends ItemOverrides
-    {
+    public static class FacadeOverride extends ItemOverrides {
         public static final FacadeOverride FACADE_OVERRIDE = new FacadeOverride();
 
-        private FacadeOverride()
-        {
+        private FacadeOverride() {
 //            super(ImmutableList.of());
         }
 
         @Override
 //        public BakedModel handleItemState(BakedModel originalModel, ItemStack stack, Level world, LivingEntity entity)
-        public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int p_173469_)
-        {
+        public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int p_173469_) {
             FacadeInstance inst = ItemPluggableFacade.getStates(stack);
             FacadePhasedState state = inst.getCurrentStateForStack();
             return cache.getUnchecked(
@@ -142,8 +126,7 @@ public enum ModelFacadeItem implements BakedModel
 
     // Calen: forced
     @Override
-    public boolean usesBlockLight()
-    {
+    public boolean usesBlockLight() {
         return false;
     }
 }

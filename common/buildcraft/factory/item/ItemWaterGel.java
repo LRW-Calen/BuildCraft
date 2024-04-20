@@ -28,21 +28,18 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Random;
 
-public class ItemWaterGel extends ItemBC_Neptune
-{
+public class ItemWaterGel extends ItemBC_Neptune {
     // Calen: from 1.12.2 not present in 1.18.2
     protected static Random itemRand = new Random();
 
-    public ItemWaterGel(String idBC, Item.Properties properties)
-    {
+    public ItemWaterGel(String idBC, Item.Properties properties) {
         super(idBC, properties);
 //        this.maxStackSize = 16;
     }
 
     @Override
 //    public ActionResult<ItemStack> onItemRightClick(Level world, Player player, InteractionHand hand)
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
-    {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
 //        Vec3 start = player.getPositionVector().addVector(0, player.getEyeHeight(), 0);
         Vec3 start = player.position().add(0, player.getEyeHeight(), 0);
@@ -53,20 +50,17 @@ public class ItemWaterGel extends ItemBC_Neptune
         BlockHitResult ray = world.clip(new ClipContext(start, end, ClipContext.Block.OUTLINE, ClipContext.Fluid.ANY, player));
 
 //        if (ray == null || ray.getLocation() == null)
-        if (ray.getType() == HitResult.Type.MISS)
-        {
+        if (ray.getType() == HitResult.Type.MISS) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         }
 
         Block b = world.getBlockState(new BlockPos(ray.getLocation())).getBlock();
-        if (b != Blocks.WATER)
-        {
+        if (b != Blocks.WATER) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         }
 
 //        if (!player.capabilities.isCreativeMode)
-        if (!player.isCreative())
-        {
+        if (!player.isCreative()) {
             stack.setCount(stack.getCount() - 1);
         }
 
@@ -76,8 +70,7 @@ public class ItemWaterGel extends ItemBC_Neptune
 //                0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
                 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
-        if (!world.isClientSide)
-        {
+        if (!world.isClientSide) {
             world.setBlock(ray.getBlockPos(), BCFactoryBlocks.waterGel.get().defaultBlockState().setValue(BlockWaterGel.PROP_STAGE, BlockWaterGel.GelStage.SPREAD_0), Block.UPDATE_ALL);
             world.scheduleTick(ray.getBlockPos(), BCFactoryBlocks.waterGel.get(), 200);
 

@@ -12,10 +12,8 @@ import buildcraft.lib.gui.slot.SlotBase;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
-public class ContainerReplacer extends ContainerBCTile<TileReplacer>
-{
-    public ContainerReplacer(MenuType menuType, int id, Player player, TileReplacer tile)
-    {
+public class ContainerReplacer extends ContainerBCTile<TileReplacer> {
+    public ContainerReplacer(MenuType menuType, int id, Player player, TileReplacer tile) {
         super(menuType, id, player, tile);
 
 //        addSlotToContainer(new SlotBase(tile.invSnapshot, 0, 8, 115));

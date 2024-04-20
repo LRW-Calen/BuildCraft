@@ -1,5 +1,4 @@
 package buildcraft.datagen.silicon;
 
-public class FacadeSwapRecipeGenerator
-{
+public class FacadeSwapRecipeGenerator {
 }

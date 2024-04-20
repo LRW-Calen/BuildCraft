@@ -44,8 +44,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.io.IOException;
 import java.util.*;
 
-public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContainer
-{
+public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContainer {
 
     protected static final IdAllocator ID_ALLOC = new IdAllocator("GateLogic");
 
@@ -98,13 +97,11 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
      */
     public boolean isOn;
 
-    public GateLogic(PluggableGate pluggable, GateVariant variant)
-    {
+    public GateLogic(PluggableGate pluggable, GateVariant variant) {
         this.pluggable = pluggable;
         this.variant = variant;
         statements = new StatementPair[variant.numSlots];
-        for (int s = 0; s < variant.numSlots; s++)
-        {
+        for (int s = 0; s < variant.numSlots; s++) {
             statements[s] = new StatementPair(s);
         }
 
@@ -117,8 +114,7 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
 
     // Saving + Loading
 
-    public GateLogic(PluggableGate pluggable, CompoundTag nbt)
-    {
+    public GateLogic(PluggableGate pluggable, CompoundTag nbt) {
         this(pluggable, new GateVariant(nbt.getCompound("variant")));
 
         readConfigData(nbt);
@@ -126,29 +122,24 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         wireBroadcasts.addAll(NBTUtilBC.readEnumSet(nbt.get("wireBroadcasts"), DyeColor.class));
     }
 
-    public void readConfigData(CompoundTag nbt)
-    {
+    public void readConfigData(CompoundTag nbt) {
         short c = nbt.getShort("connections");
-        for (int i = 0; i < connections.length; i++)
-        {
+        for (int i = 0; i < connections.length; i++) {
             connections[i] = ((c >>> i) & 1) == 1;
         }
 
-        for (int i = 0; i < statements.length; i++)
-        {
+        for (int i = 0; i < statements.length; i++) {
             String tName = "trigger[" + i + "]";
             String aName = "action[" + i + "]";
             // Legacy
-            if (nbt.contains(tName, Tag.TAG_STRING))
-            {
+            if (nbt.contains(tName, Tag.TAG_STRING)) {
                 CompoundTag nbt2 = new CompoundTag();
                 nbt2.putString("kind", nbt.getString(tName));
                 nbt2.putByte("side", nbt.getByte(tName + ".side"));
                 nbt.put(tName, nbt2);
             }
             // Legacy
-            if (nbt.contains(aName, Tag.TAG_STRING))
-            {
+            if (nbt.contains(aName, Tag.TAG_STRING)) {
                 CompoundTag nbt2 = new CompoundTag();
                 nbt2.putString("kind", nbt.getString(aName));
                 nbt2.putByte("side", nbt.getByte(aName + ".side"));
@@ -160,29 +151,23 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         }
     }
 
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = new CompoundTag();
         nbt.put("variant", variant.writeToNBT());
 
         short c = 0;
-        for (int i = 0; i < connections.length; i++)
-        {
-            if (connections[i])
-            {
+        for (int i = 0; i < connections.length; i++) {
+            if (connections[i]) {
                 c |= 1 << i;
             }
         }
         nbt.putShort("connections", c);
 
-        for (int s = 0; s < statements.length; s++)
-        {
-            if (statements[s].trigger.get() != null)
-            {
+        for (int s = 0; s < statements.length; s++) {
+            if (statements[s].trigger.get() != null) {
                 nbt.put("trigger[" + s + "]", statements[s].trigger.writeToNbt());
             }
-            if (statements[s].action.get() != null)
-            {
+            if (statements[s].action.get() != null) {
                 nbt.put("action[" + s + "]", statements[s].action.writeToNbt());
             }
         }
@@ -192,28 +177,23 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
 
     // Networking
 
-    public GateLogic(PluggableGate pluggable, PacketBufferBC buffer)
-    {
+    public GateLogic(PluggableGate pluggable, PacketBufferBC buffer) {
         this(pluggable, new GateVariant(buffer));
 
         MessageUtil.readBooleanArray(buffer, triggerOn);
         MessageUtil.readBooleanArray(buffer, actionOn);
         MessageUtil.readBooleanArray(buffer, connections);
-        try
-        {
-            for (StatementPair pair : statements)
-            {
+        try {
+            for (StatementPair pair : statements) {
                 pair.trigger.readFromBuffer(buffer);
                 pair.action.readFromBuffer(buffer);
             }
         }
-        catch (IOException io)
-        {
+        catch (IOException io) {
             throw new Error(io);
         }
         boolean on = false;
-        for (int i = 0; i < statements.length; i++)
-        {
+        for (int i = 0; i < statements.length; i++) {
             boolean b = actionOn[i];
             on |= b && (statements[i].action.get() != null);
         }
@@ -221,31 +201,26 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
 
     }
 
-    public void writeCreationToBuf(PacketBufferBC buffer)
-    {
+    public void writeCreationToBuf(PacketBufferBC buffer) {
         variant.writeToBuffer(buffer);
 
         MessageUtil.writeBooleanArray(buffer, triggerOn);
         MessageUtil.writeBooleanArray(buffer, actionOn);
         MessageUtil.writeBooleanArray(buffer, connections);
 
-        for (StatementPair pair : statements)
-        {
+        for (StatementPair pair : statements) {
             pair.trigger.writeToBuffer(buffer);
             pair.action.writeToBuffer(buffer);
         }
     }
 
-//    public void readPayload(PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    public void readPayload(PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    //    public void readPayload(PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
+    public void readPayload(PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         int id = buffer.readUnsignedByte();
-        if (id == NET_ID_CHANGE)
-        {
+        if (id == NET_ID_CHANGE) {
             boolean isAction = buffer.readBoolean();
             int slot = buffer.readUnsignedByte();
-            if (slot < 0 || slot >= statements.length)
-            {
+            if (slot < 0 || slot >= statements.length) {
                 throw new InvalidInputDataException(
                         "Slot index out of range! (" + slot + ", must be within " + statements.length + ")");
             }
@@ -253,35 +228,24 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
             (isAction ? s.action : s.trigger).readFromBuffer(buffer);
             return;
         }
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == NET_ID_RESOLVE)
-            {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == NET_ID_RESOLVE) {
                 MessageUtil.readBooleanArray(buffer, triggerOn);
                 MessageUtil.readBooleanArray(buffer, actionOn);
                 MessageUtil.readBooleanArray(buffer, connections);
-            }
-            else if (id == NET_ID_GLOWING)
-            {
+            } else if (id == NET_ID_GLOWING) {
                 isOn = true;
-            }
-            else if (id == NET_ID_DARK)
-            {
+            } else if (id == NET_ID_DARK) {
                 isOn = false;
-            }
-            else
-            {
+            } else {
                 BCLog.logger.warn("Unknown ID " + ID_ALLOC.getNameFor(id));
             }
-        }
-        else
-        {
+        } else {
             BCLog.logger.warn("Unknown side " + side + " + ID " + ID_ALLOC.getNameFor(id));
         }
     }
 
-    public void sendStatementUpdate(boolean isAction, int slot)
-    {
+    public void sendStatementUpdate(boolean isAction, int slot) {
         pluggable.sendGuiMessage((buffer) ->
         {
             buffer.writeByte(NET_ID_CHANGE);
@@ -292,8 +256,7 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         });
     }
 
-    public void sendResolveData()
-    {
+    public void sendResolveData() {
         pluggable.sendGuiMessage((buffer) ->
         {
             buffer.writeByte(NET_ID_RESOLVE);
@@ -303,8 +266,7 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         });
     }
 
-    public void sendIsOn()
-    {
+    public void sendIsOn() {
         pluggable.sendMessage(buffer ->
         {
             buffer.writeByte(isOn ? NET_ID_GLOWING : NET_ID_DARK);
@@ -314,35 +276,29 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
     // IGate
 
     @Override
-    public Direction getSide()
-    {
+    public Direction getSide() {
         return pluggable.side;
     }
 
     @Override
-    public BlockEntity getTile()
-    {
+    public BlockEntity getTile() {
         return getPipeHolder().getPipeTile();
     }
 
     @Override
-    public BlockEntity getNeighbourTile(Direction side)
-    {
+    public BlockEntity getNeighbourTile(Direction side) {
         return getPipeHolder().getNeighbourTile(side);
     }
 
     @Override
-    public IPipeHolder getPipeHolder()
-    {
+    public IPipeHolder getPipeHolder() {
         return pluggable.holder;
     }
 
     @Override
-    public List<IStatement> getTriggers()
-    {
+    public List<IStatement> getTriggers() {
         List<IStatement> list = new ArrayList<>(statements.length);
-        for (StatementPair pair : statements)
-        {
+        for (StatementPair pair : statements) {
             TriggerWrapper e = pair.trigger.get();
             list.add(e == null ? e : e.delegate);
         }
@@ -350,11 +306,9 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
     }
 
     @Override
-    public List<IStatement> getActions()
-    {
+    public List<IStatement> getActions() {
         List<IStatement> list = new ArrayList<>(statements.length);
-        for (StatementPair pair : statements)
-        {
+        for (StatementPair pair : statements) {
             ActionWrapper e = pair.action.get();
             list.add(e == null ? e : e.delegate);
         }
@@ -362,51 +316,43 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
     }
 
     @Override
-    public List<StatementSlot> getActiveActions()
-    {
+    public List<StatementSlot> getActiveActions() {
         return activeActions;
     }
 
     @Override
-    public List<IStatementParameter> getTriggerParameters(int slot)
-    {
+    public List<IStatementParameter> getTriggerParameters(int slot) {
         return Arrays.asList(statements[slot].trigger.getParameters());
     }
 
     @Override
-    public List<IStatementParameter> getActionParameters(int slot)
-    {
+    public List<IStatementParameter> getActionParameters(int slot) {
         return Arrays.asList(statements[slot].action.getParameters());
     }
 
     @Override
-    public int getRedstoneInput(Direction side)
-    {
+    public int getRedstoneInput(Direction side) {
         return getPipeHolder().getRedstoneInput(side);
     }
 
     @Override
-    public boolean setRedstoneOutput(Direction side, int value)
-    {
+    public boolean setRedstoneOutput(Direction side, int value) {
         return getPipeHolder().setRedstoneOutput(side, value);
     }
 
     // Wire related
 
     @Override
-    public boolean isEmitting(DyeColor colour)
-    {
+    public boolean isEmitting(DyeColor colour) {
         BlockEntity tile = getPipeHolder().getPipeTile();
-        if (tile.isRemoved())
-        {
+        if (tile.isRemoved()) {
             throw new UnsupportedOperationException("Cannot check an invalid emitter!");
         }
         return wireBroadcasts.contains(colour);
     }
 
     @Override
-    public void emitWire(DyeColor colour)
-    {
+    public void emitWire(DyeColor colour) {
         wireBroadcasts.add(colour);
     }
 
@@ -416,13 +362,11 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
      * @return True if the gate GUI should be split into 2 separate columns. Needed on the server for the values of
      * {@link #connections}
      */
-    public boolean isSplitInTwo()
-    {
+    public boolean isSplitInTwo() {
         return variant.numSlots > 4;
     }
 
-    public void resolveActions()
-    {
+    public void resolveActions() {
         int groupCount = 0;
         int groupActive = 0;
 
@@ -439,37 +383,28 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         EnumSet<DyeColor> previousBroadcasts = EnumSet.copyOf(wireBroadcasts);
         wireBroadcasts.clear();
 
-        for (int triggerIndex = 0; triggerIndex < statements.length; triggerIndex++)
-        {
+        for (int triggerIndex = 0; triggerIndex < statements.length; triggerIndex++) {
             StatementPair pair = statements[triggerIndex];
             TriggerWrapper trigger = pair.trigger.get();
             groupCount++;
-            if (trigger != null)
-            {
+            if (trigger != null) {
                 IStatementParameter[] params = new IStatementParameter[pair.trigger.getParamCount()];
-                for (int p = 0; p < pair.trigger.getParamCount(); p++)
-                {
+                for (int p = 0; p < pair.trigger.getParamCount(); p++) {
                     params[p] = pair.trigger.getParamRef(p).get();
                 }
-                if (trigger.isTriggerActive(this, params))
-                {
+                if (trigger.isTriggerActive(this, params)) {
                     groupActive++;
                     triggerOn[triggerIndex] = true;
                 }
             }
-            if (connections.length == triggerIndex || !connections[triggerIndex])
-            {
+            if (connections.length == triggerIndex || !connections[triggerIndex]) {
                 boolean allActionsActive;
-                if (variant.logic == EnumGateLogic.AND)
-                {
+                if (variant.logic == EnumGateLogic.AND) {
                     allActionsActive = groupActive == groupCount;
-                }
-                else
-                {
+                } else {
                     allActionsActive = groupActive > 0;
                 }
-                for (int i = groupCount - 1; i >= 0; i--)
-                {
+                for (int i = groupCount - 1; i >= 0; i--) {
                     int actionIndex = triggerIndex - i;
                     StatementPair fullAction = statements[actionIndex];
 
@@ -492,10 +427,8 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
 
                     ActionWrapper action = fullAction.action.get();
                     actionOn[actionIndex] = allActionsActive;
-                    if (action != null)
-                    {
-                        if (allActionsActive)
-                        {
+                    if (action != null) {
+                        if (allActionsActive) {
                             isOn = true;
                             StatementSlot slot = new StatementSlot();
                             slot.statement = action.delegate;
@@ -506,9 +439,7 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
                             PipeEvent evt = new PipeEventActionActivate(getPipeHolder(), action.getDelegate(),
                                     slot.parameters, action.sourcePart);
                             getPipeHolder().fireEvent(evt);
-                        }
-                        else
-                        {
+                        } else {
                             action.actionDeactivated(this, fullAction.action.getParameters());
                         }
                     }
@@ -518,8 +449,7 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
             }
         }
 
-        if (!previousBroadcasts.equals(wireBroadcasts))
-        {
+        if (!previousBroadcasts.equals(wireBroadcasts)) {
             IWireManager wires = getPipeHolder().getWireManager();
             EnumSet<DyeColor> turnedOff = EnumSet.copyOf(previousBroadcasts);
             turnedOff.removeAll(wireBroadcasts);
@@ -529,58 +459,44 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
             turnedOn.removeAll(previousBroadcasts);
             // FIXME: add call to "wires.emittingColour(turnedOff)"
 
-            if (BCModules.TRANSPORT.isLoaded() && !getPipeHolder().getPipeWorld().isClientSide)
-            {
+            if (BCModules.TRANSPORT.isLoaded() && !getPipeHolder().getPipeWorld().isClientSide) {
                 WorldSavedDataWireSystems.get(getPipeHolder().getPipeWorld()).gatesChanged = true;
             }
         }
 
-        if (isOn != prevIsOn)
-        {
+        if (isOn != prevIsOn) {
             sendIsOn();
         }
 
-        if (!Arrays.equals(prevTriggers, triggerOn) || !Arrays.equals(prevActions, actionOn))
-        {
+        if (!Arrays.equals(prevTriggers, triggerOn) || !Arrays.equals(prevActions, actionOn)) {
             sendResolveData();
         }
     }
 
-    public void onTick()
-    {
-        if (getPipeHolder().getPipeWorld().isClientSide)
-        {
+    public void onTick() {
+        if (getPipeHolder().getPipeWorld().isClientSide) {
             return;
         }
         resolveActions();
     }
 
-    public SortedSet<TriggerWrapper> getAllValidTriggers()
-    {
+    public SortedSet<TriggerWrapper> getAllValidTriggers() {
         SortedSet<TriggerWrapper> set = new TreeSet<>();
-        for (ITriggerInternal trigger : StatementManager.getInternalTriggers(this))
-        {
-            if (isValidTrigger(trigger))
-            {
+        for (ITriggerInternal trigger : StatementManager.getInternalTriggers(this)) {
+            if (isValidTrigger(trigger)) {
                 set.add(new TriggerWrapperInternal(trigger));
             }
         }
-        for (Direction face : Direction.values())
-        {
-            for (ITriggerInternalSided trigger : StatementManager.getInternalSidedTriggers(this, face))
-            {
-                if (isValidTrigger(trigger))
-                {
+        for (Direction face : Direction.values()) {
+            for (ITriggerInternalSided trigger : StatementManager.getInternalSidedTriggers(this, face)) {
+                if (isValidTrigger(trigger)) {
                     set.add(new TriggerWrapperInternalSided(trigger, face));
                 }
             }
             BlockEntity neighbour = getNeighbourTile(face);
-            if (neighbour != null)
-            {
-                for (ITriggerExternal trigger : StatementManager.getExternalTriggers(face, neighbour))
-                {
-                    if (isValidTrigger(trigger))
-                    {
+            if (neighbour != null) {
+                for (ITriggerExternal trigger : StatementManager.getExternalTriggers(face, neighbour)) {
+                    if (isValidTrigger(trigger)) {
                         set.add(new TriggerWrapperExternal(trigger, face));
                     }
                 }
@@ -589,32 +505,23 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         return set;
     }
 
-    public SortedSet<ActionWrapper> getAllValidActions()
-    {
+    public SortedSet<ActionWrapper> getAllValidActions() {
         SortedSet<ActionWrapper> set = new TreeSet<>();
-        for (IActionInternal trigger : StatementManager.getInternalActions(this))
-        {
-            if (isValidAction(trigger))
-            {
+        for (IActionInternal trigger : StatementManager.getInternalActions(this)) {
+            if (isValidAction(trigger)) {
                 set.add(new ActionWrapperInternal(trigger));
             }
         }
-        for (Direction face : Direction.values())
-        {
-            for (IActionInternalSided trigger : StatementManager.getInternalSidedActions(this, face))
-            {
-                if (isValidAction(trigger))
-                {
+        for (Direction face : Direction.values()) {
+            for (IActionInternalSided trigger : StatementManager.getInternalSidedActions(this, face)) {
+                if (isValidAction(trigger)) {
                     set.add(new ActionWrapperInternalSided(trigger, face));
                 }
             }
             BlockEntity neighbour = getNeighbourTile(face);
-            if (neighbour != null)
-            {
-                for (IActionExternal trigger : StatementManager.getExternalActions(face, neighbour))
-                {
-                    if (isValidAction(trigger))
-                    {
+            if (neighbour != null) {
+                for (IActionExternal trigger : StatementManager.getExternalActions(face, neighbour)) {
+                    if (isValidAction(trigger)) {
                         set.add(new ActionWrapperExternal(trigger, face));
                     }
                 }
@@ -623,23 +530,19 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         return set;
     }
 
-    public boolean isValidTrigger(IStatement statement)
-    {
+    public boolean isValidTrigger(IStatement statement) {
         return statement != null && statement.minParameters() <= variant.numTriggerArgs;
     }
 
-    public boolean isValidAction(IStatement statement)
-    {
+    public boolean isValidAction(IStatement statement) {
         return statement != null && statement.minParameters() <= variant.numActionArgs;
     }
 
-    public class StatementPair
-    {
+    public class StatementPair {
         public final FullStatement<TriggerWrapper> trigger;
         public final FullStatement<ActionWrapper> action;
 
-        public StatementPair(int index)
-        {
+        public StatementPair(int index) {
             IStatementChangeListener tChange = (s, i) ->
             {
                 sendStatementUpdate(false, index);

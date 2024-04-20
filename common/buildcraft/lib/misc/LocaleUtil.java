@@ -6,9 +6,9 @@
 
 package buildcraft.lib.misc;
 
-import buildcraft.api.mj.MjAPI;
 import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
+import buildcraft.api.mj.MjAPI;
 import buildcraft.lib.BCLibConfig;
 import buildcraft.lib.BCLibConfig.TimeGap;
 import net.minecraft.client.resources.language.I18n;
@@ -29,8 +29,7 @@ import java.util.Set;
 /**
  * The central class for localizing objects.
  */
-public class LocaleUtil
-{
+public class LocaleUtil {
 
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.locale");
     private static final Set<String> failedStrings = new HashSet<>();
@@ -41,8 +40,7 @@ public class LocaleUtil
     private static String localeKeyFluidStaticCap, localeKeyFluidStaticEmpty, localeKeyFluidStaticFull;
     private static String localeKeyMjStatic, localeKeyMjFlow;
 
-    static
-    {
+    static {
         BCLibConfig.configChangeListeners.add(LocaleUtil::onConfigChanged);
         onConfigChanged();
     }
@@ -51,8 +49,7 @@ public class LocaleUtil
      * Should be called whenever any of the {@link BCLibConfig} options are changed that affect any of the methods in
      * this class.
      */
-    public static void onConfigChanged()
-    {
+    public static void onConfigChanged() {
         boolean bucketStatic = BCLibConfig.useBucketsStatic;
         boolean bucketFlow = BCLibConfig.useBucketsFlow;
         String longName = BCLibConfig.useLongLocalizedName ? "long" : "short";
@@ -72,13 +69,10 @@ public class LocaleUtil
      * @param key The key to localize
      * @return The localized key, or the input key if no localization was found.
      */
-    public static String localize(String key)
-    {
+    public static String localize(String key) {
         String localized = I18n.get(key);
-        if (localized == key)
-        {
-            if (DEBUG && failedStrings.add(localized))
-            {
+        if (localized == key) {
+            if (DEBUG && failedStrings.add(localized)) {
                 BCLog.logger.warn("[lib.locale] Attempted to localize '" + key + "' but no localization existed!");
             }
             return key;
@@ -94,25 +88,20 @@ public class LocaleUtil
      * @param args The arguments to put into the localized key
      * @return The localized string.
      */
-    public static String localize(String key, Object... args)
-    {
+    public static String localize(String key, Object... args) {
 //        String localized = I18n.get(key);
         String localized = new TranslatableComponent(key, args).getString();
-        if (localized == key)
-        {
-            if (DEBUG && failedStrings.add(localized))
-            {
+        if (localized == key) {
+            if (DEBUG && failedStrings.add(localized)) {
                 BCLog.logger.warn("[lib.locale] Attempted to localize '" + key + "' but no localization existed!");
             }
             return key + " " + Arrays.toString(args);
         }
-        try
-        {
+        try {
 //            return String.format(localized, args);
             return I18n.get(key, args);
         }
-        catch (IllegalFormatException ife)
-        {
+        catch (IllegalFormatException ife) {
             return "Bad Format: " + ife.getMessage();
         }
     }
@@ -123,8 +112,7 @@ public class LocaleUtil
      * @param key The key to check
      * @return True if the key could be localized, false if not.
      */
-    public static boolean canLocalize(String key)
-    {
+    public static boolean canLocalize(String key) {
         return I18n.exists(key);
     }
 
@@ -132,15 +120,13 @@ public class LocaleUtil
      * @param colour The {@link DyeColor} to localize.
      * @return a localised name for the given colour.
      */
-    public static String localizeColour(DyeColor colour)
-    {
+    public static String localizeColour(DyeColor colour) {
 //        return localize("item.fireworksCharge." + colour.getName());
         return localize("item.minecraft.firework_star." + colour.getName());
     }
 
     // Calen
-    public static String getColorTranslateKey(DyeColor colour)
-    {
+    public static String getColorTranslateKey(DyeColor colour) {
 //        return localize("item.fireworksCharge." + colour.getName());
 //        return "item.minecraft.firework_star." + colour.getName();
         // Calen
@@ -151,75 +137,57 @@ public class LocaleUtil
      * @param face The {@link Direction} to localize.
      * @return a localised name for the given face.
      */
-    public static String localizeFacing(@Nullable Direction face)
-    {
+    public static String localizeFacing(@Nullable Direction face) {
         return localize("direction." + (face == null ? "center" : face.getName()));
     }
 
     // Calen
-    public static Component localizeFacingComponent(@Nullable Direction face)
-    {
+    public static Component localizeFacingComponent(@Nullable Direction face) {
         return new TranslatableComponent("direction." + (face == null ? "center" : face.getName()));
     }
 
-    public static String localizeFluidStaticAmount(IFluidTank tank)
-    {
+    public static String localizeFluidStaticAmount(IFluidTank tank) {
         return localizeFluidStaticAmount(tank.getFluidAmount(), tank.getCapacity());
     }
 
-    public static Component localizeFluidStaticAmountComponent(IFluidTank tank)
-    {
+    public static Component localizeFluidStaticAmountComponent(IFluidTank tank) {
         return localizeFluidStaticAmountComponent(tank.getFluidAmount(), tank.getCapacity());
     }
 
-    public static String localizeFluidStaticAmount(int fluidAmount)
-    {
+    public static String localizeFluidStaticAmount(int fluidAmount) {
         return localizeFluidStaticAmount(fluidAmount, -1);
     }
 
-    public static MutableComponent localizeFluidStaticAmountComponent(int fluidAmount)
-    {
+    public static MutableComponent localizeFluidStaticAmountComponent(int fluidAmount) {
         return localizeFluidStaticAmountComponent(fluidAmount, -1);
     }
 
     /**
      * Localizes the given fluid amount, out of a given capacity
      */
-    public static String localizeFluidStaticAmount(int fluidAmount, int capacity)
-    {
-        if (fluidAmount <= 0)
-        {
-            if (capacity > 0)
-            {
+    public static String localizeFluidStaticAmount(int fluidAmount, int capacity) {
+        if (fluidAmount <= 0) {
+            if (capacity > 0) {
                 String cap;
-                if (BCLibConfig.useBucketsStatic)
-                {
+                if (BCLibConfig.useBucketsStatic) {
                     cap = FORMAT_FLUID.format(capacity / 1000.0);
-                }
-                else
-                {
+                } else {
                     cap = FORMAT_FLUID.format(capacity);
                 }
                 return localize(localeKeyFluidStaticEmpty, cap);
             }
             return localize("buildcraft.fluid.empty");
-        }
-        else
-        {
+        } else {
             String amount;
             String cap;
-            if (BCLibConfig.useBucketsStatic)
-            {
+            if (BCLibConfig.useBucketsStatic) {
                 amount = FORMAT_FLUID.format(fluidAmount / 1000.0);
                 cap = FORMAT_FLUID.format(capacity / 1000.0);
-            }
-            else
-            {
+            } else {
                 amount = FORMAT_FLUID.format(fluidAmount);
                 cap = FORMAT_FLUID.format(capacity);
             }
-            if (capacity == fluidAmount)
-            {
+            if (capacity == fluidAmount) {
                 return localize(localeKeyFluidStaticFull, amount);
             }
             return localize(capacity > 0 ? localeKeyFluidStaticCap : localeKeyFluidStatic, amount, cap);
@@ -227,104 +195,79 @@ public class LocaleUtil
     }
 
     // Calen
-    public static MutableComponent localizeFluidStaticAmountComponent(int fluidAmount, int capacity)
-    {
-        if (fluidAmount <= 0)
-        {
-            if (capacity > 0)
-            {
+    public static MutableComponent localizeFluidStaticAmountComponent(int fluidAmount, int capacity) {
+        if (fluidAmount <= 0) {
+            if (capacity > 0) {
                 String cap;
-                if (BCLibConfig.useBucketsStatic)
-                {
+                if (BCLibConfig.useBucketsStatic) {
                     cap = FORMAT_FLUID.format(capacity / 1000.0);
-                }
-                else
-                {
+                } else {
                     cap = FORMAT_FLUID.format(capacity);
                 }
                 return new TranslatableComponent(localeKeyFluidStaticEmpty, cap);
             }
             return new TranslatableComponent("buildcraft.fluid.empty");
-        }
-        else
-        {
+        } else {
             String amount;
             String cap;
-            if (BCLibConfig.useBucketsStatic)
-            {
+            if (BCLibConfig.useBucketsStatic) {
                 amount = FORMAT_FLUID.format(fluidAmount / 1000.0);
                 cap = FORMAT_FLUID.format(capacity / 1000.0);
-            }
-            else
-            {
+            } else {
                 amount = FORMAT_FLUID.format(fluidAmount);
                 cap = FORMAT_FLUID.format(capacity);
             }
-            if (capacity == fluidAmount)
-            {
+            if (capacity == fluidAmount) {
                 return new TranslatableComponent(localeKeyFluidStaticFull, amount);
             }
             return new TranslatableComponent(capacity > 0 ? localeKeyFluidStaticCap : localeKeyFluidStatic, amount, cap);
         }
     }
 
-    public static String localizeFluidFlow(int milliBucketsPerTick)
-    {
+    public static String localizeFluidFlow(int milliBucketsPerTick) {
         String amount;
-        if (BCLibConfig.useBucketsFlow)
-        {
+        if (BCLibConfig.useBucketsFlow) {
             amount = FORMAT_FLUID.format(milliBucketsPerTick / 50.0);
-        }
-        else
-        {
+        } else {
             amount = FORMAT_FLUID.format(milliBucketsPerTick);
         }
         return localize(localeKeyFluidFlow, amount);
     }
 
     // Calen
-    public static TranslatableComponent localizeFluidFlowToTranslatableComponent(int milliBucketsPerTick)
-    {
+    public static TranslatableComponent localizeFluidFlowToTranslatableComponent(int milliBucketsPerTick) {
         String amount;
-        if (BCLibConfig.useBucketsFlow)
-        {
+        if (BCLibConfig.useBucketsFlow) {
             amount = FORMAT_FLUID.format(milliBucketsPerTick / 50.0);
-        }
-        else
-        {
+        } else {
             amount = FORMAT_FLUID.format(milliBucketsPerTick);
         }
         return new TranslatableComponent(localeKeyFluidFlow, amount);
     }
 
-    public static String localizeMj(long mj)
-    {
+    public static String localizeMj(long mj) {
         return localize(localeKeyMjStatic, MjAPI.formatMj(mj));
     }
 
     // Calen
     //    public static String localizeMj(long mj)
-    public static MutableComponent localizeMjComponent(long mj)
-    {
+    public static MutableComponent localizeMjComponent(long mj) {
 //        return localize(localeKeyMjStatic, MjAPI.formatMj(mj));
         return new TranslatableComponent(localeKeyMjStatic, MjAPI.formatMj(mj));
     }
 
-    public static String localizeMjFlow(long mj)
-    {
+    public static String localizeMjFlow(long mj) {
         mj = BCLibConfig.displayTimeGap.convertTicksToGap(mj);
         return localize(localeKeyMjFlow, MjAPI.formatMj(mj));
     }
 
     // Calen
-    public static TranslatableComponent localizeMjFlowComponent(long mj)
-    {
+    public static TranslatableComponent localizeMjFlowComponent(long mj) {
         mj = BCLibConfig.displayTimeGap.convertTicksToGap(mj);
         return new TranslatableComponent(localeKeyMjFlow, MjAPI.formatMj(mj));
     }
 
-    public static String localizeHeat(double heat)
-    {
+    public static String localizeHeat(double heat) {
         // 原本就是注释
         // if (BCLibConfig.useLongLocalizedName) {
         // return localize("buildcraft.heat.long", heat);
@@ -334,8 +277,7 @@ public class LocaleUtil
     }
 
     // Calen
-    public static boolean modLangResourceNotLoaded()
-    {
+    public static boolean modLangResourceNotLoaded() {
         return new TranslatableComponent("color.clear").getString().equals("color.clear");
     }
 }

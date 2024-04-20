@@ -6,15 +6,11 @@
 
 package buildcraft.builders.block;
 
-import buildcraft.builders.tile.TileArchitectTable;
+import buildcraft.builders.tile.TileFiller;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
-import buildcraft.builders.BCBuildersGuis;
-import buildcraft.builders.tile.TileFiller;
-import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.MessageUtil;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,13 +24,11 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-public class BlockFiller extends BlockBCTile_Neptune implements IBlockWithFacing
-{
+public class BlockFiller extends BlockBCTile_Neptune<TileFiller> implements IBlockWithFacing {
     // public static final IProperty<EnumFillerPattern> PATTERN = BuildCraftProperties.FILLER_PATTERN;
 
     //    public BlockFiller(Material material, String id)
-    public BlockFiller(String idBC, BlockBehaviour.Properties properties)
-    {
+    public BlockFiller(String idBC, BlockBehaviour.Properties properties) {
         super(idBC, properties);
         // setDefaultState(getDefaultState().withProperty(PATTERN, EnumFillerPattern.NONE));
     }
@@ -43,18 +37,15 @@ public class BlockFiller extends BlockBCTile_Neptune implements IBlockWithFacing
 
     @Override
 //    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
 //        super.addProperties(properties);
         super.createBlockStateDefinition(builder);
         // properties.add(PATTERN);
     }
 
     @Override
-    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile)
-    {
-        if (tile instanceof TileFiller filler)
-        {
+    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
+        if (tile instanceof TileFiller filler) {
             // return state.withProperty(PATTERN, EnumFillerPattern.NONE); // FIXME
         }
         return state;
@@ -63,28 +54,21 @@ public class BlockFiller extends BlockBCTile_Neptune implements IBlockWithFacing
 
     @Override
 //    public TileBC_Neptune createTileEntity(World world, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TileFiller(pos, state);
     }
 
     @Override
-//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand,
-//                                    Direction side, float hitX, float hitY, float hitZ)
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
+//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ)
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileFiller filler)
-        {
-            if (!filler.hasBox())
-            {
+        if (tile instanceof TileFiller filler) {
+            if (!filler.hasBox()) {
 //                return false;
                 return InteractionResult.FAIL;
             }
-            if (!world.isClientSide)
-            {
+            if (!world.isClientSide) {
 //            BCBuildersGuis.FILLER.openGUI(player, pos);
-                // Calen
                 MessageUtil.serverOpenTileGUI(player, filler);
             }
         }
@@ -93,8 +77,7 @@ public class BlockFiller extends BlockBCTile_Neptune implements IBlockWithFacing
     }
 
     @Override
-    public boolean canBeRotated(Level world, BlockPos pos, BlockState state)
-    {
+    public boolean canBeRotated(Level world, BlockPos pos, BlockState state) {
         return false;
     }
 }

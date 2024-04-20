@@ -9,8 +9,7 @@ package buildcraft.core.marker.volume;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum ClientVolumeBoxes
-{
+public enum ClientVolumeBoxes {
     INSTANCE;
 
     public final List<VolumeBox> volumeBoxes = new ArrayList<>();

@@ -17,15 +17,12 @@ import java.time.MonthDay;
  * Used for automatically changing lang entries, fluid colours, and a few other things around christmas time. This is
  * in energy rather than lib because no other module does anything at christmas.
  */
-public class ChristmasHandler
-{
+public class ChristmasHandler {
 
     private static Boolean enabled;
 
-    public static boolean isEnabled()
-    {
-        if (enabled == null)
-        {
+    public static boolean isEnabled() {
+        if (enabled == null) {
             throw new IllegalStateException("Unknown until init!");
         }
         return enabled;
@@ -45,11 +42,9 @@ public class ChristmasHandler
                     {0xD6_C9_90, 0xCF_BF_8E},
             };
 
-    private static void fmlPreInit()
-    {
+    private static void fmlPreInit() {
         enabled = BCEnergyConfig.christmasEventStatus.isEnabled(MonthDay.of(Month.DECEMBER, 25));
-        if (isEnabled())
-        {
+        if (isEnabled()) {
             // Calen
             BCEnergyFluids.STILL_SUFFIX = BCEnergyFluids.STILL_SUFFIX + "_christmas";
             BCEnergyFluids.FLOW_SUFFIX = BCEnergyFluids.FLOW_SUFFIX + "_christmas";
@@ -71,15 +66,13 @@ public class ChristmasHandler
 
             // boilPoint -> no gas
             BCEnergyFluids.allowGas = false;
-            for (int index = 0; index < BCEnergyFluids.data.length; index++)
-            {
+            for (int index = 0; index < BCEnergyFluids.data.length; index++) {
                 changeData(index);
             }
         }
     }
 
-    public static void fmlPreInitDedicatedServer()
-    {
+    public static void fmlPreInitDedicatedServer() {
         fmlPreInit();
 //        if (isEnabled())
 //        {
@@ -87,8 +80,7 @@ public class ChristmasHandler
 //        }
     }
 
-    public static void fmlPreInitClient()
-    {
+    public static void fmlPreInitClient() {
         fmlPreInit();
 //        if (isEnabled())
 //        {
@@ -98,8 +90,7 @@ public class ChristmasHandler
     }
 
     //    private static void setColours(int lightColour, int darkColour, BCFluid[] fluids)
-    private static void changeData(int fluidIndex)
-    {
+    private static void changeData(int fluidIndex) {
 //        if (fluids != null)
 //        {
 //            for (BCFluid fluid : fluids)
@@ -120,12 +111,9 @@ public class ChristmasHandler
     }
 
     // Calen
-    public static void regBucketNoFlipModel(ModelRegistryEvent event)
-    {
-        if (isEnabled())
-        {
-            for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill)
-            {
+    public static void regBucketNoFlipModel(ModelRegistryEvent event) {
+        if (isEnabled()) {
+            for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill) {
                 ResourceLocation bucketRegRL = fluid.get().getReg().getBucket().getRegistryName();
                 String namespace = bucketRegRL.getNamespace();
                 String normalPath = bucketRegRL.getPath();
@@ -136,12 +124,9 @@ public class ChristmasHandler
         }
     }
 
-    public static void replaceBucketNoFlipModel(ModelBakeEvent event)
-    {
-        if (isEnabled())
-        {
-            for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill)
-            {
+    public static void replaceBucketNoFlipModel(ModelBakeEvent event) {
+        if (isEnabled()) {
+            for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill) {
                 ResourceLocation normalBucketRegRL = fluid.get().getReg().getBucket().getRegistryName();
                 String namespace = normalBucketRegRL.getNamespace();
                 String normalPath = normalBucketRegRL.getPath();

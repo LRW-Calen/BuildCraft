@@ -17,8 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public enum CoreActionProvider implements IActionProvider
-{
+public enum CoreActionProvider implements IActionProvider {
     INSTANCE;
 
     @Override
@@ -29,11 +28,12 @@ public enum CoreActionProvider implements IActionProvider
     }
 
     @Override
-    public void addInternalSidedActions(Collection<IActionInternalSided> actions, IStatementContainer container, @Nonnull Direction side) { }
+    public void addInternalSidedActions(Collection<IActionInternalSided> actions, IStatementContainer container, @Nonnull Direction side) {
+    }
 
     @Override
     public void addExternalActions(Collection<IActionExternal> res, @Nonnull Direction side, BlockEntity tile) {
-        IControllable controllable = tile.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElseGet(()->null);
+        IControllable controllable = tile.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElseGet(() -> null);
         if (controllable != null) {
             for (ActionMachineControl action : BCCoreStatements.ACTION_MACHINE_CONTROL) {
                 if (controllable.acceptsControlMode(action.mode)) {

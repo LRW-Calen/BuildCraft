@@ -12,8 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 /** Something that can be put into an "advanced debug" state - every tick {@link #sendDebugState()} will be called on
  * the server, to allow the client to render all of the details normally hidden on the server. */
-public interface IAdvDebugTarget
-{
+public interface IAdvDebugTarget {
     /** Called when the current debug target changes from this to something else (or to nothing). This should inform the
      * client that it is no longer being debugged. */
     void disableDebugging();

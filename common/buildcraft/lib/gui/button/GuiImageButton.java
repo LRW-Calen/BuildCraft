@@ -21,18 +21,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  */
 @OnlyIn(Dist.CLIENT)
 @Deprecated
-public class GuiImageButton extends GuiAbstractButton
-{
+public class GuiImageButton extends GuiAbstractButton {
     private final int u, v, baseU, baseV;
     private final ResourceLocation texture;
 
-    public GuiImageButton(BuildCraftGui gui, int id, int x, int y, int size, ResourceLocation texture, int u, int v)
-    {
+    public GuiImageButton(BuildCraftGui gui, int id, int x, int y, int size, ResourceLocation texture, int u, int v) {
         this(gui, id, x, y, size, texture, 0, 0, u, v);
     }
 
-    public GuiImageButton(BuildCraftGui gui, int id, int x, int y, int size, ResourceLocation texture, int baseU, int baseV, int u, int v)
-    {
+    public GuiImageButton(BuildCraftGui gui, int id, int x, int y, int size, ResourceLocation texture, int baseU, int baseV, int u, int v) {
         super(gui, "" + id, new GuiRectangle(x, y, size, size));
         this.u = u;
         this.v = v;
@@ -42,10 +39,8 @@ public class GuiImageButton extends GuiAbstractButton
     }
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
-        if (!visible)
-        {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
+        if (!visible) {
             return;
         }
 
@@ -67,31 +62,22 @@ public class GuiImageButton extends GuiAbstractButton
         GuiUtil.drawTexturedModalRect(poseStack, getX() + 1, getY() + 1, u, v, getWidth() - 2, getHeight() - 2);
     }
 
-    private int getButtonState()
-    {
-        if (!this.enabled)
-        {
+    private int getButtonState() {
+        if (!this.enabled) {
             return 0;
         }
 
-        if (isMouseOver())
-        {
-            if (!this.active)
-            {
+        if (isMouseOver()) {
+            if (!this.active) {
                 return 2;
-            }
-            else
-            {
+            } else {
                 return 4;
             }
         }
 
-        if (!this.active)
-        {
+        if (!this.active) {
             return 1;
-        }
-        else
-        {
+        } else {
             return 3;
         }
     }

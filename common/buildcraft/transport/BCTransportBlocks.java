@@ -16,17 +16,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCTransportBlocks
-{
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCTransport.MOD_ID);
+public class BCTransportBlocks {
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCTransport.MODID);
     public static RegistryObject<BlockFilteredBuffer> filteredBuffer;
     public static RegistryObject<BlockPipeHolder> pipeHolder;
 
     public static RegistryObject<BlockEntityType<TileFilteredBuffer>> filteredBufferTile;
     public static RegistryObject<BlockEntityType<TilePipeHolder>> pipeHolderTile;
 
-    public static void preInit()
-    {
+    public static void preInit() {
         filteredBuffer = HELPER.addBlockAndItem("block.filtered_buffer", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFilteredBuffer::new);
         // TODO Calen isViewBlocking necessary?
         pipeHolder = HELPER.addBlock("block.pipe_holder", BlockPropertiesCreater.createDefaultProperties(Material.METAL).strength(0.25F, 3.0F).noOcclusion().isViewBlocking((state, world, pos) -> false).dynamicShape(), BlockPipeHolder::new);

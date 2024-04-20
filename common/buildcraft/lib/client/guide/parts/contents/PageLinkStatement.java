@@ -10,15 +10,15 @@ import buildcraft.lib.gui.ISimpleDrawable;
 import buildcraft.lib.gui.statement.GuiElementStatementSource;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
-public class PageLinkStatement extends PageLink
-{
+public class PageLinkStatement extends PageLink {
 
     public final IStatement statement;
     public final List<Component> tooltip;
@@ -26,13 +26,11 @@ public class PageLinkStatement extends PageLink
     public final Component searchText;
     public final String textKey;
 
-    public PageLinkStatement(boolean startVisible, IStatement statement)
-    {
+    public PageLinkStatement(boolean startVisible, IStatement statement) {
         super(createPageLine(statement), startVisible);
         this.statement = statement;
         List<Component> tip = statement.getTooltip();
-        if (tip.isEmpty())
-        {
+        if (tip.isEmpty()) {
             String uniqueTag = statement.getUniqueTag();
             this.tooltip = ImmutableList.of(new TextComponent(uniqueTag));
 //            this.searchText = uniqueTag.getString().toLowerCase(Locale.ROOT);
@@ -40,17 +38,13 @@ public class PageLinkStatement extends PageLink
             this.searchText = new TextComponent(uniqueTag);
 //            this.textKey = uniqueTag.getContents().toLowerCase(Locale.ROOT);
             this.textKey = statement.getDescriptionKey().toLowerCase(Locale.ROOT);
-        }
-        else
-        {
+        } else {
             this.tooltip = tip;
 //            String joinedTooltip = joinedTooltip_StrList.stream().collect(Collectors.joining(" ", "", ""));
             MutableComponent joinedTooltip = new TextComponent("");
-            for (int i = 0; i < tip.size(); i++)
-            {
+            for (int i = 0; i < tip.size(); i++) {
                 joinedTooltip = joinedTooltip.append(tip.get(i));
-                if (i < tip.size() - 1)
-                {
+                if (i < tip.size() - 1) {
                     joinedTooltip.append(new TextComponent(" "));
                 }
             }
@@ -63,8 +57,7 @@ public class PageLinkStatement extends PageLink
         }
     }
 
-    private static PageLine createPageLine(IStatement statement)
-    {
+    private static PageLine createPageLine(IStatement statement) {
         ISimpleDrawable icon = (p, x, y) -> GuiElementStatementSource.drawGuiSlot(statement, p, x, y);
 
         List<Component> tooltip = statement.getTooltip();
@@ -77,26 +70,22 @@ public class PageLinkStatement extends PageLink
 
     @Override
 //    public String getSearchName()
-    public Component getSearchName()
-    {
+    public Component getSearchName() {
         return searchText;
     }
 
     @Override
-    public String getKey()
-    {
+    public String getKey() {
         return textKey;
     }
 
     @Override
-    public List<Component> getTooltip()
-    {
+    public List<Component> getTooltip() {
         return tooltip.size() == 1 ? null : tooltip;
     }
 
     @Override
-    public GuidePageFactory getFactoryLink()
-    {
+    public GuidePageFactory getFactoryLink() {
         // TODO: Populate this with useful information!
         return g -> new GuidePage(g, ImmutableList.of(), new PageValue<>(PageEntryStatement.INSTANCE, statement));
     }

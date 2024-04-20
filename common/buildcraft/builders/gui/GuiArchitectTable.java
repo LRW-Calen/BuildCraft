@@ -13,14 +13,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import java.io.IOException;
-
-public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable>
-{
+public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable> {
     private static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftbuilders:textures/gui/architect.png");
     private static final int SIZE_X = 256, SIZE_Y = 166;
     private static final GuiIcon ICON_GUI = new GuiIcon(TEXTURE_BASE, 0, 0, SIZE_X, SIZE_Y);
@@ -30,8 +26,7 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable>
     //    private GuiTextField nameField;
     private EditBox nameField;
 
-    public GuiArchitectTable(ContainerArchitectTable container, Inventory inventory, Component component)
-    {
+    public GuiArchitectTable(ContainerArchitectTable container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -40,8 +35,7 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable>
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         super.initGui();
 //        nameField = new GuiTextField(0, fontRenderer, guiLeft + 90, guiTop + 62, 156, 12);
 //        nameField = new EditBox(font, leftPos + 90, topPos + 62, 156, 12, new TextComponent(container.tile.name));
@@ -52,8 +46,7 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable>
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
         drawProgress(
                 RECT_PROGRESS,
@@ -66,8 +59,7 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable>
 
     @Override
 //    protected void drawForegroundLayer()
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
 //        nameField.drawTextBox();
         poseStack.pushPose();
         poseStack.translate(leftPos, topPos, 0);
@@ -77,8 +69,7 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable>
 
     @Override
 //    public void updateScreen()
-    public void tick()
-    {
+    public void tick() {
         // Calen FIXED: in 1.12.2 without super.tick(), the info icons will not spread
         super.tick();
 //        nameField.updateCursorCounter();
@@ -88,57 +79,46 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable>
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
 //    public boolean charTyped(char typedChar, int keyCode)
-    public boolean keyPressed(int typedChar, int keyCode, int modifiers)
-    {
+    public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
         boolean typed = false;
-        if (nameField.isFocused())
-        {
+        if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
 //            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.keyPressed(typedChar, keyCode, modifiers);
 //            container.sendNameToServer(nameField.getText().trim());
             container.sendNameToServer(nameField.getValue().trim());
         }
-        if (!typed)
-        {
+        if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
 //            super.charTyped(typedChar, keyCode);
             return super.keyPressed(typedChar, keyCode, modifiers);
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
     @Override
-    public boolean charTyped(char typedChar, int keyCode)
-    {
+    public boolean charTyped(char typedChar, int keyCode) {
         boolean typed = false;
-        if (nameField.isFocused())
-        {
+        if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
 //            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.charTyped(typedChar, keyCode);
 //            container.sendNameToServer(nameField.getText().trim());
             container.sendNameToServer(nameField.getValue().trim());
         }
-        if (!typed)
-        {
+        if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
 //            super.charTyped(typedChar, keyCode);
             return super.charTyped(typedChar, keyCode);
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
 
     @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
-    {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 //        return nameField.mouseClicked(mouseX, mouseY, mouseButton);
         return nameField.mouseClicked(mouseX - leftPos, mouseY - topPos, mouseButton);

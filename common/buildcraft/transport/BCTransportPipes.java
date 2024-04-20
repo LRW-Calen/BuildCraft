@@ -20,8 +20,7 @@ import net.minecraft.world.item.DyeColor;
 
 import java.util.Arrays;
 
-public class BCTransportPipes
-{
+public class BCTransportPipes {
     public static PipeDefinition structure;
 
     public static PipeDefinition woodItem;
@@ -198,7 +197,7 @@ public class BCTransportPipes
 
         public DefinitionBuilder texSuffixes(String... suffixes) {
             if (suffixes.length == 0) {
-                builder.textureSuffixes = new String[] { "" };
+                builder.textureSuffixes = new String[]{""};
             } else {
                 builder.textureSuffixes = suffixes;
             }

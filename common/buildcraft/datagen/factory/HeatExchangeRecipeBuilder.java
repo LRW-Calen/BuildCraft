@@ -12,15 +12,13 @@ import net.minecraftforge.fluids.FluidStack;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-public class HeatExchangeRecipeBuilder
-{
+public class HeatExchangeRecipeBuilder {
     public final EnumHeatExchangeRecipeType type;
     public final FluidStack in;
     public final FluidStack out;
     public final int heatFrom, heatTo;
 
-    private HeatExchangeRecipeBuilder(EnumHeatExchangeRecipeType type, FluidStack in, FluidStack out, int heatFrom, int heatTo)
-    {
+    private HeatExchangeRecipeBuilder(EnumHeatExchangeRecipeType type, FluidStack in, FluidStack out, int heatFrom, int heatTo) {
         this.type = type;
         this.in = in;
         this.out = out;
@@ -28,59 +26,49 @@ public class HeatExchangeRecipeBuilder
         this.heatTo = heatTo;
     }
 
-    public static HeatExchangeRecipeBuilder heatable(FluidStack in, FluidStack out, int heatFrom, int heatTo)
-    {
+    public static HeatExchangeRecipeBuilder heatable(FluidStack in, FluidStack out, int heatFrom, int heatTo) {
         return new HeatExchangeRecipeBuilder(EnumHeatExchangeRecipeType.HEATABLE, in, out, heatFrom, heatTo);
     }
 
-    public static HeatExchangeRecipeBuilder coolable(FluidStack in, FluidStack out, int heatFrom, int heatTo)
-    {
+    public static HeatExchangeRecipeBuilder coolable(FluidStack in, FluidStack out, int heatFrom, int heatTo) {
         return new HeatExchangeRecipeBuilder(EnumHeatExchangeRecipeType.COOLABLE, in, out, heatFrom, heatTo);
     }
 
-    public void save(Consumer<FinishedRecipe> consumer, String name)
-    {
+    public void save(Consumer<FinishedRecipe> consumer, String name) {
         consumer.accept(new HeatExchangeRecipeResult(name));
     }
 
-    class HeatExchangeRecipeResult implements FinishedRecipe
-    {
+    class HeatExchangeRecipeResult implements FinishedRecipe {
         private final String name;
 
-        public HeatExchangeRecipeResult(String name)
-        {
+        public HeatExchangeRecipeResult(String name) {
             this.name = name;
         }
 
         @Override
-        public void serializeRecipeData(JsonObject json)
-        {
+        public void serializeRecipeData(JsonObject json) {
             HeatExchangeRecipeSerializer.toJson(HeatExchangeRecipeBuilder.this, json);
         }
 
         @Override
-        public ResourceLocation getId()
-        {
-            return new ResourceLocation(BCEnergy.MOD_ID, "heat_exchange/" + type.getlowerName() + "/" + name);
+        public ResourceLocation getId() {
+            return new ResourceLocation(BCEnergy.MODID, "heat_exchange/" + type.getlowerName() + "/" + name);
         }
 
         @Override
-        public RecipeSerializer<?> getType()
-        {
+        public RecipeSerializer<?> getType() {
             return HeatExchangeRecipeSerializer.HEATABLE;
         }
 
         @Nullable
         @Override
-        public JsonObject serializeAdvancement()
-        {
+        public JsonObject serializeAdvancement() {
             return null;
         }
 
         @Nullable
         @Override
-        public ResourceLocation getAdvancementId()
-        {
+        public ResourceLocation getAdvancementId() {
             return null;
         }
     }

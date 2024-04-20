@@ -20,8 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class JsonVariableObject
-{
+public class JsonVariableObject {
 
     public Map<String, ITickableNode.Source> variables = new LinkedHashMap<>();
     private ITickableNode.Source[] variablesArray;
@@ -63,13 +62,15 @@ public class JsonVariableObject
                 Class<?> nodeType;
                 try {
                     nodeType = NodeTypes.parseType(type);
-                } catch (InvalidExpressionException iee) {
+                }
+                catch (InvalidExpressionException iee) {
                     throw new JsonSyntaxException("Could not parse node type for variable '" + name + "'", iee);
                 }
                 IGetterFunc getterFunc = parseGetterFunction(getter, fnCtx);
                 try {
                     stateful = new NodeStateful(name, nodeType, getterFunc);
-                } catch (InvalidExpressionException iee) {
+                }
+                catch (InvalidExpressionException iee) {
                     throw new JsonSyntaxException("Could not create a getter for the variable '" + name + "'", iee);
                 }
                 fnCtx.putVariable(name, stateful.getter);
@@ -82,9 +83,10 @@ public class JsonVariableObject
                     try {
                         IExpressionNode nodeRounder = InternalCompiler.compileExpression(rounder, fnCtx2);
                         stateful.setRounder(nodeRounder);
-                    } catch (InvalidExpressionException iee) {
+                    }
+                    catch (InvalidExpressionException iee) {
                         throw new JsonSyntaxException("Could not compile a rounder for the variable '" + name + "'",
-                            iee);
+                                iee);
                     }
                 }
             }
@@ -93,7 +95,8 @@ public class JsonVariableObject
             IExpressionNode node;
             try {
                 node = InternalCompiler.compileExpression(expression, fnCtxValue);
-            } catch (InvalidExpressionException e) {
+            }
+            catch (InvalidExpressionException e) {
                 throw new JsonSyntaxException("Failed to compile variable " + name, e);
             }
             if (node instanceof IConstantNode) {
@@ -125,7 +128,8 @@ public class JsonVariableObject
         if ("var".equalsIgnoreCase(getter)) {
             return NodeStateful.GetterType.USE_VAR;
         }
-        return (var, last) -> {
+        return (var, last) ->
+        {
             FunctionContext fnCtx2 = new FunctionContext("Getters", fnCtx);
             fnCtx2.putVariable("var", var);
             fnCtx2.putVariable("last", last);

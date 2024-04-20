@@ -6,12 +6,12 @@
 
 package buildcraft.transport.client;
 
+import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pipe.PipeApiClient.IClientRegistry;
 import buildcraft.api.transport.pluggable.IPlugDynamicRenderer;
 import buildcraft.api.transport.pluggable.IPluggableStaticBaker;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableModelKey;
-import buildcraft.api.transport.pipe.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,13 +33,13 @@ public enum PipeRegistryClient implements IClientRegistry {
 
     @Override
     public <B extends PipeBehaviour> void registerRenderer(Class<? extends B> behaviourClass,
-        IPipeBehaviourRenderer<B> renderer) {
+                                                           IPipeBehaviourRenderer<B> renderer) {
         behaviourRenderMap.put(behaviourClass, renderer);
     }
 
     @Override
     public <P extends PipePluggable> void registerRenderer(Class<? extends P> plugClass,
-        IPlugDynamicRenderer<P> renderer) {
+                                                           IPlugDynamicRenderer<P> renderer) {
         plugRenderMap.put(plugClass, renderer);
     }
 
@@ -55,7 +55,7 @@ public enum PipeRegistryClient implements IClientRegistry {
 
     @Override
     public <P extends PluggableModelKey> void registerBaker(Class<? extends P> keyClass,
-        IPluggableStaticBaker<P> renderer) {
+                                                            IPluggableStaticBaker<P> renderer) {
         plugBakerMap.put(keyClass, renderer);
     }
 

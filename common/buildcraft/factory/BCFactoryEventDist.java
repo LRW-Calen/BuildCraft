@@ -6,34 +6,27 @@
 
 package buildcraft.factory;
 
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-
-@Mod.EventBusSubscriber(modid = BCFactory.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public enum BCFactoryEventDist
-{
+public enum BCFactoryEventDist {
     INSTANCE;
 
-    @SubscribeEvent
-    @OnlyIn(Dist.CLIENT)
-    public static void textureStitchPost(TextureStitchEvent.Post event)
-    {
-        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
-        {
-            // Calen: don't call here! The event will be called several times, then the setWhiteTex(event) will be called duplicated to make the texture lean
-            // moved to RenderPump&RenderMiningWell#initWhiteTex()
-//            RenderPump.textureStitchPost(event);
-//            RenderMiningWell.textureStitchPost();
-        }
-    }
 //    @SubscribeEvent
 //    @OnlyIn(Dist.CLIENT)
-//    public void textureStitchPost(TextureStitchEvent.Pre event)
+//    public static void textureStitchPre(TextureStitchEvent.Pre event)
 //    {
 //        RenderPump.textureStitchPre();
+////        RenderMiningWell.textureStitchPre();
+//    }
+
+//    @SubscribeEvent
+//    @OnlyIn(Dist.CLIENT)
+//    public static void textureStitchPost(TextureStitchEvent.Post event)
+//    {
+//        if (event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
+//        {
+//            // Calen: don't call here! The event will be called several times, then the setWhiteTex(event) will be called duplicated to make the texture lean
+//            // moved to RenderPump&RenderMiningWell#initWhiteTex()
+//            RenderPump.textureStitchPost();
+//            RenderMiningWell.textureStitchPost();
+//        }
 //    }
 }

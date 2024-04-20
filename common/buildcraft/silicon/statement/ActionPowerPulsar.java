@@ -17,16 +17,13 @@ import buildcraft.silicon.BCSiliconStatements;
 import buildcraft.silicon.plug.PluggablePulsar;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
-public class ActionPowerPulsar extends BCStatement implements IActionInternalSided, IActionSingle
-{
+public class ActionPowerPulsar extends BCStatement implements IActionInternalSided, IActionSingle {
 
     public final boolean constant;
 
-    public ActionPowerPulsar(boolean constant)
-    {
+    public ActionPowerPulsar(boolean constant) {
         super(
                 "buildcraft:pulsar." + (constant ? "constant" : "single"),
                 "buildcraft.pulsar.constant" + (constant ? "constant" : "single")
@@ -35,35 +32,27 @@ public class ActionPowerPulsar extends BCStatement implements IActionInternalSid
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return LocaleUtil.localize(constant ? "gate.action.pulsar.constant" : "gate.action.pulsar.single");
         return new TranslatableComponent(constant ? "gate.action.pulsar.constant" : "gate.action.pulsar.single");
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return constant ? "gate.action.pulsar.constant" : "gate.action.pulsar.single";
     }
 
     @Override
-    public void actionActivate(Direction side, IStatementContainer source, IStatementParameter[] parameters)
-    {
-        if (source instanceof IGate)
-        {
+    public void actionActivate(Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+        if (source instanceof IGate) {
             IGate gate = (IGate) source;
             IPipeHolder pipe = gate.getPipeHolder();
             PipePluggable plug = pipe.getPluggable(side);
-            if (plug instanceof PluggablePulsar)
-            {
+            if (plug instanceof PluggablePulsar) {
                 PluggablePulsar pulsar = (PluggablePulsar) plug;
-                if (constant)
-                {
+                if (constant) {
                     pulsar.enablePulsar();
-                }
-                else
-                {
+                } else {
                     pulsar.addSinglePulse();
                 }
             }
@@ -71,20 +60,17 @@ public class ActionPowerPulsar extends BCStatement implements IActionInternalSid
     }
 
     @Override
-    public boolean singleActionTick()
-    {
+    public boolean singleActionTick() {
         return !constant;
     }
 
     @Override
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return constant ? BCSiliconSprites.ACTION_PULSAR_CONSTANT : BCSiliconSprites.ACTION_PULSAR_SINGLE;
     }
 
     @Override
-    public IStatement[] getPossible()
-    {
+    public IStatement[] getPossible() {
         return BCSiliconStatements.ACTION_PULSAR;
     }
 }

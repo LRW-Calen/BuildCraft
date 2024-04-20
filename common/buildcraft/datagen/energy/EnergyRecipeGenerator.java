@@ -18,18 +18,15 @@ import net.minecraftforge.common.Tags;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class EnergyRecipeGenerator extends RecipeProvider
-{
-    private static final String MOD_ID = BCEnergy.MOD_ID;
+public class EnergyRecipeGenerator extends RecipeProvider {
+    private static final String MOD_ID = BCEnergy.MODID;
 
-    public EnergyRecipeGenerator(DataGenerator generator)
-    {
+    public EnergyRecipeGenerator(DataGenerator generator) {
         super(generator);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         // engineIron
         ShapedRecipeBuilder.shaped(BCEnergyBlocks.engineIron.get())
                 .pattern("www")
@@ -64,8 +61,7 @@ public class EnergyRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Energy Recipe Generator";
     }
 }

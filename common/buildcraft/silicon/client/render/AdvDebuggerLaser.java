@@ -7,13 +7,14 @@
 package buildcraft.silicon.client.render;
 
 import buildcraft.api.properties.BuildCraftProperties;
-import buildcraft.silicon.tile.TileLaser;
-import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.lib.client.render.DetachedRenderer;
 import buildcraft.lib.debug.DebugRenderHelper;
 import buildcraft.lib.misc.VolumeUtil;
+import buildcraft.silicon.BCSiliconBlocks;
+import buildcraft.silicon.tile.TileLaser;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -24,16 +25,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer
-{
+public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer {
     private static final int COLOUR_VISIBLE = 0xFF_99_FF_99;
     private static final int COLOUR_NOT_VISIBLE = 0xFF_11_11_99;
 
     private final BlockPos pos;
     private final Direction face;
 
-    public AdvDebuggerLaser(TileLaser tile)
-    {
+    public AdvDebuggerLaser(TileLaser tile) {
         pos = tile.getBlockPos();
         BlockState state = tile.getLevel().getBlockState(pos);
         face = state.getBlock() == BCSiliconBlocks.laser.get()
@@ -43,10 +42,8 @@ public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void render(Player player, float partialTicks, PoseStack poseStack)
-    {
-        if (pos == null || face == null)
-        {
+    public void render(Player player, float partialTicks, PoseStack poseStack) {
+        if (pos == null || face == null) {
             return;
         }
 //        BufferBuilder bb = Tessellator.getInstance().getBuffer();

@@ -14,16 +14,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nonnull;
 
-public class BlockPlastic extends BlockBCBase_Neptune
-{
+public class BlockPlastic extends BlockBCBase_Neptune {
     // Calen: not reg in 1.12.2
-    public BlockPlastic(String idBC, Properties props)
-    {
+    public BlockPlastic(String idBC, Properties props) {
         super(idBC, Properties.of(Material.METAL));
 //        setDefaultState(getStateFromMeta(0));
         this.registerDefaultState(this.getStateDefinition().any()
@@ -33,8 +30,7 @@ public class BlockPlastic extends BlockBCBase_Neptune
 
     @Override
 //    protected BlockStateContainer createBlockState()
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(BuildCraftProperties.BLOCK_COLOR);
     }
@@ -54,10 +50,8 @@ public class BlockPlastic extends BlockBCBase_Neptune
 
     @Override
 //    public void getSubBlocks(CreativeModeTab tab, NonNullList<ItemStack> list)
-    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> list)
-    {
-        for (DyeColor dye : DyeColor.values())
-        {
+    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> list) {
+        for (DyeColor dye : DyeColor.values()) {
 //            list.add(new ItemStack(this, 1, dye.getMetadata()));
             ItemStack stack = new ItemStack(this, 1);
             ColourUtil.addColorTagToStack(stack, dye);

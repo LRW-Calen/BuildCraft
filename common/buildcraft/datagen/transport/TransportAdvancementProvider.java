@@ -24,15 +24,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class TransportAdvancementProvider extends BCBaseAdvancementProvider
-{
-    private static final String NAMESPACE = BCTransport.MOD_ID;
+public class TransportAdvancementProvider extends BCBaseAdvancementProvider {
+    private static final String NAMESPACE = BCTransport.MODID;
     private static Advancement ROOT;
 
     private static final ImpossibleTrigger.TriggerInstance IMPOSSIBLE = new ImpossibleTrigger.TriggerInstance();
 
-    public static void registerTransportAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper)
-    {
+    public static void registerTransportAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
         ROOT = CoreAdvancementProvider.ROOT;
         // pipe_dream
         Advancement pipe_dream = Advancement.Builder.advancement().display(

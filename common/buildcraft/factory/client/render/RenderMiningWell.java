@@ -7,7 +7,6 @@
 package buildcraft.factory.client.render;
 
 import buildcraft.api.properties.BuildCraftProperties;
-import buildcraft.core.tile.TileMarkerVolume;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.tile.TileMiningWell;
 import buildcraft.lib.client.render.laser.LaserData_BC8.LaserRow;
@@ -26,11 +25,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nonnull;
-
 //public class RenderMiningWell extends FastTESR<TileMiningWell>
-public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell>
-{
+public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell> {
     private static final int[] COLOUR_POWER = new int[16];
     private static final int COLOUR_STATUS_ON = 0xFF_77_DD_77; // a light green
     private static final int COLOUR_STATUS_OFF = 0xFF_1f_10_1b; // black-ish
@@ -45,10 +41,8 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell>
     private static final RenderPartCube LED_POWER, LED_STATUS;
     private static final LaserType TUBE_LASER;
 
-    static
-    {
-        for (int i = 0; i < COLOUR_POWER.length; i++)
-        {
+    static {
+        for (int i = 0; i < COLOUR_POWER.length; i++) {
             int c = (i * 0x40) / COLOUR_POWER.length;
             int r = (i * 0xE0) / COLOUR_POWER.length + 0x1F;
             int colour = (0xFF << 24) + (c << 16) + (c << 8) + r;
@@ -67,9 +61,9 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell>
     }
 
     private static boolean whiteTextureFlag = false;
-//    public static void textureStitchPost()
-    public static void initWhiteTex()
-    {
+
+    //    public static void textureStitchPost()
+    public static void initWhiteTex() {
         whiteTextureFlag = true;
         LED_POWER.setWhiteTex();
         LED_STATUS.setWhiteTex();
@@ -77,17 +71,14 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell>
 
     private final RenderTube tubeRenderer = new RenderTube(null, TUBE_LASER);
 
-    public RenderMiningWell(BlockEntityRendererProvider.Context context)
-    {
+    public RenderMiningWell(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void renderTileEntityFast(@Nonnull TileMiningWell tile, double x, double y, double z, float partialTicks, int destroyStage, float partial, @Nonnull BufferBuilder buffer)
-    public void render(TileMiningWell tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileMiningWell tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         // Calen: get the white texture
-        if (!whiteTextureFlag)
-        {
+        if (!whiteTextureFlag) {
             initWhiteTex();
         }
 
@@ -98,41 +89,31 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell>
         poseStack.pushPose();
         Direction facing = Direction.NORTH;
         BlockState state = tile.getLevel().getBlockState(tile.getBlockPos());
-        if (state.getBlock() == BCFactoryBlocks.miningWell.get())
-        {
+        if (state.getBlock() == BCFactoryBlocks.miningWell.get()) {
             facing = state.getValue(BuildCraftProperties.BLOCK_FACING);
         }
 
         final int dX, dZ;
         final double ledX, ledZ;
 
-        if (facing.getAxis() == Axis.X)
-        {
+        if (facing.getAxis() == Axis.X) {
             dX = 0;
 //            dZ = facing.getAxisDirection().getOffset();
             dZ = facing.getAxisDirection().getStep();
             ledZ = 0.5;
-            if (facing == Direction.EAST)
-            {
+            if (facing == Direction.EAST) {
                 ledX = 15.8 / 16.0;
-            }
-            else
-            {
+            } else {
                 ledX = 0.2 / 16.0;
             }
-        }
-        else
-        {
+        } else {
 //            dX = -facing.getAxisDirection().getOffset();
             dX = -facing.getAxisDirection().getStep();
             dZ = 0;
             ledX = 0.5;
-            if (facing == Direction.SOUTH)
-            {
+            if (facing == Direction.SOUTH) {
                 ledZ = 15.8 / 16.0;
-            }
-            else
-            {
+            } else {
                 ledZ = 0.2 / 16.0;
             }
         }
@@ -162,20 +143,17 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell>
         Minecraft.getInstance().getProfiler().pop();
     }
 
-    public static void init()
-    {
-    }
-
     @Override
 //    public boolean isGlobalRenderer(TileMiningWell tile)
-    public boolean shouldRenderOffScreen(TileMiningWell p_112306_)
-    {
+    public boolean shouldRenderOffScreen(TileMiningWell p_112306_) {
         return true;
     }
 
     @Override
-    public int getViewDistance()
-    {
+    public int getViewDistance() {
         return 512;
+    }
+
+    public static void init() {
     }
 }

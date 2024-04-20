@@ -7,7 +7,6 @@
 package buildcraft.factory.block;
 
 import buildcraft.lib.block.BlockBCBase_Neptune;
-import buildcraft.factory.BCFactoryItems;
 import buildcraft.lib.misc.SoundUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -16,7 +15,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -26,17 +24,13 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 
-public class BlockWaterGel extends BlockBCBase_Neptune
-{
-//    public enum GelStage implements IStringSerializable
-    public enum GelStage implements StringRepresentable
-    {
+public class BlockWaterGel extends BlockBCBase_Neptune {
+    //    public enum GelStage implements IStringSerializable
+    public enum GelStage implements StringRepresentable {
         SPREAD_0(0.3f, true, 3),
         SPREAD_1(0.4f, true, 3),
         SPREAD_2(0.6f, true, 3),
@@ -52,8 +46,7 @@ public class BlockWaterGel extends BlockBCBase_Neptune
         public final boolean spreading;
         public final float hardness;
 
-        GelStage(float pitch, boolean spreading, float hardness)
-        {
+        GelStage(float pitch, boolean spreading, float hardness) {
             this.soundType = new SoundType(//
 //                    SoundType.SLIME.volume, //
                     SoundType.SLIME_BLOCK.volume, //
@@ -70,27 +63,22 @@ public class BlockWaterGel extends BlockBCBase_Neptune
 
         @Override
 //        public String getName()
-        public String getSerializedName()
-        {
+        public String getSerializedName() {
             return modelName;
         }
 
-        public static GelStage fromMeta(int meta)
-        {
-            if (meta < 0)
-            {
+        public static GelStage fromMeta(int meta) {
+            if (meta < 0) {
                 return GEL;
             }
             return VALUES[meta % VALUES.length];
         }
 
-        public int getMeta()
-        {
+        public int getMeta() {
             return ordinal();
         }
 
-        public GelStage next()
-        {
+        public GelStage next() {
             if (this == SPREAD_0) return SPREAD_1;
             if (this == SPREAD_1) return SPREAD_2;
             if (this == SPREAD_2) return SPREAD_3;
@@ -102,8 +90,7 @@ public class BlockWaterGel extends BlockBCBase_Neptune
 
     public static final EnumProperty<GelStage> PROP_STAGE = EnumProperty.create("stage", GelStage.class);
 
-    public BlockWaterGel(String idBC, Properties props)
-    {
+    public BlockWaterGel(String idBC, Properties props) {
         super(idBC, props);
 //        setSoundType(SoundType.SLIME_BLOCK);
     }
@@ -111,8 +98,7 @@ public class BlockWaterGel extends BlockBCBase_Neptune
     // BlockState
     @Override
 //    protected BlockStateContainer createBlockState()
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(PROP_STAGE);
     }
@@ -133,13 +119,11 @@ public class BlockWaterGel extends BlockBCBase_Neptune
 
     @Override
 //    public void updateTick(Level world, BlockPos pos, BlockState state, Random rand)
-    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random rand)
-    {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
         GelStage stage = state.getValue(PROP_STAGE);
         GelStage next = stage.next();
         BlockState nextState = state.setValue(PROP_STAGE, next);
-        if (stage.spreading)
-        {
+        if (stage.spreading) {
             Deque<BlockPos> openQueue = new ArrayDeque<>();
             Set<BlockPos> seenSet = new HashSet<>();
             List<BlockPos> changeable = new ArrayList<>();
@@ -147,15 +131,13 @@ public class BlockWaterGel extends BlockBCBase_Neptune
             Collections.addAll(faces, Direction.values());
             Collections.shuffle(faces);
             seenSet.add(pos);
-            for (Direction face : faces)
-            {
+            for (Direction face : faces) {
                 openQueue.add(pos.relative(face));
             }
             Collections.shuffle(faces);
             int tries = 0;
 
-            while (openQueue.size() > 0 && changeable.size() < 3 && tries < 10_000)
-            {
+            while (openQueue.size() > 0 && changeable.size() < 3 && tries < 10_000) {
                 BlockPos test = openQueue.removeFirst();
 
                 boolean water = isWater(world, test);
@@ -163,18 +145,14 @@ public class BlockWaterGel extends BlockBCBase_Neptune
 
                 // Calen: 1.18.2 source level = 8, instead of 0 in 1.12.2
 //                if (water && world.getBlockState(test).getValue(BlockLiquid.LEVEL) == 0)
-                if (water && world.getFluidState(test).isSource())
-                {
+                if (water && world.getFluidState(test).isSource()) {
                     changeable.add(test);
                 }
-                if (spreadable)
-                {
+                if (spreadable) {
                     Collections.shuffle(faces);
-                    for (Direction face : faces)
-                    {
+                    for (Direction face : faces) {
                         BlockPos n = test.relative(face);
-                        if (seenSet.add(n))
-                        {
+                        if (seenSet.add(n)) {
                             openQueue.add(n);
                         }
                     }
@@ -182,10 +160,8 @@ public class BlockWaterGel extends BlockBCBase_Neptune
                 tries++;
             }
             final int time = next.spreading ? 200 : 400;
-            if (changeable.size() == 3 || world.random.nextDouble() < 0.5)
-            {
-                for (BlockPos p : changeable)
-                {
+            if (changeable.size() == 3 || world.random.nextDouble() < 0.5) {
+                for (BlockPos p : changeable) {
                     world.setBlock(p, nextState, 3);
                     world.scheduleTick(p, this, rand.nextInt(150) + time);
                 }
@@ -193,44 +169,33 @@ public class BlockWaterGel extends BlockBCBase_Neptune
                 SoundUtil.playBlockPlace(world, pos);
             }
             world.scheduleTick(pos, this, rand.nextInt(150) + time);
-        }
-        else if (stage != next)
-        {
-            if (notTouchingWater(world, pos))
-            {
+        } else if (stage != next) {
+            if (notTouchingWater(world, pos)) {
                 world.setBlock(pos, nextState, 3);
                 world.scheduleTick(pos, this, rand.nextInt(150) + 400);
-            }
-            else
-            {
+            } else {
                 world.scheduleTick(pos, this, rand.nextInt(150) + 600);
             }
         }
     }
 
-    private static boolean notTouchingWater(Level world, BlockPos pos)
-    {
-        for (Direction face : Direction.values())
-        {
-            if (isWater(world, pos.relative(face)))
-            {
+    private static boolean notTouchingWater(Level world, BlockPos pos) {
+        for (Direction face : Direction.values()) {
+            if (isWater(world, pos.relative(face))) {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean isWater(Level world, BlockPos pos)
-    {
+    private static boolean isWater(Level world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         return state.getBlock() == Blocks.WATER;
     }
 
-    private boolean canSpread(Level world, BlockPos pos)
-    {
+    private boolean canSpread(Level world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
-        if (state.getBlock() == this)
-        {
+        if (state.getBlock() == this) {
             return true;
         }
         return false;
@@ -240,25 +205,20 @@ public class BlockWaterGel extends BlockBCBase_Neptune
 
     @Override
 //    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
-    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity)
-    {
+    public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity) {
         GelStage stage = state.getValue(PROP_STAGE);
         return stage.soundType;
     }
 
     @Override
 //    public float getBlockHardness(BlockState state, Level world, BlockPos pos)
-    public float getDestroyProgress(BlockState state, Player player, BlockGetter world, BlockPos pos)
-    {
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter world, BlockPos pos) {
         GelStage stage = state.getValue(PROP_STAGE);
         float f = stage.hardness;
         // Calen: below is from super
-        if (f == -1.0F)
-        {
+        if (f == -1.0F) {
             return 0.0F;
-        }
-        else
-        {
+        } else {
             int i = net.minecraftforge.common.ForgeHooks.isCorrectToolForDrops(state, player) ? 30 : 100;
             return player.getDigSpeed(state, pos) / f / (float) i;
         }

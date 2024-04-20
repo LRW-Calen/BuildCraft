@@ -14,9 +14,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
 
-public class BCTransportItems
-{
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCTransport.MOD_ID);
+public class BCTransportItems {
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCTransport.MODID);
 
 
     public static Item.Properties BC_TRANSPORT_ITEM_PROP_DEFAULT =
@@ -101,8 +100,7 @@ public class BCTransportItems
 
     public static RegistryObject<ItemWire> wire;
 
-    public static void preInit()
-    {
+    public static void preInit() {
         waterproof = HELPER.addItem("item.waterproof", BC_TRANSPORT_ITEM_PROP_DEFAULT, ItemBC_Neptune::new);
 
         pipeStructure = makePipeItem(BCTransportPipes.structure);
@@ -161,8 +159,7 @@ public class BCTransportItems
     }
 
     //    public static RegistryObject<ItemPipeHolder> makePipeItem(PipeDefinition def)
-    public static Map<DyeColor, RegistryObject<? extends IItemPipe>> makePipeItem(PipeDefinition def)
-    {
+    public static Map<DyeColor, RegistryObject<? extends IItemPipe>> makePipeItem(PipeDefinition def) {
         return PipeRegistry.INSTANCE.createItemForPipe(def);
     }
 }

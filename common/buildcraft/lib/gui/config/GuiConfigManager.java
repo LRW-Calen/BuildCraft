@@ -25,14 +25,12 @@ import java.util.TreeMap;
  * Stores configuration values about GUI elements. Primarily which ledger is open, however json based gui's may add
  * config options per-gui.
  */
-public class GuiConfigManager
-{
+public class GuiConfigManager {
     public static final Map<String, GuiPropertyConstructor> customGuiProperties = new HashMap<>();
     private static final Map<ResourceLocation, GuiConfigSet> properties;
     private static boolean isDirty = false;
 
-    static
-    {
+    static {
         properties = new TreeMap<>((a, b) -> a.toString().compareTo(b.toString()));
         // TODO (AlexIIL, post 1.12 move): Flesh this system out more! Add settings that can be loaded from json GUI's
         // TODO (AlexIIL, post 1.12 move): Move config file loading from core -> lib
@@ -42,35 +40,28 @@ public class GuiConfigManager
         // customGuiProperties.put(NodeTypes.getName(String.class), GuiPropertyString::new);
     }
 
-    public static IVariableNode getOrAddProperty(ResourceLocation gui, String name, IExpressionNode value)
-    {
+    public static IVariableNode getOrAddProperty(ResourceLocation gui, String name, IExpressionNode value) {
         GuiConfigSet props = properties.computeIfAbsent(gui, r -> new GuiConfigSet());
         return props.getOrAddProperty(name, value);
     }
 
-    public static IVariableNodeBoolean getOrAddBoolean(ResourceLocation gui, String name, boolean defaultValue)
-    {
+    public static IVariableNodeBoolean getOrAddBoolean(ResourceLocation gui, String name, boolean defaultValue) {
         return (IVariableNodeBoolean) getOrAddProperty(gui, name, NodeConstantBoolean.of(defaultValue));
     }
 
-    public static void markDirty()
-    {
+    public static void markDirty() {
 //        if (!isDirty && BCLibConfig.guiConfigFile != null)
-        if (!isDirty && BCLibConfig.getGuiConfigFile() != null)
-        {
+        if (!isDirty && BCLibConfig.getGuiConfigFile() != null) {
             // Minimise successive file writes -- add a little bit of a delay
             MessageUtil.doDelayedClient(10, () ->
             {
-                if (!isDirty)
-                {
+                if (!isDirty) {
                     return;
                 }
 //                try (FileWriter fw = new FileWriter(BCLibConfig.guiConfigFile))
-                try (FileWriter fw = new FileWriter(BCLibConfig.getGuiConfigFile()))
-                {
+                try (FileWriter fw = new FileWriter(BCLibConfig.getGuiConfigFile())) {
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    try (BufferedWriter bw = new BufferedWriter(fw))
-                    {
+                    try (BufferedWriter bw = new BufferedWriter(fw)) {
                         JsonObject json = writeToJson();
                         String str = gson.toJson(json);
                         bw.write(str);
@@ -78,8 +69,7 @@ public class GuiConfigManager
                         bw.close();
                     }
                 }
-                catch (IOException io)
-                {
+                catch (IOException io) {
                     BCLog.logger.warn("[lib.gui.cfg] Failed to write the config file! " + io.getMessage());
                 }
                 isDirty = false;
@@ -88,83 +78,67 @@ public class GuiConfigManager
         isDirty = true;
     }
 
-    public static void loadFromConfigFile()
-    {
+    public static void loadFromConfigFile() {
 //        if (BCLibConfig.guiConfigFile != null)
-        if (BCLibConfig.getGuiConfigFile() != null)
-        {
+        if (BCLibConfig.getGuiConfigFile() != null) {
             Gson gson = new Gson();
             List<String> lines;
-            try
-            {
+            try {
 //                lines = Files.readAllLines(BCLibConfig.guiConfigFile.toPath());
                 lines = Files.readAllLines(BCLibConfig.getGuiConfigFile().toPath());
             }
-            catch (IOException io)
-            {
+            catch (IOException io) {
                 BCLog.logger.warn("[lib.gui.cfg] Failed to read the config file! " + io.getMessage());
                 return;
             }
             StringBuilder allLines = new StringBuilder();
-            for (String line : lines)
-            {
+            for (String line : lines) {
                 allLines.append(line);
                 allLines.append('\n');
             }
-            try
-            {
+            try {
                 readFromJson(gson.fromJson(allLines.toString(), JsonObject.class));
                 return;
             }
-            catch (JsonSyntaxException jse)
-            {
+            catch (JsonSyntaxException jse) {
                 BCLog.logger.warn("[lib.gui.cfg] There's a problem with the config file: try fixing it manually, "
                         + "or deleting it to let buildcraft overwrite it on save." + jse.getMessage());
             }
-            catch (ClassCastException cce)
-            {
+            catch (ClassCastException cce) {
                 // This happens occasionally, and its a bit wierd
                 BCLog.logger.warn("[lib.gui.cfg] There's a major problem with the config file: try fixing it manually, "
                         + "or deleting it to let buildcraft overwrite it on save." + cce.getMessage());
 
             }
             BCLog.logger.info("File contents:");
-            for (String line : lines)
-            {
+            for (String line : lines) {
                 BCLog.logger.info(line.replace("\0", "\\0"));
             }
         }
     }
 
-    private static JsonObject writeToJson()
-    {
+    private static JsonObject writeToJson() {
         JsonObject json = new JsonObject();
-        for (Entry<ResourceLocation, GuiConfigSet> entry : properties.entrySet())
-        {
+        for (Entry<ResourceLocation, GuiConfigSet> entry : properties.entrySet()) {
             String key = entry.getKey().toString();
             json.add(key, entry.getValue().writeToJson());
         }
         return json;
     }
 
-    private static void readFromJson(JsonObject json)
-    {
-        if (json == null)
-        {
+    private static void readFromJson(JsonObject json) {
+        if (json == null) {
             throw new JsonSyntaxException("No json element!");
         }
-        for (Entry<String, JsonElement> entry : json.entrySet())
-        {
+        for (Entry<String, JsonElement> entry : json.entrySet()) {
             ResourceLocation location = new ResourceLocation(entry.getKey());
             GuiConfigSet set = properties.get(location);
-            if (set == null)
-            {
+            if (set == null) {
                 set = new GuiConfigSet();
                 properties.put(location, set);
             }
             JsonElement elem = entry.getValue();
-            if (!elem.isJsonObject())
-            {
+            if (!elem.isJsonObject()) {
                 BCLog.logger.warn("[lib.gui.config] Found a non-object element in '" + location + "'");
                 continue;
             }

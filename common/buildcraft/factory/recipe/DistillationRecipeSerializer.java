@@ -13,19 +13,16 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<RefineryRecipeRegistry.DistillationRecipe>
-{
+public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<RefineryRecipeRegistry.DistillationRecipe> {
     public static final DistillationRecipeSerializer INSTANCE;
 
-    static
-    {
+    static {
         INSTANCE = new DistillationRecipeSerializer();
         INSTANCE.setRegistryName(RefineryRecipeRegistry.DistillationRecipe.TYPE_ID);
     }
 
     @Override
-    public RefineryRecipeRegistry.DistillationRecipe fromJson(ResourceLocation recipeId, JsonObject json)
-    {
+    public RefineryRecipeRegistry.DistillationRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 //        InscriberProcessType mode = getMode(json);
 //
 //        ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
@@ -58,8 +55,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
         return new RefineryRecipeRegistry.DistillationRecipe(recipeId, powerRequired, in, outGas, outLiquid);
     }
 
-    public static void toJson(DistillationRecipeBuilder builder, JsonObject json)
-    {
+    public static void toJson(DistillationRecipeBuilder builder, JsonObject json) {
         json.addProperty("type", RefineryRecipeRegistry.DistillationRecipe.TYPE_ID.toString());
         json.addProperty("powerRequired", builder.powerRequired);
         json.add("in", JsonUtil.serializeFluidStack(builder.in));
@@ -69,8 +65,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
 
     @Nullable
     @Override
-    public RefineryRecipeRegistry.DistillationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
-    {
+    public RefineryRecipeRegistry.DistillationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 //        Ingredient middle = Ingredient.fromNetwork(buffer);
 //        ItemStack result = buffer.readItem();
 //        Ingredient top = Ingredient.fromNetwork(buffer);
@@ -88,8 +83,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, RefineryRecipeRegistry.DistillationRecipe recipe)
-    {
+    public void toNetwork(FriendlyByteBuf buffer, RefineryRecipeRegistry.DistillationRecipe recipe) {
 //        recipe.getMiddleInput().toNetwork(buffer);
 //        buffer.writeItem(recipe.getResultItem());
 //        recipe.getTopOptional().toNetwork(buffer);

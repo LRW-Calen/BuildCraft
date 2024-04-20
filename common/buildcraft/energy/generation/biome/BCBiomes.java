@@ -1,7 +1,6 @@
 package buildcraft.energy.generation.biome;
 
 import buildcraft.energy.generation.structure.EnergyStructureFeatureRegistry;
-import buildcraft.energy.generation.structure.OilGenStructureFeature;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.AquaticPlacements;
 import net.minecraft.sounds.Music;
@@ -14,14 +13,12 @@ import net.minecraft.world.level.levelgen.GenerationStep;
 import javax.annotation.Nullable;
 
 // Calen: OverworldBiomes.class https://forums.minecraftforge.net/topic/104296-solved1165-custom-biome-not-generating-in-overworld-dimension/
-public class BCBiomes
-{
+public class BCBiomes {
     @Nullable
     private static final Music NORMAL_MUSIC = null;
 
     // Calen: the same as Desert
-    public static Biome makeOilDesertBiome()
-    {
+    public static Biome makeOilDesertBiome() {
         MobSpawnSettings.Builder mobspawnsettings$builder = new MobSpawnSettings.Builder();
         BiomeDefaultFeatures.desertSpawns(mobspawnsettings$builder);
         BiomeGenerationSettings.Builder biomegenerationsettings$builder = new BiomeGenerationSettings.Builder();
@@ -52,8 +49,7 @@ public class BCBiomes
     }
 
     // Calen: the same as Ocean
-    public static Biome makeOilOceanBiome()
-    {
+    public static Biome makeOilOceanBiome() {
         MobSpawnSettings.Builder mobspawnsettings$builder = new MobSpawnSettings.Builder();
         BiomeDefaultFeatures.oceanSpawns(mobspawnsettings$builder, 1, 4, 10);
         mobspawnsettings$builder.addSpawn(MobCategory.WATER_CREATURE, new MobSpawnSettings.SpawnerData(EntityType.DOLPHIN, 1, 1, 2));
@@ -94,8 +90,7 @@ public class BCBiomes
             MobSpawnSettings.Builder mobSpawn,
             BiomeGenerationSettings.Builder settings,
             @Nullable Music music
-    )
-    {
+    ) {
         return (new Biome.BiomeBuilder())
                 .precipitation(p_194852_)
                 .biomeCategory(p_194853_)
@@ -116,8 +111,7 @@ public class BCBiomes
                 .build();
     }
 
-    private static void globalOverworldGeneration(BiomeGenerationSettings.Builder p_194870_)
-    {
+    private static void globalOverworldGeneration(BiomeGenerationSettings.Builder p_194870_) {
         BiomeDefaultFeatures.addDefaultCarversAndLakes(p_194870_);
         BiomeDefaultFeatures.addDefaultCrystalFormations(p_194870_);
         BiomeDefaultFeatures.addDefaultMonsterRoom(p_194870_);
@@ -126,8 +120,7 @@ public class BCBiomes
         BiomeDefaultFeatures.addSurfaceFreezing(p_194870_);
     }
 
-    protected static int calculateSkyColor(float p_194844_)
-    {
+    protected static int calculateSkyColor(float p_194844_) {
         float $$1 = p_194844_ / 3.0F;
         $$1 = Mth.clamp($$1, -1.0F, 1.0F);
         return Mth.hsvToRgb(0.62222224F - $$1 * 0.05F, 0.5F + $$1 * 0.1F, 1.0F);

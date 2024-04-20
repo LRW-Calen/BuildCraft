@@ -37,8 +37,8 @@ public class KeyPlugLens extends PluggableModelKey {
         if (obj.getClass() != getClass()) return false;
         KeyPlugLens other = (KeyPlugLens) obj;
         return other.isFilter == isFilter//
-            && other.layer == layer//
-            && other.colour == colour//
-            && other.side == side;
+                && other.layer == layer//
+                && other.colour == colour//
+                && other.side == side;
     }
 }

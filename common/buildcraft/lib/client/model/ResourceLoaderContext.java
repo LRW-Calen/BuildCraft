@@ -19,8 +19,7 @@ import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ResourceLoaderContext
-{
+public class ResourceLoaderContext {
     private final Set<ResourceLocation> loaded = new HashSet<>();
     private final Deque<ResourceLocation> loadingStack = new ArrayDeque<>();
 

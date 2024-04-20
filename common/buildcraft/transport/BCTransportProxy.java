@@ -14,23 +14,17 @@ import buildcraft.transport.client.render.PipeWireRenderer;
 import buildcraft.transport.net.MessageMultiPipeItem;
 import buildcraft.transport.wire.MessageWireSystems;
 import buildcraft.transport.wire.MessageWireSystemsPowered;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCTransportProxy implements IGuiHandler
-public abstract class BCTransportProxy
-{
+public abstract class BCTransportProxy {
     //    @SidedProxy(modId = BCTransport.MODID)
     private static BCTransportProxy proxy;
 
-    public static BCTransportProxy getProxy()
-    {
-        if (proxy == null)
-        {
-            switch (FMLLoader.getDist())
-            {
+    public static BCTransportProxy getProxy() {
+        if (proxy == null) {
+            switch (FMLLoader.getDist()) {
                 case CLIENT:
                     proxy = new BCTransportProxy.ClientProxy();
                     break;
@@ -118,35 +112,29 @@ public abstract class BCTransportProxy
 //        return null;
 //    }
 
-    public void fmlPreInit()
-    {
+    public void fmlPreInit() {
         MessageManager.registerMessageClass(BCModules.TRANSPORT, MessageWireSystems.class, Dist.CLIENT);
         MessageManager.registerMessageClass(BCModules.TRANSPORT, MessageWireSystemsPowered.class, Dist.CLIENT);
         MessageManager.registerMessageClass(BCModules.TRANSPORT, MessageMultiPipeItem.class, Dist.CLIENT);
     }
 
-    public void fmlInit()
-    {
+    public void fmlInit() {
     }
 
-    public void fmlPostInit()
-    {
+    public void fmlPostInit() {
     }
 
     // Calen: in 1.18.2 fml不提供proxy 如果@OnlyIn会导致类加载失败
     @SuppressWarnings("unused")
 //    @OnlyIn(Dist.DEDICATED_SERVER)
-    public static class ServerProxy extends BCTransportProxy
-    {
+    public static class ServerProxy extends BCTransportProxy {
     }
 
     @SuppressWarnings("unused")
 //    @OnlyIn(Dist.CLIENT)
-    public static class ClientProxy extends BCTransportProxy
-    {
+    public static class ClientProxy extends BCTransportProxy {
         @Override
-        public void fmlPreInit()
-        {
+        public void fmlPreInit() {
             super.fmlPreInit();
 //            BCTransportSprites.fmlPreInit();
 //            BCTransportModels.fmlPreInit();
@@ -159,15 +147,13 @@ public abstract class BCTransportProxy
         }
 
         @Override
-        public void fmlInit()
-        {
+        public void fmlInit() {
             super.fmlInit();
             BCTransportModels.fmlInit();
         }
 
         @Override
-        public void fmlPostInit()
-        {
+        public void fmlPostInit() {
             super.fmlPostInit();
             BCTransportModels.fmlPostInit();
         }

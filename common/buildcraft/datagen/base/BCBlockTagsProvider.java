@@ -16,16 +16,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.nio.file.Path;
 
-public class BCBlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvider
-{
-    public BCBlockTagsProvider(DataGenerator generator, ExistingFileHelper existingFileHelper)
-    {
-        super(generator, BCCore.MOD_ID, existingFileHelper);
+public class BCBlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvider {
+    public BCBlockTagsProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCCore.MODID, existingFileHelper);
     }
 
     @Override
-    protected void addTags()
-    {
+    protected void addTags() {
         tag(OreDictTags.WORKBENCHES_BLOCK)
                 .add(Blocks.CRAFTING_TABLE)
         ;
@@ -174,15 +171,13 @@ public class BCBlockTagsProvider extends net.minecraft.data.tags.BlockTagsProvid
 //    }
 
     @Override
-    protected Path getPath(ResourceLocation id)
-    {
+    protected Path getPath(ResourceLocation id) {
         return this.generator.getOutputFolder()
                 .resolve("data/" + id.getNamespace() + "/tags/blocks/" + id.getPath() + ".json");
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Block Tags";
     }
 }

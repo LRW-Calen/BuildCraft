@@ -39,13 +39,13 @@ public enum EnumNbtCompareOperation {
 
     public static EnumNbtCompareOperation byName(String name) {
         return Arrays.stream(values())
-            .filter(type -> type.name.equals(name))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Compare operation not found"));
+                .filter(type -> type.name.equals(name))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Compare operation not found"));
     }
 
     public abstract boolean compare(Tag a, Tag b);
 
     public static final JsonDeserializer<EnumNbtCompareOperation> DESERIALIZER = (json, typeOfT, context) ->
-        byName(json.getAsJsonPrimitive().getAsString());
+            byName(json.getAsJsonPrimitive().getAsString());
 }

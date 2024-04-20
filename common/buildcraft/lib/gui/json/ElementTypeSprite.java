@@ -65,8 +65,9 @@ public class ElementTypeSprite extends ElementType {
         int texSize = tex.texSize;
 
         if (!json.properties.containsKey("source.area[2]")//
-            && !json.properties.containsKey("source.area[3]")//
-            && !json.properties.containsKey("source.area")) {
+                && !json.properties.containsKey("source.area[3]")//
+                && !json.properties.containsKey("source.area"))
+        {
             srcArea = new GuiRectangle(texSize, texSize);
         }
 

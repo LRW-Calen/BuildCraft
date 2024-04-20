@@ -13,23 +13,19 @@ import buildcraft.api.statements.IStatementParameter;
 import buildcraft.core.statements.BCStatement;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
 import buildcraft.lib.misc.ColourUtil;
-import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.BCTransportStatements;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ActionPipeColor extends BCStatement implements IActionInternal
-{
+public class ActionPipeColor extends BCStatement implements IActionInternal {
 
     public final DyeColor color;
 
-    public ActionPipeColor(DyeColor color)
-    {
+    public ActionPipeColor(DyeColor color) {
         super(
                 "buildcraft:pipe.color." + color.getName(),
                 "buildcraft.pipe." + color.getName()
@@ -38,34 +34,29 @@ public class ActionPipeColor extends BCStatement implements IActionInternal
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return String.format(LocaleUtil.localize("gate.action.pipe.item.color"), ColourUtil.getTextFullTooltip(color));
         return new TranslatableComponent("gate.action.pipe.item.color", ColourUtil.getTextFullTooltipComponent(color));
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return "gate.action.pipe.item.color." + color.getName();
     }
 
     @Override
-    public void actionActivate(IStatementContainer source, IStatementParameter[] parameters)
-    {
+    public void actionActivate(IStatementContainer source, IStatementParameter[] parameters) {
         // Pipes listen for this -- we don't need to do anything here
     }
 
     @Override
-    public IStatement[] getPossible()
-    {
+    public IStatement[] getPossible() {
         return BCTransportStatements.ACTION_PIPE_COLOUR;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return BCTransportSprites.ACTION_PIPE_COLOUR[color.ordinal()];
     }
 }

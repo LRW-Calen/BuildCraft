@@ -32,12 +32,12 @@ public enum StripesHandlerUse implements IStripesHandlerItem {
                           Player player,
                           IStripesActivator activator) {
         return ITEMS.contains(stack.getItem()) &&
-            BlockUtil.useItemOnBlock(
-                world,
-                player,
-                stack,
-                pos.relative(direction),
-                direction.getOpposite()
-            );
+                BlockUtil.useItemOnBlock(
+                        world,
+                        player,
+                        stack,
+                        pos.relative(direction),
+                        direction.getOpposite()
+                );
     }
 }

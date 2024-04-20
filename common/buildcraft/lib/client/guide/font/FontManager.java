@@ -10,8 +10,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum FontManager
-{
+public enum FontManager {
     INSTANCE;
 
     private static final boolean ENABLE_SMOOTH_FONT = Boolean.getBoolean("buildcraft.guide.smooth_font");

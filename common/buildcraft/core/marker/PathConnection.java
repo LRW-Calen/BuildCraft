@@ -1,5 +1,5 @@
 /* Copyright (c) 2016 SpaceToad and the BuildCraft team
- * 
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.core.marker;
@@ -13,7 +13,6 @@ import buildcraft.lib.misc.VecUtil;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -26,8 +25,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-public class PathConnection extends MarkerConnection<PathConnection>
-{
+public class PathConnection extends MarkerConnection<PathConnection> {
     private static final double RENDER_SCALE = 1 / 16.05;
     private static final Vec3 VEC_HALF = new Vec3(0.5, 0.5, 0.5);
     private final Deque<BlockPos> positions = new LinkedList<>();
@@ -216,14 +214,14 @@ public class PathConnection extends MarkerConnection<PathConnection>
             if (last == null) {
                 last = p;
             } else {
-                renderLaser(VecUtil.add(VEC_HALF, last), VecUtil.add(VEC_HALF, p),poseStack.last(),buffer);
+                renderLaser(VecUtil.add(VEC_HALF, last), VecUtil.add(VEC_HALF, p), poseStack.last(), buffer);
                 last = p;
             }
         }
         if (loop) {
             BlockPos from = positions.getLast();
             BlockPos to = positions.getFirst();
-            renderLaser(VecUtil.add(VEC_HALF, from), VecUtil.add(VEC_HALF, to),poseStack.last(),buffer);
+            renderLaser(VecUtil.add(VEC_HALF, from), VecUtil.add(VEC_HALF, to), poseStack.last(), buffer);
         }
     }
 
@@ -233,7 +231,7 @@ public class PathConnection extends MarkerConnection<PathConnection>
         Vec3 two = offset(to, from);
         LaserData_BC8 data = new LaserData_BC8(BuildCraftLaserManager.MARKER_PATH_CONNECTED, one, two, RENDER_SCALE);
 //        LaserRenderer_BC8.renderLaserStatic(data);
-        LaserRenderer_BC8.renderLaserDynamic(data,pose,buffer);
+        LaserRenderer_BC8.renderLaserDynamic(data, pose, buffer);
     }
 
     @OnlyIn(Dist.CLIENT)

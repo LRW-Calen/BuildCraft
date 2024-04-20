@@ -22,8 +22,7 @@ import net.minecraft.world.level.block.Blocks;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class GuideSmelting extends GuidePartItem
-{
+public class GuideSmelting extends GuidePartItem {
     public static final GuiIcon SMELTING_ICON = new GuiIcon(GuiGuide.ICONS_2, 119, 54, 80, 54);
     public static final GuiRectangle OFFSET = new GuiRectangle(
             (GuiGuide.PAGE_LEFT_TEXT.width - SMELTING_ICON.width) / 2, 0, SMELTING_ICON.width, SMELTING_ICON.height);
@@ -36,9 +35,8 @@ public class GuideSmelting extends GuidePartItem
     private final ItemStack furnace;
     private final int hash;
 
-//    public GuideSmelting(GuiGuide gui, @Nonnull ItemStack input, @Nonnull ItemStack output)
-    public GuideSmelting(GuiGuide gui, @Nonnull NonNullList<Ingredient> input, @Nonnull ItemStack output)
-    {
+    //    public GuideSmelting(GuiGuide gui, @Nonnull ItemStack input, @Nonnull ItemStack output)
+    public GuideSmelting(GuiGuide gui, @Nonnull NonNullList<Ingredient> input, @Nonnull ItemStack output) {
         super(gui);
         this.input = new ChangingItemStack(input);
         this.output = new ChangingItemStack(output);
@@ -47,14 +45,12 @@ public class GuideSmelting extends GuidePartItem
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null) return false;
         if (obj.getClass() != getClass()) return false;
@@ -66,16 +62,13 @@ public class GuideSmelting extends GuidePartItem
 
     @Override
 //    public GuidePart.PagePosition renderIntoArea(int x, int y, int width, int height, GuidePart.PagePosition current, int index)
-    public GuidePart.PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, GuidePart.PagePosition current, int index)
-    {
-        if (current.pixel + PIXEL_HEIGHT > height)
-        {
+    public GuidePart.PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, GuidePart.PagePosition current, int index) {
+        if (current.pixel + PIXEL_HEIGHT > height) {
             current = current.newPage();
         }
         x += OFFSET.x;
         y += OFFSET.y + current.pixel;
-        if (current.page == index)
-        {
+        if (current.page == index) {
 //            SMELTING_ICON.drawAt(x, y);
             SMELTING_ICON.drawAt(poseStack, x, y);
             // Render the item
@@ -97,16 +90,13 @@ public class GuideSmelting extends GuidePartItem
 
     @Override
 //    public GuidePart.PagePosition handleMouseClick(int x, int y, int width, int height, GuidePart.PagePosition current, int index, int mouseX, int mouseY)
-    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index, double mouseX, double mouseY)
-    {
-        if (current.pixel + PIXEL_HEIGHT > height)
-        {
+    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index, double mouseX, double mouseY) {
+        if (current.pixel + PIXEL_HEIGHT > height) {
             current = current.newPage();
         }
         x += OFFSET.x;
         y += OFFSET.y + current.pixel;
-        if (current.page == index)
-        {
+        if (current.page == index) {
 
             testClickItemStack(input.get(), x + (int) IN_POS.x, y + (int) IN_POS.y);
             testClickItemStack(output.get(), x + (int) OUT_POS.x, y + (int) OUT_POS.y);

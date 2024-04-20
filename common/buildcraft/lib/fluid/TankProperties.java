@@ -11,54 +11,46 @@ import net.minecraft.world.level.material.EmptyFluid;
 import net.minecraftforge.fluids.FluidStack;
 
 //public class TankProperties implements FluidTankProperties
-public class TankProperties
-{
+public class TankProperties {
     private final Tank tank;
     private final boolean canFill, canDrain;
 
-    public TankProperties(Tank tank, boolean canFill, boolean canDrain)
-    {
+    public TankProperties(Tank tank, boolean canFill, boolean canDrain) {
         this.tank = tank;
         this.canFill = canFill;
         this.canDrain = canDrain;
     }
 
     //    @Override
-    public FluidStack getContents()
-    {
+    public FluidStack getContents() {
         FluidStack current = tank.getFluid();
 //        return current == null ? null : current.copy();
         return (current == null || current.getRawFluid() instanceof EmptyFluid) ? StackUtil.EMPTY_FLUID : current.copy();
     }
 
     //    @Override
-    public int getCapacity()
-    {
+    public int getCapacity() {
         return tank.getCapacity();
     }
 
     //    @Override
-    public boolean canFill()
-    {
+    public boolean canFill() {
         return canFill;
     }
 
     //    @Override
-    public boolean canDrain()
-    {
+    public boolean canDrain() {
         return canDrain;
     }
 
     //    @Override
-    public boolean canFillFluidType(FluidStack fluidStack)
-    {
+    public boolean canFillFluidType(FluidStack fluidStack) {
 //        return canFill() && tank.canFillFluidType(fluidStack);
         return canFill() && tank.isFluidValid(fluidStack);
     }
 
     //    @Override
-    public boolean canDrainFluidType(FluidStack fluidStack)
-    {
+    public boolean canDrainFluidType(FluidStack fluidStack) {
         return canDrain();
     }
 }

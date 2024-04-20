@@ -11,16 +11,13 @@ import buildcraft.core.marker.volume.Addon;
 import buildcraft.core.marker.volume.ItemAddon;
 import net.minecraft.world.item.Item;
 
-public class ItemFillerPlanner extends ItemAddon
-{
-    public ItemFillerPlanner(String idBC, Item.Properties properties)
-    {
+public class ItemFillerPlanner extends ItemAddon {
+    public ItemFillerPlanner(String idBC, Item.Properties properties) {
         super(idBC, properties);
     }
 
     @Override
-    public Addon createAddon()
-    {
+    public Addon createAddon() {
         return new AddonFillerPlanner();
     }
 }

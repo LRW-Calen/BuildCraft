@@ -18,11 +18,12 @@ import java.io.IOException;
 
 public class MessageUpdateTile implements IMessage {
     private BlockPos pos;
-//    private PacketBufferBC payload;
+    //    private PacketBufferBC payload;
     public PacketBufferBC payload;
 
     @SuppressWarnings("unused")
-    public MessageUpdateTile() {}
+    public MessageUpdateTile() {
+    }
 
     public MessageUpdateTile(BlockPos pos, PacketBufferBC payload) {
         this.pos = pos;
@@ -51,7 +52,8 @@ public class MessageUpdateTile implements IMessage {
         buf.writeBytes(payload, 0, length);
     }
 
-    public static final IMessageHandler<MessageUpdateTile, IMessage> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageUpdateTile, IMessage> HANDLER = (message, ctx) ->
+    {
         try {
             Player player = BCLibProxy.getProxy().getPlayerForContext(ctx);
             if (player == null || player.level == null) {
@@ -62,12 +64,14 @@ public class MessageUpdateTile implements IMessage {
                 return ((IPayloadReceiver) tile).receivePayload(ctx, message.payload);
             } else {
                 BCLog.logger.warn("Dropped message for player " + player.getName().getString() + " for tile at " + message.pos
-                    + " (found " + tile + ")");
+                        + " (found " + tile + ")");
             }
             return null;
-        } catch (IOException io) {
+        }
+        catch (IOException io) {
             throw new RuntimeException(io);
-        } finally {
+        }
+        finally {
             message.payload.release();
         }
     };

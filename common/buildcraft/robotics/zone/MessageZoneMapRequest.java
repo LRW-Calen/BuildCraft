@@ -9,34 +9,28 @@ package buildcraft.robotics.zone;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.IMessageHandler;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.network.FriendlyByteBuf;
 
-public class MessageZoneMapRequest implements IMessage
-{
+public class MessageZoneMapRequest implements IMessage {
     private ZonePlannerMapChunkKey key;
 
     @SuppressWarnings("unused")
-    public MessageZoneMapRequest()
-    {
+    public MessageZoneMapRequest() {
     }
 
-    public MessageZoneMapRequest(ZonePlannerMapChunkKey key)
-    {
+    public MessageZoneMapRequest(ZonePlannerMapChunkKey key) {
         this.key = key;
     }
 
     @Override
 //    public void fromBytes(ByteBuf buf)
-    public void fromBytes(FriendlyByteBuf buf)
-    {
+    public void fromBytes(FriendlyByteBuf buf) {
         key = new ZonePlannerMapChunkKey(buf);
     }
 
     @Override
 //    public void toBytes(ByteBuf buf)
-    public void toBytes(FriendlyByteBuf buf)
-    {
+    public void toBytes(FriendlyByteBuf buf) {
         key.toBytes(buf);
     }
 

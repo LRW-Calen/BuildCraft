@@ -15,11 +15,9 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 
 //@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class CapUtil
-{
+public class CapUtil {
     //    @CapabilityInject(IItemTransactor.class)
-    private static Capability<IItemTransactor> capTransactor = CapabilityManager.get(new CapabilityToken<>()
-    {
+    private static Capability<IItemTransactor> capTransactor = CapabilityManager.get(new CapabilityToken<>() {
     });
     @Nonnull
     public static final Capability<IItemHandler> CAP_ITEMS = getCapNonNull(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, IItemHandler.class);
@@ -31,8 +29,7 @@ public class CapUtil
 
     // Calen: called in BCLib
     @SubscribeEvent
-    public static void registerCaps(RegisterCapabilitiesEvent evt)
-    {
+    public static void registerCaps(RegisterCapabilitiesEvent evt) {
 //        evt.register(IFluidHandler.class);
         evt.register(IFluidHandlerAdv.class);
 //        evt.register(ICraftingMachine.class);
@@ -60,10 +57,8 @@ public class CapUtil
 //    }
 
     @Nonnull
-    private static <T> Capability<T> getCapNonNull(Capability<T> cap, Class<T> clazz)
-    {
-        if (cap == null)
-        {
+    private static <T> Capability<T> getCapNonNull(Capability<T> cap, Class<T> clazz) {
+        if (cap == null) {
             throw new NullPointerException("The capability " + clazz + " was null!");
         }
         return cap;

@@ -15,13 +15,13 @@ public class GuidePartLink extends GuidePart {
 
     @Override
     public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index) {
-        return renderLine(poseStack,current, link.text, x, y, width, height, index);
+        return renderLine(poseStack, current, link.text, x, y, width, height, index);
     }
 
     @Override
-    public PagePosition handleMouseClick(PoseStack poseStack,int x, int y, int width, int height, PagePosition current, int index,
+    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
                                          double mouseX, double mouseY) {
-        PagePosition pos = renderLine(poseStack,current, link.text, x, y, width, height, -1);
+        PagePosition pos = renderLine(poseStack, current, link.text, x, y, width, height, -1);
         if (pos.page == index && wasHovered()) {
             GuidePageFactory factory = link.getFactoryLink();
             GuidePageBase page = factory.createNew(gui);

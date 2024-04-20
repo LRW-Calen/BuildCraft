@@ -31,7 +31,8 @@ public class JsonModel {
     public static JsonModel deserialize(ResourceLocation from, ResourceLoaderContext ctx) throws JsonParseException, IOException {
         try (InputStreamReader isr = ctx.startLoading(from)) {
             return new JsonModel(new Gson().fromJson(isr, JsonObject.class), ctx);
-        } finally {
+        }
+        finally {
             ctx.finishLoading();
         }
     }
@@ -70,7 +71,8 @@ public class JsonModel {
     public JsonModel(JsonObject obj, ResourceLoaderContext ctx) throws JsonParseException, IOException {
 //        ambientOcclusion = JsonUtils.getBoolean(obj, "ambientocclusion", false);
         ambientOcclusion = GsonHelper.getAsBoolean(obj, "ambientocclusion", false);
-        textures = JsonUtil.getSubAsImmutableMap(obj, "textures", new TypeToken<HashMap<String, String>>() {});
+        textures = JsonUtil.getSubAsImmutableMap(obj, "textures", new TypeToken<HashMap<String, String>>() {
+        });
         if (obj.has("elements")) {
             cutoutElements = deserializePartArray(obj, "elements", false, ctx);
             translucentElements = new JsonModelPart[0];

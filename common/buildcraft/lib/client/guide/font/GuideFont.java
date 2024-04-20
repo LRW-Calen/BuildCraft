@@ -20,8 +20,7 @@ import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.List;
 
-public class GuideFont implements IFontRenderer
-{
+public class GuideFont implements IFontRenderer {
 
     private final DynamicTextureBC tex = new DynamicTextureBC(512, 512);
     private final BufferedImage img;
@@ -29,38 +28,33 @@ public class GuideFont implements IFontRenderer
 
     private final Font font;
 
-    public GuideFont(Font font)
-    {
+    public GuideFont(Font font) {
         this.font = font;
         this.img = new BufferedImage(512, 512, BufferedImage.TYPE_INT_ARGB);
         this.g2d = img.createGraphics();
     }
 
     @Override
-    public int getStringWidth(String text)
-    {
+    public int getStringWidth(String text) {
         FontMetrics metrics = g2d.getFontMetrics(font);
         Rectangle2D rect = metrics.getStringBounds(text, g2d);
         return (int) rect.getWidth();
     }
 
     @Override
-    public int getFontHeight(String text)
-    {
+    public int getFontHeight(String text) {
         FontMetrics metrics = g2d.getFontMetrics(font);
         Rectangle2D rect = metrics.getStringBounds(text, g2d);
         return (int) rect.getHeight();
     }
 
     @Override
-    public int getMaxFontHeight()
-    {
+    public int getMaxFontHeight() {
         return g2d.getFontMetrics().getMaxAscent() + g2d.getFontMetrics().getMaxDescent();
     }
 
     @Override
-    public int drawString(PoseStack poseStack, String text, int x, int y, int shade, boolean shadow, boolean centered, float scale)
-    {
+    public int drawString(PoseStack poseStack, String text, int x, int y, int shade, boolean shadow, boolean centered, float scale) {
         text = ColourUtil.stripAllFormatCodes(text);
         Minecraft mc = Minecraft.getInstance();
 //        ScaledResolution res = new ScaledResolution(mc);
@@ -71,8 +65,7 @@ public class GuideFont implements IFontRenderer
         g2d.fillRect(0, 0, 512, 512);
         g2d.setColor(new Color(0xFF_FF_FF));
         Font f2 = font.deriveFont(font.getSize2D() * scale * (float) scaleFactor);
-        if (shadow)
-        {
+        if (shadow) {
             f2 = f2.deriveFont(Font.BOLD);
         }
         FontMetrics metrics = g2d.getFontMetrics(f2);
@@ -83,10 +76,8 @@ public class GuideFont implements IFontRenderer
         int font_height = metrics.getMaxAscent() + metrics.getMaxDescent();
         g2d.drawString(text, 0, metrics.getMaxAscent());
 
-        for (int _x = 0; _x < 512; _x++)
-        {
-            for (int _y = 0; _y <= font_height; _y++)
-            {
+        for (int _x = 0; _x < 512; _x++) {
+            for (int _y = 0; _y <= font_height; _y++) {
                 int rgb = img.getRGB(_x, _y);
                 if ((rgb & 0xFF) == 0) rgb = 0;
                 tex.setColor(_x, _y, rgb);
@@ -103,13 +94,11 @@ public class GuideFont implements IFontRenderer
         poseStack.pushPose();
 //        GlStateManager.scale(1 / scaleFactor, 1 / scaleFactor, 1);
         poseStack.scale((float) (1 / scaleFactor), (float) (1 / scaleFactor), 1);
-        if ((shade & 0xFF_00_00_00) == 0)
-        {
+        if ((shade & 0xFF_00_00_00) == 0) {
             shade |= 0xFF_00_00_00;
         }
         RenderUtil.setGLColorFromIntPlusAlpha(shade);
-        if (centered)
-        {
+        if (centered) {
             x -= rect.getWidth() / 2 / scaleFactor;
         }
         tex.draw((int) (x * scaleFactor), (int) (y * scaleFactor - metrics.getMaxDescent()), 0, 0, 0,
@@ -126,8 +115,7 @@ public class GuideFont implements IFontRenderer
     }
 
     @Override
-    public List<String> wrapString(String text, int maxWidth, boolean shadow, float scale)
-    {
+    public List<String> wrapString(String text, int maxWidth, boolean shadow, float scale) {
         FontState state = new FontState(this, scale, shadow);
 
         return Collections.singletonList(text);
@@ -135,8 +123,7 @@ public class GuideFont implements IFontRenderer
         // throw new AbstractMethodError("// TODO: Implement this!");
     }
 
-    private static class FontState
-    {
+    private static class FontState {
         /**
          * <ol start="0">
          * <li>PLAIN</li>
@@ -148,8 +135,7 @@ public class GuideFont implements IFontRenderer
         final FontMetrics[] metrics = new FontMetrics[4];
         final boolean defaultShadow;
 
-        FontState(GuideFont font, float scale, boolean shadow)
-        {
+        FontState(GuideFont font, float scale, boolean shadow) {
             this.defaultShadow = shadow;
             Minecraft mc = Minecraft.getInstance();
 //            ScaledResolution res = new ScaledResolution(mc);
@@ -158,14 +144,12 @@ public class GuideFont implements IFontRenderer
 
             Font f2 = font.font.deriveFont(font.font.getSize2D() * scale * (float) scaleFactor);
 
-            for (int i : new int[]{0, Font.BOLD, Font.ITALIC, Font.BOLD | Font.ITALIC})
-            {
+            for (int i : new int[]{0, Font.BOLD, Font.ITALIC, Font.BOLD | Font.ITALIC}) {
                 metrics[i] = font.g2d.getFontMetrics(f2.deriveFont(i));
             }
         }
 
-        public int getPixelWidth(String text)
-        {
+        public int getPixelWidth(String text) {
             return 0;
         }
     }

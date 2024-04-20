@@ -9,14 +9,12 @@ import buildcraft.api.enums.EnumPowerStage;
 import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.energy.BCEnergyBlocks;
-import buildcraft.energy.BCEnergyGuis;
 import buildcraft.energy.BCEnergyMenuTypes;
 import buildcraft.energy.container.ContainerEngineStone_BC8;
 import buildcraft.lib.delta.DeltaInt;
 import buildcraft.lib.delta.DeltaManager.EnumNetworkVisibility;
 import buildcraft.lib.engine.EngineConnector;
 import buildcraft.lib.engine.TileEngineBase_BC8;
-import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.InventoryUtil;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
@@ -33,8 +31,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -43,8 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvider
-{
+public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvider {
     private static final long MAX_OUTPUT = MjAPI.MJ;
     private static final long MIN_OUTPUT = MAX_OUTPUT / 3;
     // private static final long TARGET_OUTPUT = 0.375f;
@@ -61,14 +56,12 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
 
     private boolean isForceInserting = false;
 
-    public TileEngineStone_BC8(BlockPos pos, BlockState blockState)
-    {
+    public TileEngineStone_BC8(BlockPos pos, BlockState blockState) {
         super(BCEnergyBlocks.engineStoneTile.get(), pos, blockState);
         invFuel = itemManager.addInvHandler("fuel", 1, this::isValidFuel, EnumAccess.BOTH, EnumPipePart.VALUES);
     }
 
-    private boolean isValidFuel(int slot, ItemStack stack)
-    {
+    private boolean isValidFuel(int slot, ItemStack stack) {
         // Always allow inserting container items if they aren't fuel
         return isForceInserting || getItemBurnTime(stack) > 0;
     }
@@ -77,8 +70,7 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
 
     @Override
 //    public void readFromNBT(NBTTagCompound nbt)
-    public void load(CompoundTag nbt)
-    {
+    public void load(CompoundTag nbt) {
         super.load(nbt);
         burnTime = nbt.getInt("burnTime");
         totalBurnTime = nbt.getInt("totalBurnTime");
@@ -87,8 +79,7 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
 
     @Override
 //    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
-    public void saveAdditional(CompoundTag nbt)
-    {
+    public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         nbt.putInt("burnTime", burnTime);
         nbt.putInt("totalBurnTime", totalBurnTime);
@@ -96,13 +87,9 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
     }
 
     @Override
-    protected void onSlotChange(IItemHandlerModifiable handler, int slot, @Nonnull ItemStack before,
-                                @Nonnull ItemStack after)
-    {
-        if (handler == invFuel)
-        {
-            if (isForceInserting && after.isEmpty())
-            {
+    protected void onSlotChange(IItemHandlerModifiable handler, int slot, @Nonnull ItemStack before, @Nonnull ItemStack after) {
+        if (handler == invFuel) {
+            if (isForceInserting && after.isEmpty()) {
                 isForceInserting = false;
             }
         }
@@ -111,13 +98,9 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
     // Engine overrides
 
     @Override
-    public InteractionResult onActivated(Player player, InteractionHand hand, Direction side, float hitX, float hitY,
-                                         float hitZ)
-    {
-        if (!level.isClientSide)
-        {
-//            BCEnergyGuis.ENGINE_STONE.openGUI(player, getBlockPos(), player.level.getBlockState(new BlockPos(hitX, hitY, hitZ)));
-//            BCEnergyGuis.ENGINE_STONE.openGUI(player, this);
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ) {
+        if (!level.isClientSide) {
+//            BCEnergyGuis.ENGINE_STONE.openGUI(player, getPos());
             MessageUtil.serverOpenTileGUI(player, this);
         }
         return InteractionResult.SUCCESS;
@@ -125,26 +108,21 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
 
     @Nonnull
     @Override
-    protected IMjConnector createConnector()
-    {
+    protected IMjConnector createConnector() {
         return new EngineConnector(false);
     }
 
     @Override
-    public boolean isBurning()
-    {
+    public boolean isBurning() {
         return burnTime > 0;
     }
 
     @Override
-    protected void engineUpdate()
-    {
+    protected void engineUpdate() {
         super.engineUpdate();
-        if (burnTime > 0)
-        {
+        if (burnTime > 0) {
             burnTime--;
-            if (getPowerStage() != EnumPowerStage.OVERHEAT)
-            {
+            if (getPowerStage() != EnumPowerStage.OVERHEAT) {
                 // this seems wrong...
                 long output = getCurrentOutput();
                 currentOutput = output; // Comment out for constant power
@@ -154,33 +132,25 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
     }
 
     @Override
-    public void burn()
-    {
-        if (burnTime == 0 && isRedstonePowered)
-        {
+    public void burn() {
+        if (burnTime == 0 && isRedstonePowered) {
             burnTime = totalBurnTime = getItemBurnTime(invFuel.getStackInSlot(0));
 
-            if (burnTime > 0)
-            {
+            if (burnTime > 0) {
                 deltaFuelLeft.setValue(100);
                 deltaFuelLeft.addDelta(0, totalBurnTime, -100);
 
                 ItemStack fuel = invFuel.extractItem(0, 1, false);
                 ItemStack container = fuel.getItem().getContainerItem(fuel);
-                if (!container.isEmpty())
-                {
-                    if (invFuel.getStackInSlot(0).isEmpty())
-                    {
+                if (!container.isEmpty()) {
+                    if (invFuel.getStackInSlot(0).isEmpty()) {
                         isForceInserting = false;
                         ItemStack leftover = invFuel.insert(container, false, false);
-                        if (!leftover.isEmpty())
-                        {
+                        if (!leftover.isEmpty()) {
                             isForceInserting = true;
                             invFuel.setStackInSlot(0, leftover);
                         }
-                    }
-                    else
-                    {
+                    } else {
                         // Not good!
                         InventoryUtil.addToBestAcceptor(getLevel(), getBlockPos(), null, container);
                     }
@@ -189,42 +159,34 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
         }
     }
 
-    private static int getItemBurnTime(ItemStack itemstack)
-    {
+    private static int getItemBurnTime(ItemStack itemstack) {
 //        return TileEntityFurnace.getItemBurnTime(itemstack);
-//        return FurnaceBlockEntity.getFuel().get(itemstack.getItem());
         Integer ret = FurnaceBlockEntity.getFuel().get(itemstack.getItem());
-//        List<SmeltingRecipe> recipes= level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING);
         return ret == null ? -1 : ret;
     }
 
     @Override
-    public long maxPowerReceived()
-    {
+    public long maxPowerReceived() {
         return 200 * MjAPI.MJ;
     }
 
     @Override
-    public long maxPowerExtracted()
-    {
+    public long maxPowerExtracted() {
         return 100 * MjAPI.MJ;
     }
 
     @Override
-    public long getMaxPower()
-    {
+    public long getMaxPower() {
         return 1000 * MjAPI.MJ;
     }
 
     @Override
-    public float explosionRange()
-    {
+    public float explosionRange() {
         return 2;
     }
 
     @Override
-    public long getCurrentOutput()
-    {
+    public long getCurrentOutput() {
         // double e = 0.375 * getMaxEnergy() - energy;
         // esum = MathUtils.clamp(esum + e, -eLimit, eLimit);
         // return MathUtils.clamp(e * 1 + esum * 0.05, MIN_OUTPUT, MAX_OUTPUT);
@@ -234,15 +196,13 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
         return clamp(e + esum / 20, MIN_OUTPUT, MAX_OUTPUT);
     }
 
-    private static long clamp(long val, long min, long max)
-    {
+    private static long clamp(long val, long min, long max) {
         return Math.max(min, Math.min(max, val));
     }
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
 //        super.getDebugInfo(left, right, side);
 //        left.add("esum = " + MjAPI.formatMj(esum) + " M");
 //        long e = 3 * getMaxPower() / 8 - power;
@@ -257,16 +217,16 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
         left.add(new TextComponent("delta = " + deltaFuelLeft.getDynamic(0)));
     }
 
+    // MenuProvider
+
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerEngineStone_BC8(BCEnergyMenuTypes.ENGINE_STONE, id, player, this);
     }
 }

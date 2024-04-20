@@ -15,8 +15,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import java.util.Arrays;
 import java.util.List;
 
-public class GuiElementStatementVariant extends GuiElementSimple implements IMenuElement
-{
+public class GuiElementStatementVariant extends GuiElementSimple implements IMenuElement {
     public static final SpriteNineSliced SELECTION_HOVER = GuiElementStatement.SELECTION_HOVER;
 
     /**
@@ -38,8 +37,7 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
     private final IGuiArea[] posPossible;
 
     public GuiElementStatementVariant(BuildCraftGui gui, IGuiArea element, IReference<? extends IGuiSlot> ref,
-                                      IGuiSlot[] possible, IGuiArea[] posPossible)
-    {
+                                      IGuiSlot[] possible, IGuiArea[] posPossible) {
         super(gui, element);
         this.ref = ref;
         this.possible = possible;
@@ -47,14 +45,12 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
     }
 
     public static GuiElementStatementVariant create(BuildCraftGui gui, IGuiArea parent,
-                                                    IReference<? extends IGuiSlot> ref, IGuiSlot[] possible)
-    {
+                                                    IReference<? extends IGuiSlot> ref, IGuiSlot[] possible) {
         int count = Math.min(OFFSET_HOVER.length, possible.length);
         possible = possible.length == count ? possible : Arrays.copyOf(possible, count);
         IGuiArea[] posPossible = new IGuiArea[count];
         IGuiArea base = new GuiRectangle(18, 18).offset(parent);
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             posPossible[i] = base.offset(OFFSET_HOVER[i][0] * 18, OFFSET_HOVER[i][1] * 18);
         }
         int sub = 18 * (count > 9 ? 2 : 1);
@@ -65,18 +61,14 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
         return new GuiElementStatementVariant(gui, area, ref, possible, posPossible);
     }
 
-    interface ISlotIter
-    {
+    interface ISlotIter {
         void iterate(IGuiArea area, IGuiSlot slot);
     }
 
-    private void iteratePossible(ISlotIter iter)
-    {
-        for (int p = 0; p < possible.length; p++)
-        {
+    private void iteratePossible(ISlotIter iter) {
+        for (int p = 0; p < possible.length; p++) {
             IGuiSlot slot = possible[p];
-            if (slot != null)
-            {
+            if (slot != null) {
                 iter.iterate(posPossible[p], slot);
             }
         }
@@ -85,8 +77,7 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
     // IGuiElement
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
 //        GlStateManager.pushMatrix();
         poseStack.pushPose();
         // Render above items in the players inventory
@@ -94,7 +85,7 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
         poseStack.translate(0, 0, 1000);
 //        GlStateManager.color(1, 1, 1);
         RenderUtil.color(1, 1, 1);
-        SELECTION_HOVER.draw(this,poseStack);
+        SELECTION_HOVER.draw(this, poseStack);
         iteratePossible((pos, slot) ->
         {
             double x = pos.getX();
@@ -106,20 +97,17 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
     }
 
     @Override
-    public void drawForeground(PoseStack poseStack, float partialTicks)
-    {
+    public void drawForeground(PoseStack poseStack, float partialTicks) {
 
     }
 
     // ITooltipElement
 
     @Override
-    public void addToolTips(List<ToolTip> tooltips)
-    {
+    public void addToolTips(List<ToolTip> tooltips) {
         iteratePossible((pos, slot) ->
         {
-            if (pos.contains(gui.mouse))
-            {
+            if (pos.contains(gui.mouse)) {
                 tooltips.add(new ToolTip(slot.getTooltip()));
             }
         });
@@ -128,13 +116,11 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
     // IInteractionElement
 
     @Override
-    public void onMouseReleased(int button)
-    {
+    public void onMouseReleased(int button) {
         gui.currentMenu = null;
         iteratePossible((pos, slot) ->
         {
-            if (pos.contains(gui.mouse))
-            {
+            if (pos.contains(gui.mouse)) {
                 ref.setIfCan(slot);
             }
         });

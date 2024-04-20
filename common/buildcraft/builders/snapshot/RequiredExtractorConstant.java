@@ -29,9 +29,9 @@ public class RequiredExtractorConstant extends RequiredExtractor {
     @Override
     public List<ItemStack> extractItemsFromBlock(@Nonnull BlockState blockState, @Nullable CompoundTag tileNbt) {
         return Collections.unmodifiableList(
-            itemRefs.stream()
-                .map(ref -> ref.get(tileNbt))
-                .collect(Collectors.toList())
+                itemRefs.stream()
+                        .map(ref -> ref.get(tileNbt))
+                        .collect(Collectors.toList())
         );
     }
 
@@ -39,9 +39,9 @@ public class RequiredExtractorConstant extends RequiredExtractor {
     @Override
     public List<FluidStack> extractFluidsFromBlock(@Nonnull BlockState blockState, @Nullable CompoundTag tileNbt) {
         return Collections.unmodifiableList(
-            fluidRefs.stream()
-                .map(ref -> ref.get(tileNbt))
-                .collect(Collectors.toList())
+                fluidRefs.stream()
+                        .map(ref -> ref.get(tileNbt))
+                        .collect(Collectors.toList())
         );
     }
 
@@ -49,9 +49,9 @@ public class RequiredExtractorConstant extends RequiredExtractor {
     @Override
     public List<ItemStack> extractItemsFromEntity(@Nonnull CompoundTag entityNbt) {
         return Collections.unmodifiableList(
-            itemRefs.stream()
-                .map(ref -> ref.get(entityNbt))
-                .collect(Collectors.toList())
+                itemRefs.stream()
+                        .map(ref -> ref.get(entityNbt))
+                        .collect(Collectors.toList())
         );
     }
 
@@ -59,9 +59,9 @@ public class RequiredExtractorConstant extends RequiredExtractor {
     @Override
     public List<FluidStack> extractFluidsFromEntity(@Nonnull CompoundTag entityNbt) {
         return Collections.unmodifiableList(
-            fluidRefs.stream()
-                .map(ref -> ref.get(entityNbt))
-                .collect(Collectors.toList())
+                fluidRefs.stream()
+                        .map(ref -> ref.get(entityNbt))
+                        .collect(Collectors.toList())
         );
     }
 }

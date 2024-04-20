@@ -18,8 +18,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public enum CoolantRegistry implements ICoolantManager
-{
+public enum CoolantRegistry implements ICoolantManager {
     INSTANCE;
 
     //    private final List<IFluidCoolant> coolants = new LinkedList<>();
@@ -29,8 +28,7 @@ public enum CoolantRegistry implements ICoolantManager
 
     @Override
 //    public IFluidCoolant addCoolant(IFluidCoolant coolant)
-    public IFluidCoolant addUnregisteredFluidCoolant(IFluidCoolant coolant)
-    {
+    public IFluidCoolant addUnregisteredFluidCoolant(IFluidCoolant coolant) {
 //        coolants.add(coolant);
         unregisteredFluidCoolants.add(coolant);
         return coolant;
@@ -38,8 +36,7 @@ public enum CoolantRegistry implements ICoolantManager
 
     @Override
 //    public ISolidCoolant addSolidCoolant(ISolidCoolant solidCoolant)
-    public ISolidCoolant addUnregisteredSolidCoolant(ISolidCoolant solidCoolant)
-    {
+    public ISolidCoolant addUnregisteredSolidCoolant(ISolidCoolant solidCoolant) {
 //        solidCoolants.add(solidCoolant);
         unregisteredSolidCoolants.add(solidCoolant);
         return solidCoolant;
@@ -47,24 +44,21 @@ public enum CoolantRegistry implements ICoolantManager
 
     @Override
 //    public IFluidCoolant addCoolant(FluidStack fluid, float degreesCoolingPerMB)
-    public IFluidCoolant addCoolant(ResourceLocation id, FluidStack fluid, float degreesCoolingPerMB)
-    {
+    public IFluidCoolant addCoolant(ResourceLocation id, FluidStack fluid, float degreesCoolingPerMB) {
 //        return addCoolant(new FluidCoolant(fluid, degreesCoolingPerMB));
         return addUnregisteredFluidCoolant(new FluidCoolant(id, fluid, degreesCoolingPerMB));
     }
 
     @Override
 //    public ISolidCoolant addSolidCoolant(ItemStack solid, FluidStack fluid, float multiplier)
-    public ISolidCoolant addSolidCoolant(ResourceLocation id, ItemStack solid, FluidStack fluid, float multiplier)
-    {
+    public ISolidCoolant addSolidCoolant(ResourceLocation id, ItemStack solid, FluidStack fluid, float multiplier) {
 //        return addSolidCoolant(new SolidCoolant(solid, fluid, multiplier));
         return addUnregisteredSolidCoolant(new SolidCoolant(id, solid, fluid, multiplier));
     }
 
     @Override
 //    public Collection<IFluidCoolant> getCoolants()
-    public Collection<IFluidCoolant> getCoolants(Level world)
-    {
+    public Collection<IFluidCoolant> getCoolants(Level world) {
 //        return coolants;
         Collection<IFluidCoolant> ret = Lists.newArrayList();
         ret.addAll(unregisteredFluidCoolants);
@@ -74,8 +68,7 @@ public enum CoolantRegistry implements ICoolantManager
 
     @Override
 //    public Collection<ISolidCoolant> getSolidCoolants()
-    public Collection<ISolidCoolant> getSolidCoolants(Level world)
-    {
+    public Collection<ISolidCoolant> getSolidCoolants(Level world) {
 //        return solidCoolants;
         Collection<ISolidCoolant> ret = Lists.newArrayList();
         ret.addAll(unregisteredSolidCoolants);
@@ -85,17 +78,13 @@ public enum CoolantRegistry implements ICoolantManager
 
     @Override
 //    public IFluidCoolant getCoolant(FluidStack fluid)
-    public IFluidCoolant getCoolant(Level world, FluidStack fluid)
-    {
-        if (fluid == null || fluid.getAmount() == 0)
-        {
+    public IFluidCoolant getCoolant(Level world, FluidStack fluid) {
+        if (fluid == null || fluid.getAmount() == 0) {
             return null;
         }
 //        for (IFluidCoolant coolant : coolants)
-        for (IFluidCoolant coolant : getCoolants(world))
-        {
-            if (coolant.matchesFluid(fluid))
-            {
+        for (IFluidCoolant coolant : getCoolants(world)) {
+            if (coolant.matchesFluid(fluid)) {
                 return coolant;
             }
         }
@@ -104,18 +93,14 @@ public enum CoolantRegistry implements ICoolantManager
 
     @Override
 //    public float getDegreesPerMb(FluidStack fluid, float heat)
-    public float getDegreesPerMb(Level world, FluidStack fluid, float heat)
-    {
-        if (fluid == null || fluid.getAmount() == 0)
-        {
+    public float getDegreesPerMb(Level world, FluidStack fluid, float heat) {
+        if (fluid == null || fluid.getAmount() == 0) {
             return 0;
         }
 //        for (IFluidCoolant coolant : coolants)
-        for (IFluidCoolant coolant : getCoolants(world))
-        {
+        for (IFluidCoolant coolant : getCoolants(world)) {
             float degrees = coolant.getDegreesCoolingPerMB(fluid, heat);
-            if (degrees > 0)
-            {
+            if (degrees > 0) {
                 return degrees;
             }
         }
@@ -124,13 +109,10 @@ public enum CoolantRegistry implements ICoolantManager
 
     @Override
 //    public ISolidCoolant getSolidCoolant(ItemStack solid)
-    public ISolidCoolant getSolidCoolant(Level world, ItemStack solid)
-    {
+    public ISolidCoolant getSolidCoolant(Level world, ItemStack solid) {
 //        for (ISolidCoolant coolant : solidCoolants)
-        for (ISolidCoolant coolant : getSolidCoolants(world))
-        {
-            if (coolant.getFluidFromSolidCoolant(solid) != null)
-            {
+        for (ISolidCoolant coolant : getSolidCoolants(world)) {
+            if (coolant.getFluidFromSolidCoolant(solid) != null) {
                 return coolant;
             }
         }
@@ -138,38 +120,32 @@ public enum CoolantRegistry implements ICoolantManager
     }
 
     //    public static class Coolant implements IFluidCoolant
-    public static class FluidCoolant implements IFluidCoolant
-    {
+    public static class FluidCoolant implements IFluidCoolant {
         private final FluidStack fluid;
         private final float degreesCoolingPerMB;
 
         private final ResourceLocation id;
 
         //        public Coolant(FluidStack fluid, float degreesCoolingPerMB)
-        public FluidCoolant(ResourceLocation id, FluidStack fluid, float degreesCoolingPerMB)
-        {
+        public FluidCoolant(ResourceLocation id, FluidStack fluid, float degreesCoolingPerMB) {
             this.fluid = fluid;
             this.degreesCoolingPerMB = degreesCoolingPerMB;
             this.id = id;
         }
 
         @Override
-        public EnumCoolantType getCoolantType()
-        {
+        public EnumCoolantType getCoolantType() {
             return EnumCoolantType.FLUID;
         }
 
         @Override
-        public boolean matchesFluid(FluidStack stack)
-        {
+        public boolean matchesFluid(FluidStack stack) {
             return fluid.isFluidEqual(stack);
         }
 
         @Override
-        public float getDegreesCoolingPerMB(FluidStack stack, float heat)
-        {
-            if (matchesFluid(stack))
-            {
+        public float getDegreesCoolingPerMB(FluidStack stack, float heat) {
+            if (matchesFluid(stack)) {
                 return degreesCoolingPerMB;
             }
             return 0;
@@ -177,27 +153,23 @@ public enum CoolantRegistry implements ICoolantManager
 
         // Calen
         @Override
-        public float getDegreesCoolingPerMB()
-        {
+        public float getDegreesCoolingPerMB() {
             return degreesCoolingPerMB;
         }
 
         @Override
-        public FluidStack getFluid()
-        {
+        public FluidStack getFluid() {
             return fluid;
         }
 
         @Override
-        public ResourceLocation getId()
-        {
+        public ResourceLocation getId() {
             return id;
         }
     }
 
     //    private static class SolidCoolant implements ISolidCoolant
-    public static class SolidCoolant implements ISolidCoolant
-    {
+    public static class SolidCoolant implements ISolidCoolant {
         private final ItemStack solid;
         private final FluidStack fluid;
         private final float multiplier;
@@ -205,8 +177,7 @@ public enum CoolantRegistry implements ICoolantManager
         private final ResourceLocation id;
 
         //        public SolidCoolant(ItemStack solid, FluidStack fluid, float multiplier)
-        public SolidCoolant(ResourceLocation id, ItemStack solid, FluidStack fluid, float multiplier)
-        {
+        public SolidCoolant(ResourceLocation id, ItemStack solid, FluidStack fluid, float multiplier) {
             this.solid = solid;
             this.fluid = fluid;
             this.multiplier = multiplier;
@@ -214,17 +185,14 @@ public enum CoolantRegistry implements ICoolantManager
         }
 
         @Override
-        public EnumCoolantType getCoolantType()
-        {
+        public EnumCoolantType getCoolantType() {
             return EnumCoolantType.SOLID;
         }
 
         @Override
-        public FluidStack getFluidFromSolidCoolant(ItemStack stack)
-        {
+        public FluidStack getFluidFromSolidCoolant(ItemStack stack) {
 //            if (stack == null || !stack.isItemEqual(solid))
-            if (stack == null || !StackUtil.isItemEqual(stack, solid))
-            {
+            if (stack == null || !StackUtil.isItemEqual(stack, solid)) {
                 return null;
             }
             int liquidAmount = (int) (stack.getCount() * fluid.getAmount() * multiplier / solid.getCount());
@@ -233,26 +201,22 @@ public enum CoolantRegistry implements ICoolantManager
 
         // Calen
         @Override
-        public FluidStack getFluid()
-        {
+        public FluidStack getFluid() {
             return fluid;
         }
 
         @Override
-        public ItemStack getSolid()
-        {
+        public ItemStack getSolid() {
             return solid;
         }
 
         @Override
-        public float getMultiplierForSerialize()
-        {
+        public float getMultiplierForSerialize() {
             return multiplier;
         }
 
         @Override
-        public ResourceLocation getId()
-        {
+        public ResourceLocation getId() {
             return id;
         }
     }

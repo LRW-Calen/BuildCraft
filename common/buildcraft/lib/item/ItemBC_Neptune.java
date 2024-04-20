@@ -14,15 +14,13 @@ import net.minecraftforge.common.extensions.IForgeItem;
 
 import java.util.Arrays;
 
-public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem
-{
+public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem {
     /**
      * The tag used to identify this in the {@link TagManager}
      */
     public final String idBC;
 
-    public ItemBC_Neptune(String idBC, Item.Properties properties,Runnable... runBeforeInit)
-    {
+    public ItemBC_Neptune(String idBC, Item.Properties properties, Runnable... runBeforeInit) {
 //        super(properties);
         super(properties.tab(CreativeTabManager.getTab(TagManager.getTag(idBC, TagManager.EnumTagType.CREATIVE_TAB))));
         Arrays.stream(runBeforeInit).forEach(Runnable::run); // Calen
@@ -31,16 +29,13 @@ public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem
     }
 
     @Override
-    public String getIdBC()
-    {
+    public String getIdBC() {
         return idBC;
     }
 
     @Override
-    public final void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items)
-    {
-        if (allowdedIn(tab))
-        {
+    public final void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
+        if (allowdedIn(tab)) {
             addSubItems(tab, items);
         }
     }
@@ -52,24 +47,21 @@ public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem
      * @param tab The {@link CreativeModeTab} to display the items in. This is provided just in case an item has multiple
      *            subtypes, split across different tabs
      */
-    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> items)
-    {
+    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> items) {
         items.add(new ItemStack(this));
     }
 
     // Calen: from IItemBuildCraft#init
     // in 1.18.2 setUnlocalizedName setRegistryName are unvailable
     @Override
-    public String getDescriptionId(ItemStack stack)
-    {
+    public String getDescriptionId(ItemStack stack) {
         return this.unlocalizedName;
     }
 
     protected String unlocalizedName;
 
     @Override
-    public void setUnlocalizedName(String unlocalizedName)
-    {
+    public void setUnlocalizedName(String unlocalizedName) {
         this.unlocalizedName = unlocalizedName;
     }
 }

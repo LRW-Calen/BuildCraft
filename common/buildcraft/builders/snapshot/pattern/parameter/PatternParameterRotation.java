@@ -29,7 +29,7 @@ public enum PatternParameterRotation implements IStatementParameter {
     THREE_QUARTERS;
 
     private static final PatternParameterRotation[] POSSIBLE_ORDER =
-        { null, null, NONE, null, QUARTER, null, HALF, null, THREE_QUARTERS };
+            {null, null, NONE, null, QUARTER, null, HALF, null, THREE_QUARTERS};
 
     public final int rotationCount;
 
@@ -69,6 +69,7 @@ public enum PatternParameterRotation implements IStatementParameter {
 //        return LocaleUtil.localize("buildcraft.param.rotation." + rotationCount);
         return new TranslatableComponent("buildcraft.param.rotation." + rotationCount);
     }
+
     @Override
     public String getDescriptionKey() {
         return "buildcraft.param.rotation." + rotationCount;
@@ -76,7 +77,7 @@ public enum PatternParameterRotation implements IStatementParameter {
 
     @Override
     public PatternParameterRotation onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-        StatementMouseClick mouse) {
+                                            StatementMouseClick mouse) {
         return null;
     }
 

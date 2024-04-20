@@ -15,8 +15,7 @@ import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 
-public enum BCBuildersActionProvider implements IActionProvider
-{
+public enum BCBuildersActionProvider implements IActionProvider {
     INSTANCE;
 
     @Override

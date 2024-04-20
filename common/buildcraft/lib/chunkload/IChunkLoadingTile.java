@@ -14,7 +14,6 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nullable;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,14 +21,12 @@ import java.util.Set;
  * This should be implemented by {@link BlockEntity}'s that wish to be chunkloaded by buildcraft lib. Note that tiles
  * should add themselves to the chunkloading list in {@link ChunkLoaderManager#loadChunksForTile(BlockEntity)}
  */
-public interface IChunkLoadingTile
-{
+public interface IChunkLoadingTile {
     /**
      * @return The chunkloading type, or null if this tile doesn't want to be chunkloaded.
      */
     @Nullable
-    default LoadType getLoadType()
-    {
+    default LoadType getLoadType() {
         return LoadType.SOFT;
     }
 
@@ -43,21 +40,18 @@ public interface IChunkLoadingTile
      * chunkloaded.
      */
     @Nullable
-    default Set<ChunkPos> getChunksToLoad()
-    {
+    default Set<ChunkPos> getChunksToLoad() {
         BlockPos pos = ((BlockEntity) this).getBlockPos();
         Set<ChunkPos> chunkPoses = new HashSet<>(4);
 //        for (EnumFacing face : EnumFacing.HORIZONTALS)
-        for (Direction face : Direction.BY_2D_DATA)
-        {
+        for (Direction face : Direction.BY_2D_DATA) {
 //            chunkPoses.add(new ChunkPos(pos.offset(face)));
             chunkPoses.add(new ChunkPos(pos.relative(face)));
         }
         return chunkPoses;
     }
 
-    public enum LoadType
-    {
+    public enum LoadType {
         /**
          * Softly attempt to chunkload this. If the value of {@link BCLibConfig#chunkLoadingType} is equal to
          * {@link ChunkLoaderLevel#STRICT_TILES} or {@link ChunkLoaderLevel#NONE} then it won't be loaded.

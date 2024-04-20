@@ -4,28 +4,22 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.core.client.render;
 
-import buildcraft.core.client.BuildCraftLaserManager;
 import buildcraft.core.BCCoreConfig;
+import buildcraft.core.client.BuildCraftLaserManager;
 import buildcraft.core.marker.VolumeConnection;
 import buildcraft.core.tile.TileMarkerVolume;
-import buildcraft.lib.client.render.DetachedRenderer;
-import buildcraft.lib.client.render.laser.LaserBoxRenderer;
 import buildcraft.lib.client.render.laser.LaserData_BC8;
 import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import buildcraft.lib.client.render.laser.LaserRenderer_BC8;
 import buildcraft.lib.misc.VecUtil;
-import buildcraft.lib.misc.data.Box;
 import com.google.common.collect.ImmutableSet;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -33,8 +27,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.Set;
 
-public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
-{
+public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume> {
     private static final double SCALE = 1 / 16.2; // smaller than normal lasers
 
 //    public static final RenderMarkerVolume<TileMarkerVolume> INSTANCE = new RenderMarkerVolume(null);
@@ -42,33 +35,28 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
     private static final LaserType LASER_TYPE = BuildCraftLaserManager.MARKER_VOLUME_SIGNAL;
     private static final Vec3 VEC_HALF = new Vec3(0.5, 0.5, 0.5);
 
-    public RenderMarkerVolume(BlockEntityRendererProvider.Context context)
-    {
+    public RenderMarkerVolume(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public boolean isGlobalRenderer(TileMarkerVolume te)
-    public boolean shouldRenderOffScreen(TileMarkerVolume te)
-    {
+    public boolean shouldRenderOffScreen(TileMarkerVolume te) {
         return true;
     }
 
     // Calen: default 64
     @Override
-    public int getViewDistance()
-    {
+    public int getViewDistance() {
         // Calen: as beacon and endGateway
         return BCCoreConfig.markerMaxDistance * 2;
     }
 
     @Override
 //    public void render(TileMarkerVolume marker, double tileX, double tileY, double tileZ, float partialTicks, int destroyStage, float alpha)
-    public void render(TileMarkerVolume marker, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileMarkerVolume marker, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         // Calen: in 1.12.2 this never called
         // rendered at VolumeConnection#renderInWorld
-        if (marker == null || !marker.isShowingSignals())
-        {
+        if (marker == null || !marker.isShowingSignals()) {
             return;
         }
 
@@ -94,10 +82,8 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
         Vec3 start = VecUtil.add(VEC_HALF, from);
         poseStack.pushPose();
         poseStack.translate(-from.getX(), -from.getY(), -from.getZ());
-        for (Direction face : Direction.values())
-        {
-            if (taken.contains(face.getAxis()))
-            {
+        for (Direction face : Direction.values()) {
+            if (taken.contains(face.getAxis())) {
                 continue;
             }
             Vec3 end = VecUtil.offset(start, face, BCCoreConfig.markerMaxDistance);
@@ -113,8 +99,7 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
         Minecraft.getInstance().getProfiler().pop();
     }
 
-    private static void renderLaser(Vec3 min, Vec3 max, Axis axis, PoseStack poseStack, VertexConsumer buffer)
-    {
+    private static void renderLaser(Vec3 min, Vec3 max, Axis axis, PoseStack poseStack, VertexConsumer buffer) {
         Direction faceForMin = VecUtil.getFacing(axis, true);
         Direction faceForMax = VecUtil.getFacing(axis, false);
         Vec3 one = offset(min, faceForMin);
@@ -124,31 +109,19 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
         LaserRenderer_BC8.renderLaserDynamic(data, poseStack.last(), buffer);
     }
 
-    private static Vec3 offset(Vec3 vec, Direction face)
-    {
+    private static Vec3 offset(Vec3 vec, Direction face) {
         double by = 1 / 16.0;
-        if (face == Direction.DOWN)
-        {
+        if (face == Direction.DOWN) {
             return vec.add(0, -by, 0);
-        }
-        else if (face == Direction.UP)
-        {
+        } else if (face == Direction.UP) {
             return vec.add(0, by, 0);
-        }
-        else if (face == Direction.EAST)
-        {
+        } else if (face == Direction.EAST) {
             return vec.add(by, 0, 0);
-        }
-        else if (face == Direction.WEST)
-        {
+        } else if (face == Direction.WEST) {
             return vec.add(-by, 0, 0);
-        }
-        else if (face == Direction.SOUTH)
-        {
+        } else if (face == Direction.SOUTH) {
             return vec.add(0, 0, by);
-        }
-        else
-        {// North
+        } else {// North
             return vec.add(0, 0, -by);
         }
     }

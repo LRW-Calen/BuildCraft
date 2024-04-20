@@ -18,36 +18,20 @@
 
 package buildcraft.energy.generation.structure;
 
-import buildcraft.energy.generation.BCWorldGenNames;
 import com.mojang.serialization.Codec;
-import net.minecraft.core.*;
-import net.minecraft.data.worldgen.features.FeatureUtils;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.QuartPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.LegacyRandomSource;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
-import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
-import net.minecraft.world.level.levelgen.placement.*;
-import net.minecraft.world.level.levelgen.structure.StructureSet;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-
-import java.util.List;
 
 //public class OilGenStructureFeature extends StructureFeature<NoneFeatureConfiguration>
-public class OilGenStructureFeature extends StructureFeature<OilFeatureConfiguration>
-{
+public class OilGenStructureFeature extends StructureFeature<OilFeatureConfiguration> {
     //    public OilGenStructureFeature(Codec<NoneFeatureConfiguration> configCodec)
-    public OilGenStructureFeature(Codec<OilFeatureConfiguration> configCodec)
-    {
+    public OilGenStructureFeature(Codec<OilFeatureConfiguration> configCodec) {
         super(configCodec,
                 PieceGeneratorSupplier.simple(
                         OilGenStructureFeature::checkLocation,
@@ -57,10 +41,8 @@ public class OilGenStructureFeature extends StructureFeature<OilFeatureConfigura
     }
 
     //    public static boolean checkLocation(PieceGeneratorSupplier.Context<NoneFeatureConfiguration> context)
-    public static boolean checkLocation(PieceGeneratorSupplier.Context<OilFeatureConfiguration> context)
-    {
-        if (!context.validBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG))
-        {
+    public static boolean checkLocation(PieceGeneratorSupplier.Context<OilFeatureConfiguration> context) {
+        if (!context.validBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG)) {
             return false;
         }
         int minHeight = context.heightAccessor().getMinBuildHeight();
@@ -88,8 +70,7 @@ public class OilGenStructureFeature extends StructureFeature<OilFeatureConfigura
                 QuartPos.fromBlock(zForGen)
         ).value();
         OilStructureGenerator.GenType type = OilStructureGenerator.getPieceTypeByRand(rand, biome, cx, cz, xForGen, zForGen, true);
-        if (type == OilStructureGenerator.GenType.NONE)
-        {
+        if (type == OilStructureGenerator.GenType.NONE) {
             return false;
         }
         context.config().add(context.chunkPos(), new OilFeatureConfiguration.Info(type, rand, xForGen, zForGen));

@@ -7,7 +7,6 @@
 package buildcraft.lib.gui;
 
 import buildcraft.lib.misc.RenderUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.ItemStack;

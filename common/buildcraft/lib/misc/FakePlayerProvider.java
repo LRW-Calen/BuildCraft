@@ -6,8 +6,8 @@
 
 package buildcraft.lib.misc;
 
-import buildcraft.api.core.IFakePlayerProvider;
 import buildcraft.api.core.BCLog;
+import buildcraft.api.core.IFakePlayerProvider;
 import buildcraft.lib.fake.FakePlayerBC;
 import com.mojang.authlib.GameProfile;
 import net.minecraft.core.BlockPos;
@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public enum FakePlayerProvider implements IFakePlayerProvider
-{
+public enum FakePlayerProvider implements IFakePlayerProvider {
     INSTANCE;
 
     /** The default {@link GameProfile} to use if a tile entity cannot determine its real owner. Most of the time this
@@ -55,7 +54,7 @@ public enum FakePlayerProvider implements IFakePlayerProvider
         }
         FakePlayerBC player = players.computeIfAbsent(profile, p -> new FakePlayerBC(world, p));
         player.level = world;
-        player.setPos(pos.getX(),pos.getY(),pos.getZ());
+        player.setPos(pos.getX(), pos.getY(), pos.getZ());
         return player;
     }
 

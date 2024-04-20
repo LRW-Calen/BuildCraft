@@ -6,8 +6,8 @@
 
 package buildcraft.transport.stripes;
 
-import buildcraft.api.core.BuildCraftAPI;
 import buildcraft.api.core.BCLog;
+import buildcraft.api.core.BuildCraftAPI;
 import buildcraft.api.transport.IStripesActivator;
 import buildcraft.api.transport.IWireManager;
 import buildcraft.api.transport.pipe.*;
@@ -45,90 +45,71 @@ import net.minecraftforge.fml.LogicalSide;
 
 import java.util.*;
 
-public enum PipeExtensionManager implements IPipeExtensionManager
-{
+public enum PipeExtensionManager implements IPipeExtensionManager {
     INSTANCE;
 
-//    private final Int2ObjectOpenHashMap<List<PipeExtensionRequest>> requests = new Int2ObjectOpenHashMap<>();
-    private final HashMap<String,List<PipeExtensionRequest>> requests = new HashMap<>();
+    //    private final Int2ObjectOpenHashMap<List<PipeExtensionRequest>> requests = new Int2ObjectOpenHashMap<>();
+    private final HashMap<String, List<PipeExtensionRequest>> requests = new HashMap<>();
     private final Set<PipeDefinition> retractionPipeDefs = new HashSet<>();
 
     @Override
-    public boolean requestPipeExtension(Level world, BlockPos pos, Direction dir, IStripesActivator stripes, ItemStack stack)
-    {
-        if (world.isClientSide || stack.isEmpty() || !(stack.getItem() instanceof IItemPipe))
-        {
+    public boolean requestPipeExtension(Level world, BlockPos pos, Direction dir, IStripesActivator stripes, ItemStack stack) {
+        if (world.isClientSide || stack.isEmpty() || !(stack.getItem() instanceof IItemPipe)) {
             return false;
         }
 
 //        int id = world.provider.getDimension();
         String id = world.dimension().getRegistryName().toString();
         List<PipeExtensionRequest> rList = requests.get(id);
-        if (rList == null)
-        {
+        if (rList == null) {
             requests.put(id, rList = new ArrayList<>());
         }
         return rList.add(new PipeExtensionRequest(pos, dir, stripes, ((IItemPipe) stack.getItem()).getDefinition(), stack.copy()));
     }
 
     @Override
-    public void registerRetractionPipe(PipeDefinition pipeDefinition)
-    {
-        if (pipeDefinition != null)
-        {
+    public void registerRetractionPipe(PipeDefinition pipeDefinition) {
+        if (pipeDefinition != null) {
             retractionPipeDefs.add(pipeDefinition);
         }
     }
 
     @SubscribeEvent
-    public void tick(TickEvent.WorldTickEvent event)
-    {
+    public void tick(TickEvent.WorldTickEvent event) {
 //        if (event.phase != TickEvent.Phase.END || event.side != Dist.DEDICATED_SERVER)
-        if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.SERVER)
-        {
+        if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.SERVER) {
             return;
         }
 //        List<PipeExtensionRequest> rList = requests.get(event.world.provider.getDimension());
         List<PipeExtensionRequest> rList = requests.get(event.world.dimension().getRegistryName().toString());
-        if (rList == null)
-        {
+        if (rList == null) {
             return;
         }
-        for (PipeExtensionRequest r : rList)
-        {
-            if (retractionPipeDefs.contains(r.pipeDef))
-            {
+        for (PipeExtensionRequest r : rList) {
+            if (retractionPipeDefs.contains(r.pipeDef)) {
                 retract(event.world, r);
-            }
-            else
-            {
+            } else {
                 extend(event.world, r);
             }
         }
         rList.clear();
     }
 
-    private void retract(Level w, PipeExtensionRequest r)
-    {
+    private void retract(Level w, PipeExtensionRequest r) {
         Direction retractDir = r.dir.getOpposite();
-        if (!isValidRetractionPath(w, r, retractDir))
-        {
+        if (!isValidRetractionPath(w, r, retractDir)) {
 
             // check other directions
             List<Direction> possible = new ArrayList<>();
-            for (Direction facing : Direction.values())
-            {
-                if (facing.getAxis() != r.dir.getAxis())
-                {
-                    if (isValidRetractionPath(w, r, facing))
-                    {
+            for (Direction facing : Direction.values()) {
+                if (facing.getAxis() != r.dir.getAxis()) {
+                    if (isValidRetractionPath(w, r, facing)) {
                         possible.add(facing);
                     }
                 }
             }
 
-            if (possible.isEmpty())
-            {
+            if (possible.isEmpty()) {
                 r.stripes.sendItem(r.stack.copy(), r.dir);
                 return;
             }
@@ -150,16 +131,14 @@ public enum PipeExtensionManager implements IPipeExtensionManager
         // Fetch owner
         {
             IPipeHolder holder = CapabilityHelper.getCapability(stripesTileOld, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
-            if (stripesTileOld == null || holder == null)
-            {
+            if (stripesTileOld == null || holder == null) {
                 BCLog.logger
                         .warn("Found an invalid request at " + r.pos + " as " + stripesTileOld + " was not a pipe tile!");
                 return;
             }
             owner = holder.getOwner();
             PipeBehaviour behaviour = holder.getPipe().getBehaviour();
-            if (behaviour instanceof PipeBehaviourStripes)
-            {
+            if (behaviour instanceof PipeBehaviourStripes) {
                 ((PipeBehaviourStripes) behaviour).direction = retractDir.getOpposite();
             }
         }
@@ -173,19 +152,16 @@ public enum PipeExtensionManager implements IPipeExtensionManager
         BlockSnapshot blockSnapshot2 = BlockSnapshot.create(w.dimension(), w, p);
         NonNullList<ItemStack> list = NonNullList.create();
         boolean canceled = !BlockUtil.breakBlock((ServerLevel) w, p, list, r.pos, owner);
-        if (canceled)
-        {
+        if (canceled) {
             blockSnapshot2.restore(true);
             BlockEntity tile = w.getBlockEntity(p);
-            if (tile != null)
-            {
+            if (tile != null) {
                 tile.onLoad();
             }
         }
 
         // Step 3: Place stripes pipe back and remove old one
-        if (!canceled)
-        {
+        if (!canceled) {
             // - Correct NBT coordinates
             stripesNBTOld.putInt("x", p.getX());
             stripesNBTOld.putInt("y", p.getY());
@@ -198,45 +174,34 @@ public enum PipeExtensionManager implements IPipeExtensionManager
 //            BlockEvent.PlaceEvent placeEvent = ForgeEventFactory.onPlayerBlockPlace(player, blockSnapshot2, r.dir, InteractionHand.MAIN_HAND);
             boolean onBlockPlaceCanceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
 //            if (canceled = placeEvent.isCanceled())
-            if (onBlockPlaceCanceled)
-            {
+            if (onBlockPlaceCanceled) {
                 blockSnapshot2.restore(true);
                 BlockEntity tile = w.getBlockEntity(r.pos);
-                if (tile != null)
-                {
+                if (tile != null) {
                     tile.onLoad();
                 }
-            }
-            else
-            {
+            } else {
                 SoundUtil.playBlockBreak(w, p, blockSnapshot2.getReplacedBlock());
 
                 canceled = !BlockUtil.breakBlock((ServerLevel) w, r.pos, NonNullList.create(), r.pos, owner);
-                if (canceled)
-                {
+                if (canceled) {
                     blockSnapshot1.restore(true);
                     BlockEntity tile1 = w.getBlockEntity(r.pos);
-                    if (tile1 != null)
-                    {
+                    if (tile1 != null) {
                         tile1.onLoad();
                     }
 
                     blockSnapshot2.restore(true);
                     BlockEntity tile2 = w.getBlockEntity(p);
-                    if (tile2 != null)
-                    {
+                    if (tile2 != null) {
                         tile2.onLoad();
                     }
-                }
-                else
-                {
+                } else {
                     stacksToSendBack.addAll(list);
-                    for (int i = 0; i < player.getInventory().getContainerSize(); i++)
-                    {
+                    for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
 //                        ItemStack stack = player.getInventory().removeStackFromSlot(i);
                         ItemStack stack = player.getInventory().removeItem(i, player.getInventory().getItem(i).getCount());
-                        if (!stack.isEmpty())
-                        {
+                        if (!stack.isEmpty()) {
                             stacksToSendBack.add(stack);
                         }
                     }
@@ -248,8 +213,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager
         cleanup(w, r, p, stacksToSendBack, canceled, stripesNBTOld);
     }
 
-    private void extend(Level w, PipeExtensionRequest r)
-    {
+    private void extend(Level w, PipeExtensionRequest r) {
         BlockPos p = r.pos.relative(r.dir);
 //        if (!w.isAirBlock(p) && !w.getBlockState(p).getBlock().isReplaceable(w, p))
         if (!w.isEmptyBlock(p) && !w.getBlockState(p).getBlock().canBeReplaced(
@@ -259,7 +223,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager
                         null,
                         InteractionHand.MAIN_HAND,
                         StackUtil.EMPTY,
-                        BlockHitResult.miss(Vec3.ZERO,r.dir,p)
+                        BlockHitResult.miss(Vec3.ZERO, r.dir, p)
                 )
         )
         )
@@ -278,8 +242,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager
         // Fetch owner
         {
             IPipeHolder holder = CapabilityHelper.getCapability(stripesTileOld, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
-            if (stripesTileOld == null || holder == null)
-            {
+            if (stripesTileOld == null || holder == null) {
                 BCLog.logger.warn("Found an invalid request at " + r.pos + " as " + stripesTileOld + " was not a pipe tile!");
                 return;
             }
@@ -291,14 +254,12 @@ public enum PipeExtensionManager implements IPipeExtensionManager
 //        BlockSnapshot blockSnapshot1 = BlockSnapshot.getBlockSnapshot(w, r.pos);
         BlockSnapshot blockSnapshot1 = BlockSnapshot.create(w.dimension(), w, r.pos);
         boolean canceled = !BlockUtil.breakBlock((ServerLevel) w, r.pos, NonNullList.create(), r.pos, owner);
-        if (canceled)
-        {
+        if (canceled) {
             stacksToSendBack.add(r.stack);
 
             blockSnapshot1.restore(true);
             BlockEntity tile = w.getBlockEntity(r.pos);
-            if (tile != null)
-            {
+            if (tile != null) {
                 tile.onLoad();
             }
         }
@@ -306,8 +267,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager
         NonNullList<ItemStack> list = NonNullList.create();
 
         // Step 2: Add new pipe
-        if (!canceled)
-        {
+        if (!canceled) {
             FakePlayer player = BuildCraftAPI.fakePlayerProvider.getFakePlayer((ServerLevel) w, owner, r.pos);
             player.getInventory().clearContent();
             player.getInventory().setItem(player.getInventory().selected, r.stack);
@@ -325,29 +285,24 @@ public enum PipeExtensionManager implements IPipeExtensionManager
                             )
                     )
             );
-            for (int i = 0; i < player.getInventory().getContainerSize(); i++)
-            {
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
 //                ItemStack stack = player.inventory.removeStackFromSlot(i);
                 ItemStack stack = player.getInventory().removeItem(i, player.getInventory().getItem(i).getCount());
-                if (!stack.isEmpty())
-                {
+                if (!stack.isEmpty()) {
                     list.add(stack);
                 }
             }
-            if (canceled = result != InteractionResult.SUCCESS)
-            {
+            if (canceled = result != InteractionResult.SUCCESS) {
                 blockSnapshot1.restore(true);
                 BlockEntity tile = w.getBlockEntity(r.pos);
-                if (tile != null)
-                {
+                if (tile != null) {
                     tile.onLoad();
                 }
             }
         }
 
         // Step 3: Place stripes pipe back
-        if (!canceled)
-        {
+        if (!canceled) {
             // - Correct NBT coordinates
             stripesNBTOld.putInt("x", p.getX());
             stripesNBTOld.putInt("y", p.getY());
@@ -362,26 +317,20 @@ public enum PipeExtensionManager implements IPipeExtensionManager
             w.setBlock(p, stripesStateOld, 3);
 //            BlockEvent.PlaceEvent placeEvent = ForgeEventFactory.onPlayerBlockPlace(player, blockSnapshot2, r.dir.getOpposite(), InteractionHand.MAIN_HAND);
             boolean onBlockPlaceCanceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
-            if (onBlockPlaceCanceled)
-            {
+            if (onBlockPlaceCanceled) {
                 stacksToSendBack.add(r.stack);
 
                 blockSnapshot1.restore(true);
                 BlockEntity tile = w.getBlockEntity(r.pos);
-                if (tile != null)
-                {
+                if (tile != null) {
                     tile.onLoad();
                 }
 
                 blockSnapshot2.restore(true);
-            }
-            else
-            {
+            } else {
                 stacksToSendBack.addAll(list);
             }
-        }
-        else
-        {
+        } else {
             stacksToSendBack.addAll(list);
         }
 
@@ -389,81 +338,61 @@ public enum PipeExtensionManager implements IPipeExtensionManager
         cleanup(w, r, p, stacksToSendBack, canceled, stripesNBTOld);
     }
 
-    private void cleanup(Level w, PipeExtensionRequest r, BlockPos p, NonNullList<ItemStack> stacksToSendBack, boolean canceled, CompoundTag stripesNBTOld)
-    {
+    private void cleanup(Level w, PipeExtensionRequest r, BlockPos p, NonNullList<ItemStack> stacksToSendBack, boolean canceled, CompoundTag stripesNBTOld) {
         BlockEntity stripesTileNew = w.getBlockEntity(canceled ? r.pos : p);
-        if (stripesTileNew == null)
-        {
+        if (stripesTileNew == null) {
             // Odd.
             // Maybe it would be better to crash?
             InventoryUtil.dropAll(w, p, stacksToSendBack);
             return;
         }
-        if (!canceled)
-        {
+        if (!canceled) {
             stripesTileNew.load(stripesNBTOld);
             stripesTileNew.onLoad();
         }
 
         IPipeHolder stripesPipeHolderNew = CapabilityHelper.getCapability(stripesTileNew, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
-        if (stripesPipeHolderNew != null)
-        {
-            if (!canceled)
-            {
+        if (stripesPipeHolderNew != null) {
+            if (!canceled) {
                 IWireManager wireManager = stripesPipeHolderNew.getWireManager();
-                if (wireManager instanceof WireManager)
-                {
+                if (wireManager instanceof WireManager) {
                     ((WireManager) wireManager).getWireSystems().rebuildWireSystemsAround(stripesPipeHolderNew);
                 }
             }
 
             PipeBehaviour behaviour = stripesPipeHolderNew.getPipe().getBehaviour();
-            if (behaviour instanceof IStripesActivator)
-            {
+            if (behaviour instanceof IStripesActivator) {
                 IStripesActivator stripesNew = (IStripesActivator) behaviour;
-                for (ItemStack s : stacksToSendBack)
-                {
+                for (ItemStack s : stacksToSendBack) {
                     s = s.copy();
-                    if (!stripesNew.sendItem(s, r.dir))
-                    {
+                    if (!stripesNew.sendItem(s, r.dir)) {
                         stripesNew.dropItem(s, r.dir);
                     }
                 }
-            }
-            else
-            {
+            } else {
                 InventoryUtil.dropAll(w, p, stacksToSendBack);
             }
-        }
-        else
-        {
+        } else {
             InventoryUtil.dropAll(w, p, stacksToSendBack);
         }
     }
 
-    private boolean isValidRetractionPath(Level w, PipeExtensionRequest r, Direction retractDir)
-    {
+    private boolean isValidRetractionPath(Level w, PipeExtensionRequest r, Direction retractDir) {
         BlockEntity tile = w.getBlockEntity(r.pos.relative(retractDir));
         IPipe pipe = CapabilityHelper.getCapability(tile, PipeApi.CAP_PIPE, null).orElse(null);
-        if (pipe != null)
-        {
+        if (pipe != null) {
             boolean connected = false;
-            for (Direction facing : Direction.values())
-            {
-                if (pipe.getConnectedType(facing) == IPipe.ConnectedType.TILE)
-                {
+            for (Direction facing : Direction.values()) {
+                if (pipe.getConnectedType(facing) == IPipe.ConnectedType.TILE) {
                     return false;
                 }
-                if (facing == retractDir.getOpposite() && pipe.getConnectedType(facing) != IPipe.ConnectedType.PIPE)
-                {
+                if (facing == retractDir.getOpposite() && pipe.getConnectedType(facing) != IPipe.ConnectedType.PIPE) {
                     return false;
                 }
-                if (facing != retractDir.getOpposite() && connected && pipe.getConnectedType(facing) != null)
-                {
+                if (facing != retractDir.getOpposite() && connected && pipe.getConnectedType(facing) != null) {
                     return false;
                 }
-                if (facing != retractDir.getOpposite() && !connected && pipe.getConnectedType(facing) != null)
-                {
+                if (facing != retractDir.getOpposite() && !connected && pipe.getConnectedType(facing) != null) {
                     connected = true;
                 }
 
@@ -473,16 +402,14 @@ public enum PipeExtensionManager implements IPipeExtensionManager
         return false;
     }
 
-    private class PipeExtensionRequest
-    {
+    private class PipeExtensionRequest {
         public final BlockPos pos;
         public final Direction dir;
         public final IStripesActivator stripes;
         public final PipeDefinition pipeDef;
         public final ItemStack stack;
 
-        private PipeExtensionRequest(BlockPos pos, Direction dir, IStripesActivator stripes, PipeDefinition pipeDef, ItemStack stack)
-        {
+        private PipeExtensionRequest(BlockPos pos, Direction dir, IStripesActivator stripes, PipeDefinition pipeDef, ItemStack stack) {
             this.pos = pos;
             this.dir = dir;
             this.stripes = stripes;

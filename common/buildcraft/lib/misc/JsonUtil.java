@@ -25,9 +25,9 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.util.JsonUtils;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,59 +41,46 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.StreamSupport;
 
-public class JsonUtil
-{
+public class JsonUtil {
 
     public static final JsonDeserializer<FluidStack> FLUID_STACK_DESERIALIZER = (json, type, ctx) ->
     {
-        if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())
-        {
+        if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
             String name = json.getAsString();
             ResourceLocation fluidName = new ResourceLocation(name); // Calen
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName); // Calen
-            if (fluid == null)
-            {
+            if (fluid == null) {
                 throw failAndListFluids(name);
-            }
-            else
-            {
+            } else {
                 return new FluidStack(fluid, 1);
             }
-        }
-        else if (json.isJsonObject())
-        {
+        } else if (json.isJsonObject()) {
             JsonObject obj = json.getAsJsonObject();
 //            String id = JsonUtils.getString(obj, "id");
             String id = GsonHelper.getAsString(obj, "id");
             ResourceLocation fluidName = new ResourceLocation(id);
             Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidName);
             ;
-            if (fluid == null)
-            {
+            if (fluid == null) {
                 throw failAndListFluids(id);
             }
             int amount = 1;
-            if (obj.has("amount"))
-            {
+            if (obj.has("amount")) {
 //                amount = JsonUtils.getInt(obj, "amount");
                 amount = GsonHelper.getAsInt(obj, "amount");
             }
             // TODO: NBT
             return new FluidStack(fluid, amount);
-        }
-        else
-        {
+        } else {
             throw new JsonSyntaxException("Expected either a string or an object, got " + json);
         }
     };
 
-    private static JsonSyntaxException failAndListFluids(String name)
-    {
+    private static JsonSyntaxException failAndListFluids(String name) {
         Set<Entry<ResourceKey<Fluid>, Fluid>> knownFluids = ForgeRegistries.FLUIDS.getEntries();
         String msg = "Unknown fluid '" + name + "'.";
         msg += "\nKnown types:";
-        for (Entry<ResourceKey<Fluid>, Fluid> known : new TreeSet<>(knownFluids))
-        {
+        for (Entry<ResourceKey<Fluid>, Fluid> known : new TreeSet<>(knownFluids)) {
             msg += "\n   " + known;
         }
         throw new JsonSyntaxException(msg);
@@ -101,42 +88,31 @@ public class JsonUtil
 
     public static final JsonDeserializer<ItemStack> ITEM_STACK_DESERIALIZER = (json, type, ctx) ->
     {
-        if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())
-        {
+        if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
             String name = json.getAsString();
             ResourceLocation id = new ResourceLocation(name);
-            if (!ForgeRegistries.ITEMS.containsKey(id))
-            {
+            if (!ForgeRegistries.ITEMS.containsKey(id)) {
                 throw new JsonSyntaxException("Unknown item '" + name + "'");
-            }
-            else
-            {
+            } else {
                 return new ItemStack(ForgeRegistries.ITEMS.getValue(id));
             }
-        }
-        else if (json.isJsonObject())
-        {
+        } else if (json.isJsonObject()) {
             JsonObject obj = json.getAsJsonObject();
 //            String id = JsonUtils.getString(obj, "id");
             String id = GsonHelper.getAsString(obj, "id");
             ResourceLocation loc = new ResourceLocation(id);
-            if (!ForgeRegistries.ITEMS.containsKey(loc))
-            {
+            if (!ForgeRegistries.ITEMS.containsKey(loc)) {
                 throw new JsonSyntaxException("Unknown item '" + id + "'");
             }
             Item item = ForgeRegistries.ITEMS.getValue(loc);
             int count = 1;
-            if (obj.has("count"))
-            {
+            if (obj.has("count")) {
                 count = JsonUtil.getInt(obj, "count");
             }
             int meta = 0;
-            if (obj.has("data"))
-            {
+            if (obj.has("data")) {
                 meta = JsonUtil.getInt(obj, "data");
-            }
-            else if (obj.has("meta"))
-            {
+            } else if (obj.has("meta")) {
 //                BCLog.logger.warn("[lib.recipe] Found deprecated item 'meta' tag inside of " + json);
                 BCLog.logger.error("[lib.recipe] Found deprecated item 'meta' tag inside of " + json);
                 meta = JsonUtil.getInt(obj, "meta");
@@ -144,137 +120,103 @@ public class JsonUtil
             // TODO: NBT!
 //            return new ItemStack(item, count, meta);
             return new ItemStack(item, count);
-        }
-        else
-        {
+        } else {
             throw new JsonSyntaxException("Expected either a string or an object, got " + json);
         }
     };
 
     public static <K, V> ImmutableMap<K, V> getSubAsImmutableMap(JsonObject obj, String sub,
-                                                                 TypeToken<HashMap<K, V>> token)
-    {
-        if (!obj.has(sub))
-        {
+                                                                 TypeToken<HashMap<K, V>> token) {
+        if (!obj.has(sub)) {
             return ImmutableMap.of();
         }
-        try
-        {
+        try {
             JsonElement elem = obj.get(sub);
             HashMap<K, V> map = new Gson().fromJson(elem, token.getType());
             return ImmutableMap.copyOf(map);
 
         }
-        catch (IllegalStateException ise)
-        {
+        catch (IllegalStateException ise) {
             throw new JsonSyntaxException("Something was wrong with " + obj + " when deserializing it as a " + token,
                     ise);
         }
     }
 
     public static <T> ImmutableList<T> getSubAsImmutableList(JsonObject obj, String sub,
-                                                             TypeToken<ArrayList<T>> token)
-    {
-        if (!obj.has(sub))
-        {
+                                                             TypeToken<ArrayList<T>> token) {
+        if (!obj.has(sub)) {
             return ImmutableList.of();
         }
-        try
-        {
+        try {
             JsonElement elem = obj.get(sub);
             ArrayList<T> list = new Gson().fromJson(elem, token.getType());
             return ImmutableList.copyOf(list);
         }
-        catch (IllegalStateException ise)
-        {
+        catch (IllegalStateException ise) {
             throw new JsonSyntaxException("Something was wrong with " + obj + " when deserializing it as a " + token,
                     ise);
         }
     }
 
-    public static float getAsFloat(JsonElement element)
-    {
-        if (!element.isJsonPrimitive())
-        {
+    public static float getAsFloat(JsonElement element) {
+        if (!element.isJsonPrimitive()) {
             throw new JsonSyntaxException("Needed a primitive, but got " + element);
         }
         JsonPrimitive prim = element.getAsJsonPrimitive();
-        try
-        {
+        try {
             return prim.getAsFloat();
         }
-        catch (NumberFormatException nfe)
-        {
+        catch (NumberFormatException nfe) {
             throw new JsonSyntaxException("Expected a valid float, but got " + prim, nfe);
         }
     }
 
-    public static float[] getAsFloatArray(JsonElement elem)
-    {
-        if (elem.isJsonArray())
-        {
+    public static float[] getAsFloatArray(JsonElement elem) {
+        if (elem.isJsonArray()) {
             JsonArray array = elem.getAsJsonArray();
             float[] floats = new float[array.size()];
-            for (int i = 0; i < floats.length; i++)
-            {
+            for (int i = 0; i < floats.length; i++) {
                 floats[i] = getAsFloat(array.get(i));
             }
             return floats;
-        }
-        else if (elem.isJsonPrimitive())
-        {
+        } else if (elem.isJsonPrimitive()) {
             return new float[]{getAsFloat(elem)};
-        }
-        else
-        {
+        } else {
             throw new JsonSyntaxException("Needed an array of floats or a single float but got " + elem);
         }
     }
 
-    public static float[] getSubAsFloatArray(JsonObject obj, String string)
-    {
-        if (!obj.has(string))
-        {
+    public static float[] getSubAsFloatArray(JsonObject obj, String string) {
+        if (!obj.has(string)) {
             throw new JsonSyntaxException("Required member " + string + " in " + obj);
         }
         return getAsFloatArray(obj.get(string));
     }
 
-    public static String getAsString(JsonElement element)
-    {
-        if (!element.isJsonPrimitive())
-        {
+    public static String getAsString(JsonElement element) {
+        if (!element.isJsonPrimitive()) {
             throw new JsonSyntaxException("Needed a primitive, but got " + element);
         }
         return element.getAsString();
     }
 
-    public static String[] getAsStringArray(JsonElement elem)
-    {
-        if (elem.isJsonArray())
-        {
+    public static String[] getAsStringArray(JsonElement elem) {
+        if (elem.isJsonArray()) {
             JsonArray array = elem.getAsJsonArray();
             String[] strings = new String[array.size()];
-            for (int i = 0; i < strings.length; i++)
-            {
+            for (int i = 0; i < strings.length; i++) {
                 strings[i] = getAsString(array.get(i));
             }
             return strings;
-        }
-        else if (elem.isJsonPrimitive())
-        {
+        } else if (elem.isJsonPrimitive()) {
             return new String[]{getAsString(elem)};
-        }
-        else
-        {
+        } else {
             throw new JsonSyntaxException("Needed an array of strings or a single string but got " + elem);
         }
     }
 
-    public static String[] getSubAsStringArray(JsonObject obj, String string)
-    {
-        if (!obj.has(string))
-        {
+    public static String[] getSubAsStringArray(JsonObject obj, String string) {
+        if (!obj.has(string)) {
             throw new JsonSyntaxException("Required member " + string + " in " + obj);
         }
         return getAsStringArray(obj.get(string));
@@ -284,56 +226,42 @@ public class JsonUtil
      * Tries to get a translatable text component from the json as a string. This will either get the prefix directly
      * for a {@link TranslatableComponent}, or the prefix plus "_raw" for a raw {@link TextComponent}.
      */
-    public static MutableComponent getTextComponent(JsonObject json, String subPrefix, String localePrefix)
-    {
-        if (json.has(subPrefix))
-        {
+    public static MutableComponent getTextComponent(JsonObject json, String subPrefix, String localePrefix) {
+        if (json.has(subPrefix)) {
 //            String str = JsonUtils.getString(json, subPrefix);
             String str = GsonHelper.getAsString(json, subPrefix);
             Object[] args;
-            if (json.has(subPrefix + "_args"))
-            {
+            if (json.has(subPrefix + "_args")) {
                 args = getSubAsStringArray(json, subPrefix + "_args");
-            }
-            else
-            {
+            } else {
                 args = new String[0];
             }
             return new TranslatableComponent(localePrefix + str, args);
-        }
-        else if (json.has(subPrefix + "_raw"))
-        {
+        } else if (json.has(subPrefix + "_raw")) {
 //            return new TextComponent(JsonUtils.getString(json, subPrefix + "_raw"));
             return new TextComponent(GsonHelper.getAsString(json, subPrefix + "_raw"));
-        }
-        else
-        {
+        } else {
             throw new JsonSyntaxException(
                     "Expected to find either '" + subPrefix + "' or '" + subPrefix + "_raw', but got neither for " + json);
         }
     }
 
-    public static ResourceLocation getIdentifier(JsonObject obj, String sub)
-    {
+    public static ResourceLocation getIdentifier(JsonObject obj, String sub) {
         ResourceLocation ident = getIdentifier(obj, sub, null);
-        if (ident == null)
-        {
+        if (ident == null) {
             throw new JsonSyntaxException("Expected to find '" + sub + "' as a string, but found nothing!");
         }
         return ident;
     }
 
-    public static ResourceLocation getIdentifier(JsonObject obj, String sub, ResourceLocation _default)
-    {
-        if (!obj.has(sub))
-        {
+    public static ResourceLocation getIdentifier(JsonObject obj, String sub, ResourceLocation _default) {
+        if (!obj.has(sub)) {
             return _default;
         }
 //        String str = JsonUtils.getString(obj, sub).toLowerCase(Locale.ROOT);
         String str = GsonHelper.getAsString(obj, sub).toLowerCase(Locale.ROOT);
         int index = str.indexOf(':');
-        if (index < 0)
-        {
+        if (index < 0) {
             throw new JsonSyntaxException("Expected 'domain:path', but didn't find a colon!");
         }
         String domain = str.substring(0, index);
@@ -341,120 +269,90 @@ public class JsonUtil
         return new ResourceLocation(domain, path);
     }
 
-    public static int getInt(JsonObject obj, String string)
-    {
-        if (obj.has(string))
-        {
+    public static int getInt(JsonObject obj, String string) {
+        if (obj.has(string)) {
             return getAsInt(obj.get(string));
         }
         throw new JsonSyntaxException("Expected a value for '" + string + "', but found nothing!");
     }
 
-    public static int getAsInt(JsonElement element)
-    {
-        if (!element.isJsonPrimitive())
-        {
+    public static int getAsInt(JsonElement element) {
+        if (!element.isJsonPrimitive()) {
             throw new JsonSyntaxException("Needed a primitive, but got " + element);
         }
         JsonPrimitive prim = element.getAsJsonPrimitive();
-        if (prim.isNumber())
-        {
+        if (prim.isNumber()) {
             return prim.getAsInt();
         }
-        if (prim.isString())
-        {
-            try
-            {
+        if (prim.isString()) {
+            try {
                 INodeLong exp = GenericExpressionCompiler.compileExpressionLong(prim.getAsString());
                 return (int) exp.evaluate();
             }
-            catch (InvalidExpressionException iee)
-            {
+            catch (InvalidExpressionException iee) {
                 throw new JsonSyntaxException("Expected an int or an expression, but got '" + prim + "'", iee);
             }
         }
         throw new JsonSyntaxException("Needed a primitive, but got " + element);
     }
 
-    public static int[] getAsIntArray(JsonElement elem)
-    {
-        if (elem.isJsonArray())
-        {
+    public static int[] getAsIntArray(JsonElement elem) {
+        if (elem.isJsonArray()) {
             JsonArray array = elem.getAsJsonArray();
             int[] strings = new int[array.size()];
-            for (int i = 0; i < strings.length; i++)
-            {
+            for (int i = 0; i < strings.length; i++) {
                 strings[i] = getAsInt(array.get(i));
             }
             return strings;
-        }
-        else if (elem.isJsonPrimitive())
-        {
+        } else if (elem.isJsonPrimitive()) {
             return new int[]{getAsInt(elem)};
-        }
-        else
-        {
+        } else {
             throw new JsonSyntaxException("Needed an array of ints or a single int but got " + elem);
         }
     }
 
-    public static int[] getSubAsIntArray(JsonObject obj, String string)
-    {
-        if (!obj.has(string))
-        {
+    public static int[] getSubAsIntArray(JsonObject obj, String string) {
+        if (!obj.has(string)) {
             throw new JsonSyntaxException("Required member " + string + " in " + obj);
         }
         return getAsIntArray(obj.get(string));
     }
 
-    public static Map<String, String> deserializeStringMap(JsonObject obj, String sub)
-    {
+    public static Map<String, String> deserializeStringMap(JsonObject obj, String sub) {
         JsonElement element = obj.get(sub);
-        if (element == null)
-        {
+        if (element == null) {
             throw new JsonSyntaxException("Expected to have the element '" + sub + "' inside of '" + obj + "'");
         }
-        if (!element.isJsonObject())
-        {
+        if (!element.isJsonObject()) {
             throw new JsonSyntaxException("Expected to find an object, but got '" + element + "'");
         }
         return deserializeStringMap(element.getAsJsonObject());
     }
 
-    public static Map<String, String> deserializeStringMap(JsonObject obj)
-    {
+    public static Map<String, String> deserializeStringMap(JsonObject obj) {
         Map<String, String> map = new LinkedHashMap<>();
-        for (Entry<String, JsonElement> key : obj.entrySet())
-        {
+        for (Entry<String, JsonElement> key : obj.entrySet()) {
             JsonElement value = key.getValue();
-            if (value.isJsonPrimitive())
-            {
+            if (value.isJsonPrimitive()) {
                 map.put(key.getKey(), value.getAsString());
-            }
-            else
-            {
+            } else {
                 throw new JsonSyntaxException("Expected a string, but got '" + value + "'");
             }
         }
         return map;
     }
 
-    public static JsonObject inlineCustom(JsonObject obj)
-    {
-        if (obj.has("inlines"))
-        {
+    public static JsonObject inlineCustom(JsonObject obj) {
+        if (obj.has("inlines")) {
             JsonElement inlineElems = obj.get("inlines");
-            if (!inlineElems.isJsonObject())
-            {
+            if (!inlineElems.isJsonObject()) {
                 throw new JsonSyntaxException("Expected an object, but got '" + inlineElems + "'");
             }
             JsonObject inlines = inlineElems.getAsJsonObject();
             Map<String, JsonObject> inlineMap = new HashMap<>();
-            for (Entry<String, JsonElement> entry : inlines.entrySet())
-            {
+            for (Entry<String, JsonElement> entry : inlines.entrySet()) {
                 JsonElement elem = entry.getValue();
-                if (!elem.isJsonObject())
-                {
+                if (!elem.isJsonObject()) {
                     throw new JsonSyntaxException("Expected an object, but got '" + elem + "'");
                 }
                 inlineMap.put(entry.getKey(), elem.getAsJsonObject());
@@ -465,87 +363,66 @@ public class JsonUtil
         return obj;
     }
 
-    private static void inline(JsonElement element, Map<String, JsonObject> inlineMap)
-    {
-        if (element instanceof JsonObject)
-        {
+    private static void inline(JsonElement element, Map<String, JsonObject> inlineMap) {
+        if (element instanceof JsonObject) {
             inline((JsonObject) element, inlineMap);
-        }
-        else if (element instanceof JsonArray)
-        {
+        } else if (element instanceof JsonArray) {
             JsonArray arr = (JsonArray) element;
-            for (JsonElement elem : arr)
-            {
+            for (JsonElement elem : arr) {
                 inline(elem, inlineMap);
             }
         }
     }
 
-    private static void inline(JsonObject obj, Map<String, JsonObject> inlineMap)
-    {
-        if (obj.has("inline"))
-        {
+    private static void inline(JsonObject obj, Map<String, JsonObject> inlineMap) {
+        if (obj.has("inline")) {
             JsonElement in = obj.remove("inline");
-            if (!in.isJsonPrimitive() || !in.getAsJsonPrimitive().isString())
-            {
+            if (!in.isJsonPrimitive() || !in.getAsJsonPrimitive().isString()) {
                 throw new JsonSyntaxException("Expected a string, but got '" + in + "'");
             }
             String target = in.getAsString();
             JsonObject toInline = inlineMap.get(target);
-            if (toInline == null)
-            {
+            if (toInline == null) {
                 throw new JsonSyntaxException("Didn't find the inline " + target);
             }
-            for (Entry<String, JsonElement> entry : toInline.entrySet())
-            {
+            for (Entry<String, JsonElement> entry : toInline.entrySet()) {
                 String name = entry.getKey();
-                if ("inline".equals(name))
-                {
+                if ("inline".equals(name)) {
                     continue;
                 }
-                if (!obj.has(name))
-                {
+                if (!obj.has(name)) {
                     /* FIXME: We really need to deep-copy the element, as then we protect against removing an element
                      * from it and ruining it for everyone. */
                     obj.add(name, entry.getValue());
                 }
             }
         }
-        for (Entry<String, JsonElement> entry : obj.entrySet())
-        {
+        for (Entry<String, JsonElement> entry : obj.entrySet()) {
             inline(entry.getValue(), inlineMap);
         }
     }
 
-    public static void registerTypeAdaptors(GsonBuilder builder)
-    {
+    public static void registerTypeAdaptors(GsonBuilder builder) {
         builder.registerTypeAdapter(FluidStack.class, FLUID_STACK_DESERIALIZER);
         builder.registerTypeAdapter(ItemStack.class, ITEM_STACK_DESERIALIZER);
         // TODO: Ingredient deserialiser!
         registerNbtSerializersDeserializers(builder);
     }
 
-    public static GsonBuilder registerNbtSerializersDeserializers(GsonBuilder gsonBuilder)
-    {
-        return gsonBuilder.registerTypeAdapterFactory(new TypeAdapterFactory()
-                {
+    public static GsonBuilder registerNbtSerializersDeserializers(GsonBuilder gsonBuilder) {
+        return gsonBuilder.registerTypeAdapterFactory(new TypeAdapterFactory() {
                     @Override
-                    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type)
-                    {
-                        return type.getRawType() == Tag.class ? new TypeAdapter<T>()
-                        {
+                    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+                        return type.getRawType() == Tag.class ? new TypeAdapter<T>() {
                             @Override
-                            public void write(JsonWriter out, T value) throws IOException
-                            {
+                            public void write(JsonWriter out, T value) throws IOException {
                                 // noinspection unchecked, RedundantCast
                                 Streams.write(((JsonSerializer<T>) (JsonSerializer<Tag>) (src, typeOfSrc, context) ->
                                 {
-                                    if (src == NBTUtilBC.NBT_NULL)
-                                    {
+                                    if (src == NBTUtilBC.NBT_NULL) {
                                         return JsonNull.INSTANCE;
                                     }
-                                    switch (src.getId())
-                                    {
+                                    switch (src.getId()) {
                                         case Tag.TAG_BYTE:
                                             return context.serialize(src, ByteTag.class);
                                         case Tag.TAG_SHORT:
@@ -571,61 +448,49 @@ public class JsonUtil
                                         default:
                                             throw new IllegalArgumentException(src.toString());
                                     }
-                                }).serialize(value, type.getType(), new JsonSerializationContext()
-                                {
+                                }).serialize(value, type.getType(), new JsonSerializationContext() {
                                     @Override
-                                    public JsonElement serialize(Object src)
-                                    {
+                                    public JsonElement serialize(Object src) {
                                         return gson.toJsonTree(src);
                                     }
 
                                     @Override
-                                    public JsonElement serialize(Object src, Type typeOfSrc)
-                                    {
+                                    public JsonElement serialize(Object src, Type typeOfSrc) {
                                         return gson.toJsonTree(src, typeOfSrc);
                                     }
                                 }), out);
                             }
 
                             @Override
-                            public T read(JsonReader in) throws IOException
-                            {
+                            public T read(JsonReader in) throws IOException {
                                 return ((JsonDeserializer<T>) (json, typeOfT, context) ->
                                 {
-                                    if (json.isJsonNull())
-                                    {
+                                    if (json.isJsonNull()) {
                                         // noinspection unchecked
                                         return (T) NBTUtilBC.NBT_NULL;
                                     }
-                                    if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber())
-                                    {
+                                    if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isNumber()) {
                                         Number number = json.getAsJsonPrimitive().getAsNumber();
                                         if (number instanceof BigInteger || number instanceof Long || number instanceof Integer
                                                 || number instanceof Short || number instanceof Byte)
                                         {
                                             return context.deserialize(json, LongTag.class);
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             return context.deserialize(json, DoubleTag.class);
                                         }
                                     }
-                                    if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean())
-                                    {
+                                    if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isBoolean()) {
                                         return context.deserialize(
                                                 new JsonPrimitive(json.getAsJsonPrimitive().getAsBoolean() ? (byte) 1 : (byte) 0),
                                                 ByteTag.class);
                                     }
-                                    if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString())
-                                    {
+                                    if (json.isJsonPrimitive() && json.getAsJsonPrimitive().isString()) {
                                         return context.deserialize(json, StringTag.class);
                                     }
-                                    if (json.isJsonArray())
-                                    {
+                                    if (json.isJsonArray()) {
                                         return context.deserialize(json, ListTag.class);
                                     }
-                                    if (json.isJsonObject())
-                                    {
+                                    if (json.isJsonObject()) {
                                         return context.deserialize(json, CompoundTag.class);
                                     }
                                     throw new IllegalArgumentException(json.toString());
@@ -666,8 +531,7 @@ public class JsonUtil
                 .registerTypeAdapter(ByteArrayTag.class, (JsonSerializer<ByteArrayTag>) (src, typeOfSrc, context) ->
                 {
                     JsonArray jsonArray = new JsonArray();
-                    for (byte element : src.getAsByteArray())
-                    {
+                    for (byte element : src.getAsByteArray()) {
                         jsonArray.add(new JsonPrimitive(element));
                     }
                     return jsonArray;
@@ -684,8 +548,7 @@ public class JsonUtil
                 .registerTypeAdapter(ListTag.class, (JsonSerializer<ListTag>) (src, typeOfSrc, context) ->
                 {
                     JsonArray jsonArray = new JsonArray();
-                    for (int i = 0; i < src.size(); i++)
-                    {
+                    for (int i = 0; i < src.size(); i++) {
                         Tag element = src.get(i);
                         jsonArray.add(context.serialize(element, Tag.class));
                     }
@@ -700,8 +563,7 @@ public class JsonUtil
                 }).registerTypeAdapter(CompoundTag.class, (JsonSerializer<CompoundTag>) (src, typeOfSrc, context) ->
                 {
                     JsonObject jsonObject = new JsonObject();
-                    for (String key : src.getAllKeys())
-                    {
+                    for (String key : src.getAllKeys()) {
                         jsonObject.add(key, context.serialize(src.get(key), Tag.class));
                     }
                     return jsonObject;
@@ -709,16 +571,14 @@ public class JsonUtil
                 .registerTypeAdapter(CompoundTag.class, (JsonDeserializer<CompoundTag>) (json, typeOfT, context) ->
                 {
                     CompoundTag nbtTagCompound = new CompoundTag();
-                    for (Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet())
-                    {
+                    for (Entry<String, JsonElement> entry : json.getAsJsonObject().entrySet()) {
                         nbtTagCompound.put(entry.getKey(), context.deserialize(entry.getValue(), Tag.class));
                     }
                     return nbtTagCompound;
                 }).registerTypeAdapter(IntArrayTag.class, (JsonSerializer<IntArrayTag>) (src, typeOfSrc, context) ->
                 {
                     JsonArray jsonArray = new JsonArray();
-                    for (int element : src.getAsIntArray())
-                    {
+                    for (int element : src.getAsIntArray()) {
                         jsonArray.add(new JsonPrimitive(element));
                     }
                     return jsonArray;
@@ -727,31 +587,24 @@ public class JsonUtil
                                 .stream(json.getAsJsonArray().spliterator(), false).mapToInt(JsonElement::getAsByte).toArray()));
     }
 
-    public static JsonObject inheritTags(JsonObject parent, JsonObject overwrite)
-    {
+    public static JsonObject inheritTags(JsonObject parent, JsonObject overwrite) {
         JsonObject object = new JsonObject();
 
-        for (Entry<String, JsonElement> entry : overwrite.entrySet())
-        {
+        for (Entry<String, JsonElement> entry : overwrite.entrySet()) {
             String key = entry.getKey();
             JsonElement element = entry.getValue();
             JsonElement alternate = parent.get(key);
-            if (element instanceof JsonObject && alternate instanceof JsonObject)
-            {
+            if (element instanceof JsonObject && alternate instanceof JsonObject) {
                 object.add(key, inheritTags(alternate.getAsJsonObject(), element.getAsJsonObject()));
                 // } else if (element instanceof JsonArray && alternate instanceof JsonArray) {
-            }
-            else
-            {
+            } else {
                 object.add(key, element);
             }
         }
-        for (Entry<String, JsonElement> entry : parent.entrySet())
-        {
+        for (Entry<String, JsonElement> entry : parent.entrySet()) {
             String key = entry.getKey();
             JsonElement element = entry.getValue();
-            if (!object.has(key))
-            {
+            if (!object.has(key)) {
                 object.add(key, element);
             }
         }
@@ -760,65 +613,55 @@ public class JsonUtil
 
     // Calen
 
-    public static JsonElement serializeFluidStack(FluidStack fluidStack)
-    {
+    public static JsonElement serializeFluidStack(FluidStack fluidStack) {
         JsonObject json = new JsonObject();
         json.addProperty("fluid", fluidStack.getFluid().getRegistryName().toString());
         json.addProperty("amount", fluidStack.getAmount());
         return json;
     }
 
-    public static FluidStack deSerializeFluidStack(JsonObject json)
-    {
+    public static FluidStack deSerializeFluidStack(JsonObject json) {
         String fluidId = GsonHelper.getAsString(json, "fluid");
         Fluid fluid = ForgeRegistries.FLUIDS.getValue(new ResourceLocation(fluidId));
         int amount = GsonHelper.getAsInt(json, "amount");
         return new FluidStack(fluid, amount);
     }
 
-    public static JsonElement serializeItemStack(ItemStack stack)
-    {
+    public static JsonElement serializeItemStack(ItemStack stack) {
         JsonObject json = new JsonObject();
         json.addProperty("item", stack.getItem().getRegistryName().toString());
-        if (stack.getCount() > 1)
-        {
+        if (stack.getCount() > 1) {
             json.addProperty("count", stack.getCount());
         }
-        if (stack.hasTag())
-        {
+        if (stack.hasTag()) {
             json.addProperty("nbt", stack.getTag().toString());
         }
         return json;
     }
 
-    public static ItemStack deSerializeItemStack(JsonObject json)
-    {
+    public static ItemStack deSerializeItemStack(JsonObject json) {
         String itemId = GsonHelper.getAsString(json, "item");
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
         int count = 1;
-        if (json.has("count"))
-        {
+        if (json.has("count")) {
             count = GsonHelper.getAsInt(json, "count");
         }
         CompoundTag nbt = JsonUtils.readNBT(json, "nbt");
         ItemStack ret = new ItemStack(item, count);
-        if (nbt != null)
-        {
+        if (nbt != null) {
             ret.setTag(nbt);
         }
         return ret;
     }
 
-    public static JsonElement serializeIngredientStack(IngredientStack stack)
-    {
+    public static JsonElement serializeIngredientStack(IngredientStack stack) {
         JsonObject json = new JsonObject();
         json.add("ingredient", stack.ingredient.toJson());
         json.addProperty("count", stack.count);
         return json;
     }
 
-    public static IngredientStack deSerializeIngredientStack(JsonObject json)
-    {
+    public static IngredientStack deSerializeIngredientStack(JsonObject json) {
         Ingredient ingredient = Ingredient.fromJson(json.get("ingredient"));
         int count = GsonHelper.getAsInt(json, "count");
         return new IngredientStack(ingredient, count);

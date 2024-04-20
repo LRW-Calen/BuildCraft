@@ -14,7 +14,7 @@ import java.util.List;
 
 /** An adding {@link IModelCache} that takes a single key and adds all of the sub-keys given by the
  * {@link IModelKeyMultipleSameMapper}
- * 
+ *
  * @author AlexIIL
  * @since 14 Mar 2016
  *

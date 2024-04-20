@@ -1,9 +1,9 @@
 package buildcraft.factory.client.model;
 
 import buildcraft.api.enums.EnumExchangePart;
-import buildcraft.lib.block.BlockBCBase_Neptune;
-import buildcraft.factory.block.BlockHeatExchange;
 import buildcraft.factory.BCFactoryModels;
+import buildcraft.factory.block.BlockHeatExchange;
+import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.expression.DefaultContexts;
@@ -23,8 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ModelHeatExchange extends ModelItemSimple
-{
+public class ModelHeatExchange extends ModelItemSimple {
 
     public static final NodeType<EnumExchangePart> TYPE_EXCHANGE_PART;
 
@@ -37,12 +36,10 @@ public class ModelHeatExchange extends ModelItemSimple
     public static final NodeVariableObject<EnumExchangePart> VAR_PART;
     public static final NodeVariableObject<Direction> VAR_DIRECTION;
 
-    static
-    {
+    static {
         TYPE_EXCHANGE_PART = new NodeType<>("HeatExchangePart", EnumExchangePart.MIDDLE);
         NodeTypes.addType(TYPE_EXCHANGE_PART);
-        for (EnumExchangePart part : EnumExchangePart.values())
-        {
+        for (EnumExchangePart part : EnumExchangePart.values()) {
             TYPE_EXCHANGE_PART.putConstant(part.getSerializedName(), part);
         }
         FUNCTION_CONTEXT = new FunctionContext("heat_exchange", DefaultContexts.createWithAll(), TYPE_EXCHANGE_PART);
@@ -57,8 +54,7 @@ public class ModelHeatExchange extends ModelItemSimple
     private final TextureAtlasSprite particle;
     private final List<List<BakedQuad>> cache = new ArrayList<>();
 
-    public ModelHeatExchange()
-    {
+    public ModelHeatExchange() {
         super(ImmutableList.of(), TRANSFORM_BLOCK, false);
 
         VAR_CONNECTED_DOWN.value = false;
@@ -68,19 +64,15 @@ public class ModelHeatExchange extends ModelItemSimple
         VAR_PART.value = EnumExchangePart.MIDDLE;
         VAR_DIRECTION.value = Direction.NORTH;
 
-        if (BCFactoryModels.HEAT_EXCHANGE_STATIC.getCutoutQuads().length == 0)
-        {
+        if (BCFactoryModels.HEAT_EXCHANGE_STATIC.getCutoutQuads().length == 0) {
 //            particle = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 //            particle = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_PARTICLES).apply(new ResourceLocation("missingno"));
             particle = SpriteUtil.missingSprite();
-        }
-        else
-        {
+        } else {
             particle = BCFactoryModels.HEAT_EXCHANGE_STATIC.getCutoutQuads()[0].toBakedItem().getSprite();
         }
 
-        for (int i = 0; i < 4 * 8 * 3; i++)
-        {
+        for (int i = 0; i < 4 * 8 * 3; i++) {
             boolean connectedUpDown = (i & 4) == 4;
             EnumExchangePart part = EnumExchangePart.values()[i / (8 * 4)];
             VAR_CONNECTED_LEFT.value = (i & 1) == 1;
@@ -91,8 +83,7 @@ public class ModelHeatExchange extends ModelItemSimple
             VAR_DIRECTION.value = Direction.from2DDataValue((i / 8) & 3);
             List<BakedQuad> quads = new ArrayList<>();
 
-            for (MutableQuad quad : BCFactoryModels.HEAT_EXCHANGE_STATIC.getCutoutQuads())
-            {
+            for (MutableQuad quad : BCFactoryModels.HEAT_EXCHANGE_STATIC.getCutoutQuads()) {
                 quad.multShade();
                 quads.add(quad.toBakedBlock());
             }
@@ -103,15 +94,13 @@ public class ModelHeatExchange extends ModelItemSimple
 
     @Override
 //    public TextureAtlasSprite getParticleTexture()
-    public TextureAtlasSprite getParticleIcon()
-    {
+    public TextureAtlasSprite getParticleIcon() {
         return particle;
     }
 
     @Override
 //    public List<BakedQuad> getQuads(BlockState state, Direction side, long rand)
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random random)
-    {
+    public List<BakedQuad> getQuads(BlockState state, Direction side, Random random) {
         // Calen: state == null
         // NullPointerException: Cannot invoke "net.minecraft.world.level.block.state.BlockState.m_61143_(net.minecraft.world.level.block.state.properties.Property)" because "state" is null
         // at buildcraft.factory.client.model.ModelHeatExchange.getIndexOf(ModelHeatExchange.java:124)
@@ -120,15 +109,13 @@ public class ModelHeatExchange extends ModelItemSimple
         // ...
         // at mezz.jei.common.render.ItemStackRenderer.render(ItemStackRenderer.java:41)
 //        if (side != null)
-        if (side != null || state == null)
-        {
+        if (side != null || state == null) {
             return ImmutableList.of();
         }
         return cache.get(getIndexOf(state));
     }
 
-    private static int getIndexOf(BlockState state)
-    {
+    private static int getIndexOf(BlockState state) {
         return (state.getValue(BlockHeatExchange.PROP_CONNECTED_LEFT) ? 1 : 0)//
                 | (state.getValue(BlockHeatExchange.PROP_CONNECTED_RIGHT) ? 2 : 0)//
                 | (state.getValue(BlockHeatExchange.PROP_CONNECTED_Y) ? 4 : 0)//

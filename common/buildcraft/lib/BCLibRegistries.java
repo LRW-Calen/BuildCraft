@@ -23,10 +23,8 @@ import buildcraft.lib.recipe.RefineryRecipeRegistry;
 import buildcraft.lib.registry.PluggableRegistry;
 import buildcraft.lib.script.ReloadableRegistryManager;
 
-public class BCLibRegistries
-{
-    public static void fmlPreInit()
-    {
+public class BCLibRegistries {
+    public static void fmlPreInit() {
 //        BuildcraftRecipeRegistry.integrationRecipes = IntegrationRecipeRegistry.INSTANCE;
 //        BuildcraftRecipeRegistry.refineryRecipes = RefineryRecipeRegistry.INSTANCE;
 //        BuildcraftFuelRegistry.fuel = FuelRegistry.INSTANCE;
@@ -42,8 +40,7 @@ public class BCLibRegistries
         CropManager.registerHandler(CropHandlerReeds.INSTANCE);
     }
 
-    public static void initRecipeRegistry()
-    {
+    public static void initRecipeRegistry() {
         BuildcraftRecipeRegistry.integrationRecipes = IntegrationRecipeRegistry.INSTANCE;
         BuildcraftRecipeRegistry.refineryRecipes = RefineryRecipeRegistry.INSTANCE;
         BuildcraftFuelRegistry.fuel = FuelRegistry.INSTANCE;
@@ -51,7 +48,6 @@ public class BCLibRegistries
 
     }
 
-    public static void fmlInit()
-    {
+    public static void fmlInit() {
     }
 }

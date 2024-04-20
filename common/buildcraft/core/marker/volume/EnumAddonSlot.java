@@ -17,8 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public enum EnumAddonSlot
-{
+public enum EnumAddonSlot {
     EAST_UP_SOUTH(Direction.AxisDirection.POSITIVE, Direction.AxisDirection.POSITIVE, Direction.AxisDirection.POSITIVE),
     EAST_UP_NORTH(Direction.AxisDirection.POSITIVE, Direction.AxisDirection.POSITIVE, Direction.AxisDirection.NEGATIVE),
     EAST_DOWN_SOUTH(Direction.AxisDirection.POSITIVE, Direction.AxisDirection.NEGATIVE, Direction.AxisDirection.POSITIVE),
@@ -41,22 +40,21 @@ public enum EnumAddonSlot
     public AABB getBoundingBox(VolumeBox volumeBox) {
         AABB aabb = volumeBox.box.getBoundingBox();
         Vec3 boxOffset = new Vec3(
-            directions.get(Direction.Axis.X) == Direction.AxisDirection.POSITIVE ? aabb.maxX : aabb.minX,
-            directions.get(Direction.Axis.Y) == Direction.AxisDirection.POSITIVE ? aabb.maxY : aabb.minY,
-            directions.get(Direction.Axis.Z) == Direction.AxisDirection.POSITIVE ? aabb.maxZ : aabb.minZ
+                directions.get(Direction.Axis.X) == Direction.AxisDirection.POSITIVE ? aabb.maxX : aabb.minX,
+                directions.get(Direction.Axis.Y) == Direction.AxisDirection.POSITIVE ? aabb.maxY : aabb.minY,
+                directions.get(Direction.Axis.Z) == Direction.AxisDirection.POSITIVE ? aabb.maxZ : aabb.minZ
         );
         return new AABB(
-            boxOffset.x,
-            boxOffset.y,
-            boxOffset.z,
-            boxOffset.x,
-            boxOffset.y,
-            boxOffset.z
+                boxOffset.x,
+                boxOffset.y,
+                boxOffset.z,
+                boxOffset.x,
+                boxOffset.y,
+                boxOffset.z
         ).inflate(1 / 16D);
     }
 
-    public static Pair<VolumeBox, EnumAddonSlot> getSelectingVolumeBoxAndSlot(Player player,
-                                                                              List<VolumeBox> volumeBoxes) {
+    public static Pair<VolumeBox, EnumAddonSlot> getSelectingVolumeBoxAndSlot(Player player, List<VolumeBox> volumeBoxes) {
         Vec3 start = player.position().add(0, player.getEyeHeight(), 0);
         Vec3 end = start.add(player.getLookAngle().scale(4));
         VolumeBox bestVolumeBox = null;

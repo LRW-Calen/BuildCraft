@@ -10,17 +10,14 @@ import buildcraft.lib.gui.pos.IGuiPosition;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 @FunctionalInterface
-public interface ISimpleDrawable
-{
+public interface ISimpleDrawable {
     void drawAt(PoseStack poseStack, double x, double y);
 
-    default void drawAt(IGuiPosition element, PoseStack poseStack)
-    {
+    default void drawAt(IGuiPosition element, PoseStack poseStack) {
         drawAt(poseStack, element.getX(), element.getY());
     }
 
-    default ISimpleDrawable andThen(ISimpleDrawable after)
-    {
+    default ISimpleDrawable andThen(ISimpleDrawable after) {
         ISimpleDrawable t = this;
         return (p, x, y) ->
         {

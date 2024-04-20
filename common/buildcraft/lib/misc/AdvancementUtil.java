@@ -14,8 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-public class AdvancementUtil
-{
+public class AdvancementUtil {
     private static final Set<ResourceLocation> UNKNOWN_ADVANCEMENTS = new HashSet<>();
 
     public static void unlockAdvancement(Player player, ResourceLocation advancementName) {

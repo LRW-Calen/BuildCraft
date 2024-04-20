@@ -23,13 +23,11 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class PluggableLightSensor extends PipePluggable
-{
+public class PluggableLightSensor extends PipePluggable {
 
     private static final VoxelShape[] BOXES = new VoxelShape[6];
 
-    static
-    {
+    static {
         double ll = 2 / 16.0;
         double lu = 4 / 16.0;
         double ul = 12 / 16.0;
@@ -46,44 +44,37 @@ public class PluggableLightSensor extends PipePluggable
         BOXES[Direction.EAST.ordinal()] = Shapes.box(ul, min, min, uu, max, max);
     }
 
-    public PluggableLightSensor(PluggableDefinition definition, IPipeHolder holder, Direction side)
-    {
+    public PluggableLightSensor(PluggableDefinition definition, IPipeHolder holder, Direction side) {
         super(definition, holder, side);
     }
 
     // PipePluggable
 
     @Override
-    public VoxelShape getBoundingBox()
-    {
+    public VoxelShape getBoundingBox() {
         return BOXES[side.ordinal()];
     }
 
     @Override
-    public boolean isBlocking()
-    {
+    public boolean isBlocking() {
         return true;
     }
 
     @Override
-    public ItemStack getPickStack()
-    {
+    public ItemStack getPickStack() {
         return new ItemStack(BCSiliconItems.plugLightSensor.get());
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public PluggableModelKey getModelRenderKey(RenderType layer)
-    {
+    public PluggableModelKey getModelRenderKey(RenderType layer) {
         if (layer == RenderType.cutout()) return new KeyPlugLightSensor(side);
         return null;
     }
 
     @PipeEventHandler
-    public void addInternalTriggers(PipeEventStatement.AddTriggerInternalSided event)
-    {
-        if (event.side == this.side)
-        {
+    public void addInternalTriggers(PipeEventStatement.AddTriggerInternalSided event) {
+        if (event.side == this.side) {
             event.triggers.add(BCSiliconStatements.TRIGGER_LIGHT_LOW);
             event.triggers.add(BCSiliconStatements.TRIGGER_LIGHT_HIGH);
         }

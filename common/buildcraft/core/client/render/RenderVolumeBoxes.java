@@ -14,22 +14,18 @@ import buildcraft.core.marker.volume.Lock;
 import buildcraft.lib.client.render.DetachedRenderer;
 import buildcraft.lib.client.render.laser.LaserBoxRenderer;
 import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Camera;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.scores.criteria.ObjectiveCriteria;
 
-public enum RenderVolumeBoxes implements DetachedRenderer.IDetachedRenderer
-{
+public enum RenderVolumeBoxes implements DetachedRenderer.IDetachedRenderer {
     INSTANCE;
 
     @SuppressWarnings("unchecked")
     @Override
-    public void render(Player player, float partialTicks, PoseStack poseStack)
-    {
+    public void render(Player player, float partialTicks, PoseStack poseStack) {
 ////        GlStateManager.enableBlend();
 //        RenderSystem.enableBlend();
 
@@ -41,12 +37,9 @@ public enum RenderVolumeBoxes implements DetachedRenderer.IDetachedRenderer
         ClientVolumeBoxes.INSTANCE.volumeBoxes.forEach(volumeBox ->
         {
             LaserType type;
-            if (volumeBox.isEditingBy(player))
-            {
+            if (volumeBox.isEditingBy(player)) {
                 type = BuildCraftLaserManager.MARKER_VOLUME_SIGNAL;
-            }
-            else
-            {
+            } else {
                 type = volumeBox.getLockTargetsStream()
                         .filter(Lock.Target.TargetUsedByMachine.class::isInstance)
                         .map(Lock.Target.TargetUsedByMachine.class::cast)

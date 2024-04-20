@@ -4,14 +4,7 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.robotics;
 
-import buildcraft.robotics.tile.TileZonePlanner;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.network.NetworkHooks;
-
-public enum RoboticsGuis
-{
+public enum RoboticsGuis {
     ZONE_PLANTER;
 
 //    public void openGUI(Player player)

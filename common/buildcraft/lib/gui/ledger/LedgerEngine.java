@@ -16,8 +16,7 @@ import buildcraft.lib.misc.LocaleUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 
-public class LedgerEngine extends Ledger_Neptune
-{
+public class LedgerEngine extends Ledger_Neptune {
     private static final int OVERLAY_COLOUR = 0xFF_D4_6C_1F;// 0xFF_FF_55_11;// TEMP!
     private static final int HEADER_COLOUR = 0xFF_E1_C9_2F;
     private static final int SUB_HEADER_COLOUR = 0xFF_AA_AF_b8;
@@ -25,8 +24,7 @@ public class LedgerEngine extends Ledger_Neptune
 
     public final TileEngineBase_BC8 engine;
 
-    public LedgerEngine(BuildCraftGui gui, TileEngineBase_BC8 engine, boolean expandPositive)
-    {
+    public LedgerEngine(BuildCraftGui gui, TileEngineBase_BC8 engine, boolean expandPositive) {
         super(gui, OVERLAY_COLOUR, expandPositive);
         this.engine = engine;
         this.title = "gui.power";
@@ -46,17 +44,14 @@ public class LedgerEngine extends Ledger_Neptune
     }
 
     @Override
-    public int getTitleColour()
-    {
+    public int getTitleColour() {
         return HEADER_COLOUR;
     }
 
     @Override
-    protected void drawIcon(PoseStack poseStack, double x, double y)
-    {
+    protected void drawIcon(PoseStack poseStack, double x, double y) {
         ISprite sprite;
-        switch (engine.getPowerStage())
-        {
+        switch (engine.getPowerStage()) {
             case OVERHEAT:
                 sprite = BCLibSprites.ENGINE_OVERHEAT;
                 break;

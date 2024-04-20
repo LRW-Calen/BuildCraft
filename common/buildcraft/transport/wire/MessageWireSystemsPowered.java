@@ -8,18 +8,17 @@ package buildcraft.transport.wire;
 
 import buildcraft.api.transport.IWireManager;
 import buildcraft.api.transport.pipe.IPipeHolder;
+import buildcraft.lib.net.IMessage;
+import buildcraft.lib.net.IMessageHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class MessageWireSystemsPowered implements IMessage
-{
+public class MessageWireSystemsPowered implements IMessage {
     private Map<Integer, Boolean> hashesPowered = new HashMap<>();
 
     @SuppressWarnings("unused")
@@ -33,7 +32,8 @@ public class MessageWireSystemsPowered implements IMessage
     @Override
     public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(hashesPowered.size());
-        hashesPowered.forEach((wiresHashCode, powered) -> {
+        hashesPowered.forEach((wiresHashCode, powered) ->
+        {
             buf.writeInt(wiresHashCode);
             buf.writeBoolean(powered);
         });
@@ -48,7 +48,8 @@ public class MessageWireSystemsPowered implements IMessage
         }
     }
 
-    public static final IMessageHandler<MessageWireSystemsPowered, IMessage> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageWireSystemsPowered, IMessage> HANDLER = (message, ctx) ->
+    {
         message.hashesPowered.entrySet().stream()
                 .map(hashPowered ->
                         Pair.of(
@@ -62,7 +63,8 @@ public class MessageWireSystemsPowered implements IMessage
                                         Pair.of(element, systemPowered.getRight())
                                 )
                 )
-                .forEach(elementPowered -> {
+                .forEach(elementPowered ->
+                {
                     WireSystem.WireElement element = elementPowered.getLeft();
                     boolean powered = elementPowered.getRight();
                     if (element.type == WireSystem.WireElement.Type.WIRE_PART) {

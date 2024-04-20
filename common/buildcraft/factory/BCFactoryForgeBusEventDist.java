@@ -7,24 +7,19 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = BCFactory.MOD_ID)
-public class BCFactoryForgeBusEventDist
-{
+@Mod.EventBusSubscriber(modid = BCFactory.MODID)
+public class BCFactoryForgeBusEventDist {
     @SubscribeEvent
-    public static void onPlayerDestroyBlock(BlockEvent.BreakEvent event)
-    {
-        if (event.getState().getBlock() != BCFactoryBlocks.tube.get())
-        {
+    public static void onPlayerDestroyBlock(BlockEvent.BreakEvent event) {
+        if (event.getState().getBlock() != BCFactoryBlocks.tube.get()) {
             return;
         }
         BlockPos currentPos = event.getPos();
         Level world = event.getPlayer().getLevel();
         // noinspection StatementWithEmptyBody
-        while (world.getBlockState(currentPos = currentPos.above()).getBlock() == BCFactoryBlocks.tube.get())
-        {
+        while (world.getBlockState(currentPos = currentPos.above()).getBlock() == BCFactoryBlocks.tube.get()) {
         }
-        if (world.getBlockEntity(currentPos) instanceof TileMiner)
-        {
+        if (world.getBlockEntity(currentPos) instanceof TileMiner) {
             event.setCanceled(true);
         }
 

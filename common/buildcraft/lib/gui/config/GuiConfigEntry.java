@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-class GuiConfigEntry
-{
+class GuiConfigEntry {
     final String name;
     final Map<String, GuiProperty> typeToProperty = new TreeMap<>();
 
@@ -26,7 +25,7 @@ class GuiConfigEntry
             GuiPropertyConstructor constructor = GuiConfigManager.customGuiProperties.get(type);
             if (constructor == null) {
                 throw new IllegalArgumentException("No support for '" + type
-                    + "' has been added!\n\tSupported types are: " + GuiConfigManager.customGuiProperties.keySet());
+                        + "' has been added!\n\tSupported types are: " + GuiConfigManager.customGuiProperties.keySet());
             }
             prop = constructor.create(name);
             prop.set(value);
@@ -51,7 +50,7 @@ class GuiConfigEntry
             Class<?> clazz = NodeTypes.getType(type);
             if (clazz == null) {
                 BCLog.logger.warn("[lib.gui.config] Unknown NodeType '" + type + "' - must be one of "
-                    + NodeTypes.getValidTypeNames());
+                        + NodeTypes.getValidTypeNames());
                 continue;
             }
             GuiProperty current = typeToProperty.get(type);

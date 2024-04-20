@@ -24,7 +24,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FallingBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,8 +35,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SchematicBlockDefault implements ISchematicBlock
-{
+public class SchematicBlockDefault implements ISchematicBlock {
     @SuppressWarnings("WeakerAccess")
     protected final Set<BlockPos> requiredBlockOffsets = new HashSet<>();
     @SuppressWarnings("WeakerAccess")
@@ -57,11 +55,9 @@ public class SchematicBlockDefault implements ISchematicBlock
     protected final Set<Block> canBeReplacedWithBlocks = new HashSet<>();
 
     @SuppressWarnings("unused")
-    public static boolean predicate(SchematicBlockContext context)
-    {
+    public static boolean predicate(SchematicBlockContext context) {
 //        if (context.blockState.getBlock().isAir(context.blockState, null, null))
-        if (context.blockState.isAir())
-        {
+        if (context.blockState.isAir()) {
             return false;
         }
         ResourceLocation registryName = context.block.getRegistryName();
@@ -81,29 +77,25 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setRequiredBlockOffsets(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setRequiredBlockOffsets(SchematicBlockContext context, Set<JsonRule> rules) {
         requiredBlockOffsets.clear();
         rules.stream()
                 .map(rule -> rule.requiredBlockOffsets)
                 .filter(Objects::nonNull)
                 .flatMap(Collection::stream)
                 .forEach(requiredBlockOffsets::add);
-        if (context.block instanceof FallingBlock)
-        {
+        if (context.block instanceof FallingBlock) {
             requiredBlockOffsets.add(new BlockPos(0, -1, 0));
         }
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setBlockState(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setBlockState(SchematicBlockContext context, Set<JsonRule> rules) {
         blockState = context.blockState;
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setIgnoredProperties(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setIgnoredProperties(SchematicBlockContext context, Set<JsonRule> rules) {
         ignoredProperties.clear();
         rules.stream()
                 .map(rule -> rule.ignoredProperties)
@@ -117,22 +109,18 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setTileNbt(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setTileNbt(SchematicBlockContext context, Set<JsonRule> rules) {
         tileNbt = null;
-        if (context.blockState.hasBlockEntity())
-        {
+        if (context.blockState.hasBlockEntity()) {
             BlockEntity tileEntity = context.world.getBlockEntity(context.pos);
-            if (tileEntity != null)
-            {
+            if (tileEntity != null) {
                 tileNbt = tileEntity.serializeNBT();
             }
         }
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setPlaceBlock(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setPlaceBlock(SchematicBlockContext context, Set<JsonRule> rules) {
         placeBlock = rules.stream()
                 .map(rule -> rule.placeBlock)
                 .filter(Objects::nonNull)
@@ -143,19 +131,15 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setUpdateBlockOffsets(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setUpdateBlockOffsets(SchematicBlockContext context, Set<JsonRule> rules) {
         updateBlockOffsets.clear();
-        if (rules.stream().map(rule -> rule.updateBlockOffsets).anyMatch(Objects::nonNull))
-        {
+        if (rules.stream().map(rule -> rule.updateBlockOffsets).anyMatch(Objects::nonNull)) {
             rules.stream()
                     .map(rule -> rule.updateBlockOffsets)
                     .filter(Objects::nonNull)
                     .flatMap(Collection::stream)
                     .forEach(updateBlockOffsets::add);
-        }
-        else
-        {
+        } else {
             Stream.of(Direction.values())
 //                    .map(Direction::getDirectionVec)
                     .map(Direction::getNormal)
@@ -166,8 +150,7 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setCanBeReplacedWithBlocks(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setCanBeReplacedWithBlocks(SchematicBlockContext context, Set<JsonRule> rules) {
         canBeReplacedWithBlocks.clear();
         rules.stream()
                 .map(rule -> rule.canBeReplacedWithBlocks)
@@ -181,8 +164,7 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @Override
-    public void init(SchematicBlockContext context)
-    {
+    public void init(SchematicBlockContext context) {
         // noinspection ConstantConditions
         Set<JsonRule> rules = RulesLoader.getRules(
                 context.blockState,
@@ -201,15 +183,13 @@ public class SchematicBlockDefault implements ISchematicBlock
 
     @Nonnull
     @Override
-    public Set<BlockPos> getRequiredBlockOffsets()
-    {
+    public Set<BlockPos> getRequiredBlockOffsets() {
         return requiredBlockOffsets;
     }
 
     @Nonnull
     @Override
-    public List<ItemStack> computeRequiredItems()
-    {
+    public List<ItemStack> computeRequiredItems() {
         Set<JsonRule> rules = RulesLoader.getRules(blockState, tileNbt);
         List<List<RequiredExtractor>> collect = rules.stream()
                 .map(rule -> rule.requiredExtractors)
@@ -227,8 +207,7 @@ public class SchematicBlockDefault implements ISchematicBlock
 
     @Nonnull
     @Override
-    public List<FluidStack> computeRequiredFluids()
-    {
+    public List<FluidStack> computeRequiredFluids() {
         Set<JsonRule> rules = RulesLoader.getRules(blockState, tileNbt);
         return rules.stream()
                 .map(rule -> rule.requiredExtractors)
@@ -240,8 +219,7 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @Override
-    public SchematicBlockDefault getRotated(Rotation rotation)
-    {
+    public SchematicBlockDefault getRotated(Rotation rotation) {
         SchematicBlockDefault schematicBlock = SchematicBlockManager.createCleanCopy(this);
         requiredBlockOffsets.stream()
                 .map(blockPos -> blockPos.rotate(rotation))
@@ -262,28 +240,22 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @Override
-    public boolean canBuild(Level world, BlockPos blockPos)
-    {
+    public boolean canBuild(Level world, BlockPos blockPos) {
         return world.isEmptyBlock(blockPos);
     }
 
     @Override
     @SuppressWarnings("Duplicates")
-    public boolean build(Level world, BlockPos blockPos)
-    {
-        if (placeBlock == Blocks.AIR)
-        {
+    public boolean build(Level world, BlockPos blockPos) {
+        if (placeBlock == Blocks.AIR) {
             return true;
         }
         world.getProfiler().push("prepare block");
         BlockState newBlockState = blockState;
-        if (placeBlock != blockState.getBlock())
-        {
+        if (placeBlock != blockState.getBlock()) {
             newBlockState = placeBlock.defaultBlockState();
-            for (Property<?> property : blockState.getProperties())
-            {
-                if (newBlockState.getProperties().contains(property))
-                {
+            for (Property<?> property : blockState.getProperties()) {
+                if (newBlockState.getProperties().contains(property)) {
                     newBlockState = BlockUtil.copyProperty(
                             property,
                             newBlockState,
@@ -292,8 +264,7 @@ public class SchematicBlockDefault implements ISchematicBlock
                 }
             }
         }
-        for (Property<?> property : ignoredProperties)
-        {
+        for (Property<?> property : ignoredProperties) {
             newBlockState = BlockUtil.copyProperty(
                     property,
                     newBlockState,
@@ -304,8 +275,7 @@ public class SchematicBlockDefault implements ISchematicBlock
         world.getProfiler().push("place block");
         boolean b = world.setBlock(blockPos, newBlockState, 11);
         world.getProfiler().pop();
-        if (b)
-        {
+        if (b) {
             world.getProfiler().push("notify");
             updateBlockOffsets.stream()
                     .map(blockPos::offset)
@@ -313,8 +283,7 @@ public class SchematicBlockDefault implements ISchematicBlock
                     .forEach(updatePos -> world.updateNeighborsAt(updatePos, placeBlock));
             world.getProfiler().pop();
 //            if (tileNbt != null && blockState.getBlock().hasTileEntity(blockState))
-            if (tileNbt != null && blockState.hasBlockEntity())
-            {
+            if (tileNbt != null && blockState.hasBlockEntity()) {
                 world.getProfiler().push("prepare tile");
                 Set<JsonRule> rules = RulesLoader.getRules(blockState, tileNbt);
                 CompoundTag replaceNbt = rules.stream()
@@ -340,8 +309,7 @@ public class SchematicBlockDefault implements ISchematicBlock
                                 ? (CompoundTag) NBTUtilBC.merge(newTileNbt, replaceNbt)
                                 : newTileNbt
                 );
-                if (tileEntity != null)
-                {
+                if (tileEntity != null) {
                     // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
 //                    tileEntity.setLevel(world);
                     world.setBlockEntity(tileEntity);
@@ -361,13 +329,10 @@ public class SchematicBlockDefault implements ISchematicBlock
     @Override
     @SuppressWarnings("Duplicates")
 //    public boolean buildWithoutChecks(Level world, BlockPos blockPos)
-    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos)
-    {
+    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos) {
         // Calen: if 0 -> FallingBlock will
-        if (world.setBlock(blockPos, blockState, 0))
-        {
-            if (tileNbt != null && blockState.hasBlockEntity())
-            {
+        if (world.setBlock(blockPos, blockState, 0)) {
+            if (tileNbt != null && blockState.hasBlockEntity()) {
                 CompoundTag newTileNbt = new CompoundTag();
                 tileNbt.getAllKeys().stream()
                         .map(key -> Pair.of(key, tileNbt.get(key)))
@@ -377,8 +342,7 @@ public class SchematicBlockDefault implements ISchematicBlock
                 newTileNbt.putInt("z", blockPos.getZ());
 //                BlockEntity tileEntity = BlockEntity.create(world, newTileNbt);
                 BlockEntity tileEntity = BlockEntity.loadStatic(blockPos, blockState, newTileNbt);
-                if (tileEntity != null)
-                {
+                if (tileEntity != null) {
                     // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
 //                    tileEntity.setLevel(world);
                     world.setBlockEntity(tileEntity);
@@ -397,16 +361,14 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @Override
-    public boolean isBuilt(Level world, BlockPos blockPos)
-    {
+    public boolean isBuilt(Level world, BlockPos blockPos) {
         return blockState != null &&
                 canBeReplacedWithBlocks.contains(world.getBlockState(blockPos).getBlock()) &&
                 BlockUtil.blockStatesWithoutBlockEqual(blockState, world.getBlockState(blockPos), ignoredProperties);
     }
 
     @Override
-    public CompoundTag serializeNBT()
-    {
+    public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.put(
                 "requiredBlockOffsets",
@@ -424,8 +386,7 @@ public class SchematicBlockDefault implements ISchematicBlock
                                 .map(Property::getName)
                 )
         );
-        if (tileNbt != null)
-        {
+        if (tileNbt != null) {
             nbt.put("tileNbt", tileNbt);
         }
         // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
@@ -452,8 +413,7 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException
-    {
+    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException {
         NBTUtilBC.readCompoundList(nbt.get("requiredBlockOffsets"))
                 .map(NbtUtils::readBlockPos)
                 .forEach(requiredBlockOffsets::add);
@@ -466,8 +426,7 @@ public class SchematicBlockDefault implements ISchematicBlock
                                 .orElse(null)
                 )
                 .forEach(ignoredProperties::add);
-        if (nbt.contains("tileNbt"))
-        {
+        if (nbt.contains("tileNbt")) {
             tileNbt = nbt.getCompound("tileNbt");
         }
         // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
@@ -485,14 +444,11 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
@@ -510,8 +466,7 @@ public class SchematicBlockDefault implements ISchematicBlock
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = requiredBlockOffsets.hashCode();
         result = 31 * result + blockState.hashCode();
         result = 31 * result + ignoredProperties.hashCode();

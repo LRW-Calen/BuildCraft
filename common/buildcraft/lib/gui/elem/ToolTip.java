@@ -77,5 +77,6 @@ public class ToolTip extends ForwardingList<Component> implements RandomAccess {
         return System.currentTimeMillis() - mouseOverStart >= delay;
     }
 
-    public void refresh() {}
+    public void refresh() {
+    }
 }

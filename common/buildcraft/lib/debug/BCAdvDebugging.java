@@ -7,8 +7,7 @@
 package buildcraft.lib.debug;
 
 /** Holds the current {@link IAdvDebugTarget}. Use {@link DebugRenderHelper} for helpers when rendering debuggables. */
-public enum BCAdvDebugging
-{
+public enum BCAdvDebugging {
     INSTANCE;
 
     private IAdvDebugTarget target = null;

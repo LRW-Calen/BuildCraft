@@ -3,17 +3,11 @@ package buildcraft.lib.gui.recipe;
 import buildcraft.lib.gui.slot.SlotPhantom;
 import buildcraft.lib.tile.item.ItemHandlerManager;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.StateSwitchingButton;
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
-import net.minecraft.client.gui.screens.recipebook.RecipeBookPage;
-import net.minecraft.stats.RecipeBook;
 import net.minecraft.world.inventory.CraftingContainer;
-import net.minecraft.world.inventory.RecipeBookMenu;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraft.world.item.crafting.Recipe;
 
-import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
 /**
@@ -22,8 +16,7 @@ import java.util.function.Consumer;
  */
 // TODO Calen: this is not used, because not found how to add recipe book in 1.18.2
 //public class GuiRecipeBookPhantom extends GuiRecipeBook
-public class GuiRecipeBookPhantom extends RecipeBookComponent
-{
+public class GuiRecipeBookPhantom extends RecipeBookComponent {
 
 //    private static final Field FIELD_GUI_BOOK;
 //    private static final Field FIELD_BUTTON_TOGGLE;
@@ -102,8 +95,7 @@ public class GuiRecipeBookPhantom extends RecipeBookComponent
     }
 
     @Override
-    public void removed()
-    {
+    public void removed() {
         super.removed();
 //        if (wasFilteringCraftable)
 //        {
@@ -113,8 +105,7 @@ public class GuiRecipeBookPhantom extends RecipeBookComponent
     }
 
 
-    public void initVisuals(boolean someBoolean, CraftingContainer invCrafting)
-    {
+    public void initVisuals(boolean someBoolean, CraftingContainer invCrafting) {
         this.initVisuals();
         super.xOffset = super.widthTooNarrow ? 0 : 86;
         invCrafting.fillStackedContents(super.stackedContents);
@@ -122,8 +113,7 @@ public class GuiRecipeBookPhantom extends RecipeBookComponent
 
     @Override
 //    public void initVisuals(boolean someBoolean, InventoryCrafting invCrafting)
-    public void initVisuals()
-    {
+    public void initVisuals() {
         // Remove the craftable toggle button: we can always craft everything (as we can only create ghosts)
 //        super.initVisuals(someBoolean, invCrafting);
         super.initVisuals();

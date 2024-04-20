@@ -6,11 +6,13 @@
 
 package buildcraft.lib.client.render.laser;
 
+import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
-import com.google.common.collect.ImmutableMap;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -18,15 +20,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import buildcraft.lib.client.render.laser.LaserData_BC8.*;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @OnlyIn(Dist.CLIENT)
-public class LaserRenderer_BC8
-{
+public class LaserRenderer_BC8 {
     private static final Map<LaserData_BC8.LaserType, CompiledLaserType> COMPILED_LASER_TYPES = new HashMap<>();
     // Calen: it seems GLList cannot be used in 1.18.2 world rendering
 //    private static final LoadingCache<LaserData_BC8, LaserCompiledList> COMPILED_STATIC_LASERS;
@@ -35,8 +35,7 @@ public class LaserRenderer_BC8
     // Calen: not used, because it seems GlList is not available in 1.18.2
 //    public static final VertexFormat FORMAT_LESS, FORMAT_ALL;
 
-    static
-    {
+    static {
         // Calen: it seems GLList cannot be used in 1.18.2 world rendering
 //        COMPILED_STATIC_LASERS = CacheBuilder.newBuilder()//
 //                .expireAfterWrite(5, TimeUnit.SECONDS)//
@@ -78,15 +77,12 @@ public class LaserRenderer_BC8
 //        ));
     }
 
-    public static void clearModels()
-    {
+    public static void clearModels() {
         COMPILED_LASER_TYPES.clear();
     }
 
-    private static CompiledLaserType compileType(LaserType laserType)
-    {
-        if (!COMPILED_LASER_TYPES.containsKey(laserType))
-        {
+    private static CompiledLaserType compileType(LaserType laserType) {
+        if (!COMPILED_LASER_TYPES.containsKey(laserType)) {
             COMPILED_LASER_TYPES.put(laserType, new CompiledLaserType(laserType));
         }
         return COMPILED_LASER_TYPES.get(laserType);
@@ -102,15 +98,13 @@ public class LaserRenderer_BC8
 //        }
 //    }
 
-    private static LaserCompiledBuffer makeDynamicLaser(LaserData_BC8 data)
-    {
+    private static LaserCompiledBuffer makeDynamicLaser(LaserData_BC8 data) {
         LaserCompiledBuffer.Builder renderer = new LaserCompiledBuffer.Builder(data.enableDiffuse);
         makeLaser(data, renderer);
         return renderer.build();
     }
 
-    private static void makeLaser(LaserData_BC8 data, ILaserRenderer renderer)
-    {
+    private static void makeLaser(LaserData_BC8 data, ILaserRenderer renderer) {
         LaserContext ctx = new LaserContext(renderer, data, data.enableDiffuse, data.doubleFace);
         CompiledLaserType type = compileType(data.laserType);
         type.bakeFor(ctx);
@@ -126,8 +120,7 @@ public class LaserRenderer_BC8
 //        }
 //    }
 
-    public static int computeLightmap(double x, double y, double z, int minBlockLight)
-    {
+    public static int computeLightmap(double x, double y, double z, int minBlockLight) {
         Level world = Minecraft.getInstance().level;
         if (world == null) return 0;
         int blockLight =
@@ -136,8 +129,7 @@ public class LaserRenderer_BC8
         return skyLight << 20 | blockLight << 4;
     }
 
-    private static int getLightFor(Level world, LightLayer type, double x, double y, double z)
-    {
+    private static int getLightFor(Level world, LightLayer type, double x, double y, double z) {
         int max = 0;
         int count = 0;
         int sum = 0;
@@ -158,15 +150,11 @@ public class LaserRenderer_BC8
         int yu = ao ? (yn > upperBound ? 1 : 0) : 1;
         int zu = ao ? (zn > upperBound ? 1 : 0) : 1;
 
-        for (int xp = xl; xp <= xu; xp++)
-        {
-            for (int yp = yl; yp <= yu; yp++)
-            {
-                for (int zp = zl; zp <= zu; zp++)
-                {
+        for (int xp = xl; xp <= xu; xp++) {
+            for (int yp = yl; yp <= yu; yp++) {
+                for (int zp = zl; zp <= zu; zp++) {
                     int light = world.getBrightness(type, new BlockPos(x + xp, y + yp, z + zp));
-                    if (light > 0)
-                    {
+                    if (light > 0) {
                         sum += light;
                         count++;
                     }
@@ -175,12 +163,9 @@ public class LaserRenderer_BC8
             }
         }
 
-        if (ao)
-        {
+        if (ao) {
             return count == 0 ? 0 : sum / count;
-        }
-        else
-        {
+        } else {
             return max;
         }
     }
@@ -200,8 +185,7 @@ public class LaserRenderer_BC8
     /**
      * Assumes the buffer uses {@link DefaultVertexFormat#BLOCK}
      */
-    public static void renderLaserDynamic(LaserData_BC8 data, PoseStack.Pose pose, VertexConsumer buffer)
-    {
+    public static void renderLaserDynamic(LaserData_BC8 data, PoseStack.Pose pose, VertexConsumer buffer) {
         ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("compute");
         LaserCompiledBuffer compiled = COMPILED_DYNAMIC_LASERS.getUnchecked(data);

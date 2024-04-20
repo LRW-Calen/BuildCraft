@@ -43,18 +43,18 @@ public class GuidePartMulti extends GuidePart {
     public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index) {
         if (isVisible()) {
             for (GuidePart part : parts) {
-                current = part.renderIntoArea(poseStack,x, y, width, height, current, index);
+                current = part.renderIntoArea(poseStack, x, y, width, height, current, index);
             }
         }
         return current;
     }
 
     @Override
-    public PagePosition handleMouseClick(PoseStack poseStack,int x, int y, int width, int height, PagePosition current, int index,
-        double mouseX, double mouseY) {
+    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
+                                         double mouseX, double mouseY) {
         if (isVisible()) {
             for (GuidePart part : parts) {
-                current = part.handleMouseClick(poseStack,x, y, width, height, current, index, mouseX, mouseY);
+                current = part.handleMouseClick(poseStack, x, y, width, height, current, index, mouseX, mouseY);
             }
         }
         return current;

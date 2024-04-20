@@ -6,8 +6,8 @@
 
 package buildcraft.lib.misc;
 
-import buildcraft.api.core.render.ISprite;
 import buildcraft.api.core.BCLog;
+import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.client.guide.font.IFontRenderer;
 import buildcraft.lib.client.render.fluid.FluidRenderer;
 import buildcraft.lib.client.sprite.SpriteNineSliced;
@@ -41,14 +41,12 @@ import java.util.*;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-public class GuiUtil
-{
+public class GuiUtil {
 
     public static final IGuiArea AREA_WHOLE_SCREEN;
     private static final Deque<GuiRectangle> scissorRegions = new ArrayDeque<>();
 
-    static
-    {
+    static {
         AREA_WHOLE_SCREEN = IGuiArea.create(() -> 0, () -> 0, GuiUtil::getScreenWidth, GuiUtil::getScreenHeight);
     }
 
@@ -56,8 +54,7 @@ public class GuiUtil
      * @return The relative screen width. (Relative - changes with both the window size and the game setting "gui
      * scale".)
      */
-    public static int getScreenWidth()
-    {
+    public static int getScreenWidth() {
         return Minecraft.getInstance().screen.width;
     }
 
@@ -65,14 +62,12 @@ public class GuiUtil
      * @return The relative screen height. (Relative - changes with both the window size and the game setting "gui
      * scale".)
      */
-    public static int getScreenHeight()
-    {
+    public static int getScreenHeight() {
 //        return Minecraft.getInstance().currentScreen.height;
         return Minecraft.getInstance().screen.height;
     }
 
-    public static IGuiArea moveRectangleToCentre(GuiRectangle area)
-    {
+    public static IGuiArea moveRectangleToCentre(GuiRectangle area) {
         final double w = area.width;
         final double h = area.height;
 
@@ -83,10 +78,8 @@ public class GuiUtil
         return IGuiArea.create(position, area.width, area.height);
     }
 
-    public static IGuiArea moveAreaToCentre(IGuiArea area)
-    {
-        if (area instanceof GuiRectangle || area instanceof IConstantNode)
-        {
+    public static IGuiArea moveAreaToCentre(IGuiArea area) {
+        if (area instanceof GuiRectangle || area instanceof IConstantNode) {
             return moveRectangleToCentre(area.asImmutable());
         }
 
@@ -96,17 +89,13 @@ public class GuiUtil
         return IGuiArea.create(posX, posY, area::getWidth, area::getHeight);
     }
 
-    public static ToolTip createToolTip(Supplier<ItemStack> stackRef)
-    {
-        return new ToolTip()
-        {
+    public static ToolTip createToolTip(Supplier<ItemStack> stackRef) {
+        return new ToolTip() {
             @Override
-            public void refresh()
-            {
+            public void refresh() {
                 delegate().clear();
                 ItemStack stack = stackRef.get();
-                if (!stack.isEmpty())
-                {
+                if (!stack.isEmpty()) {
                     delegate().addAll(GuiUtil.getFormattedTooltip(stack));
                 }
             }
@@ -117,18 +106,15 @@ public class GuiUtil
      * Draws multiple elements, one after each other.
      */
     public static <D> void drawVerticallyAppending(IGuiPosition element, Iterable<? extends D> iterable,
-                                                   IVerticalAppendingDrawer<D> drawer, PoseStack matrix)
-    {
+                                                   IVerticalAppendingDrawer<D> drawer, PoseStack matrix) {
         double x = element.getX();
         double y = element.getY();
-        for (D drawable : iterable)
-        {
+        for (D drawable : iterable) {
             y += drawer.draw(drawable, matrix, x, y);
         }
     }
 
-    public static void drawItemStackAt(ItemStack stack, PoseStack poseStack, int x, int y)
-    {
+    public static void drawItemStackAt(ItemStack stack, PoseStack poseStack, int x, int y) {
 //        RenderHelper.enableGUIStandardItemLighting();
         RenderUtil.enableGUIStandardItemLighting();
         Minecraft mc = Minecraft.getInstance();
@@ -142,8 +128,7 @@ public class GuiUtil
     }
 
     @FunctionalInterface
-    public interface IVerticalAppendingDrawer<D>
-    {
+    public interface IVerticalAppendingDrawer<D> {
         //        double draw(D drawable, double x, double y);
 //        double draw(D drawable, Matrix4f mat, double x, double y);
         double draw(D drawable, PoseStack mat, double x, double y);
@@ -167,10 +152,8 @@ public class GuiUtil
      */
 //    public static int drawHoveringText(Matrix4f mat, List<Component> textLines, final int mouseX, final int mouseY,
     public static int drawHoveringText(PoseStack poseStack, List<Component> textLines, final int mouseX, final int mouseY,
-                                       final int screenWidth, final int screenHeight, final int maxTextWidth, Font font)
-    {
-        if (!textLines.isEmpty())
-        {
+                                       final int screenWidth, final int screenHeight, final int maxTextWidth, Font font) {
+        if (!textLines.isEmpty()) {
 //            GlStateManager.disableRescaleNormal();
 //            RenderHelper.disableStandardItemLighting();
 //            GlStateManager.disableLighting();
@@ -180,12 +163,10 @@ public class GuiUtil
 //            RenderSystem.disableDepthTest();
             int tooltipTextWidth = 0;
 
-            for (Component textLine : textLines)
-            {
+            for (Component textLine : textLines) {
                 int textLineWidth = font.width(textLine);
 
-                if (textLineWidth > tooltipTextWidth)
-                {
+                if (textLineWidth > tooltipTextWidth) {
                     tooltipTextWidth = textLineWidth;
                 }
             }
@@ -194,48 +175,38 @@ public class GuiUtil
 
             int titleLinesCount = 1;
             int tooltipX = mouseX + 12;
-            if (tooltipX + tooltipTextWidth + 4 > screenWidth)
-            {
+            if (tooltipX + tooltipTextWidth + 4 > screenWidth) {
                 tooltipX = mouseX - 16 - tooltipTextWidth;
                 if (tooltipX < 4) // if the tooltip doesn't fit on the screen
                 {
-                    if (mouseX > screenWidth / 2)
-                    {
+                    if (mouseX > screenWidth / 2) {
                         tooltipTextWidth = mouseX - 12 - 8;
-                    }
-                    else
-                    {
+                    } else {
                         tooltipTextWidth = screenWidth - 16 - mouseX;
                     }
                     needsWrap = true;
                 }
             }
 
-            if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth)
-            {
+            if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth) {
                 tooltipTextWidth = maxTextWidth;
                 needsWrap = true;
             }
 
-            if (needsWrap)
-            {
+            if (needsWrap) {
                 int wrappedTooltipWidth = 0;
                 List<Component> wrappedTextLines = new ArrayList<>();
-                for (int i = 0; i < textLines.size(); i++)
-                {
+                for (int i = 0; i < textLines.size(); i++) {
                     Component textLine = textLines.get(i);
 //                    List<String> wrappedLine = font.listFormattedStringToWidth(textLine, tooltipTextWidth);
                     List<String> wrappedLine = FontUtil.listFormattedStringToWidth(textLine.getString(), tooltipTextWidth);
-                    if (i == 0)
-                    {
+                    if (i == 0) {
                         titleLinesCount = wrappedLine.size();
                     }
 
-                    for (String line : wrappedLine)
-                    {
+                    for (String line : wrappedLine) {
                         int lineWidth = font.width(line);
-                        if (lineWidth > wrappedTooltipWidth)
-                        {
+                        if (lineWidth > wrappedTooltipWidth) {
                             wrappedTooltipWidth = lineWidth;
                         }
                         wrappedTextLines.add(new TextComponent(line));
@@ -244,12 +215,9 @@ public class GuiUtil
                 tooltipTextWidth = wrappedTooltipWidth;
                 textLines = wrappedTextLines;
 
-                if (mouseX > screenWidth / 2)
-                {
+                if (mouseX > screenWidth / 2) {
                     tooltipX = mouseX - 16 - tooltipTextWidth;
-                }
-                else
-                {
+                } else {
                     tooltipX = mouseX + 12;
                 }
             }
@@ -257,17 +225,14 @@ public class GuiUtil
             int tooltipY = mouseY - 12;
             int tooltipHeight = 8;
 
-            if (textLines.size() > 1)
-            {
+            if (textLines.size() > 1) {
                 tooltipHeight += (textLines.size() - 1) * 10;
-                if (textLines.size() > titleLinesCount)
-                {
+                if (textLines.size() > titleLinesCount) {
                     tooltipHeight += 2; // gap between title lines and next lines
                 }
             }
 
-            if (tooltipY + tooltipHeight + 6 > screenHeight)
-            {
+            if (tooltipY + tooltipHeight + 6 > screenHeight) {
                 tooltipY = screenHeight - tooltipHeight - 6;
             }
 
@@ -299,8 +264,7 @@ public class GuiUtil
 
             RenderSystem.disableBlend();
             RenderSystem.enableTexture();
-            for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber)
-            {
+            for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber) {
                 Component line = textLines.get(lineNumber);
 //                font.drawStringWithShadow(line, tooltipX, tooltipY, -1);
                 poseStack.pushPose();
@@ -308,8 +272,7 @@ public class GuiUtil
                 font.drawShadow(poseStack, line, tooltipX, tooltipY, -1);
                 poseStack.popPose();
 
-                if (lineNumber + 1 == titleLinesCount)
-                {
+                if (lineNumber + 1 == titleLinesCount) {
                     tooltipY += 2;
                 }
 
@@ -327,10 +290,8 @@ public class GuiUtil
         return 0;
     }
 
-    public static void drawHorizontalLine(PoseStack p_93173_, int startX, int endX, int y, int color)
-    {
-        if (endX < startX)
-        {
+    public static void drawHorizontalLine(PoseStack p_93173_, int startX, int endX, int y, int color) {
+        if (endX < startX) {
             int i = startX;
             startX = endX;
             endX = i;
@@ -338,10 +299,8 @@ public class GuiUtil
         Gui.fill(p_93173_, startX, y, endX + 1, y + 1, color);
     }
 
-    public static void drawVerticalLine(PoseStack p_93173_, int x, int startY, int endY, int color)
-    {
-        if (endY < startY)
-        {
+    public static void drawVerticalLine(PoseStack p_93173_, int x, int startY, int endY, int color) {
+        if (endY < startY) {
             int i = startY;
             startY = endY;
             endY = i;
@@ -349,8 +308,7 @@ public class GuiUtil
         Gui.fill(p_93173_, x, startY + 1, x + 1, endY, color);
     }
 
-    public static void drawRect(PoseStack p_93173_, IGuiArea area, int colour)
-    {
+    public static void drawRect(PoseStack p_93173_, IGuiArea area, int colour) {
         int xMin = (int) area.getX();
         int yMin = (int) area.getY();
         int xMax = (int) area.getEndX();
@@ -359,8 +317,7 @@ public class GuiUtil
     }
 
     public static void drawTexturedModalRect(PoseStack poseStack, double posX, double posY, double textureX, double textureY, double width,
-                                             double height)
-    {
+                                             double height) {
 //        int x = MathHelper.floor(posX);
         int x = Mth.floor(posX);
 //        int y = MathHelper.floor(posY);
@@ -378,19 +335,16 @@ public class GuiUtil
         gui.blit(poseStack, x, y, u, v, w, h);
     }
 
-    public static void drawFluid(IGuiArea position, Tank tank, PoseStack poseStack)
-    {
+    public static void drawFluid(IGuiArea position, Tank tank, PoseStack poseStack) {
         drawFluid(position, tank.getFluidForRender(), tank.getCapacity(), poseStack);
     }
 
-    public static void drawFluid(IGuiArea position, FluidStack fluid, int capacity, PoseStack poseStack)
-    {
+    public static void drawFluid(IGuiArea position, FluidStack fluid, int capacity, PoseStack poseStack) {
         if (fluid == null || fluid.getAmount() <= 0) return;
         drawFluid(position, fluid, fluid.getAmount(), capacity, poseStack);
     }
 
-    public static void drawFluid(IGuiArea position, FluidStack fluid, int amount, int capacity, PoseStack poseStack)
-    {
+    public static void drawFluid(IGuiArea position, FluidStack fluid, int amount, int capacity, PoseStack poseStack) {
         if (fluid == null || amount <= 0) return;
 
         double height = amount * position.getHeight() / capacity;
@@ -401,13 +355,10 @@ public class GuiUtil
         double endY;
 
 //        if (fluid.getFluid().isGaseous(fluid))
-        if (fluid.getRawFluid().getAttributes().isGaseous(fluid))
-        {
+        if (fluid.getRawFluid().getAttributes().isGaseous(fluid)) {
             startY = position.getY() + height;
             endY = position.getY();
-        }
-        else
-        {
+        } else {
             startY = position.getEndY();
             endY = startY - height;
         }
@@ -415,13 +366,11 @@ public class GuiUtil
         FluidRenderer.drawFluidForGui(fluid, startX, startY, endX, endY, poseStack);
     }
 
-    public static AutoGlScissor scissor(double x, double y, double width, double height)
-    {
+    public static AutoGlScissor scissor(double x, double y, double width, double height) {
         return scissor(new GuiRectangle(x, y, width, height));
     }
 
-    public static AutoGlScissor scissor(IGuiArea area)
-    {
+    public static AutoGlScissor scissor(IGuiArea area) {
         GuiRectangle rect = area.asImmutable();
         // Calen: RenderSystem.enableScissor() contains _enableScissorTest()
 //        if (scissorRegions.isEmpty())
@@ -431,38 +380,29 @@ public class GuiUtil
 //        }
         scissorRegions.push(rect);
         scissor0();
-        return new AutoGlScissor()
-        {
+        return new AutoGlScissor() {
             @Override
-            public void close()
-            {
+            public void close() {
                 GuiRectangle last = scissorRegions.pop();
-                if (last != rect)
-                {
+                if (last != rect) {
                     throw new IllegalStateException("Popped rectangles in the wrong order!");
                 }
                 GuiRectangle next = scissorRegions.peek();
-                if (next == null)
-                {
+                if (next == null) {
 //                    GL11.glDisable(GL11.GL_SCISSOR_TEST);
 //                    GlStateManager._disableScissorTest();
                     RenderSystem.disableScissor();
-                }
-                else
-                {
+                } else {
                     scissor0();
                 }
             }
         };
     }
 
-    private static void scissor0()
-    {
+    private static void scissor0() {
         GuiRectangle total = null;
-        for (GuiRectangle rect2 : scissorRegions)
-        {
-            if (total == null)
-            {
+        for (GuiRectangle rect2 : scissorRegions) {
+            if (total == null) {
                 total = rect2;
                 continue;
             }
@@ -472,20 +412,17 @@ public class GuiUtil
             double maxY = Math.min(total.getEndY(), rect2.getEndY());
             total = new GuiRectangle(minX, minY, maxX - minX, maxY - minY);
         }
-        if (total == null)
-        {
+        if (total == null) {
             throw new IllegalStateException("Cannot call scissor0 when there are no more regions!");
         }
         scissor0(total);
     }
 
-    private static void scissor0(IGuiArea area)
-    {
+    private static void scissor0(IGuiArea area) {
         scissor0(area.getX(), area.getY(), area.getWidth(), area.getHeight());
     }
 
-    private static void scissor0(double x, double y, double width, double height)
-    {
+    private static void scissor0(double x, double y, double width, double height) {
         Window window = Minecraft.getInstance().getWindow();
         double scaleFactor = window.getGuiScale();
 //        ScaledResolution res = new ScaledResolution(mc);
@@ -504,64 +441,53 @@ public class GuiUtil
         RenderSystem.enableScissor(rx, ry, (int) (width * scaleFactor), (int) (height * scaleFactor));
     }
 
-    public static ISprite subRelative(ISprite sprite, double u, double v, double width, double height, double size)
-    {
+    public static ISprite subRelative(ISprite sprite, double u, double v, double width, double height, double size) {
         return GuiUtil.subRelative(sprite, u / size, v / size, width / size, height / size);
     }
 
     public static ISprite subAbsolute(ISprite sprite, double uMin, double vMin, double uMax, double vMax,
-                                      double spriteSize)
-    {
+                                      double spriteSize) {
         double size = spriteSize;
         return GuiUtil.subAbsolute(sprite, uMin / size, vMin / size, uMax / size, vMax / size);
     }
 
-    public static ISprite subRelative(ISprite sprite, double u, double v, double width, double height)
-    {
+    public static ISprite subRelative(ISprite sprite, double u, double v, double width, double height) {
         return GuiUtil.subAbsolute(sprite, u, v, u + width, v + height);
     }
 
-    public static ISprite subAbsolute(ISprite sprite, double uMin, double vMin, double uMax, double vMax)
-    {
-        if (uMin == 0 && vMin == 0 && uMax == 1 && vMax == 1)
-        {
+    public static ISprite subAbsolute(ISprite sprite, double uMin, double vMin, double uMax, double vMax) {
+        if (uMin == 0 && vMin == 0 && uMax == 1 && vMax == 1) {
             return sprite;
         }
         return new SubSprite(sprite, uMin, vMin, uMax, vMax);
     }
 
-    public static SpriteNineSliced slice(ISprite sprite, int uMin, int vMin, int uMax, int vMax, int textureSize)
-    {
+    public static SpriteNineSliced slice(ISprite sprite, int uMin, int vMin, int uMax, int vMax, int textureSize) {
         return new SpriteNineSliced(sprite, uMin, vMin, uMax, vMax, textureSize);
     }
 
     public static SpriteNineSliced slice(ISprite sprite, double uMin, double vMin, double uMax, double vMax,
-                                         double scale)
-    {
+                                         double scale) {
         return new SpriteNineSliced(sprite, uMin, vMin, uMax, vMax, scale);
     }
 
     /**
      * A type of {@link AutoCloseable} that will pop off the current {@link GL11#glScissor(int, int, int, int)}.
      */
-    public interface AutoGlScissor extends AutoCloseable
-    {
+    public interface AutoGlScissor extends AutoCloseable {
         @Override
         void close();
     }
 
-    public static List<Component> getFormattedTooltip(ItemStack stack)
-    {
+    public static List<Component> getFormattedTooltip(ItemStack stack) {
         List<Component> list = getUnFormattedTooltip(stack);
 
-        if (!list.isEmpty())
-        {
+        if (!list.isEmpty()) {
 //            list.set(0, new TextComponent(stack.getRarity().color.toString() + list.get(0).getString()));
             list.set(0, new TextComponent(stack.getRarity().color.toString()).append(list.get(0)));
         }
 
-        for (int i = 1; i < list.size(); ++i)
-        {
+        for (int i = 1; i < list.size(); ++i) {
 //            list.set(i, new TextComponent(ChatFormatting.GRAY.toString() + list.get(i).getString()));
             list.set(i, new TextComponent(ChatFormatting.GRAY.toString()).append(list.get(i)));
         }
@@ -569,22 +495,18 @@ public class GuiUtil
         return list;
     }
 
-    public static List<Component> getUnFormattedTooltip(ItemStack stack)
-    {
+    public static List<Component> getUnFormattedTooltip(ItemStack stack) {
         Minecraft mc = Minecraft.getInstance();
         List<Component> list = stack.getTooltipLines(mc.player, getTooltipFlags());
-        if (list.isEmpty())
-        {
+        if (list.isEmpty()) {
             return Collections.singletonList(getStackDisplayName(stack));
         }
         return list;
     }
 
-    public static Component getStackDisplayName(ItemStack stack)
-    {
+    public static Component getStackDisplayName(ItemStack stack) {
         Component name = stack.getDisplayName();
-        if (name == null)
-        {
+        if (name == null) {
             // Temp workaround for headcrumbs
             // TODO: Remove this after https://github.com/BuildCraft/BuildCraft/issues/4268 is fixed from their side! */
             Item item = stack.getItem();
@@ -595,22 +517,19 @@ public class GuiUtil
         return name;
     }
 
-    private static TooltipFlag getTooltipFlags()
-    {
+    private static TooltipFlag getTooltipFlags() {
         boolean adv = Minecraft.getInstance().options.advancedItemTooltips;
         return adv ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL;
     }
 
     public static WrappedTextData getWrappedTextData(String text, IFontRenderer fontRenderer, int maxWidth,
-                                                     boolean shadow, float scale)
-    {
+                                                     boolean shadow, float scale) {
         List<String> lines = fontRenderer.wrapString(text, maxWidth, shadow, scale);
         return new WrappedTextData(fontRenderer, lines.toArray(new String[0]), shadow, scale, maxWidth,
                 (int) (lines.size() * fontRenderer.getFontHeight("Ly") * scale));
     }
 
-    public static class WrappedTextData
-    {
+    public static class WrappedTextData {
         public final IFontRenderer renderer;
         public final String[] lines;
         public final float scale;
@@ -618,8 +537,7 @@ public class GuiUtil
         public final int width, height;
 
         public WrappedTextData(IFontRenderer renderer, String[] lines, boolean shadow, float scale, int width,
-                               int height)
-        {
+                               int height) {
             this.renderer = renderer;
             this.lines = lines;
             this.shadow = shadow;
@@ -628,10 +546,8 @@ public class GuiUtil
             this.height = height;
         }
 
-        public void drawAt(PoseStack poseStack, int x, int y, int colour, boolean centered)
-        {
-            for (String line : lines)
-            {
+        public void drawAt(PoseStack poseStack, int x, int y, int colour, boolean centered) {
+            for (String line : lines) {
                 renderer.drawString(poseStack, line, x, y, colour, shadow, centered, scale);
                 y += renderer.getFontHeight(line) * scale;
             }

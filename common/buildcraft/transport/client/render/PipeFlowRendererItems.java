@@ -18,12 +18,8 @@ import buildcraft.transport.pipe.flow.PipeFlowItems;
 import buildcraft.transport.pipe.flow.TravellingItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -36,14 +32,12 @@ import javax.vecmath.Vector3f;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems>
-{
+public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems> {
     INSTANCE;
 
     private static final MutableQuad[] COLOURED_QUADS = new MutableQuad[6];
 
-    public static void onModelBake()
-    {
+    public static void onModelBake() {
         Tuple3f center = new Point3f();
         Tuple3f radius = new Vector3f(0.2f, 0.2f, 0.2f);
 
@@ -54,8 +48,7 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems>
         uvs.minV = (float) sprite.getInterpV(0);
         uvs.maxV = (float) sprite.getInterpV(1);
 
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             MutableQuad q = ModelUtil.createFace(face, center, radius, uvs);
             q.setCalculatedDiffuse();
             COLOURED_QUADS[face.ordinal()] = q;
@@ -64,8 +57,7 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems>
 
     @Override
 //    public void render(PipeFlowItems flow, double x, double y, double z, float partialTicks, BufferBuilder bb)
-    public void render(PipeFlowItems flow, float partialTicks, PoseStack poseStack, VertexConsumer bb, int lightc, int combinedOverlay)
-    {
+    public void render(PipeFlowItems flow, float partialTicks, PoseStack poseStack, VertexConsumer bb, int lightc, int combinedOverlay) {
         Level world = flow.pipe.getHolder().getPipeWorld();
 //        long now = world.getTotalWorldTime();
         long now = world.getGameTime();
@@ -73,28 +65,24 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems>
 
         List<TravellingItem> toRender = flow.getAllItemsForRender();
 
-        for (TravellingItem item : toRender)
-        {
+        for (TravellingItem item : toRender) {
             Vec3 pos = item.getRenderPosition(BlockPos.ZERO, now, partialTicks, flow);
 
             poseStack.pushPose();
             poseStack.translate(pos.x, pos.y, pos.z);
 
             ItemStack stack = item.clientItemLink.get();
-            if (stack != null && !stack.isEmpty())
-            {
+            if (stack != null && !stack.isEmpty()) {
 //                ItemRenderUtil.renderItemStack(x + pos.x, y + pos.y, z + pos.z, stack, item.stackSize, lightc, item.getRenderDirection(now, partialTicks), bb);
                 ItemRenderUtil.renderItemStack(stack, item.stackSize, lightc, item.getRenderDirection(now, partialTicks), poseStack, bb);
             }
-            if (item.colour != null)
-            {
+            if (item.colour != null) {
 //                bb.setTranslation(x + pos.x, y + pos.y, z + pos.z);
                 int col = ColourUtil.getLightHex(item.colour);
                 int r = (col >> 16) & 0xFF;
                 int g = (col >> 8) & 0xFF;
                 int b = col & 0xFF;
-                for (MutableQuad q : COLOURED_QUADS)
-                {
+                for (MutableQuad q : COLOURED_QUADS) {
                     MutableQuad q2 = new MutableQuad(q);
                     q2.lighti(lightc);
                     q2.multColouri(r, g, b, 255);

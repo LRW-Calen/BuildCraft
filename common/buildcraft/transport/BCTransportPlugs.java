@@ -15,8 +15,7 @@ import buildcraft.transport.plug.PluggableBlocker;
 import buildcraft.transport.plug.PluggablePowerAdaptor;
 import net.minecraft.resources.ResourceLocation;
 
-public class BCTransportPlugs
-{
+public class BCTransportPlugs {
 
     public static PluggableDefinition blocker;
     public static PluggableDefinition powerAdaptor;

@@ -9,25 +9,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Random;
 import java.util.function.BiFunction;
 
-public class BlockSpring<SpringBlockEntity> extends BlockBCTile_Neptune
-{
+public class BlockSpring<SpringBlockEntity> extends BlockBCTile_Neptune {
     //    public static final Property<EnumSpring> SPRING_TYPE = BuildCraftProperties.SPRING_TYPE;
     public final EnumSpring springType;
 
-    public BlockSpring(String idBC, BlockBehaviour.Properties properties, EnumSpring springType)
-    {
+    public BlockSpring(String idBC, BlockBehaviour.Properties properties, EnumSpring springType) {
         super(idBC, properties);
 //        disableStats();
 //        registerDefaultState(
@@ -39,16 +35,14 @@ public class BlockSpring<SpringBlockEntity> extends BlockBCTile_Neptune
 
     @Override
     // protected BlockStateContainer createBlockState()
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
 //        builder.add(BuildCraftProperties.SPRING_TYPE); // Calen: not use meta, type not need to reg to blockstate
     }
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
 //        Level world = context.getLevel();
 //        BlockPos pos = context.getClickedPos();
 //        BlockState state = world.getBlockState(pos);
@@ -141,13 +135,11 @@ public class BlockSpring<SpringBlockEntity> extends BlockBCTile_Neptune
 
     @Override
 //    public BlockEntity getBlockEntity(BlockGetter world, BlockPos pos)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 //        BlockState state = world.getBlockState(pos);
 //        Supplier<BlockEntity> constructor = state.getValue(BuildCraftProperties.SPRING_TYPE).tileConstructor;
         BiFunction<BlockPos, BlockState, BlockEntity> constructor = this.springType.tileConstructor;
-        if (constructor != null)
-        {
+        if (constructor != null) {
             return constructor.apply(pos, state);
         }
         return null;
@@ -161,8 +153,7 @@ public class BlockSpring<SpringBlockEntity> extends BlockBCTile_Neptune
     @Override
 //    public void onBlockAdded(Level world, BlockPos pos, BlockState state)
     // 参考红石中继器 DiodeBlock.java
-    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity p_52509_, ItemStack p_52510_)
-    {
+    public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity p_52509_, ItemStack p_52510_) {
         super.setPlacedBy(world, pos, state, p_52509_, p_52510_);
 //        EnumSpring springType = state.getValue(BuildCraftProperties.SPRING_TYPE);
         EnumSpring springType = this.springType;
@@ -171,13 +162,11 @@ public class BlockSpring<SpringBlockEntity> extends BlockBCTile_Neptune
 
     // 随机tick生成水/油 BE是用来和泵交互的
     @Override
-    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random p_60554_)
-    {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random p_60554_) {
         generateSpringBlock(world, pos, state, p_60554_);
     }
 
-    private void generateSpringBlock(Level world, BlockPos pos, BlockState state, Random p_60554_)
-    {
+    private void generateSpringBlock(Level world, BlockPos pos, BlockState state, Random p_60554_) {
 //        EnumSpring springType = state.getValue(BuildCraftProperties.SPRING_TYPE);
         EnumSpring springType = this.springType;
         world.scheduleTick(pos, this, springType.tickRate); // 预订下次tick
@@ -185,16 +174,13 @@ public class BlockSpring<SpringBlockEntity> extends BlockBCTile_Neptune
 //        {
 //            return;
 //        }
-        if (!springType.canGen || springType.liquidBlock == null)
-        {
+        if (!springType.canGen || springType.liquidBlock == null) {
             return;
         }
-        if (!world.isEmptyBlock(pos.above()))
-        {
+        if (!world.isEmptyBlock(pos.above())) {
             return;
         }
-        if (springType.chance != -1 && p_60554_.nextInt(springType.chance) != 0)
-        {
+        if (springType.chance != -1 && p_60554_.nextInt(springType.chance) != 0) {
             return;
         }
         world.setBlock(pos.above(), springType.liquidBlock, 3);

@@ -17,27 +17,22 @@ import java.util.Objects;
 /**
  * Predicate that compares values of specified NBT keys subset.
  */
-public class StackNbtMatcher implements StackMatchingPredicate
-{
+public class StackNbtMatcher implements StackMatchingPredicate {
     private String[] keys;
 
-    public StackNbtMatcher(@Nonnull String... keys)
-    {
+    public StackNbtMatcher(@Nonnull String... keys) {
         this.keys = keys;
     }
 
     @Override
-    public boolean isMatching(@Nonnull ItemStack base, @Nonnull ItemStack comparison)
-    {
+    public boolean isMatching(@Nonnull ItemStack base, @Nonnull ItemStack comparison) {
         CompoundTag baseNBT = base.getTag();
         CompoundTag comparisonNBT = comparison.getTag();
 
-        for (String key : keys)
-        {
+        for (String key : keys) {
             Tag baseValue = baseNBT != null ? baseNBT.get(key) : null;
             Tag comparisonValue = comparisonNBT != null ? comparisonNBT.get(key) : null;
-            if (!Objects.equals(baseValue, comparisonValue))
-            {
+            if (!Objects.equals(baseValue, comparisonValue)) {
                 return false;
             }
         }

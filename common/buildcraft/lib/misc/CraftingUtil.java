@@ -13,26 +13,21 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public final class CraftingUtil
-{
+public final class CraftingUtil {
 
     /**
      * Deactivate constructor
      */
-    private CraftingUtil()
-    {
+    private CraftingUtil() {
     }
 
     //    public static Recipe findMatchingRecipe(CraftingContainer par1InventoryCrafting, Level par2World)
-    public static CraftingRecipe findMatchingRecipe(CraftingContainer par1InventoryCrafting, Level par2World)
-    {
+    public static CraftingRecipe findMatchingRecipe(CraftingContainer par1InventoryCrafting, Level par2World) {
 //        List<IRecipe> recipes = GameRegistry.findRegistry(IRecipe.class).getValues();
         List<CraftingRecipe> recipes = par2World.getRecipeManager().getRecipesFor(RecipeType.CRAFTING, par1InventoryCrafting, par2World);
 //        for (IRecipe recipe : recipes)
-        for (CraftingRecipe recipe : recipes)
-        {
-            if (recipe.matches(par1InventoryCrafting, par2World))
-            {
+        for (CraftingRecipe recipe : recipes) {
+            if (recipe.matches(par1InventoryCrafting, par2World)) {
                 return recipe;
             }
         }

@@ -2,10 +2,8 @@ package buildcraft.lib.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 
-public interface ILocalBlockUpdateSubscriber
-{
+public interface ILocalBlockUpdateSubscriber {
 
     /**
      * Returns the position of the subscriber. Used with the result of @{getUpdateRange} to determine if a subscriber

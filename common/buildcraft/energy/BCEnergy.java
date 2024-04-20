@@ -1,7 +1,7 @@
 package buildcraft.energy;
 
-import buildcraft.core.BCCore;
 import buildcraft.api.enums.EnumSpring;
+import buildcraft.core.BCCore;
 import buildcraft.energy.recipe.CoolantRecipeSerializer;
 import buildcraft.energy.recipe.FuelRecipeSerializer;
 import buildcraft.lib.fluid.BCFluid;
@@ -27,123 +27,96 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
-@Mod(BCEnergy.MOD_ID)
+//@formatter:off
+//@Mod(
+//        modid = BCEnergy.MODID,
+//        name = "BuildCraft Energy",
+//        version = BCLib.VERSION,
+//        dependencies = "required-after:buildcraftcore@[" + BCLib.VERSION + "]"
+//)
+//@formatter:on
+@Mod(BCEnergy.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCEnergy
-{
-    public static final String MOD_ID = "buildcraftenergy";
+public class BCEnergy {
+    public static final String MODID = "buildcraftenergy";
 
-    public BCEnergy()
-    {
-        RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
-        BCEnergyConfig.preInit();
+//    static {
+//        FluidRegistry.enableUniversalBucket();
+//    }
 
+    //    @Mod.Instance(MODID)
+    public static BCEnergy INSTANCE;
 
-//        BCEnergyFluids.preInit();
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        BCEnergyBlocks.init();
-//        BCEnergyItems.init();
-//        BCEnergyBlocks.BLOCK_ENTITIES.register(modEventBus);
-//        BCEnergyFluids.FLUIDS.register(modEventBus);
-        BCEnergyFluids.register(modEventBus);
-//        BCEnergyBlocks.BLOCKS.register(modEventBus);
-//        BCEnergyItems.ITEMS.register(modEventBus);
-//        modEventBus.addGenericListener(StructureFeature.class, BCStructures::register);
+    public BCEnergy() {
+        INSTANCE = this;
         BCEnergyWorldGen.init();
-//        BCBiomeRegistry.BIOMES.register(modEventBus);
-//        BCBiomeRegistry.init();
 
-//        BCEnergyModels.fmlPreInit();
-
-        modEventBus.addGenericListener(MenuType.class, BCEnergyMenuTypes::registerAll);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.register(BCEnergyModels.class);
     }
 
     @SubscribeEvent
-    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event)
-    {
-        IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
-        registry.register(FuelRecipeSerializer.INSTANCE);
-        registry.register(CoolantRecipeSerializer.INSTANCE);
-    }
-
-    @SubscribeEvent
-    public static void preInit(FMLConstructModEvent event)
-    {
+    public static void preInit(FMLConstructModEvent event) {
+        RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
+        BCEnergyConfig.preInit();
+        BCEnergyEntities.preInit();
         // Calen: from BCEnergyProxy
         // Should before BCEnergyFluids.preInit() and BCEnergyBlocks.preInit() to set christmas special fluid data
         BCEnergyProxy.getProxy().fmlPreInit();
 
+        BCEnergyFluids.preInit();
         BCEnergyBlocks.preInit();
         BCEnergyItems.preInit();
-        BCEnergyFluids.preInit();
-//        BCEnergyBlocks.preInit();
-//        EnumSpring.OIL.liquidBlock = BCEnergyFluids.crudeOil[0].getBlock().getDefaultState();
+    }
 
-//        HELPER.registerTile(TileSpringOil.class, "tile.spring.oil");
-//        HELPER.registerTile(TileEngineStone_BC8.class, "tile.engine.stone");
-//        HELPER.registerTile(TileEngineIron_BC8.class, "tile.engine.iron");
+    @SubscribeEvent
+//    public static void init(FMLInitializationEvent evt)
+    public static void init(FMLCommonSetupEvent event) {
+        BCEnergyFluids.registerBucketDispenserBehavior();
+//        BCEnergyRecipes.init(); // 1.18.2: use datagen
+        BCEnergyProxy.getProxy().fmlInit();
     }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void clientInit(FMLClientSetupEvent event)
-    {
+    public static void clientInit(FMLClientSetupEvent event) {
         // Calen: from BCFluidBlock#<init>
-        for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill)
-        {
+        for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill) {
             ItemBlockRenderTypes.setRenderLayer(fluid.get().getSource(), RenderType.solid());
             ItemBlockRenderTypes.setRenderLayer(fluid.get().getFlowing(), RenderType.solid());
         }
     }
 
     @SubscribeEvent
-    public static void commonInit(FMLCommonSetupEvent event)
-    {
-        BCEnergyFluids.registerBucketDispenserBehavior();
+    public static void postInit(FMLLoadCompleteEvent event) {
+        BCEnergyProxy.getProxy().fmlPostInit();
+        BCEnergyConfig.validateBiomeNames();
+//        registerMigrations();
+        EnumSpring.OIL.liquidBlock = BCEnergyFluids.crudeOil[0].get().defaultFluidState().createLegacyBlock();
     }
 
     @SubscribeEvent
-    public static void postInit(FMLLoadCompleteEvent event)
-    {
-        event.enqueueWork(() ->
-        {
-//            RegistryConfig.useOtherModConfigFor(MOD_ID, BuildCraft.MOD_ID);
-//            BCEnergyConfig.preInit();
-            // Calen: This SHOULD be put in enqueueWork or BCEnergyFluids.OIL is rot created
-//            EnumSpring.OIL.liquidBlock = BCEnergyFluids.OIL.getBlock().defaultBlockState();
-//            EnumSpring.OIL.liquidBlock = BCEnergyFluids.crudeOil[0].get().getBlock().defaultBlockState();
-            EnumSpring.OIL.liquidBlock = BCEnergyFluids.crudeOil[0].get().defaultFluidState().createLegacyBlock();
-        });
-
-        // Calen: moved to datagen
-//        // Calen: from BCEnergy#init
-//        BCEnergyRecipes.init();
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCEnergyMenuTypes.registerAll(event);
     }
 
-    // Calen: moved to BCEnergyModels.class @Mod.EventBusSubscriber
-//    @OnlyIn(Dist.CLIENT)
-//    @Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_ENERGY, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-//    public static class ModBusEvents
-//    {
-//        @SubscribeEvent
-//        public static void preInit(FMLCommonSetupEvent event)
-//        {
-//            BCEnergyModels.fmlPreInit();
-//        }
-//    }
+    @SubscribeEvent
+    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
+        IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
+        registry.register(FuelRecipeSerializer.INSTANCE);
+        registry.register(CoolantRecipeSerializer.INSTANCE);
+    }
 
     // TODO Calen biome???
-    @SubscribeEvent
-    public static void registerSerializers(RegistryEvent.Register<RecipeSerializer<?>> evt)
-    {
-//        Registry.register(Registry.BIOME_SOURCE, ">>>", BCBiomeProvider.TF_CODEC);
-//        Registry.register(Registry.CHUNK_GENERATOR, ">>>", BCChunkGenerator.CODEC);
-    }
+//    @SubscribeEvent
+//    public static void registerSerializers(RegistryEvent.Register<RecipeSerializer<?>> evt) {
+////        Registry.register(Registry.BIOME_SOURCE, ">>>", BCBiomeProvider.TF_CODEC);
+////        Registry.register(Registry.CHUNK_GENERATOR, ">>>", BCChunkGenerator.CODEC);
+//    }
 
     private static final TagManager tagManager = new TagManager();
 
-    static
-    {
+    static {
         // Calen: in namespace Energy
         startBatch();
         // Items
@@ -184,20 +157,17 @@ public class BCEnergy
         );
     }
 
-    private static TagManager.TagEntry registerTag(String id)
-    {
+    private static TagManager.TagEntry registerTag(String id) {
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
 //        TagManager.startBatch();
         tagManager.startBatch();
     }
 
-    private static void endBatch(Consumer<TagManager.TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagManager.TagEntry> consumer) {
 //        TagManager.endBatch(consumer);
         tagManager.endBatch(consumer);
     }

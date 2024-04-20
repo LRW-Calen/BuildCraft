@@ -6,17 +6,13 @@
 
 package buildcraft.factory.client.render;
 
-import buildcraft.factory.tile.TileMiner;
 import buildcraft.factory.tile.TilePump;
 import buildcraft.lib.client.render.laser.LaserData_BC8.LaserRow;
 import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import buildcraft.lib.client.render.tile.RenderPartCube;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
-import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -30,13 +26,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.TextureStitchEvent;
-
-import javax.annotation.Nonnull;
 
 //public class RenderPump extends FastTESR<TilePump>
-public class RenderPump implements BlockEntityRenderer<TilePump>
-{
+public class RenderPump implements BlockEntityRenderer<TilePump> {
     private static final int[] COLOUR_POWER = new int[16];
     private static final int COLOUR_STATUS_ON = 0xFF_77_DD_77; // a light green
     private static final int COLOUR_STATUS_OFF = 0xFF_1f_10_1b; // black-ish
@@ -60,10 +52,8 @@ public class RenderPump implements BlockEntityRenderer<TilePump>
             new Vec3(0, 0, -1),
     };
 
-    static
-    {
-        for (int i = 0; i < COLOUR_POWER.length; i++)
-        {
+    static {
+        for (int i = 0; i < COLOUR_POWER.length; i++) {
             int c = (i * 0x40) / COLOUR_POWER.length;
             int r = (i * 0xE0) / COLOUR_POWER.length + 0x1F;
             int colour = (0xFF << 24) + (c << 16) + (c << 8) + r;
@@ -73,41 +63,31 @@ public class RenderPump implements BlockEntityRenderer<TilePump>
         LED_POWER = new RenderPartCube[4];
         LED_STATUS = new RenderPartCube[4];
 
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
 //            Direction facing = Direction.getHorizontal(i);
             Direction facing = Direction.from2DDataValue(i);
 
             final int dX, dZ;
             final double ledX, ledZ;
 
-            if (facing.getAxis() == Axis.X)
-            {
+            if (facing.getAxis() == Axis.X) {
                 dX = 0;
 //                dZ = facing.getAxisDirection().getOffset();
                 dZ = facing.getAxisDirection().getStep();
                 ledZ = 0.5;
-                if (facing == Direction.EAST)
-                {
+                if (facing == Direction.EAST) {
                     ledX = 15.6 / 16.0;
-                }
-                else
-                {
+                } else {
                     ledX = 0.4 / 16.0;
                 }
-            }
-            else
-            {
+            } else {
 //                dX = -facing.getAxisDirection().getOffset();
                 dX = -facing.getAxisDirection().getStep();
                 dZ = 0;
                 ledX = 0.5;
-                if (facing == Direction.SOUTH)
-                {
+                if (facing == Direction.SOUTH) {
                     ledZ = 15.6 / 16.0;
-                }
-                else
-                {
+                } else {
                     ledZ = 0.4 / 16.0;
                 }
             }
@@ -135,35 +115,24 @@ public class RenderPump implements BlockEntityRenderer<TilePump>
     private static boolean whiteTextureFlag = false;
 
     //    public static void textureStitchPost()
-    public static void initWhiteTex()
-    {
+    public static void initWhiteTex() {
         whiteTextureFlag = true;
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             LED_POWER[i].setWhiteTex();
             LED_STATUS[i].setWhiteTex();
         }
     }
 
-    public static void textureStitchPre()
-    {
-        // Calen: just run the static to prepare texture load -> SpriteHolderRegistry.getHolder(...)
-    }
-
-
     private final RenderTube tubeRenderer = new RenderTube(null, TUBE_LASER);
 
-    public RenderPump(BlockEntityRendererProvider.Context context)
-    {
+    public RenderPump(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void renderTileEntityFast(@Nonnull TilePump tile, double x, double y, double z, float partialTicks, int destroyStage, float partial, @Nonnull BufferBuilder buffer)
-    public void render(TilePump tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TilePump tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         // Calen: get the white texture
-        if (!whiteTextureFlag)
-        {
+        if (!whiteTextureFlag) {
             initWhiteTex();
         }
 //        Minecraft.getMinecraft().mcProfiler.startSection("bc");
@@ -184,8 +153,7 @@ public class RenderPump implements BlockEntityRenderer<TilePump>
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS); // Calen: not necrssary
 //        VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
         VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             // Get the light level of a direction
 //            Direction dir = Direction.getHorizontal(i);
             Direction dir = Direction.from2DDataValue(i);
@@ -220,15 +188,11 @@ public class RenderPump implements BlockEntityRenderer<TilePump>
 
     @Override
 //    public boolean isGlobalRenderer(TilePump tile)
-    public boolean shouldRenderOffScreen(TilePump tile)
-    {
+    public boolean shouldRenderOffScreen(TilePump tile) {
         return true;
     }
 
-
-    // Calen: 1.12.2 called in BCFactoryProxy#fmlPreInit
-//    public static void init()
-//    {
-//        //force the static block to run before texture stitching
-//    }
+    public static void init() {
+        //force the static block to run before texture stitching
+    }
 }

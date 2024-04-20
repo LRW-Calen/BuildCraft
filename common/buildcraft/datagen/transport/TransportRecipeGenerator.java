@@ -9,7 +9,10 @@ import buildcraft.transport.BCTransportBlocks;
 import buildcraft.transport.BCTransportItems;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
-import net.minecraft.data.recipes.*;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -23,20 +26,17 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class TransportRecipeGenerator extends RecipeProvider
-{
-    private static final String MOD_ID = BCTransport.MOD_ID;
+public class TransportRecipeGenerator extends RecipeProvider {
+    private static final String MOD_ID = BCTransport.MODID;
 
-    public TransportRecipeGenerator(DataGenerator generator)
-    {
+    public TransportRecipeGenerator(DataGenerator generator) {
         super(generator);
     }
 
     private Consumer<FinishedRecipe> consumer;
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         this.consumer = consumer;
         // filtered_buffer
         ShapedRecipeBuilder.shaped(BCTransportBlocks.filteredBuffer.get())
@@ -135,8 +135,7 @@ public class TransportRecipeGenerator extends RecipeProvider
     private void addPipeRecipe(Map<DyeColor, RegistryObject<? extends IItemPipe>> pipe, TagKey left, TagKey right)
 //    private void addPipeRecipe(Map<DyeColor, RegistryObject<? extends IItemPipe>> pipe, Object left, Object right)
     {
-        if (pipe == null)
-        {
+        if (pipe == null) {
             return;
         }
         Item colourless = (Item) pipe.get(null).get();
@@ -148,8 +147,7 @@ public class TransportRecipeGenerator extends RecipeProvider
                 .unlockedBy("has_item", has(Tags.Items.GLASS))
                 .group(MOD_ID)
                 .save(consumer, MOD_ID + ":" + colourless.getRegistryName().getPath() + "_colorless");
-        for (DyeColor colour : DyeColor.values())
-        {
+        for (DyeColor colour : DyeColor.values()) {
             Item coloured = (Item) pipe.get(colour).get();
             ShapedRecipeBuilder.shaped(coloured, 8)
                     .pattern("lgr")
@@ -162,14 +160,11 @@ public class TransportRecipeGenerator extends RecipeProvider
         }
     }
 
-    private void addPipeUpgradeRecipe(Map<DyeColor, RegistryObject<? extends IItemPipe>> from, Map<DyeColor, RegistryObject<? extends IItemPipe>> to, TagKey<Item> additional)
-    {
-        if (from == null || to == null)
-        {
+    private void addPipeUpgradeRecipe(Map<DyeColor, RegistryObject<? extends IItemPipe>> from, Map<DyeColor, RegistryObject<? extends IItemPipe>> to, TagKey<Item> additional) {
+        if (from == null || to == null) {
             return;
         }
-        if (additional == null)
-        {
+        if (additional == null) {
             throw new NullPointerException("additional");
         }
         Item from_colourless = (Item) from.get(null).get();
@@ -186,8 +181,7 @@ public class TransportRecipeGenerator extends RecipeProvider
                 .group(MOD_ID)
                 .save(consumer, MOD_ID + ":" + to_colourless.getRegistryName().getPath() + "_colorless");
 
-        for (DyeColor colour : ColourUtil.COLOURS)
-        {
+        for (DyeColor colour : ColourUtil.COLOURS) {
             Item from_coloured = (Item) from.get(colour).get();
             Item to_coloured = (Item) to.get(colour).get();
             ShapelessRecipeBuilder.shapeless(from_coloured)
@@ -206,8 +200,7 @@ public class TransportRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Transport Recipe Generator";
     }
 }

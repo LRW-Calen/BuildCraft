@@ -7,7 +7,8 @@ public enum NoopTileCache implements ITileCache {
     INSTANCE;
 
     @Override
-    public void invalidate() {}
+    public void invalidate() {
+    }
 
     @Override
     public TileCacheRet getTile(BlockPos pos) {

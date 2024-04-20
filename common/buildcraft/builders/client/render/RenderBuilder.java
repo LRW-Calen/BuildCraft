@@ -22,22 +22,22 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 
+@OnlyIn(Dist.CLIENT)
 //public class RenderBuilder extends FastTESR<TileBuilder>
-public class RenderBuilder implements BlockEntityRenderer<TileBuilder>
-{
+public class RenderBuilder implements BlockEntityRenderer<TileBuilder> {
     private static final double OFFSET = 0.1;
 
-    public RenderBuilder(BlockEntityRendererProvider.Context context)
-    {
+    public RenderBuilder(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void renderTileEntityFast(@Nonnull TileBuilder tile, double x, double y, double z, float partialTicks, int destroyStage, float partial, @Nonnull BufferBuilder buffer)
-    public void render(TileBuilder tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileBuilder tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         Minecraft.getInstance().getProfiler().push("bc");
         Minecraft.getInstance().getProfiler().push("builder");
 
@@ -56,13 +56,10 @@ public class RenderBuilder implements BlockEntityRenderer<TileBuilder>
 //        buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
         buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
         List<BlockPos> path = tile.path;
-        if (path != null)
-        {
+        if (path != null) {
             BlockPos last = null;
-            for (BlockPos p : path)
-            {
-                if (last != null)
-                {
+            for (BlockPos p : path) {
+                if (last != null) {
 //                    Vec3 from = new Vec3(last).add(VecUtil.VEC_HALF);
                     Vec3 from = Vec3.atCenterOf(last).add(VecUtil.VEC_HALF);
 //                    Vec3 to = new Vec3(p).add(VecUtil.VEC_HALF);
@@ -81,8 +78,7 @@ public class RenderBuilder implements BlockEntityRenderer<TileBuilder>
 //        buffer.setTranslation(0, 0, 0);
         poseStack.popPose();
 
-        if (tile.getBuilder() != null)
-        {
+        if (tile.getBuilder() != null) {
             buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
 //            RenderSnapshotBuilder.render(tile.getBuilder(), tile.getWorld(), tile.getPos(), x, y, z, partialTicks, buffer);
             RenderSnapshotBuilder.render(tile.getBuilder(), tile.getLevel(), tile.getBlockPos(), partialTicks, poseStack, buffer);
@@ -92,21 +88,19 @@ public class RenderBuilder implements BlockEntityRenderer<TileBuilder>
         Minecraft.getInstance().getProfiler().pop();
     }
 
-    private static Vec3 offset(Vec3 from, Vec3 to)
-    {
+    private static Vec3 offset(Vec3 from, Vec3 to) {
         Vec3 dir = to.subtract(from).normalize();
         return from.add(VecUtil.scale(dir, OFFSET));
     }
 
     @Override
 //    public boolean isGlobalRenderer(TileBuilder te)
-    public boolean shouldRenderOffScreen(TileBuilder tile)
-    {
+    public boolean shouldRenderOffScreen(TileBuilder tile) {
         return true;
     }
+
     @Override
-    public int getViewDistance()
-    {
+    public int getViewDistance() {
         return 512;
     }
 }

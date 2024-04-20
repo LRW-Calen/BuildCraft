@@ -1,31 +1,26 @@
 package buildcraft.silicon.recipe;
 
-import buildcraft.api.recipes.AssemblyRecipe;
 import buildcraft.datagen.silicon.FacadeSwapRecipeBuilder;
-import buildcraft.transport.BCTransport;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
 
 import java.util.function.Function;
 
-public class FacadeSwapRecipeSerializer extends SimpleRecipeSerializer<FacadeSwapRecipe>
-{
+public class FacadeSwapRecipeSerializer extends SimpleRecipeSerializer<FacadeSwapRecipe> {
     // Calen
     public static final FacadeSwapRecipeSerializer INSTANCE;
 
-    static
-    {
+    static {
         INSTANCE = new FacadeSwapRecipeSerializer(id -> FacadeSwapRecipe.INSTANCE);
         INSTANCE.setRegistryName(FacadeSwapRecipe.TYPE_ID);
     }
-    public FacadeSwapRecipeSerializer(Function<ResourceLocation, FacadeSwapRecipe> constructor)
-    {
+
+    public FacadeSwapRecipeSerializer(Function<ResourceLocation, FacadeSwapRecipe> constructor) {
         super(constructor);
     }
 
-    public static void toJson(FacadeSwapRecipeBuilder builder, JsonObject json)
-    {
+    public static void toJson(FacadeSwapRecipeBuilder builder, JsonObject json) {
         json.addProperty("type", FacadeSwapRecipe.TYPE_ID.toString());
     }
 }

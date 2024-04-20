@@ -5,17 +5,16 @@
 package buildcraft.factory;
 
 import buildcraft.factory.item.ItemWaterGel;
-import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.BCLib;
+import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.registry.RegistrationHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCFactoryItems
-{
+public class BCFactoryItems {
 
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCFactory.MOD_ID);
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCFactory.MODID);
 
     public static final RegistryObject<ItemBC_Neptune> plasticSheet;
     public static final RegistryObject<ItemWaterGel> waterGel;
@@ -27,14 +26,10 @@ public class BCFactoryItems
                     .stacksTo(64)
                     .rarity(Rarity.COMMON);
 
-    static
-    {
-        if (BCLib.DEV)
-        {
+    static {
+        if (BCLib.DEV) {
             plasticSheet = HELPER.addItem("item.plastic.sheet", PROP_DEFAULT, ItemBC_Neptune::new);
-        }
-        else
-        {
+        } else {
             plasticSheet = null;
         }
         waterGel = HELPER.addItem(
@@ -50,8 +45,7 @@ public class BCFactoryItems
     }
 
 
-    public static void init()
-    {
+    public static void fmlPreInit() {
 
     }
 }

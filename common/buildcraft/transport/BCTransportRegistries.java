@@ -22,8 +22,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
 
-public class BCTransportRegistries
-{
+public class BCTransportRegistries {
 
     public static void preInit()
 //    static
@@ -40,8 +39,7 @@ public class BCTransportRegistries
         PipeApi.flowStructure.fallbackColourType = EnumPipeColourType.BORDER_OUTER;
     }
 
-    public static void init()
-    {
+    public static void init() {
         PipeConnectionAPI.registerConnection(Blocks.BREWING_STAND,
                 (world, pos, face, state) -> face.getAxis().getPlane() == Direction.Plane.HORIZONTAL ? 4 / 16F : 0);
 

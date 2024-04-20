@@ -13,13 +13,11 @@ import net.minecraft.world.item.Item;
 /**
  * Basically a copy of {@link ItemMultiTexture}, but extends {@link ItemBC_Neptune}
  */
-public class ItemBlockBCMulti extends ItemBlockBC_Neptune
-{
+public class ItemBlockBCMulti extends ItemBlockBC_Neptune {
 //    protected final Function<ItemStack, String> nameFunction;
 
     //    public ItemBlockBCMulti(BlockBCBase_Neptune block, Function<ItemStack, String> nameFunction)
-    public ItemBlockBCMulti(BlockBCBase_Neptune block, Item.Properties properties)
-    {
+    public ItemBlockBCMulti(BlockBCBase_Neptune block, Item.Properties properties) {
         super(block, properties);
 //        this.nameFunction = nameFunction;
 //        setHasSubtypes(true);

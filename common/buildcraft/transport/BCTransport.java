@@ -29,6 +29,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
@@ -46,11 +47,12 @@ import java.util.function.Consumer;
 //    version = BCLib.VERSION,
 //    dependencies = "required-after:buildcraftcore@[" + BCLib.VERSION + "]"
 //)
-@Mod(BCTransport.MOD_ID)
-@Mod.EventBusSubscriber(modid = BCTransport.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+//@formatter:on
+@Mod(BCTransport.MODID)
+@Mod.EventBusSubscriber(modid = BCTransport.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 //@formatter:on
 public class BCTransport {
-    public static final String MOD_ID = "buildcrafttransport";
+    public static final String MODID = "buildcrafttransport";
 
     //    @Mod.Instance(MOD_ID)
     public static BCTransport INSTANCE = null;
@@ -60,19 +62,12 @@ public class BCTransport {
 
     public BCTransport() {
         INSTANCE = this;
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        BCTransportBlockEntities.BLOCK_ENTITIES.register(modEventBus);
-//        BCTransportBlocks.BLOCKS.register(modEventBus);
-        BCTransportRegistries.preInit(); // Calen: from BCTransport#preInit
-        BCTransportPipes.preInit(); // Calen: should after BCTransportRegistries.preInit()
-        BCTransportPlugs.preInit();
-//        BCTransportItems.preInit();
-        PipeRegistry.PIPE_ITEMS.register(modEventBus);
 
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        PipeRegistry.PIPE_ITEMS.register(modEventBus);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.register(BCTransportModels.class);
         }
-        modEventBus.addGenericListener(MenuType.class, BCTransportMenuTypes::registerAll);
     }
 
     // Calen
@@ -84,17 +79,17 @@ public class BCTransport {
 
     @SubscribeEvent
     public static void preInit(FMLConstructModEvent evt) {
-        RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
+        RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
 
         tabPipes = CreativeTabManager.createTab("buildcraft.pipes");
         tabPlugs = CreativeTabManager.createTab("buildcraft.plugs");
 
-//        BCTransportRegistries.preInit();
+        BCTransportRegistries.preInit();
         BCTransportConfig.preInit();
-        BCTransportBlocks.preInit(); // Calen: Moved
-//        BCTransportPipes.preInit(); // Calen: Moved
-//        BCTransportPlugs.preInit(); // Calen: Moved
-        BCTransportItems.preInit(); // Calen: Moved
+        BCTransportBlocks.preInit();
+        BCTransportPipes.preInit();
+        BCTransportPlugs.preInit();
+        BCTransportItems.preInit();
         BCTransportStatements.preInit();
 
         // Reload after all of the pipe defs have been created.
@@ -111,6 +106,7 @@ public class BCTransport {
         BCTransportProxy.getProxy().fmlPreInit();
 //
         MinecraftForge.EVENT_BUS.register(BCTransportEventDist.INSTANCE);
+
         if (FMLEnvironment.dist == Dist.CLIENT) {
             MinecraftForge.EVENT_BUS.register(PipeTabButton.class);
         }
@@ -130,7 +126,7 @@ public class BCTransport {
 //    public static void onImcEvent(IMCEvent imc)
     public static void onImcEvent(InterModProcessEvent imc) {
 //        for (InterModComms.IMCMessage message : imc.getMessages())
-        InterModComms.getMessages(MOD_ID).forEach(message ->
+        InterModComms.getMessages(MODID).forEach(message ->
         {
             if (message.messageSupplier().get() instanceof BcImcMessage bcImcMessage) {
 //                if (FacadeAPI.isFacadeMessageId(message.key))
@@ -150,8 +146,7 @@ public class BCTransport {
                         int time = 1000;
                         if (time + totalTantrumTime > 15000) {
                             time = 0;
-                        }
-                        else {
+                        } else {
                             totalTantrumTime += time;
                             try {
                                 Thread.sleep(time);
@@ -166,8 +161,7 @@ public class BCTransport {
 //                        FacadeStateManager.receiveInterModComms(message);
                         FacadeStateManager.receiveInterModComms(message, bcImcMessage);
                     }
-                }
-                else {
+                } else {
                     BCLog.logger.error("[transport.imc] Unknown IMC message type: " + bcImcMessage.getClass().getName());
                 }
             }
@@ -179,6 +173,10 @@ public class BCTransport {
         BCTransportProxy.getProxy().fmlPostInit();
     }
 
+    @SubscribeEvent
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCTransportMenuTypes.registerAll(event);
+    }
 
     private static final TagManager tagManager = new TagManager();
 
@@ -245,9 +243,6 @@ public class BCTransport {
         registerTag("item.pipe.buildcrafttransport.power_wood_2").reg("pipe_power_wood_2").locale("PipePowerWood2");
         registerTag("item.pipe.buildcrafttransport.power_quartz_").reg("pipe_power_quartz_2").locale("PipePowerQuartz2");
         endBatch(TagManager.setTab("buildcraft.pipes"));
-//        endBatch((t) ->
-//        {
-//        });
         // Item Blocks
 //        registerTag("item.block.filtered_buffer").reg("filtered_buffer").locale("filteredBufferBlock").model("filtered_buffer");
         registerTag("item.block.filtered_buffer").reg("filtered_buffer").locale("filteredBufferBlock");

@@ -21,32 +21,27 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 //public class RenderFiller extends FastTESR<TileFiller>
-public class RenderFiller implements BlockEntityRenderer<TileFiller>
-{
+public class RenderFiller implements BlockEntityRenderer<TileFiller> {
 
-    public RenderFiller(BlockEntityRendererProvider.Context context)
-    {
+    public RenderFiller(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void renderTileEntityFast(TileFiller tile, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder bb)
-    public void render(TileFiller tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileFiller tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         Minecraft.getInstance().getProfiler().push("bc");
         Minecraft.getInstance().getProfiler().push("filler");
 
         Minecraft.getInstance().getProfiler().push("main");
         VertexConsumer bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        if (tile.getBuilder() != null)
-        {
+        if (tile.getBuilder() != null) {
 //            RenderSnapshotBuilder.render(tile.getBuilder(), tile.getWorld(), tile.getPos(), x, y, z, partialTicks, bb);
             RenderSnapshotBuilder.render(tile.getBuilder(), tile.getLevel(), tile.getBlockPos(), partialTicks, poseStack, bb);
         }
         Minecraft.getInstance().getProfiler().pop();
 
         Minecraft.getInstance().getProfiler().push("box");
-        if (tile.markerBox)
-        {
+        if (tile.markerBox) {
 //            bb.setTranslation(x - tile.getPos().getX(), y - tile.getPos().getY(), z - tile.getPos().getZ());
             poseStack.pushPose();
             poseStack.translate(-tile.getBlockPos().getX(), -tile.getBlockPos().getY(), -tile.getBlockPos().getZ());
@@ -62,14 +57,12 @@ public class RenderFiller implements BlockEntityRenderer<TileFiller>
 
     @Override
 //    public boolean isGlobalRenderer(TileFiller te)
-    public boolean shouldRenderOffScreen(TileFiller tile)
-    {
+    public boolean shouldRenderOffScreen(TileFiller tile) {
         return true;
     }
 
     @Override
-    public int getViewDistance()
-    {
+    public int getViewDistance() {
         return 512;
     }
 }

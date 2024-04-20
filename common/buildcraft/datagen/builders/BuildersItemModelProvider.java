@@ -2,7 +2,7 @@ package buildcraft.datagen.builders;
 
 import buildcraft.builders.BCBuildersBlocks;
 import buildcraft.builders.BCBuildersItems;
-import buildcraft.builders.BCBuildersModBusEventDist;
+import buildcraft.builders.client.BuildersItemModelPredicates;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -11,18 +11,15 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nonnull;
 
-public class BuildersItemModelProvider extends ItemModelProvider
-{
+public class BuildersItemModelProvider extends ItemModelProvider {
     private static final ResourceLocation generated = new ResourceLocation("minecraft", "item/generated");
 
-    public BuildersItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
-    {
+    public BuildersItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
         super(generator, modid, existingFileHelper);
     }
 
     @Override
-    protected void registerModels()
-    {
+    protected void registerModels() {
         // BlockItems
         withExistingParent(BCBuildersBlocks.builder.get().getRegistryName().toString(), new ResourceLocation("buildcraftbuilders:block/builder/main"));
         withExistingParent(BCBuildersBlocks.filler.get().getRegistryName().toString(), new ResourceLocation("buildcraftbuilders:block/filler/main"));
@@ -57,14 +54,14 @@ public class BuildersItemModelProvider extends ItemModelProvider
                         withExistingParent(schematicSingle.getNamespace() + ":item/" + schematicSingle.getPath() + "/clean", generated)
                                 .texture("layer0", "buildcraftbuilders:items/schematic_single/clean")
                 )
-                .predicate(BCBuildersModBusEventDist.PREDICATE_USED, 0)
+                .predicate(BuildersItemModelPredicates.PREDICATE_USED, 0)
                 .end()
                 .override()
                 .model(
                         withExistingParent(schematicSingle.getNamespace() + ":item/" + schematicSingle.getPath() + "/used", generated)
                                 .texture("layer0", "buildcraftbuilders:items/schematic_single/used")
                 )
-                .predicate(BCBuildersModBusEventDist.PREDICATE_USED, 1)
+                .predicate(BuildersItemModelPredicates.PREDICATE_USED, 1)
                 .end();
         // snapshotBLUEPRINT
         ResourceLocation snapshotBLUEPRINT = BCBuildersItems.snapshotBLUEPRINT.get().getRegistryName();
@@ -74,14 +71,14 @@ public class BuildersItemModelProvider extends ItemModelProvider
                         withExistingParent(snapshotBLUEPRINT.getNamespace() + ":item/" + snapshotBLUEPRINT.getPath() + "/clean", generated)
                                 .texture("layer0", "buildcraftbuilders:items/blueprint/clean")
                 )
-                .predicate(BCBuildersModBusEventDist.PREDICATE_USED, 0)
+                .predicate(BuildersItemModelPredicates.PREDICATE_USED, 0)
                 .end()
                 .override()
                 .model(
                         withExistingParent(snapshotBLUEPRINT.getNamespace() + ":item/" + snapshotBLUEPRINT.getPath() + "/used", generated)
                                 .texture("layer0", "buildcraftbuilders:items/blueprint/used")
                 )
-                .predicate(BCBuildersModBusEventDist.PREDICATE_USED, 1)
+                .predicate(BuildersItemModelPredicates.PREDICATE_USED, 1)
                 .end();
         // snapshotTEMPLATE
         ResourceLocation snapshotTEMPLATE = BCBuildersItems.snapshotTEMPLATE.get().getRegistryName();
@@ -91,22 +88,21 @@ public class BuildersItemModelProvider extends ItemModelProvider
                         withExistingParent(snapshotTEMPLATE.getNamespace() + ":item/" + snapshotTEMPLATE.getPath() + "/clean", generated)
                                 .texture("layer0", "buildcraftbuilders:items/template/clean")
                 )
-                .predicate(BCBuildersModBusEventDist.PREDICATE_USED, 0)
+                .predicate(BuildersItemModelPredicates.PREDICATE_USED, 0)
                 .end()
                 .override()
                 .model(
                         withExistingParent(snapshotTEMPLATE.getNamespace() + ":item/" + snapshotTEMPLATE.getPath() + "/used", generated)
                                 .texture("layer0", "buildcraftbuilders:items/template/used")
                 )
-                .predicate(BCBuildersModBusEventDist.PREDICATE_USED, 1)
+                .predicate(BuildersItemModelPredicates.PREDICATE_USED, 1)
                 .end();
 
     }
 
     @Nonnull
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "Item models: " + modid;
     }
 }

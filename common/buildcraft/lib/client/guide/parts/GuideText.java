@@ -13,32 +13,26 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class GuideText extends GuidePart
-{
+public class GuideText extends GuidePart {
     public final PageLine text;
 
     //    public GuideText(GuiGuide gui, Component text)
-    public GuideText(GuiGuide gui, String textKey, Component text)
-    {
+    public GuideText(GuiGuide gui, String textKey, Component text) {
 //        this(gui, new PageLine(0, text, false));
         this(gui, new PageLine(0, textKey, text, false));
     }
 
-    public GuideText(GuiGuide gui, PageLine text)
-    {
+    public GuideText(GuiGuide gui, PageLine text) {
         super(gui);
         this.text = text;
     }
 
     @Override
-    public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index)
-    {
+    public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index) {
         PagePosition newPos = renderLine(poseStack, current, text, x, y, width, height, index);
-        if (wasHovered && didRender)
-        {
+        if (wasHovered && didRender) {
             List<Component> tooltip = text.getTooltip();
-            if (tooltip != null && !tooltip.isEmpty())
-            {
+            if (tooltip != null && !tooltip.isEmpty()) {
                 gui.tooltips.add(tooltip);
             }
         }
@@ -47,14 +41,12 @@ public class GuideText extends GuidePart
 
     @Override
     public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
-                                         double mouseX, double mouseY)
-    {
+                                         double mouseX, double mouseY) {
         return renderLine(poseStack, current, text, x, y, width, height, -1);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return text.toString();
     }
 }

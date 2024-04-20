@@ -19,12 +19,10 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ContainerBuilder extends ContainerBCTile<TileBuilder>
-{
+public class ContainerBuilder extends ContainerBCTile<TileBuilder> {
     public final List<WidgetFluidTank<ContainerBuilder>> widgetTanks;
 
-    public ContainerBuilder(MenuType menuType, int id, Player player, TileBuilder tile)
-    {
+    public ContainerBuilder(MenuType menuType, int id, Player player, TileBuilder tile) {
         super(menuType, id, player, tile);
 
         addFullPlayerInventory(140);
@@ -32,10 +30,8 @@ public class ContainerBuilder extends ContainerBCTile<TileBuilder>
 //        addSlotToContainer(new SlotBase(tile.invSnapshot, 0, 80, 27));
         addSlot(new SlotBase(tile.invSnapshot, 0, 80, 27));
 
-        for (int sy = 0; sy < 3; sy++)
-        {
-            for (int sx = 0; sx < 9; sx++)
-            {
+        for (int sy = 0; sy < 3; sy++) {
+            for (int sx = 0; sx < 9; sx++) {
 //                addSlotToContainer(new SlotBase(tile.invResources, sx + sy * 9, 8 + sx * 18, 72 + sy * 18));
                 addSlot(new SlotBase(tile.invResources, sx + sy * 9, 8 + sx * 18, 72 + sy * 18));
             }
@@ -46,18 +42,15 @@ public class ContainerBuilder extends ContainerBCTile<TileBuilder>
                 .map(this::addWidget)
                 .collect(Collectors.toList());
 
-        for (int y = 0; y < 6; y++)
-        {
-            for (int x = 0; x < 4; x++)
-            {
+        for (int y = 0; y < 6; y++) {
+            for (int x = 0; x < 4; x++) {
 //                addSlotToContainer(new SlotDisplay(this::getDisplay, x + y * 4, 179 + x * 18, 18 + y * 18));
                 addSlot(new SlotDisplay(this::getDisplay, x + y * 4, 179 + x * 18, 18 + y * 18));
             }
         }
     }
 
-    private ItemStack getDisplay(int index)
-    {
+    private ItemStack getDisplay(int index) {
         return tile.snapshotType == EnumSnapshotType.BLUEPRINT &&
                 index < tile.blueprintBuilder.remainingDisplayRequired.size()
                 ? tile.blueprintBuilder.remainingDisplayRequired.get(index)

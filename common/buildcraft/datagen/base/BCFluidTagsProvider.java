@@ -8,17 +8,14 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.FluidTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class BCFluidTagsProvider extends FluidTagsProvider
-{
+public class BCFluidTagsProvider extends FluidTagsProvider {
 
-    public BCFluidTagsProvider(DataGenerator generator, ExistingFileHelper existingFileHelper)
-    {
-        super(generator, BCEnergy.MOD_ID, existingFileHelper);
+    public BCFluidTagsProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCEnergy.MODID, existingFileHelper);
     }
 
     @Override
-    protected void addTags()
-    {
+    protected void addTags() {
         // Provide an empty fluid blacklist
         tag(OreDictTags.OIL)
                 .add(BCEnergyFluids.getAllStill().stream().map(r -> r.get()).toArray(BCFluid.Source[]::new))
@@ -27,8 +24,7 @@ public class BCFluidTagsProvider extends FluidTagsProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Fluid Tags";
     }
 }

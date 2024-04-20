@@ -17,7 +17,7 @@ public class LootConditionSpreading implements LootItemCondition {
     public static LootItemConditionType TYPE;
 
     public static void reg() {
-        TYPE = Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(BCFactory.MOD_ID, "spreading"), new LootItemConditionType(new ConditionSerializer()));
+        TYPE = Registry.register(Registry.LOOT_CONDITION_TYPE, new ResourceLocation(BCFactory.MODID, "spreading"), new LootItemConditionType(new ConditionSerializer()));
     }
 
     public LootConditionSpreading() {

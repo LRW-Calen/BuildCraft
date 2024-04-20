@@ -21,12 +21,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary>
-{
+public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary> {
     private static final ResourceLocation TEXTURE_BASE =
             new ResourceLocation("buildcraftbuilders:textures/gui/electronic_library.png");
     private static final int SIZE_X = 244, SIZE_Y = 220;
@@ -38,8 +36,7 @@ public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary>
 
     private final GuiButtonDrawable delButton;
 
-    public GuiElectronicLibrary(ContainerElectronicLibrary container, Inventory inventory, Component component)
-    {
+    public GuiElectronicLibrary(ContainerElectronicLibrary container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -53,13 +50,10 @@ public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary>
         mainGui.shownElements.add(delButton.createTextElement(LocaleUtil.localize("gui.del")));
     }
 
-    private void onDelButtonClick(IButtonClickEventTrigger button, int buttonKey)
-    {
-        if (container.tile.selected != null)
-        {
+    private void onDelButtonClick(IButtonClickEventTrigger button, int buttonKey) {
+        if (container.tile.selected != null) {
             Snapshot snapshot = getSnapshots().getSnapshot(container.tile.selected);
-            if (snapshot != null)
-            {
+            if (snapshot != null) {
                 container.sendSelectedToServer(null);
                 getSnapshots().removeSnapshot(snapshot.key);
             }
@@ -68,8 +62,7 @@ public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary>
 
     @Override
 //    protected void drawBackgroundLayer(float partialTicks)
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
         // Calen FIX Issue#4694: the white overlay of the progress down arrow does not appear in 1.12.2
 //        drawProgress(RECT_PROGRESS_DOWN, ICON_PROGRESS_DOWN, poseStack, -container.tile.deltaProgressDown.getDynamic(partialTicks), 1);
@@ -78,8 +71,7 @@ public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary>
         iterateSnapshots((i, rect, key) ->
         {
             boolean isSelected = key.equals(container.tile.selected);
-            if (isSelected)
-            {
+            if (isSelected) {
                 drawGradientRect(rect, poseStack, 0xFF_55_55_55, 0xFF_55_55_55);
             }
             int colour = isSelected ? 0xffffa0 : 0xe0e0e0;
@@ -90,17 +82,14 @@ public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary>
         delButton.enabled = getSnapshots().getSnapshot(container.tile.selected) != null;
     }
 
-    private GlobalSavedDataSnapshots getSnapshots()
-    {
+    private GlobalSavedDataSnapshots getSnapshots() {
         return GlobalSavedDataSnapshots.get(container.tile.getLevel());
     }
 
-    private void iterateSnapshots(ISnapshotIterator iterator)
-    {
+    private void iterateSnapshots(ISnapshotIterator iterator) {
         List<Snapshot.Key> list = getSnapshots().getList();
         GuiRectangle rect = new GuiRectangle(mainGui.rootElement.getX() + 8, mainGui.rootElement.getY() + 22, 154, 8);
-        for (int i = 0; i < list.size(); i++)
-        {
+        for (int i = 0; i < list.size(); i++) {
             iterator.call(i, rect, list.get(i));
             rect = rect.offset(0, 8);
         }
@@ -108,28 +97,24 @@ public class GuiElectronicLibrary extends GuiBC8<ContainerElectronicLibrary>
 
     @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
-    {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         AtomicBoolean found = new AtomicBoolean(false);
         iterateSnapshots((i, rect, key) ->
         {
-            if (rect.contains(mainGui.mouse))
-            {
+            if (rect.contains(mainGui.mouse)) {
                 container.sendSelectedToServer(key);
                 delButton.enabled = true;
                 found.set(true);
             }
         });
-        if (!found.get())
-        {
+        if (!found.get()) {
             super.mouseClicked(mouseX, mouseY, mouseButton);
         }
         return true;
     }
 
     @FunctionalInterface
-    private interface ISnapshotIterator
-    {
+    private interface ISnapshotIterator {
         void call(int snapshotIndex, GuiRectangle rect, Snapshot.Key key);
     }
 }

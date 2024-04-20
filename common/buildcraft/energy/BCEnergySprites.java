@@ -18,9 +18,8 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT, modid = BCEnergy.MOD_ID)
-public class BCEnergySprites
-{
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT, modid = BCEnergy.MODID)
+public class BCEnergySprites {
     // Calen: ModBusEvent in 1.18.2!
 //    public static void fmlPreInit()
 //    {
@@ -51,8 +50,7 @@ public class BCEnergySprites
 //    }
 
     @SubscribeEvent
-    public static void onTextureStitchPre(TextureStitchEvent.Pre event)
-    {
+    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         // TODO Calen frozen
 
 //        TextureMap map = event.getMap();
@@ -77,8 +75,7 @@ public class BCEnergySprites
     }
 
     @SubscribeEvent
-    public static void onTextureStitchPost(TextureStitchEvent.Post event)
-    {
+    public static void onTextureStitchPost(TextureStitchEvent.Post event) {
         // TODO Calen frozen
 
 //        ResourceLocation[][] fromSprites = new ResourceLocation[3][2];
@@ -129,17 +126,14 @@ public class BCEnergySprites
 //        }
     }
 
-    private static void regSprite(TextureAtlas map, ResourceLocation location, TextureAtlasSprite textureatlassprite)
-    {
+    private static void regSprite(TextureAtlas map, ResourceLocation location, TextureAtlasSprite textureatlassprite) {
 
         map.sprites.add(location);
         map.texturesByName.put(location, textureatlassprite);
-        try
-        {
+        try {
             textureatlassprite.uploadFirstFrame();
         }
-        catch (Throwable throwable)
-        {
+        catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.forThrowable(throwable, "[BuildCraft Energy] Stitching texture atlas");
             CrashReportCategory crashreportcategory = crashreport.addCategory("[BuildCraft Energy] Texture being stitched together");
             crashreportcategory.setDetail("[BuildCraft Energy] Atlas path", map.location());
@@ -148,8 +142,7 @@ public class BCEnergySprites
         }
 
         Tickable tickable = textureatlassprite.getAnimationTicker();
-        if (tickable != null)
-        {
+        if (tickable != null) {
             map.animatedTextures.add(tickable);
         }
     }

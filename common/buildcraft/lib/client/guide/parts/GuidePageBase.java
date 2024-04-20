@@ -17,134 +17,109 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GuidePageBase extends GuidePart
-{
+public abstract class GuidePageBase extends GuidePart {
     /**
      * The current page that is being rendered
      */
     private int index = 0;
     protected int numPages = -1;
 
-    public GuidePageBase(GuiGuide gui)
-    {
+    public GuidePageBase(GuiGuide gui) {
         super(gui);
     }
 
-    protected void setupChapters()
-    {
+    protected void setupChapters() {
         List<GuideChapter> lastChapterAtLevel = new ArrayList<>();
         List<GuideChapter> chapters = getChapters();
-        for (GuideChapter chapter : chapters)
-        {
+        for (GuideChapter chapter : chapters) {
             chapter.parent = null;
             chapter.children.clear();
         }
-        for (GuideChapter chapter : chapters)
-        {
+        for (GuideChapter chapter : chapters) {
             int gap = chapter.level - lastChapterAtLevel.size();
 
-            if (gap < 0)
-            {
+            if (gap < 0) {
                 // There's some previous children that we need to clean up
                 lastChapterAtLevel.subList(chapter.level, lastChapterAtLevel.size()).clear();
             }
 
-            for (int g = Math.min(chapter.level, lastChapterAtLevel.size()) - 1; g >= 0; g--)
-            {
+            for (int g = Math.min(chapter.level, lastChapterAtLevel.size()) - 1; g >= 0; g--) {
                 GuideChapter parent = lastChapterAtLevel.get(g);
-                if (parent != null)
-                {
+                if (parent != null) {
                     parent.children.add(chapter);
                     chapter.parent = parent;
                     break;
                 }
             }
 
-            for (int g = 1; g < gap; g++)
-            {
+            for (int g = 1; g < gap; g++) {
                 lastChapterAtLevel.add(null);
             }
             lastChapterAtLevel.add(chapter);
         }
 
         int idx = 0;
-        for (GuideChapter c : chapters)
-        {
-            if (c.hasParent())
-            {
+        for (GuideChapter c : chapters) {
+            if (c.hasParent()) {
                 continue;
             }
             c.colourIndex = idx++ % GuideChapter.COLOURS.length;
-            if (c.hasChildren())
-            {
+            if (c.hasChildren()) {
                 c.assignChildIndices();
             }
         }
     }
 
-    protected final int getIndex()
-    {
+    protected final int getIndex() {
         return index;
     }
 
-    public final void nextPage()
-    {
-        if (index + 2 < numPages)
-        {
+    public final void nextPage() {
+        if (index + 2 < numPages) {
             index += 2;
         }
     }
 
-    public final void lastPage()
-    {
+    public final void lastPage() {
         index -= 2;
-        if (index < 0)
-        {
+        if (index < 0) {
             index = 0;
         }
     }
 
-    protected final void goToPage(int page)
-    {
-        if (numPages > 0 && page >= numPages)
-        {
+    protected final void goToPage(int page) {
+        if (numPages > 0 && page >= numPages) {
             page = numPages - 1;
         }
         // Make it a multiple of 2
         index = page / 2;
         index *= 2;
-        if (index < 0)
-        {
+        if (index < 0) {
             index = 0;
         }
     }
 
-    public int getPage()
-    {
+    public int getPage() {
         return index;
     }
 
-    public int getPageCount()
-    {
+    public int getPageCount() {
         return numPages;
     }
 
-    public void tick()
-    {
+    public void tick() {
     }
 
     @Override
-    public final PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index)
-    {
+    public final PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index) {
         // NO-OP
         return current;
     }
 
-//    public abstract String getTitle();
+    //    public abstract String getTitle();
     public abstract Component getTitle();
 
-    public boolean shouldPersistHistory()
-    {
+    public boolean shouldPersistHistory() {
         return true;
     }
 
@@ -155,54 +130,43 @@ public abstract class GuidePageBase extends GuidePart
      * reload.
      */
     @Nullable
-    public GuidePageBase createReloaded()
-    {
+    public GuidePageBase createReloaded() {
         return null;
     }
 
     public abstract List<GuideChapter> getChapters();
 
     protected GuidePart getClicked(PoseStack poseStack, Iterable<GuidePart> iterable, int x, int y, int width, int height, int mouseX,
-                                   int mouseY, int index)
-    {
+                                   int mouseY, int index) {
         PagePosition pos = new PagePosition(0, 0);
-        for (GuidePart part : iterable)
-        {
+        for (GuidePart part : iterable) {
             pos = part.renderIntoArea(poseStack, x, y, width, height, pos, -1);
-            if (pos.page == index && part.wasHovered)
-            {
+            if (pos.page == index && part.wasHovered) {
                 return part;
             }
-            if (pos.page > index)
-            {
+            if (pos.page > index) {
                 return null;
             }
         }
         return null;
     }
 
-    public void renderFirstPage(PoseStack poseStack, int x, int y, int width, int height)
-    {
+    public void renderFirstPage(PoseStack poseStack, int x, int y, int width, int height) {
         renderPage(poseStack, x, y, width, height, index);
     }
 
-    public void renderSecondPage(PoseStack poseStack, int x, int y, int width, int height)
-    {
+    public void renderSecondPage(PoseStack poseStack, int x, int y, int width, int height) {
         renderPage(poseStack, x, y, width, height, index + 1);
     }
 
-    protected void renderPage(PoseStack poseStack, int x, int y, int width, int height, int index)
-    {
+    protected void renderPage(PoseStack poseStack, int x, int y, int width, int height, int index) {
         // Even => first page, draw page back button and first page index
-        if (index % 2 == 0)
-        {
+        if (index % 2 == 0) {
             // Back page button
-            if (index != 0)
-            {
+            if (index != 0) {
                 GuiIcon icon = GuiGuide.TURN_BACK;
                 GuiRectangle turnBox = new GuiRectangle(x - 30, y + height, icon.width + 30, icon.height + 30);
-                if (turnBox.contains(gui.mouse))
-                {
+                if (turnBox.contains(gui.mouse)) {
                     icon = GuiGuide.TURN_BACK_HOVERED;
                 }
                 icon.drawAt(turnBox.offset(30, 0), poseStack);
@@ -211,26 +175,21 @@ public abstract class GuidePageBase extends GuidePart
             String text = (index + 1) + " / " + numPages;
             double textX = x + GuiGuide.PAGE_LEFT_TEXT.width / 2 - getFontRenderer().getStringWidth(text) / 2;
             getFontRenderer().drawString(poseStack, text, (int) textX, (int) (y + height) + 6, 0x90816a);
-        }
-        else
-        {
+        } else {
             // Odd => second page, draw forward button and second page index
             // Back page button
-            if (index + 1 < numPages)
-            {
+            if (index + 1 < numPages) {
                 GuiIcon icon = GuiGuide.TURN_FORWARDS;
                 GuiRectangle turnBox = new GuiRectangle(
                         x + width - icon.width, y + height, icon.width + 30, icon.height + 30
                 );
-                if (turnBox.contains(gui.mouse))
-                {
+                if (turnBox.contains(gui.mouse)) {
                     icon = GuiGuide.TURN_FORWARDS_HOVERED;
                 }
                 icon.drawAt(turnBox, poseStack);
             }
             // Page index
-            if (index + 1 <= numPages)
-            {
+            if (index + 1 <= numPages) {
                 String text = (index + 1) + " / " + numPages;
                 double textX = x + (GuiGuide.PAGE_RIGHT_TEXT.width - getFontRenderer().getStringWidth(text)) / 2;
                 getFontRenderer().drawString(poseStack, text, (int) textX, (int) (y + height) + 6, 0x90816a);
@@ -240,39 +199,30 @@ public abstract class GuidePageBase extends GuidePart
 
     @Override
     public final PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
-                                               double mouseX, double mouseY)
-    {
+                                               double mouseX, double mouseY) {
         // NO-OP, use the below!
         return current;
     }
 
     public void handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, double mouseX, double mouseY, int mouseButton,
-                                 int index, boolean isEditing)
-    {
+                                 int index, boolean isEditing) {
         // Even => first page, test page back button and first page text clicks
-        if (index % 2 == 0)
-        {
-            if (index != 0)
-            {
+        if (index % 2 == 0) {
+            if (index != 0) {
                 GuiIcon icon = GuiGuide.TURN_BACK;
                 GuiRectangle turnBox = new GuiRectangle(x - 30, y + height, icon.width + 30, icon.height + 30);
-                if (turnBox.contains(gui.mouse))
-                {
+                if (turnBox.contains(gui.mouse)) {
                     lastPage();
                 }
             }
-        }
-        else
-        {
+        } else {
             // Odd => second page, test forward page button
-            if (index + 1 < numPages)
-            {
+            if (index + 1 < numPages) {
                 GuiIcon icon = GuiGuide.TURN_FORWARDS;
                 GuiRectangle turnBox = new GuiRectangle(
                         x + width - icon.width, y + height, icon.width + 30, icon.height + 30
                 );
-                if (turnBox.contains(gui.mouse))
-                {
+                if (turnBox.contains(gui.mouse)) {
                     nextPage();
                 }
             }
@@ -280,25 +230,22 @@ public abstract class GuidePageBase extends GuidePart
     }
 
     @Override
-    public final void handleMouseDragPartial(int startX, int startY, int currentX, int currentY, int button)
-    {
+    public final void handleMouseDragPartial(int startX, int startY, int currentX, int currentY, int button) {
 
     }
 
     @Override
-    public final void handleMouseDragFinish(int startX, int startY, int endX, int endY, int button)
-    {
+    public final void handleMouseDragFinish(int startX, int startY, int endX, int endY, int button) {
 
     }
 
-//    public boolean keyTyped(char typedChar, int keyCode) throws IOException
+    //    public boolean keyTyped(char typedChar, int keyCode) throws IOException
 //    public boolean keyTyped(char typedChar, int keyCode)
-    public boolean keyTyped(int typedChar, int keyCode, int modifiers)
-    {
+    public boolean keyTyped(int typedChar, int keyCode, int modifiers) {
         return false;
     }
-    public boolean charTyped(char typedChar, int keyCode)
-    {
+
+    public boolean charTyped(char typedChar, int keyCode) {
         return false;
     }
 }

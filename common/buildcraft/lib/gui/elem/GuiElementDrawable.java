@@ -14,19 +14,16 @@ import buildcraft.lib.gui.ISimpleDrawable;
 import buildcraft.lib.gui.pos.IGuiArea;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class GuiElementDrawable extends GuiElementSimple
-{
+public class GuiElementDrawable extends GuiElementSimple {
     private final ISimpleDrawable drawable;
     private final INodeBoolean visible;
     private final boolean foreground;
 
-    public GuiElementDrawable(BuildCraftGui gui, IGuiArea element, ISimpleDrawable drawable, boolean foreground)
-    {
+    public GuiElementDrawable(BuildCraftGui gui, IGuiArea element, ISimpleDrawable drawable, boolean foreground) {
         this(gui, element, drawable, foreground, NodeConstantBoolean.TRUE);
     }
 
-    public GuiElementDrawable(BuildCraftGui gui, IGuiArea element, ISimpleDrawable drawable, boolean foreground, INodeBoolean visible)
-    {
+    public GuiElementDrawable(BuildCraftGui gui, IGuiArea element, ISimpleDrawable drawable, boolean foreground, INodeBoolean visible) {
         super(gui, element);
         this.drawable = drawable;
         this.visible = visible;
@@ -34,27 +31,21 @@ public class GuiElementDrawable extends GuiElementSimple
     }
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
-        if (!foreground)
-        {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
+        if (!foreground) {
             draw(poseStack);
         }
     }
 
     @Override
-    public void drawForeground(PoseStack poseStack, float partialTicks)
-    {
-        if (foreground)
-        {
+    public void drawForeground(PoseStack poseStack, float partialTicks) {
+        if (foreground) {
             draw(poseStack);
         }
     }
 
-    private void draw(PoseStack poseStack)
-    {
-        if (visible.evaluate())
-        {
+    private void draw(PoseStack poseStack) {
+        if (visible.evaluate()) {
             drawable.drawAt(this, poseStack);
         }
     }

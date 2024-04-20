@@ -16,20 +16,17 @@ import net.minecraftforge.network.NetworkDirection;
 
 import java.io.IOException;
 
-public class MessageContainer implements IMessage
-{
+public class MessageContainer implements IMessage {
 
     private int windowId;
     private int msgId;
     private PacketBufferBC payload;
 
     @SuppressWarnings("unused")
-    public MessageContainer()
-    {
+    public MessageContainer() {
     }
 
-    public MessageContainer(int windowId, int msgId, PacketBufferBC payload)
-    {
+    public MessageContainer(int windowId, int msgId, PacketBufferBC payload) {
         this.windowId = windowId;
         this.msgId = msgId;
         this.payload = payload;
@@ -41,8 +38,7 @@ public class MessageContainer implements IMessage
     // BYTE[size] - PAYLOAD
 
     @Override
-    public void fromBytes(FriendlyByteBuf buf)
-    {
+    public void fromBytes(FriendlyByteBuf buf) {
         windowId = buf.readInt();
         msgId = buf.readUnsignedShort();
         int payloadSize = buf.readUnsignedShort();
@@ -51,8 +47,7 @@ public class MessageContainer implements IMessage
     }
 
     @Override
-    public void toBytes(FriendlyByteBuf buf)
-    {
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(windowId);
         buf.writeShort(msgId);
         int length = payload.readableBytes();
@@ -62,12 +57,10 @@ public class MessageContainer implements IMessage
 
     public static final IMessageHandler<MessageContainer, IMessage> HANDLER = (message, ctx) ->
     {
-        try
-        {
+        try {
             int id = message.windowId;
             Player player = BCLibProxy.getProxy().getPlayerForContext(ctx);
-            if (player != null && player.containerMenu instanceof ContainerBC_Neptune container && player.containerMenu.containerId == id)
-            {
+            if (player != null && player.containerMenu instanceof ContainerBC_Neptune container && player.containerMenu.containerId == id) {
                 container.readMessage(message.msgId, message.payload, ctx.getDirection(), ctx);
 
                 // error checking
@@ -76,12 +69,10 @@ public class MessageContainer implements IMessage
             }
             return null;
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             throw new Error(e);
         }
-        finally
-        {
+        finally {
             message.payload.release();
         }
     };

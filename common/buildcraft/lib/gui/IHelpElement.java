@@ -5,7 +5,6 @@ import buildcraft.lib.gui.help.ElementHelpInfo.HelpPosition;
 import java.util.List;
 
 @FunctionalInterface
-public interface IHelpElement
-{
+public interface IHelpElement {
     void addHelpElements(List<HelpPosition> elements);
 }

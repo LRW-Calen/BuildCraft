@@ -15,7 +15,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.entity.projectile.SpectralArrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,22 +25,17 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
 
-public class EntityUtil
-{
-    public static NonNullList<ItemStack> collectItems(Level world, BlockPos around, double radius)
-    {
+public class EntityUtil {
+    public static NonNullList<ItemStack> collectItems(Level world, BlockPos around, double radius) {
         return collectItems(world, new Vec3(around.getX(), around.getY(), around.getZ()).add(0.5, 0.5, 0.5), radius);
     }
 
-    public static NonNullList<ItemStack> collectItems(Level world, Vec3 around, double radius)
-    {
+    public static NonNullList<ItemStack> collectItems(Level world, Vec3 around, double radius) {
         NonNullList<ItemStack> stacks = NonNullList.create();
 
         AABB aabb = BoundingBoxUtil.makeAround(around, radius);
-        for (ItemEntity ent : world.getEntitiesOfClass(ItemEntity.class, aabb))
-        {
-            if (ent.isAlive())
-            {
+        for (ItemEntity ent : world.getEntitiesOfClass(ItemEntity.class, aabb)) {
+            if (ent.isAlive()) {
                 ent.kill();
                 stacks.add(ent.getItem());
             }
@@ -49,43 +43,35 @@ public class EntityUtil
         return stacks;
     }
 
-    public static Vec3 getVec(Entity entity)
-    {
+    public static Vec3 getVec(Entity entity) {
         return new Vec3(entity.getX(), entity.getY(), entity.getZ());
     }
 
-    public static void setVec(Entity entity, Vec3 vec)
-    {
+    public static void setVec(Entity entity, Vec3 vec) {
         entity.setPos(vec.x, vec.y, vec.z);
     }
 
-    public static InteractionHand getWrenchHand(LivingEntity entity)
-    {
+    public static InteractionHand getWrenchHand(LivingEntity entity) {
         ItemStack stack = entity.getMainHandItem();
-        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench)
-        {
+        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench) {
             return InteractionHand.MAIN_HAND;
         }
         stack = entity.getOffhandItem();
-        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench)
-        {
+        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench) {
             return InteractionHand.OFF_HAND;
         }
         return null;
     }
 
-    public static void activateWrench(Player player, HitResult trace)
-    {
+    public static void activateWrench(Player player, HitResult trace) {
         ItemStack stack = player.getMainHandItem();
-        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench)
-        {
+        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench) {
             IToolWrench wrench = (IToolWrench) stack.getItem();
             wrench.wrenchUsed(player, InteractionHand.MAIN_HAND, stack, trace);
             return;
         }
         stack = player.getOffhandItem();
-        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench)
-        {
+        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench) {
             IToolWrench wrench = (IToolWrench) stack.getItem();
             wrench.wrenchUsed(player, InteractionHand.OFF_HAND, stack, trace);
         }
@@ -93,13 +79,11 @@ public class EntityUtil
 
     @Nonnull
 //    public static ItemStack getArrowStack(EntityArrow arrow)
-    public static ItemStack getArrowStack(AbstractArrow arrow)
-    {
+    public static ItemStack getArrowStack(AbstractArrow arrow) {
         // FIXME: Replace this with an invocation of arrow.getArrowStack
         // (but its protected so we can't)
 //        if (arrow instanceof EntitySpectralArrow)
-        if (arrow instanceof SpectralArrow)
-        {
+        if (arrow instanceof SpectralArrow) {
             return new ItemStack(Items.SPECTRAL_ARROW);
         }
         return new ItemStack(Items.ARROW);

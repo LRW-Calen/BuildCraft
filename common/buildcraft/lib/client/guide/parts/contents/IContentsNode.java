@@ -6,11 +6,11 @@ import net.minecraft.network.chat.Component;
 
 import java.util.Set;
 
-public interface IContentsNode
-{
+public interface IContentsNode {
 
     //    String getSearchName();
     Component getSearchName();
+
     // Calen
     String getKey();
 

@@ -8,11 +8,11 @@ package buildcraft.core;
 
 import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumPowerStage;
-import buildcraft.factory.tile.TileEngineCreative;
-import buildcraft.factory.tile.TileEngineRedstone_BC8;
 import buildcraft.core.client.render.RenderEngineCreative;
 import buildcraft.core.client.render.RenderEngineWood;
 import buildcraft.core.client.render.RenderMarkerVolume;
+import buildcraft.factory.tile.TileEngineCreative;
+import buildcraft.factory.tile.TileEngineRedstone_BC8;
 import buildcraft.lib.client.model.ModelHolderVariable;
 import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.client.model.MutableQuad;
@@ -36,10 +36,9 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(modid = BCCore.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = BCCore.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 @OnlyIn(Dist.CLIENT)
-public class BCCoreModels
-{
+public class BCCoreModels {
     private static final NodeVariableDouble ENGINE_PROGRESS;
     private static final NodeVariableObject<EnumPowerStage> ENGINE_STAGE;
     private static final NodeVariableObject<Direction> ENGINE_FACING;
@@ -47,8 +46,7 @@ public class BCCoreModels
     private static final ModelHolderVariable ENGINE_REDSTONE;
     private static final ModelHolderVariable ENGINE_CREATIVE;
 
-    static
-    {
+    static {
         FunctionContext fnCtx = new FunctionContext(ExpressionCompat.ENUM_POWER_STAGE, DefaultContexts.createWithAll());
         ENGINE_PROGRESS = fnCtx.putVariableDouble("progress");
         ENGINE_STAGE = fnCtx.putVariableObject("stage", EnumPowerStage.class);
@@ -77,8 +75,7 @@ public class BCCoreModels
 //        modEventBus.register(BCCoreModels.class);
 //    }
 
-    public static void fmlInit()
-    {
+    public static void fmlInit() {
         // Calen move to onBlockEntityModelBind(event)
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileMarkerVolume.class, RenderMarkerVolume.INSTANCE);
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileEngineRedstone_BC8.class, RenderEngineWood.INSTANCE);
@@ -86,16 +83,14 @@ public class BCCoreModels
     }
 
     @SubscribeEvent
-    public static void onBlockEntityModelBind(EntityRenderersEvent.RegisterRenderers event)
-    {
+    public static void onBlockEntityModelBind(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCCoreBlocks.markerVolumeTile.get(), RenderMarkerVolume::new);
         BlockEntityRenderers.register(BCCoreBlocks.engineWoodTile.get(), RenderEngineWood::new);
         BlockEntityRenderers.register(BCCoreBlocks.engineCreativeTile.get(), RenderEngineCreative::new);
     }
 
     @SubscribeEvent
-    public static void onModelBake(ModelBakeEvent event)
-    {
+    public static void onModelBake(ModelBakeEvent event) {
         ENGINE_PROGRESS.value = 0.2;
         ENGINE_STAGE.value = EnumPowerStage.BLUE;
         ENGINE_FACING.value = Direction.UP;
@@ -133,26 +128,22 @@ public class BCCoreModels
 
     private static MutableQuad[] getEngineQuads(ModelHolderVariable model,
                                                 TileEngineBase_BC8 tile,
-                                                float partialTicks)
-    {
+                                                float partialTicks) {
         ENGINE_PROGRESS.value = tile.getProgressClient(partialTicks);
         ENGINE_STAGE.value = tile.getPowerStage();
         ENGINE_FACING.value = tile.getCurrentFacing();
-        if (tile.clientModelData.hasNoNodes())
-        {
+        if (tile.clientModelData.hasNoNodes()) {
             tile.clientModelData.setNodes(model.createTickableNodes());
         }
         tile.clientModelData.refresh();
         return model.getCutoutQuads();
     }
 
-    public static MutableQuad[] getRedstoneEngineQuads(TileEngineRedstone_BC8 tile, float partialTicks)
-    {
+    public static MutableQuad[] getRedstoneEngineQuads(TileEngineRedstone_BC8 tile, float partialTicks) {
         return getEngineQuads(ENGINE_REDSTONE, tile, partialTicks);
     }
 
-    public static MutableQuad[] getCreativeEngineQuads(TileEngineCreative tile, float partialTicks)
-    {
+    public static MutableQuad[] getCreativeEngineQuads(TileEngineCreative tile, float partialTicks) {
         return getEngineQuads(ENGINE_CREATIVE, tile, partialTicks);
     }
 }

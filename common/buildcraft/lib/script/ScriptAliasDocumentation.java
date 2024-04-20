@@ -3,8 +3,7 @@ package buildcraft.lib.script;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScriptAliasDocumentation
-{
+public class ScriptAliasDocumentation {
     public final String description;
     public final String[] paramDescriptions;
 

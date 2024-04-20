@@ -3,8 +3,7 @@ package buildcraft.silicon;
 import buildcraft.silicon.statement.ActionPowerPulsar;
 import buildcraft.silicon.statement.TriggerLightSensor;
 
-public class BCSiliconStatements
-{
+public class BCSiliconStatements {
 
     public static final TriggerLightSensor TRIGGER_LIGHT_LOW;
     public static final TriggerLightSensor TRIGGER_LIGHT_HIGH;
@@ -17,11 +16,11 @@ public class BCSiliconStatements
     static {
         TRIGGER_LIGHT_LOW = new TriggerLightSensor(false);
         TRIGGER_LIGHT_HIGH = new TriggerLightSensor(true);
-        TRIGGER_LIGHT = new TriggerLightSensor[] { TRIGGER_LIGHT_LOW, TRIGGER_LIGHT_HIGH };
+        TRIGGER_LIGHT = new TriggerLightSensor[]{TRIGGER_LIGHT_LOW, TRIGGER_LIGHT_HIGH};
 
         ACTION_PULSAR_CONSTANT = new ActionPowerPulsar(true);
         ACTION_PULSAR_SINGLE = new ActionPowerPulsar(false);
-        ACTION_PULSAR = new ActionPowerPulsar[] { ACTION_PULSAR_CONSTANT, ACTION_PULSAR_SINGLE };
+        ACTION_PULSAR = new ActionPowerPulsar[]{ACTION_PULSAR_CONSTANT, ACTION_PULSAR_SINGLE};
     }
 
     public static void preInit() {

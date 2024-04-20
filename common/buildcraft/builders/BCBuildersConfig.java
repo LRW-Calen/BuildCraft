@@ -11,22 +11,15 @@ import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.misc.MathUtil;
 import net.minecraftforge_1_12_2.common.config.Property;
 
-public class BCBuildersConfig
-{
-    /**
-     * Blueprints that save larger than this are stored externally, smaller ones are stored directly in the item.
-     */
+public class BCBuildersConfig {
+    /** Blueprints that save larger than this are stored externally, smaller ones are stored directly in the item. */
     public static int bptStoreExternalThreshold = 20_000;
 
-    /**
-     * The minimum height that all quarry frames must be.
-     */
+    /** The minimum height that all quarry frames must be. */
     public static int quarryFrameMinHeight = 4;
 
-    /**
-     * If true then the frame will move with the drill in both axis, if false then only 1 axis will follow the
-     * drill.
-     */
+    /** If true then the frame will move with the drill in both axis, if false then only 1 axis will follow the
+     * drill. */
     public static boolean quarryFrameMoveBoth;
 
     public static int quarryMaxTasksPerTick = 4;
@@ -34,9 +27,7 @@ public class BCBuildersConfig
     public static double quarryMaxFrameMoveSpeed = 0;
     public static double quarryMaxBlockMineRate = 0;
 
-    /**
-     * Client-side config to enable stencils-based drawing for the architect table.
-     */
+    /** Client-side config to enable stencils-based drawing for the architect table. */
     public static boolean enableStencil = true;
 
     private static Property propBptStoreExternalThreshold;
@@ -50,8 +41,7 @@ public class BCBuildersConfig
 
     static Property internalStencilCrashTest;
 
-    public static void preInit()
-    {
+    public static void preInit() {
         EnumRestartRequirement none = EnumRestartRequirement.NONE;
         EnumRestartRequirement game = EnumRestartRequirement.GAME;
 
@@ -116,8 +106,7 @@ public class BCBuildersConfig
         BCCoreConfig.addReloadListener(BCBuildersConfig::reloadConfig);
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted)
-    {
+    public static void reloadConfig(EnumRestartRequirement restarted) {
         bptStoreExternalThreshold = propBptStoreExternalThreshold.getInt();
         quarryFrameMinHeight = propQuarryFrameMinHeight.getInt();
         quarryFrameMoveBoth = propQuarryFrameMoveBoth.getBoolean();

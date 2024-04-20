@@ -19,41 +19,35 @@
 package buildcraft.energy.generation.structure;
 
 import buildcraft.lib.misc.data.Box;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.List;
 
-public final class OilPlacer
-{
+public final class OilPlacer {
     private final LevelAccessor level;
     private final List<OilStructurePiece> structurePieces;
     private final Box box;
 
-    public OilPlacer(WorldGenLevel level, List<OilStructurePiece> structurePieces, BoundingBox bounds)
-    {
+    public OilPlacer(WorldGenLevel level, List<OilStructurePiece> structurePieces, BoundingBox bounds) {
         this.level = level;
         this.structurePieces = structurePieces;
         this.box = new Box(bounds);
     }
 
-    public void place()
-    {
+    public void place() {
         LevelAccessor world = this.level;
         OilStructurePiece.Spring spring = null;
-        for (OilStructurePiece struct : structurePieces)
-        {
+        for (OilStructurePiece struct : structurePieces) {
             struct.generate(world, box);
-            if (struct instanceof OilStructurePiece.Spring)
-            {
+            if (struct instanceof OilStructurePiece.Spring) {
                 spring = (OilStructurePiece.Spring) struct;
             }
         }
-        if (spring != null && box.contains(spring.pos))
-        {
+        if (spring != null && box.contains(spring.pos)) {
             int count = 0;
-            for (OilStructurePiece struct : structurePieces)
-            {
+            for (OilStructurePiece struct : structurePieces) {
                 count += struct.countOilBlocks();
             }
             spring.generate(world, count);

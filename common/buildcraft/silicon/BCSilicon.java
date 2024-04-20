@@ -9,7 +9,8 @@ import buildcraft.lib.registry.CreativeTabManager;
 import buildcraft.lib.registry.CreativeTabManager.CreativeTabBC;
 import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.registry.TagManager;
-import buildcraft.lib.registry.TagManager.*;
+import buildcraft.lib.registry.TagManager.EnumTagType;
+import buildcraft.lib.registry.TagManager.TagEntry;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.plug.FacadeBlockStateInfo;
 import buildcraft.silicon.plug.FacadeInstance;
@@ -35,57 +36,40 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
 
-@Mod(BCSilicon.MOD_ID)
+//@formatter:off
+//@Mod(
+//        modid = BCSilicon.MODID,
+//        name = "BuildCraft Silicon",
+//        version = BCLib.VERSION,
+//        dependencies = "required-after:buildcraftcore@[" + BCLib.VERSION + "];"
+//                // Pluggable registration needs to happen *after* the transport registries have been set
+//                + "after:buildcrafttransport"
+//)
+//@formatter:on
+@Mod(BCSilicon.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCSilicon
-{
-    public static final String MOD_ID = "buildcraftsilicon";
+public class BCSilicon {
+    public static final String MODID = "buildcraftsilicon";
+
+    //    @Mod.Instance(MODID)
+    public static BCSilicon INSTANCE = null;
 
     private static CreativeTabBC tabPlugs;
     private static CreativeTabBC tabFacades;
 
-    public BCSilicon()
-    {
+    public BCSilicon() {
+        INSTANCE = this;
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
             modEventBus.register(BCSiliconModels.class);
         }
-        modEventBus.addGenericListener(MenuType.class, BCSiliconMenuTypes::registerAll);
 
     }
 
     @SubscribeEvent
-    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event)
-    {
-        IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
-        registry.register(AssemblyRecipeSerializer.INSTANCE);
-        // Calen: use datagen, we can delete the json to disable facade recipes
-//        AssemblyRecipeRegistry.register(FacadeAssemblyRecipes.INSTANCE);
-
-//        ForgeRegistries.RECIPES.register(FacadeSwapRecipe.INSTANCE);
-        registry.register(FacadeSwapRecipeSerializer.INSTANCE);
-    }
-
-    // Calen
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event)
-    {
-        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.assemblyTable.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.advancedCraftingTable.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.integrationTable.get(), RenderType.cutout());
-        // Calen: 1.12.2 not impl……
-        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.chargingTable.get(), RenderType.cutout());
-        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.programmingTable.get(), RenderType.cutout());
-
-    }
-
-    @SubscribeEvent
-    public static void preInit(FMLConstructModEvent evt)
-    {
-        RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
+    public static void preInit(FMLConstructModEvent evt) {
+        RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
 
         tabPlugs = CreativeTabManager.createTab("buildcraft.plugs");
         tabFacades = CreativeTabManager.createTab("buildcraft.facades");
@@ -103,55 +87,74 @@ public class BCSilicon
     }
 
     @SubscribeEvent
-    public static void init(FMLCommonSetupEvent evt)
-    {
+    public static void init(FMLCommonSetupEvent evt) {
         BCSiliconProxy.getProxy().fmlInit();
         FacadeStateManager.init();
     }
 
     @SubscribeEvent
-    public static void postInit(FMLLoadCompleteEvent evt)
-    {
+    public static void postInit(FMLLoadCompleteEvent evt) {
         BCSiliconProxy.getProxy().fmlPostInit();
-        if (BCSiliconItems.plugFacade != null)
-        {
+        if (BCSiliconItems.plugFacade != null) {
             FacadeBlockStateInfo state = FacadeStateManager.previewState;
             FacadeInstance inst = FacadeInstance.createSingle(state, false);
 //            tabFacades.setItem(BCSiliconItems.plugFacade.createItemStack(inst));
             tabFacades.setItemStack(() -> BCSiliconItems.plugFacade.get().createItemStack(inst));
         }
 
-        if (!BCModules.TRANSPORT.isLoaded())
-        {
+        if (!BCModules.TRANSPORT.isLoaded()) {
 //            tabPlugs.setItem(BCSiliconItems.plugGate);
             tabPlugs.setItem(BCSiliconItems.variantGateMap.get(new GateVariant(new CompoundTag())));
         }
     }
 
     @SubscribeEvent
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCSiliconMenuTypes.registerAll(event);
+    }
+
+    @SubscribeEvent
 //    public static void onImcEvent(IMCEvent imc)
-    public static void onImcEvent(InterModProcessEvent imc)
-    {
+    public static void onImcEvent(InterModProcessEvent imc) {
 
 //        for (InterModComms.IMCMessage message : imc.getMessages())
-        InterModComms.getMessages(MOD_ID).forEach(message ->
+        InterModComms.getMessages(MODID).forEach(message ->
         {
             Object inner = message.messageSupplier().get();
-            if (inner instanceof BcImcMessage bcImcMessage)
-            {
+            if (inner instanceof BcImcMessage bcImcMessage) {
                 FacadeStateManager.receiveInterModComms(message, bcImcMessage);
-            }
-            else
-            {
+            } else {
                 BCLog.logger.error("[silicon.imc] Unknown IMC message type: " + inner.getClass().getName());
             }
         });
     }
 
+    @SubscribeEvent
+    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
+        IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
+        registry.register(AssemblyRecipeSerializer.INSTANCE);
+        // Calen: use datagen, we can delete the json to disable facade recipes
+//        AssemblyRecipeRegistry.register(FacadeAssemblyRecipes.INSTANCE);
+
+//        ForgeRegistries.RECIPES.register(FacadeSwapRecipe.INSTANCE);
+        registry.register(FacadeSwapRecipeSerializer.INSTANCE);
+    }
+
+    // Calen
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.assemblyTable.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.advancedCraftingTable.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.integrationTable.get(), RenderType.cutout());
+        // Calen: 1.12.2 not impl……
+        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.chargingTable.get(), RenderType.cutout());
+        ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.programmingTable.get(), RenderType.cutout());
+    }
+
     private static final TagManager tagManager = new TagManager();
 
-    static
-    {
+    static {
         startBatch();
         // Items
         registerTag("item.chipset.redstone").reg("chipset_redstone").locale("chipset_redstone");
@@ -227,21 +230,18 @@ public class BCSilicon
     }
 
 
-    private static TagEntry registerTag(String id)
-    {
+    private static TagEntry registerTag(String id) {
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
 //        TagManager.startBatch();
         tagManager.startBatch();
     }
 
     // Calen: the batch often causes Exception...
-    private static void endBatch(Consumer<TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagEntry> consumer) {
 //        TagManager.endBatch(consumer);
         tagManager.endBatch(consumer);
     }

@@ -12,8 +12,6 @@ import buildcraft.builders.snapshot.Snapshot.Header;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.misc.HashUtil;
 import buildcraft.lib.misc.LocaleUtil;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -32,8 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 import java.util.Locale;
 
-public class ItemSnapshot extends ItemBC_Neptune
-{
+public class ItemSnapshot extends ItemBC_Neptune {
     //    public final EnumItemSnapshotType TYPE;
     public final EnumSnapshotType TYPE;
 
@@ -41,15 +38,13 @@ public class ItemSnapshot extends ItemBC_Neptune
     public static final String TAG_KEY = "header";
 
     //    public ItemSnapshot(String idBC, Item.Properties properties, EnumItemSnapshotType type)
-    public ItemSnapshot(String idBC, Item.Properties properties, EnumSnapshotType type)
-    {
+    public ItemSnapshot(String idBC, Item.Properties properties, EnumSnapshotType type) {
         super(idBC, properties);
 //        setHasSubtypes(true);
         this.TYPE = type;
     }
 
-    public ItemStack getClean(EnumSnapshotType snapshotType)
-    {
+    public ItemStack getClean(EnumSnapshotType snapshotType) {
 ////        return new ItemStack(this, 1, EnumItemSnapshotType.get(snapshotType, false).ordinal());
 //        ItemStack stack = new ItemStack(this, 1);
 //        CompoundTag nbt = new CompoundTag();
@@ -57,8 +52,7 @@ public class ItemSnapshot extends ItemBC_Neptune
 //        stack.setTag(nbt);
         // Calen
         ItemStack stack = null;
-        switch (snapshotType)
-        {
+        switch (snapshotType) {
             case BLUEPRINT:
 //                stack = new ItemStack(BCBuildersItems.snapshotBLUEPRINT_CLEAN.get());
                 stack = new ItemStack(BCBuildersItems.snapshotBLUEPRINT.get());
@@ -71,8 +65,7 @@ public class ItemSnapshot extends ItemBC_Neptune
         return stack;
     }
 
-    public ItemStack getUsed(EnumSnapshotType snapshotType, Header header)
-    {
+    public ItemStack getUsed(EnumSnapshotType snapshotType, Header header) {
         CompoundTag nbt = new CompoundTag();
 //        nbt.put("header", header.serializeNBT());
         nbt.put(TAG_KEY, header.serializeNBT());
@@ -82,8 +75,7 @@ public class ItemSnapshot extends ItemBC_Neptune
 //        stack.setTag(nbt);
         // Calen
         ItemStack stack = null;
-        switch (snapshotType)
-        {
+        switch (snapshotType) {
             case BLUEPRINT:
 //                stack = new ItemStack(BCBuildersItems.snapshotBLUEPRINT_USED.get());
                 stack = new ItemStack(BCBuildersItems.snapshotBLUEPRINT.get());
@@ -97,18 +89,13 @@ public class ItemSnapshot extends ItemBC_Neptune
         return stack;
     }
 
-    public Header getHeader(ItemStack stack)
-    {
-        if (stack.getItem() instanceof ItemSnapshot)
-        {
-            if (EnumItemSnapshotType.getFromStack(stack).used)
-            {
+    public Header getHeader(ItemStack stack) {
+        if (stack.getItem() instanceof ItemSnapshot) {
+            if (EnumItemSnapshotType.getFromStack(stack).used) {
                 CompoundTag nbt = stack.getTag();
-                if (nbt != null)
-                {
+                if (nbt != null) {
 //                    if (nbt.contains("header", Tag.TAG_COMPOUND))
-                    if (nbt.contains(TAG_KEY, Tag.TAG_COMPOUND))
-                    {
+                    if (nbt.contains(TAG_KEY, Tag.TAG_COMPOUND)) {
 //                        return new Header(nbt.getCompound("header"));
                         return new Header(nbt.getCompound(TAG_KEY));
                     }
@@ -119,14 +106,12 @@ public class ItemSnapshot extends ItemBC_Neptune
     }
 
     @Override
-    public int getItemStackLimit(ItemStack stack)
-    {
+    public int getItemStackLimit(ItemStack stack) {
         return EnumItemSnapshotType.getFromStack(stack).used ? 1 : 16;
     }
 
     @Override
-    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems)
-    {
+    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 //        subItems.add(getClean(EnumSnapshotType.BLUEPRINT));
 //        subItems.add(getClean(EnumSnapshotType.TEMPLATE));
         subItems.add(new ItemStack(this, 1));
@@ -146,15 +131,13 @@ public class ItemSnapshot extends ItemBC_Neptune
 
     @Override
 //    public String getUnlocalizedName(ItemStack stack)
-    public String getDescriptionId(ItemStack stack)
-    {
+    public String getDescriptionId(ItemStack stack) {
 //        EnumItemSnapshotType type = EnumItemSnapshotType.getFromStack(stack);
 //        if (type.snapshotType == EnumSnapshotType.BLUEPRINT) {
 //            return "item.blueprintItem";
 //        }
 //        return "item.templateItem";
-        return switch (this.TYPE)
-        {
+        return switch (this.TYPE) {
             case BLUEPRINT -> "item.blueprintItem.name";
             case TEMPLATE -> "item.templateItem.name";
         };
@@ -163,39 +146,27 @@ public class ItemSnapshot extends ItemBC_Neptune
     @OnlyIn(Dist.CLIENT)
     @Override
 //    public void addInformation(ItemStack stack, Level world, List<String> tooltip, ITooltipFlag flag)
-    public void appendHoverText(ItemStack stack, net.minecraft.world.level.Level world, List<Component> tooltip, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, net.minecraft.world.level.Level world, List<Component> tooltip, TooltipFlag flag) {
         // Calen
         boolean langFileNotLoaded = LocaleUtil.modLangResourceNotLoaded();
         Header header = getHeader(stack);
-        if (header == null)
-        {
-            if (langFileNotLoaded)
-            {
+        if (header == null) {
+            if (langFileNotLoaded) {
                 tooltip.add(new TranslatableComponent("item.blueprint.blank"));
-            }
-            else
-            {
+            } else {
                 tooltip.add(new TextComponent(LocaleUtil.localize("item.blueprint.blank")));
             }
-        }
-        else
-        {
+        } else {
             tooltip.add(new TextComponent(header.name));
             Player owner = header.getOwnerPlayer(world);
-            if (owner != null)
-            {
-                if (langFileNotLoaded)
-                {
+            if (owner != null) {
+                if (langFileNotLoaded) {
                     tooltip.add(new TranslatableComponent("item.blueprint.author").append(" ").append(owner.getName()));
-                }
-                else
-                {
+                } else {
                     tooltip.add(new TextComponent(LocaleUtil.localize("item.blueprint.author") + " " + owner.getName().getString()));
                 }
             }
-            if (flag.isAdvanced())
-            {
+            if (flag.isAdvanced()) {
                 tooltip.add(new TextComponent("Hash: " + HashUtil.convertHashToString(header.key.hash)));
                 tooltip.add(new TextComponent("Date: " + header.created));
                 tooltip.add(new TextComponent("Owner UUID: " + header.owner));
@@ -204,8 +175,7 @@ public class ItemSnapshot extends ItemBC_Neptune
     }
 
     //    public enum EnumItemSnapshotType implements IStringSerializable
-    public enum EnumItemSnapshotType implements StringRepresentable
-    {
+    public enum EnumItemSnapshotType implements StringRepresentable {
         TEMPLATE_CLEAN(EnumSnapshotType.TEMPLATE, false),
         TEMPLATE_USED(EnumSnapshotType.TEMPLATE, true),
         BLUEPRINT_CLEAN(EnumSnapshotType.BLUEPRINT, false),
@@ -214,37 +184,28 @@ public class ItemSnapshot extends ItemBC_Neptune
         public final EnumSnapshotType snapshotType;
         public final boolean used;
 
-        EnumItemSnapshotType(EnumSnapshotType snapshotType, boolean used)
-        {
+        EnumItemSnapshotType(EnumSnapshotType snapshotType, boolean used) {
             this.snapshotType = snapshotType;
             this.used = used;
         }
 
         @Override
 //        public String getName()
-        public String getSerializedName()
-        {
+        public String getSerializedName() {
             return name().toLowerCase(Locale.ROOT);
         }
 
-        public static EnumItemSnapshotType get(EnumSnapshotType snapshotType, boolean used)
-        {
-            if (snapshotType == EnumSnapshotType.TEMPLATE)
-            {
+        public static EnumItemSnapshotType get(EnumSnapshotType snapshotType, boolean used) {
+            if (snapshotType == EnumSnapshotType.TEMPLATE) {
                 return !used ? TEMPLATE_CLEAN : TEMPLATE_USED;
-            }
-            else if (snapshotType == EnumSnapshotType.BLUEPRINT)
-            {
+            } else if (snapshotType == EnumSnapshotType.BLUEPRINT) {
                 return !used ? BLUEPRINT_CLEAN : BLUEPRINT_USED;
-            }
-            else
-            {
+            } else {
                 throw new IllegalArgumentException();
             }
         }
 
-        public static EnumItemSnapshotType getFromStack(ItemStack stack)
-        {
+        public static EnumItemSnapshotType getFromStack(ItemStack stack) {
 //            int meta = 0;
 //            if (stack.hasTag() && stack.getTag().contains("meta"))
 //            {
@@ -254,18 +215,14 @@ public class ItemSnapshot extends ItemBC_Neptune
 //            return values()[Math.abs(meta) % values().length];
 
             // Calen
-            if (stack.getItem() instanceof ItemSnapshot snapshot)
-            {
+            if (stack.getItem() instanceof ItemSnapshot snapshot) {
 //                boolean hasHeaderTag = stack.hasTag() && stack.getTag().contains("header");
                 boolean hasHeaderTag = stack.hasTag() && stack.getTag().contains(TAG_KEY);
-                return switch (snapshot.TYPE)
-                {
+                return switch (snapshot.TYPE) {
                     case TEMPLATE -> hasHeaderTag ? TEMPLATE_USED : TEMPLATE_CLEAN;
                     case BLUEPRINT -> hasHeaderTag ? BLUEPRINT_USED : BLUEPRINT_CLEAN;
                 };
-            }
-            else
-            {
+            } else {
                 return null;
             }
         }

@@ -33,8 +33,7 @@ import java.util.Map.Entry;
 /**
  * {@link JsonModel} but any element can change depending on variables.
  */
-public class JsonVariableModel extends JsonVariableObject
-{
+public class JsonVariableModel extends JsonVariableObject {
     // Never allow ao or textures to be variable - they need to be hardcoded so that we can stitch them
     public final boolean ambientOcclusion;
     public final Map<String, JsonTexture> textures;
@@ -42,55 +41,43 @@ public class JsonVariableModel extends JsonVariableObject
     public final JsonVariableModelPart[] cutoutElements, translucentElements;
 
     public static JsonVariableModel deserialize(ResourceLocation from, FunctionContext fnCtx)
-            throws JsonParseException, IOException
-    {
+            throws JsonParseException, IOException {
         return deserialize(from, fnCtx, new ResourceLoaderContext());
     }
 
     public static JsonVariableModel deserialize(ResourceLocation from, FunctionContext fnCtx, ResourceLoaderContext ctx)
-            throws JsonParseException, IOException
-    {
-        try (InputStreamReader isr = ctx.startLoading(from))
-        {
+            throws JsonParseException, IOException {
+        try (InputStreamReader isr = ctx.startLoading(from)) {
             return new JsonVariableModel(JsonUtil.inlineCustom(new Gson().fromJson(isr, JsonObject.class)), fnCtx, ctx);
         }
-        finally
-        {
+        finally {
             ctx.finishLoading();
         }
     }
 
     static JsonVariableModelPart[] deserializePartArray(JsonObject json, String member, FunctionContext fnCtx,
-                                                        ResourceLoaderContext ctx, boolean require)
-    {
-        if (!json.has(member))
-        {
-            if (require)
-            {
+                                                        ResourceLoaderContext ctx, boolean require) {
+        if (!json.has(member)) {
+            if (require) {
                 throw new JsonSyntaxException("Did not have '" + member + "' in '" + json + "'");
-            }
-            else
-            {
+            } else {
                 return new JsonVariableModelPart[0];
             }
         }
         JsonElement elem = json.get(member);
-        if (!elem.isJsonArray())
-        {
+        if (!elem.isJsonArray()) {
             throw new JsonSyntaxException("Expected an array, got '" + elem + "'");
         }
         JsonArray array = elem.getAsJsonArray();
         JsonVariableModelPart[] to = new JsonVariableModelPart[array.size()];
-        for (int i = 0; i < to.length; i++)
-        {
+        for (int i = 0; i < to.length; i++) {
             to[i] = JsonVariableModelPart.deserializeModelPart(array.get(i), fnCtx, ctx);
         }
         return to;
     }
 
     public JsonVariableModel(JsonObject obj, FunctionContext fnCtx, ResourceLoaderContext ctx)
-            throws JsonParseException
-    {
+            throws JsonParseException {
         boolean ambf = false;
         textures = new HashMap<>();
         variables = new LinkedHashMap<>();
@@ -98,48 +85,40 @@ public class JsonVariableModel extends JsonVariableObject
         List<JsonVariableModelPart> translucent = new ArrayList<>();
         List<JsonModelRule> rulesP = new ArrayList<>();
 
-        if (obj.has("values"))
-        {
+        if (obj.has("values")) {
             fnCtx = new FunctionContext(fnCtx);
 //            putVariables(JsonUtils.getJsonObject(obj, "values"), fnCtx);
             putVariables(GsonHelper.getAsJsonObject(obj, "values"), fnCtx);
         }
 
-        if (obj.has("parent"))
-        {
+        if (obj.has("parent")) {
 //            String parentName = JsonUtils.getString(obj, "parent");
             String parentName = GsonHelper.getAsString(obj, "parent");
             parentName += ".json";
             ResourceLocation from = new ResourceLocation(parentName);
             JsonVariableModel parent;
-            try
-            {
+            try {
                 parent = deserialize(from, fnCtx, ctx);
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 throw new JsonParseException("Didn't find the parent '" + parentName + "'!", e);
             }
             ambf = parent.ambientOcclusion;
 //            if (!JsonUtils.getBoolean(obj, "textures_reset", false))
-            if (!GsonHelper.getAsBoolean(obj, "textures_reset", false))
-            {
+            if (!GsonHelper.getAsBoolean(obj, "textures_reset", false)) {
                 textures.putAll(parent.textures);
             }
             variables.putAll(parent.variables);
 //            if (!JsonUtils.getBoolean(obj, "cutout_replace", false))
-            if (!GsonHelper.getAsBoolean(obj, "cutout_replace", false))
-            {
+            if (!GsonHelper.getAsBoolean(obj, "cutout_replace", false)) {
                 Collections.addAll(cutout, parent.cutoutElements);
             }
 //            if (!JsonUtils.getBoolean(obj, "translucent_replace", false))
-            if (!GsonHelper.getAsBoolean(obj, "translucent_replace", false))
-            {
+            if (!GsonHelper.getAsBoolean(obj, "translucent_replace", false)) {
                 Collections.addAll(translucent, parent.translucentElements);
             }
 //            if (!JsonUtils.getBoolean(obj, "rules_replace", false))
-            if (!GsonHelper.getAsBoolean(obj, "rules_replace", false))
-            {
+            if (!GsonHelper.getAsBoolean(obj, "rules_replace", false)) {
                 Collections.addAll(rulesP, parent.rules);
             }
         }
@@ -147,8 +126,7 @@ public class JsonVariableModel extends JsonVariableObject
 //        ambientOcclusion = JsonUtils.getBoolean(obj, "ambientocclusion", ambf);
         ambientOcclusion = GsonHelper.getAsBoolean(obj, "ambientocclusion", ambf);
         deserializeTextures(obj.get("textures"));
-        if (obj.has("variables"))
-        {
+        if (obj.has("variables")) {
             fnCtx = new FunctionContext(fnCtx);
 //            putVariables(JsonUtils.getJsonObject(obj, "variables"), fnCtx);
             putVariables(GsonHelper.getAsJsonObject(obj, "variables"), fnCtx);
@@ -156,25 +134,20 @@ public class JsonVariableModel extends JsonVariableObject
         finaliseVariables();
 
         boolean require = cutout.isEmpty() && translucent.isEmpty();
-        if (obj.has("elements"))
-        {
+        if (obj.has("elements")) {
             Collections.addAll(cutout, deserializePartArray(obj, "elements", fnCtx, ctx, require));
-        }
-        else
-        {
+        } else {
             Collections.addAll(cutout, deserializePartArray(obj, "cutout", fnCtx, ctx, require));
             Collections.addAll(translucent, deserializePartArray(obj, "translucent", fnCtx, ctx, require));
         }
         cutoutElements = cutout.toArray(new JsonVariableModelPart[cutout.size()]);
         translucentElements = translucent.toArray(new JsonVariableModelPart[translucent.size()]);
 
-        if (obj.has("rules"))
-        {
+        if (obj.has("rules")) {
             JsonElement elem = obj.get("rules");
             if (!elem.isJsonArray()) throw new JsonSyntaxException("Expected an array, got " + elem + " for 'rules'");
             JsonArray arr = elem.getAsJsonArray();
-            for (int i = 0; i < arr.size(); i++)
-            {
+            for (int i = 0; i < arr.size(); i++) {
                 rulesP.add(JsonModelRule.deserialize(arr.get(i), fnCtx, ctx));
             }
         }
@@ -185,8 +158,7 @@ public class JsonVariableModel extends JsonVariableObject
      * Creates a half copy of this -- textures are fully copied, but everything else is taken dierctly (as its
      * effectivly immutable)
      */
-    public JsonVariableModel(JsonVariableModel from)
-    {
+    public JsonVariableModel(JsonVariableModel from) {
         textures = new HashMap<>(from.textures);
         cutoutElements = from.cutoutElements;
         translucentElements = from.translucentElements;
@@ -194,20 +166,16 @@ public class JsonVariableModel extends JsonVariableObject
         ambientOcclusion = from.ambientOcclusion;
     }
 
-    public void onTextureStitchPre(ResourceLocation modelLocation, Set<ResourceLocation> toRegisterSprites)
-    {
-        if (ModelHolderRegistry.DEBUG)
-        {
+    public void onTextureStitchPre(ResourceLocation modelLocation, Set<ResourceLocation> toRegisterSprites) {
+        if (ModelHolderRegistry.DEBUG) {
             BCLog.logger.info("[lib.model] The model " + modelLocation + " requires these sprites:");
         }
         // Calen: 引擎的贴图是靠这里加载出来的↓
         ReloadSource srcModel = new ReloadSource(modelLocation, SourceType.MODEL);
-        for (Entry<String, JsonTexture> entry : textures.entrySet())
-        {
+        for (Entry<String, JsonTexture> entry : textures.entrySet()) {
             JsonTexture lookup = entry.getValue();
             String location = lookup.location;
-            if (location.startsWith("#") || location.startsWith("~"))
-            {
+            if (location.startsWith("#") || location.startsWith("~")) {
                 // its somewhere else in the map so we don't need to register it twice
                 continue;
             }
@@ -216,50 +184,39 @@ public class JsonVariableModel extends JsonVariableObject
             // Allow transitive deps
             ReloadSource srcSprite = new ReloadSource(SpriteUtil.transformLocation(textureLoc), SourceType.SPRITE);
             ReloadManager.INSTANCE.addDependency(srcSprite, srcModel);
-            if (ModelHolderRegistry.DEBUG)
-            {
+            if (ModelHolderRegistry.DEBUG) {
                 BCLog.logger.info("[lib.model]  - " + location);
             }
         }
     }
 
-    private void deserializeTextures(JsonElement elem)
-    {
+    private void deserializeTextures(JsonElement elem) {
         if (elem == null) return;
-        if (!elem.isJsonObject())
-        {
+        if (!elem.isJsonObject()) {
             throw new JsonSyntaxException("Expected to find an object for 'textures', but found " + elem);
         }
         JsonObject obj = elem.getAsJsonObject();
-        for (Entry<String, JsonElement> entry : obj.entrySet())
-        {
+        for (Entry<String, JsonElement> entry : obj.entrySet()) {
             String name = entry.getKey();
             JsonElement tex = entry.getValue();
             JsonTexture texture;
-            if (tex.isJsonPrimitive() && tex.getAsJsonPrimitive().isString())
-            {
+            if (tex.isJsonPrimitive() && tex.getAsJsonPrimitive().isString()) {
                 String location = tex.getAsString();
                 texture = new JsonTexture(location);
-            }
-            else if (tex.isJsonObject())
-            {
+            } else if (tex.isJsonObject()) {
                 texture = new JsonTexture(tex.getAsJsonObject());
-            }
-            else
-            {
+            } else {
                 throw new JsonSyntaxException("Expected a string or an object, but got " + tex);
             }
             textures.put(name, texture);
         }
     }
 
-    private TexturedFace lookupTexture(String lookup)
-    {
+    private TexturedFace lookupTexture(String lookup) {
         int attempts = 0;
         JsonTexture texture = new JsonTexture(lookup);
         TextureAtlasSprite sprite;
-        while (texture.location.startsWith("#") && attempts < 10)
-        {
+        while (texture.location.startsWith("#") && attempts < 10) {
             JsonTexture tex = textures.get(texture.location);
             if (tex == null) break;
             else texture = texture.inParent(tex);
@@ -274,36 +231,29 @@ public class JsonVariableModel extends JsonVariableObject
         return face;
     }
 
-    public MutableQuad[] bakePart(JsonVariableModelPart[] a, ITextureGetter spriteLookup)
-    {
+    public MutableQuad[] bakePart(JsonVariableModelPart[] a, ITextureGetter spriteLookup) {
         List<MutableQuad> list = new ArrayList<>();
-        for (JsonVariableModelPart part : a)
-        {
+        for (JsonVariableModelPart part : a) {
             part.addQuads(list, spriteLookup);
         }
-        for (JsonModelRule rule : rules)
-        {
-            if (rule.when.evaluate())
-            {
+        for (JsonModelRule rule : rules) {
+            if (rule.when.evaluate()) {
                 rule.apply(list);
             }
         }
         return list.toArray(new MutableQuad[list.size()]);
     }
 
-    public MutableQuad[] getCutoutQuads()
-    {
+    public MutableQuad[] getCutoutQuads() {
         return bakePart(cutoutElements, this::lookupTexture);
     }
 
     // Calen: no usage
-    public MutableQuad[] getTranslucentQuads()
-    {
+    public MutableQuad[] getTranslucentQuads() {
         return bakePart(translucentElements, this::lookupTexture);
     }
 
-    public interface ITextureGetter
-    {
+    public interface ITextureGetter {
         TexturedFace get(String location);
     }
 }

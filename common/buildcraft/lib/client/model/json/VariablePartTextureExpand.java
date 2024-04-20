@@ -3,7 +3,10 @@ package buildcraft.lib.client.model.json;
 import buildcraft.api.core.BCLog;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.expression.FunctionContext;
-import buildcraft.lib.expression.api.IExpressionNode.*;
+import buildcraft.lib.expression.api.IExpressionNode.INodeBoolean;
+import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
+import buildcraft.lib.expression.api.IExpressionNode.INodeLong;
+import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
 import buildcraft.lib.expression.node.value.NodeConstantBoolean;
 import buildcraft.lib.expression.node.value.NodeConstantLong;
 import buildcraft.lib.misc.RenderUtil;
@@ -41,7 +44,7 @@ public class VariablePartTextureExpand extends JsonVariableModelPart {
         if (visible.evaluate()) {
             float[] f = bakePosition(from);
             float[] t = bakePosition(to);
-            float[] size = { t[0] - f[0], t[1] - f[1], t[2], f[2] };
+            float[] size = {t[0] - f[0], t[1] - f[1], t[2], f[2]};
             boolean s = shade.evaluate();
             int l = (int) (light.evaluate() & 15);
             int rgba = RenderUtil.swapARGBforABGR((int) colour.evaluate());

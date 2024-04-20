@@ -7,26 +7,17 @@
 package buildcraft.energy;
 
 
-import buildcraft.core.BCCoreProxy;
 import buildcraft.energy.event.ChristmasHandler;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCEnergyProxy implements IGuiHandler
-public abstract class BCEnergyProxy
-{
+public abstract class BCEnergyProxy {
     //    @SidedProxy(modId = BCEnergy.MODID)
     private static BCEnergyProxy proxy;
 
-    public static BCEnergyProxy getProxy()
-    {
-        if (proxy == null)
-        {
-            switch (FMLLoader.getDist())
-            {
+    public static BCEnergyProxy getProxy() {
+        if (proxy == null) {
+            switch (FMLLoader.getDist()) {
                 case CLIENT:
                     proxy = new BCEnergyProxy.ClientProxy();
                     break;
@@ -38,16 +29,13 @@ public abstract class BCEnergyProxy
         return proxy;
     }
 
-    public void fmlPreInit()
-    {
+    public void fmlPreInit() {
     }
 
-    public void fmlInit()
-    {
+    public void fmlInit() {
     }
 
-    public void fmlPostInit()
-    {
+    public void fmlPostInit() {
     }
 
 //    @Override
@@ -84,23 +72,19 @@ public abstract class BCEnergyProxy
 //        return null;
 //    }
 
-//    @SideOnly(Side.SERVER)
-    public static class ServerProxy extends BCEnergyProxy
-    {
+    //    @SideOnly(Side.SERVER)
+    public static class ServerProxy extends BCEnergyProxy {
         @Override
-        public void fmlPreInit()
-        {
+        public void fmlPreInit() {
             super.fmlPreInit();
             ChristmasHandler.fmlPreInitDedicatedServer();
         }
     }
 
-//    @SideOnly(Side.CLIENT)
-    public static class ClientProxy extends BCEnergyProxy
-    {
+    //    @SideOnly(Side.CLIENT)
+    public static class ClientProxy extends BCEnergyProxy {
         @Override
-        public void fmlPreInit()
-        {
+        public void fmlPreInit() {
             super.fmlPreInit();
             ChristmasHandler.fmlPreInitClient();
 //            BCEnergyModels.fmlPreInit(); // Calen: use @Mod.EventBusSubscriber on class to ensure the renderer be registered early enough
@@ -108,8 +92,7 @@ public abstract class BCEnergyProxy
         }
 
         @Override
-        public void fmlInit()
-        {
+        public void fmlInit() {
             super.fmlInit();
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileEngineStone_BC8.class, RenderEngineStone.INSTANCE);
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileEngineIron_BC8.class, RenderEngineIron.INSTANCE);

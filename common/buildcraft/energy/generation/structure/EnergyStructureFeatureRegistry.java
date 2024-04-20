@@ -10,7 +10,6 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.level.levelgen.feature.configurations.ProbabilityFeatureConfiguration;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.levelgen.structure.StructureSet;
@@ -19,10 +18,9 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
 import java.util.List;
 
 // Calen: mc 1.18.2 StructureFeature.class
-public class EnergyStructureFeatureRegistry
-{
+public class EnergyStructureFeatureRegistry {
 
-//    public static final StructureFeature<NoneFeatureConfiguration> OIL_WELL =
+    //    public static final StructureFeature<NoneFeatureConfiguration> OIL_WELL =
     public static final StructureFeature<OilFeatureConfiguration> OIL_WELL =
             new OilGenStructureFeature(
 //                    NoneFeatureConfiguration.CODEC
@@ -58,8 +56,7 @@ public class EnergyStructureFeatureRegistry
                     modifiers(80)
             );
 
-    public static List<PlacementModifier> modifiers(int p_195234_)
-    {
+    public static List<PlacementModifier> modifiers(int p_195234_) {
         return List.of(
                 InSquarePlacement.spread(),
                 PlacementUtils.HEIGHTMAP_TOP_SOLID,

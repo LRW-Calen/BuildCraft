@@ -13,8 +13,7 @@ import net.minecraftforge_1_12_2.common.config.Property;
 
 import java.util.*;
 
-public class ConfigUtil
-{
+public class ConfigUtil {
     /** Sets a good default language key for all of the properties contained in the given configuration */
     public static void setLang(Configuration cfg) {
         for (String s : cfg.getCategoryNames()) {
@@ -72,7 +71,7 @@ public class ConfigUtil
         String value = prop.getString();
         if (!mode.name().equalsIgnoreCase(value)) {
             BCLog.logger.warn("[lib.config] Unknown " + mode.getClass().getSimpleName() + " for " + prop.getName()
-                + " '" + value + "', assuming " + mode.name());
+                    + " '" + value + "', assuming " + mode.name());
             BCLog.logger.warn("[lib.config] Possible values:");
             for (E e : possible) {
                 BCLog.logger.info("[lib.config]  - '" + e.name().toLowerCase(Locale.ROOT));

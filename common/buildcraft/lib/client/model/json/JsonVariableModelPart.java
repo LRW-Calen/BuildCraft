@@ -8,11 +8,14 @@ package buildcraft.lib.client.model.json;
 
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.model.ResourceLoaderContext;
-import buildcraft.lib.client.model.json.JsonVariableModel.*;
+import buildcraft.lib.client.model.json.JsonVariableModel.ITextureGetter;
 import buildcraft.lib.expression.FunctionContext;
 import buildcraft.lib.expression.GenericExpressionCompiler;
+import buildcraft.lib.expression.api.IExpressionNode.INodeBoolean;
+import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
+import buildcraft.lib.expression.api.IExpressionNode.INodeLong;
+import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
 import buildcraft.lib.expression.api.InvalidExpressionException;
-import buildcraft.lib.expression.api.IExpressionNode.*;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -54,14 +57,15 @@ public abstract class JsonVariableModelPart {
             return new VariablePartContainer(obj, fnCtx, ctx);
         } else {
             throw new JsonSyntaxException(
-                "Unknown type '" + type + "' -- known types are [ face, led, texture_expand, cuboid, container ]");
+                    "Unknown type '" + type + "' -- known types are [ face, led, texture_expand, cuboid, container ]");
         }
     }
 
     public static INodeDouble convertStringToDoubleNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionDouble(expression, context);
-        } catch (InvalidExpressionException e) {
+        }
+        catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -69,7 +73,8 @@ public abstract class JsonVariableModelPart {
     public static INodeObject<String> convertStringToStringNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionString(expression, context);
-        } catch (InvalidExpressionException e) {
+        }
+        catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -77,7 +82,8 @@ public abstract class JsonVariableModelPart {
     public static INodeBoolean convertStringToBooleanNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionBoolean(expression, context);
-        } catch (InvalidExpressionException e) {
+        }
+        catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -85,15 +91,17 @@ public abstract class JsonVariableModelPart {
     public static INodeLong convertStringToLongNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionLong(expression, context);
-        } catch (InvalidExpressionException e) {
+        }
+        catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
-    
+
     public static <T> INodeObject<T> convertStringToObjectNode(String expression, FunctionContext context, Class<T> clazz) {
         try {
             return GenericExpressionCompiler.compileExpressionObject(clazz, expression, context);
-        } catch (InvalidExpressionException e) {
+        }
+        catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -155,6 +163,6 @@ public abstract class JsonVariableModelPart {
         float x = (float) in[0].evaluate() / 16f;
         float y = (float) in[1].evaluate() / 16f;
         float z = (float) in[2].evaluate() / 16f;
-        return new float[] { x, y, z };
+        return new float[]{x, y, z};
     }
 }

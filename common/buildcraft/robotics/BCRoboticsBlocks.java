@@ -14,16 +14,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCRoboticsBlocks
-{
+public class BCRoboticsBlocks {
     //    private static final RegistrationHelper HELPER = new RegistrationHelper();
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCRobotics.MOD_ID);
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCRobotics.MODID);
 
     public static RegistryObject<BlockZonePlanner> zonePlanner;
     public static RegistryObject<BlockEntityType<TileZonePlanner>> zonePlannerTile;
 
-    public static void preInit()
-    {
+    public static void preInit() {
         zonePlanner = HELPER.addBlockAndItem("block.zone_planner", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockZonePlanner::new);
 
         zonePlannerTile = HELPER.registerTile("tile.zone_planner", TileZonePlanner::new, zonePlanner);

@@ -16,8 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public final class PageLinkItemStack extends PageLink
-{
+public final class PageLinkItemStack extends PageLink {
 
     private static final boolean FULL_TOOLITP = true;
 
@@ -26,8 +25,7 @@ public final class PageLinkItemStack extends PageLink
     //    public final String searchText;
     public final Component searchText;
 
-    public static PageLinkItemStack create(boolean startVisible, ItemStack stack, ProfilerFiller prof)
-    {
+    public static PageLinkItemStack create(boolean startVisible, ItemStack stack, ProfilerFiller prof) {
         prof.push("create_page_link");
         prof.push("get_tooltip");
         List<Component> tooltip = getTooltip(stack);
@@ -43,41 +41,33 @@ public final class PageLinkItemStack extends PageLink
         return page;
     }
 
-    private static List<Component> getTooltip(ItemStack stack)
-    {
-        if (FULL_TOOLITP)
-        {
+    private static List<Component> getTooltip(ItemStack stack) {
+        if (FULL_TOOLITP) {
             return GuiUtil.getUnFormattedTooltip(stack);
         }
         return Collections.singletonList(GuiUtil.getStackDisplayName(stack));
     }
 
-    private static String joinTooltip(final List<Component> tooltip)
-    {
+    private static String joinTooltip(final List<Component> tooltip) {
         StringBuilder joiner = new StringBuilder();
         joinTooltipLine(tooltip, joiner, 0);
-        for (int i = 1; i < tooltip.size(); i++)
-        {
+        for (int i = 1; i < tooltip.size(); i++) {
             joiner.append('\n');
             joinTooltipLine(tooltip, joiner, i);
         }
         return joiner.toString();
     }
 
-    private static void joinTooltipLine(final List<Component> tooltip, StringBuilder joiner, int i)
-    {
+    private static void joinTooltipLine(final List<Component> tooltip, StringBuilder joiner, int i) {
         joiner.append(removeFormatting(tooltip.get(i).getString()).toLowerCase(Locale.ROOT));
     }
 
-    private static String removeFormatting(String s)
-    {
+    private static String removeFormatting(String s) {
         char[] to = new char[s.length()];
         int len = 0;
-        for (int ci = 0; ci < s.length(); ci++)
-        {
+        for (int ci = 0; ci < s.length(); ci++) {
             char c = s.charAt(ci);
-            if (c == '§')
-            {
+            if (c == '§') {
                 ci++;
                 continue;
             }
@@ -88,8 +78,7 @@ public final class PageLinkItemStack extends PageLink
 
     private PageLinkItemStack(
             PageLine text, boolean startVisible, ItemStack stack, List<Component> tooltip, String searchText
-    )
-    {
+    ) {
         super(text, startVisible);
         this.stack = stack;
         this.tooltip = tooltip;
@@ -97,9 +86,8 @@ public final class PageLinkItemStack extends PageLink
         this.searchText = new TextComponent(searchText);
     }
 
-//    private PageLinkItemStack(boolean startVisible, ItemStack stack, Profiler prof)
-    private PageLinkItemStack(boolean startVisible, ItemStack stack, ProfilerFiller prof)
-    {
+    //    private PageLinkItemStack(boolean startVisible, ItemStack stack, Profiler prof)
+    private PageLinkItemStack(boolean startVisible, ItemStack stack, ProfilerFiller prof) {
         super(createPageLine(stack, prof), startVisible);
         this.stack = stack;
         prof.push("get_tooltip");
@@ -110,9 +98,8 @@ public final class PageLinkItemStack extends PageLink
         prof.pop();
     }
 
-//    private static PageLine createPageLine(ItemStack stack, Profiler prof)
-    private static PageLine createPageLine(ItemStack stack, ProfilerFiller prof)
-    {
+    //    private static PageLine createPageLine(ItemStack stack, Profiler prof)
+    private static PageLine createPageLine(ItemStack stack, ProfilerFiller prof) {
         prof.push("create_line");
         ISimpleDrawable icon = new GuiStack(stack);
         prof.push("get_display_name");
@@ -125,29 +112,24 @@ public final class PageLinkItemStack extends PageLink
 
     @Override
 //    public String getSearchName()
-    public Component getSearchName()
-    {
+    public Component getSearchName() {
         return searchText;
     }
 
     @Override
-    public List<Component> getTooltip()
-    {
+    public List<Component> getTooltip() {
         return tooltip.size() == 1 ? null : tooltip;
     }
 
     @Override
-    public void appendTooltip(GuiGuide gui)
-    {
-        if (tooltip.size() > 1)
-        {
+    public void appendTooltip(GuiGuide gui) {
+        if (tooltip.size() > 1) {
             gui.tooltipStack = stack;
         }
     }
 
     @Override
-    public GuidePageFactory getFactoryLink()
-    {
+    public GuidePageFactory getFactoryLink() {
         return GuideManager.INSTANCE.getPageFor(stack);
     }
 }

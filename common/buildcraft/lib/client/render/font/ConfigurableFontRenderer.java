@@ -31,7 +31,7 @@ public class ConfigurableFontRenderer extends DelegateFontRenderer {
         if (forceShadow != null) {
             dropShadow = forceShadow;
         }
-        return super.drawString(poseStack,text, x, y, color, dropShadow);
+        return super.drawString(poseStack, text, x, y, color, dropShadow);
     }
 
 }

@@ -18,21 +18,17 @@ public class ContainerAutoCraftItems extends ContainerBCTile<TileAutoWorkbenchIt
 {
     public final SlotBase[] materialSlots;
 
-    public ContainerAutoCraftItems(MenuType menuType, int id, Player player, TileAutoWorkbenchItems tile)
-    {
+    public ContainerAutoCraftItems(MenuType menuType, int id, Player player, TileAutoWorkbenchItems tile) {
         super(menuType, id, player, tile);
 
         addSlot(new SlotOutput(tile.invResult, 0, 124, 35));
-        for (int y = 0; y < 3; y++)
-        {
-            for (int x = 0; x < 3; x++)
-            {
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
                 addSlot(new SlotPhantom(tile.invBlueprint, x + y * 3, 30 + x * 18, 17 + y * 18, false));
             }
         }
         materialSlots = new SlotBase[9];
-        for (int x = 0; x < 9; x++)
-        {
+        for (int x = 0; x < 9; x++) {
             // hide the filter slots, but still sync them
             addSlot(new SlotPhantom(tile.invMaterialFilter, x, -1000000, -1000000));
             addSlot(materialSlots[x] = new SlotBase(tile.invMaterials, x, 8 + x * 18, 84));

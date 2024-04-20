@@ -1,6 +1,5 @@
 package buildcraft.datagen.silicon;
 
-import buildcraft.silicon.BCSilicon;
 import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.BCSiliconModBusEventDist;
@@ -10,18 +9,15 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class SiliconItemModelProvider extends ItemModelProvider
-{
+public class SiliconItemModelProvider extends ItemModelProvider {
     private static final ResourceLocation generated = new ResourceLocation("minecraft", "item/generated");
 
-    public SiliconItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
-    {
+    public SiliconItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
         super(generator, modid, existingFileHelper);
     }
 
     @Override
-    protected void registerModels()
-    {
+    protected void registerModels() {
         BCSiliconItems.variantGateMap.values().forEach(
                 reg ->
                         getBuilder(reg.get().getRegistryName().toString()).parent(new ModelFile.UncheckedModelFile("minecraft:builtin/entity"))

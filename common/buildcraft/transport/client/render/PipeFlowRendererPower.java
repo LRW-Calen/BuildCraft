@@ -28,18 +28,15 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.vecmath.Point3f;
 
 @OnlyIn(Dist.CLIENT)
-public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower>
-{
+public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
     INSTANCE;
 
     @Override
 //    public void render(PipeFlowPower flow, double x, double y, double z, float partialTicks, BufferBuilder bb)
-    public void render(PipeFlowPower flow, float partialTicks, PoseStack poseStack, VertexConsumer bb, int combinedLight, int combinedOverlay)
-    {
+    public void render(PipeFlowPower flow, float partialTicks, PoseStack poseStack, VertexConsumer bb, int combinedLight, int combinedOverlay) {
         double centrePower = 0;
         double[] power = new double[6];
-        for (Direction side : Direction.values())
-        {
+        for (Direction side : Direction.values()) {
             Section s = flow.getSection(side);
             int i = side.ordinal();
             power[i] = s.displayPower / (double) MjAPI.MJ;
@@ -49,37 +46,31 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower>
 //        bb.setTranslation(x, y, z);
         poseStack.pushPose();
 
-        if (centrePower > 0)
-        {
-            for (Direction side : Direction.values())
-            {
-                if (!flow.pipe.isConnected(side))
-                {
+        if (centrePower > 0) {
+            for (Direction side : Direction.values()) {
+                if (!flow.pipe.isConnected(side)) {
                     continue;
                 }
                 int i = side.ordinal();
                 Section s = flow.getSection(side);
                 double offset = MathUtil.interp(partialTicks, s.clientDisplayFlowLast, s.clientDisplayFlow);
-                renderSidePower(side, power[i], centrePower, offset,poseStack.last(), bb);
+                renderSidePower(side, power[i], centrePower, offset, poseStack.last(), bb);
             }
 
-            renderCentrePower(centrePower, flow.clientDisplayFlowCentre,poseStack.last(), bb);
+            renderCentrePower(centrePower, flow.clientDisplayFlowCentre, poseStack.last(), bb);
         }
 
 //        bb.setTranslation(0, 0, 0);
         poseStack.popPose();
     }
 
-    private static void renderSidePower(Direction side, double power, double centrePower, double offset, PoseStack.Pose pose, VertexConsumer bb)
-    {
-        if (power < 0)
-        {
+    private static void renderSidePower(Direction side, double power, double centrePower, double offset, PoseStack.Pose pose, VertexConsumer bb) {
+        if (power < 0) {
             return;
         }
         boolean overload = false;
         double radius = 0.248 * power;
-        if (radius >= 0.248)
-        {
+        if (radius >= 0.248) {
             // overload = true;
             radius = 0.248;
         }
@@ -97,10 +88,8 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower>
         Point3f radiusF = new Point3f((float) radiusV.x, (float) radiusV.y, (float) radiusV.z);
 
         UvFaceData uvs = new UvFaceData();
-        for (Direction face : Direction.values())
-        {
-            if (face == side.getOpposite())
-            {
+        for (Direction face : Direction.values()) {
+            if (face == side.getOpposite()) {
                 continue;
             }
 
@@ -111,17 +100,15 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower>
 
             MutableQuad quad = ModelUtil.createFace(face, centreF, radiusF, uvs);
             quad.texFromSprite(sprite);
-            quad.lighti((byte) 15, (byte)15);
-            quad.render(pose,bb);
+            quad.lighti((byte) 15, (byte) 15);
+            quad.render(pose, bb);
         }
     }
 
-    private static void renderCentrePower(double power, Vec3 offset, PoseStack.Pose pose, VertexConsumer bb)
-    {
+    private static void renderCentrePower(double power, Vec3 offset, PoseStack.Pose pose, VertexConsumer bb) {
         boolean overload = false;
         float radius = 0.248f * (float) power;
-        if (radius > 0.248f)
-        {
+        if (radius > 0.248f) {
             // overload = true;
             radius = 0.248f;
         }
@@ -133,8 +120,7 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower>
 
         UvFaceData uvs = new UvFaceData();
 
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
 
             AABB box = new AABB(
                     new Vec3(0.5 - radius, 0.5 - radius, 0.5 - radius).scale(0.5), //
@@ -145,8 +131,8 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower>
 
             MutableQuad quad = ModelUtil.createFace(face, centre, radiusP, uvs);
             quad.texFromSprite(sprite);
-            quad.lighti((byte) 15, (byte)15);
-            quad.render(pose,bb);
+            quad.lighti((byte) 15, (byte) 15);
+            quad.render(pose, bb);
         }
     }
 }

@@ -6,8 +6,7 @@ import buildcraft.lib.misc.ColourUtil;
 import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.common.MinecraftForge;
 
-public class BCSiliconSprites
-{
+public class BCSiliconSprites {
 
     public static final SpriteHolder TRIGGER_LIGHT_LOW;
     public static final SpriteHolder TRIGGER_LIGHT_HIGH;

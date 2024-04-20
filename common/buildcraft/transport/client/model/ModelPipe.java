@@ -6,29 +6,23 @@
 
 package buildcraft.transport.client.model;
 
+import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.transport.block.BlockPipeHolder;
-import buildcraft.transport.tile.TilePipeHolder;
-import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.transport.client.model.PipeModelCacheAll.PipeAllCutoutKey;
 import buildcraft.transport.client.model.PipeModelCacheAll.PipeAllTranslucentKey;
 import buildcraft.transport.client.model.PipeModelCacheBase.PipeBaseCutoutKey;
 import buildcraft.transport.client.model.key.PipeModelKey;
+import buildcraft.transport.tile.TilePipeHolder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -42,14 +36,12 @@ import java.util.List;
 import java.util.Random;
 
 @OnlyIn(Dist.CLIENT)
-public enum ModelPipe implements BakedModel
-{
+public enum ModelPipe implements BakedModel {
     INSTANCE;
 
     @NotNull
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull Random rand)
-    {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull Random rand) {
         return getQuads(state, side, rand, EmptyModelData.INSTANCE);
     }
 
@@ -59,10 +51,8 @@ public enum ModelPipe implements BakedModel
     @NotNull
     @Override
 //    public List<BakedQuad> getQuads(IBlockState state, Direction side, long rand)
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull Random rand, @NotNull IModelData extraData)
-    {
-        if (side != null)
-        {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull Random rand, @NotNull IModelData extraData) {
+        if (side != null) {
             return ImmutableList.of();
         }
 
@@ -82,10 +72,8 @@ public enum ModelPipe implements BakedModel
 //        RenderType layer = ItemBlockRenderTypes.getRenderType(state, true); // Calen: in 1.18.2 here will get entity_translucent_cull
         RenderType layer = MinecraftForgeClient.getRenderType();
 
-        if (tile == null || tile.getPipe() == null)
-        {
-            if (layer == RenderType.translucent())
-            {
+        if (tile == null || tile.getPipe() == null) {
+            if (layer == RenderType.translucent()) {
                 return ImmutableList.of();
             }
             return PipeModelCacheBase.cacheCutout.bake(new PipeBaseCutoutKey(PipeModelKey.DEFAULT_KEY));
@@ -117,29 +105,25 @@ public enum ModelPipe implements BakedModel
 
     @Override
 //    public boolean isAmbientOcclusion()
-    public boolean useAmbientOcclusion()
-    {
+    public boolean useAmbientOcclusion() {
         return false;
     }
 
     @Override
-    public boolean isGui3d()
-    {
+    public boolean isGui3d() {
         return false;
     }
 
     @Override
 //    public boolean isBuiltInRenderer()
-    public boolean isCustomRenderer()
-    {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     // Calen: if missingno, the particle when entity falls onto the pipe, the particle will be missingno
     @Override
 //    public TextureAtlasSprite getParticleTexture()
-    public TextureAtlasSprite getParticleIcon()
-    {
+    public TextureAtlasSprite getParticleIcon() {
 //        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
 //        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation("missingno"));
 //        return SpriteUtil.missingSprite();
@@ -148,21 +132,18 @@ public enum ModelPipe implements BakedModel
 
     @Override
 //    public ItemCameraTransforms getItemCameraTransforms()
-    public ItemTransforms getTransforms()
-    {
+    public ItemTransforms getTransforms() {
         return ModelItemSimple.TRANSFORM_DEFAULT;
     }
 
     @Override
 //    public ItemOverrideList getOverrides()
-    public ItemOverrides getOverrides()
-    {
+    public ItemOverrides getOverrides() {
         return ItemOverrides.EMPTY;
     }
 
     @Override
-    public boolean usesBlockLight()
-    {
+    public boolean usesBlockLight() {
         return false;
     }
 }

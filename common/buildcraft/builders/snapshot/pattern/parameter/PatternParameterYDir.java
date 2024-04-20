@@ -26,7 +26,7 @@ public enum PatternParameterYDir implements IStatementParameter {
     UP(true),
     DOWN(false);
 
-    private static final PatternParameterYDir[] POSSIBLE_ORDER = { null, null, UP, null, null, null, DOWN };
+    private static final PatternParameterYDir[] POSSIBLE_ORDER = {null, null, UP, null, null, null, DOWN};
 
     public final boolean up;
 
@@ -62,6 +62,7 @@ public enum PatternParameterYDir implements IStatementParameter {
 //        return LocaleUtil.localize("direction." + (up ? "up" : "down"));
         return new TranslatableComponent("direction." + (up ? "up" : "down"));
     }
+
     @Override
     public String getDescriptionKey() {
         return "direction." + (up ? "up" : "down");
@@ -69,7 +70,7 @@ public enum PatternParameterYDir implements IStatementParameter {
 
     @Override
     public PatternParameterYDir onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-        StatementMouseClick mouse) {
+                                        StatementMouseClick mouse) {
         return null;
     }
 

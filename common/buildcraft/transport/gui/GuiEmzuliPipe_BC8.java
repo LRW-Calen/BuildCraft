@@ -20,24 +20,19 @@ import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.container.ContainerEmzuliPipe_BC8;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourEmzuli;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourEmzuli.SlotIndex;
-import buildcraft.transport.tile.TilePipeHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DyeColor;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 //public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
-public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
-{
+public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8> {
     private static final ResourceLocation TEXTURE =
             new ResourceLocation("buildcrafttransport:textures/gui/pipe_emzuli.png");
     private static final int SIZE_X = 176, SIZE_Y = 166;
@@ -45,8 +40,7 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
     private static final GuiIcon ICON_NO_PAINT = new GuiIcon(TEXTURE, SIZE_X, 40, 16, 16);
     private static final GuiButtonDrawable.Builder PAINT_BUTTON_BUILDER;
 
-    static
-    {
+    static {
         GuiRectangle rect = new GuiRectangle(20, 20);
         GuiIcon enabled = new GuiIcon(TEXTURE, 176, 0, 20, 20, 256);
         PAINT_BUTTON_BUILDER = new GuiButtonDrawable.Builder(rect, enabled);
@@ -55,8 +49,7 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
 
     //    public GuiEmzuliPipe_BC8(Player player, PipeBehaviourEmzuli behaviour)
 //    public GuiEmzuliPipe_BC8(Player player, PipeBehaviourEmzuli behaviour, Inventory inventory, Component component)
-    public GuiEmzuliPipe_BC8(ContainerEmzuliPipe_BC8 container, Inventory inventory, Component component)
-    {
+    public GuiEmzuliPipe_BC8(ContainerEmzuliPipe_BC8 container, Inventory inventory, Component component) {
 //        super(new ContainerEmzuliPipe_BC8(player, behaviour));
 //        super(new ContainerEmzuliPipe_BC8(null, -1, player, behaviour), inventory, component);
         super(container, inventory, component);
@@ -67,8 +60,7 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         super.initGui();
         addButton(SlotIndex.SQUARE, 49, 19);
         addButton(SlotIndex.CIRCLE, 49, 47);
@@ -76,8 +68,7 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
         addButton(SlotIndex.CROSS, 106, 47);
     }
 
-    private void addButton(SlotIndex index, int x, int y)
-    {
+    private void addButton(SlotIndex index, int x, int y) {
         Supplier<DyeColor> getter = () -> container.behaviour.slotColours.get(index);
         Consumer<DyeColor> setter = c -> container.paintWidgets.get(index).setColour(c);
 
@@ -87,25 +78,20 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
         {
             final DyeColor old = getter.get();
             DyeColor nColour;
-            switch (key)
-            {
-                case 0:
-                {
+            switch (key) {
+                case 0: {
                     nColour = ColourUtil.getNextOrNull(old);
                     break;
                 }
-                case 1:
-                {
+                case 1: {
                     nColour = ColourUtil.getPrevOrNull(old);
                     break;
                 }
-                case 2:
-                {
+                case 2: {
                     nColour = null;
                     break;
                 }
-                default:
-                {
+                default: {
                     return;
                 }
             }
@@ -118,13 +104,10 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
         ISimpleDrawable paintIcon = (poseStack, px, py) ->
         {
             DyeColor colour = getter.get();
-            if (colour == null)
-            {
+            if (colour == null) {
 //                ICON_NO_PAINT.drawAt(px + 2, py + 2);
                 ICON_NO_PAINT.drawAt(poseStack, px + 2, py + 2);
-            }
-            else
-            {
+            } else {
                 ISprite sprite = BCTransportSprites.ACTION_PIPE_COLOUR[colour.ordinal()];
                 GuiIcon.drawAt(sprite, poseStack, px + 2, py + 2, 16);
             }
@@ -135,13 +118,10 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
             DyeColor colour = getter.get();
 //            String line;
 //            Component line;
-            if (colour == null)
-            {
+            if (colour == null) {
 //                line = LocaleUtil.localize("gui.pipes.emzuli.nopaint");
                 list.add(new ToolTip(new TranslatableComponent("gui.pipes.emzuli.nopaint")));
-            }
-            else
-            {
+            } else {
 //                line = LocaleUtil.localize("gui.pipes.emzuli.paint", ColourUtil.getTextFullTooltip(colour));
                 list.add(new ToolTip(new TranslatableComponent("gui.pipes.emzuli.paint", ColourUtil.getTextFullTooltip(colour))));
             }
@@ -152,13 +132,11 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
 
         SlotIndex currentSlot = container.behaviour.getCurrentSlot();
-        for (SlotIndex index : container.behaviour.getActiveSlots())
-        {
+        for (SlotIndex index : container.behaviour.getActiveSlots()) {
             boolean current = index == currentSlot;
             int x = (index.ordinal() < 2 ? 4 : 155);
             int y = (index.ordinal() % 2 == 0 ? 21 : 49);
@@ -168,8 +146,7 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8>
     }
 
     @Override
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
         String title = LocaleUtil.localize("gui.pipes.emzuli.title");
 //        double titleX = mainGui.rootElement.getX() + (xSize - fontRenderer.getStringWidth(title)) / 2;
         double titleX = mainGui.rootElement.getX() + (imageWidth - font.width(title)) / 2;

@@ -12,43 +12,33 @@ import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenCustomHashMap;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.io.IOException;
 import java.util.Objects;
 
 // We use ItemStackKey here because ItemStack doesn't implement hashCode and equals
-public class NetworkedItemStackCache extends NetworkedObjectCache<ItemStack>
-{
+public class NetworkedItemStackCache extends NetworkedObjectCache<ItemStack> {
 
-    public NetworkedItemStackCache()
-    {
+    public NetworkedItemStackCache() {
         super(StackUtil.EMPTY);
     }
 
     @Override
-    protected Object2IntMap<ItemStack> createObject2IntMap()
-    {
-        return new Object2IntOpenCustomHashMap<>(new Hash.Strategy<ItemStack>()
-        {
+    protected Object2IntMap<ItemStack> createObject2IntMap() {
+        return new Object2IntOpenCustomHashMap<>(new Hash.Strategy<ItemStack>() {
             @Override
-            public int hashCode(ItemStack o)
-            {
-                if (o == null || o.isEmpty())
-                {
+            public int hashCode(ItemStack o) {
+                if (o == null || o.isEmpty()) {
                     return 0;
                 }
                 return Objects.hash(o.getItem(), o.getTag());
             }
 
             @Override
-            public boolean equals(ItemStack a, ItemStack b)
-            {
-                if (a == null || b == null)
-                {
+            public boolean equals(ItemStack a, ItemStack b) {
+                if (a == null || b == null) {
                     return a == b;
                 }
                 return StackUtil.canMerge(a, b);
@@ -57,27 +47,21 @@ public class NetworkedItemStackCache extends NetworkedObjectCache<ItemStack>
     }
 
     @Override
-    protected ItemStack copyOf(ItemStack object)
-    {
+    protected ItemStack copyOf(ItemStack object) {
         return object == null ? null : object.copy();
     }
 
     @Override
-    protected void writeObject(ItemStack obj, PacketBufferBC buffer)
-    {
-        if (obj == null || obj.isEmpty())
-        {
+    protected void writeObject(ItemStack obj, PacketBufferBC buffer) {
+        if (obj == null || obj.isEmpty()) {
             buffer.writeBoolean(false);
-        }
-        else
-        {
+        } else {
             buffer.writeBoolean(true);
             buffer.writeShort(Item.getId(obj.getItem()));
 //            buffer.writeShort(obj.getMetadata());
             CompoundTag tag = null;
 //            if (obj.getItem().isDamageable(obj) || obj.getItem().getShareTag(obj))
-            if (obj.getItem().isDamageable(obj))
-            {
+            if (obj.getItem().isDamageable(obj)) {
                 tag = obj.getItem().getShareTag(obj);
             }
             buffer.writeNbt(tag);
@@ -85,26 +69,21 @@ public class NetworkedItemStackCache extends NetworkedObjectCache<ItemStack>
     }
 
     @Override
-    protected ItemStack readObject(PacketBufferBC buffer) throws IOException
-    {
-        if (buffer.readBoolean())
-        {
+    protected ItemStack readObject(PacketBufferBC buffer) throws IOException {
+        if (buffer.readBoolean()) {
             Item item = Item.byId(buffer.readUnsignedShort());
 //            int meta = buffer.readShort();
 //            ItemStack stack = new ItemStack(item, 1, meta);
             ItemStack stack = new ItemStack(item, 1);
             stack.setTag(buffer.readNbt());
             return stack;
-        }
-        else
-        {
+        } else {
             return ItemStack.EMPTY;
         }
     }
 
     @Override
-    protected String getCacheName()
-    {
+    protected String getCacheName() {
         return "ItemStack";
     }
 }

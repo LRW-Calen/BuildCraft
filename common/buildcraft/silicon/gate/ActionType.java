@@ -1,8 +1,8 @@
 package buildcraft.silicon.gate;
 
 import buildcraft.api.core.BCLog;
-import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.core.EnumPipePart;
+import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.statements.IAction;
 import buildcraft.api.statements.IActionInternal;
 import buildcraft.api.statements.IStatement;

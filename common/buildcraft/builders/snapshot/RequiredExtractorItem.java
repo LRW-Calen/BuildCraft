@@ -23,21 +23,21 @@ public class RequiredExtractorItem extends RequiredExtractor {
     @Override
     public List<ItemStack> extractItemsFromBlock(@Nonnull BlockState blockState, @Nullable CompoundTag tileNbt) {
         return Optional.ofNullable(path.get(tileNbt))
-            .map(CompoundTag.class::cast)
+                .map(CompoundTag.class::cast)
 //            .map(ItemStack::new)
-            .map(ItemStack::of)
-            .map(Collections::singletonList)
-            .orElseGet(Collections::emptyList);
+                .map(ItemStack::of)
+                .map(Collections::singletonList)
+                .orElseGet(Collections::emptyList);
     }
 
     @Nonnull
     @Override
     public List<ItemStack> extractItemsFromEntity(@Nonnull CompoundTag entityNbt) {
         return Optional.ofNullable(path.get(entityNbt))
-            .map(CompoundTag.class::cast)
+                .map(CompoundTag.class::cast)
 //            .map(ItemStack::new)
-            .map(ItemStack::of)
-            .map(Collections::singletonList)
-            .orElseGet(Collections::emptyList);
+                .map(ItemStack::of)
+                .map(Collections::singletonList)
+                .orElseGet(Collections::emptyList);
     }
 }

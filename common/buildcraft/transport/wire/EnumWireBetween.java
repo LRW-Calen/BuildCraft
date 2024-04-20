@@ -110,17 +110,17 @@ public enum EnumWireBetween {
     private EnumWirePart[] getParts() {
         Function<AxisDirection[], EnumWirePart> getPartFromDirections = directions -> Arrays.stream(EnumWirePart.VALUES).filter(part -> part.x == directions[0] && part.y == directions[1] && part.z == directions[2]).findFirst().orElse(null);
         EnumWirePart[] arr = new EnumWirePart[2];
-        for(int i = 0; i < arr.length; i++) {
+        for (int i = 0; i < arr.length; i++) {
             AxisDirection[] directions = new AxisDirection[3];
             boolean found = false;
-            for(int j = 0; j < directions.length; j++) {
-                if(mainAxis.ordinal() == j) {
-                    if(to == null) {
+            for (int j = 0; j < directions.length; j++) {
+                if (mainAxis.ordinal() == j) {
+                    if (to == null) {
                         directions[j] = i == 0 ? AxisDirection.NEGATIVE : AxisDirection.POSITIVE;
                     } else {
                         directions[j] = i == 0 ? to.getAxisDirection() : to.getOpposite().getAxisDirection();
                     }
-                } else if(!found) {
+                } else if (!found) {
                     directions[j] = xy ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE;
                     found = true;
                 } else {

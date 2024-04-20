@@ -45,7 +45,7 @@ public class ReloadSource {
         }
         ReloadSource other = (ReloadSource) obj;
         return type == other.type//
-            && location.equals(other.location);
+                && location.equals(other.location);
     }
 
     @Override

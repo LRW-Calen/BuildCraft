@@ -36,7 +36,7 @@ public class InjectableWrapper implements IItemTransactor {
                 // sanity check: it really helps debugging
                 if (!reallyLeftOver.isEmpty()) {
                     throw new IllegalStateException("Found an invalid IInjectable instance! (leftOver = "//
-                        + leftOver + ", reallyLeftOver = " + reallyLeftOver + ", " + injectable.getClass() + ")");
+                            + leftOver + ", reallyLeftOver = " + reallyLeftOver + ", " + injectable.getClass() + ")");
                 } else {
                     return StackUtil.EMPTY;
                 }

@@ -24,8 +24,7 @@ import java.util.List;
  * or outputs for recipes that use the oredictionary, or recipes that vary the output depending on the metadata of the
  * input (for example a pipe colouring recipe)
  */
-public final class ChangingItemStack extends ChangingObject<ItemStackKey>
-{
+public final class ChangingItemStack extends ChangingObject<ItemStackKey> {
     /**
      * Creates a stack list that iterates through all of the given stacks. This does NOT check possible variants.
      *
@@ -33,18 +32,15 @@ public final class ChangingItemStack extends ChangingObject<ItemStackKey>
      */
 //    public ChangingItemStack(NonNullList<ItemStack> stacks)
     // Calen: ? is ItemStack or Ingredient
-    public ChangingItemStack(NonNullList<?> stacks)
-    {
+    public ChangingItemStack(NonNullList<?> stacks) {
         super(makeListArray(stacks));
     }
 
-    public ChangingItemStack(@Nonnull Ingredient ingredient)
-    {
+    public ChangingItemStack(@Nonnull Ingredient ingredient) {
         super(makeRecipeArray(ingredient));
     }
 
-    public ChangingItemStack(ItemStack stack)
-    {
+    public ChangingItemStack(ItemStack stack) {
         super(makeStackArray(stack));
     }
 
@@ -56,22 +52,15 @@ public final class ChangingItemStack extends ChangingObject<ItemStackKey>
 //    }
 
     //    private static ItemStackKey[] makeListArray(NonNullList<ItemStack> stacks)
-    private static ItemStackKey[] makeListArray(NonNullList<?> items)
-    {
+    private static ItemStackKey[] makeListArray(NonNullList<?> items) {
 //        return makeStackArray(stacks.toArray(new ItemStack[0]));
         List<ItemStack> ret = Lists.newArrayList();
-        for (Object ele : items)
-        {
-            if (ele instanceof ItemStack stack)
-            {
+        for (Object ele : items) {
+            if (ele instanceof ItemStack stack) {
                 ret.add(stack);
-            }
-            else if (ele instanceof Ingredient ingredient)
-            {
+            } else if (ele instanceof Ingredient ingredient) {
                 Arrays.stream(ingredient.getItems()).forEach(ret::add);
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException("[lib.guide.recipe] Recipe items should be ItemStack or Ingredient!");
             }
         }
@@ -79,54 +68,40 @@ public final class ChangingItemStack extends ChangingObject<ItemStackKey>
         return makeStackArray(ret.toArray(new ItemStack[0]));
     }
 
-    private static ItemStackKey[] makeStackArray(ItemStack stack)
-    {
-        if (stack.isEmpty())
-        {
+    private static ItemStackKey[] makeStackArray(ItemStack stack) {
+        if (stack.isEmpty()) {
             return new ItemStackKey[]{ItemStackKey.EMPTY};
         }
 //        if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
-        if (stack.getDamageValue() == Short.MAX_VALUE)
-        {
+        if (stack.getDamageValue() == Short.MAX_VALUE) {
             NonNullList<ItemStack> subs = NonNullList.create();
             stack.getItem().fillItemCategory(CreativeModeTab.TAB_SEARCH, subs);
             return makeListArray(subs);
-        }
-        else
-        {
+        } else {
             return new ItemStackKey[]{new ItemStackKey(stack)};
         }
     }
 
-    private static ItemStackKey[] makeRecipeArray(Ingredient ingredient)
-    {
+    private static ItemStackKey[] makeRecipeArray(Ingredient ingredient) {
         ItemStack[] stacks = ingredient.getItems();
         return makeStackArray(stacks);
     }
 
-    private static ItemStackKey[] makeStackArray(ItemStack[] stacks)
-    {
-        if (stacks.length == 0)
-        {
+    private static ItemStackKey[] makeStackArray(ItemStack[] stacks) {
+        if (stacks.length == 0) {
             return new ItemStackKey[]{ItemStackKey.EMPTY};
-        }
-        else
-        {
+        } else {
             ItemStackKey[] arr = new ItemStackKey[stacks.length];
-            for (int i = 0; i < stacks.length; i++)
-            {
+            for (int i = 0; i < stacks.length; i++) {
                 arr[i] = new ItemStackKey(stacks[i]);
             }
             return arr;
         }
     }
 
-    public boolean matches(ItemStack target)
-    {
-        for (ItemStackKey s : options)
-        {
-            if (StackUtil.isCraftingEquivalent(s.baseStack, target, false))
-            {
+    public boolean matches(ItemStack target) {
+        for (ItemStackKey s : options) {
+            if (StackUtil.isCraftingEquivalent(s.baseStack, target, false)) {
                 return true;
             }
         }

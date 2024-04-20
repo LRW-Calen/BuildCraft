@@ -12,7 +12,6 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import javax.annotation.Nonnull;
 
 @FunctionalInterface
-public interface StackChangeCallback
-{
+public interface StackChangeCallback {
     void onStackChange(IItemHandlerModifiable itemHandler, int slot, @Nonnull ItemStack before, @Nonnull ItemStack after);
 }

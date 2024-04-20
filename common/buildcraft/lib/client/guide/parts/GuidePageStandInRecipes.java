@@ -21,20 +21,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Deprecated
-public class GuidePageStandInRecipes extends GuidePage
-{
-    public GuidePageStandInRecipes(GuiGuide gui, List<GuidePart> parts, ItemStack stack)
-    {
+public class GuidePageStandInRecipes extends GuidePage {
+    public GuidePageStandInRecipes(GuiGuide gui, List<GuidePart> parts, ItemStack stack) {
         super(gui, parts, new PageValue<>(PageEntryItemStack.INSTANCE, new ItemStackValueFilter(stack)));
     }
 
     @Nonnull
-    public static GuidePageFactory createFactory(@Nonnull ItemStack stack)
-    {
+    public static GuidePageFactory createFactory(@Nonnull ItemStack stack) {
 //        List<GuidePartFactory> factories = XmlPageLoader.loadAllCrafting(stack, new Profiler(), 0);
         List<GuidePartFactory> factories = XmlPageLoader.loadAllCrafting(stack, Minecraft.getInstance().getProfiler(), 0);
-        if (factories.isEmpty())
-        {
+        if (factories.isEmpty()) {
             return (gui) ->
             {
 //                return new GuidePageStandInRecipes(gui, ImmutableList.of(new GuideText(gui, "No recipes!")), stack);
@@ -44,8 +40,7 @@ public class GuidePageStandInRecipes extends GuidePage
         return (gui) ->
         {
             List<GuidePart> parts = new ArrayList<>();
-            for (GuidePartFactory factory : factories)
-            {
+            for (GuidePartFactory factory : factories) {
                 parts.add(factory.createNew(gui));
             }
             return new GuidePageStandInRecipes(gui, parts, stack);
@@ -53,14 +48,12 @@ public class GuidePageStandInRecipes extends GuidePage
     }
 
     @Override
-    public boolean shouldPersistHistory()
-    {
+    public boolean shouldPersistHistory() {
         return false;
     }
 
     @Override
-    public GuidePageBase createReloaded()
-    {
+    public GuidePageBase createReloaded() {
         // Recipes won't have reloaded, so there's no need to change what is displayed.
         return this;
     }

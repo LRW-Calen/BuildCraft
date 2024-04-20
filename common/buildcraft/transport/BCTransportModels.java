@@ -24,7 +24,10 @@ import buildcraft.transport.client.model.ModelPipe;
 import buildcraft.transport.client.model.ModelPipeItem;
 import buildcraft.transport.client.model.key.KeyPlugBlocker;
 import buildcraft.transport.client.model.key.KeyPlugPowerAdaptor;
-import buildcraft.transport.client.render.*;
+import buildcraft.transport.client.render.PipeBehaviourRendererStripes;
+import buildcraft.transport.client.render.PipeFlowRendererFluids;
+import buildcraft.transport.client.render.PipeFlowRendererItems;
+import buildcraft.transport.client.render.PipeFlowRendererPower;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
 import buildcraft.transport.pipe.flow.PipeFlowFluids;
 import buildcraft.transport.pipe.flow.PipeFlowItems;
@@ -40,8 +43,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 //@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_TRANSPORT, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCTransportModels
-{
+public class BCTransportModels {
     public static final ModelHolderStatic BLOCKER;
     public static final ModelHolderStatic POWER_ADAPTER;
 
@@ -51,8 +53,7 @@ public class BCTransportModels
     public static final IPluggableStaticBaker<KeyPlugBlocker> BAKER_PLUG_BLOCKER;
     public static final IPluggableStaticBaker<KeyPlugPowerAdaptor> BAKER_PLUG_POWER_ADAPTOR;
 
-    static
-    {
+    static {
         // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); runned, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
         ExpressionCompat.setup();
 
@@ -69,13 +70,11 @@ public class BCTransportModels
         }
     }
 
-    private static ModelHolderStatic getStaticModel(String str)
-    {
+    private static ModelHolderStatic getStaticModel(String str) {
         return new ModelHolderStatic("buildcrafttransport:models/" + str + ".json");
     }
 
-    private static ModelHolderVariable getModel(String str, FunctionContext fnCtx)
-    {
+    private static ModelHolderVariable getModel(String str, FunctionContext fnCtx) {
         return new ModelHolderVariable("buildcrafttransport:models/" + str + ".json", fnCtx);
     }
 
@@ -85,8 +84,7 @@ public class BCTransportModels
 //        MinecraftForge.EVENT_BUS.register(BCTransportModels.class);
 //    }
 
-    public static void fmlInit()
-    {
+    public static void fmlInit() {
         // Moved to onRenderRegister
 //        ClientRegistry.bindTileEntitySpecialRenderer(TilePipeHolder.class, new RenderPipeHolder());
 
@@ -100,15 +98,13 @@ public class BCTransportModels
         PipeApiClient.registry.registerRenderer(PipeBehaviourStripes.class, PipeBehaviourRendererStripes.INSTANCE);
     }
 
-    public static void fmlPostInit()
-    {
+    public static void fmlPostInit() {
         RenderUtil.registerBlockColour(BCTransportBlocks.pipeHolder.get(), PipeBlockColours.INSTANCE);
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onModelRegistry(ModelRegistryEvent event)
-    {
+    public static void onModelRegistry(ModelRegistryEvent event) {
         // Calen: Useless
 //        PipeRegistry.INSTANCE.getAllRegisteredPipes().forEach((def) ->
 //                ForgeModelBakery.addSpecialModel(new ModelResourceLocation(def.identifier.getNamespace(), "pipe_" + def.identifier.getPath(), "inventory"))
@@ -127,26 +123,18 @@ public class BCTransportModels
     @OnlyIn(Dist.CLIENT)
 //    @SubscribeEvent
     @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onModelBake(ModelBakeEvent event)
-    {
+    public static void onModelBake(ModelBakeEvent event) {
 //        putModel(event, "pipe_holder#normal", ModelPipe.INSTANCE);
 //        putModel(event, "pipe_item#inventory", ModelPipeItem.INSTANCE);
         event.getModelRegistry().replaceAll(((resourceLocation, bakedModel) ->
         {
-            if (resourceLocation instanceof ModelResourceLocation m)
-            {
-                if (m.getNamespace().equals("buildcrafttransport"))
-                {
-                    if (m.getVariant().equals("inventory") && m.getPath().startsWith("pipe_"))
-                    {
+            if (resourceLocation instanceof ModelResourceLocation m) {
+                if (m.getNamespace().equals("buildcrafttransport")) {
+                    if (m.getVariant().equals("inventory") && m.getPath().startsWith("pipe_")) {
                         return ModelPipeItem.INSTANCE;
-                    }
-                    else if (m.getPath().equals("pipe_holder"))
-                    {
+                    } else if (m.getPath().equals("pipe_holder")) {
                         return ModelPipe.INSTANCE;
-                    }
-                    else if (m.getPath().contains("pipe"))
-                    {
+                    } else if (m.getPath().contains("pipe")) {
                         BCLog.logger.warn("Found unexpected pipe at ModelBakeEvent: " + m);
                     }
                 }
@@ -157,13 +145,11 @@ public class BCTransportModels
         putModel(event, "plug_power_adaptor#inventory", new ModelPluggableItem(POWER_ADAPTER.getCutoutQuads()));
     }
 
-    private static void putModel(ModelBakeEvent event, String str, BakedModel model)
-    {
+    private static void putModel(ModelBakeEvent event, String str, BakedModel model) {
         event.getModelRegistry().replace(new ModelResourceLocation("buildcrafttransport:" + str), model);
     }
 
-    public static MutableQuad[] getStripesDynQuads(Direction side)
-    {
+    public static MutableQuad[] getStripesDynQuads(Direction side) {
         STRIPES_DIRECTION.value = side;
         return STRIPES.getCutoutQuads();
     }

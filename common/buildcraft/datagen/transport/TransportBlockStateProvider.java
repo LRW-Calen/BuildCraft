@@ -1,7 +1,6 @@
 package buildcraft.datagen.transport;
 
 import buildcraft.datagen.base.BCBlockStateProvider;
-import buildcraft.transport.BCTransport;
 import buildcraft.transport.BCTransportBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -9,16 +8,13 @@ import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class TransportBlockStateProvider extends BlockStateProvider
-{
-    public TransportBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
-    {
+public class TransportBlockStateProvider extends BlockStateProvider {
+    public TransportBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
         super(gen, modid, exFileHelper);
     }
 
     @Override
-    protected void registerStatesAndModels()
-    {
+    protected void registerStatesAndModels() {
         getVariantBuilder(BCTransportBlocks.filteredBuffer.get()).forAllStates(s ->
         {
             return ConfiguredModel.builder().modelFile(

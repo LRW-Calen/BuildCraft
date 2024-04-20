@@ -1,9 +1,9 @@
 package buildcraft.datagen.silicon;
 
 import buildcraft.datagen.base.BCBaseAdvancementProvider;
+import buildcraft.datagen.core.CoreAdvancementProvider;
 import buildcraft.silicon.BCSilicon;
 import buildcraft.silicon.BCSiliconBlocks;
-import buildcraft.datagen.core.CoreAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
@@ -15,16 +15,14 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class SiliconAdvancementProvider extends BCBaseAdvancementProvider
-{
-    private static final String NAMESPACE = BCSilicon.MOD_ID;
+public class SiliconAdvancementProvider extends BCBaseAdvancementProvider {
+    private static final String NAMESPACE = BCSilicon.MODID;
     private static Advancement ROOT;
 
     private static final ImpossibleTrigger.TriggerInstance IMPOSSIBLE = new ImpossibleTrigger.TriggerInstance();
 
 
-    public static void registerSiliconAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper)
-    {
+    public static void registerSiliconAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
         ROOT = CoreAdvancementProvider.ROOT;
         // fluid_storage
         Advancement laser_power = Advancement.Builder.advancement().display(

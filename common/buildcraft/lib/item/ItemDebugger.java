@@ -20,16 +20,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.Vec3;
 
-public class ItemDebugger extends ItemBC_Neptune
-{
-    public ItemDebugger(String idBC, Item.Properties properties)
-    {
+public class ItemDebugger extends ItemBC_Neptune {
+    public ItemDebugger(String idBC, Item.Properties properties) {
         super(idBC, properties);
     }
 
     @Override
-    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx)
-    {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx) {
         Player player = ctx.getPlayer();
         Level world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
@@ -41,17 +38,14 @@ public class ItemDebugger extends ItemBC_Neptune
         double hitZ = vec3Pos.z;
 
 
-        if (world.isClientSide())
-        {
+        if (world.isClientSide()) {
             return InteractionResult.PASS;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile == null)
-        {
+        if (tile == null) {
             return InteractionResult.FAIL;
         }
-        if (tile instanceof IAdvDebugTarget)
-        {
+        if (tile instanceof IAdvDebugTarget) {
             BCAdvDebugging.setCurrentDebugTarget((IAdvDebugTarget) tile);
             return InteractionResult.SUCCESS;
         }
@@ -64,8 +58,7 @@ public class ItemDebugger extends ItemBC_Neptune
 //        return onItemUseFirst(stack, new UseOnContext(world, player, hand, stack, new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false)));
 //    }
 
-    public static boolean isShowDebugInfo(Player player)
-    {
+    public static boolean isShowDebugInfo(Player player) {
         return player.getAbilities().instabuild ||
                 player.getItemInHand(InteractionHand.MAIN_HAND).getItem() instanceof ItemDebugger ||
                 player.getItemInHand(InteractionHand.OFF_HAND).getItem() instanceof ItemDebugger;

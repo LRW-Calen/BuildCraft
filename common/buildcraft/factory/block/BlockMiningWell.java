@@ -15,18 +15,15 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockMiningWell extends BlockBCTile_Neptune implements IBlockWithFacing
-{
-    public BlockMiningWell(String id, BlockBehaviour.Properties props)
-    {
+public class BlockMiningWell extends BlockBCTile_Neptune implements IBlockWithFacing {
+    public BlockMiningWell(String id, BlockBehaviour.Properties props) {
         super(id, props);
     }
 
     @Nullable
     @Override
 //    public TileBC_Neptune createTileEntity(World worldIn, IBlockState state)
-    public TileBC_Neptune newBlockEntity(BlockPos worldIn, BlockState state)
-    {
+    public TileBC_Neptune newBlockEntity(BlockPos worldIn, BlockState state) {
         return new TileMiningWell(worldIn, state);
     }
 }

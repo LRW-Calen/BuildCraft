@@ -14,8 +14,7 @@ import javax.annotation.Nonnull;
 /** Defines a way of inserting items into an inventory - this can be overridden to have different rules with stack
  * merging. */
 @FunctionalInterface
-public interface StackInsertionFunction
-{
+public interface StackInsertionFunction {
     /** @param addingTo The existing stack. Modifications are lost.
      * @param toInsert The stacks to insert. Modifications are lost.
      * @return The result of attempting to insert it. */
@@ -25,7 +24,8 @@ public interface StackInsertionFunction
     /** Gets a stack insertion function that will insert items up to a given stack size. The stack size of the items
      * themselves IS taken into account, so this has an effective upper limit of 64. */
     static StackInsertionFunction getInsertionFunction(int maxStackSize) {
-        return (slot, addingTo, toInsert) -> {
+        return (slot, addingTo, toInsert) ->
+        {
             if (toInsert.isEmpty()) {
                 return new InsertionResult(addingTo, StackUtil.EMPTY);
             }

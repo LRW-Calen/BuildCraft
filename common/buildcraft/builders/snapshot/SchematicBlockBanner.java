@@ -1,10 +1,7 @@
 package buildcraft.builders.snapshot;
 
 import buildcraft.api.schematics.SchematicBlockContext;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.BannerBlock;
 import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -14,19 +11,15 @@ import java.util.List;
 import java.util.Set;
 
 // Calen
-public class SchematicBlockBanner extends SchematicBlockDefault
-{
+public class SchematicBlockBanner extends SchematicBlockDefault {
     private ItemStack requiredItem;
 
     @SuppressWarnings({"unused", "WeakerAccess"})
-    protected void setTileNbt(SchematicBlockContext context, Set<JsonRule> rules)
-    {
+    protected void setTileNbt(SchematicBlockContext context, Set<JsonRule> rules) {
         tileNbt = null;
-        if (context.blockState.hasBlockEntity())
-        {
+        if (context.blockState.hasBlockEntity()) {
             BlockEntity tileEntity = context.world.getBlockEntity(context.pos);
-            if (tileEntity instanceof BannerBlockEntity banner)
-            {
+            if (tileEntity instanceof BannerBlockEntity banner) {
                 tileNbt = banner.serializeNBT();
                 // Calen
                 requiredItem = banner.getItem();
@@ -36,8 +29,7 @@ public class SchematicBlockBanner extends SchematicBlockDefault
 
     @Nonnull
     @Override
-    public List<ItemStack> computeRequiredItems()
-    {
+    public List<ItemStack> computeRequiredItems() {
 //        return Collections.singletonList(ItemBanner.makeBanner(
 //                EnumDyeColor.byDyeDamage(tileNbt.getInteger("Base")), tileNbt.getTagList("Patterns", 10)));
         return Collections.singletonList(requiredItem);

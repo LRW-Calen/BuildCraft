@@ -13,8 +13,7 @@ import buildcraft.transport.statements.*;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
 
-public class BCTransportStatements
-{
+public class BCTransportStatements {
 
     public static final TriggerPipeSignal[] TRIGGER_PIPE_SIGNAL;
     public static final TriggerPowerRequested TRIGGER_POWER_REQUESTED;

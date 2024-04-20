@@ -1,8 +1,10 @@
 package buildcraft.factory.client.render;
 
-import buildcraft.factory.tile.TileHeatExchange;
-import buildcraft.factory.tile.TileHeatExchange.*;
 import buildcraft.factory.BCFactoryBlocks;
+import buildcraft.factory.tile.TileHeatExchange;
+import buildcraft.factory.tile.TileHeatExchange.EnumProgressState;
+import buildcraft.factory.tile.TileHeatExchange.ExchangeSectionEnd;
+import buildcraft.factory.tile.TileHeatExchange.ExchangeSectionStart;
 import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.client.render.fluid.FluidRenderer;
 import buildcraft.lib.client.render.fluid.FluidRenderer.TankSize;
@@ -12,7 +14,8 @@ import buildcraft.lib.fluid.FluidSmoother.FluidStackInterp;
 import buildcraft.lib.misc.VecUtil;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -32,13 +35,11 @@ import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
-{
+public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange> {
     private static final Map<Direction, TankSideData> TANK_SIDES = new EnumMap<>(Direction.class);
     private static final TankSize TANK_BOTTOM, TANK_TOP;
 
-    static
-    {
+    static {
         double s = 1 / 64.0;
         TANK_BOTTOM = new TankSize(2, 0, 2, 14, 2, 14).shrink(s, 0, s);
         TANK_TOP = new TankSize(2, 14, 2, 14, 16, 14).shrink(s, 0, s);
@@ -46,42 +47,35 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
         TankSize end = new TankSize(14, 4, 4, 16, 12, 12).shrink(0, s, s);
         TankSideData sides = new TankSideData(start, end);
         Direction face = Direction.EAST;
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             TANK_SIDES.put(face, sides);
             face = face.getClockWise();
             sides = sides.rotateY();
         }
     }
 
-    static class TankSideData
-    {
+    static class TankSideData {
         public final TankSize start, end;
 
-        public TankSideData(TankSize start, TankSize end)
-        {
+        public TankSideData(TankSize start, TankSize end) {
             this.start = start;
             this.end = end;
         }
 
-        public TankSideData rotateY()
-        {
+        public TankSideData rotateY() {
             return new TankSideData(start.rotateY(), end.rotateY());
         }
     }
 
-    public RenderHeatExchange(BlockEntityRendererProvider.Context context)
-    {
+    public RenderHeatExchange(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void render(TileHeatExchange tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
-    public void render(TileHeatExchange tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileHeatExchange tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 //        super.render(tile, x, y, z, partialTicks, destroyStage, alpha);
 
-        if (!tile.isStart())
-        {
+        if (!tile.isStart()) {
             return;
         }
 
@@ -89,8 +83,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
         ExchangeSectionEnd sectionEnd = section.getEndSection();
 
         BlockState state = tile.getCurrentStateForBlock(BCFactoryBlocks.heatExchange.get());
-        if (state == null)
-        {
+        if (state == null) {
             return;
         }
 
@@ -137,8 +130,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
         renderTank(sideTank.start, section.smoothedTankOutput, combinedLight, combinedOverlay, partialTicks, poseStack.last(), bbForTank);
 
         int middles = section.middleCount;
-        if (sectionEnd != null)
-        {
+        if (sectionEnd != null) {
             // TODO: Move this into the other renderer!
             BlockPos diff = sectionEnd.getTile().getBlockPos().subtract(tile.getBlockPos());
             poseStack.pushPose();
@@ -152,12 +144,10 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
 
         profiler.popPush("flow");
 
-        if (middles > 0 && sectionEnd != null)
-        {
+        if (middles > 0 && sectionEnd != null) {
             EnumProgressState progressState = section.getProgressState();
             double progress = section.getProgress(partialTicks);
-            if (progress > 0)
-            {
+            if (progress > 0) {
                 double length = middles + 2 - 4 / 16.0 - 0.02;
                 double p0 = 2 / 16.0 + 0.01;
                 double p1 = p0 + length - 0.01;
@@ -167,14 +157,12 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
                 boolean flip = progressState == EnumProgressState.PREPARING;
                 flip ^= face.getAxisDirection() == AxisDirection.NEGATIVE;
 
-                if (flip)
-                {
+                if (flip) {
                     progressStart = p1 - length * progress;
                     progressEnd = p1;
                 }
                 BlockPos diff = BlockPos.ZERO;
-                if (face.getAxisDirection() == AxisDirection.NEGATIVE)
-                {
+                if (face.getAxisDirection() == AxisDirection.NEGATIVE) {
                     diff = diff.relative(face, middles + 1);
                 }
                 double otherStart = flip ? p0 : p1 - length * progress;
@@ -216,14 +204,12 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
             float partialTicks,
             PoseStack.Pose pose,
             VertexConsumer bb
-    )
-    {
+    ) {
         FluidStackInterp fluid = tank.getFluidForRender(partialTicks);
 //        VertexConsumer bb = bufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(fluid.fluid.getFluid().defaultFluidState()));
 //        bb = bufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(fluid.fluid.getFluid().defaultFluidState()));
 //        bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        if (fluid == null || fluid.amount <= 0)
-        {
+        if (fluid == null || fluid.amount <= 0) {
             return;
         }
         int blockLight = fluid.fluid.getRawFluid().getAttributes().getLuminosity(fluid.fluid) & 0xF;
@@ -236,6 +222,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
 
     public static boolean xxx = false; // Calen debug
     public static boolean xxx1 = false; // Calen debug
+
     private static void renderFlow(
             Vec3 diff,
             Direction face,
@@ -247,8 +234,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
             int combinedOverlay,
             int point,
             float partialTicks
-    )
-    {
+    ) {
 //        // Calen test
 //        RenderType r0 = Sheets.translucentCullBlockSheet();
 //        RenderType r1 = ItemBlockRenderTypes.getRenderLayer(fluid.getFluid().defaultFluidState());
@@ -263,8 +249,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
 //        bufferSource.getBuffer(RenderType.);
         double tickTime = Minecraft.getInstance().level.getGameTime();
         double offset = (tickTime + partialTicks) % 31 / 31.0;
-        if (face.getAxisDirection() == AxisDirection.NEGATIVE)
-        {
+        if (face.getAxisDirection() == AxisDirection.NEGATIVE) {
             offset = -offset;
             face = face.getOpposite();
         }
@@ -275,18 +260,15 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
         diff = diff.subtract(VecUtil.scale(dirVec, offset));
         s += offset;
         e += offset;
-        if (s < 0)
-        {
+        if (s < 0) {
             s++;
             e++;
             diff = diff.subtract(dirVec);
         }
-        for (int i = 0; i <= e; i++)
-        {
+        for (int i = 0; i <= e; i++) {
             Vec3 d = diff;
             diff = diff.add(dirVec);
-            if (i < s - 1)
-            {
+            if (i < s - 1) {
                 continue;
             }
             poseStack.pushPose();
@@ -299,12 +281,10 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
             ve = VecUtil.replaceValue(ve, face.getAxis(), e1);
             boolean[] sides = new boolean[6];
             Arrays.fill(sides, true);
-            if (s < i)
-            {
+            if (s < i) {
                 sides[face.getOpposite().ordinal()] = false;
             }
-            if (e > i + 1)
-            {
+            if (e > i + 1) {
                 sides[face.ordinal()] = false;
             }
             // Calen add
@@ -320,8 +300,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
     }
 
     @Override
-    public boolean shouldRenderOffScreen(TileHeatExchange tile)
-    {
+    public boolean shouldRenderOffScreen(TileHeatExchange tile) {
         return tile.isStart();
     }
 }

@@ -31,8 +31,7 @@ import java.io.InputStreamReader;
  * {@link ISprite}'s and configure buttons in code - currently this only allows for completely defining simple elements
  * via json, more complex ones must be implemented in code.
  */
-public class BuildCraftJsonGui extends BuildCraftGui
-{
+public class BuildCraftJsonGui extends BuildCraftGui {
 
     public final ResourceLocation jsonGuiDefinition;
 
@@ -51,89 +50,72 @@ public class BuildCraftJsonGui extends BuildCraftGui
         time = context.putVariableDouble("time");
     }
 
-    public BuildCraftJsonGui(AbstractContainerScreen gui, ResourceLocation jsonGuiDefinition)
-    {
+    public BuildCraftJsonGui(AbstractContainerScreen gui, ResourceLocation jsonGuiDefinition) {
         super(gui);
         this.jsonGuiDefinition = jsonGuiDefinition;
     }
 
-    public BuildCraftJsonGui(AbstractContainerScreen gui, IGuiArea rootElement, ResourceLocation jsonGuiDefinition)
-    {
+    public BuildCraftJsonGui(AbstractContainerScreen gui, IGuiArea rootElement, ResourceLocation jsonGuiDefinition) {
         super(gui, rootElement);
         this.jsonGuiDefinition = jsonGuiDefinition;
     }
 
-    public final void load()
-    {
+    public final void load() {
         ResourceLoaderContext loadHistory = new ResourceLoaderContext();
-        try (InputStreamReader reader = loadHistory.startLoading(jsonGuiDefinition))
-        {
+        try (InputStreamReader reader = loadHistory.startLoading(jsonGuiDefinition)) {
             JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
             JsonGuiInfo info = new JsonGuiInfo(obj, context, loadHistory);
             sizeX = (int) GenericExpressionCompiler.compileExpressionLong(info.sizeX, context).evaluate();
             sizeY = (int) GenericExpressionCompiler.compileExpressionLong(info.sizeY, context).evaluate();
             varData.setNodes(info.createTickableNodes());
 
-            for (JsonGuiElement elem : info.elements)
-            {
+            for (JsonGuiElement elem : info.elements) {
                 String typeName = elem.properties.get("type");
                 ElementType type = JsonGuiTypeRegistry.TYPES.get(typeName);
-                if (type == null)
-                {
+                if (type == null) {
                     BCLog.logger.warn("Unknown type " + typeName);
-                }
-                else
-                {
+                } else {
                     IGuiElement e = type.deserialize(this, rootElement, info, elem);
                     String parent = elem.properties.get("parent");
                     IContainingElement p = properties.get("custom." + parent, IContainingElement.class);
                     properties.put("custom." + elem.name, e);
-                    if (p == null)
-                    {
+                    if (p == null) {
                         shownElements.add(e);
-                    }
-                    else
-                    {
+                    } else {
                         p.getChildElements().add(e);
                         p.calculateSizes();
                     }
                 }
             }
         }
-        catch (InvalidExpressionException iee)
-        {
+        catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException("Failed to resolve the size of " + jsonGuiDefinition, iee);
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             throw new Error(e);
         }
         loadHistory.finishLoading();
     }
 
-    public int getSizeX()
-    {
+    public int getSizeX() {
         return sizeX;
     }
 
-    public int getSizeY()
-    {
+    public int getSizeY() {
         return sizeY;
     }
 
     @Override
-    public void tick()
-    {
+    public void tick() {
         super.tick();
         timeOpen++;
         varData.tick();
     }
 
     @Override
-    public void drawBackgroundLayer(PoseStack poseStack, float partialTicks, int mouseX, int mouseY, Runnable backgroundRenderer)
-    {
+    public void drawBackgroundLayer(PoseStack poseStack, float partialTicks, int mouseX, int mouseY, Runnable backgroundRenderer) {
         time.value = timeOpen + partialTicks;
         varData.refresh();
-        super.drawBackgroundLayer(poseStack,partialTicks, mouseX, mouseY, backgroundRenderer);
+        super.drawBackgroundLayer(poseStack, partialTicks, mouseX, mouseY, backgroundRenderer);
     }
 }

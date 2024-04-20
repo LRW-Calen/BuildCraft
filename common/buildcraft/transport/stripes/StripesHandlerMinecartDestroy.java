@@ -13,7 +13,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
-import net.minecraft.world.entity.vehicle.Minecart;
 import net.minecraft.world.entity.vehicle.MinecartChest;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -22,35 +21,28 @@ import net.minecraft.world.phys.AABB;
 import java.util.Collections;
 import java.util.List;
 
-public enum StripesHandlerMinecartDestroy implements IStripesHandlerBlock
-{
+public enum StripesHandlerMinecartDestroy implements IStripesHandlerBlock {
     INSTANCE;
 
     @Override
-    public boolean handle(Level world, BlockPos pos, Direction direction, Player player, IStripesActivator activator)
-    {
+    public boolean handle(Level world, BlockPos pos, Direction direction, Player player, IStripesActivator activator) {
         AABB box = new AABB(pos, pos.offset(1, 1, 1));
 //        List<EntityMinecart> minecarts = world.getEntitiesWithinAABB(EntityMinecart.class, box);
         List<AbstractMinecart> minecarts = world.getEntitiesOfClass(AbstractMinecart.class, box);
 
-        if (minecarts.size() > 0)
-        {
+        if (minecarts.size() > 0) {
             Collections.shuffle(minecarts);
             AbstractMinecart cart = minecarts.get(0);
-            if (cart instanceof MinecartChest)
-            {
+            if (cart instanceof MinecartChest) {
                 // good job, Mojang. :<
 //                EntityMinecartContainer container = (EntityMinecartContainer) cart;
                 MinecartChest container = (MinecartChest) cart;
-                for (int i = 0; i < container.getContainerSize(); i++)
-                {
+                for (int i = 0; i < container.getContainerSize(); i++) {
                     ItemStack s = container.getItem(i);
-                    if (!s.isEmpty())
-                    {
+                    if (!s.isEmpty()) {
                         container.setItem(i, StackUtil.EMPTY);
                         // Safety check
-                        if (container.getItem(i).isEmpty())
-                        {
+                        if (container.getItem(i).isEmpty()) {
                             activator.sendItem(s, direction);
                         }
                     }

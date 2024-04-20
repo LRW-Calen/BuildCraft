@@ -31,16 +31,14 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class ItemPaintbrush_BC8 extends ItemBC_Neptune
-{
+public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
     private static final String DAMAGE = "damage";
     private static final int MAX_USES = 64;
 
     private DyeColor colour;
 
     //    public ItemPaintbrush_BC8(String idBC, Item.Properties properties)
-    public ItemPaintbrush_BC8(String idBC, Item.Properties properties, DyeColor colour)
-    {
+    public ItemPaintbrush_BC8(String idBC, Item.Properties properties, DyeColor colour) {
         super(idBC, properties);
         this.colour = colour;
 //        setMaxStackSize(1);
@@ -77,8 +75,7 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
 
     @Override
 //    public InteractionResult onItemUse(Player player, Level world, BlockPos pos, InteractionHand hand, Direction facing, float hitX, float hitY, float hitZ)
-    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context)
-    {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         Player player = context.getPlayer();
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
@@ -86,11 +83,9 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
         Direction facing = context.getHorizontalDirection();
         Vec3 hitPos = context.getClickLocation();
         Brush brush = new Brush(stack);
-        if (brush.useOnBlock(world, pos, world.getBlockState(pos), hitPos, facing, player))
-        {
+        if (brush.useOnBlock(world, pos, world.getBlockState(pos), hitPos, facing, player)) {
             ItemStack newStack = brush.save(stack);
-            if (!newStack.isEmpty())
-            {
+            if (!newStack.isEmpty()) {
                 player.setItemInHand(hand, newStack);
             }
             // We just changed the damage NBT value
@@ -100,15 +95,13 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
         return InteractionResult.FAIL;
     }
 
-    public Brush getBrushFromStack(ItemStack stack)
-    {
+    public Brush getBrushFromStack(ItemStack stack) {
         return new Brush(stack);
     }
 
     @Override
 //    public String getItemStackDisplayName(ItemStack stack)
-    public Component getName(ItemStack stack)
-    {
+    public Component getName(ItemStack stack) {
 ////        Brush brush = getBrushFromStack(stack);
 //        String colourComponent = "";
 ////        if (brush.colour != null)
@@ -119,27 +112,18 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
 //        }
 //        return new TextComponent(colourComponent).append(new TranslatableComponent(this.unlocalizedName));
 
-        if (LocaleUtil.modLangResourceNotLoaded())
-        {
-            if (this.colour != null)
-            {
+        if (LocaleUtil.modLangResourceNotLoaded()) {
+            if (this.colour != null) {
                 MutableComponent colourComponent = ColourUtil.getTextFullTooltipSpecialComponent(this.colour).append(new TextComponent(" "));
                 return colourComponent.append(new TranslatableComponent(this.unlocalizedName));
-            }
-            else
-            {
+            } else {
                 return new TranslatableComponent(this.unlocalizedName);
             }
-        }
-        else
-        {
-            if (this.colour != null)
-            {
+        } else {
+            if (this.colour != null) {
                 String colourStr = ColourUtil.getTextFullTooltipSpecial(this.colour) + " ";
                 return new TextComponent(colourStr).append(new TranslatableComponent(this.unlocalizedName));
-            }
-            else
-            {
+            } else {
                 return new TranslatableComponent(this.unlocalizedName);
             }
         }
@@ -153,36 +137,31 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
 //    }
 
     @Override
-    public int getDamage(ItemStack stack)
-    {
+    public int getDamage(ItemStack stack) {
         Brush brush = new Brush(stack);
         return MAX_USES - brush.usesLeft;
 //        return super.getDamage(stack);
     }
 
     @Override
-    public void setDamage(ItemStack stack, int damage)
-    {
+    public void setDamage(ItemStack stack, int damage) {
         // Explicitly disallow this- some core use cases mistake this for metadata and fail
     }
 
     @Override
-    public boolean isDamaged(ItemStack stack)
-    {
+    public boolean isDamaged(ItemStack stack) {
 //        Brush brush = new Brush(stack);
 //        return brush.colour != null && brush.usesLeft < MAX_USES;
         return this.colour != null && stack.getDamageValue() > 0;
     }
 
     @Override
-    public boolean isBarVisible(ItemStack stack)
-    {
+    public boolean isBarVisible(ItemStack stack) {
         return isDamaged(stack);
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, world, tooltip, flag);
         Brush brush = new Brush(stack);
         tooltip.add(new TextComponent(brush.usesLeft + " / " + MAX_USES));
@@ -198,8 +177,7 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
 //    }
 
     @Override
-    public int getMaxDamage(ItemStack stack)
-    {
+    public int getMaxDamage(ItemStack stack) {
         return MAX_USES;
     }
 
@@ -236,103 +214,81 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
     /**
      * Delegate class for handling
      */
-    public class Brush
-    {
+    public class Brush {
         public DyeColor colour;
         public int usesLeft;
 
-        public Brush(DyeColor colour)
-        {
+        public Brush(DyeColor colour) {
             this.colour = colour;
             usesLeft = MAX_USES;
         }
 
-        public Brush(ItemStack stack)
-        {
+        public Brush(ItemStack stack) {
 //            DyeColor meta = getColorFromStack(stack);
 //            DyeColor meta = ColourUtil.getStackColourFromTag(stack);
             DyeColor meta = ((ItemPaintbrush_BC8) stack.getItem()).colour;
-            if (meta != null)
-            {
+            if (meta != null) {
                 colour = meta;
                 CompoundTag nbt = stack.getTag();
-                if (nbt == null)
-                {
+                if (nbt == null) {
                     usesLeft = MAX_USES;
-                }
-                else
-                {
+                } else {
                     usesLeft = MAX_USES - nbt.getByte(DAMAGE);
                 }
-            }
-            else
-            {
+            } else {
                 usesLeft = 0;
             }
         }
 
         @Nonnull
-        public ItemStack save()
-        {
+        public ItemStack save() {
             return save(StackUtil.EMPTY);
         }
 
         @Nonnull
-        public ItemStack save(@Nonnull ItemStack existing)
-        {
+        public ItemStack save(@Nonnull ItemStack existing) {
             ItemStack stack = existing;
 //            if (existing.isEmpty() || getColorFromStack(existing) != getMeta())
-            if (existing.isEmpty() || ColourUtil.getStackColourFromTag(stack) != getMeta())
-            {
+            if (existing.isEmpty() || ColourUtil.getStackColourFromTag(stack) != getMeta()) {
                 stack = new ItemStack(ItemPaintbrush_BC8.this, 1);
 //                CompoundTag stackTag = new CompoundTag();
 //                dyeColorToTag(getMeta(), stackTag);
 //                stack.setTag(stackTag);
             }
-            if (usesLeft != MAX_USES && colour != null)
-            {
+            if (usesLeft != MAX_USES && colour != null) {
                 CompoundTag nbt = stack.getTag();
-                if (nbt == null)
-                {
+                if (nbt == null) {
                     nbt = new CompoundTag();
                     stack.setTag(nbt);
                 }
                 nbt.putByte(DAMAGE, (byte) (MAX_USES - usesLeft));
-            }
-            else if (usesLeft == 0)
-            {
+            } else if (usesLeft == 0) {
                 stack = new ItemStack(BCCoreItems.colourBrushMap.get(null).get());
             }
             return stack == existing ? StackUtil.EMPTY : stack;
 //            return stack;
         }
 
-        public DyeColor getMeta()
-        {
+        public DyeColor getMeta() {
             return (usesLeft <= 0 || colour == null) ? null : colour;
         }
 
-        public boolean useOnBlock(Level world, BlockPos pos, BlockState state, Vec3 hitPos, Direction side, Player player)
-        {
-            if (colour != null && usesLeft <= 0)
-            {
+        public boolean useOnBlock(Level world, BlockPos pos, BlockState state, Vec3 hitPos, Direction side, Player player) {
+            if (colour != null && usesLeft <= 0) {
                 return false;
             }
 
             InteractionResult result = CustomPaintHelper.INSTANCE.attemptPaintBlock(world, pos, state, hitPos, side, colour);
 
-            if (result == InteractionResult.SUCCESS)
-            {
+            if (result == InteractionResult.SUCCESS) {
                 ParticleUtil.showChangeColour(world, hitPos, colour);
                 SoundUtil.playChangeColour(world, pos, colour);
 
-                if (!player.isCreative())
-                {
+                if (!player.isCreative()) {
                     usesLeft--;
                 }
 
-                if (usesLeft <= 0)
-                {
+                if (usesLeft <= 0) {
                     colour = null;
                     usesLeft = 0;
                 }
@@ -342,8 +298,7 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return "[" + usesLeft + " of " + (colour == null ? "nothing" : colour.getName()) + "]";
         }
     }

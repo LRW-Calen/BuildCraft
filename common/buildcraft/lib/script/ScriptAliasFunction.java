@@ -2,8 +2,7 @@ package buildcraft.lib.script;
 
 import javax.annotation.Nullable;
 
-public class ScriptAliasFunction
-{
+public class ScriptAliasFunction {
     public static class AliasBuilder {
         public String name;
         public LineData[] rawOutputs;

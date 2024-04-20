@@ -6,17 +6,16 @@
 
 package buildcraft.lib.net.cache;
 
+import buildcraft.lib.net.IMessage;
+import buildcraft.lib.net.IMessageHandler;
 import buildcraft.lib.net.PacketBufferBC;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
 
 /**
  * Signifies a client to server request for the value of a cached object, given its ID.
  */
-public class MessageObjectCacheRequest implements IMessage
-{
+public class MessageObjectCacheRequest implements IMessage {
 
     private int cacheId;
 
@@ -53,7 +52,8 @@ public class MessageObjectCacheRequest implements IMessage
         }
     }
 
-    public static final IMessageHandler<MessageObjectCacheRequest, MessageObjectCacheResponse> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageObjectCacheRequest, MessageObjectCacheResponse> HANDLER = (message, ctx) ->
+    {
         NetworkedObjectCache<?> cache = BuildCraftObjectCaches.CACHES.get(message.cacheId);
         byte[][] values = new byte[message.ids.length][];
 

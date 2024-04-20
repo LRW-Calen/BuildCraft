@@ -12,10 +12,8 @@ import buildcraft.lib.gui.slot.SlotBase;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
-public class ContainerEngineStone_BC8 extends ContainerBCTile<TileEngineStone_BC8>
-{
-    public ContainerEngineStone_BC8(MenuType menuType, int id, Player player, TileEngineStone_BC8 engine)
-    {
+public class ContainerEngineStone_BC8 extends ContainerBCTile<TileEngineStone_BC8> {
+    public ContainerEngineStone_BC8(MenuType menuType, int id, Player player, TileEngineStone_BC8 engine) {
         super(menuType, id, player, engine);
 
         addFullPlayerInventory(84);

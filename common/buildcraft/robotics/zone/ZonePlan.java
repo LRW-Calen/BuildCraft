@@ -21,7 +21,8 @@ import java.util.*;
 public class ZonePlan implements IZone {
     private final HashMap<ChunkPos, ZoneChunk> chunkMapping = new HashMap<>();
 
-    public ZonePlan() {}
+    public ZonePlan() {
+    }
 
     public ZonePlan(ZonePlan old) {
         for (ChunkPos chunkPos : old.chunkMapping.keySet()) {
@@ -76,7 +77,8 @@ public class ZonePlan implements IZone {
                 }
             }
         }
-        chunkMapping.forEach((chunkPos, zoneChunk) -> {
+        chunkMapping.forEach((chunkPos, zoneChunk) ->
+        {
             List<Point2i> zoneChunkAll = zoneChunk.getAll();
             zoneChunkAll.forEach(p -> p.add(new Point2i(chunkPos.getMaxBlockX(), chunkPos.getMinBlockZ())));
             builder.addAll(zoneChunkAll);
@@ -107,7 +109,8 @@ public class ZonePlan implements IZone {
                 "chunkMapping",
                 NBTUtilBC.writeCompoundList(
                         chunkMapping.entrySet().stream()
-                                .map(entry -> {
+                                .map(entry ->
+                                {
                                     CompoundTag zoneChunkTag = new CompoundTag();
                                     entry.getValue().writeToNBT(zoneChunkTag);
                                     zoneChunkTag.putInt("chunkX", entry.getKey().x);
@@ -120,7 +123,8 @@ public class ZonePlan implements IZone {
 
     public void readFromNBT(CompoundTag nbt) {
         NBTUtilBC.readCompoundList(nbt.get("chunkMapping"))
-                .forEach(zoneChunkTag -> {
+                .forEach(zoneChunkTag ->
+                {
                     ZoneChunk chunk = new ZoneChunk();
                     chunk.readFromNBT(zoneChunkTag);
                     chunkMapping.put(

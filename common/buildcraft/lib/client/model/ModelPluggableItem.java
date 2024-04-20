@@ -19,18 +19,14 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class ModelPluggableItem implements BakedModel
-{
+public class ModelPluggableItem implements BakedModel {
 
     private final List<BakedQuad> quads;
 
-    public ModelPluggableItem(MutableQuad[]... quads)
-    {
+    public ModelPluggableItem(MutableQuad[]... quads) {
         ImmutableList.Builder<BakedQuad> list = ImmutableList.builder();
-        for (MutableQuad[] qa : quads)
-        {
-            for (MutableQuad q : qa)
-            {
+        for (MutableQuad[] qa : quads) {
+            for (MutableQuad q : qa) {
                 list.add(q.toBakedItem());
             }
         }
@@ -39,57 +35,49 @@ public class ModelPluggableItem implements BakedModel
 
     @Override
 //    public List<BakedQuad> getQuads(BlockState state, Direction side, long rand)
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand)
-    {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
         return side == null ? quads : ImmutableList.of();
     }
 
     @Override
 //    public boolean isAmbientOcclusion()
-    public boolean useAmbientOcclusion()
-    {
+    public boolean useAmbientOcclusion() {
         return false;
     }
 
     @Override
-    public boolean isGui3d()
-    {
+    public boolean isGui3d() {
         return false;
     }
 
     @Override
 //    public boolean isBuiltInRenderer()
-    public boolean isCustomRenderer()
-    {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
 //    public TextureAtlasSprite getParticleTexture()
-    public TextureAtlasSprite getParticleIcon()
-    {
+    public TextureAtlasSprite getParticleIcon() {
         return null;
     }
 
     @Override
 //    public ItemCameraTransforms getItemCameraTransforms()
-    public ItemTransforms getTransforms()
-    {
+    public ItemTransforms getTransforms() {
         return ModelItemSimple.TRANSFORM_PLUG_AS_ITEM;
     }
 
     @Override
 //    public ItemOverrideList getOverrides()
-    public ItemOverrides getOverrides()
-    {
+    public ItemOverrides getOverrides() {
 //        return ItemOverrideList.NONE;
         return ItemOverrides.EMPTY;
     }
 
     // Calen: Forced Override
     @Override
-    public boolean usesBlockLight()
-    {
+    public boolean usesBlockLight() {
         return false;
     }
 }

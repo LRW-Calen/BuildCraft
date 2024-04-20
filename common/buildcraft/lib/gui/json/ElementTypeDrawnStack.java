@@ -12,19 +12,16 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
-public class ElementTypeDrawnStack extends ElementType
-{
+public class ElementTypeDrawnStack extends ElementType {
     public static final String NAME = "buildcraftlib:drawable/stack";
     public static final ElementTypeDrawnStack INSTANCE = new ElementTypeDrawnStack();
 
-    private ElementTypeDrawnStack()
-    {
+    private ElementTypeDrawnStack() {
         super(NAME);
     }
 
     @Override
-    protected IGuiElement deserialize0(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json)
-    {
+    protected IGuiElement deserialize0(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json) {
         FunctionContext ctx = createContext(json);
         IGuiPosition pos = resolvePosition(json, "pos", parent, ctx);
 
@@ -35,8 +32,7 @@ public class ElementTypeDrawnStack extends ElementType
         Item item = GsonHelper.getAsItem(json.json, "id");
         int meta = resolveEquationInt(json, "meta", ctx);
         // Calen
-        if (meta != 0)
-        {
+        if (meta != 0) {
             throw new RuntimeException("[lib.gui.json] Found stack with meta in " + json + " , but meta is not supported in this MC version");
         }
 //        ItemStack stack = new ItemStack(item, 1, meta);

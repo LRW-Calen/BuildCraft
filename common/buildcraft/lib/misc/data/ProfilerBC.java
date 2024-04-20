@@ -6,8 +6,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 /** An extension for minecraft's {@link ProfilerFiller} class that returns {@link AutoCloseable} profiler sections. */
-public class ProfilerBC
-{
+public class ProfilerBC {
 
     @OnlyIn(Dist.CLIENT)
     public static ProfilerBC getClient() {
@@ -29,7 +28,8 @@ public class ProfilerBC
         for (String s : names) {
             profiler.push(s);
         }
-        return () -> {
+        return () ->
+        {
             for (int i = 0; i < names.length; i++) {
                 profiler.pop();
             }

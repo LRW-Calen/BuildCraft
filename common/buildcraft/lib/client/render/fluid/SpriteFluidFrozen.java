@@ -10,21 +10,16 @@ import buildcraft.api.core.BCLog;
 import buildcraft.lib.misc.SpriteUtil;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.platform.NativeImage;
-import com.mojang.blaze3d.platform.PngInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.AbstractTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.metadata.animation.AnimationFrame;
 import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
-import net.minecraft.client.resources.metadata.texture.TextureMetadataSection;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.stream.Stream;
 
 // TODO Calen
 public class SpriteFluidFrozen extends TextureAtlasSprite
@@ -39,8 +34,7 @@ public class SpriteFluidFrozen extends TextureAtlasSprite
 
     private NativeImage data = new NativeImage(16, 16, false);
 
-    public SpriteFluidFrozen(ResourceLocation srcLocation) throws IOException
-    {
+    public SpriteFluidFrozen(ResourceLocation srcLocation) throws IOException {
         super(
                 null,
                 new TextureAtlasSprite.Info(
@@ -78,15 +72,11 @@ public class SpriteFluidFrozen extends TextureAtlasSprite
             return;
         }
 //        TextureAtlas src = (TextureAtlas) src_;
-        if (src.getFrameCount() <= 0)
-        {
+        if (src.getFrameCount() <= 0) {
 //            if (src.hasCustomLoader(manager, location))
-            if (false)
-            {
+            if (false) {
 //                src.load(manager, location, textureGetter);
-            }
-            else
-            {
+            } else {
 //                try
 //                {
 ////                    PngSizeInfo size = PngSizeInfo.makeFromResource(manager.getResource(location));
@@ -175,8 +165,7 @@ public class SpriteFluidFrozen extends TextureAtlasSprite
     // TODO Calen
 //    @Override
 //    public boolean hasCustomLoader(IResourceManager manager, ResourceLocation location)
-    public boolean hasCustomLoader(ResourceManager manager, ResourceLocation location)
-    {
+    public boolean hasCustomLoader(ResourceManager manager, ResourceLocation location) {
         return true;
     }
 
@@ -184,8 +173,7 @@ public class SpriteFluidFrozen extends TextureAtlasSprite
 
     // TODO Calen
 //    @Override
-    public int getFrameCount()
-    {
+    public int getFrameCount() {
         return data == null ? 0 : 1;
     }
 
@@ -216,8 +204,7 @@ public class SpriteFluidFrozen extends TextureAtlasSprite
 
     @Override
 //    public float getInterpolatedU(double u)
-    public float getU(double u)
-    {
+    public float getU(double u) {
 //        return super.getInterpolatedU(u / 2 + 4);
         return super.getU(u / 2 + 4);
     }
@@ -225,8 +212,7 @@ public class SpriteFluidFrozen extends TextureAtlasSprite
     // TODO Calen
     @Override
 //    public float getInterpolatedV(double v)
-    public float getV(double v)
-    {
+    public float getV(double v) {
 //        return super.getInterpolatedV(v / 2 + 4);
         return super.getV(v / 2 + 4);
     }

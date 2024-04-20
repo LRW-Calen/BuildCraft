@@ -6,6 +6,7 @@ package buildcraft.lib;
 
 import buildcraft.api.BCModules;
 import buildcraft.api.core.BCLog;
+import buildcraft.lib.block.VanillaPaintHandlers;
 import buildcraft.lib.block.VanillaRotationHandlers;
 import buildcraft.lib.chunkload.ChunkLoaderManager;
 import buildcraft.lib.expression.ExpressionDebugManager;
@@ -16,9 +17,9 @@ import buildcraft.lib.misc.ExpressionCompat;
 import buildcraft.lib.net.MessageManager;
 import buildcraft.lib.net.cache.BuildCraftObjectCaches;
 import buildcraft.lib.registry.MigrationManager;
-import buildcraft.lib.script.ReloadableRegistryManager;
 import buildcraft.lib.registry.TagManager;
-import buildcraft.lib.registry.TagManager.*;
+import buildcraft.lib.registry.TagManager.TagEntry;
+import buildcraft.lib.script.ReloadableRegistryManager;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -42,8 +43,7 @@ import java.util.function.Consumer;
 @Mod(BCLib.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 //@formatter:on
-public class BCLib
-{
+public class BCLib {
     public static final String MODID = "buildcraftlib";
     public static final String VERSION = "$version";
     public static final String MC_VERSION = "${mcversion}";
@@ -54,62 +54,50 @@ public class BCLib
 
     public static final boolean DEV = VERSION.startsWith("$") || Boolean.getBoolean("buildcraft.dev");
 
+    //    @Instance(MODID)
     public static BCLib INSTANCE;
 
     public static ModContainer MOD_CONTAINER;
 
-    static
-    {
+    static {
+        // Calen: should before BCSiliconPlugs.preInit()
         BCLibRegistries.fmlPreInit();
     }
 
-    public BCLib()
-    {
+    public BCLib() {
         INSTANCE = this;
-        BCLibItems.enableGuide();
-        BCLibItems.enableDebugger();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        BCLibItems.ITEMS.register(modEventBus);
 
         modEventBus.addListener(CapUtil::registerCaps);
 
         // various sprite registers
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
             BCLibSprites.fmlPreInitClient();
         }
-        modEventBus.addGenericListener(MenuType.class, BCLibMenuTypes::registerAll);
 
         ExpressionCompat.setup();
     }
 
     // Calen: recipe type registry is frozen at FMLConstructModEvent
     @SubscribeEvent
-    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event)
-    {
+    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
         BCLibRegistries.initRecipeRegistry();
     }
 
     @SubscribeEvent
-    public static void preInit(FMLConstructModEvent evt)
-    {
-        BCLibItems.fmlPreInit();
-
+    public static void preInit(FMLConstructModEvent evt) {
         MOD_CONTAINER = ModList.get().getModContainerById(MODID).get();
 
-        try
-        {
+        try {
             BCLog.logger.info("");
         }
-        catch (NoSuchFieldError e)
-        {
+        catch (NoSuchFieldError e) {
             throw throwBadClass(e, BCLog.class);
         }
         BCLog.logger.info("Starting BuildCraft " + BCLib.VERSION);
         BCLog.logger.info("Copyright (c) the BuildCraft team, 2011-2018");
         BCLog.logger.info("https://www.mod-buildcraft.com");
-        if (!GIT_COMMIT_HASH.startsWith("${"))
-        {
+        if (!GIT_COMMIT_HASH.startsWith("${")) {
             BCLog.logger.info("Detailed Build Information:");
             BCLog.logger.info("  Branch " + GIT_BRANCH);
             BCLog.logger.info("  Commit " + GIT_COMMIT_HASH);
@@ -118,18 +106,14 @@ public class BCLib
         }
         BCLog.logger.info("");
         BCLog.logger.info("Loaded Modules:");
-        for (BCModules module : BCModules.VALUES)
-        {
-            if (module.isLoaded())
-            {
+        for (BCModules module : BCModules.VALUES) {
+            if (module.isLoaded()) {
                 BCLog.logger.info("  - " + module.lowerCaseName);
             }
         }
         BCLog.logger.info("Missing Modules:");
-        for (BCModules module : BCModules.VALUES)
-        {
-            if (!module.isLoaded())
-            {
+        for (BCModules module : BCModules.VALUES) {
+            if (!module.isLoaded()) {
                 BCLog.logger.info("  - " + module.lowerCaseName);
             }
         }
@@ -138,17 +122,18 @@ public class BCLib
         ExpressionDebugManager.logger = BCLog.logger::info;
 //        ExpressionCompat.setup(); // Calen: moved to <init> to be loaded early enough, or the Silicon/Transport/Factory model classed will cause Exception when running <cinit>
 
+
 //        BCLibRegistries.fmlPreInit(); // Calen: moved to static
         BCLibProxy.getProxy().fmlPreInit();
-//        BCLibItems.fmlPreInit();
+        BCLibItems.fmlPreInit();
 //
         BuildCraftObjectCaches.fmlPreInit();
 //        NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, BCLibProxy.getProxy());
 //
-        MinecraftForge.EVENT_BUS.register(BCLibEventDistForgeBus.class);
+        MinecraftForge.EVENT_BUS.register(BCLibEventDist.class);
         MinecraftForge.EVENT_BUS.register(MigrationManager.INSTANCE);
 //        MinecraftForge.EVENT_BUS.register(FluidManager.class); // Calen: not used in 1.18.2
-//
+
 //        // Set max chunk limit for quarries: 1 chunk for quarry itself and 5 * 5 chunks square for working area
 //        ForgeChunkManager.getConfig().get(MODID, "maximumChunksPerTicket", 26);
 //        ForgeChunkManager.syncConfigDefaults();
@@ -156,35 +141,26 @@ public class BCLib
         ForgeChunkManager.setForcedChunkLoadingCallback(BCLib.MODID, ChunkLoaderManager::rebindTickets);
     }
 
-    public static Error throwBadClass(Error e, Class<?> cls) throws Error
-    {
+    public static Error throwBadClass(Error e, Class<?> cls) throws Error {
         throw new Error(
                 "Bad " + cls + " loaded from " + cls.getClassLoader() + " domain: " + cls.getProtectionDomain(), e
         );
     }
 
-    // Calen: moved to BCLibEventDistForgeBus#serverStarting because it is Forge Bus Event in 1.18.2
-//    @Mod.EventHandler
-//    public static void serverStarting(FMLServerStartingEvent event) {
-//        event.registerServerCommand(new CommandBuildCraft());
-//    }
-
     @SubscribeEvent
-    public static void init(FMLCommonSetupEvent evt)
-    {
+    public static void init(FMLCommonSetupEvent evt) {
         BCLibProxy.getProxy().fmlInit();
-//
-//        BCLibRegistries.fmlInit();
+
+        BCLibRegistries.fmlInit(); // did nothing in 1.12.2 as well
         VanillaListHandlers.fmlInit();
-//        VanillaPaintHandlers.fmlInit();
+        VanillaPaintHandlers.fmlInit();
         VanillaRotationHandlers.fmlInit();
 
-//        RegistrationHelper.registerOredictEntries();
+//        RegistrationHelper.registerOredictEntries(); // 1.18.2 oredict -> datagen
     }
 
     @SubscribeEvent
-    public static void postInit(FMLLoadCompleteEvent evt)
-    {
+    public static void postInit(FMLLoadCompleteEvent evt) {
         ReloadableRegistryManager.loadAll();
         BCLibProxy.getProxy().fmlPostInit();
         BuildCraftObjectCaches.fmlPostInit();
@@ -193,10 +169,20 @@ public class BCLib
         MessageManager.fmlPostInit();
     }
 
+    @SubscribeEvent
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCLibMenuTypes.registerAll(event);
+    }
+
+    // Calen: moved to BCLibEventDistForgeBus#serverStarting because it is Forge Bus Event in 1.18.2
+//    @Mod.EventHandler
+//    public static void serverStarting(FMLServerStartingEvent event) {
+//        event.registerServerCommand(new CommandBuildCraft());
+//    }
+
     private static final TagManager tagManager = new TagManager();
 
-    static
-    {
+    static {
         startBatch();
         registerTag("item.guide").reg("guide").locale("buildcraft.guide")
 //                .model("guide")
@@ -217,21 +203,18 @@ public class BCLib
         endBatch(TagManager.prependTags("buildcraftlib:", TagManager.EnumTagType.REGISTRY_NAME));
     }
 
-    private static TagEntry registerTag(String id)
-    {
+    private static TagEntry registerTag(String id) {
 //        return TagManager.registerTag(id);
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
 //        TagManager.startBatch();
         tagManager.startBatch();
     }
 
-    private static void endBatch(Consumer<TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagEntry> consumer) {
 //        TagManager.endBatch(consumer);
         tagManager.endBatch(consumer);
     }

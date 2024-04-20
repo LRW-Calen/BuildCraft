@@ -3,8 +3,8 @@ package buildcraft.datagen.energy;
 import buildcraft.datagen.base.BCTextureProvider;
 import buildcraft.energy.BCEnergyFluids;
 import buildcraft.energy.event.ChristmasHandler;
-import buildcraft.lib.fluid.BCFluidAttributes;
 import buildcraft.lib.fluid.BCFluid;
+import buildcraft.lib.fluid.BCFluidAttributes;
 import com.google.gson.JsonObject;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.DataProvider;
@@ -22,27 +22,22 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 // from 1.12.2 AtlasSpriteFluid.class
-public class EnergyOilTextureProvider extends BCTextureProvider
-{
+public class EnergyOilTextureProvider extends BCTextureProvider {
 
-    public EnergyOilTextureProvider(DataGenerator gen, ExistingFileHelper exFileHelper)
-    {
+    public EnergyOilTextureProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
         super(gen, exFileHelper);
     }
 
     @Override
-    public void run(HashCache cache) throws IOException
-    {
+    public void run(HashCache cache) throws IOException {
         ResourceLocation[][] fromSprites = new ResourceLocation[3][2];
-        for (int h = 0; h < 3; h++)
-        {
+        for (int h = 0; h < 3; h++) {
             fromSprites[h][0] = new ResourceLocation("buildcraftlib:fluids/heat_" + h + "_still");
             fromSprites[h][1] = new ResourceLocation("buildcraftlib:fluids/heat_" + h + "_flow");
         }
 
         Path mainOutput = generator.getOutputFolder();
-        for (int index = 0; index < BCEnergyFluids.allStill.size(); index++)
-        {
+        for (int index = 0; index < BCEnergyFluids.allStill.size(); index++) {
             BCFluid.Source fluid = BCEnergyFluids.allStill.get(index).get();
             ResourceLocation[] sprites = fromSprites[((BCFluidAttributes) fluid.getAttributes()).getHeat()];
             int lightColour = ((BCFluidAttributes) fluid.getAttributes()).getLightColour();
@@ -52,23 +47,20 @@ public class EnergyOilTextureProvider extends BCTextureProvider
             // when run datagen in Christmas...
             String normalStillTexture = fluid.getSource().getAttributes().getStillTexture().toString().replace("_christmas", "");
             String normalFlowTexture = fluid.getSource().getAttributes().getFlowingTexture().toString().replace("_christmas", "");
-            try
-            {
+            try {
                 recolourAndSave(mainOutput, new ResourceLocation(normalStillTexture), lightColour, darkColour, sprites[0], cache);
                 recolourAndSave(mainOutput, new ResourceLocation(normalFlowTexture), lightColour, darkColour, sprites[1], cache);
                 // Christmas
                 recolourAndSave(mainOutput, new ResourceLocation(normalStillTexture + "_christmas"), lightColour_christmas, darkColour_christmas, sprites[0], cache);
                 recolourAndSave(mainOutput, new ResourceLocation(normalFlowTexture + "_christmas"), lightColour_christmas, darkColour_christmas, sprites[1], cache);
             }
-            catch (IOException e)
-            {
+            catch (IOException e) {
                 LOGGER.error("Couldn't save texture of {}", fluid.getRegistryName(), e);
             }
         }
     }
 
-    private void recolourAndSave(Path mainOutput, ResourceLocation fluid, int light, int dark, ResourceLocation baseTexture, HashCache cache) throws IOException
-    {
+    private void recolourAndSave(Path mainOutput, ResourceLocation fluid, int light, int dark, ResourceLocation baseTexture, HashCache cache) throws IOException {
         Resource basePngResource = exFileHelper.getResource(baseTexture, PackType.CLIENT_RESOURCES, ".png", "textures");
         Resource baseMcmetaResource = exFileHelper.getResource(baseTexture, PackType.CLIENT_RESOURCES, ".png.mcmeta", "textures");
 
@@ -86,10 +78,8 @@ public class EnergyOilTextureProvider extends BCTextureProvider
         int minx = bi.getMinX();
         int miny = bi.getMinY();
         BufferedImage bo = new BufferedImage(width, height, bi.getType());
-        for (int x = minx; x < width; x++)
-        {
-            for (int y = miny; y < height; y++)
-            {
+        for (int x = minx; x < width; x++) {
+            for (int y = miny; y < height; y++) {
                 // argb
                 int pixel = bi.getRGB(x, y);
                 bo.setRGB(x, y, calcColourFromARGBToARGB(pixel, light, dark));
@@ -111,8 +101,7 @@ public class EnergyOilTextureProvider extends BCTextureProvider
         exFileHelper.trackGenerated(fluid, PackType.CLIENT_RESOURCES, ".png.mcmeta", "textures");
     }
 
-    public static int calcColourFromARGBToARGB(int argb, int light, int dark)
-    {
+    public static int calcColourFromARGBToARGB(int argb, int light, int dark) {
         int r = recolourSubPixel(argb, light, dark, 16);
         int g = recolourSubPixel(argb, light, dark, 8);
         int b = recolourSubPixel(argb, light, dark, 0);
@@ -121,8 +110,7 @@ public class EnergyOilTextureProvider extends BCTextureProvider
         return (a << 24) | (r << 16) | (g << 8) | b;
     }
 
-    private static int recolourSubPixel(int rgba, int lightIn, int darkIn, int offset)
-    {
+    private static int recolourSubPixel(int rgba, int lightIn, int darkIn, int offset) {
         int data = (rgba >>> offset) & 0xFF;
         int dark = (darkIn >>> offset) & 0xFF;
         int light = (lightIn >>> offset) & 0xFF;
@@ -130,8 +118,7 @@ public class EnergyOilTextureProvider extends BCTextureProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Energy Oil Texture Generator";
     }
 }

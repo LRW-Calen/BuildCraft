@@ -23,8 +23,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public enum StatementParamGateSideOnly implements IStatementParameter
-{
+public enum StatementParamGateSideOnly implements IStatementParameter {
     ANY(false),
     SPECIFIC(true);
 
@@ -33,88 +32,72 @@ public enum StatementParamGateSideOnly implements IStatementParameter
     private static final StatementParamGateSideOnly[] POSSIBLE_ANY = {ANY, SPECIFIC};
     private static final StatementParamGateSideOnly[] POSSIBLE_SPECIFIC = {SPECIFIC, ANY};
 
-    StatementParamGateSideOnly(boolean isSpecific)
-    {
+    StatementParamGateSideOnly(boolean isSpecific) {
         this.isSpecific = isSpecific;
     }
 
-    public static StatementParamGateSideOnly readFromNbt(CompoundTag nbt)
-    {
-        if (nbt.getBoolean("isOn"))
-        {
+    public static StatementParamGateSideOnly readFromNbt(CompoundTag nbt) {
+        if (nbt.getBoolean("isOn")) {
             return SPECIFIC;
         }
         return ANY;
     }
 
     @Override
-    public void writeToNbt(CompoundTag compound)
-    {
+    public void writeToNbt(CompoundTag compound) {
         compound.putBoolean("isOn", isSpecific);
     }
 
     @Nonnull
     @Override
-    public ItemStack getItemStack()
-    {
+    public ItemStack getItemStack() {
         return StackUtil.EMPTY;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public ISprite getSprite()
-    {
-        if (isSpecific)
-        {
+    public ISprite getSprite() {
+        if (isSpecific) {
             return BCCoreSprites.PARAM_GATE_SIDE_ONLY;
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
     @Override
-    public DrawType getDrawType()
-    {
+    public DrawType getDrawType() {
         return DrawType.SPRITE_ONLY;
     }
 
     @Override
     public StatementParamGateSideOnly onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-                                              StatementMouseClick mouse)
-    {
+                                              StatementMouseClick mouse) {
         return null;
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return isSpecific ? LocaleUtil.localize("gate.parameter.redstone.gateSideOnly") : "";
         return isSpecific ? new TranslatableComponent("gate.parameter.redstone.gateSideOnly") : new TextComponent("");
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return isSpecific ? "gate.parameter.redstone.gateSideOnly" : "";
     }
 
     @Override
-    public String getUniqueTag()
-    {
+    public String getUniqueTag() {
         return "buildcraft:redstoneGateSideOnly";
     }
 
     @Override
-    public IStatementParameter rotateLeft()
-    {
+    public IStatementParameter rotateLeft() {
         return this;
     }
 
     @Override
-    public IStatementParameter[] getPossible(IStatementContainer source)
-    {
+    public IStatementParameter[] getPossible(IStatementContainer source) {
         return isSpecific ? POSSIBLE_SPECIFIC : POSSIBLE_ANY;
     }
 }

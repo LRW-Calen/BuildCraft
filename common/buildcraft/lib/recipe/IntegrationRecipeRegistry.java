@@ -31,7 +31,6 @@ public class IntegrationRecipeRegistry implements IIntegrationRecipeRegistry {
     }
 
 
-
     @Override
     public void addRecipe(IntegrationRecipe recipe) {
         if (recipes.containsKey(recipe.name)) {

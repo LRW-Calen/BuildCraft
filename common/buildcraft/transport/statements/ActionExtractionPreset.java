@@ -13,23 +13,19 @@ import buildcraft.api.statements.IStatementParameter;
 import buildcraft.core.statements.BCStatement;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
 import buildcraft.lib.misc.ColourUtil;
-import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.BCTransportStatements;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourEmzuli.SlotIndex;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ActionExtractionPreset extends BCStatement implements IActionInternal
-{
+public class ActionExtractionPreset extends BCStatement implements IActionInternal {
 
     public final SlotIndex index;
 
-    public ActionExtractionPreset(SlotIndex index)
-    {
+    public ActionExtractionPreset(SlotIndex index) {
         super(
                 "buildcraft:extraction.preset." + index.colour.getName(),
                 "buildcraft.extraction.preset." + index.colour.getName()
@@ -39,34 +35,29 @@ public class ActionExtractionPreset extends BCStatement implements IActionIntern
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return LocaleUtil.localize("gate.action.extraction", ColourUtil.getTextFullTooltip(index.colour));
         return new TranslatableComponent("gate.action.extraction", ColourUtil.getTextFullTooltipComponent(index.colour));
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return "gate.action.extraction." + index.colour.getName();
     }
 
     @Override
-    public void actionActivate(IStatementContainer source, IStatementParameter[] parameters)
-    {
+    public void actionActivate(IStatementContainer source, IStatementParameter[] parameters) {
         // The pipe handles this
     }
 
     @Override
-    public IStatement[] getPossible()
-    {
+    public IStatement[] getPossible() {
         return BCTransportStatements.ACTION_EXTRACTION_PRESET;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return BCTransportSprites.ACTION_EXTRACTION_PRESET.get(index);
     }
 }

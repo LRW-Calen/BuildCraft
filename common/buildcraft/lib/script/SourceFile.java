@@ -1,7 +1,6 @@
 package buildcraft.lib.script;
 
-public final class SourceFile
-{
+public final class SourceFile {
     public final String name;
     public final int lineCount;
 

@@ -15,8 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AdvModelCache
-{
+public class AdvModelCache {
     private static final int MODEL_INDEX_INCORRECT = -1;
     private static final int MODEL_INDEX_NO_CACHE = -2;
 
@@ -91,10 +90,10 @@ public class AdvModelCache
 
         if (!missKeys.isEmpty()) {
             BCLog.logger.warn(
-                "[lib.model.adv_cache] Creating an indexed cache despite knowing that there will be cache misses!");
+                    "[lib.model.adv_cache] Creating an indexed cache despite knowing that there will be cache misses!");
             for (VariableInfo<?> info : missKeys) {
                 BCLog.logger.warn("[lib.model.adv_cache]  - " + info.node + " (" + info.cacheType + ", "
-                    + info.getPossibleValues() + ")");
+                        + info.getPossibleValues() + ")");
             }
         }
 
@@ -130,8 +129,8 @@ public class AdvModelCache
                 if (index == MODEL_INDEX_INCORRECT) {
                     // Uh-oh! incorrect creation of this cache!
                     BCLog.logger.warn(
-                        "[lib.model.adv_cache] Cache miss for indexed cache - this should be impossible! (index = "
-                            + index + ", length = " + values.length + ")");
+                            "[lib.model.adv_cache] Cache miss for indexed cache - this should be impossible! (index = "
+                                    + index + ", length = " + values.length + ")");
                     for (VariableInfo<?> var : variables) {
                         BCLog.logger.warn("            - " + var);
                     }

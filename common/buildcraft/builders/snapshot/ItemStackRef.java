@@ -12,15 +12,13 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
 import java.util.Optional;
 
-public class ItemStackRef
-{
+public class ItemStackRef {
     private final NbtRef<StringTag> item;
     private final NbtRef<IntTag> amount;
     //    private final NbtRef<IntTag> meta;
@@ -29,16 +27,14 @@ public class ItemStackRef
     public ItemStackRef(NbtRef<StringTag> item,
                         NbtRef<IntTag> amount,
 //                        NbtRef<IntTag> meta,
-                        NbtRef<CompoundTag> tagCompound)
-    {
+                        NbtRef<CompoundTag> tagCompound) {
         this.item = item;
         this.amount = amount;
 //        this.meta = meta;
         this.tagCompound = tagCompound;
     }
 
-    public ItemStack get(Tag nbt)
-    {
+    public ItemStack get(Tag nbt) {
         ItemStack itemStack = new ItemStack(
                 Objects.requireNonNull(
                         ForgeRegistries.ITEMS.getValue(new ResourceLocation(

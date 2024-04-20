@@ -9,8 +9,7 @@ import buildcraft.api.transport.pluggable.PluggableDefinition.IPluggableNetLoade
 import buildcraft.silicon.plug.*;
 import net.minecraft.resources.ResourceLocation;
 
-public class BCSiliconPlugs
-{
+public class BCSiliconPlugs {
 
     public static PluggableDefinition gate;
     public static PluggableDefinition lens;
@@ -28,18 +27,15 @@ public class BCSiliconPlugs
         facade = register("facade", PluggableFacade::new, PluggableFacade::new);
     }
 
-    private static PluggableDefinition register(String name, IPluggableCreator creator)
-    {
+    private static PluggableDefinition register(String name, IPluggableCreator creator) {
         return register(new PluggableDefinition(idFor(name), creator));
     }
 
-    private static PluggableDefinition register(String name, IPluggableNbtReader reader, IPluggableNetLoader loader)
-    {
+    private static PluggableDefinition register(String name, IPluggableNbtReader reader, IPluggableNetLoader loader) {
         return register(new PluggableDefinition(idFor(name), reader, loader));
     }
 
-    private static PluggableDefinition register(PluggableDefinition def)
-    {
+    private static PluggableDefinition register(PluggableDefinition def) {
         // TODO: Add config for enabling/disabling
         PipeApi.pluggableRegistry.register(def);
 
@@ -50,8 +46,7 @@ public class BCSiliconPlugs
         return def;
     }
 
-    private static ResourceLocation idFor(String name)
-    {
+    private static ResourceLocation idFor(String name) {
         return new ResourceLocation("buildcraftsilicon", name);
     }
 }

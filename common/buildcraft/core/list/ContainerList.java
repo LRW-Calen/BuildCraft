@@ -24,8 +24,7 @@ import net.minecraftforge.network.NetworkEvent;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class ContainerList extends ContainerBC_Neptune<ItemList_BC8>
-{
+public class ContainerList extends ContainerBC_Neptune<ItemList_BC8> {
     // Network ID's
 
     protected static final IdAllocator IDS = ContainerBC_Neptune.IDS.makeChild("list");
@@ -33,8 +32,7 @@ public class ContainerList extends ContainerBC_Neptune<ItemList_BC8>
     private static final int ID_BUTTON = IDS.allocId("BUTTON");
 
     @Override
-    public IdAllocator getIdAllocator()
-    {
+    public IdAllocator getIdAllocator() {
         return IDS;
     }
 
@@ -44,35 +42,29 @@ public class ContainerList extends ContainerBC_Neptune<ItemList_BC8>
 
     final WidgetListSlot[][] slots;
 
-    class WidgetListSlot extends WidgetPhantomSlot
-    {
+    class WidgetListSlot extends WidgetPhantomSlot {
         final int lineIndex, slotIndex;
 
-        public WidgetListSlot(int lineIndex, int slotIndex)
-        {
+        public WidgetListSlot(int lineIndex, int slotIndex) {
             super(ContainerList.this);
             this.lineIndex = lineIndex;
             this.slotIndex = slotIndex;
         }
 
         @Override
-        protected void onSetStack()
-        {
+        protected void onSetStack() {
             ContainerList.this.setStack(lineIndex, slotIndex, getStack());
         }
     }
 
-    public ContainerList(MenuType menuType, int id, Player iPlayer)
-    {
+    public ContainerList(MenuType menuType, int id, Player iPlayer) {
         super(menuType, id, iPlayer);
 
         lines = ListHandler.getLines(getListItemStack());
 
         slots = new WidgetListSlot[lines.length][ListHandler.WIDTH];
-        for (int line = 0; line < lines.length; line++)
-        {
-            for (int slot = 0; slot < ListHandler.WIDTH; slot++)
-            {
+        for (int line = 0; line < lines.length; line++) {
+            for (int slot = 0; slot < ListHandler.WIDTH; slot++) {
                 WidgetListSlot widget = new WidgetListSlot(line, slot);
                 slots[line][slot] = addWidget(widget);
                 widget.setStack(lines[line].getStack(slot), false);
@@ -83,54 +75,43 @@ public class ContainerList extends ContainerBC_Neptune<ItemList_BC8>
     }
 
     @Override
-    public boolean stillValid(Player player)
-    {
+    public boolean stillValid(Player player) {
         return !getListItemStack().isEmpty();
     }
 
     @Nonnull
-    public ItemStack getListItemStack()
-    {
+    public ItemStack getListItemStack() {
         ItemStack toTry = player.getMainHandItem();
-        if (!toTry.isEmpty() && toTry.getItem() instanceof ItemList_BC8)
-        {
+        if (!toTry.isEmpty() && toTry.getItem() instanceof ItemList_BC8) {
             return toTry;
         }
 
         toTry = player.getOffhandItem();
-        if (!toTry.isEmpty() && toTry.getItem() instanceof ItemList_BC8)
-        {
+        if (!toTry.isEmpty() && toTry.getItem() instanceof ItemList_BC8) {
             return toTry;
         }
         return StackUtil.EMPTY;
     }
 
-    void setStack(final int lineIndex, final int slotIndex, @Nonnull final ItemStack stack)
-    {
+    void setStack(final int lineIndex, final int slotIndex, @Nonnull final ItemStack stack) {
         lines[lineIndex].setStack(slotIndex, stack);
         ListHandler.saveLines(getListItemStack(), lines);
     }
 
-    public void switchButton(final int lineIndex, final int button)
-    {
+    public void switchButton(final int lineIndex, final int button) {
         lines[lineIndex].toggleOption(button);
 
-        if (player.level.isClientSide)
-        {
+        if (player.level.isClientSide) {
             sendMessage(ID_BUTTON, (buffer) ->
             {
                 buffer.writeByte(lineIndex);
                 buffer.writeByte(button);
             });
-        }
-        else if (button == 1 || button == 2)
-        {
+        } else if (button == 1 || button == 2) {
             Type type = lines[lineIndex].getSortingType();
-            if (type == Type.MATERIAL || type == Type.TYPE)
-            {
+            if (type == Type.MATERIAL || type == Type.TYPE) {
                 WidgetListSlot[] widgetSlots = slots[lineIndex];
-                for (int i = 1; i < widgetSlots.length; i++)
-                {
+                for (int i = 1; i < widgetSlots.length; i++) {
                     widgetSlots[i].setStack(StackUtil.EMPTY, true);
                 }
             }
@@ -139,30 +120,23 @@ public class ContainerList extends ContainerBC_Neptune<ItemList_BC8>
         ListHandler.saveLines(getListItemStack(), lines);
     }
 
-    public void setLabel(final String text)
-    {
+    public void setLabel(final String text) {
         BCCoreItems.list.get().setName(getListItemStack(), text);
 
-        if (player.level.isClientSide)
-        {
+        if (player.level.isClientSide) {
             sendMessage(ID_LABEL, (buffer) -> buffer.writeUtf(text));
         }
     }
 
     @Override
-    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readMessage(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_SERVER)
-        {
-            if (id == ID_BUTTON)
-            {
+        if (side == NetworkDirection.PLAY_TO_SERVER) {
+            if (id == ID_BUTTON) {
                 int lineIndex = buffer.readUnsignedByte();
                 int button = buffer.readUnsignedByte();
                 switchButton(lineIndex, button);
-            }
-            else if (id == ID_LABEL)
-            {
+            } else if (id == ID_LABEL) {
                 setLabel(buffer.readUtf(1024));
             }
         }

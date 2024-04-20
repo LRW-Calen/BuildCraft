@@ -4,8 +4,8 @@ import buildcraft.datagen.factory.HeatExchangeRecipeBuilder;
 import buildcraft.factory.BCFactory;
 import buildcraft.lib.misc.JsonUtil;
 import buildcraft.lib.recipe.RefineryRecipeRegistry.CoolableRecipe;
-import buildcraft.lib.recipe.RefineryRecipeRegistry.HeatableRecipe;
 import buildcraft.lib.recipe.RefineryRecipeRegistry.HeatExchangeRecipe;
+import buildcraft.lib.recipe.RefineryRecipeRegistry.HeatableRecipe;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -16,13 +16,11 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<HeatExchangeRecipe>
-{
+public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<HeatExchangeRecipe> {
     public static final HeatExchangeRecipeSerializer HEATABLE;
     public static final HeatExchangeRecipeSerializer COOLABLE;
 
-    static
-    {
+    static {
         HEATABLE = new HeatExchangeRecipeSerializer(EnumHeatExchangeRecipeType.HEATABLE);
         COOLABLE = new HeatExchangeRecipeSerializer(EnumHeatExchangeRecipeType.COOLABLE);
         HEATABLE.setRegistryName(HeatableRecipe.TYPE_ID);
@@ -31,14 +29,12 @@ public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
 
     private final EnumHeatExchangeRecipeType type;
 
-    private HeatExchangeRecipeSerializer(EnumHeatExchangeRecipeType type)
-    {
+    private HeatExchangeRecipeSerializer(EnumHeatExchangeRecipeType type) {
         this.type = type;
     }
 
     @Override
-    public HeatExchangeRecipe fromJson(ResourceLocation recipeId, JsonObject json)
-    {
+    public HeatExchangeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
 //        InscriberProcessType mode = getMode(json);
 //
 //        ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
@@ -69,16 +65,14 @@ public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
         FluidStack out = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("out"));
         int heatFrom = json.get("heatFrom").getAsInt();
         int heatTo = json.get("heatTo").getAsInt();
-        return switch (this.type)
-        {
+        return switch (this.type) {
             case COOLABLE -> new CoolableRecipe(recipeId, in, out, heatFrom, heatTo);
             case HEATABLE -> new HeatableRecipe(recipeId, in, out, heatFrom, heatTo);
         };
     }
 
-    public static void toJson(HeatExchangeRecipeBuilder builder, JsonObject json)
-    {
-        json.addProperty("type", BCFactory.MOD_ID + ":heat_exchange/" + builder.type.getlowerName());
+    public static void toJson(HeatExchangeRecipeBuilder builder, JsonObject json) {
+        json.addProperty("type", BCFactory.MODID + ":heat_exchange/" + builder.type.getlowerName());
         json.add("in", JsonUtil.serializeFluidStack(builder.in));
         json.add("out", JsonUtil.serializeFluidStack(builder.out));
         json.addProperty("heatFrom", builder.heatFrom);
@@ -87,8 +81,7 @@ public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
 
     @Nullable
     @Override
-    public HeatExchangeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
-    {
+    public HeatExchangeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
 //        Ingredient middle = Ingredient.fromNetwork(buffer);
 //        ItemStack result = buffer.readItem();
 //        Ingredient top = Ingredient.fromNetwork(buffer);
@@ -102,16 +95,14 @@ public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
         FluidStack out = buffer.readFluidStack();
         int heatFrom = buffer.readInt();
         int heatTo = buffer.readInt();
-        return switch (this.type)
-        {
+        return switch (this.type) {
             case COOLABLE -> new CoolableRecipe(recipeId, in, out, heatFrom, heatTo);
             case HEATABLE -> new HeatableRecipe(recipeId, in, out, heatFrom, heatTo);
         };
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, HeatExchangeRecipe recipe)
-    {
+    public void toNetwork(FriendlyByteBuf buffer, HeatExchangeRecipe recipe) {
 //        recipe.getMiddleInput().toNetwork(buffer);
 //        buffer.writeItem(recipe.getResultItem());
 //        recipe.getTopOptional().toNetwork(buffer);

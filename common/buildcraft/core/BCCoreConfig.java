@@ -7,9 +7,14 @@
 package buildcraft.core;
 
 import buildcraft.api.BCModules;
-import buildcraft.core.config.*;
+import buildcraft.core.config.ConfigEntry;
+import buildcraft.core.config.JsonConfig;
+import buildcraft.core.config.PluginConfig;
+import buildcraft.core.config.WailaConfig;
 import buildcraft.lib.BCLibConfig;
-import buildcraft.lib.BCLibConfig.*;
+import buildcraft.lib.BCLibConfig.ChunkLoaderLevel;
+import buildcraft.lib.BCLibConfig.RenderRotation;
+import buildcraft.lib.BCLibConfig.TimeGap;
 import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.config.FileConfigManager;
 import buildcraft.lib.misc.ConfigUtil;
@@ -21,21 +26,20 @@ import com.google.gson.GsonBuilder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge_1_12_2.common.config.Configuration;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge_1_12_2.common.config.Configuration;
 import net.minecraftforge_1_12_2.common.config.Property;
 
 import java.io.File;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class BCCoreConfig
-{
+public class BCCoreConfig {
     private static final List<Consumer<EnumRestartRequirement>> reloadListeners = new ArrayList<>();
 
     public static File configFolder;
@@ -88,18 +92,13 @@ public class BCCoreConfig
     // Calen for thread safety
 
 
-    public static synchronized Configuration getConfig(boolean notObjConfig)
-    {
-        if (BCCoreConfig.config == null)
-        {
+    public static synchronized Configuration getConfig(boolean notObjConfig) {
+        if (BCCoreConfig.config == null) {
             createConfigFile();
         }
-        if (notObjConfig)
-        {
+        if (notObjConfig) {
             return BCCoreConfig.config;
-        }
-        else
-        {
+        } else {
             return BCCoreConfig.objConfig;
         }
     }
@@ -107,7 +106,7 @@ public class BCCoreConfig
     // JADE
 
     public static final JsonConfig<WailaConfig> CONFIG =
-            new JsonConfig<>(BCCore.MOD_ID + "/" + BCCore.MOD_ID, WailaConfig.class).withGson(
+            new JsonConfig<>(BCCore.MODID + "/" + BCCore.MODID, WailaConfig.class).withGson(
                     new GsonBuilder()
                             .setPrettyPrinting()
                             .enableComplexMapKeySerialization()
@@ -130,8 +129,7 @@ public class BCCoreConfig
     private static ForgeConfigSpec.ConfigValue<List<? extends String>> modBlacklistVal;
     public static final ForgeConfigSpec spec = new ForgeConfigSpec.Builder().configure(BCCoreConfig::new).getRight();
 
-    private BCCoreConfig(ForgeConfigSpec.Builder builder)
-    {
+    private BCCoreConfig(ForgeConfigSpec.Builder builder) {
         builder.push("inventory");
         inventorySneakShowAmountVal = builder.defineInRange("sneakShowAmount", inventoryDetailedShowAmount, 0, 54);
         inventoryNormalShowAmountVal = builder.defineInRange("normalShowAmount", inventoryNormalShowAmount, 0, 54);
@@ -153,9 +151,8 @@ public class BCCoreConfig
 
     }
 
-    private static ResourceLocation newConfigResourceLocation(String path)
-    {
-        return new ResourceLocation(BCCore.MOD_ID, path);
+    private static ResourceLocation newConfigResourceLocation(String path) {
+        return new ResourceLocation(BCCore.MODID, path);
     }
 
     public static final ResourceLocation CONFIG_REGISTRY_NAME = newConfigResourceLocation("registry_name");
@@ -166,24 +163,21 @@ public class BCCoreConfig
     public static final ResourceLocation CONFIG_ITEM_MOD_NAME = newConfigResourceLocation("item_mod_name");
 
 
-    public void addConfig(ResourceLocation key, boolean defaultValue)
-    {
-        if (FMLEnvironment.dist.isClient())
-        {
+    public void addConfig(ResourceLocation key, boolean defaultValue) {
+        if (FMLEnvironment.dist.isClient()) {
             PluginConfig.INSTANCE.addConfig(new ConfigEntry(key, defaultValue, false));
         }
     }
 
     // Calen
-    private static void createConfigFile()
-    {
+    private static void createConfigFile() {
         // Calen changed
         File forgeConfigFolder = FMLPaths.CONFIGDIR.get().toFile();
         File buildCraftConfigFolder = new File(forgeConfigFolder, "buildcraft");
 
         configFolder = buildCraftConfigFolder;
         config = new Configuration(new File(buildCraftConfigFolder, "main.cfg"));
-        objConfig = RegistryConfig.setRegistryConfig(BCCore.MOD_ID, new File(buildCraftConfigFolder, "objects.cfg"));
+        objConfig = RegistryConfig.setRegistryConfig(BCCore.MODID, new File(buildCraftConfigFolder, "objects.cfg"));
         // Calen: thread safety
         // access the method to create
 //        BCLibConfig.guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
@@ -196,8 +190,7 @@ public class BCCoreConfig
         detailedConfigManager.setConfigFile(new File(buildCraftConfigFolder, "detailed.properties"));
     }
 
-    public static void preInit()
-    {
+    public static void preInit() {
         // Calen
         getConfig(true); // ensure object created
 //        // Calen changed
@@ -376,52 +369,42 @@ public class BCCoreConfig
         MinecraftForge.EVENT_BUS.register(BCCoreConfig.class);
     }
 
-    public static void addReloadListener(Consumer<EnumRestartRequirement> listener)
-    {
+    public static void addReloadListener(Consumer<EnumRestartRequirement> listener) {
         reloadListeners.add(listener);
     }
 
     @SubscribeEvent
-    public static void onConfigChange(ModConfigEvent cce)
-    {
+    public static void onConfigChange(ModConfigEvent cce) {
 //        if (BCModules.isBcMod(cce.getModID()))
-        if (BCModules.isBcMod(cce.getConfig().getModId()))
-        {
+        if (BCModules.isBcMod(cce.getConfig().getModId())) {
             EnumRestartRequirement req = EnumRestartRequirement.NONE;
 //            if (Loader.instance().isInState(LoaderState.AVAILABLE))
-            if (ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE)
-            {
+            if (ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE) {
                 // The loaders state will be LoaderState.SERVER_STARTED when we are in a world
                 req = EnumRestartRequirement.WORLD;
             }
-            for (Consumer<EnumRestartRequirement> listener : reloadListeners)
-            {
+            for (Consumer<EnumRestartRequirement> listener : reloadListeners) {
                 listener.accept(req);
             }
         }
     }
 
-    public static void postInit()
-    {
+    public static void postInit() {
 //        ConfigUtil.setLang(config);
         ConfigUtil.setLang(getConfig(true));
         saveConfigs();
     }
 
-    public static void saveConfigs()
-    {
-        if (getConfig(true).hasChanged())
-        {
+    public static void saveConfigs() {
+        if (getConfig(true).hasChanged()) {
             getConfig(true).save();
         }
-        if (getConfig(false).hasChanged())
-        {
+        if (getConfig(false).hasChanged()) {
             getConfig(false).save();
         }
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted)
-    {
+    public static void reloadConfig(EnumRestartRequirement restarted) {
         minePlayerProtected = propMinePlayerProtected.getBoolean();
         BCLibConfig.useColouredLabels = propUseColouredLabels.getBoolean();
         BCLibConfig.useHighContrastLabelColours = propUseHighContrastColouredLabels.getBoolean();
@@ -444,13 +427,11 @@ public class BCCoreConfig
         miningMultiplier = MathUtil.clamp(propMiningMultiplier.getDouble(), 1, 200);
         miningMaxDepth = propMiningMaxDepth.getInt();
 
-        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted))
-        {
+        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
             BCLibConfig.chunkLoadingLevel =
                     ConfigUtil.parseEnumForConfig(propChunkLoadLevel, BCLibConfig.ChunkLoaderLevel.SELF_TILES);
 
-            if (EnumRestartRequirement.GAME.hasBeenRestarted(restarted))
-            {
+            if (EnumRestartRequirement.GAME.hasBeenRestarted(restarted)) {
                 worldGen = propWorldGen.getBoolean();
                 worldGenWaterSpring = propWorldGenWaterSpring.getBoolean();
                 BCLibConfig.useSwappableSprites = propUseSwappableSprites.getBoolean();

@@ -15,16 +15,14 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class BuildersAdvancementProvider extends BCBaseAdvancementProvider
-{
-    private static final String NAMESPACE = BCBuilders.MOD_ID;
+public class BuildersAdvancementProvider extends BCBaseAdvancementProvider {
+    private static final String NAMESPACE = BCBuilders.MODID;
 
     public static Advancement ROOT;
 
     private static final ImpossibleTrigger.TriggerInstance IMPOSSIBLE = new ImpossibleTrigger.TriggerInstance();
 
-    public static void registerBuildersAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper)
-    {
+    public static void registerBuildersAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
         // architect
         Advancement architect = Advancement.Builder.advancement().display(
                         BCBuildersBlocks.architect.get(),

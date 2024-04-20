@@ -15,8 +15,7 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge_1_12_2.common.config.Configuration;
 import net.minecraftforge_1_12_2.common.config.Property;
 
-public class BCSiliconConfig
-{
+public class BCSiliconConfig {
 
     public static boolean renderLaserBeams = true;
     // Calen
@@ -26,8 +25,7 @@ public class BCSiliconConfig
     // Calen
     private static Property propDifferStatesOfNoteBlockForFacade;
 
-    public static void preInit()
-    {
+    public static void preInit() {
 
 //        Configuration config = BCCoreConfig.config;
         Configuration config = BCCoreConfig.getConfig(true);
@@ -41,18 +39,15 @@ public class BCSiliconConfig
         MinecraftForge.EVENT_BUS.register(BCSiliconConfig.class);
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted)
-    {
+    public static void reloadConfig(EnumRestartRequirement restarted) {
         renderLaserBeams = propRenderLaserBeams.getBoolean();
         differStatesOfNoteBlockForFacade = propDifferStatesOfNoteBlockForFacade.getBoolean();
     }
 
     @SubscribeEvent
 //    public static void onConfigChange(OnConfigChangedEvent cce)
-    public static void onConfigChange(ModConfigEvent.Reloading cce)
-    {
-        if (BCModules.isBcMod(cce.getConfig().getModId()))
-        {
+    public static void onConfigChange(ModConfigEvent.Reloading cce) {
+        if (BCModules.isBcMod(cce.getConfig().getModId())) {
             reloadConfig(EnumRestartRequirement.NONE);
         }
     }

@@ -19,20 +19,17 @@ import buildcraft.lib.gui.pos.IGuiArea;
 import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.misc.RenderUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LedgerHelp extends Ledger_Neptune
-{
+public class LedgerHelp extends Ledger_Neptune {
 
     private static final SpriteNineSliced[][] SPRITE_HELP_SPLIT = new SpriteNineSliced[2][2];
 
-    static
-    {
+    static {
         SPRITE_HELP_SPLIT[0][0] =
                 GuiUtil.slice(GuiUtil.subRelative(BCLibSprites.HELP_SPLIT, 0, 0, 8, 8, 16), 2, 2, 6, 6, 8);
         SPRITE_HELP_SPLIT[0][1] =
@@ -46,8 +43,7 @@ public class LedgerHelp extends Ledger_Neptune
     private IGuiElement selected = null;
     private boolean foundAny = false, init = false;
 
-    public LedgerHelp(BuildCraftGui gui, boolean expandPositive)
-    {
+    public LedgerHelp(BuildCraftGui gui, boolean expandPositive) {
         super(gui, 0xFF_CC_99_FF, expandPositive);
         title = LocaleUtil.localize("gui.ledger.help");
         calculateMaxSize();
@@ -57,14 +53,11 @@ public class LedgerHelp extends Ledger_Neptune
     }
 
     @Override
-    public void tick()
-    {
+    public void tick() {
         super.tick();
-        if (currentWidth == CLOSED_WIDTH && currentHeight == CLOSED_HEIGHT)
-        {
+        if (currentWidth == CLOSED_WIDTH && currentHeight == CLOSED_HEIGHT) {
             selected = null;
-            if (openElements.size() == 2)
-            {
+            if (openElements.size() == 2) {
                 openElements.remove(1);
                 title = LocaleUtil.localize("gui.ledger.help");
                 calculateMaxSize();
@@ -73,14 +66,11 @@ public class LedgerHelp extends Ledger_Neptune
     }
 
     @Override
-    protected void drawIcon(PoseStack poseStack, double x, double y)
-    {
-        if (!init)
-        {
+    protected void drawIcon(PoseStack poseStack, double x, double y) {
+        if (!init) {
             init = true;
             List<HelpPosition> elements = new ArrayList<>();
-            for (IGuiElement element : gui.shownElements)
-            {
+            for (IGuiElement element : gui.shownElements) {
                 element.addHelpElements(elements);
             }
             foundAny = elements.size() > 0;
@@ -90,32 +80,25 @@ public class LedgerHelp extends Ledger_Neptune
     }
 
     @Override
-    public void drawForeground(PoseStack poseStack, float partialTicks)
-    {
+    public void drawForeground(PoseStack poseStack, float partialTicks) {
         super.drawForeground(poseStack, partialTicks);
-        if (!shouldDrawOpen())
-        {
+        if (!shouldDrawOpen()) {
             return;
         }
         boolean set = false;
         List<HelpPosition> elements = new ArrayList<>();
-        for (IGuiElement element : gui.shownElements)
-        {
+        for (IGuiElement element : gui.shownElements) {
             element.addHelpElements(elements);
             foundAny |= elements.size() > 0;
-            for (HelpPosition info : elements)
-            {
+            for (HelpPosition info : elements) {
                 IGuiArea rect = info.target;
                 boolean isHovered = rect.contains(gui.mouse);
-                if (isHovered)
-                {
-                    if (selected != element && !set)
-                    {
+                if (isHovered) {
+                    if (selected != element && !set) {
                         selected = element;
                         GuiElementContainerHelp container = new GuiElementContainerHelp(gui, positionLedgerInnerStart);
                         info.info.addGuiElements(container);
-                        if (openElements.size() == 2)
-                        {
+                        if (openElements.size() == 2) {
                             openElements.remove(1);
                         }
                         openElements.add(container);

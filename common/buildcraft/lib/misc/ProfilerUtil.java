@@ -16,16 +16,14 @@ import java.text.NumberFormat;
 /**
  * Provides a few methods for writing the results from a vanilla {@link ProfilerFiller} to a file or something else.
  */
-public class ProfilerUtil
-{
+public class ProfilerUtil {
 
     /**
      * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link System#out} as the
      * {@link ILogAcceptor}.
      */
 //    public static void printProfilerResults(Profiler profiler, String rootName)
-    public static void printProfilerResults(ActiveProfiler profiler, String rootName)
-    {
+    public static void printProfilerResults(ActiveProfiler profiler, String rootName) {
         printProfilerResults(profiler, rootName, -1);
     }
 
@@ -34,8 +32,7 @@ public class ProfilerUtil
      * {@link ILogAcceptor}.
      */
 //    public static void printProfilerResults(Profiler profiler, String rootName, long totalNanoseconds)
-    public static void printProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds)
-    {
+    public static void printProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds) {
         writeProfilerResults(profiler, rootName, totalNanoseconds, System.out::println);
     }
 
@@ -44,8 +41,7 @@ public class ProfilerUtil
      * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}.
      */
 //    public static void logProfilerResults(Profiler profiler, String rootName)
-    public static void logProfilerResults(ActiveProfiler profiler, String rootName)
-    {
+    public static void logProfilerResults(ActiveProfiler profiler, String rootName) {
         logProfilerResults(profiler, rootName, -1);
     }
 
@@ -54,8 +50,7 @@ public class ProfilerUtil
      * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}.
      */
 //    public static void logProfilerResults(Profiler profiler, String rootName, long totalNanoseconds)
-    public static void logProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds)
-    {
+    public static void logProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds) {
         writeProfilerResults(profiler, rootName, totalNanoseconds, BCLog.logger::info);
     }
 
@@ -67,8 +62,7 @@ public class ProfilerUtil
      *                     the profiler results.
      */
 //    public static void saveProfilerResults(Profiler profiler, String rootName, Path dest) throws IOException
-    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, Path dest) throws IOException
-    {
+    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, Path dest) throws IOException {
         saveProfilerResults(profiler, rootName, -1, dest);
     }
 
@@ -80,8 +74,7 @@ public class ProfilerUtil
      *                     the profiler results.
      */
 //    public static void saveProfilerResults(Profiler profiler, String rootName, File dest) throws IOException
-    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, File dest) throws IOException
-    {
+    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, File dest) throws IOException {
         dest = dest.getAbsoluteFile();
         dest.getParentFile().mkdirs();
         saveProfilerResults(profiler, rootName, -1, dest.toPath());
@@ -98,8 +91,7 @@ public class ProfilerUtil
      */
 //    public static void saveProfilerResults(Profiler profiler, String rootName, long totalNanoseconds, Path dest)
     public static void saveProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds, Path dest)
-            throws IOException
-    {
+            throws IOException {
         try (BufferedWriter br = Files.newBufferedWriter(dest, StandardOpenOption.WRITE,
                 StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE))
         {
@@ -119,8 +111,7 @@ public class ProfilerUtil
      */
 //    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
     public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName,
-                                                                  ILogAcceptor<E> dest) throws E
-    {
+                                                                  ILogAcceptor<E> dest) throws E {
         writeProfilerResults(profiler, rootName, -1, dest);
     }
 
@@ -133,15 +124,13 @@ public class ProfilerUtil
      */
 //    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
     public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName,
-                                                                  long totalNanoseconds, ILogAcceptor<E> dest) throws E
-    {
+                                                                  long totalNanoseconds, ILogAcceptor<E> dest) throws E {
         writeProfilerResults_Internal(profiler, rootName, totalNanoseconds, 0, dest);
     }
 
     //    private static <E extends Throwable> void writeProfilerResults_Internal(Profiler profiler, String sectionName,
     private static <E extends Throwable> void writeProfilerResults_Internal(ActiveProfiler profiler, String sectionName,
-                                                                            long totalNanoseconds, int indent, ILogAcceptor<E> dest) throws E
-    {
+                                                                            long totalNanoseconds, int indent, ILogAcceptor<E> dest) throws E {
 
 //        List<Profiler.Result> list = profiler.getProfilingData(sectionName);
         ActiveProfiler.PathEntry list = profiler.getEntry(sectionName);
@@ -150,11 +139,9 @@ public class ProfilerUtil
 //        List<Pair<String, MetricCategory>> list = s.stream().toList();
 
 //        if (list != null && list.size() >= 3)
-        if (list != null && list.getCount() >= 3)
-        {
+        if (list != null && list.getCount() >= 3) {
 //            for (int i = 1; i < list.size(); ++i)
-            for (String key : list.getCounters().keySet())
-            {
+            for (String key : list.getCounters().keySet()) {
 //                Pair<String, MetricCategory> p = list.get(i);
 
 //                Profiler.Result result = list.get(i);
@@ -167,8 +154,7 @@ public class ProfilerUtil
 
                 builder.append(String.format("[%02d] ", indent));
 
-                for (int j = 0; j < indent; ++j)
-                {
+                for (int j = 0; j < indent; ++j) {
                     builder.append("|   ");
                 }
 
@@ -180,28 +166,20 @@ public class ProfilerUtil
                 builder.append("%/");
 //                builder.append(String.format("%.2f", result.totalUsePercentage));
                 builder.append(String.format("%.2f", list.getCount()));
-                if (totalNanoseconds > 0)
-                {
+                if (totalNanoseconds > 0) {
                     builder.append(" (");
 //                    long nano = (long) (result.totalUsePercentage * totalNanoseconds / 100);
                     long nano = (long) (list.getMaxDuration() * totalNanoseconds / 100);
-                    if (nano < 99_999)
-                    {
+                    if (nano < 99_999) {
                         builder.append(NumberFormat.getInstance().format(nano));
                         builder.append("ns");
-                    }
-                    else if (nano < 99_999_999)
-                    {
+                    } else if (nano < 99_999_999) {
                         builder.append(NumberFormat.getInstance().format(nano / 1000));
                         builder.append("µs");
-                    }
-                    else if (nano < 99_999_999_999L)
-                    {
+                    } else if (nano < 99_999_999_999L) {
                         builder.append(NumberFormat.getInstance().format(nano / 1_000_000));
                         builder.append("ms");
-                    }
-                    else
-                    {
+                    } else {
                         builder.append(NumberFormat.getInstance().format(nano / 1_000_000_000));
                         builder.append("s");
                     }
@@ -210,10 +188,8 @@ public class ProfilerUtil
                 dest.write(builder.toString());
 
 //                if (!"unspecified".equals(result.profilerName))
-                if (!"unspecified".equals(key))
-                {
-                    if (indent > 20)
-                    {
+                if (!"unspecified".equals(key)) {
+                    if (indent > 20) {
                         // Something probably went wrong
                         dest.write("[[ Too deep! ]]");
                         continue;
@@ -230,110 +206,87 @@ public class ProfilerUtil
      * @param <E> The base exception type that {@link #write(String)} might throw. Used to allow writing to files to
      *            throw a (checked) exception, but {@link System#out} to never throw.
      */
-    public interface ILogAcceptor<E extends Throwable>
-    {
+    public interface ILogAcceptor<E extends Throwable> {
         void write(String line) throws E;
     }
 
-    public interface ProfilerEntry
-    {
+    public interface ProfilerEntry {
         void startSection(String name);
 
         void endSection();
 
-        default void endStartSection(String name)
-        {
+        default void endStartSection(String name) {
             endSection();
             startSection(name);
         }
     }
 
     //    public static ProfilerEntry createEntry(Profiler p1, Profiler p2)
-    public static ProfilerEntry createEntry(ProfilerFiller p1, ProfilerFiller p2)
-    {
+    public static ProfilerEntry createEntry(ProfilerFiller p1, ProfilerFiller p2) {
 //        if (p1.profilingEnabled)
-        if (p1 instanceof ActiveProfiler)
-        {
+        if (p1 instanceof ActiveProfiler) {
 //            if (p2.profilingEnabled)
-            if (p2 instanceof ActiveProfiler)
-            {
+            if (p2 instanceof ActiveProfiler) {
                 return new ProfilerEntry2(p1, p2);
-            }
-            else
-            {
+            } else {
                 return new ProfilerEntry1(p1);
             }
-        }
-        else
-        {
+        } else {
 //            if (p2.profilingEnabled)
-            if (p2 instanceof ActiveProfiler)
-            {
+            if (p2 instanceof ActiveProfiler) {
                 return new ProfilerEntry1(p2);
-            }
-            else
-            {
+            } else {
                 return ProfilerEntry0.INSTANCE;
             }
         }
     }
 
-    static enum ProfilerEntry0 implements ProfilerEntry
-    {
+    static enum ProfilerEntry0 implements ProfilerEntry {
         INSTANCE;
 
         @Override
-        public void startSection(String name)
-        {
+        public void startSection(String name) {
             // NO-OP
         }
 
         @Override
-        public void endSection()
-        {
+        public void endSection() {
             // NO-OP
         }
     }
 
-    static final class ProfilerEntry1 implements ProfilerEntry
-    {
+    static final class ProfilerEntry1 implements ProfilerEntry {
         final ProfilerFiller p;
 
-        ProfilerEntry1(ProfilerFiller p)
-        {
+        ProfilerEntry1(ProfilerFiller p) {
             this.p = p;
         }
 
         @Override
-        public void startSection(String name)
-        {
+        public void startSection(String name) {
 //            p.startSection(name);
             p.push(name);
         }
 
         @Override
-        public void endSection()
-        {
+        public void endSection() {
 //            p.endSection();
             p.pop();
         }
     }
 
-    static final class ProfilerEntry2 implements ProfilerEntry
-    {
+    static final class ProfilerEntry2 implements ProfilerEntry {
         //        final Profiler p1, p2;
         final ProfilerFiller p1, p2;
 
         //        ProfilerEntry2(Profiler p1, Profiler p2)
-        ProfilerEntry2(ProfilerFiller p1, ProfilerFiller p2)
-        {
+        ProfilerEntry2(ProfilerFiller p1, ProfilerFiller p2) {
             this.p1 = p1;
             this.p2 = p2;
         }
 
         @Override
-        public void startSection(String name)
-        {
+        public void startSection(String name) {
 //            p1.startSection(name);
 //            p2.startSection(name);
             p1.push(name);
@@ -341,8 +294,7 @@ public class ProfilerUtil
         }
 
         @Override
-        public void endSection()
-        {
+        public void endSection() {
 //            p1.endSection();
 //            p2.endSection();
             p1.pop();

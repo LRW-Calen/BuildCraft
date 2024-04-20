@@ -16,8 +16,7 @@ import java.util.function.Function;
 /**
  * Specialised class for rendering {@link IStatementParameter}.
  */
-public class ParameterRenderer
-{
+public class ParameterRenderer {
 
     private static final ISimpleDrawable BACKGROUND_DRAWABLE = (p, x, y) ->
     {
@@ -25,8 +24,7 @@ public class ParameterRenderer
     };
     private static final Map<DrawType, Function<IStatementParameter, ISimpleDrawable>> drawTypes;
 
-    static
-    {
+    static {
         drawTypes = new EnumMap<>(DrawType.class);
         drawTypes.put(DrawType.SPRITE_ONLY, ParameterRenderer::getSpriteDrawable);
         drawTypes.put(DrawType.STACK_ONLY, (p) -> getStackDrawable(p, false));
@@ -43,46 +41,37 @@ public class ParameterRenderer
         });
     }
 
-    public static ISimpleDrawable getSpriteDrawable(IStatementParameter param)
-    {
+    public static ISimpleDrawable getSpriteDrawable(IStatementParameter param) {
         return (p, x, y) ->
         {
             ISprite sprite = param.getSprite();
-            if (sprite != null)
-            {
+            if (sprite != null) {
                 GuiIcon.drawAt(sprite, p, x + 1, y + 1, 16);
             }
         };
     }
 
-    public static ISimpleDrawable getStackDrawable(IStatementParameter param, boolean orQuestionMark)
-    {
+    public static ISimpleDrawable getStackDrawable(IStatementParameter param, boolean orQuestionMark) {
         return (p, x, y) ->
         {
             ItemStack stack = param.getItemStack();
-            if (!stack.isEmpty())
-            {
+            if (!stack.isEmpty()) {
                 GuiUtil.drawItemStackAt(stack, p, (int) x + 1, (int) y + 1);
-            }
-            else if (orQuestionMark)
-            {
+            } else if (orQuestionMark) {
                 GuiElementStatement.ICON_SLOT_NOT_SET.drawAt(p, x + 1, y + 1);
             }
         };
     }
 
-    public static ISimpleDrawable getDrawable(IStatementParameter param)
-    {
-        if (param instanceof IDrawingParameter)
-        {
+    public static ISimpleDrawable getDrawable(IStatementParameter param) {
+        if (param instanceof IDrawingParameter) {
             return BACKGROUND_DRAWABLE.andThen(((IDrawingParameter) param).getDrawable());
         }
         DrawType type = param.getDrawType();
         return BACKGROUND_DRAWABLE.andThen(drawTypes.get(type).apply(param));
     }
 
-    public static void draw(IStatementParameter param, PoseStack poseStack, double x, double y)
-    {
+    public static void draw(IStatementParameter param, PoseStack poseStack, double x, double y) {
         getDrawable(param).drawAt(poseStack, x, y);
     }
 }

@@ -9,14 +9,7 @@ package buildcraft.lib.client.render;
 import buildcraft.api.core.EnumPipePart;
 import buildcraft.lib.BCLibConfig;
 import buildcraft.lib.client.model.MutableQuad;
-import buildcraft.lib.misc.ItemStackKey;
 import buildcraft.lib.misc.RenderUtil;
-import buildcraft.lib.misc.StackUtil;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-import com.google.common.cache.RemovalNotification;
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -24,11 +17,8 @@ import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.entity.ItemEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
@@ -40,13 +30,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import javax.vecmath.Vector3f;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 @OnlyIn(Dist.CLIENT)
-public class ItemRenderUtil
-{
+public class ItemRenderUtil {
 
 //    private static final LoadingCache<ItemStackKey, Integer> glListCache;
 
@@ -78,8 +65,7 @@ public class ItemRenderUtil
 //                }
 //            };
 
-    static
-    {
+    static {
 //        glListCache = CacheBuilder.newBuilder()//
 //                .expireAfterAccess(40, TimeUnit.SECONDS)//
 //                .removalListener(ItemRenderUtil::onStackRemove)//
@@ -146,8 +132,7 @@ public class ItemRenderUtil
      * You must call {@link #endItemBatch()} after your have rendered all of the items.
      */
 //    public static void renderItemStack(double x, double y, double z, ItemStack stack, int lightc, Direction dir, BufferBuilder bb)
-    public static void renderItemStack(ItemStack stack, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb)
-    {
+    public static void renderItemStack(ItemStack stack, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb) {
 //        renderItemStack(x, y, z, stack, stack.getCount(), lightc, dir, bb);
         renderItemStack(stack, stack.getCount(), lightc, dir, poseStack, bb);
     }
@@ -157,19 +142,15 @@ public class ItemRenderUtil
      * You must call {@link #endItemBatch()} after your have rendered all of the items.
      */
 //    public static void renderItemStack(double x, double y, double z, ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb)
-    public static void renderItemStack(ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb)
-    {
-        if (stack.isEmpty())
-        {
+    public static void renderItemStack(ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb) {
+        if (stack.isEmpty()) {
             return;
         }
-        try
-        {
+        try {
 //            renderItemStackInternal(x, y, z, stack, stackCount, lightc, dir, bb);
             renderItemStackInternal(stack, stackCount, lightc, dir, poseStack, bb);
         }
-        catch (Throwable exception)
-        {
+        catch (Throwable exception) {
 //            CrashReport report = CrashReport.makeCrashReport(exception, "Rendering Item Stack");
             CrashReport report = CrashReport.forThrowable(exception, "Rendering Item Stack");
 //            CrashReportCategory category = report.makeCategory("Item being rendered");
@@ -188,10 +169,8 @@ public class ItemRenderUtil
     }
 
     //    private static void renderItemStackInternal(double x, double y, double z, ItemStack stack, int stackCount, int lightc, Direction dir, BufferBuilder bb)
-    private static void renderItemStackInternal(ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb)
-    {
-        if (dir == null)
-        {
+    private static void renderItemStackInternal(ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb) {
+        if (dir == null) {
             dir = Direction.EAST;
         }
         dir = BCLibConfig.rotateTravelingItems.changeFacing(dir);
@@ -205,25 +184,19 @@ public class ItemRenderUtil
 
 //        RenderSystem.setShader(GameRenderer::getRendertypeItemEntityTranslucentCullShader);
 
-        if (bb != null && !requireGl)
-        {
+        if (bb != null && !requireGl) {
 
             final int itemModelCount = getStackModelCount(stackCount);
 
-            if (itemModelCount > 1)
-            {
+            if (itemModelCount > 1) {
                 setupModelOffsetRandom(stack);
             }
 
             poseStack.pushPose();
-            for (int i = 0; i < itemModelCount; i++)
-            {
-                if (i == 0)
-                {
+            for (int i = 0; i < itemModelCount; i++) {
+                if (i == 0) {
 //                    bb.setTranslation(x, y, z);
-                }
-                else
-                {
+                } else {
                     float dx = (modelOffsetRandom.nextFloat() * 2.0F - 1.0F) * 0.08F;
                     float dy = (modelOffsetRandom.nextFloat() * 2.0F - 1.0F) * 0.08F;
                     float dz = (modelOffsetRandom.nextFloat() * 2.0F - 1.0F) * 0.08F;
@@ -235,18 +208,15 @@ public class ItemRenderUtil
                 float scale = 0.30f;
 
                 MutableQuad q = new MutableQuad(-1, null);
-                for (EnumPipePart part : EnumPipePart.VALUES)
-                {
+                for (EnumPipePart part : EnumPipePart.VALUES) {
 //                    for (BakedQuad quad : model.getQuads(null, part.face, 0))
-                    for (BakedQuad quad : model.getQuads(null, part.face, new Random()))
-                    {
+                    for (BakedQuad quad : model.getQuads(null, part.face, new Random())) {
                         q.fromBakedItem(quad);
                         q.translated(-0.5, -0.5, -0.5);
                         q.scaled(scale);
                         q.rotate(Direction.SOUTH, dir, 0, 0, 0);
 //                        if (quad.hasTintIndex())
-                        if (quad.isTinted())
-                        {
+                        if (quad.isTinted()) {
 //                            int colour = Minecraft.getInstance().getItemColors().colorMultiplier(stack, quad.getTintIndex());
                             int colour = Minecraft.getInstance().getItemColors().getColor(stack, quad.getTintIndex());
 //                            if (EntityRenderer.anaglyphEnable)
@@ -272,8 +242,7 @@ public class ItemRenderUtil
             return;
         }
         // Calen
-        else
-        {
+        else {
 //            float scale = 0.30f;
 //            poseStack.pushPose();
 //            poseStack.scale(scale, scale, scale);
@@ -281,8 +250,7 @@ public class ItemRenderUtil
 //            poseStack.popPose();
         }
 
-        if (!inBatch)
-        {
+        if (!inBatch) {
             inBatch = true;
 //            Minecraft.getInstance().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
@@ -300,22 +268,15 @@ public class ItemRenderUtil
         Minecraft.getInstance().getItemRenderer().renderModelLists(model, stack, lightc, OverlayTexture.NO_OVERLAY, poseStack, bb);
     }
 
-    private static void setupModelOffsetRandom(ItemStack stack)
-    {
+    private static void setupModelOffsetRandom(ItemStack stack) {
         final long seed;
-        if (stack.isEmpty())
-        {
+        if (stack.isEmpty()) {
             seed = 137;
-        }
-        else
-        {
+        } else {
             ResourceLocation regName = stack.getItem().getRegistryName();
-            if (regName == null)
-            {
+            if (regName == null) {
                 seed = 127;
-            }
-            else
-            {
+            } else {
 //                int regNameSeed = regName.getNamespace().hashCode() ^ regName.getResourcePath().hashCode();
                 int regNameSeed = regName.getNamespace().hashCode() ^ regName.getPath().hashCode();
 //                seed = (regNameSeed & 0x7F_FF_FF_FF) | (((long) stack.getMetadata()) << 32);
@@ -325,43 +286,28 @@ public class ItemRenderUtil
         modelOffsetRandom.setSeed(seed);
     }
 
-    private static int getStackModelCount(int stackCount)
-    {
-        if (stackCount > 1)
-        {
-            if (stackCount > 16)
-            {
-                if (stackCount > 32)
-                {
-                    if (stackCount > 48)
-                    {
+    private static int getStackModelCount(int stackCount) {
+        if (stackCount > 1) {
+            if (stackCount > 16) {
+                if (stackCount > 32) {
+                    if (stackCount > 48) {
                         return 5;
-                    }
-                    else
-                    {
+                    } else {
                         return 4;
                     }
-                }
-                else
-                {
+                } else {
                     return 3;
                 }
-            }
-            else
-            {
+            } else {
                 return 2;
             }
-        }
-        else
-        {
+        } else {
             return 1;
         }
     }
 
-    public static void endItemBatch(PoseStack poseStack)
-    {
-        if (inBatch)
-        {
+    public static void endItemBatch(PoseStack poseStack) {
+        if (inBatch) {
             inBatch = false;
 //            GL11.glPopMatrix();
             poseStack.popPose();

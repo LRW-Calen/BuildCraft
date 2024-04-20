@@ -11,8 +11,6 @@ import buildcraft.api.transport.IStripesHandlerItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Shearable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShearsItem;
@@ -24,8 +22,7 @@ import net.minecraftforge.common.IForgeShearable;
 
 import java.util.List;
 
-public enum StripesHandlerShears implements IStripesHandlerItem
-{
+public enum StripesHandlerShears implements IStripesHandlerItem {
     INSTANCE;
 
     @Override
@@ -34,10 +31,8 @@ public enum StripesHandlerShears implements IStripesHandlerItem
                           Direction direction,
                           ItemStack stack,
                           Player player,
-                          IStripesActivator activator)
-    {
-        if (!(stack.getItem() instanceof ShearsItem))
-        {
+                          IStripesActivator activator) {
+        if (!(stack.getItem() instanceof ShearsItem)) {
             return false;
         }
 
@@ -46,19 +41,15 @@ public enum StripesHandlerShears implements IStripesHandlerItem
         Block block = state.getBlock();
 
 //        if (block instanceof IShearable shearableBlock)
-        if (block instanceof IForgeShearable shearableBlock)
-        {
-            if (shearableBlock.isShearable(stack, world, pos))
-            {
+        if (block instanceof IForgeShearable shearableBlock) {
+            if (shearableBlock.isShearable(stack, world, pos)) {
                 List<ItemStack> drops = shearableBlock.onSheared(null, stack, world, pos, 0);
 //                if (stack.attemptDamageItem(1, player.getRNG(), player instanceof ServerPlayer ? (ServerPlayer) player : null))
-                if (stack.hurt(1, player.getRandom(), player instanceof ServerPlayer ? (ServerPlayer) player : null))
-                {
+                if (stack.hurt(1, player.getRandom(), player instanceof ServerPlayer ? (ServerPlayer) player : null)) {
                     stack.shrink(1);
                 }
                 world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11); // Might become obsolete in 1.12+
-                for (ItemStack dropStack : drops)
-                {
+                for (ItemStack dropStack : drops) {
                     activator.sendItem(dropStack, direction);
                 }
                 return true;

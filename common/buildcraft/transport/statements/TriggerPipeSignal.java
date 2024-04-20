@@ -15,24 +15,20 @@ import buildcraft.api.transport.IWireManager;
 import buildcraft.core.statements.BCStatement;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
 import buildcraft.lib.misc.ColourUtil;
-import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.BCTransportStatements;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.DyeColor;
 
 import java.util.Locale;
 
-public class TriggerPipeSignal extends BCStatement implements ITriggerInternal
-{
+public class TriggerPipeSignal extends BCStatement implements ITriggerInternal {
 
     private final boolean active;
     private final DyeColor colour;
 
-    public TriggerPipeSignal(boolean active, DyeColor colour)
-    {
+    public TriggerPipeSignal(boolean active, DyeColor colour) {
         super(
 
                 "buildcraft:pipe.wire.input." + colour.getName().toLowerCase(Locale.ROOT)
@@ -46,21 +42,18 @@ public class TriggerPipeSignal extends BCStatement implements ITriggerInternal
         this.colour = colour;
     }
 
-    public static boolean doesGateHaveColour(IGate gate, DyeColor c)
-    {
+    public static boolean doesGateHaveColour(IGate gate, DyeColor c) {
         // FIXME: replace with a check to wires.hasWire(colour)!
         return gate.getPipeHolder().getWireManager().hasPartOfColor(c);
     }
 
     @Override
-    public int maxParameters()
-    {
+    public int maxParameters() {
         return 3;
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return String.format(LocaleUtil.localize("gate.trigger.pipe.wire." + (active ? "active" : "inactive")),
 //                ColourUtil.getTextFullTooltip(colour));
         return new TranslatableComponent("gate.trigger.pipe.wire." + (active ? "active" : "inactive"),
@@ -68,38 +61,30 @@ public class TriggerPipeSignal extends BCStatement implements ITriggerInternal
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return "gate.trigger.pipe.wire." + (active ? "active." : "inactive.") + colour.getName();
     }
 
     @Override
-    public boolean isTriggerActive(IStatementContainer container, IStatementParameter[] parameters)
-    {
-        if (!(container instanceof IGate))
-        {
+    public boolean isTriggerActive(IStatementContainer container, IStatementParameter[] parameters) {
+        if (!(container instanceof IGate)) {
             return false;
         }
 
         IGate gate = (IGate) container;
         IWireManager wires = gate.getPipeHolder().getWireManager();
 
-        if (this.active != wires.isAnyPowered(this.colour))
-        {
+        if (this.active != wires.isAnyPowered(this.colour)) {
             return false;
         }
 
-        for (IStatementParameter param : parameters)
-        {
-            if (param != null && param instanceof TriggerParameterSignal)
-            {
+        for (IStatementParameter param : parameters) {
+            if (param != null && param instanceof TriggerParameterSignal) {
                 TriggerParameterSignal signal = (TriggerParameterSignal) param;
-                if (signal.colour == null)
-                {
+                if (signal.colour == null) {
                     continue;
                 }
-                if (signal.active != wires.isAnyPowered(signal.colour))
-                {
+                if (signal.active != wires.isAnyPowered(signal.colour)) {
                     return false;
                 }
             }
@@ -108,20 +93,17 @@ public class TriggerPipeSignal extends BCStatement implements ITriggerInternal
     }
 
     @Override
-    public IStatementParameter createParameter(int index)
-    {
+    public IStatementParameter createParameter(int index) {
         return TriggerParameterSignal.EMPTY;
     }
 
     @Override
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return BCTransportSprites.getPipeSignal(active, colour);
     }
 
     @Override
-    public IStatement[] getPossible()
-    {
+    public IStatement[] getPossible() {
         return BCTransportStatements.TRIGGER_PIPE_SIGNAL;
     }
 }

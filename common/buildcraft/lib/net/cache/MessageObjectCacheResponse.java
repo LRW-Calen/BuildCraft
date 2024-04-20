@@ -6,11 +6,11 @@
 
 package buildcraft.lib.net.cache;
 
+import buildcraft.lib.net.IMessage;
+import buildcraft.lib.net.IMessageHandler;
 import buildcraft.lib.net.PacketBufferBC;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
 
 import java.io.IOException;
 
@@ -55,7 +55,8 @@ public class MessageObjectCacheResponse implements IMessage {
         }
     }
 
-    public static final IMessageHandler<MessageObjectCacheResponse, IMessage> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageObjectCacheResponse, IMessage> HANDLER = (message, ctx) ->
+    {
         try {
             NetworkedObjectCache<?> cache = BuildCraftObjectCaches.CACHES.get(message.cacheId);
             for (int i = 0; i < message.ids.length; i++) {
@@ -64,7 +65,8 @@ public class MessageObjectCacheResponse implements IMessage {
                 cache.readObjectClient(id, new PacketBufferBC(Unpooled.copiedBuffer(payload)));
             }
             return null;
-        } catch (IOException io) {
+        }
+        catch (IOException io) {
             throw new Error(io);
         }
     };

@@ -17,8 +17,7 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
 
-public class ParticleUtil
-{
+public class ParticleUtil {
     public static void showChangeColour(Level world, Vec3 pos, @Nullable DyeColor colour) {
         if (colour == null) {
             showWaterParticles(world, pos);

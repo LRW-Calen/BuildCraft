@@ -11,9 +11,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCSiliconBlocks
-{
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCSilicon.MOD_ID);
+public class BCSiliconBlocks {
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCSilicon.MODID);
 
     public static RegistryObject<BlockLaser> laser;
     public static RegistryObject<BlockLaserTable> assemblyTable;
@@ -29,14 +28,12 @@ public class BCSiliconBlocks
     public static RegistryObject<BlockEntityType<TileChargingTable>> chargingTableTile;
     public static RegistryObject<BlockEntityType<TileProgrammingTable_Neptune>> programmingTableTile;
 
-    public static void preInit()
-    {
+    public static void preInit() {
         laser = HELPER.addBlockAndItem("block.laser", BlockPropertiesCreater.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), BlockLaser::new);
         assemblyTable = createLaserTable(EnumLaserTableType.ASSEMBLY_TABLE, "block.assembly_table");
         advancedCraftingTable = createLaserTable(EnumLaserTableType.ADVANCED_CRAFTING_TABLE, "block.advanced_crafting_table");
         integrationTable = createLaserTable(EnumLaserTableType.INTEGRATION_TABLE, "block.integration_table");
-        if (BCLib.DEV)
-        {
+        if (BCLib.DEV) {
             chargingTable = createLaserTable(EnumLaserTableType.CHARGING_TABLE, "block.charging_table");
             programmingTable = createLaserTable(EnumLaserTableType.PROGRAMMING_TABLE, "block.programming_table");
         }
@@ -45,15 +42,13 @@ public class BCSiliconBlocks
         assemblyTableTile = HELPER.registerTile("tile.assembly_table", TileAssemblyTable::new, assemblyTable);
         advancedCraftingTableTile = HELPER.registerTile("tile.advanced_crafting_table", TileAdvancedCraftingTable::new, advancedCraftingTable);
         integrationTableTile = HELPER.registerTile("tile.integration_table", TileIntegrationTable::new, integrationTable);
-        if (BCLib.DEV)
-        {
+        if (BCLib.DEV) {
             chargingTableTile = HELPER.registerTile("tile.charging_table", TileChargingTable::new, chargingTable);
             programmingTableTile = HELPER.registerTile("tile.programming_table", TileProgrammingTable_Neptune::new, programmingTable);
         }
     }
 
-    private static RegistryObject<BlockLaserTable> createLaserTable(EnumLaserTableType type, String id)
-    {
+    private static RegistryObject<BlockLaserTable> createLaserTable(EnumLaserTableType type, String id) {
         return HELPER.addBlockAndItem(id, BlockPropertiesCreater.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), (idBC, properties) -> new BlockLaserTable(idBC, properties, type));
     }
 }

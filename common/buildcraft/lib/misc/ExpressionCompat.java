@@ -20,8 +20,7 @@ import net.minecraft.world.item.DyeColor;
  * A special class dedicated to adding support to minecraft-specific types to "buildcraft.lib.expression". This isn't
  * part of that package as then we can safely distribute it separately.
  */
-public class ExpressionCompat
-{
+public class ExpressionCompat {
 
     public static final FunctionContext RENDERING = DefaultContexts.RENDERING;
 
@@ -38,12 +37,10 @@ public class ExpressionCompat
     public static final NodeType<IGuiPosition> GUI_POSITION;
     public static final NodeType<IGuiArea> GUI_AREA;
 
-    static
-    {
+    static {
         ENUM_AXIS = new NodeType<>("Axis", Axis.X);
         NodeTypes.addType("Axis", ENUM_AXIS);
-        for (Axis a : Axis.values())
-        {
+        for (Axis a : Axis.values()) {
             ENUM_AXIS.putConstant("" + a, a);
         }
 
@@ -52,8 +49,7 @@ public class ExpressionCompat
         ENUM_FACING.put_t_t("getOpposite", Direction::getOpposite);
         ENUM_FACING.put_t_o("getAxis", Axis.class, Direction::getAxis);
         ENUM_FACING.put_t_o("(string)", String.class, Direction::getName);
-        for (Direction f : Direction.values())
-        {
+        for (Direction f : Direction.values()) {
             ENUM_FACING.putConstant("" + f, f);
         }
 
@@ -62,32 +58,27 @@ public class ExpressionCompat
         NodeTypes.addType("DyeColour", ENUM_DYE_COLOUR);
         ENUM_DYE_COLOUR.put_t_l("to_argb", c -> 0xFF_00_00_00 | ColourUtil.getLightHex(c));
         ENUM_DYE_COLOUR.put_t_o("(string)", String.class, DyeColor::getName);
-        for (DyeColor c : DyeColor.values())
-        {
+        for (DyeColor c : DyeColor.values()) {
             ENUM_DYE_COLOUR.putConstant("" + c, c);
         }
 
         ENUM_POWER_STAGE = new NodeType<>("Engine Power Stage", EnumPowerStage.BLUE);
         NodeTypes.addType("EnginePowerStage", ENUM_POWER_STAGE);
         ENUM_POWER_STAGE.put_t_o("(string)", String.class, EnumPowerStage::getSerializedName);
-        for (EnumPowerStage stage : EnumPowerStage.VALUES)
-        {
+        for (EnumPowerStage stage : EnumPowerStage.VALUES) {
             ENUM_POWER_STAGE.putConstant("" + stage, stage);
         }
 
-        try
-        {
+        try {
             IControllable.Mode.ON.name();
         }
-        catch (NoSuchFieldError e)
-        {
+        catch (NoSuchFieldError e) {
             throw BCLib.throwBadClass(e, IControllable.Mode.class);
         }
         ENUM_CONTROL_MODE = new NodeType<>("Controllable Mode", IControllable.Mode.class, IControllable.Mode.ON);
         NodeTypes.addType("ControlMode", ENUM_CONTROL_MODE);
         ENUM_CONTROL_MODE.put_t_o("(string)", String.class, e -> e.lowerCaseName);
-        for (IControllable.Mode mode : IControllable.Mode.VALUES)
-        {
+        for (IControllable.Mode mode : IControllable.Mode.VALUES) {
             ENUM_CONTROL_MODE.putConstant("" + mode, mode);
         }
 
@@ -116,21 +107,18 @@ public class ExpressionCompat
         RENDERING.put_s_l("convertColourToArgb", ExpressionCompat::convertColourToArgb);
     }
 
-//    public static void setup()
-    public static synchronized void setup()
-    {
+    //    public static void setup()
+    public static synchronized void setup() {
         // Just to call the above static initializer
     }
 
-    private static long convertColourToAbgr(String c)
-    {
+    private static long convertColourToAbgr(String c) {
         DyeColor colour = ColourUtil.parseColourOrNull(c);
         if (colour == null) return 0xFF_FF_FF_FF;
         return 0xFF_00_00_00 | ColourUtil.swapArgbToAbgr(ColourUtil.getLightHex(colour));
     }
 
-    private static long convertColourToArgb(String c)
-    {
+    private static long convertColourToArgb(String c) {
         DyeColor colour = ColourUtil.parseColourOrNull(c);
         if (colour == null) return 0xFF_FF_FF_FF;
         return 0xFF_00_00_00 | ColourUtil.getLightHex(colour);

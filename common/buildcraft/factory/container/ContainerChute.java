@@ -12,10 +12,8 @@ import buildcraft.lib.gui.slot.SlotBase;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
-public class ContainerChute extends ContainerBCTile<TileChute>
-{
-    public ContainerChute(MenuType menuType, int id, Player player, TileChute tile)
-    {
+public class ContainerChute extends ContainerBCTile<TileChute> {
+    public ContainerChute(MenuType menuType, int id, Player player, TileChute tile) {
         super(menuType, id, player, tile);
         addFullPlayerInventory(71);
 

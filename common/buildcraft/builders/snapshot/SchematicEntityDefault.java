@@ -33,16 +33,14 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SchematicEntityDefault implements ISchematicEntity
-{
+public class SchematicEntityDefault implements ISchematicEntity {
     private CompoundTag entityNbt;
     private Vec3 pos;
     private BlockPos hangingPos;
     private Direction hangingFacing;
     private Rotation entityRotation = Rotation.NONE;
 
-    public static boolean predicate(SchematicEntityContext context)
-    {
+    public static boolean predicate(SchematicEntityContext context) {
 //        ResourceLocation registryName = EntityList.getKey(context.entity);
         ResourceLocation registryName = context.entity.getType().getRegistryName();
         return registryName != null &&
@@ -58,42 +56,35 @@ public class SchematicEntityDefault implements ISchematicEntity
     }
 
     @Override
-    public void init(SchematicEntityContext context)
-    {
+    public void init(SchematicEntityContext context) {
         entityNbt = context.entity.serializeNBT();
 //        pos = context.entity.getPositionVector().subtract(new Vec3(context.basePos));
         pos = context.entity.position().subtract(Vec3.atLowerCornerOf(context.basePos));
-        if (context.entity instanceof HangingEntity entityHanging)
-        {
+        if (context.entity instanceof HangingEntity entityHanging) {
 //            EntityHanging entityHanging = (EntityHanging) context.entity;
 //            hangingPos = entityHanging.getHangingPosition().subtract(context.basePos);
             hangingPos = entityHanging.getPos().subtract(context.basePos);
 //            hangingFacing = entityHanging.getHorizontalFacing();
             hangingFacing = entityHanging.getDirection();
-        }
-        else
-        {
+        } else {
             hangingPos = new BlockPos(pos);
             hangingFacing = Direction.NORTH;
         }
     }
 
     @Override
-    public Vec3 getPos()
-    {
+    public Vec3 getPos() {
         return pos;
     }
 
     @Nonnull
     @Override
-    public List<ItemStack> computeRequiredItems()
-    {
+    public List<ItemStack> computeRequiredItems() {
         Set<JsonRule> rules = RulesLoader.getRules(
                 new ResourceLocation(entityNbt.getString("id")),
                 entityNbt
         );
-        if (rules.isEmpty())
-        {
+        if (rules.isEmpty()) {
             throw new IllegalArgumentException("Rules are empty");
         }
         return rules.stream()
@@ -107,8 +98,7 @@ public class SchematicEntityDefault implements ISchematicEntity
 
     @Nonnull
     @Override
-    public List<FluidStack> computeRequiredFluids()
-    {
+    public List<FluidStack> computeRequiredFluids() {
         Set<JsonRule> rules = RulesLoader.getRules(
                 new ResourceLocation(entityNbt.getString("id")),
                 entityNbt
@@ -123,8 +113,7 @@ public class SchematicEntityDefault implements ISchematicEntity
     }
 
     @Override
-    public SchematicEntityDefault getRotated(Rotation rotation)
-    {
+    public SchematicEntityDefault getRotated(Rotation rotation) {
         SchematicEntityDefault schematicEntity = SchematicEntityManager.createCleanCopy(this);
         schematicEntity.entityNbt = entityNbt;
         schematicEntity.pos = RotationUtil.rotateVec3d(pos, rotation);
@@ -136,8 +125,7 @@ public class SchematicEntityDefault implements ISchematicEntity
     }
 
     @Override
-    public Entity build(Level world, BlockPos basePos)
-    {
+    public Entity build(Level world, BlockPos basePos) {
         Set<JsonRule> rules = RulesLoader.getRules(
                 new ResourceLocation(entityNbt.getString("id")),
                 entityNbt
@@ -158,15 +146,12 @@ public class SchematicEntityDefault implements ISchematicEntity
         newEntityNbt.put("Pos", NBTUtilBC.writeVec3d(placePos));
         newEntityNbt.putUUID("UUID", UUID.randomUUID());
         boolean rotate = false;
-        if (Stream.of("TileX", "TileY", "TileZ", "Facing").allMatch(newEntityNbt::contains))
-        {
+        if (Stream.of("TileX", "TileY", "TileZ", "Facing").allMatch(newEntityNbt::contains)) {
             newEntityNbt.putInt("TileX", placeHangingPos.getX());
             newEntityNbt.putInt("TileY", placeHangingPos.getY());
             newEntityNbt.putInt("TileZ", placeHangingPos.getZ());
             newEntityNbt.putByte("Facing", (byte) hangingFacing.get2DDataValue());
-        }
-        else
-        {
+        } else {
             rotate = true;
         }
 //        Entity entity = EntityList.createEntityFromNBT(
@@ -177,10 +162,8 @@ public class SchematicEntityDefault implements ISchematicEntity
                 world
         );
         Entity entity = entityOptional.orElse(null);
-        if (entity != null)
-        {
-            if (rotate)
-            {
+        if (entity != null) {
+            if (rotate) {
 //                entity.setLocationAndAngles(
                 entity.setPos(
                         placePos.x,
@@ -205,14 +188,12 @@ public class SchematicEntityDefault implements ISchematicEntity
     }
 
     @Override
-    public Entity buildWithoutChecks(Level world, BlockPos basePos)
-    {
+    public Entity buildWithoutChecks(Level world, BlockPos basePos) {
         return build(world, basePos);
     }
 
     @Override
-    public CompoundTag serializeNBT()
-    {
+    public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.put("entityNbt", entityNbt);
         nbt.put("pos", NBTUtilBC.writeVec3d(pos));
@@ -223,8 +204,7 @@ public class SchematicEntityDefault implements ISchematicEntity
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException
-    {
+    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException {
         entityNbt = nbt.getCompound("entityNbt");
         pos = NBTUtilBC.readVec3d(nbt.get("pos"));
         hangingPos = NbtUtils.readBlockPos(nbt.getCompound("hangingPos"));
@@ -233,14 +213,11 @@ public class SchematicEntityDefault implements ISchematicEntity
     }
 
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass())
-        {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
@@ -254,8 +231,7 @@ public class SchematicEntityDefault implements ISchematicEntity
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = entityNbt.hashCode();
         result = 31 * result + pos.hashCode();
         result = 31 * result + hangingPos.hashCode();

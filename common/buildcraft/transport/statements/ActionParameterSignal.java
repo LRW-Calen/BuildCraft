@@ -26,17 +26,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class ActionParameterSignal implements IStatementParameter
-{
+public class ActionParameterSignal implements IStatementParameter {
 
     public static final ActionParameterSignal EMPTY = new ActionParameterSignal(null);
     private static final Map<DyeColor, ActionParameterSignal> SIGNALS;
 
-    static
-    {
+    static {
         SIGNALS = new EnumMap<>(DyeColor.class);
-        for (DyeColor colour : ColourUtil.COLOURS)
-        {
+        for (DyeColor colour : ColourUtil.COLOURS) {
             SIGNALS.put(colour, new ActionParameterSignal(colour));
         }
     }
@@ -44,89 +41,70 @@ public class ActionParameterSignal implements IStatementParameter
     @Nullable
     public final DyeColor colour;
 
-    private ActionParameterSignal(DyeColor colour)
-    {
+    private ActionParameterSignal(DyeColor colour) {
         this.colour = colour;
     }
 
-    public static ActionParameterSignal get(DyeColor colour)
-    {
+    public static ActionParameterSignal get(DyeColor colour) {
         return colour == null ? EMPTY : SIGNALS.get(colour);
     }
 
-    public static ActionParameterSignal readFromNbt(CompoundTag nbt)
-    {
-        if (nbt.contains("color", Tag.TAG_ANY_NUMERIC))
-        {
+    public static ActionParameterSignal readFromNbt(CompoundTag nbt) {
+        if (nbt.contains("color", Tag.TAG_ANY_NUMERIC)) {
             return get(DyeColor.byId(nbt.getByte("color")));
         }
         return EMPTY;
     }
 
     @Override
-    public void writeToNbt(CompoundTag nbt)
-    {
+    public void writeToNbt(CompoundTag nbt) {
         DyeColor c = colour;
-        if (c != null)
-        {
+        if (c != null) {
             nbt.putByte("color", (byte) c.getId());
         }
     }
 
     @Nullable
-    public DyeColor getColor()
-    {
+    public DyeColor getColor() {
         return colour;
     }
 
     @Override
-    public ISprite getSprite()
-    {
+    public ISprite getSprite() {
         DyeColor c = colour;
-        if (c == null)
-        {
+        if (c == null) {
             return null;
-        }
-        else
-        {
+        } else {
             return BCTransportSprites.getPipeSignal(true, c);
         }
     }
 
     @Override
     public ActionParameterSignal onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-                                         StatementMouseClick mouse)
-    {
+                                         StatementMouseClick mouse) {
         return null;
     }
 
     @Override
-    public boolean equals(Object object)
-    {
-        if (object instanceof ActionParameterSignal)
-        {
+    public boolean equals(Object object) {
+        if (object instanceof ActionParameterSignal) {
             ActionParameterSignal param = (ActionParameterSignal) object;
 
             return param.getColor() == getColor();
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(getColor());
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
         DyeColor c = colour;
-        if (c == null)
-        {
+        if (c == null) {
             return null;
         }
 //        String format = LocaleUtil.localize("gate.action.pipe.wire");
@@ -137,49 +115,40 @@ public class ActionParameterSignal implements IStatementParameter
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         DyeColor c = colour;
-        if (c == null)
-        {
+        if (c == null) {
             return null;
         }
         return "gate.action.pipe.wire." + c.getName();
     }
 
     @Override
-    public String getUniqueTag()
-    {
+    public String getUniqueTag() {
         return "buildcraft:pipeWireAction";
     }
 
     @Override
-    public IStatementParameter rotateLeft()
-    {
+    public IStatementParameter rotateLeft() {
         return this;
     }
 
     @Nonnull
     @Override
-    public ItemStack getItemStack()
-    {
+    public ItemStack getItemStack() {
         return StackUtil.EMPTY;
     }
 
     @Override
-    public IStatementParameter[] getPossible(IStatementContainer source)
-    {
-        if (!(source instanceof IGate))
-        {
+    public IStatementParameter[] getPossible(IStatementContainer source) {
+        if (!(source instanceof IGate)) {
             return null;
         }
         IGate gate = (IGate) source;
         List<IStatementParameter> poss = new ArrayList<>(1 + ColourUtil.COLOURS.length);
         poss.add(EMPTY);
-        for (DyeColor c : ColourUtil.COLOURS)
-        {
-            if (TriggerPipeSignal.doesGateHaveColour(gate, c))
-            {
+        for (DyeColor c : ColourUtil.COLOURS) {
+            if (TriggerPipeSignal.doesGateHaveColour(gate, c)) {
                 poss.add(get(c));
             }
         }

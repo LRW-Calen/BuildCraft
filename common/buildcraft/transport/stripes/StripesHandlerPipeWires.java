@@ -19,25 +19,21 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public class StripesHandlerPipeWires implements IStripesHandlerItem
-{
+public class StripesHandlerPipeWires implements IStripesHandlerItem {
 
     private static final int PIPES_TO_TRY = 8;
 
     @Override
-    public boolean handle(Level world, BlockPos pos, Direction direction, ItemStack stack, Player player, IStripesActivator activator)
-    {
+    public boolean handle(Level world, BlockPos pos, Direction direction, ItemStack stack, Player player, IStripesActivator activator) {
 //        DyeColor pipeWireColor = DyeColor.byMetadata(stack.getMetadata());
         DyeColor pipeWireColor = ColourUtil.getStackColourFromTag(stack);
 
-        for (int i = PIPES_TO_TRY; i > 0; i--)
-        {
+        for (int i = PIPES_TO_TRY; i > 0; i--) {
             pos = pos.relative(direction.getOpposite());
 
             BlockEntity tile = world.getBlockEntity(pos);
 //            if (tile != null && tile.hasCapability(PipeApi.CAP_PIPE_HOLDER, null))
-            if (tile != null && tile.getCapability(PipeApi.CAP_PIPE_HOLDER, null).isPresent())
-            {
+            if (tile != null && tile.getCapability(PipeApi.CAP_PIPE_HOLDER, null).isPresent()) {
                 IPipeHolder pipeHolder = tile.getCapability(PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
 
                 /*
@@ -56,9 +52,7 @@ public class StripesHandlerPipeWires implements IStripesHandlerItem
             }
             */
 
-            }
-            else
-            {
+            } else {
                 // Not a pipe, don't follow chain
                 return false;
             }

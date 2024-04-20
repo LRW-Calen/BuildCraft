@@ -4,15 +4,13 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.factory;
 
-import buildcraft.silicon.tile.TileLaserTableBase;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkHooks;
 
-public enum BCFactoryGuis
-{
+public enum BCFactoryGuis {
     AUTO_WORKBENCH_ITEMS,
     AUTO_WORKBENCH_FLUIDS,
     CHUTE;
@@ -22,14 +20,11 @@ public enum BCFactoryGuis
 //        player.openGui(BCFactory.INSTANCE, ordinal(), player.getEntityWorld(), 0, 0, 0);
 //    }
 
-    public void openGUI(Player player, BlockPos pos)
-    {
+    public void openGUI(Player player, BlockPos pos) {
 //        player.openGui(BCFactory.INSTANCE, ordinal(), player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
-        if (player instanceof ServerPlayer serverPlayer)
-        {
+        if (player instanceof ServerPlayer serverPlayer) {
 //            player.openMenu(state.getMenuProvider(player.level, pos));
-            if (player.level.getBlockEntity(pos) instanceof MenuProvider tile)
-            {
+            if (player.level.getBlockEntity(pos) instanceof MenuProvider tile) {
                 NetworkHooks.openGui(serverPlayer, tile, pos);
             }
         }

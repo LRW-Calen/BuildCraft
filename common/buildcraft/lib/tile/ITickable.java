@@ -33,8 +33,7 @@ public interface ITickable {
         if (forceDelay || ((BlockEntity) this).getLevel() == null) {
             List<Runnable> tasksOfCurrentTile = tasks.computeIfAbsent(this, k -> new LinkedList<>());
             tasksOfCurrentTile.add(task);
-        }
-        else {
+        } else {
             task.run();
         }
     }

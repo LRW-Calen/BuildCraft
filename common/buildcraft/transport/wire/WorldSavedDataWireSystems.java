@@ -12,7 +12,6 @@ import buildcraft.api.transport.IWireEmitter;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.lib.net.MessageManager;
-import com.google.common.base.Predicates;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -29,8 +28,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class WorldSavedDataWireSystems extends SavedData
-{
+public class WorldSavedDataWireSystems extends SavedData {
     public static final String DATA_NAME = "buildcraft_wire_systems";
     public Level world;
     public final Map<WireSystem, Boolean> wireSystems = new HashMap<>();
@@ -44,38 +42,32 @@ public class WorldSavedDataWireSystems extends SavedData
 
     public String name;
 
-    public WorldSavedDataWireSystems()
-    {
+    public WorldSavedDataWireSystems() {
 //        super(DATA_NAME);
         this.name = DATA_NAME;
     }
 
-    public WorldSavedDataWireSystems(String name)
-    {
+    public WorldSavedDataWireSystems(String name) {
 //        super(name);
         this.name = name;
     }
 
-    public void markStructureChanged()
-    {
+    public void markStructureChanged() {
         structureChanged = true;
         gatesChanged = true;
         emittersCache.clear();
     }
 
-    public List<WireSystem> getWireSystemsWithElement(WireSystem.WireElement element)
-    {
+    public List<WireSystem> getWireSystemsWithElement(WireSystem.WireElement element) {
         List<WireSystem> wireSystemsWithElement = this.elementsToWireSystemsIndex.get(element);
         return wireSystemsWithElement != null ? new ArrayList<>(wireSystemsWithElement) : Collections.emptyList();
     }
 
-    public List<WireSystem> getWireSystemsWithElementAsReadOnlyList(WireSystem.WireElement element)
-    {
+    public List<WireSystem> getWireSystemsWithElementAsReadOnlyList(WireSystem.WireElement element) {
         return this.elementsToWireSystemsIndex.getOrDefault(element, Collections.emptyList());
     }
 
-    public void removeWireSystem(WireSystem wireSystem)
-    {
+    public void removeWireSystem(WireSystem wireSystem) {
         wireSystems.remove(wireSystem);
         wireSystem.elements.forEach(elementIn ->
         {
@@ -88,15 +80,12 @@ public class WorldSavedDataWireSystems extends SavedData
         markStructureChanged();
     }
 
-    public void addWireSystem(WireSystem wireSystem, boolean powered)
-    {
-        if (this.wireSystems.put(wireSystem, powered) == null)
-        {
+    public void addWireSystem(WireSystem wireSystem, boolean powered) {
+        if (this.wireSystems.put(wireSystem, powered) == null) {
             wireSystem.elements.forEach(systemElement ->
             {
                 List<WireSystem> wireSystemsWithElement = this.elementsToWireSystemsIndex.computeIfAbsent(systemElement, unused -> new ArrayList<>());
-                if (wireSystemsWithElement.contains(wireSystem))
-                {
+                if (wireSystemsWithElement.contains(wireSystem)) {
                     throw new IllegalStateException();
                 }
                 wireSystemsWithElement.add(wireSystem);
@@ -104,47 +93,37 @@ public class WorldSavedDataWireSystems extends SavedData
         }
     }
 
-    public void buildAndAddWireSystem(WireSystem.WireElement element)
-    {
+    public void buildAndAddWireSystem(WireSystem.WireElement element) {
         WireSystem wireSystem = new WireSystem(this, element);
-        if (!wireSystem.isEmpty())
-        {
+        if (!wireSystem.isEmpty()) {
             this.addWireSystem(wireSystem, false);
             wireSystems.put(wireSystem, wireSystem.update(this));
         }
         markStructureChanged();
     }
 
-    public void rebuildWireSystemsAround(IPipeHolder holder)
-    {
+    public void rebuildWireSystemsAround(IPipeHolder holder) {
         Arrays.stream(EnumWirePart.values())
                 .flatMap(part -> WireSystem.getConnectedElementsOfElement(world, new WireSystem.WireElement(holder.getPipePos(), part)).stream())
                 .distinct()
                 .forEach(this::buildAndAddWireSystem);
     }
 
-    public IWireEmitter getEmitter(WireSystem.WireElement element)
-    {
-        if (element.type == WireSystem.WireElement.Type.EMITTER_SIDE)
-        {
-            if (!emittersCache.containsKey(element))
-            {
-                if (!world.isLoaded(element.blockPos))
-                {
+    public IWireEmitter getEmitter(WireSystem.WireElement element) {
+        if (element.type == WireSystem.WireElement.Type.EMITTER_SIDE) {
+            if (!emittersCache.containsKey(element)) {
+                if (!world.isLoaded(element.blockPos)) {
                     BCLog.logger.warn("[transport.wire] Ghost loading " + element.blockPos + " to look for an emitter!");
                 }
                 BlockEntity tile = world.getBlockEntity(element.blockPos);
-                if (tile instanceof IPipeHolder)
-                {
+                if (tile instanceof IPipeHolder) {
                     IPipeHolder holder = (IPipeHolder) tile;
                     PipePluggable plug = holder.getPluggable(element.emitterSide);
-                    if (plug instanceof IWireEmitter)
-                    {
+                    if (plug instanceof IWireEmitter) {
                         emittersCache.put(element, (IWireEmitter) plug);
                     }
                 }
-                if (!emittersCache.containsKey(element))
-                {
+                if (!emittersCache.containsKey(element)) {
                     throw new IllegalStateException("Tried to get a wire element when none existed! THIS IS A BUG " + element);
                 }
             }
@@ -153,33 +132,26 @@ public class WorldSavedDataWireSystems extends SavedData
         return null;
     }
 
-    public boolean isEmitterEmitting(WireSystem.WireElement element, DyeColor color)
-    {
-        if (!world.isLoaded(element.blockPos))
-        {
+    public boolean isEmitterEmitting(WireSystem.WireElement element, DyeColor color) {
+        if (!world.isLoaded(element.blockPos)) {
             BCLog.logger.warn("[transport.wire] Ghost loading " + element.blockPos + " to look for an emitter!");
         }
         BlockEntity tile = world.getBlockEntity(element.blockPos);
-        if (tile instanceof IPipeHolder)
-        {
+        if (tile instanceof IPipeHolder) {
             IPipeHolder holder = (IPipeHolder) tile;
-            if (holder.getPluggable(element.emitterSide) instanceof IWireEmitter)
-            {
+            if (holder.getPluggable(element.emitterSide) instanceof IWireEmitter) {
                 return getEmitter(element).isEmitting(color);
             }
         }
         return false;
     }
 
-    public void tick()
-    {
-        if (gatesChanged)
-        {
+    public void tick() {
+        if (gatesChanged) {
             wireSystems.replaceAll((wireSystem, oldPowered) ->
             {
                 boolean newPowered = wireSystem.update(this);
-                if (oldPowered != newPowered)
-                {
+                if (oldPowered != newPowered) {
                     changedSystems.add(wireSystem);
                 }
                 return newPowered;
@@ -192,8 +164,7 @@ public class WorldSavedDataWireSystems extends SavedData
                     Map<Integer, WireSystem> changedWires = this.wireSystems.keySet().stream()
                             .filter(wireSystem -> wireSystem.isPlayerWatching(player) && (structureChanged || changedPlayers.contains(player)))
                             .collect(Collectors.toMap(WireSystem::getWiresHashCode, Function.identity()));
-                    if (!changedWires.isEmpty())
-                    {
+                    if (!changedWires.isEmpty()) {
                         MessageManager.sendTo(new MessageWireSystems(changedWires), player);
                     }
                     Map<Integer, Boolean> hashesPowered = this.wireSystems.entrySet().stream()
@@ -203,13 +174,11 @@ public class WorldSavedDataWireSystems extends SavedData
                             )
                             .map(systemPowered -> Pair.of(systemPowered.getKey().getWiresHashCode(), systemPowered.getValue()))
                             .collect(Collectors.toMap(Pair::getLeft, Pair::getRight));
-                    if (!hashesPowered.isEmpty())
-                    {
+                    if (!hashesPowered.isEmpty()) {
                         MessageManager.sendTo(new MessageWireSystemsPowered(hashesPowered), player);
                     }
                 });
-        if (structureChanged || !changedSystems.isEmpty())
-        {
+        if (structureChanged || !changedSystems.isEmpty()) {
             setDirty();
         }
         structureChanged = false;
@@ -218,8 +187,7 @@ public class WorldSavedDataWireSystems extends SavedData
     }
 
     @Override
-    public CompoundTag save(CompoundTag nbt)
-    {
+    public CompoundTag save(CompoundTag nbt) {
         ListTag entriesList = new ListTag();
         wireSystems.forEach((wireSystem, powered) ->
         {
@@ -232,37 +200,32 @@ public class WorldSavedDataWireSystems extends SavedData
         return nbt;
     }
 
-//    @Override
-    public void readFromNBT(CompoundTag nbt)
-    {
+    //    @Override
+    public void readFromNBT(CompoundTag nbt) {
         wireSystems.clear();
         this.elementsToWireSystemsIndex.clear();
 
         ListTag entriesList = nbt.getList("entries", Tag.TAG_COMPOUND);
-        for (int i = 0; i < entriesList.size(); i++)
-        {
+        for (int i = 0; i < entriesList.size(); i++) {
             CompoundTag entry = entriesList.getCompound(i);
             this.addWireSystem(new WireSystem(entry.getCompound("wireSystem")), entry.getBoolean("powered"));
         }
     }
 
-    public static WorldSavedDataWireSystems get(Level world)
-    {
-        if (world.isClientSide)
-        {
+    public static WorldSavedDataWireSystems get(Level world) {
+        if (world.isClientSide) {
             throw new UnsupportedOperationException("Attempted to get WorldSavedDataWireSystems on the client!");
         }
-        ServerLevel serverLevel = (ServerLevel)world;
+        ServerLevel serverLevel = (ServerLevel) world;
         DimensionDataStorage storage = serverLevel.getDataStorage();
 //        WorldSavedDataWireSystems instance = (WorldSavedDataWireSystems) storage.getOrLoadData(WorldSavedDataWireSystems.class, DATA_NAME);
-        WorldSavedDataWireSystems instance = (WorldSavedDataWireSystems) storage.get((nbt)->
+        WorldSavedDataWireSystems instance = (WorldSavedDataWireSystems) storage.get((nbt) ->
         {
             WorldSavedDataWireSystems ret = new WorldSavedDataWireSystems();
             ret.readFromNBT(nbt);
             return ret;
         }, DATA_NAME);
-        if (instance == null)
-        {
+        if (instance == null) {
             instance = new WorldSavedDataWireSystems();
             storage.set(DATA_NAME, instance);
         }

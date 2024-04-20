@@ -6,7 +6,6 @@
 
 package buildcraft.robotics.zone;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceKey;
@@ -16,8 +15,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.Arrays;
 
-public class ZonePlannerMapChunkKey
-{
+public class ZonePlannerMapChunkKey {
     public static final int LEVEL_HEIGHT = 32;
 
     public final ChunkPos chunkPos;
@@ -27,8 +25,7 @@ public class ZonePlannerMapChunkKey
     private final int hash;
 
     //    public ZonePlannerMapChunkKey(ChunkPos chunkPos, int dimensionalId, int level)
-    public ZonePlannerMapChunkKey(ChunkPos chunkPos, ResourceKey<Level> dimensionalId, int level)
-    {
+    public ZonePlannerMapChunkKey(ChunkPos chunkPos, ResourceKey<Level> dimensionalId, int level) {
         this.chunkPos = chunkPos;
         this.dimensionalId = dimensionalId;
         this.level = level;
@@ -37,8 +34,7 @@ public class ZonePlannerMapChunkKey
     }
 
     //    public ZonePlannerMapChunkKey(ByteBuf buf)
-    public ZonePlannerMapChunkKey(FriendlyByteBuf buf)
-    {
+    public ZonePlannerMapChunkKey(FriendlyByteBuf buf) {
         chunkPos = new ChunkPos(buf.readInt(), buf.readInt());
         dimensionalId = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(buf.readUtf()));
         level = buf.readInt();
@@ -47,8 +43,7 @@ public class ZonePlannerMapChunkKey
     }
 
     //    public void toBytes(ByteBuf buf)
-    public void toBytes(FriendlyByteBuf buf)
-    {
+    public void toBytes(FriendlyByteBuf buf) {
         buf.writeInt(chunkPos.x);
         buf.writeInt(chunkPos.z);
 //        buf.writeInt(dimensionalId);
@@ -57,8 +52,7 @@ public class ZonePlannerMapChunkKey
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (o == this) return true;
         if (o == null) return false;
         if (o.getClass() != getClass()) return false;
@@ -70,8 +64,7 @@ public class ZonePlannerMapChunkKey
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return hash;
     }
 }

@@ -17,36 +17,28 @@ import net.minecraftforge.fluids.FluidStack;
 import java.io.IOException;
 import java.util.Objects;
 
-public class NetworkedFluidStackCache extends NetworkedObjectCache<FluidStack>
-{
+public class NetworkedFluidStackCache extends NetworkedObjectCache<FluidStack> {
     private static final int FLUID_AMOUNT = 1;
 
-    public NetworkedFluidStackCache()
-    {
+    public NetworkedFluidStackCache() {
         // Use water for our base stack as it might not be too bad of an assumption
         super(new FluidStack(Fluids.WATER, FLUID_AMOUNT));
     }
 
     @Override
-    protected Object2IntMap<FluidStack> createObject2IntMap()
-    {
-        return new Object2IntOpenCustomHashMap<>(new Hash.Strategy<FluidStack>()
-        {
+    protected Object2IntMap<FluidStack> createObject2IntMap() {
+        return new Object2IntOpenCustomHashMap<>(new Hash.Strategy<FluidStack>() {
             @Override
-            public int hashCode(FluidStack o)
-            {
-                if (o == null)
-                {
+            public int hashCode(FluidStack o) {
+                if (o == null) {
                     return 0;
                 }
                 return Objects.hash(o.getRawFluid(), o.getTag());
             }
 
             @Override
-            public boolean equals(FluidStack a, FluidStack b)
-            {
-                if (a == null || b == null)
-                {
+            public boolean equals(FluidStack a, FluidStack b) {
+                if (a == null || b == null) {
                     return a == b;
                 }
                 return a.getRawFluid() == b.getRawFluid() //
@@ -56,24 +48,19 @@ public class NetworkedFluidStackCache extends NetworkedObjectCache<FluidStack>
     }
 
     @Override
-    protected FluidStack copyOf(FluidStack object)
-    {
+    protected FluidStack copyOf(FluidStack object) {
         return object.copy();
     }
 
     @Override
-    protected void writeObject(FluidStack obj, PacketBufferBC buffer)
-    {
+    protected void writeObject(FluidStack obj, PacketBufferBC buffer) {
         Fluid f = obj.getFluid();
 //        buffer.writeString(FluidRegistry.getFluidName(f));
         buffer.writeRegistryId(f); // Calen: FluidStack#writeToPacket
 //        if (obj.tag == null)
-        if (obj.getTag() == null)
-        {
+        if (obj.getTag() == null) {
             buffer.writeBoolean(false);
-        }
-        else
-        {
+        } else {
             buffer.writeBoolean(true);
 //            buffer.writeCompoundTag(obj.tag);
             buffer.writeNbt(obj.getTag());
@@ -82,13 +69,11 @@ public class NetworkedFluidStackCache extends NetworkedObjectCache<FluidStack>
     }
 
     @Override
-    protected FluidStack readObject(PacketBufferBC buffer) throws IOException
-    {
+    protected FluidStack readObject(PacketBufferBC buffer) throws IOException {
 //        Fluid fluid = FluidRegistry.getFluid(buffer.readString(255));
         Fluid fluid = buffer.readRegistryId(); // Calen: FluidStack#readFromPacket
         FluidStack stack = new FluidStack(fluid, FLUID_AMOUNT);
-        if (buffer.readBoolean())
-        {
+        if (buffer.readBoolean()) {
 //            stack.tag = buffer.readCompoundTag();
             stack.setTag(buffer.readNbt());
         }
@@ -97,8 +82,7 @@ public class NetworkedFluidStackCache extends NetworkedObjectCache<FluidStack>
     }
 
     @Override
-    protected String getCacheName()
-    {
+    protected String getCacheName() {
         return "FluidStack";
     }
 }

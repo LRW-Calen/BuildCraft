@@ -8,8 +8,7 @@ package buildcraft.lib.misc.data;
 
 import gnu.trove.list.array.TByteArrayList;
 
-public class DecompactingBitSet
-{
+public class DecompactingBitSet {
     public final int bits;
     private final TByteArrayList bytes = new TByteArrayList();
     private int byteIndex = 0, bitIndex = 0;

@@ -10,7 +10,8 @@ import buildcraft.factory.tile.TileMiner;
 import buildcraft.lib.client.render.laser.LaserData_BC8;
 import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import buildcraft.lib.client.render.laser.LaserRenderer_BC8;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -19,22 +20,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
 //public class RenderTube extends FastTESR<TileMiner>
-public class RenderTube implements BlockEntityRenderer<TileMiner>
-{
+public class RenderTube implements BlockEntityRenderer<TileMiner> {
     private final LaserType laserType;
 
     //    public RenderTube(LaserType laserType)
-    public RenderTube(BlockEntityRendererProvider.Context context, LaserType laserType)
-    {
+    public RenderTube(BlockEntityRendererProvider.Context context, LaserType laserType) {
         this.laserType = laserType;
     }
 
     @Override
 //    public void renderTileEntityFast(@Nonnull TileMiner tile, double x, double y, double z, float partialTicks, int destroyStage, float partial, @Nonnull BufferBuilder buffer)
-    public void render(TileMiner tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
-        if (tile.isComplete())
-        {
+    public void render(TileMiner tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
+        if (tile.isComplete()) {
             return;
         }
 //        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS); // Calen: not necrssary

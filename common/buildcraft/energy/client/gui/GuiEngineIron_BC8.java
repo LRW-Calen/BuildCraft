@@ -14,21 +14,17 @@ import buildcraft.lib.gui.ledger.LedgerEngine;
 import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.misc.LocaleUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GuiEngineIron_BC8 extends GuiBC8<ContainerEngineIron_BC8>
-{
+public class GuiEngineIron_BC8 extends GuiBC8<ContainerEngineIron_BC8> {
     private static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftenergy:textures/gui/combustion_engine_gui.png");
     private static final int SIZE_X = 176, SIZE_Y = 177;
     private static final GuiIcon ICON_GUI = new GuiIcon(TEXTURE_BASE, 0, 0, SIZE_X, SIZE_Y);
     private static final GuiIcon ICON_TANK_OVERLAY = new GuiIcon(TEXTURE_BASE, 176, 0, 16, 60);
 
-    public GuiEngineIron_BC8(ContainerEngineIron_BC8 container, Inventory inventory, Component component)
-    {
+    public GuiEngineIron_BC8(ContainerEngineIron_BC8 container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -50,15 +46,13 @@ public class GuiEngineIron_BC8 extends GuiBC8<ContainerEngineIron_BC8>
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
     }
 
     @Override
 //    protected void drawForegroundLayer()
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
 //        String str = LocaleUtil.localize("tile.engineIron.name");
         String str = LocaleUtil.localize(BCEnergyBlocks.engineIron.get().getDescriptionId());
 //        int strWidth = fontRenderer.getStringWidth(str);

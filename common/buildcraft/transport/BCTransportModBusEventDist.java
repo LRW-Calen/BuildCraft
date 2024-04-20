@@ -1,8 +1,5 @@
 package buildcraft.transport;
 
-import buildcraft.builders.BCBuildersItems;
-import buildcraft.builders.item.ItemSnapshot;
-import buildcraft.core.BCCore;
 import buildcraft.lib.misc.ColourUtil;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
@@ -10,12 +7,10 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = BCTransport.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCTransportModBusEventDist
-{
+@Mod.EventBusSubscriber(modid = BCTransport.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class BCTransportModBusEventDist {
     @SubscribeEvent
-    public static void itemPropReg(FMLClientSetupEvent event)
-    {
+    public static void itemPropReg(FMLClientSetupEvent event) {
         event.enqueueWork(
                 () ->
                 {

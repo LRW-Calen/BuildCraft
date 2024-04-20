@@ -45,8 +45,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
-public enum FacadeStateManager implements IFacadeRegistry
-{
+public enum FacadeStateManager implements IFacadeRegistry {
     INSTANCE;
 
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("silicon.facade");
@@ -66,28 +65,23 @@ public enum FacadeStateManager implements IFacadeRegistry
     private static final List<String> KNOWN_INVALID_REPORTED_MODS = Arrays.asList(new String[]{ //
     });
 
-    static
-    {
+    static {
         validFacadeStates = new TreeMap<>(BlockUtil.blockStateComparator());
         stackFacades = new HashMap<>();
     }
 
-    public static FacadeBlockStateInfo getInfoForBlock(Block block)
-    {
+    public static FacadeBlockStateInfo getInfoForBlock(Block block) {
         return getInfoForState(block.defaultBlockState());
     }
 
-    private static FacadeBlockStateInfo getInfoForState(BlockState state)
-    {
+    private static FacadeBlockStateInfo getInfoForState(BlockState state) {
         return validFacadeStates.get(state);
     }
 
-//    public static void receiveInterModComms(IMCMessage message)
-    public static void receiveInterModComms(IMCMessage messageOuter, BcImcMessage messageInner)
-    {
+    //    public static void receiveInterModComms(IMCMessage message)
+    public static void receiveInterModComms(IMCMessage messageOuter, BcImcMessage messageInner) {
         String id = messageInner.key;
-        if (FacadeAPI.IMC_FACADE_DISABLE.equals(id))
-        {
+        if (FacadeAPI.IMC_FACADE_DISABLE.equals(id)) {
 //            if (!message.isResourceLocationMessage())
 //            {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
@@ -97,8 +91,7 @@ public enum FacadeStateManager implements IFacadeRegistry
             ResourceLocation loc = messageInner.getResourceLocationValue();
 //            Block block = Block.REGISTRY.getObject(loc);
             Block block = Registry.BLOCK.get(loc);
-            if (block == Blocks.AIR)
-            {
+            if (block == Blocks.AIR) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
                 BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + messageOuter.senderModId() + " - "
                         + id + " should have a valid block target, not " + block + " (" + messageInner + ")");
@@ -106,11 +99,8 @@ public enum FacadeStateManager implements IFacadeRegistry
             }
 //            disabledBlocks.put(block, message.getSender());
             disabledBlocks.put(block, messageOuter.senderModId());
-        }
-        else if (FacadeAPI.IMC_FACADE_CUSTOM.equals(id))
-        {
-            if (!messageInner.isNBTMessage())
-            {
+        } else if (FacadeAPI.IMC_FACADE_CUSTOM.equals(id)) {
+            if (!messageInner.isNBTMessage()) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
                 BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + messageOuter.senderModId() + " - "
 //                        + id + " should have an nbt value, not a " + message);
@@ -123,16 +113,14 @@ public enum FacadeStateManager implements IFacadeRegistry
             BlockState state = NbtUtils.readBlockState(nbt.getCompound(FacadeAPI.NBT_CUSTOM_BLOCK_META));
 //            ItemStack stack = new ItemStack(nbt.getCompound(FacadeAPI.NBT_CUSTOM_ITEM_STACK));
             ItemStack stack = ItemStack.of(nbt.getCompound(FacadeAPI.NBT_CUSTOM_ITEM_STACK));
-            if (regName.isEmpty())
-            {
+            if (regName.isEmpty()) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
                 BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + messageOuter.senderModId() + " - "
                         + id + " should have a registry name for the block, stored as "
                         + FacadeAPI.NBT_CUSTOM_BLOCK_REG_KEY);
                 return;
             }
-            if (stack.isEmpty())
-            {
+            if (stack.isEmpty()) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
                 BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + messageOuter.senderModId() + " - "
                         + id + " should have a valid ItemStack stored in " + FacadeAPI.NBT_CUSTOM_ITEM_STACK);
@@ -140,8 +128,7 @@ public enum FacadeStateManager implements IFacadeRegistry
             }
 //            Block block = Block.REGISTRY.getObject(new ResourceLocation(regName));
             Block block = Registry.BLOCK.get(new ResourceLocation(regName));
-            if (block == Blocks.AIR)
-            {
+            if (block == Blocks.AIR) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
                 BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + messageOuter.senderModId() + " - "
 //                        + id + " should have a valid block target, not " + block + " (" + message + ")");
@@ -163,27 +150,22 @@ public enum FacadeStateManager implements IFacadeRegistry
      * for a facade)</li>
      * </ul>
      */
-    private static InteractionResultHolder<String> isValidFacadeBlock(Block block)
-    {
+    private static InteractionResultHolder<String> isValidFacadeBlock(Block block) {
         String disablingMod = disabledBlocks.get(block);
-        if (disablingMod != null)
-        {
+        if (disablingMod != null) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, "it has been disabled by " + disablingMod);
         }
-        if (block instanceof IFluidBlock || block instanceof LiquidBlock)
-        {
+        if (block instanceof IFluidBlock || block instanceof LiquidBlock) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, "it is a fluid block");
         }
         // Calen
-        if (block instanceof ChorusFlowerBlock)
-        {
+        if (block instanceof ChorusFlowerBlock) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, "it is ChorusFlowerBlock");
         }
         // if (block instanceof BlockSlime) {
         // return "it is a slime block";
         // }
-        if (block instanceof GlassBlock || block instanceof StainedGlassBlock)
-        {
+        if (block instanceof GlassBlock || block instanceof StainedGlassBlock) {
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, "");
         }
         return new InteractionResultHolder<>(InteractionResult.PASS, "");
@@ -197,35 +179,29 @@ public enum FacadeStateManager implements IFacadeRegistry
      * for a facade)</li>
      * </ul>
      */
-    private static InteractionResultHolder<String> isValidFacadeState(BlockState state)
-    {
+    private static InteractionResultHolder<String> isValidFacadeState(BlockState state) {
 //        if (state.getBlock().hasTileEntity(state))
-        if (state.hasBlockEntity())
-        {
+        if (state.hasBlockEntity()) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, "it has a tile entity");
         }
 //        if (state.getRenderType() != EnumBlockRenderType.MODEL)
-        if (state.getRenderShape() != RenderShape.MODEL)
-        {
+        if (state.getRenderShape() != RenderShape.MODEL) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, "it doesn't have a normal model");
         }
 //        if (!state.isFullCube())
 //        if (!state.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, CollisionContext.empty()))
         VoxelShape shape = state.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
 //        if (shape.isEmpty() || !shape.bounds().equals(Shapes.block().bounds()))
-        if (shape.isEmpty() || shape != Shapes.block())
-        {
+        if (shape.isEmpty() || shape != Shapes.block()) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, "it isn't a full cube");
         }
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, "");
     }
 
     @Nonnull
-    private static ItemStack getRequiredStack(BlockState state)
-    {
+    private static ItemStack getRequiredStack(BlockState state) {
         ItemStack stack = customBlocks.get(state);
-        if (stack != null)
-        {
+        if (stack != null) {
             return stack;
         }
         Block block = state.getBlock();
@@ -244,11 +220,9 @@ public enum FacadeStateManager implements IFacadeRegistry
         return item;
     }
 
-    public static void init()
-    {
+    public static void init() {
         defaultState = new FacadeBlockStateInfo(Blocks.AIR.defaultBlockState(), StackUtil.EMPTY, ImmutableSet.of());
-        if (FacadeAPI.facadeItem == null)
-        {
+        if (FacadeAPI.facadeItem == null) {
             previewState = defaultState;
             return;
         }
@@ -256,16 +230,14 @@ public enum FacadeStateManager implements IFacadeRegistry
         // Calen
         Stopwatch watch = Stopwatch.createStarted();
 
-        for (Block block : ForgeRegistries.BLOCKS)
-        {
+        for (Block block : ForgeRegistries.BLOCKS) {
             scanBlock(block);
         }
 
         // Calen
         watch.stop();
         long time = watch.elapsed(TimeUnit.MICROSECONDS);
-        if (DEBUG)
-        {
+        if (DEBUG) {
             BCLog.logger.info("[silicon.facade] Scanned blocks for facade. (" + time / 1000 + "ms)");
         }
 
@@ -273,14 +245,10 @@ public enum FacadeStateManager implements IFacadeRegistry
         FacadeSwapRecipe.genRecipes();
     }
 
-    private static void scanBlock(Block block)
-    {
-        try
-        {
-            if (!DEBUG && KNOWN_INVALID_REPORTED_MODS.contains(block.getRegistryName().getNamespace()))
-            {
-                if (BCLib.VERSION.startsWith("7.99"))
-                {
+    private static void scanBlock(Block block) {
+        try {
+            if (!DEBUG && KNOWN_INVALID_REPORTED_MODS.contains(block.getRegistryName().getNamespace())) {
+                if (BCLib.VERSION.startsWith("7.99")) {
                     BCLog.logger.warn(
                             "[silicon.facade] Skipping " + block + " as it has been added to the list of broken mods!");
                     return;
@@ -291,55 +259,41 @@ public enum FacadeStateManager implements IFacadeRegistry
             // Fixes a bug in extra utilities who doesn't serialise and deserialise properties properly
 
             boolean allPropertiesOk = true;
-            for (Property<?> property : block.getStateDefinition().getProperties())
-            {
+            for (Property<?> property : block.getStateDefinition().getProperties()) {
                 allPropertiesOk &= doesPropertyConform(property);
             }
-            if (!allPropertiesOk)
-            {
+            if (!allPropertiesOk) {
                 return;
             }
 
             InteractionResultHolder<String> result = isValidFacadeBlock(block);
             // These strings are hardcoded, so we can get away with not needing the .equals check
-            if (result.getResult() != InteractionResult.PASS && result.getResult() != InteractionResult.SUCCESS)
-            {
-                if (DEBUG)
-                {
+            if (result.getResult() != InteractionResult.PASS && result.getResult() != InteractionResult.SUCCESS) {
+                if (DEBUG) {
                     BCLog.logger.info("[silicon.facade] Disallowed block " + block.getRegistryName() + " because "
                             + result.getResult());
                 }
                 return;
-            }
-            else if (DEBUG)
-            {
-                if (result.getResult() == InteractionResult.SUCCESS)
-                {
+            } else if (DEBUG) {
+                if (result.getResult() == InteractionResult.SUCCESS) {
                     BCLog.logger.info("[silicon.facade] Allowed block " + block.getRegistryName());
                 }
             }
             Map<BlockState, ItemStack> usedStates = new HashMap<>();
             Map<ItemStackKey, Map<Property<?>, Comparable<?>>> varyingProperties = new HashMap<>();
-            for (BlockState state : block.getStateDefinition().getPossibleStates())
-            {
+            for (BlockState state : block.getStateDefinition().getPossibleStates()) {
                 // state = block.getStateFromMeta(block.getMetaFromState(state));
                 // if (!checkedStates.add(state)) {
                 // continue;
                 // }
-                if (result.getResult() != InteractionResult.SUCCESS)
-                {
+                if (result.getResult() != InteractionResult.SUCCESS) {
                     result = isValidFacadeState(state);
-                    if (result.getResult() == InteractionResult.SUCCESS)
-                    {
-                        if (DEBUG)
-                        {
+                    if (result.getResult() == InteractionResult.SUCCESS) {
+                        if (DEBUG) {
                             BCLog.logger.info("[silicon.facade] Allowed state " + state);
                         }
-                    }
-                    else
-                    {
-                        if (DEBUG)
-                        {
+                    } else {
+                        if (DEBUG) {
                             BCLog.logger
                                     .info("[silicon.facade] Disallowed state " + state + " because " + result.getResult());
                         }
@@ -347,20 +301,17 @@ public enum FacadeStateManager implements IFacadeRegistry
                     }
                 }
                 final ItemStack requiredStack;
-                try
-                {
+                try {
                     requiredStack = getRequiredStack(state);
                 }
-                catch (RuntimeException e)
-                {
+                catch (RuntimeException e) {
                     BCLog.logger.warn(
                             "[silicon.facade] Disallowed state " + state
                                     + " after getRequiredStack(state) threw an exception!", e
                     );
                     continue;
                 }
-                if (requiredStack.isEmpty())
-                {
+                if (requiredStack.isEmpty()) {
                     BCLog.logger.info(
                             "[silicon.facade] Disallowed state " + state
                                     + " because required item is empty"
@@ -370,33 +321,26 @@ public enum FacadeStateManager implements IFacadeRegistry
                 usedStates.put(state, requiredStack);
                 ItemStackKey stackKey = new ItemStackKey(requiredStack);
                 Map<Property<?>, Comparable<?>> vars = varyingProperties.get(stackKey);
-                if (vars == null)
-                {
+                if (vars == null) {
                     final Map<Property<?>, Comparable<?>> varsFinal = new HashMap<>();
                     state.getProperties().forEach((property -> varsFinal.put(property, state.getValue(property))));
                     vars = varsFinal;
                     varyingProperties.put(stackKey, vars);
-                }
-                else
-                {
+                } else {
 //                    for (Entry<Property<?>, Comparable<?>> entry : state.getProperties().entrySet())
-                    for (Property<?> prop : state.getProperties())
-                    {
+                    for (Property<?> prop : state.getProperties()) {
 //                        Property<?> prop = entry.getKey();
 //                        Comparable<?> value = entry.getValue();
                         Comparable<?> value = state.getValue(prop);
-                        if (vars.get(prop) != value)
-                        {
+                        if (vars.get(prop) != value) {
                             vars.put(prop, null);
                         }
                     }
                 }
 
                 // Calen:
-                if (block == Blocks.NOTE_BLOCK)
-                {
-                    if (!BCSiliconConfig.differStatesOfNoteBlockForFacade)
-                    {
+                if (block == Blocks.NOTE_BLOCK) {
+                    if (!BCSiliconConfig.differStatesOfNoteBlockForFacade) {
                         break;
                     }
                 }
@@ -404,30 +348,25 @@ public enum FacadeStateManager implements IFacadeRegistry
             PacketBufferBC testingBuffer = PacketBufferBC.asPacketBufferBc(Unpooled.buffer());
             varyingProperties.forEach((key, vars) ->
             {
-                if (DEBUG)
-                {
+                if (DEBUG) {
                     BCLog.logger.info("[silicon.facade]   pre-" + key + ":");
                     vars.keySet().forEach(p -> BCLog.logger.info("[silicon.facade]       " + p));
                 }
                 vars.values().removeIf(Objects::nonNull);
-                if (DEBUG && !vars.isEmpty())
-                {
+                if (DEBUG && !vars.isEmpty()) {
                     BCLog.logger.info("[silicon.facade]   " + key + ":");
                     vars.keySet().forEach(p -> BCLog.logger.info("[silicon.facade]       " + p));
                 }
             });
-            for (Entry<BlockState, ItemStack> entry : usedStates.entrySet())
-            {
+            for (Entry<BlockState, ItemStack> entry : usedStates.entrySet()) {
                 BlockState state = entry.getKey();
                 ItemStack stack = entry.getValue();
                 Map<Property<?>, Comparable<?>> vars = varyingProperties.get(new ItemStackKey(stack));
-                try
-                {
+                try {
                     ImmutableSet<Property<?>> varSet = ImmutableSet.copyOf(vars.keySet());
                     FacadeBlockStateInfo info = new FacadeBlockStateInfo(state, stack, varSet);
                     validFacadeStates.put(state, info);
-                    if (!info.requiredStack.isEmpty())
-                    {
+                    if (!info.requiredStack.isEmpty()) {
                         ItemStackKey stackKey = new ItemStackKey(info.requiredStack);
                         stackFacades.computeIfAbsent(stackKey, k -> new ArrayList<>()).add(info);
                     }
@@ -436,33 +375,28 @@ public enum FacadeStateManager implements IFacadeRegistry
                     FacadePhasedState phasedState = info.createPhased(null);
                     CompoundTag nbt = phasedState.writeToNbt();
                     FacadePhasedState read = FacadePhasedState.readFromNbt(nbt);
-                    if (read.stateInfo != info)
-                    {
+                    if (read.stateInfo != info) {
                         throw new IllegalStateException("Read (from NBT) state was different! (\n\t" + read.stateInfo
                                 + "\n !=\n\t" + info + "\n\tNBT = " + nbt + "\n)");
                     }
                     phasedState.writeToBuffer(testingBuffer);
                     read = FacadePhasedState.readFromBuffer(testingBuffer);
-                    if (read.stateInfo != info)
-                    {
+                    if (read.stateInfo != info) {
                         throw new IllegalStateException("Read (from buffer) state was different! (\n\t" + read.stateInfo
                                 + "\n !=\n\t" + info + "\n)");
                     }
                     testingBuffer.clear();
-                    if (DEBUG)
-                    {
+                    if (DEBUG) {
                         BCLog.logger.info("[silicon.facade]   Added " + info);
                     }
                 }
-                catch (Throwable t)
-                {
+                catch (Throwable t) {
                     String msg = "Scanning facade states";
                     msg += "\n\tState = " + state;
                     msg += "\n\tBlock = " + safeToString(() -> state.getBlock().getRegistryName());
                     msg += "\n\tStack = " + stack;
                     msg += "\n\tvarying-properties: {";
-                    for (Entry<Property<?>, Comparable<?>> varEntry : vars.entrySet())
-                    {
+                    for (Entry<Property<?>, Comparable<?>> varEntry : vars.entrySet()) {
                         msg += "\n\t\t" + varEntry.getKey() + " = " + varEntry.getValue();
                     }
                     msg += "\n\t}";
@@ -470,10 +404,8 @@ public enum FacadeStateManager implements IFacadeRegistry
                 }
             }
         }
-        catch (RuntimeException e)
-        {
-            if (e instanceof IllegalStateException)
-            {
+        catch (RuntimeException e) {
+            if (e instanceof IllegalStateException) {
                 // This one needs to exit properly
                 throw e;
             }
@@ -481,38 +413,30 @@ public enum FacadeStateManager implements IFacadeRegistry
         }
     }
 
-    private static <V extends Comparable<V>> boolean doesPropertyConform(Property<V> property)
-    {
-        try
-        {
+    private static <V extends Comparable<V>> boolean doesPropertyConform(Property<V> property) {
+        try {
             property.getValue("");
         }
-        catch (AbstractMethodError error)
-        {
+        catch (AbstractMethodError error) {
             String message = "Invalid Property object detected!";
             message += "\n  Class = " + property.getClass();
             message += "\n  Method not overriden: Property.parseValue(String)";
             RuntimeException exception = new RuntimeException(message, error);
 //            if (BCLib.DEV || !BCLib.MC_VERSION.equals("1.12.2"))
-            if (BCLib.DEV || !BCLib.MC_VERSION.equals("1.18.2"))
-            {
+            if (BCLib.DEV || !BCLib.MC_VERSION.equals("1.18.2")) {
                 throw exception;
-            }
-            else
-            {
+            } else {
                 BCLog.logger.error("[silicon.facade] Invalid property!", exception);
             }
             return false;
         }
 
         boolean allFine = true;
-        for (V value : property.getPossibleValues())
-        {
+        for (V value : property.getPossibleValues()) {
             String name = property.getName(value);
             Optional<V> optional = property.getValue(name);
             V parsed = optional == null ? null : optional.orElseGet(() -> null);
-            if (!Objects.equals(value, parsed))
-            {
+            if (!Objects.equals(value, parsed)) {
                 allFine = false;
                 // A property is *wrong*
                 // this is a big problem
@@ -525,8 +449,7 @@ public enum FacadeStateManager implements IFacadeRegistry
                 message += "\n  Value (parsed) = " + parsed;
                 message += "\n  Value class (original) = " + (value == null ? null : value.getClass());
                 message += "\n  Value class (parsed) = " + (parsed == null ? null : parsed.getClass());
-                if (optional == null)
-                {
+                if (optional == null) {
                     // Massive issue
                     message += "\n  Property.parseValue() -> Null com.google.common.base.Optional!!";
                 }
@@ -536,12 +459,9 @@ public enum FacadeStateManager implements IFacadeRegistry
                 // as this really needs to be fixed
                 RuntimeException exception = new RuntimeException(message);
 //                if (BCLib.DEV || !BCLib.MC_VERSION.equals("1.12.2"))
-                if (BCLib.DEV || !BCLib.MC_VERSION.equals("1.18.2"))
-                {
+                if (BCLib.DEV || !BCLib.MC_VERSION.equals("1.18.2")) {
                     throw exception;
-                }
-                else
-                {
+                } else {
                     BCLog.logger.error("[silicon.facade] Invalid property!", exception);
                 }
             }
@@ -549,14 +469,11 @@ public enum FacadeStateManager implements IFacadeRegistry
         return allFine;
     }
 
-    private static String safeToString(Callable<Object> callable)
-    {
-        try
-        {
+    private static String safeToString(Callable<Object> callable) {
+        try {
             return Objects.toString(callable.call());
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             return "~~ERROR~~" + t.getMessage();
         }
     }
@@ -564,23 +481,19 @@ public enum FacadeStateManager implements IFacadeRegistry
     // IFacadeRegistry
 
     @Override
-    public Collection<? extends IFacadeState> getValidFacades()
-    {
+    public Collection<? extends IFacadeState> getValidFacades() {
         return validFacadeStates.values();
     }
 
     @Override
-    public IFacadePhasedState createPhasedState(IFacadeState state, DyeColor activeColor)
-    {
+    public IFacadePhasedState createPhasedState(IFacadeState state, DyeColor activeColor) {
         return new FacadePhasedState((FacadeBlockStateInfo) state, activeColor);
     }
 
     @Override
-    public IFacade createPhasedFacade(IFacadePhasedState[] states, boolean isHollow)
-    {
+    public IFacade createPhasedFacade(IFacadePhasedState[] states, boolean isHollow) {
         FacadePhasedState[] realStates = new FacadePhasedState[states.length];
-        for (int i = 0; i < states.length; i++)
-        {
+        for (int i = 0; i < states.length; i++) {
             realStates[i] = (FacadePhasedState) states[i];
         }
         return new FacadeInstance(realStates, isHollow);

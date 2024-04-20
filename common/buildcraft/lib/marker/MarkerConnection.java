@@ -18,12 +18,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public abstract class MarkerConnection<C extends MarkerConnection<C>>
-{
+public abstract class MarkerConnection<C extends MarkerConnection<C>> {
     public final MarkerSubCache<C> subCache;
 
-    public MarkerConnection(MarkerSubCache<C> subCache)
-    {
+    public MarkerConnection(MarkerSubCache<C> subCache) {
         this.subCache = subCache;
     }
 
@@ -40,32 +38,23 @@ public abstract class MarkerConnection<C extends MarkerConnection<C>>
     public abstract void renderInWorld(PoseStack poseStack);
 
     //    public void getDebugInfo(BlockPos caller, List<String> left)
-    public void getDebugInfo(BlockPos caller, List<Component> left)
-    {
+    public void getDebugInfo(BlockPos caller, List<Component> left) {
         Collection<BlockPos> positions = getMarkerPositions();
         List<BlockPos> list = new ArrayList<>(positions);
-        if (positions instanceof Set)
-        {
+        if (positions instanceof Set) {
             Collections.sort(list);
         }
-        for (BlockPos pos : list)
-        {
+        for (BlockPos pos : list) {
             TileMarker<C> marker = subCache.getMarker(pos);
             String s = "  " + pos + " [";
-            if (marker == null)
-            {
+            if (marker == null) {
                 s += ChatFormatting.RED + "U";
-            }
-            else
-            {
+            } else {
                 s += ChatFormatting.GREEN + "L";
             }
-            if (pos.equals(caller))
-            {
+            if (pos.equals(caller)) {
                 s += ChatFormatting.BLACK + "S";
-            }
-            else
-            {
+            } else {
                 s += ChatFormatting.AQUA + "C";
             }
             s += getTypeInfo(pos, marker);
@@ -75,8 +64,7 @@ public abstract class MarkerConnection<C extends MarkerConnection<C>>
         }
     }
 
-    protected String getTypeInfo(BlockPos pos, @Nullable TileMarker<C> value)
-    {
+    protected String getTypeInfo(BlockPos pos, @Nullable TileMarker<C> value) {
         return "";
     }
 }

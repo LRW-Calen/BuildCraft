@@ -13,16 +13,13 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
-public class BCAdvancementProvider extends AdvancementProvider
-{
-    public BCAdvancementProvider(DataGenerator generatorIn, ExistingFileHelper fileHelperIn)
-    {
+public class BCAdvancementProvider extends AdvancementProvider {
+    public BCAdvancementProvider(DataGenerator generatorIn, ExistingFileHelper fileHelperIn) {
         super(generatorIn, fileHelperIn);
     }
 
     @Override
-    protected void registerAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper)
-    {
+    protected void registerAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
         CoreAdvancementProvider.registerCoreAdvancements(consumer, fileHelper); // Calen: should be first
 
         EnergyAdvancementProvider.registerEnergyAdvancements(consumer, fileHelper);
@@ -33,8 +30,7 @@ public class BCAdvancementProvider extends AdvancementProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Advancement Generator";
     }
 }

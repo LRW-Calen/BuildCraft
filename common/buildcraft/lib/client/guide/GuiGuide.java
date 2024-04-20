@@ -50,8 +50,7 @@ import java.util.Optional;
 
 //public class GuiGuide extends Screen
 //public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
-public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
-{
+public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
     public static final ResourceLocation ICONS_1 = Gui.GUI_ICONS_LOCATION;
     public static final ResourceLocation ICONS_2 = new ResourceLocation("buildcraftlib:textures/gui/guide/icons.png");
     public static final ResourceLocation COVER = new ResourceLocation("buildcraftlib:textures/gui/guide/cover.png");
@@ -162,8 +161,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
 
     private static final float BOOK_OPEN_TIME = 10f; // 20
 
-    static
-    {
+    static {
         CHAPTER_MARKER_9 = new SpriteNineSliced(CHAPTER_MARKER.sprite, 8, 8, 24, 24, 32);
         CHAPTER_MARKER_9_LEFT = new SpriteNineSliced(CHAPTER_MARKER_LEFT.sprite, 8, 8, 24, 24, 24, 32);
         CHAPTER_MARKER_9_RIGHT = new SpriteNineSliced(CHAPTER_MARKER_RIGHT.sprite, 0, 8, 16, 24, 24, 32);
@@ -199,20 +197,17 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
     private float lastPartialTicks;
 
     //    public GuiGuide()
-    public GuiGuide(ContainerGuide container, Component component)
-    {
+    public GuiGuide(ContainerGuide container, Component component) {
         this(container, (GuideBook) null, component);
     }
 
     //    public GuiGuide(String bookName)
-    public GuiGuide(ContainerGuide container, String bookName, Component component)
-    {
+    public GuiGuide(ContainerGuide container, String bookName, Component component) {
         this(container, GuideBookRegistry.INSTANCE.getBook(bookName), component);
     }
 
     //    private GuiGuide(@Nullable GuideBook book)
-    private GuiGuide(ContainerGuide container, @Nullable GuideBook book, Component component)
-    {
+    private GuiGuide(ContainerGuide container, @Nullable GuideBook book, Component component) {
         super(component);
         // Calen
         this.menu = container;
@@ -223,147 +218,115 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         openPage(new GuidePageContents(this));
     }
 
-    public void openPage(GuidePageBase page)
-    {
-        if (currentPage != null && currentPage.shouldPersistHistory())
-        {
+    public void openPage(GuidePageBase page) {
+        if (currentPage != null && currentPage.shouldPersistHistory()) {
             pages.push(currentPage);
         }
         setPageInternal(page);
     }
 
-    public void closePage()
-    {
-        if (pages.isEmpty())
-        {
+    public void closePage() {
+        if (pages.isEmpty()) {
             minecraft.setScreen(null);
-        }
-        else
-        {
+        } else {
             setPageInternal(pages.pop());
         }
     }
 
-    public void goBackToMenu()
-    {
+    public void goBackToMenu() {
         GuidePageBase newPage = currentPage;
-        while (!pages.isEmpty())
-        {
+        while (!pages.isEmpty()) {
             newPage = pages.pop();
         }
         setPageInternal(newPage);
     }
 
-    private void setPageInternal(GuidePageBase page)
-    {
+    private void setPageInternal(GuidePageBase page) {
         currentPage = page;
         refreshChapters();
     }
 
-    public GuidePageBase getCurrentPage()
-    {
+    public GuidePageBase getCurrentPage() {
         return currentPage;
     }
 
-    public IFontRenderer getCurrentFont()
-    {
+    public IFontRenderer getCurrentFont() {
         return this.currentFont;
     }
 
-    public List<GuideChapter> getChapters()
-    {
+    public List<GuideChapter> getChapters() {
         return chapters;
     }
 
-    public void refreshChapters()
-    {
+    public void refreshChapters() {
         chapters.clear();
         chapters.addAll(currentPage.getChapters());
     }
 
     @Override
 //    public void updateScreen()
-    public void tick()
-    {
+    public void tick() {
 //        super.updateScreen();
         super.tick();
         // Calen: from AbstractContainerScreen
-        if (!(this.minecraft.player.isAlive()) || this.minecraft.player.isRemoved())
-        {
+        if (!(this.minecraft.player.isAlive()) || this.minecraft.player.isRemoved()) {
             this.minecraft.player.closeContainer();
             return;
         }
         // BC 1.12.2
-        if (isOpen)
-        {
+        if (isOpen) {
             currentPage.updateScreen();
-            for (GuideChapter chapter : chapters)
-            {
+            for (GuideChapter chapter : chapters) {
                 chapter.updateScreen();
             }
-        }
-        else if (isOpening)
-        {
+        } else if (isOpening) {
             openingAngleLast = openingAngleNext;
             openingAngleNext += 180 / BOOK_OPEN_TIME;
         }
-        if (currentPage != null)
-        {
+        if (currentPage != null) {
             setupFontRenderer();
             currentPage.tick();
         }
     }
 
-    public boolean isSmallScreen()
-    {
+    public boolean isSmallScreen() {
 //        return new ScaledResolution(minecraft).getScaledWidth() < 590;
         return minecraft.getWindow().getGuiScaledWidth() < 590;
     }
 
     @Override
 //    public void drawScreen(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
-    {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
         lastPartialTicks = partialTicks = minecraft.getFrameTime();
         minX = (this.width - PAGE_LEFT.width * 2) / 2;
         minY = (this.height - BOOK_COVER.height) / 2;
         mouse.setMousePosition(mouseX, mouseY);
-        try
-        {
-            if (isOpen)
-            {
+        try {
+            if (isOpen) {
                 drawOpen(poseStack, partialTicks);
-            }
-            else if (isOpening)
-            {
+            } else if (isOpening) {
                 drawOpening(partialTicks, poseStack);
-            }
-            else
-            {
+            } else {
                 drawCover(poseStack);
             }
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             // Temporary fix for crash report classes crashing so we can see the ACTUAL error
             t.printStackTrace();
             throw new RuntimeException(t);
         }
     }
 
-    public float getLastPartialTicks()
-    {
+    public float getLastPartialTicks() {
         return this.lastPartialTicks;
     }
 
-    public void drawTooltip(PoseStack poseStack, ItemStack stack, int x, int y)
-    {
+    public void drawTooltip(PoseStack poseStack, ItemStack stack, int x, int y) {
 //        renderToolTip(stack, x, y);
         renderTooltip(poseStack, stack, x, y);
     }
 
-    private void drawCover(PoseStack poseStack)
-    {
+    private void drawCover(PoseStack poseStack) {
         minX = (width - BOOK_COVER.width) / 2;
         minY = (height - BOOK_COVER.height) / 2;
 
@@ -371,24 +334,20 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         BOOK_COVER.drawAt(poseStack, minX, minY);
     }
 
-    private void drawOpening(float partialTicks, PoseStack poseStack)
-    {
+    private void drawOpening(float partialTicks, PoseStack poseStack) {
         minX = (width - BOOK_COVER.width) / 2;
         minY = (height - BOOK_COVER.height) / 2;
 
         float openingAngle = openingAngleLast * (1 - partialTicks) + openingAngleNext * partialTicks;
 //        float sin = MathHelper.sin((float) (openingAngle * Math.PI / 180));
         float sin = Mth.sin((float) (openingAngle * Math.PI / 180));
-        if (sin < 0)
-        {
+        if (sin < 0) {
             sin *= -1;
         }
-        if (openingAngle >= 90)
-        {
+        if (openingAngle >= 90) {
             isOpen = true;
         }
-        if (openingAngle < 0)
-        {
+        if (openingAngle < 0) {
             minX = (width - BOOK_COVER.width) / 2;
             minY = (height - BOOK_COVER.height) / 2;
 
@@ -421,9 +380,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
                     (int) (BOOK_BINDING.height + offset * 2)
             );
 
-        }
-        else if (openingAngle == 0)
-        {
+        } else if (openingAngle == 0) {
             minX = (width - BOOK_COVER.width) / 2;
             minY = (height - BOOK_COVER.height) / 2;
 
@@ -432,9 +389,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
 
             minecraft.textureManager.bindForSetup(COVER);
             BOOK_COVER.drawAt(poseStack, minX, minY);
-        }
-        else if (openingAngle > 0)
-        {
+        } else if (openingAngle > 0) {
             int pageWidth = (int) (sin * PAGE_LEFT.width);
             int bindingWidth = (int) ((1 - sin) * BOOK_BINDING.width);
 
@@ -471,8 +426,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         }
     }
 
-    private void drawOpen(PoseStack poseStack, float partialTicks)
-    {
+    private void drawOpen(PoseStack poseStack, float partialTicks) {
 
         int cp = currentPage.getPage();
         int pc = currentPage.getPageCount();
@@ -480,16 +434,11 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         {
             (cp == 0 ? PAGE_LEFT_FIRST : PAGE_LEFT).drawAt(poseStack, minX, minY);
             final GuiIcon lastPageIcon;
-            if (cp + 2 == pc)
-            {
+            if (cp + 2 == pc) {
                 lastPageIcon = PAGE_RIGHT_LAST;
-            }
-            else if (isHalfPageShown)
-            {
+            } else if (isHalfPageShown) {
                 lastPageIcon = PAGE_RIGHT_BACK;
-            }
-            else
-            {
+            } else {
                 lastPageIcon = PAGE_RIGHT;
             }
 
@@ -499,17 +448,13 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         // Now draw the actual contents of the book
 //        String title = currentPage.getTitle();
         Component title = currentPage.getTitle();
-        if (title != null)
-        {
+        if (title != null) {
             final int x;
 //            int titleWidth = currentFont.getStringWidth(title);
             int titleWidth = currentFont.getStringWidth(title.getString());
-            if (isHalfPageShown)
-            {
+            if (isHalfPageShown) {
                 x = (int) (minX + PAGE_LEFT_TEXT.x + (PAGE_LEFT_TEXT.width - titleWidth) / 2);
-            }
-            else
-            {
+            } else {
                 x = (width - titleWidth) / 2;
             }
 //            currentFont.drawString(poseStack, title, x, minY + 12, 0x90816a);
@@ -519,8 +464,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         tooltipStack = null;
         tooltips.clear();
         setupFontRenderer();
-        for (GuideChapter chapter : chapters)
-        {
+        for (GuideChapter chapter : chapters) {
             chapter.reset();
         }
 
@@ -530,8 +474,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
                 (int) PAGE_LEFT_TEXT.height
         );
         int secondPageX = minX + PAGE_LEFT.width + (int) PAGE_RIGHT_TEXT.x;
-        if (!isHalfPageShown)
-        {
+        if (!isHalfPageShown) {
             currentPage.renderSecondPage(
                     poseStack,
                     secondPageX, minY + (int) PAGE_RIGHT_TEXT.y, (int) PAGE_RIGHT_TEXT.width, (int) PAGE_RIGHT_TEXT.height
@@ -540,13 +483,11 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
 
         boolean drawContents = true;
         boolean smallScreen = isSmallScreen();
-        if (smallScreen)
-        {
+        if (smallScreen) {
             drawContents = showingContentsMenu;
 
             String str = LocaleUtil.localize("buildcraft.guide.chapter_list");
-            if (showingContentsMenu)
-            {
+            if (showingContentsMenu) {
                 CHAPTER_MARKER_9.draw(FLOATING_CHAPTER_MENU, poseStack);
                 currentFont.drawString(
                         poseStack,
@@ -555,29 +496,23 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
                         (int) FLOATING_CHAPTER_MENU.getY() + 7,
                         0
                 );
-            }
-            else
-            {
+            } else {
                 boolean isHovered = new GuiRectangle(secondPageX, minY, 80, 10).contains(mouse);
                 int hoverOffset = isHovered ? -5 : 0;
                 int y = minY + hoverOffset;
 
                 int strWidth = currentFont.getStringWidth(str);
-                try (AutoGlScissor scissor = GuiUtil.scissor(secondPageX, 0, strWidth + 20, minY + 10))
-                {
+                try (AutoGlScissor scissor = GuiUtil.scissor(secondPageX, 0, strWidth + 20, minY + 10)) {
                     CHAPTER_MARKER_9.draw(poseStack, secondPageX, y, strWidth + 20, 100);
                     currentFont.drawString(poseStack, str, secondPageX + 10, y + 3, 0);
                 }
             }
         }
 
-        if (drawContents)
-        {
+        if (drawContents) {
             int chapterIndex = 0;
-            for (GuideChapter chapter : chapters)
-            {
-                if (chapter.hasParent())
-                {
+            for (GuideChapter chapter : chapters) {
+                if (chapter.hasParent()) {
                     continue;
                 }
                 chapterIndex += chapter.draw(poseStack, chapterIndex, partialTicks, smallScreen);
@@ -585,12 +520,10 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         }
 
         // Draw the back button if there are any pages on the stack
-        if (!pages.isEmpty())
-        {
+        if (!pages.isEmpty()) {
             GuiIcon icon = BACK;
             IGuiArea position = BACK_POSITION.offset(minX, minY);
-            if (position.contains(mouse))
-            {
+            if (position.contains(mouse)) {
                 icon = BACK_HOVERED;
             }
             icon.drawAt(position, poseStack);
@@ -599,16 +532,12 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         // Reset the colour
 //        GlStateManager.color(1, 1, 1);
         RenderUtil.color(1, 1, 1);
-        if (tooltipStack != null)
-        {
+        if (tooltipStack != null) {
             drawTooltip(poseStack, tooltipStack, (int) mouse.getX(), (int) mouse.getY());
-        }
-        else if (!tooltips.isEmpty())
-        {
+        } else if (!tooltips.isEmpty()) {
             // Calen: tooltipStack == null
             int y = (int) mouse.getY();
-            for (List<Component> tooltip : tooltips)
-            {
+            for (List<Component> tooltip : tooltips) {
 //                drawHoveringText(tooltip, (int) mouse.getX(), y);
 //                renderTooltip(poseStack, tooltip, StackUtil.EMPTY.getTooltipImage(), (int) mouse.getX(), y);
                 renderTooltip(poseStack, tooltip, Optional.empty(), (int) mouse.getX(), y);
@@ -617,21 +546,17 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
         }
     }
 
-    public void setupFontRenderer()
-    {
+    public void setupFontRenderer() {
         currentPage.setFontRenderer(currentFont);
     }
 
     @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
-    {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         mouse.setMousePosition(mouseX, mouseY);
         // Primary mouse button
-        if (mouseButton == 0)
-        {
-            if (isOpen)
-            {
+        if (mouseButton == 0) {
+            if (isOpen) {
                 int page0xMin = this.minX + (int) PAGE_LEFT_TEXT.x;
                 int page0xMax = page0xMin + (int) PAGE_LEFT_TEXT.width;
                 int page1xMin = this.minX + PAGE_LEFT.width + (int) PAGE_RIGHT_TEXT.x;
@@ -642,13 +567,10 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
                 GuidePageBase current = currentPage;
                 current.setFontRenderer(currentFont);
 
-                for (GuideChapter chapter : chapters)
-                {
+                for (GuideChapter chapter : chapters) {
                     int clickResult = chapter.handleClick();
-                    if (clickResult > 0)
-                    {
-                        if (showingContentsMenu && clickResult == 1)
-                        {
+                    if (clickResult > 0) {
+                        if (showingContentsMenu && clickResult == 1) {
                             showingContentsMenu = false;
                         }
 //                        return;
@@ -656,27 +578,21 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
                     }
                 }
 
-                if (isSmallScreen())
-                {
-                    if (showingContentsMenu)
-                    {
+                if (isSmallScreen()) {
+                    if (showingContentsMenu) {
                         double menuWidth = (PAGE_LEFT_TEXT.width + PAGE_RIGHT_TEXT.width) / 2;
                         double menuHeight = PAGE_LEFT.height - 20;
                         IGuiArea menuRect = GuiUtil.moveRectangleToCentre(new GuiRectangle(menuWidth, menuHeight));
-                        if (!menuRect.contains(mouse))
-                        {
+                        if (!menuRect.contains(mouse)) {
                             showingContentsMenu = false;
 //                        return;
                             return true;
                         }
 //                        return;
                         return true;
-                    }
-                    else
-                    {
+                    } else {
                         int secondPageX = minX + PAGE_LEFT.width + (int) PAGE_RIGHT_TEXT.x;
-                        if (new GuiRectangle(secondPageX, minY, 80, 10).contains(mouse))
-                        {
+                        if (new GuiRectangle(secondPageX, minY, 80, 10).contains(mouse)) {
                             showingContentsMenu = true;
 //                        return;
                             return true;
@@ -695,21 +611,17 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
                         currentPage.getPage() + 1, isEditing
                 );
 
-                if ((!pages.isEmpty()) && BACK_POSITION.offset(minX, minY).contains(mouse))
-                {
+                if ((!pages.isEmpty()) && BACK_POSITION.offset(minX, minY).contains(mouse)) {
                     closePage();
                 }
 
-            }
-            else
-            {
+            } else {
                 if (
                         mouseX >= minX && mouseY >= minY && mouseX <= minX + BOOK_COVER.width && mouseY <= minY
                                 + BOOK_COVER.height
                 )
                 {
-                    if (isOpening)
-                    {// So you can double-click to open it instantly
+                    if (isOpening) {// So you can double-click to open it instantly
                         isOpen = true;
                     }
                     isOpening = true;
@@ -722,119 +634,95 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
 //    public boolean charTyped(char typedChar, int keyCode)
-    public boolean keyPressed(int typedChar, int keyCode, int modifiers)
-    {
+    public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
 //        super.keyTyped(typedChar, keyCode);
 //        super.charTyped(typedChar, keyCode);
         super.keyPressed(typedChar, keyCode, modifiers);
 //        if (currentPage.keyTyped(typedChar, keyCode))
-        if (currentPage.keyTyped(typedChar, keyCode, modifiers))
-        {
+        if (currentPage.keyTyped(typedChar, keyCode, modifiers)) {
 //            return;
             return true;
         }
 //        if (Keyboard.isKeyDown(Keyboard.KEY_F3) && keyCode == Keyboard.KEY_T)
-        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && keyCode == InputConstants.KEY_T)
-        {
+        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && keyCode == InputConstants.KEY_T) {
             GuideManager.INSTANCE.reload();
-            while (true)
-            {
+            while (true) {
                 currentPage = currentPage.createReloaded();
-                if (currentPage != null)
-                {
+                if (currentPage != null) {
                     break;
                 }
                 currentPage = pages.poll();
-                if (currentPage == null)
-                {
+                if (currentPage == null) {
                     throw new IllegalStateException("Didn't find the contents page!");
                 }
             }
             GuidePageBase[] history = pages.toArray(new GuidePageBase[0]);
             pages.clear();
-            for (int i = 0; i < history.length; i++)
-            {
+            for (int i = 0; i < history.length; i++) {
                 GuidePageBase page = history[i].createReloaded();
-                if (page != null)
-                {
+                if (page != null) {
                     pages.add(page);
                 }
             }
             refreshChapters();
             ISimpleDrawable icon = null;
-            if (BCLibItems.guide != null)
-            {
+            if (BCLibItems.guide != null) {
                 GuiStack stackIcon = new GuiStack(new ItemStack(BCLibItems.guide.get()));
                 icon = (poseStack, x, y) -> stackIcon.drawAt(poseStack, x + 8, y + 8);
             }
 //            minecraft.getToastGui().add(new ToastInformation("buildcraft.guide_book.reloaded", icon));
             minecraft.getToasts().addToast(new ToastInformation("buildcraft.guide_book.reloaded", icon));
         }
-        if (keyCode == minecraft.options.keyLeft.getKey().getValue())
-        {
+        if (keyCode == minecraft.options.keyLeft.getKey().getValue()) {
             currentPage.lastPage();
-        }
-        else if (keyCode == minecraft.options.keyRight.getKey().getValue())
-        {
+        } else if (keyCode == minecraft.options.keyRight.getKey().getValue()) {
             currentPage.nextPage();
         }
         return true;
     }
 
-    public boolean charTyped(char typedChar, int keyCode)
-    {
+    public boolean charTyped(char typedChar, int keyCode) {
 //        super.keyTyped(typedChar, keyCode);
 //        super.charTyped(typedChar, keyCode);
         super.charTyped(typedChar, keyCode);
 //        if (currentPage.keyTyped(typedChar, keyCode))
-        if (currentPage.charTyped(typedChar, keyCode))
-        {
+        if (currentPage.charTyped(typedChar, keyCode)) {
 //            return;
             return true;
         }
 //        if (Keyboard.isKeyDown(Keyboard.KEY_F3) && keyCode == Keyboard.KEY_T)
-        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && keyCode == InputConstants.KEY_T)
-        {
+        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && keyCode == InputConstants.KEY_T) {
             GuideManager.INSTANCE.reload();
-            while (true)
-            {
+            while (true) {
                 currentPage = currentPage.createReloaded();
-                if (currentPage != null)
-                {
+                if (currentPage != null) {
                     break;
                 }
                 currentPage = pages.poll();
-                if (currentPage == null)
-                {
+                if (currentPage == null) {
                     throw new IllegalStateException("Didn't find the contents page!");
                 }
             }
             GuidePageBase[] history = pages.toArray(new GuidePageBase[0]);
             pages.clear();
-            for (int i = 0; i < history.length; i++)
-            {
+            for (int i = 0; i < history.length; i++) {
                 GuidePageBase page = history[i].createReloaded();
-                if (page != null)
-                {
+                if (page != null) {
                     pages.add(page);
                 }
             }
             refreshChapters();
             ISimpleDrawable icon = null;
-            if (BCLibItems.guide != null)
-            {
+            if (BCLibItems.guide != null) {
                 GuiStack stackIcon = new GuiStack(new ItemStack(BCLibItems.guide.get()));
                 icon = (poseStack, x, y) -> stackIcon.drawAt(poseStack, x + 8, y + 8);
             }
 //            minecraft.getToastGui().add(new ToastInformation("buildcraft.guide_book.reloaded", icon));
             minecraft.getToasts().addToast(new ToastInformation("buildcraft.guide_book.reloaded", icon));
         }
-        if (keyCode == minecraft.options.keyLeft.getKey().getValue())
-        {
+        if (keyCode == minecraft.options.keyLeft.getKey().getValue()) {
             currentPage.lastPage();
-        }
-        else if (keyCode == minecraft.options.keyRight.getKey().getValue())
-        {
+        } else if (keyCode == minecraft.options.keyRight.getKey().getValue()) {
             currentPage.nextPage();
         }
         return true;
@@ -842,30 +730,25 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
 
     @Override
 //    public boolean doesGuiPauseGame()
-    public boolean isPauseScreen()
-    {
+    public boolean isPauseScreen() {
         return false;
     }
 
     protected final ContainerGuide menu;
 
     @Override
-    public ContainerGuide getMenu()
-    {
+    public ContainerGuide getMenu() {
         return this.menu;
     }
 
     @Override
-    public void removed()
-    {
-        if (this.minecraft.player != null)
-        {
+    public void removed() {
+        if (this.minecraft.player != null) {
             this.menu.removed(this.minecraft.player);
         }
     }
 
-    public void onClose()
-    {
+    public void onClose() {
         this.minecraft.player.closeContainer();
         super.onClose();
     }

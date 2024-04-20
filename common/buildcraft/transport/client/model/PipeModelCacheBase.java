@@ -61,7 +61,7 @@ public class PipeModelCacheBase {
                 this.colourType = null;
             }
             hashCode = Objects.hash(System.identityHashCode(definition), centerSprite, Arrays.hashCode(sideSprites),
-                Arrays.hashCode(connections), colour, colourType);
+                    Arrays.hashCode(connections), colour, colourType);
         }
 
         private static boolean canBakeCutoutColour(EnumPipeColourType type) {
@@ -91,7 +91,7 @@ public class PipeModelCacheBase {
         @Override
         public String toString() {
             return "PipeBaseCutoutKey [center=" + centerSprite + ", sides=" + Arrays.toString(sideSprites)
-                + ", connections=" + Arrays.toString(connections) + "]";
+                    + ", connections=" + Arrays.toString(connections) + "]";
         }
     }
 

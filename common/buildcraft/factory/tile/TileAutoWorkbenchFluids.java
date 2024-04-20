@@ -20,15 +20,13 @@ import net.minecraftforge.fluids.FluidAttributes;
 
 import java.util.List;
 
-public class TileAutoWorkbenchFluids extends TileAutoWorkbenchBase implements IDebuggable
-{
+public class TileAutoWorkbenchFluids extends TileAutoWorkbenchBase implements IDebuggable {
     //    private final Tank tank1 = new Tank("tank1", Fluid.BUCKET_VOLUME * 6, this);
     private final Tank tank1 = new Tank("tank1", FluidAttributes.BUCKET_VOLUME * 6, this);
     //    private final Tank tank2 = new Tank("tank2", Fluid.BUCKET_VOLUME * 6, this);
     private final Tank tank2 = new Tank("tank2", FluidAttributes.BUCKET_VOLUME * 6, this);
 
-    public TileAutoWorkbenchFluids(BlockPos pos, BlockState blockState)
-    {
+    public TileAutoWorkbenchFluids(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.autoWorkbenchFluidsTile.get(), 2, 2, pos, blockState);
         tankManager.addAll(tank1, tank2);
         caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tankManager, EnumPipePart.CENTER);
@@ -38,8 +36,7 @@ public class TileAutoWorkbenchFluids extends TileAutoWorkbenchBase implements ID
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
 //        left.add("Tanks:");
 //        left.add("  " + tank1.getContentsString());
 //        left.add("  " + tank2.getContentsString());

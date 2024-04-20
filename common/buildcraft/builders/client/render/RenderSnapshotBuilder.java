@@ -31,8 +31,7 @@ import javax.vecmath.Point3f;
 import java.util.Collections;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderSnapshotBuilder
-{
+public class RenderSnapshotBuilder {
     //    public static <T extends ITileForSnapshotBuilder> void render(
 //            SnapshotBuilder<T> snapshotBuilder,
 //            World world,
@@ -50,10 +49,8 @@ public class RenderSnapshotBuilder
             float partialTicks,
             PoseStack poseStack,
             VertexConsumer bb
-    )
-    {
-        for (SnapshotBuilder<T>.PlaceTask placeTask : snapshotBuilder.clientPlaceTasks)
-        {
+    ) {
+        for (SnapshotBuilder<T>.PlaceTask placeTask : snapshotBuilder.clientPlaceTasks) {
             Vec3 prevPos = snapshotBuilder.prevClientPlaceTasks.stream()
                     .filter(renderTaskLocal -> renderTaskLocal.pos.equals(placeTask.pos))
                     .map(snapshotBuilder::getPlaceTaskItemPos)
@@ -66,8 +63,7 @@ public class RenderSnapshotBuilder
                     -tilePos.getY() + pos.y,
                     -tilePos.getZ() + pos.z
             );
-            for (ItemStack item : placeTask.items)
-            {
+            for (ItemStack item : placeTask.items) {
 //                ItemRenderUtil.renderItemStack(
 //                        x - tilePos.getX() + pos.x,
 //                        y - tilePos.getY() + pos.y,
@@ -91,10 +87,8 @@ public class RenderSnapshotBuilder
 
         poseStack.pushPose();
         Vec3 robotPos = snapshotBuilder.robotPos;
-        if (robotPos != null)
-        {
-            if (snapshotBuilder.prevRobotPos != null)
-            {
+        if (robotPos != null) {
+            if (snapshotBuilder.prevRobotPos != null) {
                 robotPos = snapshotBuilder.prevRobotPos.add(robotPos.subtract(snapshotBuilder.prevRobotPos).scale(partialTicks));
             }
 
@@ -102,8 +96,7 @@ public class RenderSnapshotBuilder
             poseStack.translate(-tilePos.getX(), -tilePos.getY(), -tilePos.getZ());
 
             int i = 0;
-            for (Direction face : Direction.values())
-            {
+            for (Direction face : Direction.values()) {
                 ModelUtil.createFace(
                                 face,
                                 new Point3f((float) robotPos.x, (float) robotPos.y, (float) robotPos.z),
@@ -121,8 +114,7 @@ public class RenderSnapshotBuilder
                 i++;
             }
 
-            for (SnapshotBuilder.BreakTask breakTask : snapshotBuilder.clientBreakTasks)
-            {
+            for (SnapshotBuilder.BreakTask breakTask : snapshotBuilder.clientBreakTasks) {
                 LaserRenderer_BC8.renderLaserDynamic(
                         new LaserData_BC8(
                                 BuildCraftLaserManager.POWERS[(int) Math.round(

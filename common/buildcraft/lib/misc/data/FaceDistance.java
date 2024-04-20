@@ -4,8 +4,7 @@ import buildcraft.lib.misc.VecUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 
-public final class FaceDistance
-{
+public final class FaceDistance {
     public final Direction direction;
     public final int distance;
 

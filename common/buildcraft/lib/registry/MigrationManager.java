@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public enum MigrationManager
-{
+public enum MigrationManager {
     INSTANCE;
 
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.migrate");
@@ -41,7 +40,7 @@ public enum MigrationManager
             itemMigrations.put(oldLowerCase, to);
             if (DEBUG) {
                 BCLog.logger
-                    .info("[lib.migrate] Adding item migration from " + oldLowerCase + " to " + to.getRegistryName());
+                        .info("[lib.migrate] Adding item migration from " + oldLowerCase + " to " + to.getRegistryName());
             }
         }
     }
@@ -59,7 +58,7 @@ public enum MigrationManager
             blockMigrations.put(oldLowerCase, to);
             if (DEBUG) {
                 BCLog.logger
-                    .info("[lib.migrate] Adding item migration from " + oldLowerCase + " to " + to.getRegistryName());
+                        .info("[lib.migrate] Adding item migration from " + oldLowerCase + " to " + to.getRegistryName());
             }
         }
     }
@@ -75,14 +74,14 @@ public enum MigrationManager
     }
 
     private static <T extends IForgeRegistryEntry<T>> void onMissingMappings(MissingMappings<T> missing,
-        Map<String, T> migrations) {
+                                                                             Map<String, T> migrations) {
         ImmutableList<Mapping<T>> all = missing.getAllMappings();
         if (all.isEmpty()) {
             return;
         }
         if (DEBUG) {
             BCLog.logger.info("[lib.migrate] Received missing mappings event for " + missing.getGenericType() + " with "
-                + all.size() + " missing.");
+                    + all.size() + " missing.");
         }
         for (Mapping<T> mapping : all) {
             ResourceLocation loc = mapping.key;

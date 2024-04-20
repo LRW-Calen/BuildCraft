@@ -22,21 +22,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 
-public final class StringUtilBC
-{
+public final class StringUtilBC {
 
     public static final Splitter newLineSplitter = Splitter.on("\\n");
 
     private static final DecimalFormat displayDecimalFormat = new DecimalFormat("#####0.00");
 
     /** Deactivate constructor */
-    private StringUtilBC() {}
+    private StringUtilBC() {
+    }
 
     // Calen changed
     public static List<Component> splitIntoLines(String string) {
         List<Component> newList = new ArrayList<>();
-        for(String s:newLineSplitter.splitToList(string.replaceAll("\\n", "\n")))
-        {
+        for (String s : newLineSplitter.splitToList(string.replaceAll("\\n", "\n"))) {
             newList.add(new TextComponent(s));
         }
         return newList;
@@ -118,7 +117,7 @@ public final class StringUtilBC
             return "null";
         }
         return displayDecimalFormat.format(vec.x) + ", " + displayDecimalFormat.format(vec.y) + ", "
-            + displayDecimalFormat.format(vec.z);
+                + displayDecimalFormat.format(vec.z);
     }
 
     public static String vec3ToDispString(Vec3i vec) {
@@ -141,11 +140,11 @@ public final class StringUtilBC
     }
 
     // Calen from 1.12.2 StringUtils.class
+
     /**
      * Returns a value indicating whether the given string is null or empty.
      */
-    public static boolean isNullOrEmpty(@Nullable String string)
-    {
+    public static boolean isNullOrEmpty(@Nullable String string) {
         return org.apache.commons.lang3.StringUtils.isEmpty(string);
     }
 

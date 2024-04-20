@@ -26,9 +26,6 @@ import buildcraft.robotics.BCRoboticsMenuTypes;
 import buildcraft.robotics.container.ContainerZonePlanner;
 import buildcraft.robotics.zone.ZonePlan;
 import buildcraft.robotics.zone.ZonePlannerMapChunkKey;
-import buildcraft.silicon.BCSiliconBlocks;
-import buildcraft.silicon.BCSiliconMenuTypes;
-import buildcraft.silicon.container.ContainerAssemblyTable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,9 +35,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -53,8 +48,7 @@ import java.util.List;
 import java.util.Optional;
 
 //public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebuggable
-public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider
-{
+public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider {
     protected static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("zone_planner");
     public static final int NET_PLAN_CHANGE = IDS.allocId("PLAN_CHANGE");
 
@@ -110,40 +104,32 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
     public final DeltaInt deltaProgressOutput = deltaManager.addDelta("progressOutput", EnumNetworkVisibility.GUI_ONLY);
     public ZonePlan[] layers = new ZonePlan[16];
 
-    public TileZonePlanner(BlockPos pos, BlockState blockState)
-    {
+    public TileZonePlanner(BlockPos pos, BlockState blockState) {
         super(BCRoboticsBlocks.zonePlannerTile.get(), pos, blockState);
-        for (int i = 0; i < layers.length; i++)
-        {
+        for (int i = 0; i < layers.length; i++) {
             layers[i] = new ZonePlan();
         }
     }
 
     @OnlyIn(Dist.CLIENT)
 //    public int getLevel()
-    public int getLevelBC()
-    {
+    public int getLevelBC() {
         BlockPos blockPos = Minecraft.getInstance().player.getOnPos();
 //        while (!Minecraft.getInstance().level.getBlockState(blockPos).isSideSolid(Minecraft.getMinecraft().world, blockPos, Direction.DOWN) && blockPos.getY() < 255)
 //        while (!Minecraft.getInstance().level.getBlockState(blockPos).getBlockSupportShape(Minecraft.getInstance().level, blockPos).getFaceShape(Direction.DOWN). && blockPos.getY() < 255)
 //        while (!Block.isFaceFull(Minecraft.getInstance().level.getBlockState(blockPos).getBlockSupportShape(Minecraft.getInstance().level, blockPos), Direction.DOWN) && blockPos.getY() < 255)
-        while (!Minecraft.getInstance().level.getBlockState(blockPos).isFaceSturdy(Minecraft.getInstance().level, blockPos, Direction.DOWN) && blockPos.getY() < 255)
-        {
+        while (!Minecraft.getInstance().level.getBlockState(blockPos).isFaceSturdy(Minecraft.getInstance().level, blockPos, Direction.DOWN) && blockPos.getY() < 255) {
             blockPos = new BlockPos(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ());
         }
         return (int) Math.floor((double) blockPos.getY() / ZonePlannerMapChunkKey.LEVEL_HEIGHT);
     }
 
     @Override
-    public void writePayload(int id, PacketBufferBC buffer, Dist side)
-    {
+    public void writePayload(int id, PacketBufferBC buffer, Dist side) {
         super.writePayload(id, buffer, side);
-        if (side == Dist.DEDICATED_SERVER)
-        {
-            if (id == NET_RENDER_DATA)
-            {
-                for (ZonePlan layer : layers)
-                {
+        if (side == Dist.DEDICATED_SERVER) {
+            if (id == NET_RENDER_DATA) {
+                for (ZonePlan layer : layers) {
                     layer.writeToByteBuf(buffer);
                 }
             }
@@ -152,24 +138,17 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
 
     @Override
 //    public void readPayload(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == NET_RENDER_DATA)
-            {
-                for (int i = 0; i < layers.length; i++)
-                {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == NET_RENDER_DATA) {
+                for (int i = 0; i < layers.length; i++) {
                     ZonePlan layer = layers[i];
                     layers[i] = layer.readFromByteBuf(buffer);
                 }
             }
-        }
-        else if (side == NetworkDirection.PLAY_TO_SERVER)
-        {
-            if (id == NET_PLAN_CHANGE)
-            {
+        } else if (side == NetworkDirection.PLAY_TO_SERVER) {
+            if (id == NET_PLAN_CHANGE) {
                 int index = buffer.readUnsignedShort();
                 layers[index].readFromByteBuf(buffer);
 //                markDirty();
@@ -181,12 +160,10 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
 
     @Override
 //    public CompoundTag writeToNBT(CompoundTag nbt)
-    public void saveAdditional(CompoundTag nbt)
-    {
+    public void saveAdditional(CompoundTag nbt) {
 //        super.writeToNBT(nbt);
         super.saveAdditional(nbt);
-        for (int i = 0; i < layers.length; i++)
-        {
+        for (int i = 0; i < layers.length; i++) {
             ZonePlan layer = layers[i];
             CompoundTag layerCompound = new CompoundTag();
             layer.writeToNBT(layerCompound);
@@ -197,19 +174,16 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
 
     @Override
 //    public void readFromNBT(CompoundTag nbt)
-    public void load(CompoundTag nbt)
-    {
+    public void load(CompoundTag nbt) {
 //        super.readFromNBT(nbt);
         super.load(nbt);
-        for (int i = 0; i < layers.length; i++)
-        {
+        for (int i = 0; i < layers.length; i++) {
             ZonePlan layer = layers[i];
             layer.readFromNBT(nbt.getCompound("layer_" + i));
         }
     }
 
-    public void sendLayerToServer(int index)
-    {
+    public void sendLayerToServer(int index) {
         IMessage message = createMessage(NET_PLAN_CHANGE, (buffer) ->
         {
             buffer.writeShort(index);
@@ -220,8 +194,7 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
 //        left.add("progress_input = " + progressInput);
         left.add(new TextComponent("progress_input = " + progressInput));
 //        left.add("progress_output = " + progressOutput);
@@ -229,13 +202,11 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         ITickable.super.update();
         deltaManager.tick();
 //        if (getWorld().isRemote)
-        if (getLevel().isClientSide)
-        {
+        if (getLevel().isClientSide) {
             return;
         }
 
@@ -246,14 +217,12 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
                     && invInputMapLocation.getStackInSlot(0).getItem() instanceof ItemMapLocation && invInputMapLocation.getStackInSlot(0).hasTag() && invInputMapLocation.getStackInSlot(0)
                     .getTag().contains("chunkMapping") && invInputResult.getStackInSlot(0).isEmpty())
             {
-                if (progressInput == 0)
-                {
+                if (progressInput == 0) {
                     deltaProgressInput.addDelta(0, 200, 1);
                     deltaProgressInput.addDelta(200, 205, -1);
                 }
 
-                if (progressInput < 200)
-                {
+                if (progressInput < 200) {
                     progressInput++;
                     return;
                 }
@@ -268,9 +237,7 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
                 this.setChanged();
                 this.sendNetworkUpdate(NET_RENDER_DATA);
                 progressInput = 0;
-            }
-            else if (progressInput != -1)
-            {
+            } else if (progressInput != -1) {
                 progressInput = -1;
                 deltaProgressInput.setValue(0);
             }
@@ -279,14 +246,12 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
             if (!invOutputPaintbrush.getStackInSlot(0).isEmpty() && invOutputPaintbrush.getStackInSlot(0).getItem() instanceof ItemPaintbrush_BC8 && !invOutputMapLocation.getStackInSlot(0).isEmpty()
                     && invOutputMapLocation.getStackInSlot(0).getItem() instanceof ItemMapLocation && invOutputResult.getStackInSlot(0).isEmpty())
             {
-                if (progressOutput == 0)
-                {
+                if (progressOutput == 0) {
                     deltaProgressOutput.addDelta(0, 200, 1);
                     deltaProgressOutput.addDelta(200, 205, -1);
                 }
 
-                if (progressOutput < 200)
-                {
+                if (progressOutput < 200) {
                     progressOutput++;
                     return;
                 }
@@ -298,9 +263,7 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
                 invOutputResult.setStackInSlot(0, invOutputMapLocation.getStackInSlot(0));
                 invOutputMapLocation.setStackInSlot(0, StackUtil.EMPTY);
                 progressOutput = 0;
-            }
-            else if (progressOutput != -1)
-            {
+            } else if (progressOutput != -1) {
                 progressOutput = -1;
                 deltaProgressOutput.setValue(0);
             }
@@ -311,14 +274,13 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
     // Calen added from MenuProvider
 
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();
     }
+
     @Nullable
     @Override
-    public ContainerZonePlanner createMenu(int id, Inventory inventory, Player player)
-    {
+    public ContainerZonePlanner createMenu(int id, Inventory inventory, Player player) {
         return new ContainerZonePlanner(BCRoboticsMenuTypes.ZONE_PLANNER, id, player, this);
     }
 }

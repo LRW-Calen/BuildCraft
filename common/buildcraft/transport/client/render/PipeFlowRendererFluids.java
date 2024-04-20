@@ -32,17 +32,14 @@ import net.minecraftforge.fluids.FluidStack;
 import java.util.Arrays;
 
 @OnlyIn(Dist.CLIENT)
-public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids>
-{
+public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> {
     INSTANCE;
 
     @Override
 //    public void render(PipeFlowFluids flow, double x, double y, double z, float partialTicks, BufferBuilder vb)
-    public void render(PipeFlowFluids flow, float partialTicks, PoseStack poseStack, VertexConsumer fluidBuffer, int combinedLight, int combinedOverlay)
-    {
+    public void render(PipeFlowFluids flow, float partialTicks, PoseStack poseStack, VertexConsumer fluidBuffer, int combinedLight, int combinedOverlay) {
         FluidStack forRender = flow.getFluidStackForRender();
-        if (forRender == null)
-        {
+        if (forRender == null) {
             return;
         }
 
@@ -81,8 +78,7 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids>
             double size = ((Pipe) flow.pipe).getConnectedDist(face);
 //                double amount = amounts[face.getIndex()];
             double amount = amounts[face.get3DDataValue()];
-            if (face.getAxis() != Axis.Y)
-            {
+            if (face.getAxis() != Axis.Y) {
                 horizontal |= flow.pipe.isConnected(face) && amount > 0;
             }
 
@@ -90,8 +86,7 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids>
             Vec3 radius = new Vec3(0.24, 0.24, 0.24);
             radius = VecUtil.replaceValue(radius, face.getAxis(), 0.005 + size / 2);
 
-            if (face.getAxis() == Axis.Y)
-            {
+            if (face.getAxis() == Axis.Y) {
                 double perc = amount / flow.capacity;
                 perc = Math.sqrt(perc);
                 radius = new Vec3(perc * 0.24, radius.y, perc * 0.24);
@@ -111,12 +106,9 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids>
             Vec3 min = center.subtract(radius);
             Vec3 max = center.add(radius);
 
-            if (face.getAxis() == Axis.Y)
-            {
+            if (face.getAxis() == Axis.Y) {
                 FluidRenderer.renderFluid(FluidSpriteType.FROZEN, forRender, 1, 1, min, max, poseStack.last(), fluidBuffer, sides);
-            }
-            else
-            {
+            } else {
                 FluidRenderer.renderFluid(FluidSpriteType.FROZEN, forRender, amount, flow.capacity, min, max, poseStack.last(), fluidBuffer, sides);
             }
             poseStack.popPose();
@@ -135,8 +127,7 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids>
         poseStack.popPose();
 
 //        // Calen test
-        if (horizontal | !vertical)
-        {
+        if (horizontal | !vertical) {
             Vec3 min = new Vec3(0.26, 0.26, 0.26);
             Vec3 max = new Vec3(0.74, 0.74, 0.74);
 
@@ -148,8 +139,7 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids>
         }
 
 //        // Calen test
-        if (vertical && horizPos < 0.74)
-        {
+        if (vertical && horizPos < 0.74) {
             double perc = amount / flow.capacity;
             perc = Math.sqrt(perc);
             double minXZ = 0.5 - 0.24 * perc;

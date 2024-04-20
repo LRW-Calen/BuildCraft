@@ -22,6 +22,7 @@ import buildcraft.lib.inventory.TransactorEntityItem;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.BoundingBoxUtil;
 import buildcraft.lib.mj.MjBatteryReceiver;
+import buildcraft.lib.tile.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
@@ -43,7 +44,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
-import buildcraft.lib.tile.ITickable;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
@@ -52,8 +52,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider
-{
+public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider {
     private static final ResourceLocation ADVANCEMENT_DID_INSERT = new ResourceLocation("buildcraftfactory:retired_hopper");
 
     private static final int PICKUP_MAX = 3;
@@ -68,37 +67,31 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
     private final MjBattery battery = new MjBattery(1 * MjAPI.MJ);
     private int progress = 0;
 
-    public TileChute(BlockPos pos, BlockState blockState)
-    {
+    public TileChute(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.chuteTile.get(), pos, blockState);
         caps.addProvider(new MjCapabilityHelper(new MjBatteryReceiver(battery)));
     }
 
     //    public static boolean hasInventoryAtPosition(IBlockAccess world, BlockPos pos, Direction side)
-    public static boolean hasInventoryAtPosition(LevelAccessor world, BlockPos pos, Direction side)
-    {
+    public static boolean hasInventoryAtPosition(LevelAccessor world, BlockPos pos, Direction side) {
         BlockEntity tile = world.getBlockEntity(pos);
         return ItemTransactorHelper.getTransactor(tile, side.getOpposite()) != NoSpaceTransactor.INSTANCE;
     }
 
-    private void pickupItems(Direction currentSide)
-    {
+    private void pickupItems(Direction currentSide) {
         AABB aabb = BoundingBoxUtil.extrudeFace(getBlockPos(), currentSide, 0.25);
         int count = PICKUP_MAX;
 //        for (ItemEntity entity : level.getEntitiesOfClass(ItemEntity.class, aabb, EntitySelectors.IS_ALIVE))
-        for (ItemEntity entity : level.getEntitiesOfClass(ItemEntity.class, aabb, EntitySelector.ENTITY_STILL_ALIVE))
-        {
+        for (ItemEntity entity : level.getEntitiesOfClass(ItemEntity.class, aabb, EntitySelector.ENTITY_STILL_ALIVE)) {
             int moved = ItemTransactorHelper.move(new TransactorEntityItem(entity), inv, count);
             count -= moved;
-            if (count <= 0)
-            {
+            if (count <= 0) {
                 return;
             }
         }
     }
 
-    private void putInNearInventories(Direction currentSide)
-    {
+    private void putInNearInventories(Direction currentSide) {
         boolean[] didWork = {false};
         List<Direction> sides = new ArrayList<>(Arrays.asList(Direction.values()));
         Collections.shuffle(sides, new Random());
@@ -117,13 +110,11 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
                 .filter(Predicate.isEqual(NoSpaceTransactor.INSTANCE).negate())
                 .forEach(transactor ->
                 {
-                    if (ItemTransactorHelper.move(inv, transactor, 1) > 0)
-                    {
+                    if (ItemTransactorHelper.move(inv, transactor, 1) > 0) {
                         didWork[0] = true;
                     }
                 });
-        if (didWork[0])
-        {
+        if (didWork[0]) {
             AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT_DID_INSERT);
         }
     }
@@ -131,16 +122,13 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
     // ITickable
 
     @Override
-    public void update()
-    {
+    public void update() {
         ITickable.super.update();
-        if (level.isClientSide)
-        {
+        if (level.isClientSide) {
             return;
         }
 
-        if (!(level.getBlockState(worldPosition).getBlock() instanceof BlockChute))
-        {
+        if (!(level.getBlockState(worldPosition).getBlock() instanceof BlockChute)) {
             return;
         }
 
@@ -149,14 +137,12 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
         Direction currentSide = level.getBlockState(worldPosition).getValue(BlockBCBase_Neptune.BLOCK_FACING_6);
 
         int target = 100000;
-        if (currentSide == Direction.UP)
-        {
+        if (currentSide == Direction.UP) {
             progress += 1000; // can be free because of gravity
         }
         progress += battery.extractPower(0, target - progress);
 
-        if (progress >= target)
-        {
+        if (progress >= target) {
             progress = 0;
             pickupItems(currentSide);
         }
@@ -166,8 +152,7 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
 
     @Override
 //    public void readFromNBT(CompoundTag nbt)
-    public void load(CompoundTag nbt)
-    {
+    public void load(CompoundTag nbt) {
 //        super.readFromNBT(nbt);
         super.load(nbt);
         progress = nbt.getInt("progress");
@@ -176,8 +161,7 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
 
     @Override
 //    public CompoundTag writeToNBT(CompoundTag nbt)
-    public void saveAdditional(CompoundTag nbt)
-    {
+    public void saveAdditional(CompoundTag nbt) {
 //        super.writeToNBT(nbt);
         super.saveAdditional(nbt);
         nbt.putInt("progress", progress);
@@ -189,8 +173,7 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
 //        left.add("battery = " + battery.getDebugString());
 //        left.add("progress = " + progress);
         left.add(new TextComponent("battery = " + battery.getDebugString()));
@@ -198,15 +181,13 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
     }
 
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerChute(BCFactoryMenuTypes.CHUTE, id, player, this);
     }
 }

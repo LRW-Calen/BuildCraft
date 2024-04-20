@@ -23,10 +23,8 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 // Calen Completed
-public class BCLootGenerator extends LootTableProvider
-{
-    public BCLootGenerator(DataGenerator generator)
-    {
+public class BCLootGenerator extends LootTableProvider {
+    public BCLootGenerator(DataGenerator generator) {
         super(generator);
     }
 
@@ -40,19 +38,16 @@ public class BCLootGenerator extends LootTableProvider
     );
 
     @Override
-    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker)
-    {
+    protected void validate(Map<ResourceLocation, LootTable> map, ValidationContext validationtracker) {
     }
 
     @Override
-    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables()
-    {
+    protected List<Pair<Supplier<Consumer<BiConsumer<ResourceLocation, LootTable.Builder>>>, LootContextParamSet>> getTables() {
         return tables;
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Loot Tables";
     }
 }

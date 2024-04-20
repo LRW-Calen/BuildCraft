@@ -6,43 +6,35 @@
 
 package buildcraft.silicon.block;
 
-import buildcraft.silicon.BCSiliconBlocks;
-import buildcraft.silicon.tile.TileLaser;
 import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.block.IBlockWithTickableTE;
 import buildcraft.lib.tile.TileBC_Neptune;
+import buildcraft.silicon.BCSiliconBlocks;
+import buildcraft.silicon.tile.TileLaser;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import javax.annotation.Nullable;
-
-public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlockWithFacing, IBlockWithTickableTE<TileLaser>
-{
-    public BlockLaser(String id, BlockBehaviour.Properties props)
-    {
+public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlockWithFacing, IBlockWithTickableTE<TileLaser> {
+    public BlockLaser(String id, BlockBehaviour.Properties props) {
         super(id, props);
     }
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level world, BlockState state)
-    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return BCSiliconBlocks.laserTile.get().create(pos, state);
     }
 
     @Override
-    public boolean canFaceVertically()
-    {
+    public boolean canFaceVertically() {
         return true;
     }
 
@@ -93,10 +85,8 @@ public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlock
 
     @Override
 //    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
-    {
-        return switch (state.getValue(BlockBCBase_Neptune.BLOCK_FACING_6))
-        {
+    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(BlockBCBase_Neptune.BLOCK_FACING_6)) {
             case UP -> UP;
             case DOWN -> DOWN;
             case NORTH -> NORTH;

@@ -7,9 +7,7 @@ package buildcraft.core.block;
 import buildcraft.core.tile.TileMarkerPath;
 import buildcraft.lib.block.BlockMarkerBase;
 import buildcraft.lib.misc.PermissionUtil;
-import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -17,13 +15,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class BlockMarkerPath extends BlockMarkerBase
-{
-    public BlockMarkerPath(String idBC, BlockBehaviour.Properties properties)
-    {
+public class BlockMarkerPath extends BlockMarkerBase {
+    public BlockMarkerPath(String idBC, BlockBehaviour.Properties properties) {
         super(
                 idBC,
                 properties
@@ -32,23 +27,18 @@ public class BlockMarkerPath extends BlockMarkerBase
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level worldIn, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TileMarkerPath(pos, state);
     }
 
     @Override
 //    public boolean onBlockActivated(Level world, BlockPos pos, IBlockState state, Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ)
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
-        if (!world.isClientSide)
-        {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!world.isClientSide) {
             BlockEntity tile = world.getBlockEntity(pos);
-            if (tile instanceof TileMarkerPath)
-            {
+            if (tile instanceof TileMarkerPath) {
                 TileMarkerPath marker = (TileMarkerPath) tile;
-                if (PermissionUtil.hasPermission(PermissionUtil.PERM_EDIT, player, marker.getPermBlock()))
-                {
+                if (PermissionUtil.hasPermission(PermissionUtil.PERM_EDIT, player, marker.getPermBlock())) {
                     marker.reverseDirection();
                 }
             }

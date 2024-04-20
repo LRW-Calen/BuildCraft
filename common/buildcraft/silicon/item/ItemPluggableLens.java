@@ -18,8 +18,6 @@ import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.misc.SoundUtil;
 import buildcraft.silicon.BCSiliconPlugs;
 import buildcraft.silicon.plug.PluggableLens;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -33,34 +31,27 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 
-public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable
-{
-    public ItemPluggableLens(String idBC, Item.Properties properties)
-    {
+public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable {
+    public ItemPluggableLens(String idBC, Item.Properties properties) {
         super(idBC, properties);
 //        setMaxDamage(0);
 //        setHasSubtypes(true);
     }
 
-    public static LensData getData(ItemStack stack)
-    {
+    public static LensData getData(ItemStack stack) {
         return new LensData(stack);
     }
 
     @Nonnull
-    public ItemStack getStack(DyeColor colour, boolean isFilter)
-    {
+    public ItemStack getStack(DyeColor colour, boolean isFilter) {
         return getStack(new LensData(colour, isFilter));
     }
 
     @Nonnull
-    public ItemStack getStack(LensData variant)
-    {
+    public ItemStack getStack(LensData variant) {
         ItemStack stack = new ItemStack(this);
         variant.writeToStack(stack);
         return stack;
@@ -68,11 +59,9 @@ public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable
 
     @Override
     public PipePluggable onPlace(@Nonnull ItemStack stack, IPipeHolder holder, Direction side, Player player,
-                                 InteractionHand hand)
-    {
+                                 InteractionHand hand) {
         IPipe pipe = holder.getPipe();
-        if (pipe == null || !(pipe.getFlow() instanceof IFlowItems))
-        {
+        if (pipe == null || !(pipe.getFlow() instanceof IFlowItems)) {
             return null;
         }
         LensData data = getData(stack);
@@ -83,19 +72,15 @@ public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable
 
     @Override
 //    public String getItemStackDisplayName(ItemStack stack)
-    public Component getName(ItemStack stack)
-    {
+    public Component getName(ItemStack stack) {
         // Calen: to test whether the lang file loaded
-        if (LocaleUtil.modLangResourceNotLoaded())
-        {
+        if (LocaleUtil.modLangResourceNotLoaded()) {
             // Calen: if use TranslatableComponent to localize colours, the colour will not ne seen, unknown why...
             LensData data = getData(stack);
             MutableComponent colour = data.colour == null ? new TranslatableComponent("color.clear") : ColourUtil.getTextFullTooltipSpecialComponent(data.colour);
             MutableComponent first = new TranslatableComponent(data.isFilter ? "item.Filter.name" : "item.Lens.name");
             return colour.append(new TextComponent(" ")).append(first);
-        }
-        else
-        {
+        } else {
             // Calen: if use this way, the guidebook will show unlocalized name...
             LensData data = getData(stack);
             String colour = data.colour == null ? LocaleUtil.localize("color.clear")
@@ -114,10 +99,8 @@ public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable
 //    }
 
     @Override
-    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems)
-    {
-        for (int i = 0; i < 34; i++)
-        {
+    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
+        for (int i = 0; i < 34; i++) {
 //            ItemStack stack = new ItemStack(this, 1, i);
             ItemStack stack = new ItemStack(this, 1);
             stack.setDamageValue(i);
@@ -136,52 +119,40 @@ public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable
 //        }
 //    }
 
-    public static class LensData
-    {
+    public static class LensData {
         public final DyeColor colour;
         public final boolean isFilter;
 
-        public LensData(DyeColor colour, boolean isFilter)
-        {
+        public LensData(DyeColor colour, boolean isFilter) {
             this.colour = colour;
             this.isFilter = isFilter;
         }
 
-        public LensData(ItemStack stack)
-        {
+        public LensData(ItemStack stack) {
             this(stack.getDamageValue());
         }
 
-        public LensData(int damage)
-        {
-            if (damage >= 32)
-            {
+        public LensData(int damage) {
+            if (damage >= 32) {
                 colour = null;
                 isFilter = damage == 33;
-            }
-            else
-            {
+            } else {
 //                colour = EnumDyeColor.byDyeDamage(damage & 15);
                 colour = DyeColor.byId(15 - damage & 15);
                 isFilter = damage >= 16;
             }
         }
 
-        public int getItemDamage()
-        {
-            if (colour == null)
-            {
+        public int getItemDamage() {
+            if (colour == null) {
                 return isFilter ? 33 : 32;
-            }
-            else
-            {
+            } else {
 //                return colour.getDyeDamage() + (isFilter ? 16 : 0);
                 return (15 - colour.getId()) + (isFilter ? 16 : 0);
             }
         }
 
-        public ItemStack writeToStack(ItemStack stack)
-        {
+        public ItemStack writeToStack(ItemStack stack) {
             stack.setDamageValue(getItemDamage());
             return stack;
         }

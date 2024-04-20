@@ -13,7 +13,6 @@ import buildcraft.lib.engine.EngineConnector;
 import buildcraft.lib.engine.TileEngineBase_BC8;
 import buildcraft.lib.misc.MathUtil;
 import buildcraft.lib.net.PacketBufferBC;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -30,76 +29,60 @@ import net.minecraftforge.network.NetworkEvent;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class TileEngineCreative extends TileEngineBase_BC8
-{
+public class TileEngineCreative extends TileEngineBase_BC8 {
     public static final long[] outputs = {1, 2, 4, 8, 16, 32, 64, 128, 256};
     public int currentOutputIndex = 0;
 
-    public TileEngineCreative(BlockPos pos, BlockState blockState)
-    {
+    public TileEngineCreative(BlockPos pos, BlockState blockState) {
         super(BCCoreBlocks.engineCreativeTile.get(), pos, blockState);
     }
 
     @Override
-    public void writePayload(int id, PacketBufferBC buffer, Dist side)
-    {
+    public void writePayload(int id, PacketBufferBC buffer, Dist side) {
         super.writePayload(id, buffer, side);
-        if (side == Dist.DEDICATED_SERVER)
-        {
-            if (id == NET_RENDER_DATA)
-            {
+        if (side == Dist.DEDICATED_SERVER) {
+            if (id == NET_RENDER_DATA) {
                 buffer.writeByte(currentOutputIndex);
             }
         }
     }
 
     @Override
-    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == NET_RENDER_DATA)
-            {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == NET_RENDER_DATA) {
                 currentOutputIndex = buffer.readUnsignedByte() % outputs.length;
             }
         }
     }
 
     @Override
-    protected void engineUpdate()
-    {
-        if (isBurning())
-        {
+    protected void engineUpdate() {
+        if (isBurning()) {
             power += getCurrentOutput();
             long max = getMaxPower();
-            if (power > max)
-            {
+            if (power > max) {
                 power = getMaxPower();
             }
-        }
-        else
-        {
+        } else {
             power = 0;
         }
     }
 
     @Nonnull
     @Override
-    protected IMjConnector createConnector()
-    {
+    protected IMjConnector createConnector() {
         return new EngineConnector(false);
     }
 
     @Override
-    public boolean isBurning()
-    {
+    public boolean isBurning() {
         return isRedstonePowered;
     }
 
     @Override
-    public double getPistonSpeed()
-    {
+    public double getPistonSpeed() {
         final double max = 0.08;
         final double min = 0.01;
         double interp = currentOutputIndex / (double) (outputs.length - 1);
@@ -107,54 +90,44 @@ public class TileEngineCreative extends TileEngineBase_BC8
     }
 
     @Override
-    protected EnumPowerStage computePowerStage()
-    {
+    protected EnumPowerStage computePowerStage() {
         return EnumPowerStage.BLACK;
     }
 
     @Override
-    public long getMaxPower()
-    {
+    public long getMaxPower() {
         return getCurrentOutput() * 10_000;
     }
 
     @Override
-    public long maxPowerReceived()
-    {
+    public long maxPowerReceived() {
         return 2_000 * MjAPI.MJ;
     }
 
     @Override
-    public long maxPowerExtracted()
-    {
+    public long maxPowerExtracted() {
         return 20 * getCurrentOutput();
     }
 
     @Override
-    public float explosionRange()
-    {
+    public float explosionRange() {
         return 0;
     }
 
     @Override
-    public long getCurrentOutput()
-    {
+    public long getCurrentOutput() {
         return outputs[MathUtil.clamp(currentOutputIndex, 0, outputs.length - 1)] * MjAPI.MJ;
     }
 
     @Override
-    public InteractionResult onActivated(Player player, InteractionHand hand, Direction side, float hitX, float hitY,
-                                         float hitZ)
-    {
+    public InteractionResult onActivated(Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getItemInHand(hand);
-        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench)
-        {
-            if (!level.isClientSide)
-            {
+        if (!stack.isEmpty() && stack.getItem() instanceof IToolWrench) {
+            if (!level.isClientSide) {
                 currentOutputIndex++;
                 currentOutputIndex %= outputs.length;
 //                player.sendStatusMessage(
-//                        new TranslatableComponent("chat.pipe.power.iron.mode", outputs[currentOutputIndex]),
+//                        new TextComponentTranslation("chat.pipe.power.iron.mode", outputs[currentOutputIndex]),
 //                        true
 //                );
                 player.displayClientMessage(
@@ -169,15 +142,13 @@ public class TileEngineCreative extends TileEngineBase_BC8
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
-    {
+    public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         nbt.putInt("currentOutputIndex", currentOutputIndex);
     }
 
     @Override
-    public void load(CompoundTag nbt)
-    {
+    public void load(CompoundTag nbt) {
         super.load(nbt);
         currentOutputIndex = nbt.getInt("currentOutputIndex");
         currentOutputIndex = MathUtil.clamp(currentOutputIndex, 0, outputs.length);

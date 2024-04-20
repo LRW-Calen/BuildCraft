@@ -12,7 +12,6 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nonnull;
 
 @FunctionalInterface
-public interface StackMatchingPredicate
-{
+public interface StackMatchingPredicate {
     boolean isMatching(@Nonnull ItemStack base, @Nonnull ItemStack comparison);
 }

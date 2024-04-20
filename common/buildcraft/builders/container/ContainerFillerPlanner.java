@@ -21,8 +21,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 //public class ContainerFillerPlanner extends ContainerBC_Neptune implements IContainerFilling
-public class ContainerFillerPlanner extends ContainerBC_Neptune<TileFiller> implements IContainerFilling
-{
+public class ContainerFillerPlanner extends ContainerBC_Neptune<TileFiller> implements IContainerFilling {
     public final AddonFillerPlanner addon;
     private final FullStatement<IFillerPattern> patternStatementClient = new FullStatement<>(
             FillerType.INSTANCE,
@@ -30,8 +29,7 @@ public class ContainerFillerPlanner extends ContainerBC_Neptune<TileFiller> impl
             (statement, paramIndex) -> onStatementChange()
     );
 
-    public ContainerFillerPlanner(MenuType menuType, int id, Player player)
-    {
+    public ContainerFillerPlanner(MenuType menuType, int id, Player player) {
         super(menuType, id, player);
         Pair<VolumeBox, EnumAddonSlot> selectingVolumeBoxAndSlot = EnumAddonSlot.getSelectingVolumeBoxAndSlot(
                 player,
@@ -45,49 +43,41 @@ public class ContainerFillerPlanner extends ContainerBC_Neptune<TileFiller> impl
     }
 
     @Override
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return player;
     }
 
     @Override
-    public FullStatement<IFillerPattern> getPatternStatementClient()
-    {
+    public FullStatement<IFillerPattern> getPatternStatementClient() {
         return patternStatementClient;
     }
 
     @Override
-    public FullStatement<IFillerPattern> getPatternStatement()
-    {
+    public FullStatement<IFillerPattern> getPatternStatement() {
         return addon.patternStatement;
     }
 
     @Override
-    public boolean isInverted()
-    {
+    public boolean isInverted() {
         return addon.inverted;
     }
 
     @Override
-    public void setInverted(boolean value)
-    {
+    public void setInverted(boolean value) {
         addon.inverted = value;
     }
 
     @Override
-    public void valuesChanged()
-    {
+    public void valuesChanged() {
         addon.updateBuildingInfo();
-        if (!player.level.isClientSide)
-        {
+        if (!player.level.isClientSide) {
             WorldSavedDataVolumeBoxes.get(getPlayer().level).setDirty();
         }
     }
 
     @Override
 //    public void readMessage(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readMessage(id, buffer, side, ctx);
         IContainerFilling.super.readMessage(id, buffer, side, ctx);
     }
@@ -95,8 +85,7 @@ public class ContainerFillerPlanner extends ContainerBC_Neptune<TileFiller> impl
     @SuppressWarnings("NullableProblems")
     @Override
 //    public boolean canInteractWith(Player player)
-    public boolean stillValid(Player player)
-    {
+    public boolean stillValid(Player player) {
         return true;
     }
 }

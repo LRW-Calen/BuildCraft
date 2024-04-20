@@ -1,28 +1,20 @@
 package buildcraft.lib.client.render.font;
 
 import buildcraft.api.core.BCLog;
-import buildcraft.lib.client.guide.font.MinecraftFont;
 import buildcraft.lib.misc.ColourUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.font.FontManager;
 import net.minecraft.client.gui.font.FontSet;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.DyeColor;
 
-import java.util.List;
-import java.util.function.Function;
-
-public class SpecialColourFontRenderer extends Font
-{
+public class SpecialColourFontRenderer extends Font {
     public static final SpecialColourFontRenderer INSTANCE = new SpecialColourFontRenderer();
 
-    private SpecialColourFontRenderer()
-    {
+    private SpecialColourFontRenderer() {
         // TODO Calen textureManager?
         super((resourceLocation -> new FontSet(Minecraft.getInstance().textureManager, new ResourceLocation("textures/font/ascii.png"))));
 //        super(Minecraft.getInstance().gameSettings, new ResourceLocation("textures/font/ascii.png"),
@@ -31,45 +23,37 @@ public class SpecialColourFontRenderer extends Font
 
     // TODO Calen dropShadow???
     @Override
-    public int draw(PoseStack poseStack, String text, float x, float y, int color)
-    {
+    public int draw(PoseStack poseStack, String text, float x, float y, int color) {
 
         int next = text.indexOf(ColourUtil.COLOUR_SPECIAL_START);
         int taken = 0;
 
-        if (next > 0)
-        {
+        if (next > 0) {
             // Render some of it normally
             // TODO Calen dropShadow???
             x = getRealRenderer().draw(poseStack, text.substring(0, next), x, y, color);
             taken = next;
         }
 
-        while (next != -1)
-        {
+        while (next != -1) {
 
             int end = text.indexOf(ChatFormatting.RESET.toString());
             String sub;
-            if (end > 0)
-            {
+            if (end > 0) {
                 sub = text.substring(next, end);
                 taken = end;
-            }
-            else
-            {
+            } else {
                 sub = text.substring(next);
                 taken = text.length();
             }
 
             char c = text.charAt(next + 3);
             int thisColour = color;
-            try
-            {
+            try {
                 int ord = Integer.parseInt(Character.toString(c), 16);
                 thisColour = ColourUtil.getLightHex(DyeColor.byId(ord));
             }
-            catch (NumberFormatException nfe)
-            {
+            catch (NumberFormatException nfe) {
                 BCLog.logger
                         .warn("[lib.font] Invalid colour string for SpecialColourFontRenderer! " + nfe.getMessage());
             }
@@ -82,8 +66,7 @@ public class SpecialColourFontRenderer extends Font
             next = text.indexOf(ColourUtil.COLOUR_SPECIAL_START, end);
         }
 
-        if (taken < text.length())
-        {
+        if (taken < text.length()) {
 //            x = getRealRenderer().drawString(text.substring(taken), x, y, color, dropShadow);
             x = getRealRenderer().draw(poseStack, text.substring(taken), x, y, color);
         }
@@ -91,8 +74,7 @@ public class SpecialColourFontRenderer extends Font
         return (int) x;
     }
 
-    private static Font getRealRenderer()
-    {
+    private static Font getRealRenderer() {
         return Minecraft.getInstance().font;
     }
 
@@ -107,8 +89,7 @@ public class SpecialColourFontRenderer extends Font
 
     @Override
 //    public int getStringWidth(String text)
-    public int width(String text)
-    {
+    public int width(String text) {
 //        return getRealRenderer().getStringWidth(text);
         return getRealRenderer().width(text);
     }
@@ -121,24 +102,21 @@ public class SpecialColourFontRenderer extends Font
 
     @Override
 //    public String trimStringToWidth(String text, int width)
-    public String plainSubstrByWidth(String text, int width)
-    {
+    public String plainSubstrByWidth(String text, int width) {
 //        return getRealRenderer().trimStringToWidth(text, width);
         return getRealRenderer().plainSubstrByWidth(text, width);
     }
 
     @Override
 //    public String trimStringToWidth(String text, int width, boolean reverse)
-    public String plainSubstrByWidth(String text, int width, boolean reverse)
-    {
+    public String plainSubstrByWidth(String text, int width, boolean reverse) {
 //        return getRealRenderer().trimStringToWidth(text, width, reverse);
         return getRealRenderer().plainSubstrByWidth(text, width, reverse);
     }
 
     @Override
 //    public int getWordWrappedHeight(String str, int maxLength)
-    public int wordWrapHeight(String str, int maxLength)
-    {
+    public int wordWrapHeight(String str, int maxLength) {
 //        return getRealRenderer().getWordWrappedHeight(str, maxLength);
         return getRealRenderer().wordWrapHeight(str, maxLength);
     }
@@ -165,16 +143,14 @@ public class SpecialColourFontRenderer extends Font
 
     @Override
 //    public List<String> listFormattedStringToWidth(String str, int wrapWidth)
-    public FormattedText substrByWidth(FormattedText str, int wrapWidth)
-    {
+    public FormattedText substrByWidth(FormattedText str, int wrapWidth) {
 //        return getRealRenderer().listFormattedStringToWidth(str, wrapWidth);
         return getRealRenderer().substrByWidth(str, wrapWidth);
     }
 
     @Override
 //    public boolean getBidiFlag()
-    public boolean isBidirectional()
-    {
+    public boolean isBidirectional() {
 //        return getRealRenderer().getBidiFlag();
         return getRealRenderer().isBidirectional();
     }

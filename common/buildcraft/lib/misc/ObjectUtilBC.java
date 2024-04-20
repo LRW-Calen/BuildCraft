@@ -2,8 +2,7 @@ package buildcraft.lib.misc;
 
 import javax.annotation.Nullable;
 
-public class ObjectUtilBC
-{
+public class ObjectUtilBC {
 
     /** @param obj The object to check
      * @param clazz the type that is needed

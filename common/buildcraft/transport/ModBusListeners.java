@@ -8,14 +8,12 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = BCTransport.MOD_ID)
-public class ModBusListeners
-{
+@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, modid = BCTransport.MODID)
+public class ModBusListeners {
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event)
-    {
+    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCTransportBlocks.pipeHolderTile.get(), RenderPipeHolder::new);
     }
 }

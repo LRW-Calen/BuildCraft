@@ -7,7 +7,6 @@
 package buildcraft.silicon.block;
 
 import buildcraft.api.enums.EnumLaserTableType;
-//import buildcraft.api.mj.ILaserTargetAnnotation;
 import buildcraft.api.mj.ILaserTargetBlock;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
@@ -28,20 +27,17 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 //@ILaserTargetAnnotation // Calen
-public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> implements ILaserTargetBlock, IBlockWithTickableTE<TileLaserTableBase>
-{
+public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> implements ILaserTargetBlock, IBlockWithTickableTE<TileLaserTableBase> {
     private final EnumLaserTableType type;
 
-    public BlockLaserTable(String id, BlockBehaviour.Properties props, EnumLaserTableType type)
-    {
+    public BlockLaserTable(String id, BlockBehaviour.Properties props, EnumLaserTableType type) {
         super(id, props);
         this.type = type;
     }
 
     @Override
 //    public boolean isOpaqueCube(BlockState state)
-    public boolean useShapeForLightOcclusion(BlockState state)
-    {
+    public boolean useShapeForLightOcclusion(BlockState state) {
         return false;
     }
 //
@@ -59,10 +55,8 @@ public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> imp
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level world, BlockState state)
-    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state)
-    {
-        switch (type)
-        {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
+        switch (type) {
             case ASSEMBLY_TABLE:
                 return new TileAssemblyTable(pos, state);
             case ADVANCED_CRAFTING_TABLE:
@@ -81,15 +75,13 @@ public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> imp
 
     @Override
 //    public AxisAlignedBB getBoundingBox(BlockState state, IBlockAccess source, BlockPos pos)
-    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         return SHAPE;
     }
 
     @Override
 //    public boolean onBlockActivated(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ)
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 //        if (world.getBlockEntity(pos) instanceof TileLaserTableBase laserTable)
 //        {
 //            switch (type)
@@ -119,10 +111,8 @@ public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> imp
 //                case PROGRAMMING_TABLE:
 //            }
 //        }
-        if (!world.isClientSide)
-        {
-            if (world.getBlockEntity(pos) instanceof TileBC_Neptune tile)
-            {
+        if (!world.isClientSide) {
+            if (world.getBlockEntity(pos) instanceof TileBC_Neptune tile) {
 //                    BCSiliconGuis.ADVANCED_CRAFTING_TABLE.openGUI(player, pos, state);
                 MessageUtil.serverOpenTileGUI(player, tile);
                 return InteractionResult.SUCCESS;

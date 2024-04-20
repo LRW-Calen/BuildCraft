@@ -2,8 +2,7 @@ package buildcraft.lib.script;
 
 import java.util.Objects;
 
-public final class SourceLine
-{
+public final class SourceLine {
     public final SourceFile file;
     public final int line;
 

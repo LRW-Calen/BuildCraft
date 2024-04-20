@@ -10,20 +10,15 @@ import buildcraft.lib.misc.SpriteUtil;
 import com.google.common.collect.ImmutableList;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Vector3f;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransform;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
@@ -33,8 +28,7 @@ import java.util.Random;
  * that make it simple to render as a core, item or tool (todo)
  */
 @SuppressWarnings("deprecation")
-public class ModelItemSimple implements BakedModel
-{
+public class ModelItemSimple implements BakedModel {
     public static final ItemTransforms TRANSFORM_DEFAULT = ItemTransforms.NO_TRANSFORMS;
     public static final ItemTransforms TRANSFORM_BLOCK;
     public static final ItemTransforms TRANSFORM_PLUG_AS_ITEM;
@@ -43,8 +37,7 @@ public class ModelItemSimple implements BakedModel
     public static final ItemTransforms TRANSFORM_ITEM;
     // TODO: TRANSFORM_TOOL
 
-    static
-    {
+    static {
         // Values taken from "minecraft:models/core/core.json"
         ItemTransform thirdp_left = def(75, 45, 0, 0, 2.5, 0, 0.375);
         ItemTransform thirdp_right = def(75, 225, 0, 0, 2.5, 0, 0.375);
@@ -87,8 +80,7 @@ public class ModelItemSimple implements BakedModel
                 new ItemTransforms(thirdp_left, thirdp_right, firstp_left, firstp_right, head, gui, ground, fixed);
     }
 
-    private static ItemTransforms scale(ItemTransforms from, double by)
-    {
+    private static ItemTransforms scale(ItemTransforms from, double by) {
         ItemTransform thirdperson_left = scale(from.thirdPersonLeftHand, by);
         ItemTransform thirdperson_right = scale(from.thirdPersonRightHand, by);
         ItemTransform firstperson_left = scale(from.firstPersonLeftHand, by);
@@ -101,8 +93,7 @@ public class ModelItemSimple implements BakedModel
                 gui, ground, fixed);
     }
 
-    private static ItemTransform scale(ItemTransform from, double by)
-    {
+    private static ItemTransform scale(ItemTransform from, double by) {
 
         float scale = (float) by;
         Vector3f nScale = new Vector3f(from.scale.x(), from.scale.y(), from.scale.z());
@@ -111,21 +102,18 @@ public class ModelItemSimple implements BakedModel
         return new ItemTransform(from.rotation, from.translation, nScale);
     }
 
-    private static ItemTransform translate(ItemTransform from, double dx, double dy, double dz)
-    {
+    private static ItemTransform translate(ItemTransform from, double dx, double dy, double dz) {
         Vector3f nTranslation = new Vector3f(from.translation.x(), from.translation.y(), from.translation.z());
         nTranslation.transform(Matrix3f.createScaleMatrix((float) dx, (float) dy, (float) dz));
         return new ItemTransform(from.rotation, nTranslation, from.scale);
     }
 
     private static ItemTransform def(double rx, double ry, double rz, double tx, double ty, double tz,
-                                     double scale)
-    {
+                                     double scale) {
         return def((float) rx, (float) ry, (float) rz, (float) tx, (float) ty, (float) tz, (float) scale);
     }
 
-    private static ItemTransform def(float rx, float ry, float rz, float tx, float ty, float tz, float scale)
-    {
+    private static ItemTransform def(float rx, float ry, float rz, float tx, float ty, float tz, float scale) {
         Vector3f rot = new Vector3f(rx, ry, rz);
         Vector3f translate = new Vector3f(tx / 16f, ty / 16f, tz / 16f);
         return new ItemTransform(rot, translate, new Vector3f(scale, scale, scale));
@@ -136,17 +124,13 @@ public class ModelItemSimple implements BakedModel
     private final TextureAtlasSprite particle;
     private final ItemTransforms transforms;
 
-    public ModelItemSimple(List<BakedQuad> quads, ItemTransforms transforms, boolean isGui3d)
-    {
+    public ModelItemSimple(List<BakedQuad> quads, ItemTransforms transforms, boolean isGui3d) {
         this.quads = quads == null ? ImmutableList.of() : quads;
         this.isGui3d = isGui3d;
-        if (quads.isEmpty())
-        {
+        if (quads.isEmpty()) {
 //            particle = Minecraft.getInstance().getTextureMapBlocks().getMissingSprite();
             this.particle = SpriteUtil.missingSprite();
-        }
-        else
-        {
+        } else {
             this.particle = quads.get(0).getSprite();
         }
         this.transforms = transforms;
@@ -154,54 +138,46 @@ public class ModelItemSimple implements BakedModel
 
     @Override
 //    public List<BakedQuad> getQuads(BlockState state, Direction side, long rand)
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random rand)
-    {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random rand) {
         return face == null ? quads : ImmutableList.of();
     }
 
     @Override
 //    public boolean isAmbientOcclusion()
-    public boolean useAmbientOcclusion()
-    {
+    public boolean useAmbientOcclusion() {
         return false;
     }
 
     @Override
-    public boolean isGui3d()
-    {
+    public boolean isGui3d() {
         return isGui3d;
     }
 
     @Override
 //    public boolean isBuiltInRenderer()
-    public boolean isCustomRenderer()
-    {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
 //    public TextureAtlasSprite getParticleTexture()
-    public TextureAtlasSprite getParticleIcon()
-    {
+    public TextureAtlasSprite getParticleIcon() {
         return particle;
     }
 
     @Override
 //    public ItemTransforms getItemTransforms()
-    public ItemTransforms getTransforms()
-    {
+    public ItemTransforms getTransforms() {
         return transforms;
     }
 
     @Override
-    public ItemOverrides getOverrides()
-    {
+    public ItemOverrides getOverrides() {
         return ItemOverrides.EMPTY;
     }
 
     @Override
-    public boolean usesBlockLight()
-    {
+    public boolean usesBlockLight() {
         return false;
     }
 }

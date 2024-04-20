@@ -8,21 +8,22 @@ package buildcraft.silicon.tile;
 
 import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.recipes.AssemblyRecipe;
-import buildcraft.lib.misc.StackUtil;
-import buildcraft.lib.tile.craft.IAssemblyCraft;
-import buildcraft.silicon.BCSiliconMenuTypes;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.InventoryUtil;
 import buildcraft.lib.misc.LocaleUtil;
+import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.data.IdAllocator;
+import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.MessageManager;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.lib.recipe.AssemblyRecipeRegistry;
 import buildcraft.lib.tile.TileBC_Neptune;
+import buildcraft.lib.tile.craft.IAssemblyCraft;
 import buildcraft.lib.tile.item.ItemHandlerManager;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
-import buildcraft.silicon.EnumAssemblyRecipeState;
 import buildcraft.silicon.BCSiliconBlocks;
+import buildcraft.silicon.BCSiliconMenuTypes;
+import buildcraft.silicon.EnumAssemblyRecipeState;
 import buildcraft.silicon.container.ContainerAssemblyTable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -40,15 +41,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
-import buildcraft.lib.net.IMessage;
 
 import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
 //public class TileAssemblyTable extends TileLaserTableBase
-public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCraft
-{
+public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCraft {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("assembly_table");
     public static final int NET_RECIPE_STATE = IDS.allocId("RECIPE_STATE");
 
@@ -62,39 +61,31 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
 
     private static final ResourceLocation ADVANCEMENT = new ResourceLocation("buildcraftsilicon:precision_crafting");
 
-    public TileAssemblyTable(BlockPos pos, BlockState blockState)
-    {
+    public TileAssemblyTable(BlockPos pos, BlockState blockState) {
         super(BCSiliconBlocks.assemblyTableTile.get(), pos, blockState);
     }
 
     @Override
-    public IdAllocator getIdAllocator()
-    {
+    public IdAllocator getIdAllocator() {
         return IDS;
     }
 
-    private void updateRecipes()
-    {
+    private void updateRecipes() {
         //TODO: rework this to not iterate over every recipe every tick
         int count = recipesStates.size();
 //        for (AssemblyRecipe recipe : AssemblyRecipeRegistry.REGISTRY.values())
-        for (AssemblyRecipe recipe : AssemblyRecipeRegistry.getAll(level))
-        {
+        for (AssemblyRecipe recipe : AssemblyRecipeRegistry.getAll(level)) {
             Set<ItemStack> outputs = recipe.getOutputs(inv.stacks);
-            for (ItemStack out : outputs)
-            {
+            for (ItemStack out : outputs) {
                 boolean found = false;
-                for (AssemblyInstruction instruction : recipesStates.keySet())
-                {
-                    if (instruction.recipe == recipe && out == instruction.output)
-                    {
+                for (AssemblyInstruction instruction : recipesStates.keySet()) {
+                    if (instruction.recipe == recipe && out == instruction.output) {
                         found = true;
                         break;
                     }
                 }
                 AssemblyInstruction instruction = new AssemblyInstruction(recipe, out);
-                if (!found && !recipesStates.containsKey(instruction))
-                {
+                if (!found && !recipesStates.containsKey(instruction)) {
                     recipesStates.put(instruction, EnumAssemblyRecipeState.POSSIBLE);
                 }
             }
@@ -107,82 +98,61 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
             AssemblyInstruction instruction = entry.getKey();
             EnumAssemblyRecipeState state = entry.getValue();
             boolean enough = extract(inv, instruction.recipe.getInputsFor(instruction.output), true, false);
-            if (state == EnumAssemblyRecipeState.POSSIBLE)
-            {
-                if (!enough)
-                {
+            if (state == EnumAssemblyRecipeState.POSSIBLE) {
+                if (!enough) {
                     iterator.remove();
                 }
-            }
-            else
-            {
-                if (enough)
-                {
-                    if (state == EnumAssemblyRecipeState.SAVED)
-                    {
+            } else {
+                if (enough) {
+                    if (state == EnumAssemblyRecipeState.SAVED) {
                         state = EnumAssemblyRecipeState.SAVED_ENOUGH;
                     }
-                }
-                else
-                {
-                    if (state != EnumAssemblyRecipeState.SAVED)
-                    {
+                } else {
+                    if (state != EnumAssemblyRecipeState.SAVED) {
                         state = EnumAssemblyRecipeState.SAVED;
                     }
                 }
             }
-            if (state == EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE)
-            {
+            if (state == EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE) {
                 findActive = true;
             }
             entry.setValue(state);
         }
-        if (!findActive)
-        {
-            for (Map.Entry<AssemblyInstruction, EnumAssemblyRecipeState> entry : recipesStates.entrySet())
-            {
+        if (!findActive) {
+            for (Map.Entry<AssemblyInstruction, EnumAssemblyRecipeState> entry : recipesStates.entrySet()) {
                 EnumAssemblyRecipeState state = entry.getValue();
-                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH)
-                {
+                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH) {
                     state = EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE;
                     entry.setValue(state);
                     break;
                 }
             }
         }
-        if (count != recipesStates.size())
-        {
+        if (count != recipesStates.size()) {
             sendNetworkGuiUpdate(NET_GUI_DATA);
         }
     }
 
-    private AssemblyInstruction getActiveRecipe()
-    {
+    private AssemblyInstruction getActiveRecipe() {
         return recipesStates.entrySet().stream().filter(entry -> entry.getValue() == EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE).map(Map.Entry::getKey).findFirst().orElse(null);
     }
 
-    private void activateNextRecipe()
-    {
+    private void activateNextRecipe() {
         AssemblyInstruction activeRecipe = getActiveRecipe();
-        if (activeRecipe != null)
-        {
+        if (activeRecipe != null) {
             int index = 0;
             int activeIndex = 0;
             boolean isActiveLast = false;
             long enoughCount = recipesStates.values().stream().filter(state -> state == EnumAssemblyRecipeState.SAVED_ENOUGH || state == EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE).count();
-            if (enoughCount <= 1)
-            {
+            if (enoughCount <= 1) {
                 return;
             }
-            for (Map.Entry<AssemblyInstruction, EnumAssemblyRecipeState> entry : recipesStates.entrySet())
-            {
+            for (Map.Entry<AssemblyInstruction, EnumAssemblyRecipeState> entry : recipesStates.entrySet()) {
                 EnumAssemblyRecipeState state = entry.getValue();
-                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH)
-                {
+                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH) {
                     isActiveLast = false;
                 }
-                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE)
-                {
+                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE) {
                     state = EnumAssemblyRecipeState.SAVED_ENOUGH;
                     entry.setValue(state);
                     activeIndex = index;
@@ -191,12 +161,10 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
                 index++;
             }
             index = 0;
-            for (Map.Entry<AssemblyInstruction, EnumAssemblyRecipeState> entry : recipesStates.entrySet())
-            {
+            for (Map.Entry<AssemblyInstruction, EnumAssemblyRecipeState> entry : recipesStates.entrySet()) {
                 AssemblyRecipe recipe = entry.getKey().recipe;
                 EnumAssemblyRecipeState state = entry.getValue();
-                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH && recipe != activeRecipe.recipe && (index > activeIndex || isActiveLast))
-                {
+                if (state == EnumAssemblyRecipeState.SAVED_ENOUGH && recipe != activeRecipe.recipe && (index > activeIndex || isActiveLast)) {
                     state = EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE;
                     entry.setValue(state);
                     break;
@@ -207,28 +175,23 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     }
 
     @Override
-    public long getTarget()
-    {
+    public long getTarget() {
         return Optional.ofNullable(getActiveRecipe()).map(instruction -> instruction.recipe.getRequiredMicroJoulesFor(instruction.output)).orElse(0L);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         super.update();
 
-        if (level.isClientSide)
-        {
+        if (level.isClientSide) {
             return;
         }
 
         updateRecipes();
 
-        if (getTarget() > 0)
-        {
+        if (getTarget() > 0) {
             AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT);
-            if (power >= getTarget())
-            {
+            if (power >= getTarget()) {
                 AssemblyInstruction instruction = getActiveRecipe();
                 extract(inv, instruction.recipe.getInputsFor(instruction.output), false, false);
 
@@ -242,8 +205,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     }
 
     @Override
-    public void saveAdditional(CompoundTag nbt)
-    {
+    public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
         ListTag recipesStatesTag = new ListTag();
         recipesStates.forEach((instruction, state) ->
@@ -258,18 +220,15 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     }
 
     @Override
-    public void load(CompoundTag nbt)
-    {
+    public void load(CompoundTag nbt) {
         super.load(nbt);
         recipesStates.clear();
         ListTag recipesStatesTag = nbt.getList("recipes_states", Tag.TAG_COMPOUND);
-        for (int i = 0; i < recipesStatesTag.size(); i++)
-        {
+        for (int i = 0; i < recipesStatesTag.size(); i++) {
 //            CompoundTag entryTag = recipesStatesTag.getCompound(i);
             CompoundTag entryTag = recipesStatesTag.getCompound(i).copy();
             String name = entryTag.getString("recipe");
-            if (entryTag.contains("output"))
-            {
+            if (entryTag.contains("output")) {
                 // Calen: here this.level is null, if lookup recipes, will cause exception
 //                AssemblyInstruction instruction = lookupRecipe(name, ItemStack.of(entryTag.getCompound("output")));
 //                if (instruction != null)
@@ -286,12 +245,10 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     }
 
     @Override
-    public void writePayload(int id, PacketBufferBC buffer, Dist side)
-    {
+    public void writePayload(int id, PacketBufferBC buffer, Dist side) {
         super.writePayload(id, buffer, side);
 
-        if (id == NET_GUI_DATA)
-        {
+        if (id == NET_GUI_DATA) {
             buffer.writeInt(recipesStates.size());
             recipesStates.forEach((instruction, state) ->
             {
@@ -304,34 +261,28 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
 
     @Override
 //    public void readPayload(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(id, buffer, side, ctx);
 
-        if (id == NET_GUI_DATA)
-        {
+        if (id == NET_GUI_DATA) {
             recipesStates.clear();
             int count = buffer.readInt();
-            for (int i = 0; i < count; i++)
-            {
+            for (int i = 0; i < count; i++) {
                 AssemblyInstruction instruction = lookupRecipe(buffer.readString(), buffer.readItem());
                 recipesStates.put(instruction, EnumAssemblyRecipeState.values()[buffer.readInt()]);
             }
         }
 
-        if (id == NET_RECIPE_STATE)
-        {
+        if (id == NET_RECIPE_STATE) {
             AssemblyInstruction recipe = lookupRecipe(buffer.readString(), buffer.readItem());
             EnumAssemblyRecipeState state = EnumAssemblyRecipeState.values()[buffer.readInt()];
-            if (recipesStates.containsKey(recipe))
-            {
+            if (recipesStates.containsKey(recipe)) {
                 recipesStates.put(recipe, state);
             }
         }
     }
 
-    public void sendRecipeStateToServer(AssemblyInstruction instruction, EnumAssemblyRecipeState state)
-    {
+    public void sendRecipeStateToServer(AssemblyInstruction instruction, EnumAssemblyRecipeState state) {
         IMessage message = createMessage(NET_RECIPE_STATE, (buffer) ->
         {
             buffer.writeUtf(instruction.recipe.getRegistryName().toString());
@@ -343,8 +294,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
         super.getDebugInfo(left, right, side);
 //        left.add("recipes - " + recipesStates.size());
         left.add(new TextComponent("recipes - " + recipesStates.size()));
@@ -353,34 +303,29 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     }
 
     @Nullable
-    private AssemblyInstruction lookupRecipe(String name, ItemStack output)
-    {
+    private AssemblyInstruction lookupRecipe(String name, ItemStack output) {
 //        AssemblyRecipe recipe = AssemblyRecipeRegistry.REGISTRY.get(new ResourceLocation(name));
         Optional<AssemblyRecipe> recipe = AssemblyRecipeRegistry.getAll(level).stream().filter(r -> r.getRegistryName().equals(new ResourceLocation(name))).findFirst();
 //        return recipe != null ? new AssemblyInstruction(recipe, output) : null;
         return recipe.map(assemblyRecipe -> new AssemblyInstruction(assemblyRecipe, output)).orElse(null);
     }
 
-    public class AssemblyInstruction implements Comparable<AssemblyInstruction>
-    {
+    public class AssemblyInstruction implements Comparable<AssemblyInstruction> {
         public final AssemblyRecipe recipe;
         public final ItemStack output;
 
-        private AssemblyInstruction(AssemblyRecipe recipe, ItemStack output)
-        {
+        private AssemblyInstruction(AssemblyRecipe recipe, ItemStack output) {
             this.recipe = recipe;
             this.output = output;
         }
 
         @Override
-        public int compareTo(AssemblyInstruction o)
-        {
+        public int compareTo(AssemblyInstruction o) {
             return recipe.compareTo(o.recipe) + output.serializeNBT().toString().compareTo(o.output.serializeNBT().toString());
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (!(obj instanceof AssemblyInstruction)) return false;
             AssemblyInstruction instruction = (AssemblyInstruction) obj;
             return recipe.getRegistryName().equals(instruction.recipe.getRegistryName()) && ItemStack.isSameItemSameTags(output, instruction.output);
@@ -390,15 +335,13 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     // Calen added from MenuProvider
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerAssemblyTable(BCSiliconMenuTypes.ASSEMBLY_TABLE, id, player, this);
     }
 
     // Calen for jade disp recipe
     @Override
-    public ItemStack getAssemblyResult()
-    {
+    public ItemStack getAssemblyResult() {
         AssemblyInstruction recipe = this.getActiveRecipe();
         return recipe == null ? StackUtil.EMPTY : recipe.output;
     }

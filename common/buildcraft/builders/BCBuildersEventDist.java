@@ -27,42 +27,35 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderTooltipEvent;
-import net.minecraftforge.client.gui.GuiUtils;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
 
-public enum BCBuildersEventDist
-{
+public enum BCBuildersEventDist {
     INSTANCE;
 
     private static final UUID UUID_SINGLE_SCHEMATIC = new UUID(0xfd3b8c59b0a8b191L, 0x772ec006c1b0ffaaL);
     private final Map<Level, Deque<WeakReference<TileQuarry>>> allQuarries = new WeakHashMap<>();
 
-    public synchronized void validateQuarry(TileQuarry quarry)
-    {
+    public synchronized void validateQuarry(TileQuarry quarry) {
         Deque<WeakReference<TileQuarry>> quarries =
                 allQuarries.computeIfAbsent(quarry.getLevel(), k -> new LinkedList<>());
         quarries.add(new WeakReference<>(quarry));
     }
 
-    public synchronized void invalidateQuarry(TileQuarry quarry)
-    {
+    public synchronized void invalidateQuarry(TileQuarry quarry) {
         Deque<WeakReference<TileQuarry>> quarries = allQuarries.get(quarry.getLevel());
-        if (quarries == null)
-        {
+        if (quarries == null) {
             // Odd.
             return;
         }
         Iterator<WeakReference<TileQuarry>> iter = quarries.iterator();
-        while (iter.hasNext())
-        {
+        while (iter.hasNext()) {
             WeakReference<TileQuarry> ref = iter.next();
             TileQuarry pos = ref.get();
-            if (pos == null || pos == quarry)
-            {
+            if (pos == null || pos == quarry) {
                 iter.remove();
             }
         }
@@ -101,22 +94,17 @@ public enum BCBuildersEventDist
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
 //    public void onRenderTooltipPostText(RenderTooltipEvent.PostText event)
-    public void onRenderTooltipPostText(RenderTooltipEvent.Color event)
-    {
+    public void onRenderTooltipPostText(RenderTooltipEvent.Color event) {
         Snapshot snapshot = null;
 //        ItemStack stack = event.getStack();
         ItemStack stack = event.getItemStack();
 //        Header header = BCBuildersItems.snapshotBLUEPRINT_CLEAN != null ? BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getHeader(stack) : null;
         Header header = BCBuildersItems.snapshotBLUEPRINT != null ? BCBuildersItems.snapshotBLUEPRINT.get().getHeader(stack) : null;
-        if (header != null)
-        {
+        if (header != null) {
             snapshot = ClientSnapshots.INSTANCE.getSnapshot(header.key);
-        }
-        else if (BCBuildersItems.schematicSingle != null)
-        {
+        } else if (BCBuildersItems.schematicSingle != null) {
             ISchematicBlock schematicBlock = ItemSchematicSingle.getSchematicSafe(stack);
-            if (schematicBlock != null)
-            {
+            if (schematicBlock != null) {
                 Blueprint blueprint = new Blueprint();
                 blueprint.size = new BlockPos(1, 1, 1);
                 blueprint.offset = BlockPos.ZERO;
@@ -127,14 +115,12 @@ public enum BCBuildersEventDist
             }
         }
 
-        if (snapshot != null)
-        {
+        if (snapshot != null) {
             int pX = event.getX();
 //            int pY = event.getY() + event.getHeight() + 10;
 //            int pY = event.getY() + event.getFont().lineHeight * event.getComponents().size() + 10;
             int pY = event.getY() + 10;
-            for (ClientTooltipComponent line : event.getComponents())
-            {
+            for (ClientTooltipComponent line : event.getComponents()) {
                 pY += line.getHeight();
             }
             int sX = 100;
@@ -195,11 +181,9 @@ public enum BCBuildersEventDist
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public void onTickClientTick(TickEvent.ClientTickEvent event)
-    {
+    public void onTickClientTick(TickEvent.ClientTickEvent event) {
 //        if (event.phase == TickEvent.Phase.END && !Minecraft.getMinecraft().isGamePaused())
-        if (event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isPaused())
-        {
+        if (event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isPaused()) {
             ClientArchitectTables.tick();
         }
     }

@@ -21,10 +21,8 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.Random;
 
-public class BlockMarkerVolume extends BlockMarkerBase
-{
-    public BlockMarkerVolume(String idBC, BlockBehaviour.Properties properties)
-    {
+public class BlockMarkerVolume extends BlockMarkerBase {
+    public BlockMarkerVolume(String idBC, BlockBehaviour.Properties properties) {
         super(
                 idBC,
                 properties
@@ -33,37 +31,30 @@ public class BlockMarkerVolume extends BlockMarkerBase
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level worldIn, BlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return BCCoreBlocks.markerVolumeTile.get().create(pos, state);
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_60514_)
-    {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_60514_) {
         checkSignalState(world, pos);
     }
 
     @Override
 //    public void updateTick(Level world, BlockPos pos, BlockState state, Random rand)
-    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random rand)
-    {
+    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random rand) {
         checkSignalState(world, pos);
     }
 
-    public static void checkSignalState(Level world, BlockPos pos)
-    {
-        if (world.isClientSide)
-        {
+    public static void checkSignalState(Level world, BlockPos pos) {
+        if (world.isClientSide) {
             return;
         }
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileMarkerVolume volume)
-        {
+        if (tile instanceof TileMarkerVolume volume) {
             boolean powered = world.hasNeighborSignal(pos);
 
-            if (volume.isShowingSignals() != powered)
-            {
+            if (volume.isShowingSignals() != powered) {
                 volume.switchSignals();
             }
 //            world.setBlock(pos, BlockMarkerBase.getActualState(world.getBlockState(pos), world, pos, tile), Block.UPDATE_ALL);
@@ -72,13 +63,10 @@ public class BlockMarkerVolume extends BlockMarkerBase
 
     @Override
 //    public boolean onBlockActivated(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ)
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
-        if (!world.isClientSide)
-        {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!world.isClientSide) {
             BlockEntity tile = world.getBlockEntity(pos);
-            if (tile instanceof TileMarkerVolume volume)
-            {
+            if (tile instanceof TileMarkerVolume volume) {
                 volume.onManualConnectionAttempt(player);
             }
         }

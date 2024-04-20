@@ -2,7 +2,6 @@ package buildcraft.datagen.factory;
 
 import buildcraft.api.properties.BuildCraftProperties;
 import buildcraft.datagen.base.BCBlockStateProvider;
-import buildcraft.factory.BCFactory;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.block.BlockTank;
 import buildcraft.factory.block.BlockWaterGel;
@@ -12,16 +11,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class FactoryBlockStateProvider extends BlockStateProvider
-{
-    public FactoryBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
-    {
+public class FactoryBlockStateProvider extends BlockStateProvider {
+    public FactoryBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
         super(gen, modid, exFileHelper);
     }
 
     @Override
-    protected void registerStatesAndModels()
-    {
+    protected void registerStatesAndModels() {
 
 //        BlockModelBuilder openBarrel = models().getBuilder(BCFactoryBlocks.HEAT_EXCHANGE.getId().toString() + "/normal");
         // heatExchange
@@ -295,8 +291,7 @@ public class FactoryBlockStateProvider extends BlockStateProvider
                                 models().withExistingParent(waterGel.getNamespace() + ":block/" + waterGel.getPath() + "/" + s.getValue(BlockWaterGel.PROP_STAGE).name().toLowerCase(), new ResourceLocation("minecraft:cube_all"))
                                         .texture(
                                                 "all",
-                                                switch (s.getValue(BlockWaterGel.PROP_STAGE))
-                                                {
+                                                switch (s.getValue(BlockWaterGel.PROP_STAGE)) {
                                                     case SPREAD_0 ->
                                                             new ResourceLocation("buildcraftfactory:blocks/gel/spread_0");
                                                     case SPREAD_1 ->

@@ -22,8 +22,7 @@ import java.util.*;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class VolumeBox
-{
+public class VolumeBox {
     public final Level world;
     public UUID id;
     public Box box;
@@ -60,9 +59,10 @@ public class VolumeBox
         if (nbt.contains("oldMax")) {
             oldMax = NbtUtils.readBlockPos(nbt.getCompound("oldMax"));
         }
-        NBTUtilBC.readCompoundList(nbt.get("addons")).forEach(addonsEntryTag -> {
+        NBTUtilBC.readCompoundList(nbt.get("addons")).forEach(addonsEntryTag ->
+        {
             Class<? extends Addon> addonClass =
-                AddonsRegistry.INSTANCE.getClassByName(new ResourceLocation(addonsEntryTag.getString("addonClass")));
+                    AddonsRegistry.INSTANCE.getClassByName(new ResourceLocation(addonsEntryTag.getString("addonClass")));
             try {
                 Addon addon = addonClass.newInstance();
                 addon.volumeBox = this;
@@ -70,11 +70,13 @@ public class VolumeBox
                 EnumAddonSlot slot = NBTUtilBC.readEnum(addonsEntryTag.get("slot"), EnumAddonSlot.class);
                 addons.put(slot, addon);
                 addon.postReadFromNbt();
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        NBTUtilBC.readCompoundList(nbt.get("locks")).map(lockTag -> {
+        NBTUtilBC.readCompoundList(nbt.get("locks")).map(lockTag ->
+        {
             Lock lock = new Lock();
             lock.readFromNBT(lockTag);
             return lock;
@@ -182,19 +184,20 @@ public class VolumeBox
             nbt.put("oldMax", NbtUtils.writeBlockPos(oldMax));
         }
         nbt.put(
-            "addons",
-            NBTUtilBC.writeCompoundList(
-                addons.entrySet().stream().map(entry -> {
-                    CompoundTag addonsEntryTag = new CompoundTag();
-                    addonsEntryTag.put("slot", NBTUtilBC.writeEnum(entry.getKey()));
-                    addonsEntryTag.putString(
-                        "addonClass",
-                        AddonsRegistry.INSTANCE.getNameByClass(entry.getValue().getClass()).toString()
-                    );
-                    addonsEntryTag.put("addonData", entry.getValue().writeToNBT(new CompoundTag()));
-                    return addonsEntryTag;
-                })
-            ));
+                "addons",
+                NBTUtilBC.writeCompoundList(
+                        addons.entrySet().stream().map(entry ->
+                        {
+                            CompoundTag addonsEntryTag = new CompoundTag();
+                            addonsEntryTag.put("slot", NBTUtilBC.writeEnum(entry.getKey()));
+                            addonsEntryTag.putString(
+                                    "addonClass",
+                                    AddonsRegistry.INSTANCE.getNameByClass(entry.getValue().getClass()).toString()
+                            );
+                            addonsEntryTag.put("addonData", entry.getValue().writeToNBT(new CompoundTag()));
+                            return addonsEntryTag;
+                        })
+                ));
         nbt.put("locks", NBTUtilBC.writeCompoundList(locks.stream().map(Lock::writeToNBT)));
         return nbt;
     }
@@ -207,7 +210,8 @@ public class VolumeBox
             buf.writeUUID(player);
         }
         buf.writeInt(addons.size());
-        addons.forEach((slot, addon) -> {
+        addons.forEach((slot, addon) ->
+        {
             buf.writeEnum(slot);
             buf.writeUtf(AddonsRegistry.INSTANCE.getNameByClass(addon.getClass()).toString());
             addon.toBytes(buf);
@@ -236,20 +240,22 @@ public class VolumeBox
                 addon.onAdded();
                 addon.fromBytes(buf);
                 newAddons.put(slot, addon);
-            } catch (InstantiationException | IllegalAccessException e) {
+            }
+            catch (InstantiationException | IllegalAccessException e) {
                 throw new IOException("Failed to deserialize addon!", e);
             }
         }
         addons.keySet().removeIf(slot -> !newAddons.containsKey(slot));
         newAddons.entrySet().stream().filter(slotAddon -> !addons.containsKey(slotAddon.getKey()))
-            .forEach(slotAddon -> addons.put(slotAddon.getKey(), slotAddon.getValue()));
+                .forEach(slotAddon -> addons.put(slotAddon.getKey(), slotAddon.getValue()));
         for (Map.Entry<EnumAddonSlot, Addon> slotAddon : newAddons.entrySet()) {
             PacketBufferBC buffer = new PacketBufferBC(Unpooled.buffer());
             slotAddon.getValue().toBytes(buffer);
             addons.get(slotAddon.getKey()).fromBytes(buffer);
         }
         locks.clear();
-        IntStream.range(0, buf.readInt()).mapToObj(i -> {
+        IntStream.range(0, buf.readInt()).mapToObj(i ->
+        {
             Lock lock = new Lock();
             lock.fromBytes(buf);
             return lock;

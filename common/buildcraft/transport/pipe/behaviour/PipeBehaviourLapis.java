@@ -7,8 +7,8 @@
 package buildcraft.transport.pipe.behaviour;
 
 import buildcraft.api.core.EnumPipePart;
-import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 import buildcraft.api.transport.pipe.*;
+import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 import buildcraft.lib.misc.EntityUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.transport.BCTransportStatements;
@@ -26,69 +26,56 @@ import net.minecraftforge.network.NetworkEvent;
 import java.io.IOException;
 import java.util.Collections;
 
-public class PipeBehaviourLapis extends PipeBehaviour
-{
+public class PipeBehaviourLapis extends PipeBehaviour {
     private DyeColor colour = DyeColor.WHITE;
 
-    public PipeBehaviourLapis(IPipe pipe)
-    {
+    public PipeBehaviourLapis(IPipe pipe) {
         super(pipe);
     }
 
-    public PipeBehaviourLapis(IPipe pipe, CompoundTag nbt)
-    {
+    public PipeBehaviourLapis(IPipe pipe, CompoundTag nbt) {
         super(pipe, nbt);
         colour = NBTUtilBC.readEnum(nbt.get("colour"), DyeColor.class);
-        if (colour == null)
-        {
+        if (colour == null) {
             colour = DyeColor.WHITE;
         }
     }
 
     @Override
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = super.writeToNbt();
         nbt.put("colour", NBTUtilBC.writeEnum(colour));
         return nbt;
     }
 
     @Override
-    public void writePayload(FriendlyByteBuf buffer, Dist side)
-    {
+    public void writePayload(FriendlyByteBuf buffer, Dist side) {
         super.writePayload(buffer, side);
-        if (side == Dist.DEDICATED_SERVER)
-        {
+        if (side == Dist.DEDICATED_SERVER) {
             buffer.writeByte(colour.getId());
         }
     }
 
     @Override
 //    public void readPayload(PacketBuffer buffer, Dist side, MessageContext ctx) throws IOException
-    public void readPayload(FriendlyByteBuf buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(FriendlyByteBuf buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
             colour = DyeColor.byId(buffer.readUnsignedByte());
         }
     }
 
     @Override
-    public int getTextureIndex(Direction face)
-    {
+    public int getTextureIndex(Direction face) {
         return colour.getId();
     }
 
     @Override
-    public boolean onPipeActivate(Player player, HitResult trace, float hitX, float hitY, float hitZ, EnumPipePart part)
-    {
-        if (player.level.isClientSide)
-        {
+    public boolean onPipeActivate(Player player, HitResult trace, float hitX, float hitY, float hitZ, EnumPipePart part) {
+        if (player.level.isClientSide) {
             return EntityUtil.getWrenchHand(player) != null;
         }
-        if (EntityUtil.getWrenchHand(player) != null)
-        {
+        if (EntityUtil.getWrenchHand(player) != null) {
             EntityUtil.activateWrench(player, trace);
 //            int n = colour.getMetadata() + (player.isSneaking() ? 15 : 1);
             int n = colour.getId() + (player.isShiftKeyDown() ? 15 : 1);
@@ -101,25 +88,20 @@ public class PipeBehaviourLapis extends PipeBehaviour
     }
 
     @PipeEventHandler
-    public void onReachCenter(PipeEventItem.ReachCenter reachCenter)
-    {
+    public void onReachCenter(PipeEventItem.ReachCenter reachCenter) {
         reachCenter.colour = colour;
     }
 
     @PipeEventHandler
-    public static void addActions(PipeEventStatement.AddActionInternal event)
-    {
+    public static void addActions(PipeEventStatement.AddActionInternal event) {
         Collections.addAll(event.actions, BCTransportStatements.ACTION_PIPE_COLOUR);
     }
 
     @PipeEventHandler
-    public void onActionActivated(PipeEventActionActivate event)
-    {
-        if (event.action instanceof ActionPipeColor)
-        {
+    public void onActionActivated(PipeEventActionActivate event) {
+        if (event.action instanceof ActionPipeColor) {
             ActionPipeColor action = ((ActionPipeColor) event.action);
-            if (this.colour != action.color)
-            {
+            if (this.colour != action.color) {
                 this.colour = action.color;
                 pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
             }

@@ -33,9 +33,9 @@ import java.util.stream.IntStream;
 
 public class AddonFillerPlanner extends Addon implements ISingleAddon, IFillerStatementContainer {
     public final FullStatement<IFillerPattern> patternStatement = new FullStatement<>(
-        FillerType.INSTANCE,
-        4,
-        null
+            FillerType.INSTANCE,
+            4,
+            null
     );
     public boolean inverted;
     @Nullable
@@ -43,12 +43,12 @@ public class AddonFillerPlanner extends Addon implements ISingleAddon, IFillerSt
 
     public void updateBuildingInfo() {
         buildingInfo = FillerUtil.createBuildingInfo(
-            this,
-            patternStatement,
-            IntStream.range(0, patternStatement.maxParams)
-                .mapToObj(patternStatement::get)
-                .toArray(IStatementParameter[]::new),
-            inverted
+                this,
+                patternStatement,
+                IntStream.range(0, patternStatement.maxParams)
+                        .mapToObj(patternStatement::get)
+                        .toArray(IStatementParameter[]::new),
+                inverted
         );
     }
 
@@ -60,7 +60,7 @@ public class AddonFillerPlanner extends Addon implements ISingleAddon, IFillerSt
     @Override
     public IFastAddonRenderer<AddonFillerPlanner> getRenderer() {
         return new AddonDefaultRenderer<AddonFillerPlanner>(BCBuildersSprites.FILLER_PLANNER.getSprite())
-            .then(new AddonRendererFillerPlanner());
+                .then(new AddonRendererFillerPlanner());
     }
 
     @Override

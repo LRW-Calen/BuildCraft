@@ -11,29 +11,22 @@ import net.minecraft.client.gui.Gui;
 
 // TODO Calen ConfigGui?
 //public class ConfigGuiFactoryBC implements ModGuiFactory
-public class ConfigGuiFactoryBC
-{
+public class ConfigGuiFactoryBC {
     //    public static class GuiConfigManager extends GuiConfig
-    public static class GuiConfigManager
-    {
-        public GuiConfigManager(Gui parentScreen)
-        {
+    public static class GuiConfigManager {
+        public GuiConfigManager(Gui parentScreen) {
 //            super(parentScreen, new ArrayList<>(), "buildcraftcore", "config", false, false, new TranslatableComponent("config.buildcraftcore").getContents());
 
 //            for (String s : BCCoreConfig.config.getCategoryNames())
-            for (String s : BCCoreConfig.getConfig(true).getCategoryNames())
-            {
-                if (!s.contains("."))
-                {
+            for (String s : BCCoreConfig.getConfig(true).getCategoryNames()) {
+                if (!s.contains(".")) {
 //                    configElements.add(new BCConfigElement(BCCoreConfig.config.getCategory(s)));
                 }
             }
 
 //            for (String s : BCCoreConfig.objConfig.getCategoryNames())
-            for (String s : BCCoreConfig.getConfig(false).getCategoryNames())
-            {
-                if (!s.contains("."))
-                {
+            for (String s : BCCoreConfig.getConfig(false).getCategoryNames()) {
+                if (!s.contains(".")) {
 //                    configElements.add(new BCConfigElement(BCCoreConfig.objConfig.getCategory(s)));
                 }
             }
@@ -43,8 +36,7 @@ public class ConfigGuiFactoryBC
     /**
      * Needed for forge IModGuiFactory
      */
-    public ConfigGuiFactoryBC()
-    {
+    public ConfigGuiFactoryBC() {
     }
 
 //    @Override

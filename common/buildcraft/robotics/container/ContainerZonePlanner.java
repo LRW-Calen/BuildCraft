@@ -11,17 +11,13 @@ import buildcraft.robotics.tile.TileZonePlanner;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
-public class ContainerZonePlanner extends ContainerBCTile<TileZonePlanner>
-{
-    public ContainerZonePlanner(MenuType menuType, int id, Player player, TileZonePlanner tile)
-    {
+public class ContainerZonePlanner extends ContainerBCTile<TileZonePlanner> {
+    public ContainerZonePlanner(MenuType menuType, int id, Player player, TileZonePlanner tile) {
         super(menuType, id, player, tile);
         addFullPlayerInventory(88, 146);
 
-        for (int x = 0; x < 4; x++)
-        {
-            for (int y = 0; y < 4; y++)
-            {
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
                 addSlot(new SlotBase(tile.invPaintbrushes, x * 4 + y, 8 + x * 18, 146 + y * 18));
             }
         }

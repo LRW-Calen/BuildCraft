@@ -6,8 +6,7 @@
 
 package buildcraft.lib.misc.data;
 
-public class AverageInt
-{
+public class AverageInt {
     private int[] data;
     private int pos, precise;
     private int averageRaw, tickValue;

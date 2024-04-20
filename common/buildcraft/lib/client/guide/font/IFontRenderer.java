@@ -10,8 +10,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 
 import java.util.List;
 
-public interface IFontRenderer
-{
+public interface IFontRenderer {
     int getStringWidth(String text);
 
     int getFontHeight(String text);

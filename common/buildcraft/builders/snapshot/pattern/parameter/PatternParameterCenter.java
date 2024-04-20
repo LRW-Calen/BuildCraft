@@ -34,8 +34,8 @@ public enum PatternParameterCenter implements IStatementParameter {
     SOUTH_EAST(1, 1);
 
     public static final PatternParameterCenter[] POSSIBLE_ORDER = {//
-        CENTER, NORTH_WEST, NORTH, NORTH_EAST, EAST,//
-        SOUTH_EAST, SOUTH, SOUTH_WEST, WEST//
+            CENTER, NORTH_WEST, NORTH, NORTH_EAST, EAST,//
+            SOUTH_EAST, SOUTH, SOUTH_WEST, WEST//
     };
 
     public final int offsetX, offsetZ;
@@ -80,6 +80,7 @@ public enum PatternParameterCenter implements IStatementParameter {
 //        return LocaleUtil.localize("direction.center." + ordinal());
         return new TranslatableComponent("direction.center." + ordinal());
     }
+
     @Override
     public String getDescriptionKey() {
         return "direction.center." + ordinal();
@@ -87,7 +88,7 @@ public enum PatternParameterCenter implements IStatementParameter {
 
     @Override
     public PatternParameterCenter onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-        StatementMouseClick mouse) {
+                                          StatementMouseClick mouse) {
         return null;
     }
 

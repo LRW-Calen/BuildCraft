@@ -16,8 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
 // TODO: Convert this gui into JSON!
-public class GuiBuilder extends GuiBC8<ContainerBuilder>
-{
+public class GuiBuilder extends GuiBC8<ContainerBuilder> {
     private static final ResourceLocation TEXTURE_BASE =
             new ResourceLocation("buildcraftbuilders:textures/gui/builder.png");
     private static final ResourceLocation TEXTURE_BLUEPRINT =
@@ -33,8 +32,7 @@ public class GuiBuilder extends GuiBC8<ContainerBuilder>
     );
     private static final GuiIcon ICON_TANK_OVERLAY = new GuiIcon(TEXTURE_BLUEPRINT, 0, 54, 16, 47);
 
-    public GuiBuilder(ContainerBuilder container, Inventory inventory, Component component)
-    {
+    public GuiBuilder(ContainerBuilder container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_BLUEPRINT_X;
         imageWidth = SIZE_BLUEPRINT_X;
@@ -49,8 +47,7 @@ public class GuiBuilder extends GuiBC8<ContainerBuilder>
 //        super.initGui();
 //        super.init();
 
-        for (int i = 0; i < container.widgetTanks.size(); i++)
-        {
+        for (int i = 0; i < container.widgetTanks.size(); i++) {
             mainGui.shownElements.add(
                     container.widgetTanks
                             .get(i).createGuiElement(mainGui, new GuiRectangle(179 + i * 18, 145, 16, 47).offset(mainGui.rootElement), ICON_TANK_OVERLAY)
@@ -77,8 +74,7 @@ public class GuiBuilder extends GuiBC8<ContainerBuilder>
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
         ICON_BLUEPRINT_GUI.drawAt(mainGui.rootElement.offset(SIZE_BLUEPRINT_X - BLUEPRINT_WIDTH, 0), poseStack);
     }

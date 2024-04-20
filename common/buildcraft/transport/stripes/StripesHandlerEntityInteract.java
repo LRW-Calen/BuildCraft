@@ -33,7 +33,7 @@ public enum StripesHandlerEntityInteract implements IStripesHandlerItem {
                           IStripesActivator activator) {
         List<LivingEntity> entities = world.getEntitiesOfClass(
                 LivingEntity.class,
-            new AABB(pos.relative(direction))
+                new AABB(pos.relative(direction))
         );
         Collections.shuffle(entities);
         for (LivingEntity entity : entities) {

@@ -107,7 +107,7 @@ public class ElementTypeButton extends ElementType {
     }
 
     private static ISimpleDrawable resolveDrawable(FunctionContext ctx, JsonGuiInfo guiInfo, JsonGuiElement json,
-        BuildCraftJsonGui gui, int sizeX, int sizeY, String key) {
+                                                   BuildCraftJsonGui gui, int sizeX, int sizeY, String key) {
         double[] uvs = new double[4];
         for (int i = 0; i < 4; i++) {
             uvs[i] = resolveEquationDouble(json, key + "[" + i + "]", ctx);

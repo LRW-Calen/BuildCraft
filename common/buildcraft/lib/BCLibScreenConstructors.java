@@ -12,35 +12,24 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class BCLibScreenConstructors
-{
-    public static final MenuScreens.ScreenConstructor<ContainerGuide, GuiGuide> GUIDE = new MenuScreens.ScreenConstructor<>()
-    {
+public class BCLibScreenConstructors {
+    public static final MenuScreens.ScreenConstructor<ContainerGuide, GuiGuide> GUIDE = new MenuScreens.ScreenConstructor<>() {
         @Nonnull
         @Override
-        public GuiGuide create(@Nonnull ContainerGuide container, @Nonnull Inventory inv, @Nonnull Component title)
-        {
+        public GuiGuide create(@Nonnull ContainerGuide container, @Nonnull Inventory inv, @Nonnull Component title) {
             Player player = inv.player;
             ItemStack stack;
-            if (player.getMainHandItem().getItem() == BCLibItems.guide.get())
-            {
+            if (player.getMainHandItem().getItem() == BCLibItems.guide.get()) {
                 stack = player.getMainHandItem();
-            }
-            else if (player.getOffhandItem().getItem() == BCLibItems.guide.get())
-            {
+            } else if (player.getOffhandItem().getItem() == BCLibItems.guide.get()) {
                 stack = player.getOffhandItem();
-            }
-            else
-            {
+            } else {
                 stack = StackUtil.EMPTY;
             }
             String name = ItemGuide.getBookName(stack);
-            if (name == null || name.isEmpty())
-            {
+            if (name == null || name.isEmpty()) {
                 return new GuiGuide(container, title);
-            }
-            else
-            {
+            } else {
                 return new GuiGuide(container, name, title);
             }
         }

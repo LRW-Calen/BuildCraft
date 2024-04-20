@@ -9,19 +9,11 @@ package buildcraft.lib.debug;
 import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.render.DetachedRenderer.IDetachedRenderer;
-import buildcraft.lib.client.sprite.SpriteHolderRegistry;
-import buildcraft.lib.misc.SpriteUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Camera;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
@@ -33,8 +25,7 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Tuple3f;
 
 @OnlyIn(Dist.CLIENT)
-public enum DebugRenderHelper implements IDetachedRenderer
-{
+public enum DebugRenderHelper implements IDetachedRenderer {
     INSTANCE;
 
 //    //    private static final MutableQuad[] smallCuboid;
@@ -67,8 +58,7 @@ public enum DebugRenderHelper implements IDetachedRenderer
         Tuple3f center = new Point3f(0.5f, 0.5f, 0.5f);
         Tuple3f radius = new Point3f(0.25f, 0.25f, 0.25f);
 
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             MutableQuad quad = ModelUtil.createFace(face, center, radius, null);
             // Calen: "white" is missingno in 1.18.2
             // fixed by loading "white" in SpriteHolderRegistry
@@ -82,27 +72,21 @@ public enum DebugRenderHelper implements IDetachedRenderer
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void render(Player player, float partialTicks, PoseStack poseStack)
-    {
+    public void render(Player player, float partialTicks, PoseStack poseStack) {
         IAdvDebugTarget target = BCAdvDebugging.INSTANCE.targetClient;
-        if (target == null)
-        {
+        if (target == null) {
             return;
-        }
-        else if (!target.doesExistInWorld())
-        {
+        } else if (!target.doesExistInWorld()) {
             // targetClient = null;
             // return;
         }
         IDetachedRenderer renderer = target.getDebugRenderer();
-        if (renderer != null)
-        {
+        if (renderer != null) {
             renderer.render(player, partialTicks, poseStack);
         }
     }
 
-    public static void renderAABB(PoseStack poseStack, VertexConsumer bb, AABB aabb, int colour)
-    {
+    public static void renderAABB(PoseStack poseStack, VertexConsumer bb, AABB aabb, int colour) {
         // Calen Calen normal?
 //        bb.setTranslation(0, 0, 0);
         poseStack.pushPose();
@@ -112,8 +96,7 @@ public enum DebugRenderHelper implements IDetachedRenderer
 //                (float) aabb.getCenter().y,
 //                (float) aabb.getCenter().z
 //        );
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             MutableQuad quad = ModelUtil.createFace(
                     face,
                     new Point3f(
@@ -147,14 +130,12 @@ public enum DebugRenderHelper implements IDetachedRenderer
 
 //    private static TextureAtlasSprite WHITE_CONCRETE = null;
 
-    public static void renderSmallCuboid(PoseStack poseStack, VertexConsumer bb, BlockPos pos, int colour)
-    {
+    public static void renderSmallCuboid(PoseStack poseStack, VertexConsumer bb, BlockPos pos, int colour) {
 //        bb.setTranslation(pos.getX(), pos.getY(), pos.getZ());
         poseStack.pushPose();
         poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
 //        for (MutableQuad q : smallCuboid)
-        for (MutableQuad q : smallCuboid.resolve().get())
-        {
+        for (MutableQuad q : smallCuboid.resolve().get()) {
 //            q.texFromSprite(ModelLoader.White.INSTANCE);
 //            q.texFromSprite(ForgeModelBakery.White.instance()); // Calen: "white" is missingno in 1.18.2
             // Calen: don't texFromSprite here! or the tex_u/v will be changed based on last time!

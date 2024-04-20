@@ -12,9 +12,9 @@ import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 import buildcraft.api.transport.pipe.PipeApi;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
-import buildcraft.transport.tile.TilePipeHolder;
 import buildcraft.lib.misc.data.IdAllocator;
 import buildcraft.lib.net.PacketBufferBC;
+import buildcraft.transport.tile.TilePipeHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -25,8 +25,7 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.io.IOException;
 
-public final class PluggableHolder
-{
+public final class PluggableHolder {
     // TODO: Networking is kinda sub-par at the moment for pluggables
     // perhaps add some sort of interface for allowing pluggables to correctly write data?
     private static final IdAllocator ID_ALLOC = new IdAllocator("PlugHolder");
@@ -38,29 +37,24 @@ public final class PluggableHolder
     public final Direction side;
     public PipePluggable pluggable;
 
-    public PluggableHolder(TilePipeHolder holder, Direction side)
-    {
+    public PluggableHolder(TilePipeHolder holder, Direction side) {
         this.holder = holder;
         this.side = side;
     }
 
     // Saving + Loading
 
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = new CompoundTag();
-        if (pluggable != null)
-        {
+        if (pluggable != null) {
             nbt.putString("id", pluggable.definition.identifier.toString());
             nbt.put("data", pluggable.writeToNbt());
         }
         return nbt;
     }
 
-    public void readFromNbt(CompoundTag nbt)
-    {
-        if (nbt.isEmpty())
-        {
+    public void readFromNbt(CompoundTag nbt) {
+        if (nbt.isEmpty()) {
             pluggable = null;
             return;
         }
@@ -68,13 +62,10 @@ public final class PluggableHolder
         CompoundTag data = nbt.getCompound("data");
         ResourceLocation identifier = new ResourceLocation(id);
         PluggableDefinition def = PipeApi.pluggableRegistry.getDefinition(identifier);
-        if (def == null)
-        {
+        if (def == null) {
             BCLog.logger.warn("Unknown pluggable id '" + id + "'");
             throw new Error("Def was null!");
-        }
-        else
-        {
+        } else {
             pluggable = def.readFromNbt(holder, side, data);
             holder.eventBus.registerHandler(pluggable);
         }
@@ -86,118 +77,81 @@ public final class PluggableHolder
      * Called by {@link TilePipeHolder#replacePluggable(Direction, PipePluggable)} to inform clients about the new
      * pluggable.
      */
-    public void sendNewPluggableData()
-    {
+    public void sendNewPluggableData() {
         holder.sendMessage(PipeMessageReceiver.PLUGGABLES[side.ordinal()], this::writeCreationPayload);
     }
 
-    public void writeCreationPayload(FriendlyByteBuf buffer)
-    {
-        if (pluggable == null)
-        {
+    public void writeCreationPayload(FriendlyByteBuf buffer) {
+        if (pluggable == null) {
             buffer.writeByte(ID_REMOVE_PLUG);
-        }
-        else
-        {
+        } else {
             buffer.writeByte(ID_CREATE_PLUG);
             buffer.writeUtf(pluggable.definition.identifier.toString());
             pluggable.writeCreationPayload(buffer);
         }
     }
 
-    public void readCreationPayload(FriendlyByteBuf buffer) throws InvalidInputDataException
-    {
+    public void readCreationPayload(FriendlyByteBuf buffer) throws InvalidInputDataException {
         int id = buffer.readUnsignedByte();
-        if (id == ID_CREATE_PLUG)
-        {
+        if (id == ID_CREATE_PLUG) {
             readCreateInternal(buffer);
-        }
-        else if (id == ID_REMOVE_PLUG)
-        {
+        } else if (id == ID_REMOVE_PLUG) {
             holder.eventBus.unregisterHandler(pluggable);
             pluggable = null;
-        }
-        else
-        {
+        } else {
             throw new InvalidInputDataException("Invalid ID for creation! " + ID_ALLOC.getNameFor(id));
         }
     }
 
-    private void readCreateInternal(FriendlyByteBuf buffer) throws InvalidInputDataException
-    {
+    private void readCreateInternal(FriendlyByteBuf buffer) throws InvalidInputDataException {
         ResourceLocation identifier = new ResourceLocation(buffer.readUtf(256));
         PluggableDefinition def = PipeApi.pluggableRegistry.getDefinition(identifier);
-        if (def == null)
-        {
+        if (def == null) {
             throw new InvalidInputDataException("Unknown remote pluggable \"" + identifier + "\"");
         }
-        if (pluggable != null)
-        {
+        if (pluggable != null) {
             holder.eventBus.unregisterHandler(pluggable);
         }
         pluggable = def.loadFromBuffer(holder, side, buffer);
         holder.eventBus.registerHandler(pluggable);
     }
 
-    public void writePayload(PacketBufferBC buffer, Dist netSide)
-    {
-        if (netSide == Dist.CLIENT)
-        {
+    public void writePayload(PacketBufferBC buffer, Dist netSide) {
+        if (netSide == Dist.CLIENT) {
             buffer.writeByte(ID_UPDATE_PLUG);
-            if (pluggable != null)
-            {
+            if (pluggable != null) {
                 pluggable.writePayload(buffer, netSide);
             }
-        }
-        else
-        {
-            if (pluggable == null)
-            {
+        } else {
+            if (pluggable == null) {
                 buffer.writeByte(ID_REMOVE_PLUG);
-            }
-            else
-            {
+            } else {
                 buffer.writeByte(ID_UPDATE_PLUG);
                 pluggable.writePayload(buffer, netSide);
             }
         }
     }
 
-//    public void readPayload(PacketBufferBC buffer, Dist netSide, MessageContext ctx) throws IOException
-    public void readPayload(PacketBufferBC buffer, NetworkDirection netSide, NetworkEvent.Context ctx) throws IOException
-    {
+    //    public void readPayload(PacketBufferBC buffer, Dist netSide, MessageContext ctx) throws IOException
+    public void readPayload(PacketBufferBC buffer, NetworkDirection netSide, NetworkEvent.Context ctx) throws IOException {
         int id = buffer.readUnsignedByte();
-        if (netSide == NetworkDirection.PLAY_TO_SERVER)
-        {
-            if (id == ID_UPDATE_PLUG)
-            {
-                if (pluggable != null)
-                {
+        if (netSide == NetworkDirection.PLAY_TO_SERVER) {
+            if (id == ID_UPDATE_PLUG) {
+                if (pluggable != null) {
                     pluggable.readPayload(buffer, netSide, ctx);
                 }
-            }
-            else
-            {
+            } else {
                 throw new InvalidInputDataException("Unknown ID " + ID_ALLOC.getNameFor(id));
             }
-        }
-        else
-        {
-            if (id == ID_REMOVE_PLUG)
-            {
+        } else {
+            if (id == ID_REMOVE_PLUG) {
                 holder.eventBus.unregisterHandler(pluggable);
                 pluggable = null;
-            }
-            else if (id == ID_UPDATE_PLUG)
-            {
+            } else if (id == ID_UPDATE_PLUG) {
                 pluggable.readPayload(buffer, netSide, ctx);
-            }
-            else if (id == ID_CREATE_PLUG)
-            {
+            } else if (id == ID_CREATE_PLUG) {
                 readCreateInternal(buffer);
-            }
-            else
-            {
+            } else {
                 throw new InvalidInputDataException("Unknown ID " + ID_ALLOC.getNameFor(id));
             }
         }
@@ -205,10 +159,8 @@ public final class PluggableHolder
 
     // Pluggable overrides
 
-    public void onTick()
-    {
-        if (pluggable != null)
-        {
+    public void onTick() {
+        if (pluggable != null) {
             pluggable.onTick();
         }
     }

@@ -28,7 +28,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -37,31 +36,26 @@ import net.minecraft.world.phys.Vec3;
 import java.util.concurrent.TimeUnit;
 
 //public class RenderZonePlanner extends TileEntitySpecialRenderer<TileZonePlanner>
-public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner>
-{
+public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner> {
     private static final Cache<WorldPos, DynamicTextureBC> TEXTURES = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.MINUTES).removalListener(RenderZonePlanner::onRemove).build();
     private static final int TEXTURE_WIDTH = 10;
     private static final int TEXTURE_HEIGHT = 8;
 
-    public RenderZonePlanner(BlockEntityRendererProvider.Context context)
-    {
+    public RenderZonePlanner(BlockEntityRendererProvider.Context context) {
     }
 
 
-    private static void onRemove(RemovalNotification<WorldPos, DynamicTextureBC> notification)
-    {
+    private static void onRemove(RemovalNotification<WorldPos, DynamicTextureBC> notification) {
         DynamicTextureBC texture = notification.getValue();
-        if (texture != null)
-        {
+        if (texture != null) {
             texture.deleteGlTexture();
         }
     }
 
     @Override
 //    public final void render(TileZonePlanner tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
-    public void render(TileZonePlanner tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileZonePlanner tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         Minecraft.getInstance().getProfiler().push("bc");
         Minecraft.getInstance().getProfiler().push("zone");
 
@@ -74,15 +68,13 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner>
         double maxZ = 1 + offset;
 
         BlockState state = tile.getLevel().getBlockState(tile.getBlockPos());
-        if (state.getBlock() != BCRoboticsBlocks.zonePlanner.get())
-        {
+        if (state.getBlock() != BCRoboticsBlocks.zonePlanner.get()) {
             return;
         }
         Direction side = state.getValue(BuildCraftProperties.BLOCK_FACING).getOpposite();
 
         DynamicTextureBC texture = getTexture(tile, side);
-        if (texture == null)
-        {
+        if (texture == null) {
             return;
         }
         poseStack.pushPose();
@@ -104,13 +96,10 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner>
         // TODO Calen
 //            GlStateManager.disableCull();
 //        if (Minecraft.isAmbientOcclusionEnabled())
-        if (Minecraft.useAmbientOcclusion())
-        {
+        if (Minecraft.useAmbientOcclusion()) {
 //            GlStateManager.shadeModel(GL11.GL_SMOOTH);
             RenderSystem.setShader(GameRenderer::getRendertypeEntitySmoothCutoutShader);
-        }
-        else
-        {
+        } else {
 //            GlStateManager.shadeModel(GL11.GL_FLAT);
             RenderSystem.setShader(GameRenderer::getBlockShader);
         }
@@ -126,8 +115,7 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner>
         float minV = 0;
         float maxV = texture.getMaxV();
 
-        switch (side)
-        {
+        switch (side) {
             case NORTH:
                 min = new Vec3(minX, minY, maxZ);
                 max = new Vec3(maxX, maxY, maxZ);
@@ -171,33 +159,26 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner>
         Minecraft.getInstance().getProfiler().pop();
     }
 
-    private static DynamicTextureBC getTexture(TileZonePlanner tile, Direction side)
-    {
-        if (TEXTURES.getIfPresent(new WorldPos(tile)) == null)
-        {
+    private static DynamicTextureBC getTexture(TileZonePlanner tile, Direction side) {
+        if (TEXTURES.getIfPresent(new WorldPos(tile)) == null) {
             DynamicTextureBC texture = createTexture(tile, side);
-            if (texture != null)
-            {
+            if (texture != null) {
                 TEXTURES.put(new WorldPos(tile), texture);
             }
         }
         return TEXTURES.getIfPresent(new WorldPos(tile));
     }
 
-    private static DynamicTextureBC createTexture(TileZonePlanner tile, Direction side)
-    {
+    private static DynamicTextureBC createTexture(TileZonePlanner tile, Direction side) {
         DynamicTextureBC texture = new DynamicTextureBC(TEXTURE_WIDTH, TEXTURE_HEIGHT);
-        for (int textureX = 0; textureX < TEXTURE_WIDTH; textureX++)
-        {
-            for (int textureY = 0; textureY < TEXTURE_HEIGHT; textureY++)
-            {
+        for (int textureX = 0; textureX < TEXTURE_WIDTH; textureX++) {
+            for (int textureY = 0; textureY < TEXTURE_HEIGHT; textureY++) {
                 int posX;
                 int posZ;
                 int scale = 4;
                 int offset1 = (textureX - TEXTURE_WIDTH / 2) * scale;
                 int offset2 = (textureY - TEXTURE_HEIGHT / 2) * scale;
-                switch (side)
-                {
+                switch (side) {
                     case NORTH:
                         posX = tile.getBlockPos().getX() + offset1;
                         posZ = tile.getBlockPos().getZ() - offset2;
@@ -222,12 +203,9 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner>
                 ZonePlannerMapChunkKey key = new ZonePlannerMapChunkKey(chunkPos, tile.getLevel().dimension(), tile.getLevelBC());
                 ZonePlannerMapChunk zonePlannerMapChunk =
                         ZonePlannerMapDataClient.INSTANCE.getChunk(tile.getLevel(), key);
-                if (zonePlannerMapChunk != null)
-                {
+                if (zonePlannerMapChunk != null) {
                     texture.setColor(textureX, textureY, zonePlannerMapChunk.getColour(posX, posZ) | 0xFF_00_00_00);
-                }
-                else
-                {
+                } else {
                     return null;
                 }
             }

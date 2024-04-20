@@ -25,10 +25,9 @@ import net.minecraftforge.fml.common.Mod;
 import java.util.EnumMap;
 import java.util.Locale;
 
-@Mod.EventBusSubscriber(modid = BCTransport.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = BCTransport.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 @OnlyIn(Dist.CLIENT)
-public class BCTransportSprites
-{
+public class BCTransportSprites {
     public static final SpriteHolder EMPTY_FILTERED_BUFFER_SLOT;
     public static final SpriteHolder NOTHING_FILTERED_BUFFER_SLOT;
     public static final SpriteHolder PIPE_COLOUR, COLOUR_ITEM_BOX;
@@ -48,8 +47,7 @@ public class BCTransportSprites
     public static final SpriteHolder POWER_FLOW;
     public static final SpriteHolder POWER_FLOW_OVERLOAD;
 
-    static
-    {
+    static {
         EMPTY_FILTERED_BUFFER_SLOT = getHolder("gui/empty_filtered_buffer_slot");
         NOTHING_FILTERED_BUFFER_SLOT = getHolder("gui/nothing_filtered_buffer_slot");
         PIPE_COLOUR = getHolder("pipes/overlay_stained");
@@ -58,30 +56,26 @@ public class BCTransportSprites
         PIPE_COLOUR_BORDER_INNER = getHolder("pipes/colour_border_inner");
 
         ACTION_PIPE_COLOUR = new SpriteHolder[ColourUtil.COLOURS.length];
-        for (DyeColor colour : ColourUtil.COLOURS)
-        {
+        for (DyeColor colour : ColourUtil.COLOURS) {
             ACTION_PIPE_COLOUR[colour.ordinal()] = getHolder("core", "items/paintbrush/" + colour.getName());
         }
 
         PIPE_SIGNAL_OFF = new EnumMap<>(DyeColor.class);
         PIPE_SIGNAL_ON = new EnumMap<>(DyeColor.class);
 
-        for (DyeColor colour : ColourUtil.COLOURS)
-        {
+        for (DyeColor colour : ColourUtil.COLOURS) {
             String pre = "triggers/trigger_pipesignal_" + colour.getName().toLowerCase(Locale.ROOT) + "_";
             PIPE_SIGNAL_OFF.put(colour, getHolder(pre + "inactive"));
             PIPE_SIGNAL_ON.put(colour, getHolder(pre + "active"));
         }
 
         ACTION_EXTRACTION_PRESET = new EnumMap<>(SlotIndex.class);
-        for (SlotIndex index : SlotIndex.VALUES)
-        {
+        for (SlotIndex index : SlotIndex.VALUES) {
             ACTION_EXTRACTION_PRESET.put(index, getHolder("triggers/extraction_preset_" + index.colour.getName()));
         }
 
         ACTION_PIPE_DIRECTION = new EnumMap<>(Direction.class);
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             ACTION_PIPE_DIRECTION.put(face,
                     getHolder("core", "triggers/trigger_dir_" + face.getName().toLowerCase(Locale.ROOT)));
         }
@@ -94,13 +88,11 @@ public class BCTransportSprites
         TRIGGER_FLUIDS_TRAVERSING = getHolder("transport", "triggers/trigger_pipecontents_containsfluids");
     }
 
-    private static SpriteHolder getHolder(String loc)
-    {
+    private static SpriteHolder getHolder(String loc) {
         return SpriteHolderRegistry.getHolder("buildcrafttransport:" + loc);
     }
 
-    private static SpriteHolder getHolder(String module, String loc)
-    {
+    private static SpriteHolder getHolder(String module, String loc) {
         return SpriteHolderRegistry.getHolder("buildcraft" + module + ":" + loc);
     }
 
@@ -110,31 +102,26 @@ public class BCTransportSprites
 //    }
 
     @SubscribeEvent
-    public static void onTextureStitchPre(TextureStitchEvent.Pre event)
-    {
+    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         PipeModelCacheBase.generator.onTextureStitchPre(event);
     }
 
     @SubscribeEvent
-    public static void onTextureStitchPost(TextureStitchEvent.Post event)
-    {
+    public static void onTextureStitchPost(TextureStitchEvent.Post event) {
         PipeModelCacheBase.generator.onTextureStitchPost(event);
     }
 
     @SubscribeEvent
-    public static void onModelBake(ModelBakeEvent event)
-    {
+    public static void onModelBake(ModelBakeEvent event) {
         PipeModelCacheAll.clearModels();
         PipeFlowRendererItems.onModelBake();
     }
 
-    public static SpriteHolder getPipeSignal(boolean active, DyeColor colour)
-    {
+    public static SpriteHolder getPipeSignal(boolean active, DyeColor colour) {
         return (active ? PIPE_SIGNAL_ON : PIPE_SIGNAL_OFF).get(colour);
     }
 
-    public static SpriteHolder getPipeDirection(Direction face)
-    {
+    public static SpriteHolder getPipeDirection(Direction face) {
         return ACTION_PIPE_DIRECTION.get(face);
     }
 }

@@ -11,60 +11,48 @@ import buildcraft.core.marker.PathConnection;
 import buildcraft.lib.tile.TileMarker;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class TileMarkerPath extends TileMarker<PathConnection> implements IPathProvider
-{
+public class TileMarkerPath extends TileMarker<PathConnection> implements IPathProvider {
 
-    public TileMarkerPath(BlockPos pos, BlockState blockState)
-    {
-        super(BCCoreBlocks.markerPathTile.get(),pos, blockState);
+    public TileMarkerPath(BlockPos pos, BlockState blockState) {
+        super(BCCoreBlocks.markerPathTile.get(), pos, blockState);
     }
 
     @Override
-    public ImmutableList<BlockPos> getPath()
-    {
+    public ImmutableList<BlockPos> getPath() {
         PathConnection connection = getCurrentConnection();
-        if (connection == null)
-        {
+        if (connection == null) {
             return ImmutableList.of();
         }
         return connection.getMarkerPositions();
     }
 
     @Override
-    public void removeFromWorld()
-    {
-        for (BlockPos pos : getPath())
-        {
+    public void removeFromWorld() {
+        for (BlockPos pos : getPath()) {
 //            world.destroyBlock(pos, true);
             level.destroyBlock(pos, true);
         }
     }
 
     @Override
-    public PathCache getCache()
-    {
+    public PathCache getCache() {
         return PathCache.INSTANCE;
     }
 
     @Override
-    public boolean isActiveForRender()
-    {
+    public boolean isActiveForRender() {
         PathConnection connection = getCurrentConnection();
         return connection != null;
     }
 
-    public void reverseDirection()
-    {
-        if (level.isClientSide)
-        {
+    public void reverseDirection() {
+        if (level.isClientSide) {
             return;
         }
         PathConnection connection = getCurrentConnection();
-        if (connection == null)
-        {
+        if (connection == null) {
             return;
         }
         connection.reverseDirection();

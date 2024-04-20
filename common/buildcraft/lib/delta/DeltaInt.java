@@ -1,15 +1,15 @@
 /* Copyright (c) 2016 SpaceToad and the BuildCraft team
- * 
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.lib.delta;
 
+import buildcraft.lib.delta.DeltaManager.EnumDeltaMessage;
+import buildcraft.lib.delta.DeltaManager.EnumNetworkVisibility;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import buildcraft.lib.delta.DeltaManager.EnumNetworkVisibility;
-import buildcraft.lib.delta.DeltaManager.EnumDeltaMessage;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -121,14 +121,15 @@ public class DeltaInt {
     }
 
     /** Adds a delta value
-     * 
+     *
      * @param start
      * @param end
      * @param delta */
     public void addDelta(long start, long end, int delta) {
         DeltaIntEntry entry = new DeltaIntEntry(start + tick, end + tick, delta);
         changingEntries.add(entry);
-        manager.sendDeltaMessage(EnumDeltaMessage.ADD_SINGLE, this, (buffer) -> {
+        manager.sendDeltaMessage(EnumDeltaMessage.ADD_SINGLE, this, (buffer) ->
+        {
             buffer.writeLong(entry.startTick - tick);
             buffer.writeLong(entry.endTick - tick);
             buffer.writeInt(entry.delta);
@@ -136,7 +137,7 @@ public class DeltaInt {
     }
 
     /** Forgets all existing deltas and sets the values to the new value.
-     * 
+     *
      * @param value */
     public void setValue(int value) {
         changingEntries.clear();

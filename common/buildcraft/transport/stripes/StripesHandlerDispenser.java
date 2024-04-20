@@ -25,21 +25,18 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum StripesHandlerDispenser implements IStripesHandlerItem
-{
+public enum StripesHandlerDispenser implements IStripesHandlerItem {
     INSTANCE;
 
     public static final List<Item> ITEMS = new ArrayList<>();
     public static final List<Class<? extends Item>> ITEM_CLASSES = new ArrayList<>();
 
-    public static class Source implements BlockSource
-    {
+    public static class Source implements BlockSource {
         private final ServerLevel world;
         private final BlockPos pos;
         private final Direction side;
 
-        public Source(ServerLevel world, BlockPos pos, Direction side)
-        {
+        public Source(ServerLevel world, BlockPos pos, Direction side) {
             this.world = world;
             this.pos = pos;
             this.side = side;
@@ -47,66 +44,55 @@ public enum StripesHandlerDispenser implements IStripesHandlerItem
 
         @Override
 //        public double getX()
-        public double x()
-        {
+        public double x() {
             return pos.getX() + 0.5D;
         }
 
         @Override
 //        public double getY()
-        public double y()
-        {
+        public double y() {
             return pos.getY() + 0.5D;
         }
 
         @Override
 //        public double getZ()
-        public double z()
-        {
+        public double z() {
             return pos.getZ() + 0.5D;
         }
 
         @Override
 //        public BlockPos getBlockPos()
-        public BlockPos getPos()
-        {
+        public BlockPos getPos() {
             return pos;
         }
 
         @Override
-        public BlockState getBlockState()
-        {
+        public BlockState getBlockState() {
             return Blocks.DISPENSER.defaultBlockState().setValue(DispenserBlock.FACING, side);
         }
 
         @SuppressWarnings("unchecked")
         @Override
 //        public <T extends BlockEntity> T getBlockTileEntity()
-        public <T extends BlockEntity> T getEntity()
-        {
+        public <T extends BlockEntity> T getEntity() {
             return (T) world.getBlockEntity(pos);
         }
 
         @Override
 //        public Level getWorld()
-        public ServerLevel getLevel()
-        {
+        public ServerLevel getLevel() {
             return world;
         }
     }
 
-    private static boolean shouldHandle(ItemStack stack)
-    {
-        if (ITEMS.contains(stack.getItem()))
-        {
+    private static boolean shouldHandle(ItemStack stack) {
+        if (ITEMS.contains(stack.getItem())) {
             return true;
         }
 
         Class<?> c = stack.getItem().getClass();
-        while (c != Item.class)
-        {
-            if (ITEMS.contains(c))
-            {
+        while (c != Item.class) {
+            if (ITEMS.contains(c)) {
                 return true;
             }
             c = c.getSuperclass();
@@ -120,11 +106,9 @@ public enum StripesHandlerDispenser implements IStripesHandlerItem
                           Direction direction,
                           ItemStack stack,
                           Player player,
-                          IStripesActivator activator)
-    {
+                          IStripesActivator activator) {
 //        if (!DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.containsKey(stack.getItem()))
-        if (DispenserBlock.DISPENSER_REGISTRY.containsKey(stack.getItem()))
-        {
+        if (DispenserBlock.DISPENSER_REGISTRY.containsKey(stack.getItem())) {
             return false;
         }
 //        DispenseItemBehavior behaviour = DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.getObject(stack.getItem());

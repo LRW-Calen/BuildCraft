@@ -24,8 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-public class WorldSavedDataVolumeBoxes extends SavedData
-{
+public class WorldSavedDataVolumeBoxes extends SavedData {
     private static final String DATA_NAME = "buildcraft_volume_boxes";
     /**
      * Used to assign {@link WorldSavedDataVolumeBoxes#world} to pass it to {@link VolumeBox},
@@ -66,7 +65,8 @@ public class WorldSavedDataVolumeBoxes extends SavedData
 
     public void tick() {
         AtomicBoolean dirty = new AtomicBoolean(false);
-        volumeBoxes.stream().filter(VolumeBox::isEditing).forEach(volumeBox -> {
+        volumeBoxes.stream().filter(VolumeBox::isEditing).forEach(volumeBox ->
+        {
             Player player = volumeBox.getPlayer(world);
             if (player == null) {
                 volumeBox.pauseEditing();
@@ -76,9 +76,9 @@ public class WorldSavedDataVolumeBoxes extends SavedData
                 volumeBox.box.reset();
                 volumeBox.box.extendToEncompass(volumeBox.getHeld());
                 BlockPos lookingAt = new BlockPos(
-                    player.position()
-                        .add(0, player.getEyeHeight(), 0)
-                        .add(player.getLookAngle().scale(volumeBox.getDist()))
+                        player.position()
+                                .add(0, player.getEyeHeight(), 0)
+                                .add(player.getLookAngle().scale(volumeBox.getDist()))
                 );
                 volumeBox.box.extendToEncompass(lookingAt);
                 if (!volumeBox.box.getBoundingBox().equals(oldAabb)) {
@@ -88,8 +88,8 @@ public class WorldSavedDataVolumeBoxes extends SavedData
         });
         for (VolumeBox volumeBox : volumeBoxes) {
             List<Lock> locksToRemove = new ArrayList<>(volumeBox.locks).stream()
-                .filter(lock -> !lock.cause.stillWorks(world))
-                .collect(Collectors.toList());
+                    .filter(lock -> !lock.cause.stillWorks(world))
+                    .collect(Collectors.toList());
             if (!locksToRemove.isEmpty()) {
                 volumeBox.locks.removeAll(locksToRemove);
                 dirty.set(true);
@@ -120,18 +120,18 @@ public class WorldSavedDataVolumeBoxes extends SavedData
     public void load(CompoundTag nbt) {
         volumeBoxes.clear();
         NBTUtilBC.readCompoundList(nbt.get("volumeBoxes"))
-            .map(volumeBoxTag -> new VolumeBox(world, volumeBoxTag))
-            .forEach(volumeBoxes::add);
+                .map(volumeBoxTag -> new VolumeBox(world, volumeBoxTag))
+                .forEach(volumeBoxes::add);
     }
 
     public static WorldSavedDataVolumeBoxes get(Level world) {
-        if (world.isClientSide||!(world instanceof ServerLevel)) {
+        if (world.isClientSide || !(world instanceof ServerLevel)) {
             throw new IllegalArgumentException("Tried to create a world saved data instance on the client!");
         }
-        DimensionDataStorage storage = ((ServerLevel)world).getDataStorage();
+        DimensionDataStorage storage = ((ServerLevel) world).getDataStorage();
         currentWorld = world;
         WorldSavedDataVolumeBoxes instance =
-                storage.get((nbt)->
+                storage.get((nbt) ->
                 {
                     WorldSavedDataVolumeBoxes ret = new WorldSavedDataVolumeBoxes(DATA_NAME);
                     ret.load(nbt);

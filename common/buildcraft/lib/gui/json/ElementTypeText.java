@@ -40,7 +40,8 @@ public class ElementTypeText extends ElementType {
         } else if ((prop = json.properties.get("expression")) != null) {
             try {
                 text = GenericExpressionCompiler.compileExpressionString(prop, ctx);
-            } catch (InvalidExpressionException e) {
+            }
+            catch (InvalidExpressionException e) {
                 throw new JsonSyntaxException("Invalid expression for '" + json.name + "'", e);
             }
         } else {

@@ -10,8 +10,7 @@ import buildcraft.api.statements.StatementManager;
 import buildcraft.builders.snapshot.pattern.*;
 import buildcraft.builders.snapshot.pattern.parameter.*;
 
-public class BCBuildersStatements
-{
+public class BCBuildersStatements {
     public static final PatternNone PATTERN_NONE = new PatternNone();
     public static final PatternClear PATTERN_CLEAR = new PatternClear();
     public static final PatternFill PATTERN_FILL = new PatternFill();
@@ -35,12 +34,12 @@ public class BCBuildersStatements
     public static final PatternSpherePart PATTERN_EIGHTH_SPHERE = new PatternSpherePart(PatternSpherePart.SpherePartType.EIGHTH);
 
     public static final Pattern[] PATTERNS = { //
-        PATTERN_NONE, PATTERN_CLEAR, PATTERN_FILL, PATTERN_BOX, PATTERN_FRAME, //
-        /* PATTERN_HORIZON, PATTERN_FLATTEN, */ PATTERN_PYRAMID, PATTERN_STAIRS, //
-        PATTERN_TRIANGLE, PATTERN_SQUARE, PATTERN_PENTAGON, PATTERN_HEXAGON, //
-        PATTERN_OCTAGON, PATTERN_ARC, PATTERN_SEMI_CIRCLE, PATTERN_CIRCLE, //
-        PATTERN_SPHERE, PATTERN_HEMI_SPHERE, PATTERN_QUARTER_SPHERE, //
-        PATTERN_EIGHTH_SPHERE //
+            PATTERN_NONE, PATTERN_CLEAR, PATTERN_FILL, PATTERN_BOX, PATTERN_FRAME, //
+            /* PATTERN_HORIZON, PATTERN_FLATTEN, */ PATTERN_PYRAMID, PATTERN_STAIRS, //
+            PATTERN_TRIANGLE, PATTERN_SQUARE, PATTERN_PENTAGON, PATTERN_HEXAGON, //
+            PATTERN_OCTAGON, PATTERN_ARC, PATTERN_SEMI_CIRCLE, PATTERN_CIRCLE, //
+            PATTERN_SPHERE, PATTERN_HEMI_SPHERE, PATTERN_QUARTER_SPHERE, //
+            PATTERN_EIGHTH_SPHERE //
     };
 
     static {

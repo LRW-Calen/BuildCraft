@@ -28,8 +28,7 @@ import net.minecraft.network.FriendlyByteBuf;
  *
  * @author cpw
  */
-public interface IMessage
-{
+public interface IMessage {
     /**
      * Convert from the supplied buffer into your specific message type
      *
@@ -45,16 +44,13 @@ public interface IMessage
     void toBytes(FriendlyByteBuf buf);
 
     // Calen: 1.12.2 FMLIndexedMessageToMessageCodec.class 用反射创建对象……这……
-    public static IMessage staticFromBytes(Class<? extends IMessage> clazz, FriendlyByteBuf buf)
-    {
-        try
-        {
+    public static IMessage staticFromBytes(Class<? extends IMessage> clazz, FriendlyByteBuf buf) {
+        try {
             IMessage message = clazz.newInstance();
             message.fromBytes(buf);
             return message;
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }

@@ -20,17 +20,14 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-public class ItemVolumeBox extends ItemBC_Neptune
-{
-    public ItemVolumeBox(String idBC, Item.Properties properties)
-    {
+public class ItemVolumeBox extends ItemBC_Neptune {
+    public ItemVolumeBox(String idBC, Item.Properties properties) {
         super(idBC, properties);
     }
 
     @Override
 //    public EnumActionResult onItemUse(Player player, Level world, BlockPos pos, InteractionHand hand, Direction facing, float hitX, float hitY, float hitZ)
-    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx)
-    {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx) {
         Player player = ctx.getPlayer();
         Level world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
@@ -40,8 +37,7 @@ public class ItemVolumeBox extends ItemBC_Neptune
         double hitX = vec3Pos.x;
         double hitY = vec3Pos.y;
         double hitZ = vec3Pos.z;
-        if (world.isClientSide)
-        {
+        if (world.isClientSide) {
 //            return EnumActionResult.PASS;
             return InteractionResult.PASS;
         }
@@ -51,8 +47,7 @@ public class ItemVolumeBox extends ItemBC_Neptune
         WorldSavedDataVolumeBoxes volumeBoxes = WorldSavedDataVolumeBoxes.get(world);
         VolumeBox current = volumeBoxes.getVolumeBoxAt(offset);
 
-        if (current == null)
-        {
+        if (current == null) {
             volumeBoxes.addVolumeBox(offset);
             volumeBoxes.setDirty();
 //            return EnumActionResult.SUCCESS;

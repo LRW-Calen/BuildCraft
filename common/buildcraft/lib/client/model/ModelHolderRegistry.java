@@ -14,12 +14,13 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.ModLoadingStage;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class ModelHolderRegistry
-{
+public class ModelHolderRegistry {
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.model.holder");
 
     // Calen: Thread Safety
@@ -27,51 +28,40 @@ public class ModelHolderRegistry
     static final CopyOnWriteArrayList<ModelHolder> HOLDERS = new CopyOnWriteArrayList<>();
 
     //    public static void onTextureStitchPre(TextureMap map)
-    public static void onTextureStitchPre(TextureAtlas map, TextureStitchEvent.Pre event)
-    {
+    public static void onTextureStitchPre(TextureAtlas map, TextureStitchEvent.Pre event) {
         // Calen test
-        if (!map.location().equals(TextureAtlas.LOCATION_BLOCKS))
-        {
+        if (!map.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
             return;
         }
         // Calen: Thread Safety
 //        Set<ResourceLocation> toStitch = new HashSet<>();
         CopyOnWriteArraySet<ResourceLocation> toStitch = new CopyOnWriteArraySet<>();
-        for (ModelHolder holder : HOLDERS)
-        {
+        for (ModelHolder holder : HOLDERS) {
             holder.onTextureStitchPre(toStitch);
         }
 
-        for (ResourceLocation res : toStitch)
-        {
+        for (ResourceLocation res : toStitch) {
 //            map.setTextureEntry(AtlasSpriteVariants.createForConfig(res));
             event.addSprite(res);
         }
     }
 
-    public static void onModelBake()
-    {
-        for (ModelHolder holder : HOLDERS)
-        {
+    public static void onModelBake() {
+        for (ModelHolder holder : HOLDERS) {
             holder.onModelBake();
         }
 //        if (DEBUG && Loader.instance().isInState(LoaderState.AVAILABLE))
-        if (DEBUG && ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE)
-        {
+        if (DEBUG && ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE) {
             BCLog.logger.info("[lib.model.holder] List of registered Models:");
             List<ModelHolder> holders = new ArrayList<>();
             holders.addAll(HOLDERS);
             holders.sort(Comparator.comparing(a -> a.modelLocation.toString()));
 
-            for (ModelHolder holder : holders)
-            {
+            for (ModelHolder holder : holders) {
                 String status = "  ";
-                if (holder.failReason != null)
-                {
+                if (holder.failReason != null) {
                     status += "(" + holder.failReason + ")";
-                }
-                else if (!holder.hasBakedQuads())
-                {
+                } else if (!holder.hasBakedQuads()) {
                     status += "(Model was registered too late)";
                 }
 

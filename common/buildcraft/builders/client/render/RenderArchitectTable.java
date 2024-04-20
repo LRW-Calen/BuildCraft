@@ -16,20 +16,19 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 //public class RenderArchitectTable extends TileEntitySpecialRenderer<TileArchitectTable>
-public class RenderArchitectTable implements BlockEntityRenderer<TileArchitectTable>
-{
-    public RenderArchitectTable(BlockEntityRendererProvider.Context context)
-    {
+public class RenderArchitectTable implements BlockEntityRenderer<TileArchitectTable> {
+    public RenderArchitectTable(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void render(TileArchitectTable tile, double x, double y, double z, float partialTicks, int destroyStage, float partial)
-    public void render(TileArchitectTable tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
-        if (!tile.markerBox)
-        {
+    public void render(TileArchitectTable tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
+        if (!tile.markerBox) {
             return;
         }
         Minecraft.getInstance().getProfiler().push("bc");
@@ -57,14 +56,12 @@ public class RenderArchitectTable implements BlockEntityRenderer<TileArchitectTa
 
     @Override
 //    public boolean isGlobalRenderer(TileArchitectTable te)
-    public boolean shouldRenderOffScreen(TileArchitectTable tile)
-    {
+    public boolean shouldRenderOffScreen(TileArchitectTable tile) {
         return true;
     }
 
     @Override
-    public int getViewDistance()
-    {
+    public int getViewDistance() {
         return 512;
     }
 }

@@ -1,23 +1,19 @@
 package buildcraft.datagen.robotics;
 
 import buildcraft.datagen.base.BCBlockStateProvider;
-import buildcraft.robotics.BCRobotics;
 import buildcraft.robotics.BCRoboticsBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class RoboticsBlockStateProvider extends BlockStateProvider
-{
-    public RoboticsBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
-    {
+public class RoboticsBlockStateProvider extends BlockStateProvider {
+    public RoboticsBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
         super(gen, modid, exFileHelper);
     }
 
     @Override
-    protected void registerStatesAndModels()
-    {
+    protected void registerStatesAndModels() {
         // zonePlanner
         BCBlockStateProvider.simple4FacingBlock(
                 this,

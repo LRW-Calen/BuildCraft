@@ -15,7 +15,6 @@ import buildcraft.lib.misc.CapUtil;
 import buildcraft.lib.misc.StackUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,8 +27,8 @@ public class TriggerInventory extends BCStatement implements ITriggerExternal {
 
     public TriggerInventory(State state) {
         super(
-            "buildcraft:inventory." + state.name().toLowerCase(Locale.ROOT),
-            "buildcraft.inventory." + state.name().toLowerCase(Locale.ROOT)
+                "buildcraft:inventory." + state.name().toLowerCase(Locale.ROOT),
+                "buildcraft.inventory." + state.name().toLowerCase(Locale.ROOT)
         );
         this.state = state;
     }
@@ -49,6 +48,7 @@ public class TriggerInventory extends BCStatement implements ITriggerExternal {
 //        return LocaleUtil.localize("gate.trigger.inventory." + state.name().toLowerCase(Locale.ROOT));
         return new TranslatableComponent("gate.trigger.inventory." + state.name().toLowerCase(Locale.ROOT));
     }
+
     @Override
     public String getDescriptionKey() {
         return "gate.trigger.inventory." + state.name().toLowerCase(Locale.ROOT);
@@ -62,7 +62,7 @@ public class TriggerInventory extends BCStatement implements ITriggerExternal {
             searchedStack = parameters[0].getItemStack();
         }
 
-        IItemHandler handler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElseGet(()->null);
+        IItemHandler handler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElseGet(() -> null);
 
         if (handler != null) {
             boolean hasSlots = false;
@@ -77,7 +77,7 @@ public class TriggerInventory extends BCStatement implements ITriggerExternal {
                 foundItems |= !stack.isEmpty() && (searchedStack.isEmpty() || StackUtil.canStacksOrListsMerge(stack, searchedStack));
 
                 foundSpace |= (stack.isEmpty() || (StackUtil.canStacksOrListsMerge(stack, searchedStack) && stack.getCount() < stack.getMaxStackSize()))//
-                    && (searchedStack.isEmpty() || searchedStack.getItem() instanceof IList || handler.insertItem(i, searchedStack, true).isEmpty());
+                        && (searchedStack.isEmpty() || searchedStack.getItem() instanceof IList || handler.insertItem(i, searchedStack, true).isEmpty());
                 // On the test above, we deactivate item list as inventories
                 // typically don't check for lists possibility. This is a
                 // heuristic which is more desirable than expensive computation

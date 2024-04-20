@@ -10,9 +10,7 @@ import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.gui.pos.IGuiArea;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -20,19 +18,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
  * Defines and draws a 9-sliced sprite.
  */
 @OnlyIn(Dist.CLIENT)
-public class SpriteNineSliced
-{
+public class SpriteNineSliced {
     public final ISprite sprite;
     public final double xMin, yMin, xMax, yMax;
     public final double xScale, yScale;
 
-    public SpriteNineSliced(ISprite sprite, int xMin, int yMin, int xMax, int yMax, int textureSize)
-    {
+    public SpriteNineSliced(ISprite sprite, int xMin, int yMin, int xMax, int yMax, int textureSize) {
         this(sprite, xMin, yMin, xMax, yMax, textureSize, textureSize);
     }
 
-    public SpriteNineSliced(ISprite sprite, int xMin, int yMin, int xMax, int yMax, int xScale, int yScale)
-    {
+    public SpriteNineSliced(ISprite sprite, int xMin, int yMin, int xMax, int yMax, int xScale, int yScale) {
         this.sprite = sprite;
         this.xMin = xMin / (double) xScale;
         this.yMin = yMin / (double) yScale;
@@ -42,14 +37,12 @@ public class SpriteNineSliced
         this.yScale = yScale;
     }
 
-    public SpriteNineSliced(ISprite sprite, double xMin, double yMin, double xMax, double yMax, double scale)
-    {
+    public SpriteNineSliced(ISprite sprite, double xMin, double yMin, double xMax, double yMax, double scale) {
         this(sprite, xMin, yMin, xMax, yMax, scale, scale);
     }
 
     public SpriteNineSliced(ISprite sprite, double xMin, double yMin, double xMax, double yMax, double xScale,
-                            double yScale)
-    {
+                            double yScale) {
         this.sprite = sprite;
         this.xMin = xMin;
         this.yMin = yMin;
@@ -59,13 +52,11 @@ public class SpriteNineSliced
         this.yScale = yScale;
     }
 
-    public void draw(IGuiArea element, PoseStack poseStack)
-    {
+    public void draw(IGuiArea element, PoseStack poseStack) {
         draw(poseStack, element.getX(), element.getY(), element.getWidth(), element.getHeight());
     }
 
-    public void draw(PoseStack poseStack, double x, double y, double width, double height)
-    {
+    public void draw(PoseStack poseStack, double x, double y, double width, double height) {
         // Calen test
         sprite.bindTexture();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -110,8 +101,7 @@ public class SpriteNineSliced
         poseStack.popPose();
     }
 
-    private void quad(BufferBuilder vb, PoseStack poseStack, double[] x, double[] y, double[] u, double[] v, int xIndex, int yIndex)
-    {
+    private void quad(BufferBuilder vb, PoseStack poseStack, double[] x, double[] y, double[] u, double[] v, int xIndex, int yIndex) {
         int xis = xIndex;
         int xIB = xIndex + 1;
 
@@ -132,8 +122,7 @@ public class SpriteNineSliced
 //        );
     }
 
-    private void vertex(BufferBuilder vb, PoseStack.Pose pose, double x, double y, double texU, double texV)
-    {
+    private void vertex(BufferBuilder vb, PoseStack.Pose pose, double x, double y, double texU, double texV) {
 //        vb.pos(x, y, 0);
         vb.vertex(pose.pose(), (float) x, (float) y, 0);
 //        vb.tex(sprite.getInterpU(texU), sprite.getInterpV(texV));

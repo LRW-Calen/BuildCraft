@@ -14,76 +14,62 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class FuelRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FuelRegistry.Fuel>
-{
+public class FuelRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FuelRegistry.Fuel> {
     public static final FuelRecipeSerializer INSTANCE;
 
-    static
-    {
+    static {
         INSTANCE = new FuelRecipeSerializer();
         INSTANCE.setRegistryName(IFuel.TYPE_ID);
     }
 
     @Override
-    public FuelRegistry.Fuel fromJson(ResourceLocation recipeId, JsonObject json)
-    {
+    public FuelRegistry.Fuel fromJson(ResourceLocation recipeId, JsonObject json) {
         String type = GsonHelper.getAsString(json, "type");
         FluidStack fluid = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("fluid"));
         long powerPerCycle = json.get("powerPerCycle").getAsLong();
         int totalBurningTime = GsonHelper.getAsInt(json, "totalBurningTime");
         boolean dirty = GsonHelper.getAsBoolean(json, "dirty");
-        if (dirty)
-        {
+        if (dirty) {
             FluidStack residue = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("residue"));
             return new FuelRegistry.DirtyFuel(recipeId, fluid, powerPerCycle, totalBurningTime, residue);
-        }
-        else
-        {
+        } else {
             return new FuelRegistry.Fuel(recipeId, fluid, powerPerCycle, totalBurningTime);
         }
     }
 
-    public static void toJson(FuelRecipeBuilder builder, JsonObject json)
-    {
+    public static void toJson(FuelRecipeBuilder builder, JsonObject json) {
         json.addProperty("type", FuelRegistry.Fuel.TYPE_ID.toString());
         json.add("fluid", JsonUtil.serializeFluidStack(builder.fluid));
         json.addProperty("powerPerCycle", builder.powerPerCycle);
         json.addProperty("totalBurningTime", builder.totalBurningTime);
         json.addProperty("dirty", builder.dirty);
-        if (builder.dirty)
-        {
+        if (builder.dirty) {
             json.add("residue", JsonUtil.serializeFluidStack(builder.residue));
         }
     }
 
     @Nullable
     @Override
-    public FuelRegistry.Fuel fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer)
-    {
+    public FuelRegistry.Fuel fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         FluidStack fluid = buffer.readFluidStack();
         long powerPerCycle = buffer.readLong();
         int totalBurningTime = buffer.readInt();
         boolean dirty = buffer.readBoolean();
-        if (dirty)
-        {
+        if (dirty) {
             FluidStack residue = buffer.readFluidStack();
             return new FuelRegistry.DirtyFuel(recipeId, fluid, powerPerCycle, totalBurningTime, residue);
-        }
-        else
-        {
+        } else {
             return new FuelRegistry.Fuel(recipeId, fluid, powerPerCycle, totalBurningTime);
         }
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, FuelRegistry.Fuel recipe)
-    {
+    public void toNetwork(FriendlyByteBuf buffer, FuelRegistry.Fuel recipe) {
         buffer.writeFluidStack(recipe.getFluid());
         buffer.writeLong(recipe.getPowerPerCycle());
         buffer.writeInt(recipe.getTotalBurningTime());
         buffer.writeBoolean(recipe instanceof FuelRegistry.DirtyFuel);
-        if (recipe instanceof FuelRegistry.DirtyFuel dirtyFuel)
-        {
+        if (recipe instanceof FuelRegistry.DirtyFuel dirtyFuel) {
             buffer.writeFluidStack(dirtyFuel.getResidue());
         }
     }

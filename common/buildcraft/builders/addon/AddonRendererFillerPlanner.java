@@ -26,14 +26,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class AddonRendererFillerPlanner implements IFastAddonRenderer<AddonFillerPlanner>
-{
+public class AddonRendererFillerPlanner implements IFastAddonRenderer<AddonFillerPlanner> {
     @Override
 //    public void renderAddonFast(AddonFillerPlanner addon, Player player, float partialTicks, BufferBuilder vb)
-    public void renderAddonFast(AddonFillerPlanner addon, Player player, PoseStack.Pose pose, float partialTicks, VertexConsumer vb)
-    {
-        if (addon.buildingInfo == null)
-        {
+    public void renderAddonFast(AddonFillerPlanner addon, Player player, PoseStack.Pose pose, float partialTicks, VertexConsumer vb) {
+        if (addon.buildingInfo == null) {
             return;
         }
         Minecraft.getInstance().getProfiler().push("filler_planner");
@@ -66,41 +63,40 @@ public class AddonRendererFillerPlanner implements IFastAddonRenderer<AddonFille
         Minecraft.getInstance().getProfiler().push("render");
         Matrix4f posePose = pose.pose();
         Matrix3f normal = pose.normal();
-        for (BlockPos p : list)
-        {
+        for (BlockPos p : list) {
             AABB bb = new AABB(p, p.offset(1, 1, 1)).inflate(-0.1);
 //            TextureAtlasSprite s = ModelLoader.White.INSTANCE;
             TextureAtlasSprite s = ForgeModelBakery.White.instance();
 
-            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.minZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
 
-            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.maxZ).color(204, 204, 204, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
 
-            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.minZ).color(127, 127, 127, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.minZ).color(127, 127, 127, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.maxZ).color(127, 127, 127, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.maxZ).color(127, 127, 127, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.minZ).color(127, 127, 127, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.minZ).color(127, 127, 127, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.maxZ).color(127, 127, 127, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.maxZ).color(127, 127, 127, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
 
-            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.maxZ).color(255, 255, 255, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ).color(255, 255, 255, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.minZ).color(255, 255, 255, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.minZ).color(255, 255, 255, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.maxZ).color(255, 255, 255, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ).color(255, 255, 255, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.minZ).color(255, 255, 255, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.minZ).color(255, 255, 255, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
 
-            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.maxY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.minX, (float) bb.minY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
 
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
-            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal,1,1,1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.minZ).color(153, 153, 153, 127).uv(s.getU0(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.maxY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV1()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
+            vb.vertex(posePose, (float) bb.maxX, (float) bb.minY, (float) bb.maxZ).color(153, 153, 153, 127).uv(s.getU1(), s.getV0()).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(240, 0).normal(normal, 1, 1, 1).endVertex();
         }
         Minecraft.getInstance().getProfiler().pop();
 

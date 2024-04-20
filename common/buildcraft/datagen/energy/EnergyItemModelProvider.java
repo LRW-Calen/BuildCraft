@@ -1,6 +1,5 @@
 package buildcraft.datagen.energy;
 
-import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyBlocks;
 import buildcraft.energy.BCEnergyItems;
 import net.minecraft.data.DataGenerator;
@@ -9,18 +8,15 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class EnergyItemModelProvider extends ItemModelProvider
-{
+public class EnergyItemModelProvider extends ItemModelProvider {
     private static final ResourceLocation generated = new ResourceLocation("minecraft", "item/generated");
 
-    public EnergyItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
-    {
+    public EnergyItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
         super(generator, modid, existingFileHelper);
     }
 
     @Override
-    protected void registerModels()
-    {
+    protected void registerModels() {
         // Block Items
         getBuilder(BCEnergyBlocks.engineStone.get().getRegistryName().toString()).parent(new ModelFile.UncheckedModelFile("minecraft:builtin/entity"));
         getBuilder(BCEnergyBlocks.engineIron.get().getRegistryName().toString()).parent(new ModelFile.UncheckedModelFile("minecraft:builtin/entity"));

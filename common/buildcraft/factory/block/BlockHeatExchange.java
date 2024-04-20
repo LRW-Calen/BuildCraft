@@ -13,18 +13,14 @@ import buildcraft.factory.tile.TileHeatExchange;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.block.IBlockWithTickableTE;
-import com.google.common.collect.ImmutableMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -37,11 +33,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.function.Function;
 
-public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> implements ICustomPipeConnection, IBlockWithFacing, IBlockWithTickableTE<TileHeatExchange>
-{
+public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> implements ICustomPipeConnection, IBlockWithFacing, IBlockWithTickableTE<TileHeatExchange> {
 
 
     public static final EnumProperty<EnumExchangePart> PROP_PART = EnumProperty.create("part", EnumExchangePart.class);
@@ -49,8 +42,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     public static final Property<Boolean> PROP_CONNECTED_LEFT = BooleanProperty.create("connected_left");
     public static final Property<Boolean> PROP_CONNECTED_RIGHT = BooleanProperty.create("connected_right");
 
-    public BlockHeatExchange(String id, BlockBehaviour.Properties props)
-    {
+    public BlockHeatExchange(String id, BlockBehaviour.Properties props) {
         super(id, props);
         this.registerDefaultState(
                 this.getStateDefinition().any()
@@ -63,8 +55,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
 
     @Override
 //    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         // Calen 一定要super!!!
         super.createBlockStateDefinition(builder);
         builder.add(PROP_PART);
@@ -93,10 +84,8 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
 //    }
 
     @Override
-    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile)
-    {
-        if (tile instanceof TileHeatExchange exchange)
-        {
+    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
+        if (tile instanceof TileHeatExchange exchange) {
             Direction thisFacing = state.getValue(PROP_FACING);
 //            boolean connectLeft = doesNeighbourConnect(world, pos, thisFacing, thisFacing.rotateY());
             boolean connectLeft = doesNeighbourConnect(world, pos, thisFacing, thisFacing.getClockWise());
@@ -107,16 +96,11 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
             state = state.setValue(PROP_CONNECTED_RIGHT, connectRight);
 
             EnumExchangePart part;
-            if (exchange.isStart())
-            {
+            if (exchange.isStart()) {
                 part = EnumExchangePart.START;
-            }
-            else if (exchange.isEnd())
-            {
+            } else if (exchange.isEnd()) {
                 part = EnumExchangePart.END;
-            }
-            else
-            {
+            } else {
                 part = EnumExchangePart.MIDDLE;
             }
             state = state.setValue(PROP_PART, part);
@@ -127,8 +111,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
-    {
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
         BlockEntity tile = world.getBlockEntity(pos);
         return getActualState(state, world, pos, tile);
     }
@@ -149,19 +132,15 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     // if ret full box, the inner quads will be dark
     @NotNull
     @Override
-    public VoxelShape getShape(BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext context)
-    {
-        return switch (state.getValue(PROP_PART))
-        {
-            case MIDDLE -> switch (state.getValue(getFacingProperty()).getAxis())
-            {
+    public VoxelShape getShape(BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+        return switch (state.getValue(PROP_PART)) {
+            case MIDDLE -> switch (state.getValue(getFacingProperty()).getAxis()) {
                 case X -> MIDDLE_X;
                 case Z -> MIDDLE_Z;
                 case Y ->
                         throw new RuntimeException("[factory.heat_exchange] HeatExchange block [middle] part never has Y axis!");
             };
-            case START -> switch (state.getValue(getFacingProperty()))
-            {
+            case START -> switch (state.getValue(getFacingProperty())) {
                 case NORTH -> Shapes.or(START_N_END_S, INNER_TUBE_Z, START_DOWN);
                 case SOUTH -> Shapes.or(START_S_END_N, INNER_TUBE_Z, START_DOWN);
                 case WEST -> Shapes.or(START_W_END_E, INNER_TUBE_X, START_DOWN);
@@ -169,8 +148,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
                 default ->
                         throw new RuntimeException("[factory.heat_exchange] HeatExchange block [start] part never has " + state.getValue(getFacingProperty()) + " direction!");
             };
-            case END -> switch (state.getValue(getFacingProperty()))
-            {
+            case END -> switch (state.getValue(getFacingProperty())) {
                 case NORTH -> Shapes.or(START_S_END_N, INNER_TUBE_Z, END_UP);
                 case SOUTH -> Shapes.or(START_N_END_S, INNER_TUBE_Z, END_UP);
                 case WEST -> Shapes.or(START_E_END_W, INNER_TUBE_X, END_UP);
@@ -189,22 +167,18 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
 
 
     private static boolean doesNeighbourConnect(LevelAccessor world, BlockPos pos, Direction thisFacing,
-                                                Direction dir)
-    {
+                                                Direction dir) {
         BlockState neighbour = world.getBlockState(pos.relative(dir));
-        if (neighbour.getBlock() == BCFactoryBlocks.heatExchange.get())
-        {
+        if (neighbour.getBlock() == BCFactoryBlocks.heatExchange.get()) {
             return neighbour.getValue(PROP_FACING) == thisFacing;
         }
         return false;
     }
 
     @Override
-    public boolean rotate(Level world, BlockPos pos, Direction axis)
-    {
+    public boolean rotate(Level world, BlockPos pos, Direction axis) {
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileHeatExchange)
-        {
+        if (tile instanceof TileHeatExchange) {
             TileHeatExchange exchange = (TileHeatExchange) tile;
             return exchange.rotate();
         }
@@ -212,11 +186,9 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     }
 
     @Override
-    public InteractionResult attemptRotation(Level world, BlockPos pos, BlockState state, Direction sideWrenched)
-    {
+    public InteractionResult attemptRotation(Level world, BlockPos pos, BlockState state, Direction sideWrenched) {
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileHeatExchange)
-        {
+        if (tile instanceof TileHeatExchange) {
             TileHeatExchange exchange = (TileHeatExchange) tile;
             return exchange.rotate() ? InteractionResult.PASS : InteractionResult.FAIL;
         }
@@ -225,26 +197,22 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level world, BlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TileHeatExchange(pos, state);
     }
 
     //    @Override
-    public boolean isOpaqueCube(BlockState state)
-    {
+    public boolean isOpaqueCube(BlockState state) {
         return false;
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_)
-    {
+    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
         return true;
     }
 
     //    @Override
-    public boolean isFullCube(BlockState state)
-    {
+    public boolean isFullCube(BlockState state) {
         return false;
     }
 
@@ -262,8 +230,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
 
     // Calen
     @Override
-    public VoxelShape getOcclusionShape(BlockState p_60578_, BlockGetter p_60579_, BlockPos p_60580_)
-    {
+    public VoxelShape getOcclusionShape(BlockState p_60578_, BlockGetter p_60579_, BlockPos p_60580_) {
         return Shapes.empty();
     }
 
@@ -311,8 +278,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
 //        return BlockRenderLayer.CUTOUT;
 //    }
     @Override
-    public float getExtension(Level world, BlockPos pos, Direction face, BlockState state)
-    {
+    public float getExtension(Level world, BlockPos pos, Direction face, BlockState state) {
         return 0;
     }
 

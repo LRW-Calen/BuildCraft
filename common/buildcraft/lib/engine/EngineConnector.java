@@ -13,8 +13,7 @@ import buildcraft.api.mj.IMjRedstoneReceiver;
 
 import javax.annotation.Nonnull;
 
-public class EngineConnector implements IMjConnector
-{
+public class EngineConnector implements IMjConnector {
     public final boolean redstoneOnly;
 
     public EngineConnector(boolean redstoneOnly) {

@@ -18,33 +18,28 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MessageDebugRequest implements IMessage
-{
+public class MessageDebugRequest implements IMessage {
     private BlockPos pos;
     private Direction side;
 
     @SuppressWarnings("unused")
-    public MessageDebugRequest()
-    {
+    public MessageDebugRequest() {
     }
 
-    public MessageDebugRequest(BlockPos pos, Direction side)
-    {
+    public MessageDebugRequest(BlockPos pos, Direction side) {
         this.pos = pos;
         this.side = side;
     }
 
     @Override
-    public void toBytes(FriendlyByteBuf buffer)
-    {
+    public void toBytes(FriendlyByteBuf buffer) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         buf.writeBlockPos(pos);
         buf.writeEnum(side);
     }
 
     @Override
-    public void fromBytes(FriendlyByteBuf buffer)
-    {
+    public void fromBytes(FriendlyByteBuf buffer) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         pos = buf.readBlockPos();
         side = buf.readEnum(Direction.class);
@@ -53,13 +48,11 @@ public class MessageDebugRequest implements IMessage
     public static final IMessageHandler<MessageDebugRequest, MessageDebugResponse> HANDLER = (message, ctx) ->
     {
         Player player = ctx.getSender();
-        if (!ItemDebugger.isShowDebugInfo(player))
-        {
+        if (!ItemDebugger.isShowDebugInfo(player)) {
             return new MessageDebugResponse();
         }
         BlockEntity tile = player.level.getBlockEntity(message.pos);
-        if (tile instanceof IDebuggable)
-        {
+        if (tile instanceof IDebuggable) {
 //            List<String> left = new ArrayList<>();
 //            List<String> right = new ArrayList<>();
             List<Component> left = new ArrayList<>();

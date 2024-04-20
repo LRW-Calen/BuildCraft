@@ -2,18 +2,15 @@ package buildcraft.factory.recipe;
 
 import java.util.Locale;
 
-public enum EnumHeatExchangeRecipeType
-{
+public enum EnumHeatExchangeRecipeType {
     COOLABLE,
     HEATABLE;
 
-    public String getlowerName()
-    {
+    public String getlowerName() {
         return this.name().toLowerCase(Locale.ROOT);
     }
 
-    public static EnumHeatExchangeRecipeType byName(String name)
-    {
+    public static EnumHeatExchangeRecipeType byName(String name) {
         return valueOf(name.toUpperCase(Locale.ROOT));
     }
 }

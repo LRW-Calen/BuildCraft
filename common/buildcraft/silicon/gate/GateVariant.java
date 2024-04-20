@@ -6,7 +6,6 @@
 
 package buildcraft.silicon.gate;
 
-import buildcraft.lib.misc.LocaleUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;
@@ -14,8 +13,7 @@ import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.Objects;
 
-public class GateVariant
-{
+public class GateVariant {
     public final EnumGateLogic logic;
     public final EnumGateMaterial material;
     public final EnumGateModifier modifier;
@@ -23,8 +21,7 @@ public class GateVariant
     public final int numTriggerArgs, numActionArgs;
     private final int hash;
 
-    public GateVariant(EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier)
-    {
+    public GateVariant(EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier) {
         this.logic = logic;
         this.material = material;
         this.modifier = modifier;
@@ -34,8 +31,7 @@ public class GateVariant
         this.hash = Objects.hash(logic, material, modifier);
     }
 
-    public GateVariant(CompoundTag nbt)
-    {
+    public GateVariant(CompoundTag nbt) {
         this.logic = EnumGateLogic.getByOrdinal(nbt.getByte("logic"));
         this.material = EnumGateMaterial.getByOrdinal(nbt.getByte("material"));
         this.modifier = EnumGateModifier.getByOrdinal(nbt.getByte("modifier"));
@@ -45,8 +41,7 @@ public class GateVariant
         this.hash = Objects.hash(logic, material, modifier);
     }
 
-    public CompoundTag writeToNBT()
-    {
+    public CompoundTag writeToNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.putByte("logic", (byte) logic.ordinal());
         nbt.putByte("material", (byte) material.ordinal());
@@ -54,8 +49,7 @@ public class GateVariant
         return nbt;
     }
 
-    public GateVariant(FriendlyByteBuf buffer)
-    {
+    public GateVariant(FriendlyByteBuf buffer) {
         this.logic = EnumGateLogic.getByOrdinal(buffer.readUnsignedByte());
         this.material = EnumGateMaterial.getByOrdinal(buffer.readUnsignedByte());
         this.modifier = EnumGateModifier.getByOrdinal(buffer.readUnsignedByte());
@@ -65,21 +59,16 @@ public class GateVariant
         this.hash = Objects.hash(logic, material, modifier);
     }
 
-    public void writeToBuffer(FriendlyByteBuf buffer)
-    {
+    public void writeToBuffer(FriendlyByteBuf buffer) {
         buffer.writeByte(logic.ordinal());
         buffer.writeByte(material.ordinal());
         buffer.writeByte(modifier.ordinal());
     }
 
-    public String getVariantName()
-    {
-        if (material.canBeModified)
-        {
+    public String getVariantName() {
+        if (material.canBeModified) {
             return material.tag + "_" + logic.tag + "_" + modifier.tag;
-        }
-        else
-        {
+        } else {
             return material.tag;
         }
     }
@@ -94,14 +83,10 @@ public class GateVariant
 //            return String.format(gateName, materialName, logicName);
 //        }
 //    }
-    public MutableComponent getLocalizedName()
-    {
-        if (material == EnumGateMaterial.CLAY_BRICK)
-        {
+    public MutableComponent getLocalizedName() {
+        if (material == EnumGateMaterial.CLAY_BRICK) {
             return new TranslatableComponent("gate.name.basic");
-        }
-        else
-        {
+        } else {
             String gateName = "gate.name";
             String materialName = "gate.material." + material.tag;
             String logicName = "gate.logic." + logic.tag;
@@ -110,8 +95,7 @@ public class GateVariant
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null) return false;
         if (obj.getClass() != getClass()) return false;
@@ -122,8 +106,7 @@ public class GateVariant
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return hash;
     }
 }

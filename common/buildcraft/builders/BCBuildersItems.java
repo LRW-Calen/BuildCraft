@@ -13,21 +13,19 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCBuildersItems
-{
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCBuilders.MOD_ID);
+public class BCBuildersItems {
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCBuilders.MODID);
 
     public static RegistryObject<ItemSnapshot> snapshotBLUEPRINT;
-//    public static RegistryObject<ItemSnapshot> snapshotBLUEPRINT_CLEAN;
+    //    public static RegistryObject<ItemSnapshot> snapshotBLUEPRINT_CLEAN;
 //    public static RegistryObject<ItemSnapshot> snapshotBLUEPRINT_USED;
     public static RegistryObject<ItemSnapshot> snapshotTEMPLATE;
-//    public static RegistryObject<ItemSnapshot> snapshotTEMPLATE_CLEAN;
+    //    public static RegistryObject<ItemSnapshot> snapshotTEMPLATE_CLEAN;
 //    public static RegistryObject<ItemSnapshot> snapshotTEMPLATE_USED;
     public static RegistryObject<ItemSchematicSingle> schematicSingle;
     public static RegistryObject<ItemFillerPlanner> addonFillerPlanner;
 
-    public static void fmlPreInit()
-    {
+    public static void fmlPreInit() {
         snapshotBLUEPRINT = HELPER.addItem("item.snapshot.blueprint", PROP_DEFAULT, (idBC, prop) -> new ItemSnapshot(idBC, prop, EnumSnapshotType.BLUEPRINT));
 //        snapshotBLUEPRINT_CLEAN = HELPER.addItem("item.snapshot.blueprint.clean", PROP_DEFAULT, (idBC, prop) -> new ItemSnapshot(idBC, prop, ItemSnapshot.EnumItemSnapshotType.BLUEPRINT_CLEAN));
 //        snapshotBLUEPRINT_USED = HELPER.addItem("item.snapshot.blueprint.used", PROP_STACK1, (idBC, prop) -> new ItemSnapshot(idBC, prop, ItemSnapshot.EnumItemSnapshotType.BLUEPRINT_USED));

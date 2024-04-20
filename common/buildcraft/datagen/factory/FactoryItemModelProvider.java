@@ -1,6 +1,5 @@
 package buildcraft.datagen.factory;
 
-import buildcraft.factory.BCFactory;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.BCFactoryItems;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -12,18 +11,15 @@ import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class FactoryItemModelProvider extends ItemModelProvider
-{
+public class FactoryItemModelProvider extends ItemModelProvider {
     private static final ResourceLocation generated = new ResourceLocation("minecraft", "item/generated");
 
-    public FactoryItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper)
-    {
+    public FactoryItemModelProvider(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
         super(generator, modid, existingFileHelper);
     }
 
     @Override
-    protected void registerModels()
-    {
+    protected void registerModels() {
         // Items
         withExistingParent(BCFactoryItems.waterGel.get().getRegistryName().toString(), generated).texture("layer0", "buildcraftfactory:items/water_gel");
         withExistingParent(BCFactoryItems.gelledWater.get().getRegistryName().toString(), generated).texture("layer0", "buildcraftfactory:items/gel");

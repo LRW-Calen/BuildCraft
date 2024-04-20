@@ -19,20 +19,25 @@ import java.util.List;
 /** Defines an element that can be irendered, that exists inside of a rectangle. */
 @OnlyIn(Dist.CLIENT)
 public interface IGuiElement extends IGuiArea, ITooltipElement, IHelpElement {
-    default void drawBackground(float partialTicks,PoseStack poseStack) {}
+    default void drawBackground(float partialTicks, PoseStack poseStack) {
+    }
 
-    default void drawForeground(PoseStack poseStack, float partialTicks) {}
+    default void drawForeground(PoseStack poseStack, float partialTicks) {
+    }
 
-    default void tick() {}
+    default void tick() {
+    }
 
     /** {@inheritDoc}
      * <p>
      * This is called EVEN IF the mouse is not inside your width and height! */
     @Override
-    default void addToolTips(List<ToolTip> tooltips) {}
+    default void addToolTips(List<ToolTip> tooltips) {
+    }
 
     @Override
-    default void addHelpElements(List<HelpPosition> elements) {}
+    default void addHelpElements(List<HelpPosition> elements) {
+    }
 
     default List<IGuiElement> getThisAndChildrenAt(double x, double y) {
         if (contains(x, y)) {
@@ -44,7 +49,7 @@ public interface IGuiElement extends IGuiArea, ITooltipElement, IHelpElement {
 
     /** Add debugging information to the list. Note that a lot of elements will be called for this, so keep the amount
      * of information minimal.
-     * 
+     *
      * @return An identifier for this element (usually a name) */
     default String getDebugInfo(List<String> info) {
         return toString();

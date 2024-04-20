@@ -9,38 +9,33 @@ package buildcraft.energy.container;
 import buildcraft.energy.tile.TileEngineIron_BC8;
 import buildcraft.lib.gui.ContainerBCTile;
 import buildcraft.lib.gui.widget.WidgetFluidTank;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
-{
+public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8> {
     public final WidgetFluidTank<ContainerEngineIron_BC8> widgetTankFuel;
     public final WidgetFluidTank<ContainerEngineIron_BC8> widgetTankCoolant;
     public final WidgetFluidTank<ContainerEngineIron_BC8> widgetTankResidue;
 
-    public ContainerEngineIron_BC8(MenuType menuType, int id, Player player, TileEngineIron_BC8 engine)
-    {
+    public ContainerEngineIron_BC8(MenuType menuType, int id, Player player, TileEngineIron_BC8 engine) {
         super(menuType, id, player, engine);
 
         addFullPlayerInventory(95);
 
         widgetTankFuel = addWidget(new WidgetFluidTank<>(this, engine.tankFuel));
-        widgetTankCoolant =  addWidget(new WidgetFluidTank<>(this, engine.tankCoolant));
-        widgetTankResidue =  addWidget(new WidgetFluidTank<>(this, engine.tankResidue));
+        widgetTankCoolant = addWidget(new WidgetFluidTank<>(this, engine.tankCoolant));
+        widgetTankResidue = addWidget(new WidgetFluidTank<>(this, engine.tankResidue));
     }
 
 
     @Override
 //    public ItemStack transferStackInSlot(Player player, int index)
-    public ItemStack quickMoveStack(Player playerIn, int index)
-    {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         // The only slots are player slots -- try to interact with all of the tanks
 
-        if (!player.level.isClientSide)
-        {
+        if (!player.level.isClientSide) {
 //            Slot slot = inventorySlots.get(index);
             Slot slot = slots.get(index);
 //            ItemStack stack = slot.getStack();
@@ -48,8 +43,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
             ItemStack original = stack.copy();
             stack = tile.tankFuel.transferStackToTank(this, stack);
 //            if (!ItemStack.areItemStacksEqual(stack, original))
-            if (!ItemStack.matches(stack, original))
-            {
+            if (!ItemStack.matches(stack, original)) {
 //                slot.putStack(stack);
                 slot.set(stack);
 //                detectAndSendChanges();
@@ -58,8 +52,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
             }
             stack = tile.tankCoolant.transferStackToTank(this, stack);
 //            if (!ItemStack.areItemStacksEqual(stack, original))
-            if (!ItemStack.matches(stack, original))
-            {
+            if (!ItemStack.matches(stack, original)) {
 //                slot.putStack(stack);
                 slot.set(stack);
 //                detectAndSendChanges();
@@ -68,8 +61,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
             }
             stack = tile.tankResidue.transferStackToTank(this, stack);
 //            if (!ItemStack.areItemStacksEqual(stack, original))
-            if (!ItemStack.matches(stack, original))
-            {
+            if (!ItemStack.matches(stack, original)) {
 //                slot.putStack(stack);
                 slot.set(stack);
 //                detectAndSendChanges();

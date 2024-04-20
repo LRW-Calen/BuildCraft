@@ -10,7 +10,6 @@ import buildcraft.api.tiles.IDebuggable;
 import buildcraft.lib.marker.MarkerCache;
 import buildcraft.lib.marker.MarkerConnection;
 import buildcraft.lib.marker.MarkerSubCache;
-import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -20,17 +19,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-public abstract class TileMarker<C extends MarkerConnection<C>> extends TileBC_Neptune implements IDebuggable
-{
-    public TileMarker(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState)
-    {
+public abstract class TileMarker<C extends MarkerConnection<C>> extends TileBC_Neptune implements IDebuggable {
+    public TileMarker(BlockEntityType<?> blockEntityType, BlockPos pos, BlockState blockState) {
         super(blockEntityType, pos, blockState);
     }
 
     public abstract MarkerCache<? extends MarkerSubCache<C>> getCache();
 
-    public MarkerSubCache<C> getLocalCache()
-    {
+    public MarkerSubCache<C> getLocalCache() {
         return getCache().getSubCache(level);
     }
 
@@ -40,66 +36,55 @@ public abstract class TileMarker<C extends MarkerConnection<C>> extends TileBC_N
      */
     public abstract boolean isActiveForRender();
 
-    public C getCurrentConnection()
-    {
+    public C getCurrentConnection() {
         return getLocalCache().getConnection(getBlockPos());
     }
 
     @Override
-    public void onLoad()
-    {
+    public void onLoad() {
         super.onLoad();
         getLocalCache().loadMarker(getBlockPos(), this);
     }
 
     @Override
 //    public void onChunkUnload()
-    public void onChunkUnloaded()
-    {
+    public void onChunkUnloaded() {
         super.onChunkUnloaded();
         getLocalCache().unloadMarker(getBlockPos());
     }
 
     @Override
 //    public void invalidate()
-    public void setRemoved()
-    {
+    public void setRemoved() {
         super.setRemoved();
         // BC原版注释
         // getLocalCache().removeMarker(getPos());
     }
 
     @Override
-    public void onRemove()
-    {
+    public void onRemove() {
         super.onRemove();
         getLocalCache().removeMarker(getBlockPos());
     }
 
-    protected void disconnectFromOthers()
-    {
+    protected void disconnectFromOthers() {
         C currentConnection = getCurrentConnection();
-        if (currentConnection != null)
-        {
+        if (currentConnection != null) {
             currentConnection.removeMarker(getBlockPos());
         }
     }
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
         C current = getCurrentConnection();
         MarkerSubCache<C> cache = getLocalCache();
 //        left.add("Exists = " + (cache.getMarker(getBlockPos()) == this));
         left.add(new TextComponent("Exists = " + (cache.getMarker(getBlockPos()) == this)));
-        if (current == null)
-        {
+        if (current == null) {
 //            left.add("Connection = null");
             left.add(new TextComponent("Connection = null"));
-        }
-        else
-        {
+        } else {
 //            left.add("Connection:");
             left.add(new TextComponent("Connection:"));
             current.getDebugInfo(getBlockPos(), left);

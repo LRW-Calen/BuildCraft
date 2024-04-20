@@ -3,8 +3,7 @@ package buildcraft.lib.misc;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public enum TimeUtil
-{
+public enum TimeUtil {
     ;
 
     public static String formatNow() {

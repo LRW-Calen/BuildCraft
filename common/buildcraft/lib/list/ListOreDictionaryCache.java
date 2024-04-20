@@ -9,13 +9,10 @@ package buildcraft.lib.list;
 
 import net.minecraft.tags.TagKey;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-public final class ListOreDictionaryCache
-{
+public final class ListOreDictionaryCache {
     public static final ListOreDictionaryCache INSTANCE = new ListOreDictionaryCache();
     private static final String[] TYPE_KEYWORDS = {"Tiny", "Dense", "Small"};
     // Calen not still useful in 1.18
@@ -23,8 +20,7 @@ public final class ListOreDictionaryCache
 //    private final Set<String> registeredNames = new HashSet<>();
     private final Set<TagKey> registeredNames = new HashSet<>();
 
-    private ListOreDictionaryCache()
-    {
+    private ListOreDictionaryCache() {
 
     }
 
@@ -56,19 +52,14 @@ public final class ListOreDictionaryCache
 //        }
 //    }
 
-    public static String getType(String name)
-    {
+    public static String getType(String name) {
         // Rules for finding type:
         // - Split just before the last uppercase character found.
         int splitLocation = name.length() - 1;
-        while (splitLocation >= 0)
-        {
-            if (Character.isUpperCase(name.codePointAt(splitLocation)))
-            {
+        while (splitLocation >= 0) {
+            if (Character.isUpperCase(name.codePointAt(splitLocation))) {
                 break;
-            }
-            else
-            {
+            } else {
                 splitLocation--;
             }
         }
@@ -76,37 +67,27 @@ public final class ListOreDictionaryCache
         // "record".
     }
 
-    public static String getMaterial(String name)
-    {
+    public static String getMaterial(String name) {
         // Rules for finding material:
         // - For every uppercase character, check if the character is not in
         // TYPE_KEYWORDS. This is used to skip things like "plate[DenseIron]"
         // or "dust[TinyRedstone]". That part should be the material still.
         int splitLocation = 0;
         String t = null;
-        while (splitLocation < name.length())
-        {
-            if (!Character.isUpperCase(name.codePointAt(splitLocation)))
-            {
+        while (splitLocation < name.length()) {
+            if (!Character.isUpperCase(name.codePointAt(splitLocation))) {
                 splitLocation++;
-            }
-            else
-            {
+            } else {
                 t = name.substring(splitLocation);
-                for (String s : TYPE_KEYWORDS)
-                {
-                    if (t.startsWith(s))
-                    {
+                for (String s : TYPE_KEYWORDS) {
+                    if (t.startsWith(s)) {
                         t = null;
                         break;
                     }
                 }
-                if (t != null)
-                {
+                if (t != null) {
                     break;
-                }
-                else
-                {
+                } else {
                     splitLocation++;
                 }
             }
@@ -114,11 +95,9 @@ public final class ListOreDictionaryCache
         return splitLocation < name.length() ? t : null;
     }
 
-//    public void registerName(String name)
-    public void registerName(TagKey name)
-    {
-        if (registeredNames.contains(name))
-        {
+    //    public void registerName(String name)
+    public void registerName(TagKey name) {
+        if (registeredNames.contains(name)) {
             return;
         }
 

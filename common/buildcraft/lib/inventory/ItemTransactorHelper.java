@@ -30,93 +30,71 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
-public class ItemTransactorHelper
-{
+public class ItemTransactorHelper {
     @Nonnull
-    public static IItemTransactor getTransactor(ICapabilityProvider provider, Direction face)
-    {
-        if (provider == null)
-        {
+    public static IItemTransactor getTransactor(ICapabilityProvider provider, Direction face) {
+        if (provider == null) {
             return NoSpaceTransactor.INSTANCE;
         }
 
         LazyOptional<IItemTransactor> trans = provider.getCapability(CapUtil.CAP_ITEM_TRANSACTOR, face);
-        if (trans.isPresent())
-        {
+        if (trans.isPresent()) {
             return trans.resolve().get();
         }
 
         LazyOptional<IItemHandler> handler = provider.getCapability(CapUtil.CAP_ITEMS, face);
-        if (!handler.isPresent())
-        {
+        if (!handler.isPresent()) {
 //            if (provider instanceof ISidedInventory)
-            if (provider instanceof WorldlyContainer)
-            {
+            if (provider instanceof WorldlyContainer) {
 //                return new SidedInventoryWrapper((ISidedInventory) provider, face);
                 return new SidedInventoryWrapper((WorldlyContainer) provider, face);
             }
-            if (provider instanceof Container)
-            {
+            if (provider instanceof Container) {
                 return new InventoryWrapper((Container) provider);
             }
             return NoSpaceTransactor.INSTANCE;
         }
-        if (handler instanceof IItemTransactor)
-        {
+        if (handler instanceof IItemTransactor) {
             return (IItemTransactor) handler;
         }
         return new ItemHandlerWrapper(handler.resolve().get());
     }
 
     @Nonnull
-    public static IItemTransactor getTransactor(Inventory inventory)
-    {
-        if (inventory == null)
-        {
+    public static IItemTransactor getTransactor(Inventory inventory) {
+        if (inventory == null) {
             return NoSpaceTransactor.INSTANCE;
         }
         return new InventoryWrapper(inventory);
     }
 
     @Nonnull
-    public static IItemTransactor getTransactorForEntity(Entity entity, Direction face)
-    {
+    public static IItemTransactor getTransactorForEntity(Entity entity, Direction face) {
         IItemTransactor transactor = getTransactor(entity, face);
-        if (transactor != NoSpaceTransactor.INSTANCE)
-        {
+        if (transactor != NoSpaceTransactor.INSTANCE) {
             return transactor;
-        }
-        else if (entity instanceof ItemEntity)
-        {
+        } else if (entity instanceof ItemEntity) {
             return new TransactorEntityItem((ItemEntity) entity);
-        }
-        else if (entity instanceof Arrow arrow)
-        {
+        } else if (entity instanceof Arrow arrow) {
             return new TransactorEntityArrow(arrow);
-        }
-        else
-        {
+        } else {
             return NoSpaceTransactor.INSTANCE;
         }
     }
 
     @Nonnull
-    public static IInjectable getInjectable(ICapabilityProvider provider, Direction face)
-    {
-        if (provider == null)
-        {
+    public static IInjectable getInjectable(ICapabilityProvider provider, Direction face) {
+        if (provider == null) {
             return NoSpaceInjectable.INSTANCE;
         }
         LazyOptional<IInjectable> injectable = provider.getCapability(PipeApi.CAP_INJECTABLE, face);
-        if (!injectable.isPresent())
-        {
+        if (!injectable.isPresent()) {
             return NoSpaceInjectable.INSTANCE;
         }
         return injectable.resolve().get();
     }
 
-    public static IItemTransactor wrapInjectable(IInjectable injectable, Direction facing)
-    {
+    public static IItemTransactor wrapInjectable(IInjectable injectable, Direction facing) {
         return new InjectableWrapper(injectable, facing);
     }
 
@@ -125,14 +103,11 @@ public class ItemTransactorHelper
      * {@link IItemTransactor#insert(ItemStack, boolean, boolean)}. This is the least efficient, default
      * implementation.
      */
-    public static NonNullList<ItemStack> insertAllBypass(IItemTransactor transactor, NonNullList<ItemStack> stacks, boolean simulate)
-    {
+    public static NonNullList<ItemStack> insertAllBypass(IItemTransactor transactor, NonNullList<ItemStack> stacks, boolean simulate) {
         NonNullList<ItemStack> leftOver = NonNullList.create();
-        for (ItemStack stack : stacks)
-        {
+        for (ItemStack stack : stacks) {
             ItemStack leftOverStack = transactor.insert(stack, false, simulate);
-            if (!leftOverStack.isEmpty())
-            {
+            if (!leftOverStack.isEmpty()) {
                 leftOver.add(leftOverStack);
             }
         }
@@ -144,8 +119,7 @@ public class ItemTransactorHelper
      *
      * @return The number of items moved.
      */
-    public static int move(IItemTransactor src, IItemTransactor dst)
-    {
+    public static int move(IItemTransactor src, IItemTransactor dst) {
         return move(src, dst, Integer.MAX_VALUE);
     }
 
@@ -155,8 +129,7 @@ public class ItemTransactorHelper
      * @param maxItems The maximum number of items to move.
      * @return The number of items moved.
      */
-    public static int move(IItemTransactor src, IItemTransactor dst, int maxItems)
-    {
+    public static int move(IItemTransactor src, IItemTransactor dst, int maxItems) {
         return move(src, dst, null, maxItems);
     }
 
@@ -165,8 +138,7 @@ public class ItemTransactorHelper
      *
      * @return The number of items moved.
      */
-    public static int move(IItemTransactor src, IItemTransactor dst, IStackFilter filter)
-    {
+    public static int move(IItemTransactor src, IItemTransactor dst, IStackFilter filter) {
         return move(src, dst, filter, Integer.MAX_VALUE);
     }
 
@@ -177,31 +149,24 @@ public class ItemTransactorHelper
      * @param maxItems The maximum number of items to move.
      * @return The number of items moved.
      */
-    public static int move(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems)
-    {
+    public static int move(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems) {
         int moved = 0;
         IStackFilter rFilter = dst::canPartiallyAccept;
-        if (filter != null)
-        {
+        if (filter != null) {
             rFilter = rFilter.and(filter);
         }
-        while (true)
-        {
+        while (true) {
             int m = moveSingle0(src, dst, rFilter, maxItems - moved, false, false);
-            if (m == 0)
-            {
+            if (m == 0) {
                 break;
-            }
-            else
-            {
+            } else {
                 moved += m;
             }
         }
         return moved;
     }
 
-    public static int moveSingle(IItemTransactor src, IItemTransactor dst, IStackFilter filter, boolean simulateSrc, boolean simulateDst)
-    {
+    public static int moveSingle(IItemTransactor src, IItemTransactor dst, IStackFilter filter, boolean simulateSrc, boolean simulateDst) {
         return moveSingle(src, dst, filter, Integer.MAX_VALUE, simulateSrc, simulateDst);
     }
 
@@ -209,26 +174,22 @@ public class ItemTransactorHelper
      * Similar to {@link #move(IItemTransactor, IItemTransactor, IStackFilter, int)}, but will only attempt to extract
      * and insert once, which means that you can simulate the move safely.
      */
-    public static int moveSingle(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems, boolean simulateSrc, boolean simulateDst)
-    {
+    public static int moveSingle(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems, boolean simulateSrc, boolean simulateDst) {
         IStackFilter rFilter = dst::canPartiallyAccept;
-        if (filter != null)
-        {
+        if (filter != null) {
             rFilter = rFilter.and(filter);
         }
         return moveSingle0(src, dst, rFilter, maxItems, simulateSrc, simulateDst);
     }
 
-    private static int moveSingle0(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems, boolean simulateSrc, boolean simulateDst)
-    {
+    private static int moveSingle0(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems, boolean simulateSrc, boolean simulateDst) {
         ItemStack potential = src.extract(filter, 1, maxItems, true);
         if (potential.isEmpty()) return 0;
         ItemStack leftOver = dst.insert(potential, false, simulateDst);
         int toTake = potential.getCount() - leftOver.getCount();
         IStackFilter exactFilter = (stack) -> StackUtil.canMerge(stack, potential);
         ItemStack taken = src.extract(exactFilter, toTake, toTake, simulateSrc);
-        if (taken.getCount() != toTake)
-        {
+        if (taken.getCount() != toTake) {
             String msg = "One of the two transactors (either src = ";
             msg += src.getClass() + " or dst = " + dst.getClass() + ")";
             msg += " didn't respect the movement flags! ( potential = " + potential;
@@ -239,12 +200,10 @@ public class ItemTransactorHelper
         return toTake;
     }
 
-    public static IItemTransactor.IItemInsertable createDroppingTransactor(Level world, Vec3 vec)
-    {
+    public static IItemTransactor.IItemInsertable createDroppingTransactor(Level world, Vec3 vec) {
         return (stack, allorNone, simulate) ->
         {
-            if (!simulate)
-            {
+            if (!simulate) {
                 InventoryUtil.drop(world, vec, stack);
             }
             return StackUtil.EMPTY;

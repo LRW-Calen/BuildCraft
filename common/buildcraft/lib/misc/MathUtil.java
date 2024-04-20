@@ -6,8 +6,7 @@
 
 package buildcraft.lib.misc;
 
-public class MathUtil
-{
+public class MathUtil {
     // ItemStacks are commonly found in small stacks -- precompute for smaller numbers
     private static final short HCF_SIZE = 64;
     private static final short[][] HCF_TABLE;

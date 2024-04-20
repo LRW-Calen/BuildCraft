@@ -1,6 +1,8 @@
 package buildcraft.energy.item;
 
-import buildcraft.energy.generation.structure.*;
+import buildcraft.energy.generation.structure.OilPlacer;
+import buildcraft.energy.generation.structure.OilStructure;
+import buildcraft.energy.generation.structure.OilStructureGenerator;
 import buildcraft.energy.generation.structure.OilStructureGenerator.GenType;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.misc.TimeUtil;
@@ -10,8 +12,6 @@ import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -19,15 +19,11 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.chunk.LevelChunk;
 
-public class ItemOilPlacer extends ItemBC_Neptune
-{
-    public ItemOilPlacer(String idBC, Item.Properties properties)
-    {
+public class ItemOilPlacer extends ItemBC_Neptune {
+    public ItemOilPlacer(String idBC, Item.Properties properties) {
         super(idBC, properties);
     }
 
@@ -35,10 +31,8 @@ public class ItemOilPlacer extends ItemBC_Neptune
 
     // Calen: 对方块用和对虚空用都会触发这个
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand)
-    {
-        if (level.isClientSide())
-        {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+        if (level.isClientSide()) {
             return InteractionResultHolder.pass(player.getItemInHand(hand));
         }
 
@@ -46,38 +40,30 @@ public class ItemOilPlacer extends ItemBC_Neptune
         ServerPlayer serverPlayer = (ServerPlayer) player;
 
         final ItemStack itemStack = player.getItemInHand(hand);
-        if (player.isShiftKeyDown())
-        {
+        if (player.isShiftKeyDown()) {
             final CompoundTag tag = itemStack.getOrCreateTag();
 
-            if (tag.contains(TAG_TYPE))
-            {
+            if (tag.contains(TAG_TYPE)) {
                 final byte mode = tag.getByte(TAG_TYPE);
                 tag.putByte(TAG_TYPE, (byte) ((mode + 1) % GenType.values().length));
-            }
-            else
-            {
+            } else {
                 tag.putByte(TAG_TYPE, (byte) GenType.LARGE.ordinal());
             }
 
             GenType craterType = GenType.values()[tag.getByte(TAG_TYPE)];
 
             player.sendMessage(new TextComponent("TYPE = " + craterType.name()), Util.NIL_UUID);
-        }
-        else
-        {
+        } else {
 
             this.place(serverLevel, serverPlayer, itemStack, player.blockPosition());
         }
         return InteractionResultHolder.success(itemStack);
     }
 
-    private void place(ServerLevel level, ServerPlayer player, ItemStack stack, BlockPos pos)
-    {
+    private void place(ServerLevel level, ServerPlayer player, ItemStack stack, BlockPos pos) {
         player.sendMessage(new TextComponent(ChatFormatting.AQUA + ">>>>>>>>> " + TimeUtil.formatNow()), Util.NIL_UUID);
         CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains(TAG_TYPE))
-        {
+        if (!tag.contains(TAG_TYPE)) {
             tag.putByte(TAG_TYPE, (byte) GenType.LARGE.ordinal());
         }
 
@@ -111,8 +97,7 @@ public class ItemOilPlacer extends ItemBC_Neptune
         // Structure
         OilStructure structure = OilStructureGenerator.createTotalStructure(craterType, level.random, player.getBlockX(), player.getBlockZ(), minBuildHeight, maxBuildHeight, box);
         // Placer
-        if (structure != null)
-        {
+        if (structure != null) {
             player.sendMessage(new TextComponent(
                     ChatFormatting.GOLD + "Structure " +
                             ChatFormatting.YELLOW + "Placing " +
@@ -121,9 +106,7 @@ public class ItemOilPlacer extends ItemBC_Neptune
             final OilPlacer placer = new OilPlacer(level, structure.pieces, box.getBB());
             placer.place();
             player.sendMessage(new TextComponent(ChatFormatting.GREEN + ">>>>>>>>> " + TimeUtil.formatNow()), Util.NIL_UUID);
-        }
-        else
-        {
+        } else {
             player.sendMessage(new TextComponent("None!"), Util.NIL_UUID);
         }
     }

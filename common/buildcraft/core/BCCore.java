@@ -1,18 +1,21 @@
 package buildcraft.core;
 
+import buildcraft.core.client.CoreItemModelPredicates;
 import buildcraft.core.marker.PathCache;
 import buildcraft.core.marker.VolumeCache;
+import buildcraft.lib.BCLibItems;
 import buildcraft.lib.marker.MarkerCache;
 import buildcraft.lib.registry.CreativeTabManager;
 import buildcraft.lib.registry.TagManager;
-import buildcraft.lib.registry.TagManager.*;
+import buildcraft.lib.registry.TagManager.EnumTagType;
+import buildcraft.lib.registry.TagManager.TagEntry;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
@@ -20,67 +23,63 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.function.Consumer;
 
-@Mod(BCCore.MOD_ID)
+@Mod(BCCore.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCCore
-{
-    public static final String MOD_ID = "buildcraftcore";
+public class BCCore {
+    public static final String MODID = "buildcraftcore";
     public static final String MOD_NAME = "Build Craft";
-    public static final String MOD_VERSION = ModList.get().getModContainerById(MOD_ID).get().getModInfo().getVersion().toString();
+    public static final String MOD_VERSION = ModList.get().getModContainerById(MODID).get().getModInfo().getVersion().toString();
 
     public static BCCore INSTANCE = null;
 
     public static CreativeTabManager.CreativeTabBC mainTab;
 
-    public BCCore()
-    {
-        BCCoreConfig.preInit();
+    static {
+        BCLibItems.enableGuide();
+        BCLibItems.enableDebugger();
+    }
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+    public BCCore() {
+        INSTANCE = this;
 
 //        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BCCoreConfig.spec, "buildcraft-config.toml"); // TODO Calen ???
-
-//        modEventBus.addListener(Integrations::enqueueIMC);
-        modEventBus.addListener(this::commonSetup);
-        modEventBus.addGenericListener(MenuType.class, BCCoreMenuTypes::registerAll);
-
-        // Calen: from #preInit
-        BCCoreConfig.saveConfigs();
     }
 
     @SubscribeEvent
-//    public static void preInit(FMLCommonSetupEvent event)
-    public static void preInit(FMLConstructModEvent event)
-    {
+//    public static void preInit(FMLPreInitializationEvent event)
+    public static void preInit(FMLConstructModEvent event) {
+        BCCoreConfig.preInit();
 
 //        CreativeTabManager.CreativeTabBC tab = CreativeTabManager.createTab("buildcraft.main");
         mainTab = CreativeTabManager.createTab("buildcraft.main");
 
-        BCCoreBlocks.init();
+        BCCoreBlocks.preInit();
         BCCoreItems.preInit();
         BCCoreStatements.preInit();
+//        BCCoreRecipes.fmlPreInit(); // 1.18.2: use datagen
 
         BCCoreProxy.getProxy().fmlPreInit();
 
 //        tab.setItem(BCCoreItems.wrench);
         mainTab.setItem(BCCoreItems.wrench);
 
-        // Calen: in 1.18.2 the item object not created yet
+        // 1.18.2: the item object not created yet
 //        setItemTab(BCLibItems.guide, tab);
 //        setItemTab(BCLibItems.guideNote, tab);
 //        setItemTab(BCLibItems.debugger, tab);
 
+//        NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, BCCoreProxy.getProxy());
+
+//        OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE); // 1.18.2: use datagen
         MinecraftForge.EVENT_BUS.register(BCCoreEventDist.INSTANCE);
-//
-//        BCCoreConfig.saveConfigs();
+        BCCoreConfig.saveConfigs();
     }
 
-    private void commonSetup(FMLCommonSetupEvent event)
-    {
+    @SubscribeEvent
+    public static void init(FMLCommonSetupEvent event) {
         BCCoreConfig.saveConfigs();
         // Calen: moved to BCLib#<cinit>
 //        BCLibItems.guide.setCreativeTab(CreativeTabManager.getTab("buildcraft.main"));
@@ -93,20 +92,30 @@ public class BCCore
 
     @SubscribeEvent
 //    public static void postInit(FMLPostInitializationEvent event)
-    public static void postInit(FMLLoadCompleteEvent event)
-    {
+    public static void postInit(FMLLoadCompleteEvent event) {
         BCCoreConfig.saveConfigs();
         BCCoreProxy.getProxy().fmlPostInit();
         BCCoreConfig.postInit();
     }
 
-    // Calen: use TagManager object fpr thread safety
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        ItemBlockRenderTypes.setRenderLayer(BCCoreBlocks.markerVolume.get(), RenderType.cutout());
+        CoreItemModelPredicates.clientInit(event);
+    }
+
+    @SubscribeEvent
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCCoreMenuTypes.registerAll(event);
+    }
+
+    // Calen: use TagManager object for thread safety
     // java.util.NoSuchElementException
     // at buildcraftcore.registry.TagManager.endBatch(TagManager.java:172) ~[%2387!/:?] {re:classloading}
     private static final TagManager tagManager = new TagManager();
 
-    static
-    {
+    static {
         startBatch();
         // Items
 //        registerTag("item.wrench").reg("wrench").locale("wrenchItem").model("wrench");
@@ -210,29 +219,18 @@ public class BCCore
     }
 
 
-    private static TagEntry registerTag(String id)
-    {
+    private static TagEntry registerTag(String id) {
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
 //        TagManager.startBatch();
         tagManager.startBatch();
     }
 
-    private static void endBatch(Consumer<TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagEntry> consumer) {
 //        TagManager.endBatch(consumer);
         tagManager.endBatch(consumer);
-    }
-
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event)
-    {
-        ItemBlockRenderTypes.setRenderLayer(BCCoreBlocks.markerVolume.get(), RenderType.cutout());
     }
 }

@@ -66,7 +66,7 @@ public class NbtRef<N extends Tag> {
             }
             // noinspection unchecked
             Class<? extends Tag> nClass = (Class<? extends Tag>)
-                ((ParameterizedType) type.getType()).getActualTypeArguments()[0];
+                    ((ParameterizedType) type.getType()).getActualTypeArguments()[0];
             if (nClass == ByteArrayTag.class || nClass == IntArrayTag.class || nClass == ListTag.class) {
                 return new TypeAdapter<T>() {
                     @Override
@@ -79,16 +79,16 @@ public class NbtRef<N extends Tag> {
                         if (in.peek() != JsonToken.BEGIN_ARRAY) {
                             // noinspection unchecked
                             return (T) EnumType.BY_PATH.create(
-                                ((Map<String, NbtPath>) (gson.fromJson(
-                                    in,
-                                    new TypeToken<Map<String, NbtPath>>() {
-                                    }.getType()
-                                ))).get("ref")
+                                    ((Map<String, NbtPath>) (gson.fromJson(
+                                            in,
+                                            new TypeToken<Map<String, NbtPath>>() {
+                                            }.getType()
+                                    ))).get("ref")
                             );
                         } else {
                             // noinspection unchecked
                             return (T) EnumType.BY_VALUE.create(
-                                gson.<Tag>fromJson(in, nClass)
+                                    gson.<Tag>fromJson(in, nClass)
                             );
                         }
                     }
@@ -105,12 +105,12 @@ public class NbtRef<N extends Tag> {
                         if (in.peek() == JsonToken.BEGIN_ARRAY) {
                             // noinspection unchecked
                             return (T) EnumType.BY_PATH.create(
-                                gson.<NbtPath>fromJson(in, NbtPath.class)
+                                    gson.<NbtPath>fromJson(in, NbtPath.class)
                             );
                         } else {
                             // noinspection unchecked
                             return (T) EnumType.BY_VALUE.create(
-                                gson.<Tag>fromJson(in, nClass)
+                                    gson.<Tag>fromJson(in, nClass)
                             );
                         }
                     }

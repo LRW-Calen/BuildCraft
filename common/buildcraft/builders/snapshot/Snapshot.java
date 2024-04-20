@@ -25,17 +25,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.UUID;
 
-public abstract class Snapshot
-{
+public abstract class Snapshot {
     public Key key = new Key();
     public BlockPos size;
     public Direction facing;
     public BlockPos offset;
 
-    public static Snapshot create(EnumSnapshotType type)
-    {
-        switch (type)
-        {
+    public static Snapshot create(EnumSnapshotType type) {
+        switch (type) {
             case TEMPLATE:
                 return new Template();
             case BLUEPRINT:
@@ -45,44 +42,37 @@ public abstract class Snapshot
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static int posToIndex(int sizeX, int sizeY, int sizeZ, int x, int y, int z)
-    {
+    public static int posToIndex(int sizeX, int sizeY, int sizeZ, int x, int y, int z) {
         return ((z * sizeY) + y) * sizeX + x;
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static int posToIndex(BlockPos size, int x, int y, int z)
-    {
+    public static int posToIndex(BlockPos size, int x, int y, int z) {
         return posToIndex(size.getX(), size.getY(), size.getZ(), x, y, z);
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static int posToIndex(int sizeX, int sizeY, int sizeZ, BlockPos pos)
-    {
+    public static int posToIndex(int sizeX, int sizeY, int sizeZ, BlockPos pos) {
         return posToIndex(sizeX, sizeY, sizeZ, pos.getX(), pos.getY(), pos.getZ());
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static int posToIndex(BlockPos size, BlockPos pos)
-    {
+    public static int posToIndex(BlockPos size, BlockPos pos) {
         return posToIndex(size.getX(), size.getY(), size.getZ(), pos.getX(), pos.getY(), pos.getZ());
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public int posToIndex(int x, int y, int z)
-    {
+    public int posToIndex(int x, int y, int z) {
         return posToIndex(size, x, y, z);
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public int posToIndex(BlockPos pos)
-    {
+    public int posToIndex(BlockPos pos) {
         return posToIndex(size, pos);
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static BlockPos indexToPos(int sizeX, int sizeY, int sizeZ, int i)
-    {
+    public static BlockPos indexToPos(int sizeX, int sizeY, int sizeZ, int i) {
         return new BlockPos(
                 i % sizeX,
                 (i / sizeX) % sizeY,
@@ -91,48 +81,40 @@ public abstract class Snapshot
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static BlockPos indexToPos(BlockPos size, int i)
-    {
+    public static BlockPos indexToPos(BlockPos size, int i) {
         return indexToPos(size.getX(), size.getY(), size.getZ(), i);
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public BlockPos indexToPos(int i)
-    {
+    public BlockPos indexToPos(int i) {
         return indexToPos(size, i);
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static int getDataSize(int x, int y, int z)
-    {
+    public static int getDataSize(int x, int y, int z) {
         return x * y * z;
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public static int getDataSize(BlockPos size)
-    {
+    public static int getDataSize(BlockPos size) {
         return getDataSize(size.getX(), size.getY(), size.getZ());
     }
 
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public int getDataSize()
-    {
+    public int getDataSize() {
         return getDataSize(size);
     }
 
-    public static CompoundTag writeToNBT(Snapshot snapshot)
-    {
+    public static CompoundTag writeToNBT(Snapshot snapshot) {
         CompoundTag nbt = snapshot.serializeNBT();
         nbt.put("type", NBTUtilBC.writeEnum(snapshot.getType()));
         return nbt;
     }
 
-    public static Snapshot readFromNBT(CompoundTag nbt) throws InvalidInputDataException
-    {
+    public static Snapshot readFromNBT(CompoundTag nbt) throws InvalidInputDataException {
         Tag tag = nbt.get("type");
         EnumSnapshotType type = NBTUtilBC.readEnum(tag, EnumSnapshotType.class);
-        if (type == null)
-        {
+        if (type == null) {
             throw new InvalidInputDataException("Unknown snapshot type " + tag);
         }
         Snapshot snapshot = Snapshot.create(type);
@@ -140,8 +122,7 @@ public abstract class Snapshot
         return snapshot;
     }
 
-    public CompoundTag serializeNBT()
-    {
+    public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.put("key", key.serializeNBT());
         nbt.put("size", NbtUtils.writeBlockPos(size));
@@ -150,9 +131,8 @@ public abstract class Snapshot
         return nbt;
     }
 
-//    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException
-    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException
-    {
+    //    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException
+    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException {
         key = new Key(nbt.getCompound("key"));
         size = NbtUtils.readBlockPos(nbt.getCompound("size"));
         facing = NBTUtilBC.readEnum(nbt.get("facing"), Direction.class);
@@ -163,19 +143,16 @@ public abstract class Snapshot
 
     abstract public EnumSnapshotType getType();
 
-    public void computeKey()
-    {
+    public void computeKey() {
         CompoundTag nbt = writeToNBT(this);
-        if (nbt.contains("key", Tag.TAG_COMPOUND))
-        {
+        if (nbt.contains("key", Tag.TAG_COMPOUND)) {
             nbt.remove("key");
         }
         key = new Key(key, HashUtil.computeHash(nbt));
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "Snapshot{" +
                 "key=" + key +
                 ", size=" + StringUtilBC.blockPosAsSizeToString(size) +
@@ -184,70 +161,59 @@ public abstract class Snapshot
                 "}";
     }
 
-    public static class Key
-    {
+    public static class Key {
         public final byte[] hash;
         @Nullable // for client storage
         public final Header header;
 
         @SuppressWarnings("WeakerAccess")
-        public Key()
-        {
+        public Key() {
             this.hash = new byte[0];
             this.header = null;
         }
 
         @SuppressWarnings("WeakerAccess")
-        public Key(Key oldKey, byte[] hash)
-        {
+        public Key(Key oldKey, byte[] hash) {
             this.hash = hash;
             this.header = oldKey.header;
         }
 
         @SuppressWarnings("WeakerAccess")
-        public Key(Key oldKey, @Nullable Header header)
-        {
+        public Key(Key oldKey, @Nullable Header header) {
             this.hash = oldKey.hash;
             this.header = header;
         }
 
         @SuppressWarnings("WeakerAccess")
-        public Key(CompoundTag nbt)
-        {
+        public Key(CompoundTag nbt) {
             hash = nbt.getByteArray("hash");
             header = nbt.contains("header") ? new Header(nbt.getCompound("header")) : null;
         }
 
-        public Key(PacketBufferBC buffer)
-        {
+        public Key(PacketBufferBC buffer) {
             hash = buffer.readByteArray();
             header = buffer.readBoolean() ? new Header(buffer) : null;
         }
 
-        public CompoundTag serializeNBT()
-        {
+        public CompoundTag serializeNBT() {
             CompoundTag nbt = new CompoundTag();
             nbt.putByteArray("hash", hash);
-            if (header != null)
-            {
+            if (header != null) {
                 nbt.put("header", header.serializeNBT());
             }
             return nbt;
         }
 
-        public void writeToByteBuf(PacketBufferBC buffer)
-        {
+        public void writeToByteBuf(PacketBufferBC buffer) {
             buffer.writeByteArray(hash);
             buffer.writeBoolean(header != null);
-            if (header != null)
-            {
+            if (header != null) {
                 header.writeToByteBuf(buffer);
             }
         }
 
         @Override
-        public boolean equals(Object o)
-        {
+        public boolean equals(Object o) {
             return this == o ||
                     o != null &&
                             getClass() == o.getClass() &&
@@ -256,28 +222,24 @@ public abstract class Snapshot
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return Arrays.hashCode(hash);
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return HashUtil.convertHashToString(hash);
         }
     }
 
-    public static class Header
-    {
+    public static class Header {
         public final Key key;
         public final UUID owner;
         public final Date created;
         public final String name;
 
         @SuppressWarnings("WeakerAccess")
-        public Header(Key key, UUID owner, Date created, String name)
-        {
+        public Header(Key key, UUID owner, Date created, String name) {
             this.key = key;
             this.owner = owner;
             this.created = created;
@@ -285,8 +247,7 @@ public abstract class Snapshot
         }
 
         @SuppressWarnings("WeakerAccess")
-        public Header(CompoundTag nbt)
-        {
+        public Header(CompoundTag nbt) {
             key = new Key(nbt.getCompound("key"));
             owner = nbt.getUUID("owner");
             created = new Date(nbt.getLong("created"));
@@ -294,16 +255,14 @@ public abstract class Snapshot
         }
 
         @SuppressWarnings("WeakerAccess")
-        public Header(PacketBufferBC buffer)
-        {
+        public Header(PacketBufferBC buffer) {
             key = new Key(buffer);
             owner = buffer.readUUID();
             created = new Date(buffer.readLong());
             name = buffer.readString();
         }
 
-        public CompoundTag serializeNBT()
-        {
+        public CompoundTag serializeNBT() {
             CompoundTag nbt = new CompoundTag();
             nbt.put("key", key.serializeNBT());
             nbt.putUUID("owner", owner);
@@ -312,22 +271,19 @@ public abstract class Snapshot
             return nbt;
         }
 
-        public void writeToByteBuf(PacketBufferBC buffer)
-        {
+        public void writeToByteBuf(PacketBufferBC buffer) {
             key.writeToByteBuf(buffer);
             buffer.writeUUID(owner);
             buffer.writeLong(created.getTime());
             buffer.writeUtf(name);
         }
 
-        public Player getOwnerPlayer(Level world)
-        {
+        public Player getOwnerPlayer(Level world) {
             return world.getPlayerByUUID(owner);
         }
 
         @Override
-        public boolean equals(Object o)
-        {
+        public boolean equals(Object o) {
             return this == o ||
                     o != null &&
                             getClass() == o.getClass() &&
@@ -338,8 +294,7 @@ public abstract class Snapshot
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             int result = key.hashCode();
             result = 31 * result + owner.hashCode();
             result = 31 * result + created.hashCode();
@@ -348,22 +303,19 @@ public abstract class Snapshot
         }
 
         @Override
-        public String toString()
-        {
+        public String toString() {
             return name;
         }
     }
 
     @SuppressWarnings("WeakerAccess")
-    public abstract class BuildingInfo
-    {
+    public abstract class BuildingInfo {
         public final BlockPos basePos;
         public final BlockPos offsetPos;
         public final Rotation rotation;
         public final Box box = new Box();
 
-        protected BuildingInfo(BlockPos basePos, Rotation rotation)
-        {
+        protected BuildingInfo(BlockPos basePos, Rotation rotation) {
             this.basePos = basePos;
             this.offsetPos = basePos.offset(offset.rotate(rotation));
             this.rotation = rotation;
@@ -371,15 +323,13 @@ public abstract class Snapshot
             this.box.extendToEncompass(toWorld(size.subtract(VecUtil.POS_ONE)));
         }
 
-        public BlockPos toWorld(BlockPos blockPos)
-        {
+        public BlockPos toWorld(BlockPos blockPos) {
             return blockPos
                     .rotate(rotation)
                     .offset(offsetPos);
         }
 
-        public BlockPos fromWorld(BlockPos blockPos)
-        {
+        public BlockPos fromWorld(BlockPos blockPos) {
             return blockPos
                     .subtract(offsetPos)
                     .rotate(RotationUtil.invert(rotation));

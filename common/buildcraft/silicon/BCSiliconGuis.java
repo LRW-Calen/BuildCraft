@@ -5,22 +5,13 @@
 package buildcraft.silicon;
 
 import buildcraft.lib.net.MessageUpdateTile;
-import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.lib.tile.TileBC_Neptune;
-import buildcraft.silicon.tile.TileLaserTableBase;
-import io.netty.buffer.Unpooled;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 
-public enum BCSiliconGuis
-{
+public enum BCSiliconGuis {
     ASSEMBLY_TABLE,
     ADVANCED_CRAFTING_TABLE,
     INTEGRATION_TABLE,
@@ -63,19 +54,16 @@ public enum BCSiliconGuis
 //    }
 
     //    public void openGui(Player player, BlockPos pos, int data, BlockState state)
-    public void openGui(Player player, MenuProvider provider, BlockPos pos, int data)
-    {
+    public void openGui(Player player, MenuProvider provider, BlockPos pos, int data) {
         int fullId = (data << 8) | ordinal();
 //        player.openGui(BCSilicon.INSTANCE, fullId, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
-        if (player instanceof ServerPlayer serverPlayer)
-        {
+        if (player instanceof ServerPlayer serverPlayer) {
 //            player.openMenu(state.getMenuProvider(player.level, pos));
 //            if (player.level.getBlockEntity(pos) instanceof MenuProvider tile)
 //            {
 //                NetworkHooks.openGui(serverPlayer, tile, pos);
 //            }
-            if (this == GATE)
-            {
+            if (this == GATE) {
                 NetworkHooks.openGui(
                         serverPlayer, provider, buf ->
                         {
@@ -83,27 +71,23 @@ public enum BCSiliconGuis
                             buf.writeInt(fullId);
                         }
                 );
-            }
-            else
-            {
+            } else {
                 NetworkHooks.openGui(serverPlayer, provider, pos);
             }
         }
     }
+
     // Calen: only for GATE in Server Thread
-    public void openGui(Player player, MenuProvider provider, BlockPos pos, int data, MessageUpdateTile msg)
-    {
+    public void openGui(Player player, MenuProvider provider, BlockPos pos, int data, MessageUpdateTile msg) {
         int fullId = (data << 8) | ordinal();
 //        player.openGui(BCSilicon.INSTANCE, fullId, player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
-        if (player instanceof ServerPlayer serverPlayer)
-        {
+        if (player instanceof ServerPlayer serverPlayer) {
 //            player.openMenu(state.getMenuProvider(player.level, pos));
 //            if (player.level.getBlockEntity(pos) instanceof MenuProvider tile)
 //            {
 //                NetworkHooks.openGui(serverPlayer, tile, pos);
 //            }
-            if (this == GATE)
-            {
+            if (this == GATE) {
                 NetworkHooks.openGui(
                         serverPlayer, provider, buf ->
                         {
@@ -113,9 +97,7 @@ public enum BCSiliconGuis
                             msg.toBytes(buf);
                         }
                 );
-            }
-            else
-            {
+            } else {
                 NetworkHooks.openGui(serverPlayer, provider, pos);
             }
         }

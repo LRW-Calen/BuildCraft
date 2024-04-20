@@ -23,8 +23,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 @SuppressWarnings("WeakerAccess")
-public class JsonSelector
-{
+public class JsonSelector {
     private final String base;
     @SerializedName("nbt")
     private final List<Expression> expressions;
@@ -36,8 +35,8 @@ public class JsonSelector
 
     public boolean matches(Predicate<String> basePredicate, CompoundTag nbt) {
         return basePredicate.test(base) &&
-            expressions.stream()
-                .allMatch(expression -> expression.operation.compare(expression.key.get(nbt), expression.value));
+                expressions.stream()
+                        .allMatch(expression -> expression.operation.compare(expression.key.get(nbt), expression.value));
     }
 
     public static final TypeAdapterFactory TYPE_ADAPTER_FACTORY = new TypeAdapterFactory() {
@@ -57,8 +56,8 @@ public class JsonSelector
                 @Override
                 public T read(JsonReader in) throws IOException {
                     return in.peek() == JsonToken.STRING
-                        ? (T) new JsonSelector(in.nextString(), Collections.emptyList())
-                        : delegate.read(in);
+                            ? (T) new JsonSelector(in.nextString(), Collections.emptyList())
+                            : delegate.read(in);
                 }
             };
         }

@@ -14,8 +14,7 @@ import buildcraft.api.mj.MjBattery;
 
 import javax.annotation.Nonnull;
 
-public class MjBatteryReceiver implements IMjReceiver, IMjReadable
-{
+public class MjBatteryReceiver implements IMjReceiver, IMjReadable {
     private final MjBattery battery;
 
     public MjBatteryReceiver(MjBattery battery) {

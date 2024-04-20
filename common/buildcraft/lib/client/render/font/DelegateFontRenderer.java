@@ -14,12 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 // TODO Calen
-public class DelegateFontRenderer extends Font
-{
+public class DelegateFontRenderer extends Font {
     public final Font delegate;
 
-    public DelegateFontRenderer(Font delegate)
-    {
+    public DelegateFontRenderer(Font delegate) {
         // TODO Calen creat Font Intance? where is fontset???  When soved, GuidePageContents#<init>:new ConfigurableFontRenderer(Minecraft.getInstance().font).disableShadow();
 //        super(
 //                Minecraft.getInstance().options,
@@ -31,8 +29,7 @@ public class DelegateFontRenderer extends Font
         // FontManager 匿名内部类 protected void apply(Map<ResourceLocation, List<GlyphProvider>> p_95036_, ResourceManager p_95037_, ProfilerFiller p_95038_)
         super((p_95014_) ->
                 {
-                    try
-                    {
+                    try {
                         Field f_fontManager = Minecraft.class.getDeclaredField("fontManager");
                         f_fontManager.setAccessible(true);
                         FontManager mcFontManager = (FontManager) f_fontManager.get(Minecraft.getInstance());
@@ -47,8 +44,7 @@ public class DelegateFontRenderer extends Font
 //                new FontSet(Minecraft.getInstance().textureManager,new ResourceLocation("textures/font/ascii.png"))
                         return fontset;
                     }
-                    catch (Exception e)
-                    {
+                    catch (Exception e) {
                         e.printStackTrace();
                         return null;
                     }
@@ -58,15 +54,13 @@ public class DelegateFontRenderer extends Font
 
         // copy from 1.12.2
 
-        for (int i = 0; i < 32; ++i)
-        {
+        for (int i = 0; i < 32; ++i) {
             int j = (i >> 3 & 1) * 85;
             int k = (i >> 2 & 1) * 170 + j;
             int l = (i >> 1 & 1) * 170 + j;
             int i1 = (i >> 0 & 1) * 170 + j;
 
-            if (i == 6)
-            {
+            if (i == 6) {
                 k += 85;
             }
 
@@ -81,8 +75,7 @@ public class DelegateFontRenderer extends Font
 //                i1 = l1;
 //            }
 
-            if (i >= 16)
-            {
+            if (i >= 16) {
                 k /= 4;
                 l /= 4;
                 i1 /= 4;
@@ -93,14 +86,12 @@ public class DelegateFontRenderer extends Font
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return delegate.hashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         return delegate.equals(obj);
     }
 
@@ -111,26 +102,22 @@ public class DelegateFontRenderer extends Font
 //    }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return delegate.toString();
     }
 
-//    @Override
-    public final int drawStringWithShadow(PoseStack poseStack, String text, float x, float y, int color)
-    {
+    //    @Override
+    public final int drawStringWithShadow(PoseStack poseStack, String text, float x, float y, int color) {
         return drawString(poseStack, text, x, y, color, true);
     }
 
-//    @Override
-    public final int drawString(PoseStack poseStack, String text, int x, int y, int color)
-    {
+    //    @Override
+    public final int drawString(PoseStack poseStack, String text, int x, int y, int color) {
         return drawString(poseStack, text, x, y, color, false);
     }
 
-//    @Override
-    public int drawString(PoseStack poseStack, String text, float x, float y, int color, boolean dropShadow)
-    {
+    //    @Override
+    public int drawString(PoseStack poseStack, String text, float x, float y, int color, boolean dropShadow) {
 //        return delegate.drawString(text, x, y, color, dropShadow);
         return delegate.drawShadow(poseStack, text, x, y, color, dropShadow);
 //        int ret;
@@ -152,71 +139,64 @@ public class DelegateFontRenderer extends Font
     }
 
     @Override
-    public int width(String text)
-    {
+    public int width(String text) {
         return delegate.width(text);
     }
 
-//    @Override
-    public int getCharWidth(char character)
-    {
+    //    @Override
+    public int getCharWidth(char character) {
         return delegate.width(String.valueOf(character));
     }
-//
+
+    //
     @Override
-    public String plainSubstrByWidth(String text, int width)
-    {
-        return delegate.plainSubstrByWidth(text, width);
-    }
-    public String trimStringToWidth(String text, int width)
-    {
+    public String plainSubstrByWidth(String text, int width) {
         return delegate.plainSubstrByWidth(text, width);
     }
 
-//    @Override
-    public String trimStringToWidth(String text, int width, boolean reverse)
-    {
-        return delegate.plainSubstrByWidth(text, width, reverse);
+    public String trimStringToWidth(String text, int width) {
+        return delegate.plainSubstrByWidth(text, width);
     }
-    @Override
-    public String plainSubstrByWidth(String text, int width, boolean reverse)
-    {
+
+    //    @Override
+    public String trimStringToWidth(String text, int width, boolean reverse) {
         return delegate.plainSubstrByWidth(text, width, reverse);
     }
 
-//    @Override
-    public void drawSplitString(PoseStack poseStack, String str, int x, int y, int wrapWidth, int textColor)
-    {
+    @Override
+    public String plainSubstrByWidth(String text, int width, boolean reverse) {
+        return delegate.plainSubstrByWidth(text, width, reverse);
+    }
+
+    //    @Override
+    public void drawSplitString(PoseStack poseStack, String str, int x, int y, int wrapWidth, int textColor) {
         str = this.trimStringNewline(str);
         str = delegate.plainSubstrByWidth(str, wrapWidth);
-        delegate.draw(poseStack,str, x, y, textColor);
+        delegate.draw(poseStack, str, x, y, textColor);
     }
 
     /**
      * Remove all newline characters from the end of the string
      * from 1.12.2
      */
-    private String trimStringNewline(String text)
-    {
-        while (text != null && text.endsWith("\n"))
-        {
+    private String trimStringNewline(String text) {
+        while (text != null && text.endsWith("\n")) {
             text = text.substring(0, text.length() - 1);
         }
 
         return text;
     }
 
-    public int getWordWrappedHeight(String str, int maxLength)
-    {
-        return delegate.wordWrapHeight(str, maxLength);
-    }
-    @Override
-    public int wordWrapHeight(String str, int maxLength)
-    {
+    public int getWordWrappedHeight(String str, int maxLength) {
         return delegate.wordWrapHeight(str, maxLength);
     }
 
-//    @Override
+    @Override
+    public int wordWrapHeight(String str, int maxLength) {
+        return delegate.wordWrapHeight(str, maxLength);
+    }
+
+    //    @Override
 //    public void setUnicodeFlag(boolean unicodeFlagIn)
 //    {
 //        delegate.setUnicodeFlag(unicodeFlagIn);
@@ -235,8 +215,7 @@ public class DelegateFontRenderer extends Font
 //    }
 //
 //    @Override
-    public List<String> listFormattedStringToWidth(String str, int wrapWidth)
-    {
+    public List<String> listFormattedStringToWidth(String str, int wrapWidth) {
         return Arrays.stream(delegate.plainSubstrByWidth(str, wrapWidth).split("\n")).toList();
     }
 //
@@ -256,8 +235,8 @@ public class DelegateFontRenderer extends Font
      * drop shadows.
      */
     private final int[] colorCode = new int[32];
-    public int getColorCode(char character)
-    {
+
+    public int getColorCode(char character) {
         int i = "0123456789abcdef".indexOf(character);
         return i >= 0 && i < this.colorCode.length ? this.colorCode[i] : -1;
     }

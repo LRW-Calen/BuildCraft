@@ -25,13 +25,11 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public class PipeModelCachePluggable
-{
+public class PipeModelCachePluggable {
     public static final IModelCache<PluggableKey> cacheCutoutAll, cacheTranslucentAll;
     public static final ModelCache<PluggableModelKey> cacheCutoutSingle, cacheTranslucentSingle;
 
-    static
-    {
+    static {
         cacheCutoutSingle = new ModelCache<>(PipeModelCachePluggable::generate);
         cacheCutoutAll = new ModelCacheMultipleSame<>(PluggableKey::getKeys, cacheCutoutSingle);
 
@@ -39,31 +37,25 @@ public class PipeModelCachePluggable
         cacheTranslucentAll = new ModelCacheMultipleSame<>(PluggableKey::getKeys, cacheTranslucentSingle);
     }
 
-    private static <K extends PluggableModelKey> List<BakedQuad> generate(K key)
-    {
-        if (key == null)
-        {
+    private static <K extends PluggableModelKey> List<BakedQuad> generate(K key) {
+        if (key == null) {
             return ImmutableList.of();
         }
         IPluggableStaticBaker<K> baker = PipeRegistryClient.getPlugBaker(key);
-        if (baker == null)
-        {
+        if (baker == null) {
             return ImmutableList.of();
         }
         return baker.bake(key);
     }
 
-    public static class PluggableKey
-    {
+    public static class PluggableKey {
         private final ImmutableSet<PluggableModelKey> pluggables;
         private final int hash;
 
-//        public PluggableKey(BlockRenderLayer layer, IPipeHolder holder)
-        public PluggableKey(RenderType layer, IPipeHolder holder)
-        {
+        //        public PluggableKey(BlockRenderLayer layer, IPipeHolder holder)
+        public PluggableKey(RenderType layer, IPipeHolder holder) {
             ImmutableSet.Builder<PluggableModelKey> builder = ImmutableSet.builder();
-            for (Direction side : Direction.values())
-            {
+            for (Direction side : Direction.values()) {
                 PipePluggable pluggable = holder.getPluggable(side);
                 if (pluggable == null) continue;
                 PluggableModelKey key = pluggable.getModelRenderKey(layer);
@@ -74,20 +66,17 @@ public class PipeModelCachePluggable
             this.hash = pluggables.hashCode();
         }
 
-        public ImmutableSet<PluggableModelKey> getKeys()
-        {
+        public ImmutableSet<PluggableModelKey> getKeys() {
             return pluggables;
         }
 
         @Override
-        public int hashCode()
-        {
+        public int hashCode() {
             return hash;
         }
 
         @Override
-        public boolean equals(Object obj)
-        {
+        public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null) return false;
             if (getClass() != obj.getClass()) return false;

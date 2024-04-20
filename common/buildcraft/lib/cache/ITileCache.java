@@ -6,8 +6,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.Nullable;
 
-public interface ITileCache
-{
+public interface ITileCache {
 
     /** Call this in {@link BlockEntity#setRemoved()} to remove everything that has been cached. */
     void invalidate();

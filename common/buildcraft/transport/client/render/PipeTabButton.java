@@ -4,11 +4,9 @@ import buildcraft.api.core.BCLog;
 import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.oredicttag.OreDictTags;
 import buildcraft.lib.registry.CreativeTabManager;
-
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.Button;
@@ -33,10 +31,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
-public class PipeTabButton
-{
+public class PipeTabButton {
     private static int LEFT_POS_ADD = 116;
-    //    private static final int TOP_POS_ADD = 6;
     private static int TOP_POS_ADD = 3;
     private static int BUTTON_W = 72;
     private static int BUTTON_H = 14;
@@ -52,18 +48,15 @@ public class PipeTabButton
     private static Method m_addRenderableWidget;
 
 
-    static
-    {
-        try
-        {
+    static {
+        try {
             // srg
             m_removeWidget = Screen.class.getDeclaredMethod("m_169411_", GuiEventListener.class);
             m_removeWidget.setAccessible(true);
             m_addRenderableWidget = Screen.class.getDeclaredMethod("m_142416_", GuiEventListener.class);
             m_addRenderableWidget.setAccessible(true);
         }
-        catch (NoSuchMethodException e)
-        {
+        catch (NoSuchMethodException e) {
             try {
                 // official
                 m_removeWidget = Screen.class.getDeclaredMethod("removeWidget", GuiEventListener.class);
@@ -79,20 +72,14 @@ public class PipeTabButton
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void onDrawScreenEventPre(ScreenEvent.DrawScreenEvent.Pre event)
-    {
-        try
-        {
-            if (event.getScreen() instanceof CreativeModeInventoryScreen screen)
-            {
+    public static void onDrawScreenEventPre(ScreenEvent.DrawScreenEvent.Pre event) {
+        try {
+            if (event.getScreen() instanceof CreativeModeInventoryScreen screen) {
                 // pipes tab
-                if (screen.getSelectedTab() == CreativeTabManager.getTab("buildcraft.pipes").getId())
-                {
+                if (screen.getSelectedTab() == CreativeTabManager.getTab("buildcraft.pipes").getId()) {
                     // screen changed
-                    if (screen != PipeTabButton.screen)
-                    {
-                        if (PipeTabButton.screen != null)
-                        {
+                    if (screen != PipeTabButton.screen) {
+                        if (PipeTabButton.screen != null) {
                             m_removeWidget.invoke(PipeTabButton.screen, button);
                         }
                         PipeTabButton.screen = screen;
@@ -101,15 +88,13 @@ public class PipeTabButton
                         updateTabItems(screen);
                     }
                     // button not created
-                    else if (!screen.renderables.contains(button) || button == null)
-                    {
+                    else if (!screen.renderables.contains(button) || button == null) {
                         button = newButton(screen);
                         m_addRenderableWidget.invoke(screen, button);
                         updateTabItems(screen);
                     }
                     // window size changed
-                    else if (screen.renderables.contains(button) && (button.x != (screen.getGuiLeft() + LEFT_POS_ADD) || button.y != (screen.getGuiTop() + TOP_POS_ADD)))
-                    {
+                    else if (screen.renderables.contains(button) && (button.x != (screen.getGuiLeft() + LEFT_POS_ADD) || button.y != (screen.getGuiTop() + TOP_POS_ADD))) {
                         // Calen: accesstransformer doesn't work for removeWidget & addRenderableWidget
                         // When gradle refreshed, runClient will be not able to launch mc
                         m_removeWidget.invoke(screen, button);
@@ -119,24 +104,20 @@ public class PipeTabButton
                     }
                 }
                 // no longer pipes tab
-                else
-                {
+                else {
                     m_removeWidget.invoke(screen, button);
                 }
             }
             // CreativeModeInventoryScreen closed
-            else
-            {
-                if (PipeTabButton.screen != null)
-                {
+            else {
+                if (PipeTabButton.screen != null) {
                     m_removeWidget.invoke(PipeTabButton.screen, button);
                     button = null;
                     PipeTabButton.screen = null;
                 }
             }
         }
-        catch (ReflectiveOperationException e)
-        {
+        catch (ReflectiveOperationException e) {
             BCLog.logger.error(e);
         }
     }
@@ -144,29 +125,20 @@ public class PipeTabButton
     private static final TranslatableComponent ALL = new TranslatableComponent("gui.creativetab.pipe.button.all");
     private static final TranslatableComponent FILTERED = new TranslatableComponent("gui.creativetab.pipe.button.filtered");
 
-    //    private static void onPress(CreativeModeInventoryScreen screen, Button button)
-    private static void onPress(CreativeModeInventoryScreen screen, Button button, int pMouseButton)
-    {
-        if (pMouseButton == InputConstants.MOUSE_BUTTON_LEFT)
-        {
+    private static void onPress(CreativeModeInventoryScreen screen, Button button, int pMouseButton) {
+        if (pMouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
             colourSHL();
-        }
-        else if (pMouseButton == InputConstants.MOUSE_BUTTON_RIGHT)
-        {
+        } else if (pMouseButton == InputConstants.MOUSE_BUTTON_RIGHT) {
             colourSHR();
-        }
-        else
-        {
+        } else {
             return;
         }
         updateTabItems(screen);
     }
 
-    private static void updateTabItems(CreativeModeInventoryScreen screen)
-    {
+    private static void updateTabItems(CreativeModeInventoryScreen screen) {
         // show all
-        if (colour == 0)
-        {
+        if (colour == 0) {
             CreativeModeTab tab = CreativeModeTab.TABS[screen.getSelectedTab()];
             screen.getMenu().items.clear();
             tab.fillItemList(screen.getMenu().items);
@@ -175,19 +147,16 @@ public class PipeTabButton
             button.setMessage(colourToComponent());
         }
         // limited
-        else
-        {
+        else {
             CreativeModeTab tab = CreativeModeTab.TABS[screen.getSelectedTab()];
             screen.getMenu().items.clear();
             tab.fillItemList(screen.getMenu().items);
             DyeColor dyeColor = colour == 1 ? null : DyeColor.byId(colour - 2);
             TagKey<Item> tag = OreDictTags.pipeColorTags.get(dyeColor);
             Iterator<ItemStack> itr = screen.getMenu().items.iterator();
-            while (itr.hasNext())
-            {
+            while (itr.hasNext()) {
                 ItemStack stack = itr.next();
-                if (!stack.is(tag))
-                {
+                if (!stack.is(tag)) {
                     itr.remove();
                 }
             }
@@ -197,47 +166,35 @@ public class PipeTabButton
         }
     }
 
-    private static MutableComponent colourToComponent()
-    {
-        if (colour == 0)
-        {
+    private static MutableComponent colourToComponent() {
+        if (colour == 0) {
             return ALL;
-        }
-        else
-        {
+        } else {
             DyeColor dyeColor = colour == 1 ? null : DyeColor.byId(colour - 2);
             return ColourUtil.getTextFullTooltipComponent(FILTERED.copy(), dyeColor);
         }
     }
 
-    private static void colourSHL()
-    {
+    private static void colourSHL() {
         colour = (colour + 1) % 18;
     }
 
-    private static void colourSHR()
-    {
+    private static void colourSHR() {
         colour = (colour - 1 + 18) % 18;
     }
 
-    private static Button newButton(CreativeModeInventoryScreen screen)
-    {
-//        return new ColourFilterButton(x, y, 80, 9, colourToComponent(), (button) -> PipeTabButton.onPress(screen, button));
-//        return new ColourFilterButton(x, y, 80, 14, colourToComponent(), (button) -> PipeTabButton.onPress(screen, button));
+    private static Button newButton(CreativeModeInventoryScreen screen) {
         return new ColourFilterButton(screen.getGuiLeft() + LEFT_POS_ADD, screen.getGuiTop() + TOP_POS_ADD, BUTTON_W, BUTTON_H, colourToComponent(), (button) ->
         {
         });
     }
 
-    public static class ColourFilterButton extends Button
-    {
-        public ColourFilterButton(int x, int y, int w, int h, Component message, OnPress func)
-        {
+    public static class ColourFilterButton extends Button {
+        public ColourFilterButton(int x, int y, int w, int h, Component message, OnPress func) {
             super(x, y, w, h, message, func);
         }
 
-        public void renderButton(PoseStack poseStack, int x, int y, float particleTicks)
-        {
+        public void renderButton(PoseStack poseStack, int x, int y, float particleTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             Font font = minecraft.font;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -273,22 +230,15 @@ public class PipeTabButton
             );
             this.renderBg(poseStack, minecraft, x, y);
             int j = getFGColor();
-//            poseStack.pushPose();
-//            poseStack.scale(0.7F, 0.7F, 0.7F);
             drawCenteredString(poseStack, font, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | Mth.ceil(this.alpha * 255.0F) << 24);
-//            poseStack.popPose();
         }
 
         @Override
-        public boolean mouseClicked(double pMouseX, double pMouseY, int pMouseButton)
-        {
-            if (this.active && this.visible)
-            {
-                if (this.isValidClickButton(pMouseButton))
-                {
+        public boolean mouseClicked(double pMouseX, double pMouseY, int pMouseButton) {
+            if (this.active && this.visible) {
+                if (this.isValidClickButton(pMouseButton)) {
                     boolean flag = this.clicked(pMouseX, pMouseY);
-                    if (flag)
-                    {
+                    if (flag) {
                         this.playDownSound(Minecraft.getInstance().getSoundManager());
                         PipeTabButton.onPress(screen, this, pMouseButton);
                         return true;
@@ -296,28 +246,23 @@ public class PipeTabButton
                 }
 
                 return false;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
 
         @Override
-        public void onClick(double p_93371_, double p_93372_)
-        {
+        public void onClick(double p_93371_, double p_93372_) {
             this.onPress();
         }
 
         @Override
-        public void onPress()
-        {
+        public void onPress() {
             this.onPress.onPress(this);
         }
 
         @Override
-        protected boolean isValidClickButton(int mouseButton)
-        {
+        protected boolean isValidClickButton(int mouseButton) {
             return mouseButton == InputConstants.MOUSE_BUTTON_LEFT || mouseButton == InputConstants.MOUSE_BUTTON_RIGHT;
         }
     }

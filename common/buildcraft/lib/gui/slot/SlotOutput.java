@@ -11,18 +11,15 @@ import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class SlotOutput extends SlotBase
-{
+public class SlotOutput extends SlotBase {
 
-    public SlotOutput(IItemHandlerAdv handler, int slotIndex, int posX, int posY)
-    {
+    public SlotOutput(IItemHandlerAdv handler, int slotIndex, int posX, int posY) {
         super(handler, slotIndex, posX, posY);
     }
 
     @Override
 //    public boolean isItemValid(@Nonnull ItemStack itemstack)
-    public boolean mayPlace(@Nonnull ItemStack itemstack)
-    {
+    public boolean mayPlace(@Nonnull ItemStack itemstack) {
         return false;
     }
 }

@@ -7,7 +7,6 @@
 package buildcraft.transport.pipe.behaviour;
 
 import buildcraft.api.transport.pipe.*;
-
 import net.minecraft.nbt.CompoundTag;
 
 import java.util.Arrays;

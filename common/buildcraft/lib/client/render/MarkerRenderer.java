@@ -11,7 +11,6 @@ import buildcraft.lib.marker.MarkerCache;
 import buildcraft.lib.marker.MarkerConnection;
 import buildcraft.lib.marker.MarkerSubCache;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Camera;
 import net.minecraft.world.entity.player.Player;
 
 public enum MarkerRenderer implements IDetachedRenderer {

@@ -9,62 +9,50 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.block.SupportType;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
 
-public class FacadeInstance implements IFacade
-{
+public class FacadeInstance implements IFacade {
     public final FacadePhasedState[] phasedStates;
     public final FacadeType type;
     public final boolean isHollow;
 
-    public FacadeInstance(FacadePhasedState[] phasedStates, boolean isHollow)
-    {
+    public FacadeInstance(FacadePhasedState[] phasedStates, boolean isHollow) {
         if (phasedStates == null) throw new NullPointerException("phasedStates");
         if (phasedStates.length == 0) throw new IllegalArgumentException("phasedStates.length was 0");
         // Maximum of 17 states - 16 for each colour, 1 for no colour
         if (phasedStates.length > 17) throw new IllegalArgumentException("phasedStates.length was > 17");
         this.phasedStates = phasedStates;
-        if (phasedStates.length == 1)
-        {
+        if (phasedStates.length == 1) {
             type = FacadeType.Basic;
-        }
-        else
-        {
+        } else {
             type = FacadeType.Phased;
         }
         this.isHollow = isHollow;
     }
 
-    public static FacadeInstance createSingle(FacadeBlockStateInfo info, boolean isHollow)
-    {
+    public static FacadeInstance createSingle(FacadeBlockStateInfo info, boolean isHollow) {
         return new FacadeInstance(new FacadePhasedState[]{new FacadePhasedState(info, null)}, isHollow);
     }
 
-    public static FacadeInstance readFromNbt(CompoundTag nbt)
-    {
+    public static FacadeInstance readFromNbt(CompoundTag nbt) {
         ListTag list = nbt.getList("states", Tag.TAG_COMPOUND);
-        if (list.isEmpty())
-        {
+        if (list.isEmpty()) {
             return FacadeInstance.createSingle(FacadeStateManager.defaultState, false);
         }
         FacadePhasedState[] states = new FacadePhasedState[list.size()];
-        for (int i = 0; i < list.size(); i++)
-        {
+        for (int i = 0; i < list.size(); i++) {
             states[i] = FacadePhasedState.readFromNbt(list.getCompound(i));
         }
         boolean hollow = nbt.getBoolean("isHollow");
         return new FacadeInstance(states, hollow);
     }
 
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = new CompoundTag();
         ListTag list = new ListTag();
-        for (FacadePhasedState state : phasedStates)
-        {
+        for (FacadePhasedState state : phasedStates) {
             list.add(state.writeToNbt());
         }
         nbt.put("states", list);
@@ -72,34 +60,27 @@ public class FacadeInstance implements IFacade
         return nbt;
     }
 
-    public static FacadeInstance readFromBuffer(PacketBufferBC buf)
-    {
+    public static FacadeInstance readFromBuffer(PacketBufferBC buf) {
         boolean isHollow = buf.readBoolean();
         int count = buf.readFixedBits(5);
         FacadePhasedState[] states = new FacadePhasedState[count];
-        for (int i = 0; i < count; i++)
-        {
+        for (int i = 0; i < count; i++) {
             states[i] = FacadePhasedState.readFromBuffer(buf);
         }
         return new FacadeInstance(states, isHollow);
     }
 
-    public void writeToBuffer(PacketBufferBC buf)
-    {
+    public void writeToBuffer(PacketBufferBC buf) {
         buf.writeBoolean(isHollow);
         buf.writeFixedBits(phasedStates.length, 5);
-        for (FacadePhasedState phasedState : phasedStates)
-        {
+        for (FacadePhasedState phasedState : phasedStates) {
             phasedState.writeToBuffer(buf);
         }
     }
 
-    public boolean canAddColour(DyeColor colour)
-    {
-        for (FacadePhasedState state : phasedStates)
-        {
-            if (state.activeColour == colour)
-            {
+    public boolean canAddColour(DyeColor colour) {
+        for (FacadePhasedState state : phasedStates) {
+            if (state.activeColour == colour) {
                 return false;
             }
         }
@@ -107,45 +88,33 @@ public class FacadeInstance implements IFacade
     }
 
     @Nullable
-    public FacadeInstance withState(FacadePhasedState state)
-    {
-        if (canAddColour(state.activeColour))
-        {
+    public FacadeInstance withState(FacadePhasedState state) {
+        if (canAddColour(state.activeColour)) {
             FacadePhasedState[] newStates = Arrays.copyOf(phasedStates, phasedStates.length + 1);
             newStates[newStates.length - 1] = state;
             return new FacadeInstance(newStates, isHollow);
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
-    public FacadePhasedState getCurrentStateForStack()
-    {
+    public FacadePhasedState getCurrentStateForStack() {
         int count = phasedStates.length;
-        if (count == 1)
-        {
+        if (count == 1) {
             return phasedStates[0];
-        }
-        else
-        {
+        } else {
             int now = (int) (System.currentTimeMillis() % 100_000);
             return phasedStates[(now / 500) % count];
         }
     }
 
-    public FacadeInstance withSwappedIsHollow()
-    {
+    public FacadeInstance withSwappedIsHollow() {
         return new FacadeInstance(phasedStates, !isHollow);
     }
 
-    public boolean areAllStatesSolid(Direction side)
-    {
-        for (FacadePhasedState state : phasedStates)
-        {
-            if (!state.isSideSolid(side))
-            {
+    public boolean areAllStatesSolid(Direction side) {
+        for (FacadePhasedState state : phasedStates) {
+            if (!state.isSideSolid(side)) {
                 return false;
             }
         }
@@ -196,20 +165,17 @@ public class FacadeInstance implements IFacade
     // IFacade
 
     @Override
-    public FacadeType getType()
-    {
+    public FacadeType getType() {
         return type;
     }
 
     @Override
-    public boolean isHollow()
-    {
+    public boolean isHollow() {
         return isHollow;
     }
 
     @Override
-    public IFacadePhasedState[] getPhasedStates()
-    {
+    public IFacadePhasedState[] getPhasedStates() {
         return phasedStates;
     }
 }

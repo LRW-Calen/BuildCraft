@@ -1,7 +1,6 @@
 package buildcraft.factory;
 
 import buildcraft.core.BCCore;
-import buildcraft.factory.client.render.RenderPump;
 import buildcraft.factory.loot.LootConditionSpreading;
 import buildcraft.factory.recipe.DistillationRecipeSerializer;
 import buildcraft.factory.recipe.HeatExchangeRecipeSerializer;
@@ -13,46 +12,75 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
 
-@Mod(BCFactory.MOD_ID)
-@Mod.EventBusSubscriber(modid = BCFactory.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCFactory
-{
-    public static final String MOD_ID = "buildcraftfactory";
+//@formatter:off
+//@Mod(
+//        modid = BCFactory.MODID,
+//        name = "BuildCraft Factory",
+//        version = BCLib.VERSION,
+//        dependencies = "required-after:buildcraftcore@[" + BCLib.VERSION + "]"
+//)
+//@formatter:on
+@Mod(BCFactory.MODID)
+@Mod.EventBusSubscriber(modid = BCFactory.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class BCFactory {
+    public static final String MODID = "buildcraftfactory";
 
-    public BCFactory()
-    {
+    //    @Mod.Instance(MODID)
+    public static BCFactory INSTANCE = null;
+
+    public BCFactory() {
+        INSTANCE = this;
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        BCFactoryBlockEntities.BLOCK_ENTITIES.register(modEventBus);
-//        BCFactoryBlocks.BLOCKS.register(modEventBus);
-//        MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, this::attachAbility);
-
-        // Calen: reg pump tube texture for load
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
-            RenderPump.textureStitchPre();
-        }
-
-        modEventBus.addGenericListener(MenuType.class, BCFactoryMenuTypes::registerAll);
         modEventBus.register(BCFactoryModels.class);
+    }
+
+    @SubscribeEvent
+    public static void preInit(FMLConstructModEvent event) {
+        RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
+
+        BCFactoryBlocks.fmlPreInit();
+        BCFactoryItems.fmlPreInit();
+
+//        NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, BCFactoryProxy.getProxy());
+        MinecraftForge.EVENT_BUS.register(BCFactoryEventDist.INSTANCE);
+
+        BCFactoryProxy.getProxy().fmlPreInit();
+    }
+
+    @SubscribeEvent
+    public static void init(FMLCommonSetupEvent event) {
+        BCFactoryProxy.getProxy().fmlInit();
+    }
+
+    @SubscribeEvent
+//    public static void postInit(FMLPostInitializationEvent evt)
+    public static void postInit(FMLLoadCompleteEvent evt) {
+        BCFactoryProxy.getProxy().fmlPostInit();
+    }
+
+    @SubscribeEvent
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCFactoryMenuTypes.registerAll(event);
     }
 
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event)
-    {
+    public static void clientInit(FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(BCFactoryBlocks.tank.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BCFactoryBlocks.distiller.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BCFactoryBlocks.heatExchange.get(), RenderType.cutout());
@@ -60,42 +88,18 @@ public class BCFactory
     }
 
     @SubscribeEvent
-    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event)
-    {
+    public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
         IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
         registry.register(HeatExchangeRecipeSerializer.HEATABLE);
         registry.register(HeatExchangeRecipeSerializer.COOLABLE);
         registry.register(DistillationRecipeSerializer.INSTANCE);
 
-        // Calen
         LootConditionSpreading.reg();
     }
 
-    @SubscribeEvent
-    public static void fmlPreInit(FMLConstructModEvent event)
-    {
-        RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
-
-        BCFactoryBlocks.init();
-        BCFactoryItems.init();
-
-        // Calen: moved to @Mod.EventBusSubscriber
-//        BCFactoryModels.fmlPreInit();
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void fmlInit(FMLClientSetupEvent event)
-    {
-
-//        BCFactoryModels.fmlInit();
-    }
-
-
     private static final TagManager tagManager = new TagManager();
 
-    static
-    {
+    static {
         startBatch();// factory
         // BC Factory Items
         registerTag("item.plastic.sheet").reg("plastic_sheet").locale("plasticSheet");
@@ -164,18 +168,15 @@ public class BCFactory
         );
     }
 
-    private static TagManager.TagEntry registerTag(String id)
-    {
+    private static TagManager.TagEntry registerTag(String id) {
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
         tagManager.startBatch();
     }
 
-    private static void endBatch(Consumer<TagManager.TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagManager.TagEntry> consumer) {
         tagManager.endBatch(consumer);
     }
 }

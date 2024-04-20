@@ -12,9 +12,8 @@ import buildcraft.api.schematics.SchematicBlockContext;
 import buildcraft.api.transport.pipe.PipeApi;
 import buildcraft.api.transport.pipe.PipeDefinition;
 import buildcraft.builders.snapshot.FakeWorld;
-import buildcraft.transport.BCTransportBlocks;
-import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.NBTUtilBC;
+import buildcraft.transport.BCTransportBlocks;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -29,23 +28,19 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class SchematicBlockPipe implements ISchematicBlock
-{
+public class SchematicBlockPipe implements ISchematicBlock {
     private CompoundTag tileNbt;
     // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //    private Rotation tileRotation = Rotation.NONE;
 
-    public static boolean predicate(SchematicBlockContext context)
-    {
+    public static boolean predicate(SchematicBlockContext context) {
         return context.world.getBlockState(context.pos).getBlock() == BCTransportBlocks.pipeHolder.get();
     }
 
     @Override
-    public void init(SchematicBlockContext context)
-    {
+    public void init(SchematicBlockContext context) {
         BlockEntity tileEntity = context.world.getBlockEntity(context.pos);
-        if (tileEntity == null)
-        {
+        if (tileEntity == null) {
             throw new IllegalStateException();
         }
         tileNbt = tileEntity.serializeNBT();
@@ -53,10 +48,8 @@ public class SchematicBlockPipe implements ISchematicBlock
 
     @Nonnull
     @Override
-    public List<ItemStack> computeRequiredItems()
-    {
-        try
-        {
+    public List<ItemStack> computeRequiredItems() {
+        try {
             ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
             PipeDefinition definition = PipeRegistry.INSTANCE.loadDefinition(
                     tileNbt.getCompound("pipe").getString("def")
@@ -68,8 +61,7 @@ public class SchematicBlockPipe implements ISchematicBlock
             // Calen: reg different item object for different colour
 //            Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition);
             Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition, color);
-            if (item != null)
-            {
+            if (item != null) {
 //                builder.add(
 //                        new ItemStack(
 //                                item,
@@ -83,15 +75,13 @@ public class SchematicBlockPipe implements ISchematicBlock
             }
             return builder.build();
         }
-        catch (InvalidInputDataException e)
-        {
+        catch (InvalidInputDataException e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public SchematicBlockPipe getRotated(Rotation rotation)
-    {
+    public SchematicBlockPipe getRotated(Rotation rotation) {
         SchematicBlockPipe schematicBlock = new SchematicBlockPipe();
         schematicBlock.tileNbt = tileNbt;
         // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
@@ -101,24 +91,20 @@ public class SchematicBlockPipe implements ISchematicBlock
     }
 
     @Override
-    public boolean canBuild(Level world, BlockPos blockPos)
-    {
+    public boolean canBuild(Level world, BlockPos blockPos) {
 //        return world.isAirBlock(blockPos);
         return world.isEmptyBlock(blockPos);
     }
 
     @SuppressWarnings("Duplicates")
     @Override
-    public boolean build(Level world, BlockPos blockPos)
-    {
+    public boolean build(Level world, BlockPos blockPos) {
         BlockState state = BCTransportBlocks.pipeHolder.get().defaultBlockState();
         boolean setBlockResult = world.setBlock(blockPos, state, 11);
-        if (setBlockResult)
-        {
+        if (setBlockResult) {
 //            BlockEntity tileEntity = BlockEntity.loadStatic(world, tileNbt);
             BlockEntity tileEntity = BlockEntity.loadStatic(blockPos, state, tileNbt);
-            if (tileEntity != null)
-            {
+            if (tileEntity != null) {
                 // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
 //                tileEntity.setWorld(world);
 //                tileEntity.setLevel(world);
@@ -139,15 +125,12 @@ public class SchematicBlockPipe implements ISchematicBlock
     @SuppressWarnings("Duplicates")
     @Override
 //    public boolean buildWithoutChecks(Level world, BlockPos blockPos)
-    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos)
-    {
+    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos) {
         BlockState state = BCTransportBlocks.pipeHolder.get().defaultBlockState();
-        if (world.setBlock(blockPos, state, 0))
-        {
+        if (world.setBlock(blockPos, state, 0)) {
 //            BlockEntity tileEntity = BlockEntity.loadStatic(world, tileNbt);
             BlockEntity tileEntity = BlockEntity.loadStatic(blockPos, state, tileNbt);
-            if (tileEntity != null)
-            {
+            if (tileEntity != null) {
                 // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
 //                tileEntity.setWorld(world);
 //                tileEntity.setLevel(world);
@@ -166,14 +149,12 @@ public class SchematicBlockPipe implements ISchematicBlock
     }
 
     @Override
-    public boolean isBuilt(Level world, BlockPos blockPos)
-    {
+    public boolean isBuilt(Level world, BlockPos blockPos) {
         return world.getBlockState(blockPos).getBlock() == BCTransportBlocks.pipeHolder.get();
     }
 
     @Override
-    public CompoundTag serializeNBT()
-    {
+    public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
         nbt.put("tileNbt", tileNbt);
         // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
@@ -182,8 +163,7 @@ public class SchematicBlockPipe implements ISchematicBlock
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException
-    {
+    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException {
         tileNbt = nbt.getCompound("tileNbt");
         // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //        tileRotation = NBTUtilBC.readEnum(nbt.get("tileRotation"), Rotation.class);

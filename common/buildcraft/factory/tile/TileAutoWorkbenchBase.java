@@ -17,6 +17,7 @@ import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.MathUtil;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.net.PacketBufferBC;
+import buildcraft.lib.tile.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.craft.IAutoCraft;
 import buildcraft.lib.tile.craft.WorkbenchCrafting;
@@ -30,7 +31,6 @@ import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import buildcraft.lib.tile.ITickable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.network.NetworkDirection;
@@ -40,8 +40,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Arrays;
 
-public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements ITickable, IHasWork, IMjRedstoneReceiver, IAutoCraft
-{
+public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements ITickable, IHasWork, IMjRedstoneReceiver, IAutoCraft {
 
     /**
      * A redstone engine generates <code> 1 * {@link MjAPI#MJ}</code> per tick. This makes it a lot slower without one
@@ -75,8 +74,7 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
 
     public ItemStack resultClient = ItemStack.EMPTY;
 
-    public TileAutoWorkbenchBase(BlockEntityType<?> blockEntityType, int width, int height, BlockPos pos, BlockState blockState)
-    {
+    public TileAutoWorkbenchBase(BlockEntityType<?> blockEntityType, int width, int height, BlockPos pos, BlockState blockState) {
         super(blockEntityType, pos, blockState);
         int slots = width * height;
         invBlueprint = itemManager.addInvHandler("blueprint", slots, EnumAccess.PHANTOM);
@@ -92,69 +90,50 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
 
     @Override
     protected void onSlotChange(IItemHandlerModifiable handler, int slot, @Nonnull ItemStack before,
-                                @Nonnull ItemStack after)
-    {
+                                @Nonnull ItemStack after) {
         super.onSlotChange(handler, slot, before, after);
 //        if (!ItemStack.areItemStacksEqual(before, after))
-        if (!ItemStack.matches(before, after))
-        {
+        if (!ItemStack.matches(before, after)) {
             crafting.onInventoryChange(handler);
         }
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         ITickable.super.update();
-        if (getLevel().isClientSide)
-        {
+        if (getLevel().isClientSide) {
             return;
         }
         boolean didChange = crafting.tick();
-        if (crafting.canCraft())
-        {
-            if (powerStored >= POWER_REQUIRED)
-            {
-                if (crafting.craft())
-                {
+        if (crafting.canCraft()) {
+            if (powerStored >= POWER_REQUIRED) {
+                if (crafting.craft()) {
                     // This is used for #hasWork(), to ensure that it doesn't return
                     // false for the one tick in between crafts.
                     powerStored = crafting.canCraft() ? 1 : 0;
                     AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT_AUTOCRAFT);
                 }
-            }
-            else
-            {
+            } else {
                 powerStored += POWER_GEN_PASSIVE;
             }
-        }
-        else if (powerStored >= POWER_LOST)
-        {
+        } else if (powerStored >= POWER_LOST) {
             powerStored -= POWER_LOST;
-        }
-        else
-        {
+        } else {
             powerStored = 0;
         }
-        if (didChange)
-        {
+        if (didChange) {
             createFilters();
             sendNetworkGuiUpdate(NET_GUI_DATA);
         }
     }
 
     @Override
-    public void writePayload(int id, PacketBufferBC buffer, Dist side)
-    {
+    public void writePayload(int id, PacketBufferBC buffer, Dist side) {
         super.writePayload(id, buffer, side);
-        if (side == Dist.DEDICATED_SERVER)
-        {
-            if (id == NET_GUI_TICK)
-            {
+        if (side == Dist.DEDICATED_SERVER) {
+            if (id == NET_GUI_TICK) {
                 buffer.writeLong(powerStored);
-            }
-            else if (id == NET_GUI_DATA)
-            {
+            } else if (id == NET_GUI_DATA) {
 //                buffer.writeItemStack(crafting.getAssumedResult());
                 buffer.writeItemStack(crafting.getAssumedResult(), false);
             }
@@ -162,51 +141,39 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
     }
 
     @Override
-    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == NET_GUI_TICK)
-            {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == NET_GUI_TICK) {
                 powerStoredLast = powerStored;
                 powerStored = buffer.readLong();
-                if (powerStored < 10)
-                {
+                if (powerStored < 10) {
                     // properly handle crafting finishes
                     powerStoredLast = powerStored;
                 }
-            }
-            else if (id == NET_GUI_DATA)
-            {
+            } else if (id == NET_GUI_DATA) {
                 resultClient = buffer.readItem();
             }
         }
     }
 
     @Override
-    public boolean hasWork()
-    {
+    public boolean hasWork() {
         return powerStored > 0;
     }
 
-    public double getProgress(float partialTicks)
-    {
+    public double getProgress(float partialTicks) {
         return MathUtil.interp(partialTicks, powerStoredLast, powerStored) / POWER_REQUIRED;
     }
 
     //    public InventoryCrafting getWorkbenchCrafting()
-    public CraftingContainer getWorkbenchCrafting()
-    {
+    public CraftingContainer getWorkbenchCrafting() {
         return crafting;
     }
 
-    private void createFilters()
-    {
-        if (crafting.getAssumedResult().isEmpty())
-        {
-            for (int s = 0; s < invMaterialFilter.getSlots(); s++)
-            {
+    private void createFilters() {
+        if (crafting.getAssumedResult().isEmpty()) {
+            for (int s = 0; s < invMaterialFilter.getSlots(); s++) {
                 invMaterialFilter.setStackInSlot(s, ItemStack.EMPTY);
             }
             return;
@@ -214,23 +181,18 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
         NonNullList<ItemStack> uniqueStacks = NonNullList.create();
         int slotCount = invBlueprint.getSlots();
         int[] requirements = new int[slotCount];
-        for (int s = 0; s < slotCount; s++)
-        {
+        for (int s = 0; s < slotCount; s++) {
             ItemStack bptStack = invBlueprint.getStackInSlot(s);
-            if (!bptStack.isEmpty())
-            {
+            if (!bptStack.isEmpty()) {
                 boolean foundMatch = false;
-                for (int i = 0; i < uniqueStacks.size(); i++)
-                {
-                    if (StackUtil.canMerge(bptStack, uniqueStacks.get(i)))
-                    {
+                for (int i = 0; i < uniqueStacks.size(); i++) {
+                    if (StackUtil.canMerge(bptStack, uniqueStacks.get(i))) {
                         foundMatch = true;
                         requirements[i]++;
                         break;
                     }
                 }
-                if (!foundMatch)
-                {
+                if (!foundMatch) {
                     requirements[uniqueStacks.size()] = 1;
                     uniqueStacks.add(bptStack);
                 }
@@ -240,19 +202,16 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
         int[] slotAllocationCount = new int[uniqueSlotCount];
         Arrays.fill(slotAllocationCount, 1);
         int slotsLeft = slotCount - uniqueSlotCount;
-        for (int i = 0; i < slotsLeft; i++)
-        {
+        for (int i = 0; i < slotsLeft; i++) {
             int smallestDifference = Integer.MAX_VALUE;
             int smallestDifferenceIndex = 0;
 
-            for (int s = 0; s < uniqueSlotCount; s++)
-            {
+            for (int s = 0; s < uniqueSlotCount; s++) {
                 ItemStack stack = uniqueStacks.get(s);
                 int uniqueCountTotal = stack.getMaxStackSize() * slotAllocationCount[s];
 
                 int difference = uniqueCountTotal / requirements[s];
-                if (difference < smallestDifference)
-                {
+                if (difference < smallestDifference) {
                     smallestDifference = difference;
                     smallestDifferenceIndex = s;
                 }
@@ -261,18 +220,15 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
         }
 
         int realIndex = 0;
-        for (int s = 0; s < uniqueSlotCount; s++)
-        {
+        for (int s = 0; s < uniqueSlotCount; s++) {
             ItemStack stack = uniqueStacks.get(s).copy();
             stack.setCount(1);
-            for (int i = 0; i < slotAllocationCount[s]; i++)
-            {
+            for (int i = 0; i < slotAllocationCount[s]; i++) {
                 invMaterialFilter.setStackInSlot(realIndex, stack);
                 realIndex++;
             }
         }
-        if (realIndex != slotCount)
-        {
+        if (realIndex != slotCount) {
             throw new IllegalStateException("Somehow the balanced formula wasn't perfectly balanced!");
         }
     }
@@ -280,24 +236,20 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
     // IMjRedstoneReceiver
 
     @Override
-    public boolean canConnect(@Nonnull IMjConnector other)
-    {
+    public boolean canConnect(@Nonnull IMjConnector other) {
         return true;
     }
 
     @Override
-    public long getPowerRequested()
-    {
+    public long getPowerRequested() {
         return POWER_REQUIRED - powerStored;
     }
 
     @Override
-    public long receivePower(long microJoules, boolean simulate)
-    {
+    public long receivePower(long microJoules, boolean simulate) {
         long req = getPowerRequested();
         long taken = Math.min(req, microJoules);
-        if (!simulate)
-        {
+        if (!simulate) {
             powerStored += taken;
         }
         return microJoules - taken;
@@ -306,14 +258,12 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
     // IAutoCraft
 
     @Override
-    public ItemStack getCurrentRecipeOutput()
-    {
+    public ItemStack getCurrentRecipeOutput() {
         return crafting.getAssumedResult();
     }
 
     @Override
-    public ItemHandlerSimple getInvBlueprint()
-    {
+    public ItemHandlerSimple getInvBlueprint() {
         return invBlueprint;
     }
 }

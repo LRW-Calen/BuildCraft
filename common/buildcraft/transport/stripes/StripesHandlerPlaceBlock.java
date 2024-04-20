@@ -19,8 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public enum StripesHandlerPlaceBlock implements IStripesHandlerItem
-{
+public enum StripesHandlerPlaceBlock implements IStripesHandlerItem {
     INSTANCE;
 
     @Override
@@ -29,14 +28,11 @@ public enum StripesHandlerPlaceBlock implements IStripesHandlerItem
                           Direction direction,
                           ItemStack stack,
                           Player player,
-                          IStripesActivator activator)
-    {
-        if (!(stack.getItem() instanceof BlockItem))
-        {
+                          IStripesActivator activator) {
+        if (!(stack.getItem() instanceof BlockItem)) {
             return false;
         }
-        if (!world.isEmptyBlock(pos.relative(direction)))
-        {
+        if (!world.isEmptyBlock(pos.relative(direction))) {
             return false;
         }
 //        stack.getItem().onItemUse(

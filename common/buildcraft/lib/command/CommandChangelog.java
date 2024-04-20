@@ -1,21 +1,12 @@
 package buildcraft.lib.command;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.Util;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 
 //public class CommandChangelog extends CommandBase
-public class CommandChangelog extends BCSubCommandBase
-{
-    public CommandChangelog()
-    {
+public class CommandChangelog extends BCSubCommandBase {
+    public CommandChangelog() {
         super(
                 "changelog",
                 "command.buildcraft.buildcraft.changelog.help",
@@ -23,8 +14,7 @@ public class CommandChangelog extends BCSubCommandBase
                 (arg) ->
                 {
                     Entity e = arg.getSource().getEntity();
-                    if (e != null)
-                    {
+                    if (e != null) {
                         e.sendMessage(new TextComponent("TODO: Implement this!"), Util.NIL_UUID);
                     }
                     return 0;

@@ -21,13 +21,11 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.io.IOException;
 
-public class ContainerArchitectTable extends ContainerBCTile<TileArchitectTable>
-{
+public class ContainerArchitectTable extends ContainerBCTile<TileArchitectTable> {
     private static final IdAllocator IDS = ContainerBC_Neptune.IDS.makeChild("architect_table");
     private static final int ID_NAME = IDS.allocId("NAME");
 
-    public ContainerArchitectTable(MenuType menuType, int id, Player player, TileArchitectTable tile)
-    {
+    public ContainerArchitectTable(MenuType menuType, int id, Player player, TileArchitectTable tile) {
         super(menuType, id, player, tile);
         addFullPlayerInventory(88, 84);
 
@@ -38,25 +36,20 @@ public class ContainerArchitectTable extends ContainerBCTile<TileArchitectTable>
     }
 
     @Override
-    public IdAllocator getIdAllocator()
-    {
+    public IdAllocator getIdAllocator() {
         return IDS;
     }
 
-    public void sendNameToServer(String name)
-    {
+    public void sendNameToServer(String name) {
         sendMessage(ID_NAME, buffer -> buffer.writeUtf(name));
     }
 
     @Override
 //    public void readMessage(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readMessage(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_SERVER)
-        {
-            if (id == ID_NAME)
-            {
+        if (side == NetworkDirection.PLAY_TO_SERVER) {
+            if (id == ID_NAME) {
                 tile.name = buffer.readString();
                 tile.sendNetworkUpdate(TileBC_Neptune.NET_RENDER_DATA);
             }

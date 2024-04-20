@@ -7,30 +7,24 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
 
 import java.lang.ref.WeakReference;
-import java.lang.reflect.Method;
 
-public class CachedChunk implements IChunkCache
-{
+public class CachedChunk implements IChunkCache {
 
     private final BlockEntity tile;
     private WeakReference<LevelChunk> cachedChunk;
 
-    public CachedChunk(BlockEntity tile)
-    {
+    public CachedChunk(BlockEntity tile) {
         this.tile = tile;
     }
 
     @Override
-    public void invalidate()
-    {
+    public void invalidate() {
         cachedChunk = null;
     }
 
     @Override
-    public LevelChunk getChunk(BlockPos pos)
-    {
-        if (tile.isRemoved())
-        {
+    public LevelChunk getChunk(BlockPos pos) {
+        if (tile.isRemoved()) {
             cachedChunk = null;
             return null;
         }
@@ -40,25 +34,21 @@ public class CachedChunk implements IChunkCache
         {
             return null;
         }
-        if (cachedChunk != null)
-        {
+        if (cachedChunk != null) {
             LevelChunk c = cachedChunk.get();
 //            if (c != null && c.isLoaded())
-            if (c != null && c.isInLevel())
-            {
+            if (c != null && c.isInLevel()) {
                 return c;
             }
             cachedChunk = null;
         }
         Level world = tile.getLevel();
-        if (world == null)
-        {
+        if (world == null) {
             cachedChunk = null;
             return null;
         }
         LevelChunk chunk = ChunkUtil.getChunk(world, pos, true);
-        if (chunk != null && chunk.getLevel() == world)
-        {
+        if (chunk != null && chunk.getLevel() == world) {
             cachedChunk = new WeakReference<>(chunk);
             return chunk;
         }

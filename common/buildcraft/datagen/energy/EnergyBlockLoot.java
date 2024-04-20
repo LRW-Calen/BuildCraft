@@ -8,11 +8,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EnergyBlockLoot extends BlockLoot
-{
+public class EnergyBlockLoot extends BlockLoot {
     @Override
-    protected void addTables()
-    {
+    protected void addTables() {
         dropSelf(BCEnergyBlocks.engineStone.get());
         dropSelf(BCEnergyBlocks.engineIron.get());
     }
@@ -21,15 +19,13 @@ public class EnergyBlockLoot extends BlockLoot
     private final Set<Block> knownBlocks = new HashSet<>();
 
     @Override
-    protected void add(Block block, LootTable.Builder builder)
-    {
+    protected void add(Block block, LootTable.Builder builder) {
         super.add(block, builder);
         knownBlocks.add(block);
     }
 
     @Override
-    protected Iterable<Block> getKnownBlocks()
-    {
+    protected Iterable<Block> getKnownBlocks() {
         return knownBlocks;
     }
 }

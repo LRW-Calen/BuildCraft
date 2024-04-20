@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
-public class RotationUtil
-{
+public class RotationUtil {
     public static AABB rotateAABB(AABB aabb, Direction facing) {
         if (facing == Direction.DOWN) {
             return new AABB(aabb.minX, aabb.maxY, aabb.minZ, aabb.maxX, aabb.minY, aabb.maxZ);

@@ -1,7 +1,6 @@
 package buildcraft.datagen.builders;
 
 import buildcraft.builders.BCBuildersBlocks;
-import buildcraft.energy.BCEnergyBlocks;
 import net.minecraft.data.loot.BlockLoot;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -9,11 +8,9 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class BuildersBlockLoot extends BlockLoot
-{
+public class BuildersBlockLoot extends BlockLoot {
     @Override
-    protected void addTables()
-    {
+    protected void addTables() {
         dropSelf(BCBuildersBlocks.filler.get());
         dropSelf(BCBuildersBlocks.builder.get());
         dropSelf(BCBuildersBlocks.architect.get());
@@ -26,15 +23,13 @@ public class BuildersBlockLoot extends BlockLoot
     private final Set<Block> knownBlocks = new HashSet<>();
 
     @Override
-    protected void add(Block block, LootTable.Builder builder)
-    {
+    protected void add(Block block, LootTable.Builder builder) {
         super.add(block, builder);
         knownBlocks.add(block);
     }
 
     @Override
-    protected Iterable<Block> getKnownBlocks()
-    {
+    protected Iterable<Block> getKnownBlocks() {
         return knownBlocks;
     }
 }

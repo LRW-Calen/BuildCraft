@@ -9,28 +9,19 @@ package buildcraft.lib.client.render.tile;
 import buildcraft.lib.client.model.MutableVertex;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
-import com.mojang.math.Vector4f;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ForgeModelBakery;
 
-import javax.vecmath.Matrix4d;
 import javax.vecmath.Point3f;
-import javax.vecmath.Vector4d;
 
 /**
  * A variable sized element (like LED) that can render somewhere in a TESR. Passing a resolver instance will let you
  * modify the location, colour, lightmap, and size of the single element. This does not allow for different textures.
  */
 @OnlyIn(Dist.CLIENT)
-public class RenderPartCube
-{
+public class RenderPartCube {
     /**
      * The centre of this element.
      */
@@ -40,24 +31,20 @@ public class RenderPartCube
     /**
      * Constructs a simple cube configured for a LED.
      */
-    public RenderPartCube()
-    {
+    public RenderPartCube() {
         this(1 / 16.0, 1 / 16.0, 1 / 16.0);
     }
 
-    public RenderPartCube(double x, double y, double z)
-    {
+    public RenderPartCube(double x, double y, double z) {
         center.positiond(x, y, z);
     }
 
-    public void setWhiteTex()
-    {
+    public void setWhiteTex() {
         // Calen: at TextureStitchEvent.Post ForgeModelBakery.White.instance() cannot be called
         // RuntimeException: getAtlasTexture called too early! (ModelManager.java:99)
 ////        TextureAtlasSprite sprite = ModelLoader.White.INSTANCE;
         TextureAtlasSprite sprite = ForgeModelBakery.White.instance();
 //        // Reset the vertex so that edits don't spill out to other tiles.
-//        center.texf(sprite.getInterpolatedU(8), sprite.getInterpolatedV(8));
         center.texf(sprite.getU(8), sprite.getV(8));
     }
 
@@ -66,8 +53,7 @@ public class RenderPartCube
      * of the vertex.
      */
 //    public void render(BufferBuilder bb)
-    public void render(PoseStack poseStack, VertexConsumer bb)
-    {
+    public void render(PoseStack poseStack, VertexConsumer bb) {
         Point3f pos = center.positionvf();
         double x = pos.x;
         double y = pos.y;
@@ -113,8 +99,7 @@ public class RenderPartCube
     }
 
     //    private static void vertex(BufferBuilder vb, MutableVertex center, double x, double y, double z)
-    private static void vertex(PoseStack poseStack, VertexConsumer vb, MutableVertex center, double x, double y, double z)
-    {
+    private static void vertex(PoseStack poseStack, VertexConsumer vb, MutableVertex center, double x, double y, double z) {
         // Using DefaultVertexFormats.BLOCK
         // -- POSITION_3F // pos
         // -- COLOR_4UB // colour

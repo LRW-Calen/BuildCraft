@@ -13,21 +13,19 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
 import net.minecraft.world.level.block.Blocks;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public enum GuideSmeltingRecipes implements IStackRecipes
-{
+public enum GuideSmeltingRecipes implements IStackRecipes {
     INSTANCE;
 
     @Override
-    public List<GuidePartFactory> getUsages(@Nonnull ItemStack stack)
-    {
+    public List<GuidePartFactory> getUsages(@Nonnull ItemStack stack) {
 //        Map<ItemStack, ItemStack> recipes;
         List<SmeltingRecipe> recipes;
 //        Map<ItemStack, ItemStack> old = FurnaceRecipes.instance().getSmeltingList();
@@ -58,18 +56,15 @@ public enum GuideSmeltingRecipes implements IStackRecipes
         }).findFirst().orElse(null);
 
 //        if (!result.isEmpty())
-        if (recipe != null)
-        {
+        if (recipe != null) {
 //            return ImmutableList.of(new GuideSmeltingFactory(stack, result));
             return ImmutableList.of(new GuideSmeltingFactory(recipe.getIngredients(), recipe.getResultItem()));
         }
 
-        if (stack.getItem() == Blocks.FURNACE.asItem())
-        {
+        if (stack.getItem() == Blocks.FURNACE.asItem()) {
             List<GuidePartFactory> list = new ArrayList<>();
 //            for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
-            for (SmeltingRecipe recipe_i : recipes)
-            {
+            for (SmeltingRecipe recipe_i : recipes) {
 //                list.add(new GuideSmeltingFactory(recipe.getKey(), recipe.getValue()));
                 list.add(new GuideSmeltingFactory(recipe_i.getIngredients(), recipe_i.getResultItem()));
             }
@@ -80,19 +75,16 @@ public enum GuideSmeltingRecipes implements IStackRecipes
     }
 
     @Override
-    public List<GuidePartFactory> getRecipes(@Nonnull ItemStack stack)
-    {
+    public List<GuidePartFactory> getRecipes(@Nonnull ItemStack stack) {
         List<GuidePartFactory> list = new ArrayList<>();
 
 //        for (Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet())
-        for (SmeltingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING))
-        {
+        for (SmeltingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING)) {
 //            ItemStack input = StackUtil.asNonNull(entry.getKey());
             NonNullList<Ingredient> input = recipe.getIngredients();
 //            ItemStack output = StackUtil.asNonNull(entry.getValue());
             ItemStack output = recipe.getResultItem();
-            if (StackUtil.doesEitherStackMatch(stack, output))
-            {
+            if (StackUtil.doesEitherStackMatch(stack, output)) {
                 list.add(new GuideSmeltingFactory(input, output));
             }
         }

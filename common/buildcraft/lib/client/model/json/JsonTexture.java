@@ -52,7 +52,8 @@ public class JsonTexture {
                 } else if (elem.isJsonPrimitive() && elem.getAsJsonPrimitive().isString()) {
                     try {
                         arr[i] = GenericExpressionCompiler.compileExpressionDouble(elem.getAsString(), DefaultContexts.createWithAll()).evaluate();
-                    } catch (InvalidExpressionException e) {
+                    }
+                    catch (InvalidExpressionException e) {
                         throw new JsonSyntaxException("in " + elem, e);
                     }
                 } else {
@@ -64,7 +65,8 @@ public class JsonTexture {
             faceData.minV = (float) MathUtil.clamp(arr[1] / 16.0, 0, 1.0);
             faceData.maxU = (float) MathUtil.clamp(arr[2] / 16.0, 0, 1.0);
             faceData.maxV = (float) MathUtil.clamp(arr[3] / 16.0, 0, 1.0);
-        } catch (JsonSyntaxException jse) {
+        }
+        catch (JsonSyntaxException jse) {
             throw new JsonSyntaxException("in " + obj, jse);
         }
     }

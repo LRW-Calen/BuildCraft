@@ -6,12 +6,10 @@
 
 package buildcraft.lib.client.sprite;
 
-import buildcraft.api.core.render.ISprite;
 import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
-//import buildcraft.lib.client.resource.DataMetadataSection;
+import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.misc.SpriteUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -30,58 +28,50 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.IntBuffer;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 @OnlyIn(Dist.CLIENT)
-public class SpriteHolderRegistry
-{
+public class SpriteHolderRegistry {
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.sprite.holder");
 
     // Calen: Thread Safety
 //    private static final Map<ResourceLocation, SpriteHolder> HOLDER_MAP = new HashMap<>();
     private static final Map<ResourceLocation, SpriteHolder> HOLDER_MAP = new ConcurrentHashMap<>();
 
-    public static SpriteHolder getHolder(ResourceLocation location)
-    {
-        if (!HOLDER_MAP.containsKey(location))
-        {
+    public static SpriteHolder getHolder(ResourceLocation location) {
+        if (!HOLDER_MAP.containsKey(location)) {
             HOLDER_MAP.put(location, new SpriteHolder(location));
-            if (DEBUG)
-            {
+            if (DEBUG) {
                 BCLog.logger.info("[lib.sprite.holder] Created a new sprite holder for " + location);
             }
-        }
-        else if (DEBUG)
-        {
+        } else if (DEBUG) {
             BCLog.logger.info("[lib.sprite.holder] Returned existing sprite holder for " + location);
         }
         return HOLDER_MAP.get(location);
     }
 
-    public static SpriteHolder getHolder(String location)
-    {
+    public static SpriteHolder getHolder(String location) {
         return getHolder(new ResourceLocation(location));
     }
 
     //    public static void onTextureStitchPre(TextureAtlas map)
-    public static void onTextureStitchPre(TextureStitchEvent.Pre event)
-    {
+    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         // Calen: for the ForgeModelBakery.White.instance() texture missing in 1.18.2
         event.addSprite(new ResourceLocation("minecraft", "white"));
 
-        for (SpriteHolder holder : HOLDER_MAP.values())
-        {
+        for (SpriteHolder holder : HOLDER_MAP.values()) {
 
 //            holder.onTextureStitchPre(map);
             holder.onTextureStitchPre(event);
         }
     }
 
-    public static void exportTextureMap()
-    {
-        if (!DEBUG)
-        {
+    public static void exportTextureMap() {
+        if (!DEBUG) {
             return;
         }
 //        TextureAtlas map = Minecraft.getInstance().getTextureMapBlocks();
@@ -90,8 +80,7 @@ public class SpriteHolderRegistry
 //        RenderSystem.bindTexture(map.getId());
         GL11.glBindTexture(3553, map.getId());
 
-        for (int l = 0; l < 4; l++)
-        {
+        for (int l = 0; l < 4; l++) {
             int width = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, l, GL11.GL_TEXTURE_WIDTH);
             int height = GL11.glGetTexLevelParameteri(GL11.GL_TEXTURE_2D, l, GL11.GL_TEXTURE_HEIGHT);
 
@@ -106,29 +95,24 @@ public class SpriteHolderRegistry
             BufferedImage bufferedimage = new BufferedImage(width, height, 2);
             bufferedimage.setRGB(0, 0, width, height, aint, 0, width);
 
-            try
-            {
+            try {
                 ImageIO.write(bufferedimage, "png", new File("bc_spritemap_" + l + ".png"));
             }
-            catch (IOException io)
-            {
+            catch (IOException io) {
                 BCLog.logger.warn(io);
             }
         }
     }
 
-    public static void onTextureStitchPost(TextureStitchEvent.Post event)
-    {
-        for (SpriteHolder holder : HOLDER_MAP.values())
-        {
+    public static void onTextureStitchPost(TextureStitchEvent.Post event) {
+        for (SpriteHolder holder : HOLDER_MAP.values()) {
 
 //            holder.onTextureStitchPre(map);
             holder.onTextureStitchPost(event);
         }
 
 //        if (DEBUG && Loader.instance().isInState(LoaderState.AVAILABLE))
-        if (DEBUG && ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE)
-        {
+        if (DEBUG && ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE) {
             BCLog.logger.info("[lib.sprite.holder] List of registered sprites:");
             List<ResourceLocation> locations = new ArrayList<>();
             locations.addAll(HOLDER_MAP.keySet());
@@ -137,17 +121,13 @@ public class SpriteHolderRegistry
 //            TextureAtlasSprite missing = Minecraft.getInstance().getTextureMapBlocks().getMissingSprite();
             TextureAtlasSprite missing = SpriteUtil.missingSprite();
 
-            for (ResourceLocation r : locations)
-            {
+            for (ResourceLocation r : locations) {
                 SpriteHolder sprite = HOLDER_MAP.get(r);
                 TextureAtlasSprite stitched = sprite.sprite;
                 String status = "  ";
-                if (stitched == null)
-                {
+                if (stitched == null) {
                     status += "(Sprite was registered too late)";
-                }
-                else if (missing.getU0() == stitched.getU0() && missing.getV0() == stitched.getV0())
-                {
+                } else if (missing.getU0() == stitched.getU0() && missing.getV0() == stitched.getV0()) {
                     status += "(Sprite did not exist in a resource pack)";
                 }
 
@@ -163,16 +143,14 @@ public class SpriteHolderRegistry
      * class is initialised before init.
      */
     @OnlyIn(Dist.CLIENT)
-    public static class SpriteHolder implements ISprite
-    {
+    public static class SpriteHolder implements ISprite {
         public final ResourceLocation spriteLocation;
         private TextureAtlasSprite sprite;
         // Calen: never used in 1.12.2
 //        private DataMetadataSection extraData = null;
         private boolean hasCalled = false;
 
-        private SpriteHolder(ResourceLocation spriteLocation)
-        {
+        private SpriteHolder(ResourceLocation spriteLocation) {
             this.spriteLocation = spriteLocation;
         }
 
@@ -180,8 +158,7 @@ public class SpriteHolderRegistry
         // TextureStitchEvent.Post -> get the loaded texture u v from TextureAtlas.LOCATION_BLOCKS
 
         //        protected void onTextureStitchPre(TextureAtlas map)
-        protected void onTextureStitchPre(TextureStitchEvent.Pre event)
-        {
+        protected void onTextureStitchPre(TextureStitchEvent.Pre event) {
             event.addSprite(spriteLocation);
 //            extraData = null;
 //            TextureAtlasSprite varSprite = AtlasSpriteVariants.createForConfig(spriteLocation);
@@ -196,58 +173,47 @@ public class SpriteHolderRegistry
 //            }
         }
 
-        protected void onTextureStitchPost(TextureStitchEvent.Post event)
-        {
+        protected void onTextureStitchPost(TextureStitchEvent.Post event) {
             // Calen
             // ensure LOCATION_BLOCKS
             // or will get wrong texture
             TextureAtlas map = event.getAtlas();
-            if (map.location().equals(TextureAtlas.LOCATION_BLOCKS))
-            {
+            if (map.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
                 sprite = map.getSprite(spriteLocation);
             }
         }
 
-        private TextureAtlasSprite getSpriteChecking()
-        {
-            if (sprite == null & !hasCalled)
-            {
+        private TextureAtlasSprite getSpriteChecking() {
+            if (sprite == null & !hasCalled) {
                 hasCalled = true;
                 String warnText = "[lib.sprite.holder] Tried to use the sprite " + spriteLocation + " before it was stitched!";
-                if (DEBUG)
-                {
+                if (DEBUG) {
                     BCLog.logger.warn(warnText, new Throwable());
-                }
-                else
-                {
+                } else {
                     BCLog.logger.warn(warnText);
                 }
             }
             return sprite;
         }
 
-        public TextureAtlasSprite getSprite()
-        {
+        public TextureAtlasSprite getSprite() {
             return getSpriteChecking();
         }
 
         @Override
-        public double getInterpU(double u)
-        {
+        public double getInterpU(double u) {
             TextureAtlasSprite s = getSpriteChecking();
             return s == null ? u : s.getU0() + u * (s.getU1() - s.getU0());
         }
 
         @Override
-        public double getInterpV(double v)
-        {
+        public double getInterpV(double v) {
             TextureAtlasSprite s = getSpriteChecking();
             return s == null ? v : s.getV0() + v * (s.getV1() - s.getV0());
         }
 
         @Override
-        public void bindTexture()
-        {
+        public void bindTexture() {
             SpriteUtil.bindBlockTextureMap();
         }
 

@@ -14,20 +14,17 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class BCItemTagsProvider extends ItemTagsProvider
-{
+public class BCItemTagsProvider extends ItemTagsProvider {
     public BCItemTagsProvider(
             DataGenerator generator,
             ExistingFileHelper existingFileHelper,
             BlockTagsProvider blockTagsProvider
-    )
-    {
+    ) {
         super(generator, blockTagsProvider, BCModules.BUILDCRAFT, existingFileHelper);
     }
 
     @Override
-    protected void addTags()
-    {
+    protected void addTags() {
 //        copyBlockTags();
 
         tag(OreDictTags.GEAR_WOOD)
@@ -123,8 +120,7 @@ public class BCItemTagsProvider extends ItemTagsProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Item Tags";
     }
 }

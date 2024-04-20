@@ -16,22 +16,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.tuple.Pair;
 
-public abstract class ItemAddon extends ItemBC_Neptune
-{
-    public ItemAddon(String idBC, Item.Properties properties)
-    {
+public abstract class ItemAddon extends ItemBC_Neptune {
+    public ItemAddon(String idBC, Item.Properties properties) {
         super(idBC, properties);
     }
 
     public abstract Addon createAddon();
 
+    // TODO Calen: how to use Addon?
     @SuppressWarnings("NullableProblems")
     @Override
 //    public ActionResult<ItemStack> onItemRightClick(Level world, Player player, InteractionHand hand)
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
-    {
-        if (world.isClientSide)
-        {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
+        if (world.isClientSide) {
             return new InteractionResultHolder<>(InteractionResult.PASS, player.getItemInHand(hand));
         }
 
@@ -42,13 +39,10 @@ public abstract class ItemAddon extends ItemBC_Neptune
         );
         VolumeBox volumeBox = selectingVolumeBoxAndSlot.getLeft();
         EnumAddonSlot slot = selectingVolumeBoxAndSlot.getRight();
-        if (volumeBox != null && slot != null)
-        {
-            if (!volumeBox.addons.containsKey(slot))
-            {
+        if (volumeBox != null && slot != null) {
+            if (!volumeBox.addons.containsKey(slot)) {
                 Addon addon = createAddon();
-                if (addon.canBePlaceInto(volumeBox))
-                {
+                if (addon.canBePlaceInto(volumeBox)) {
                     addon.volumeBox = volumeBox;
                     volumeBox.addons.put(slot, addon);
                     volumeBox.addons.get(slot).onAdded();

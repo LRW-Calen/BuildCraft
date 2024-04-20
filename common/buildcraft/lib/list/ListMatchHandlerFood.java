@@ -2,26 +2,21 @@ package buildcraft.lib.list;
 
 import buildcraft.api.lists.ListMatchHandler;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
 
 import javax.annotation.Nonnull;
 
 // Calen
-public class ListMatchHandlerFood extends ListMatchHandler
-{
+public class ListMatchHandlerFood extends ListMatchHandler {
     @Override
-    public boolean matches(Type type, @Nonnull ItemStack stack, @Nonnull ItemStack target, boolean precise)
-    {
-        if (type == Type.TYPE)
-        {
+    public boolean matches(Type type, @Nonnull ItemStack stack, @Nonnull ItemStack target, boolean precise) {
+        if (type == Type.TYPE) {
             return stack.getItem().isEdible() && target.getItem().isEdible();
         }
         return false;
     }
 
     @Override
-    public boolean isValidSource(Type type, @Nonnull ItemStack stack)
-    {
+    public boolean isValidSource(Type type, @Nonnull ItemStack stack) {
         return stack.getItem().isEdible();
     }
 }

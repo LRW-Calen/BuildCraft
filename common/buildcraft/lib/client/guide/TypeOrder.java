@@ -8,8 +8,7 @@ package buildcraft.lib.client.guide;
 
 import com.google.common.collect.ImmutableList;
 
-public class TypeOrder
-{
+public class TypeOrder {
     public final String localeKey;
     public final ImmutableList<ETypeTag> tags;
 

@@ -23,12 +23,10 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.function.Supplier;
 
-public class BCFluidBlock extends LiquidBlock
-{
+public class BCFluidBlock extends LiquidBlock {
     private boolean sticky = false;
 
-    public BCFluidBlock(Supplier<? extends FlowingFluid> p_54694_, BlockBehaviour.Properties properties, boolean sticky)
-    {
+    public BCFluidBlock(Supplier<? extends FlowingFluid> p_54694_, BlockBehaviour.Properties properties, boolean sticky) {
         super(p_54694_, properties);
         this.registerDefaultState(
                 this.stateDefinition.any()
@@ -46,8 +44,7 @@ public class BCFluidBlock extends LiquidBlock
 
     // displacements.put(...)
     @Override
-    public boolean canBeReplaced(BlockState p_56589_, BlockPlaceContext p_56590_)
-    {
+    public boolean canBeReplaced(BlockState p_56589_, BlockPlaceContext p_56590_) {
 //        displacements.put(Blocks.WATER, displaceWater);
 //        displacements.put(Blocks.FLOWING_WATER, displaceWater);
 //
@@ -59,16 +56,11 @@ public class BCFluidBlock extends LiquidBlock
         Boolean displaceWater = this.getFluid().getAttributes().getDensity() > 1000;
         Boolean displaceLava = this.getFluid().getAttributes().getDensity() > 9000;
         Item itemInHand = p_56590_.getItemInHand().getItem();
-        if (itemInHand == Items.WATER_BUCKET && displaceWater)
-        {
+        if (itemInHand == Items.WATER_BUCKET && displaceWater) {
             return false;
-        }
-        else if (itemInHand == Items.LAVA_BUCKET && displaceLava)
-        {
+        } else if (itemInHand == Items.LAVA_BUCKET && displaceLava) {
             return false;
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
@@ -86,24 +78,20 @@ public class BCFluidBlock extends LiquidBlock
 
     // public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
     @Override
-    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction)
-    {
+    public int getFlammability(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return this.material.isFlammable() ? 200 : 0;
     }
 
     // public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face)
     @Override
-    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction)
-    {
+    public int getFireSpreadSpeed(BlockState state, BlockGetter level, BlockPos pos, Direction direction) {
         return this.material.isFlammable() ? 200 : 0;
     }
 
     // public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     @Override
-    public void entityInside(BlockState p_58180_, Level p_58181_, BlockPos p_58182_, Entity entityIn)
-    {
-        if (sticky)
-        {
+    public void entityInside(BlockState p_58180_, Level p_58181_, BlockPos p_58182_, Entity entityIn) {
+        if (sticky) {
             entityIn.makeStuckInBlock(p_58180_, new Vec3(0.25D, (double) 0.05F, 0.25D));
         }
     }

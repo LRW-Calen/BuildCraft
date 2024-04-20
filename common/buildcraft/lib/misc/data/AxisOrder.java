@@ -13,8 +13,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 
-public class AxisOrder
-{
+public class AxisOrder {
     private static final Table<EnumAxisOrder, Inversion, AxisOrder> allOrders;
 
     static {

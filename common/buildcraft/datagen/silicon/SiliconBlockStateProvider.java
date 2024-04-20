@@ -1,24 +1,23 @@
 package buildcraft.datagen.silicon;
 
-import buildcraft.silicon.BCSilicon;
 import buildcraft.silicon.BCSiliconBlocks;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.*;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
+import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class SiliconBlockStateProvider extends BlockStateProvider
-{
-    public SiliconBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
-    {
+public class SiliconBlockStateProvider extends BlockStateProvider {
+    public SiliconBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
         super(gen, modid, exFileHelper);
     }
 
     @Override
-    protected void registerStatesAndModels()
-    {
+    protected void registerStatesAndModels() {
         // laser
         ModelBuilder laser = models().withExistingParent("buildcraftsilicon:block/laser", new ResourceLocation("minecraft", "block/block"))
                 .element()
@@ -52,8 +51,7 @@ public class SiliconBlockStateProvider extends BlockStateProvider
                 .texture("side", "buildcraftsilicon:blocks/laser/side")
                 .texture("bottom", "buildcraftsilicon:blocks/laser/bottom");
         getVariantBuilder(BCSiliconBlocks.laser.get()).forAllStates(state ->
-                switch (state.getValue(BCSiliconBlocks.laser.get().getFacingProperty()))
-                {
+                switch (state.getValue(BCSiliconBlocks.laser.get().getFacingProperty())) {
                     case UP -> ConfiguredModel.builder().modelFile(laser).build();
                     case DOWN -> ConfiguredModel.builder().modelFile(laser).rotationX(180).build();
                     case NORTH -> ConfiguredModel.builder().modelFile(laser).rotationX(90).build();

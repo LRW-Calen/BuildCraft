@@ -4,7 +4,6 @@ import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.BCFactoryItems;
 import buildcraft.factory.loot.LootConditionSpreading;
 import net.minecraft.data.loot.BlockLoot;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -12,16 +11,13 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class FactoryBlockLoot extends BlockLoot
-{
+public class FactoryBlockLoot extends BlockLoot {
     @Override
-    protected void addTables()
-    {
+    protected void addTables() {
         dropSelf(BCFactoryBlocks.autoWorkbenchItems.get());
         dropSelf(BCFactoryBlocks.miningWell.get());
         dropSelf(BCFactoryBlocks.pump.get());
@@ -53,15 +49,13 @@ public class FactoryBlockLoot extends BlockLoot
     private final Set<Block> knownBlocks = new HashSet<>();
 
     @Override
-    protected void add(Block block, LootTable.Builder builder)
-    {
+    protected void add(Block block, LootTable.Builder builder) {
         super.add(block, builder);
         knownBlocks.add(block);
     }
 
     @Override
-    protected Iterable<Block> getKnownBlocks()
-    {
+    protected Iterable<Block> getKnownBlocks() {
         return knownBlocks;
     }
 }

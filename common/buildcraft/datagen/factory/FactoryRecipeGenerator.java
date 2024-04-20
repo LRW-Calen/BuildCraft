@@ -16,18 +16,15 @@ import net.minecraftforge.common.Tags;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class FactoryRecipeGenerator extends RecipeProvider
-{
-    private static final String MOD_ID = BCFactory.MOD_ID;
+public class FactoryRecipeGenerator extends RecipeProvider {
+    private static final String MOD_ID = BCFactory.MODID;
 
-    public FactoryRecipeGenerator(DataGenerator generator)
-    {
+    public FactoryRecipeGenerator(DataGenerator generator) {
         super(generator);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         // autoworkbench_item
         ShapedRecipeBuilder.shaped(BCFactoryBlocks.autoWorkbenchItems.get())
                 .pattern("gwg")
@@ -136,8 +133,7 @@ public class FactoryRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Factory Recipe Generator";
     }
 }

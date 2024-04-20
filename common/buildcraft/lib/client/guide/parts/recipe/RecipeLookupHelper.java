@@ -16,8 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class RecipeLookupHelper
-{
+public class RecipeLookupHelper {
     public static final Map<String, IStackRecipes> handlerTypes = new HashMap<>();
 
     static {

@@ -12,15 +12,14 @@ import buildcraft.lib.marker.MarkerConnection;
 import buildcraft.lib.misc.PositionUtil;
 import buildcraft.lib.misc.data.Box;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
-import net.minecraft.client.Camera;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -29,17 +28,14 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-public class VolumeConnection extends MarkerConnection<VolumeConnection>
-{
+public class VolumeConnection extends MarkerConnection<VolumeConnection> {
     private static final double RENDER_SCALE = 1 / 16.05;
 
     private final Set<BlockPos> makeup = new HashSet<>();
     private final Box box = new Box();
 
-    public static boolean tryCreateConnection(VolumeSubCache subCache, BlockPos from, BlockPos to)
-    {
-        if (canCreateConnection(subCache, from, to))
-        {
+    public static boolean tryCreateConnection(VolumeSubCache subCache, BlockPos from, BlockPos to) {
+        if (canCreateConnection(subCache, from, to)) {
             VolumeConnection connection = new VolumeConnection(subCache);
             connection.makeup.add(from);
             connection.makeup.add(to);
@@ -50,12 +46,10 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection>
         return false;
     }
 
-    public static boolean canCreateConnection(VolumeSubCache subCache, BlockPos from, BlockPos to)
-    {
+    public static boolean canCreateConnection(VolumeSubCache subCache, BlockPos from, BlockPos to) {
         Direction directOffset = PositionUtil.getDirectFacingOffset(from, to);
         if (directOffset == null) return false;
-        for (int i = 1; i <= BCCoreConfig.markerMaxDistance; i++)
-        {
+        for (int i = 1; i <= BCCoreConfig.markerMaxDistance; i++) {
             BlockPos offset = from.relative(directOffset, i);
             if (offset.equals(to)) return true;
             if (subCache.hasLoadedOrUnloadedMarker(offset)) return false;
@@ -63,34 +57,28 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection>
         return false;
     }
 
-    public VolumeConnection(VolumeSubCache subCache)
-    {
+    public VolumeConnection(VolumeSubCache subCache) {
         super(subCache);
     }
 
-    public VolumeConnection(VolumeSubCache subCache, Collection<BlockPos> positions)
-    {
+    public VolumeConnection(VolumeSubCache subCache, Collection<BlockPos> positions) {
         super(subCache);
         makeup.addAll(positions);
         createBox();
     }
 
     @Override
-    public void removeMarker(BlockPos pos)
-    {
+    public void removeMarker(BlockPos pos) {
         makeup.remove(pos);
-        if (makeup.size() < 2)
-        {
+        if (makeup.size() < 2) {
             // This connection will be removed by the sub-cache
             makeup.clear();
         }
         createBox();
     }
 
-    public boolean addMarker(BlockPos pos)
-    {
-        if (canAddMarker(pos))
-        {
+    public boolean addMarker(BlockPos pos) {
+        if (canAddMarker(pos)) {
             makeup.add(pos);
             createBox();
             subCache.refreshConnection(this);
@@ -99,24 +87,19 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection>
         return false;
     }
 
-    public boolean canAddMarker(BlockPos to)
-    {
+    public boolean canAddMarker(BlockPos to) {
         Set<Axis> taken = getConnectedAxis();
-        for (BlockPos from : makeup)
-        {
+        for (BlockPos from : makeup) {
             Direction direct = PositionUtil.getDirectFacingOffset(from, to);
-            if (direct != null && !taken.contains(direct.getAxis()))
-            {
+            if (direct != null && !taken.contains(direct.getAxis())) {
                 return true;
             }
         }
         return !makeup.contains(to) && box.isCorner(to);
     }
 
-    public boolean mergeWith(VolumeConnection other)
-    {
-        if (canMergeWith(other))
-        {
+    public boolean mergeWith(VolumeConnection other) {
+        if (canMergeWith(other)) {
             makeup.addAll(other.makeup);
             other.makeup.clear();
             createBox();
@@ -127,27 +110,21 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection>
         return false;
     }
 
-    public boolean canMergeWith(VolumeConnection other)
-    {
+    public boolean canMergeWith(VolumeConnection other) {
         EnumSet<Axis> us = getConnectedAxis();
         EnumSet<Axis> them = other.getConnectedAxis();
-        if (us.size() != 1 || them.size() != 1)
-        {
+        if (us.size() != 1 || them.size() != 1) {
             return false;
         }
-        if (us.equals(them))
-        {
+        if (us.equals(them)) {
             return false;
         }
         Set<Axis> blacklisted = EnumSet.copyOf(us);
         blacklisted.addAll(them);
-        for (BlockPos from : makeup)
-        {
-            for (BlockPos to : other.makeup)
-            {
+        for (BlockPos from : makeup) {
+            for (BlockPos to : other.makeup) {
                 Direction offset = PositionUtil.getDirectFacingOffset(from, to);
-                if (offset != null && !blacklisted.contains(offset.getAxis()))
-                {
+                if (offset != null && !blacklisted.contains(offset.getAxis())) {
                     return true;
                 }
             }
@@ -155,16 +132,12 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection>
         return false;
     }
 
-    public EnumSet<Direction.Axis> getConnectedAxis()
-    {
+    public EnumSet<Direction.Axis> getConnectedAxis() {
         EnumSet<Direction.Axis> taken = EnumSet.noneOf(Direction.Axis.class);
-        for (BlockPos a : getMarkerPositions())
-        {
-            for (BlockPos b : getMarkerPositions())
-            {
+        for (BlockPos a : getMarkerPositions()) {
+            for (BlockPos b : getMarkerPositions()) {
                 Direction offset = PositionUtil.getDirectFacingOffset(a, b);
-                if (offset != null)
-                {
+                if (offset != null) {
                     taken.add(offset.getAxis());
                 }
             }
@@ -173,22 +146,18 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection>
     }
 
     @Override
-    public Collection<BlockPos> getMarkerPositions()
-    {
+    public Collection<BlockPos> getMarkerPositions() {
         return makeup;
     }
 
-    private void createBox()
-    {
+    private void createBox() {
         box.reset();
-        for (BlockPos p : makeup)
-        {
+        for (BlockPos p : makeup) {
             box.extendToEncompass(p);
         }
     }
 
-    public Box getBox()
-    {
+    public Box getBox() {
         return new Box(box.min(), box.max());
     }
 
@@ -200,8 +169,7 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection>
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void renderInWorld(PoseStack poseStack)
-    {
+    public void renderInWorld(PoseStack poseStack) {
 
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Sheets.solidBlockSheet());

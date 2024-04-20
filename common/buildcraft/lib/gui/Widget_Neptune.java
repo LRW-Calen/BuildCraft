@@ -6,6 +6,7 @@
 
 package buildcraft.lib.gui;
 
+import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.IPayloadReceiver;
 import buildcraft.lib.net.IPayloadWriter;
 import buildcraft.lib.net.PacketBufferBC;
@@ -13,13 +14,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
-import buildcraft.lib.net.IMessage;
 
 import java.io.IOException;
 
 /** Defines some sort of separate element that exists on both the server and client. Doesn't draw directly. */
-public abstract class Widget_Neptune<C extends ContainerBC_Neptune> implements IPayloadReceiver
-{
+public abstract class Widget_Neptune<C extends ContainerBC_Neptune> implements IPayloadReceiver {
     public final C container;
 
     public Widget_Neptune(C container) {

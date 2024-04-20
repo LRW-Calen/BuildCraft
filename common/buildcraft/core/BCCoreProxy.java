@@ -7,7 +7,6 @@ package buildcraft.core;
 import buildcraft.api.BCModules;
 import buildcraft.core.client.RenderTickListener;
 import buildcraft.core.client.render.RenderVolumeBoxes;
-import buildcraft.core.list.ContainerList;
 import buildcraft.core.list.ListTooltipHandler;
 import buildcraft.core.marker.volume.ClientVolumeBoxes;
 import buildcraft.core.marker.volume.MessageVolumeBoxes;
@@ -15,7 +14,6 @@ import buildcraft.core.marker.volume.VolumeBox;
 import buildcraft.core.marker.volume.WorldSavedDataVolumeBoxes;
 import buildcraft.lib.client.render.DetachedRenderer;
 import buildcraft.lib.net.MessageManager;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -24,18 +22,14 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import java.util.List;
 
 //public abstract class BCCoreProxy implements IGuiHandler
-public abstract class BCCoreProxy
-{
+public abstract class BCCoreProxy {
     //    @SidedProxy(modId = BCCore.MODID)
     private static BCCoreProxy proxy = null;
 
-    public static BCCoreProxy getProxy()
-    {
-        if (proxy == null)
-        {
-            switch (FMLLoader.getDist())
-            {
-                case  CLIENT:
+    public static BCCoreProxy getProxy() {
+        if (proxy == null) {
+            switch (FMLLoader.getDist()) {
+                case CLIENT:
                     proxy = new ClientProxy();
                     break;
                 case DEDICATED_SERVER:
@@ -62,33 +56,27 @@ public abstract class BCCoreProxy
 //        return null;
 //    }
 
-    public void fmlPreInit()
-    {
+    public void fmlPreInit() {
         MessageManager.registerMessageClass(BCModules.CORE, MessageVolumeBoxes.class, Dist.CLIENT);
     }
 
-    public void fmlInit()
-    {
+    public void fmlInit() {
     }
 
-    public void fmlPostInit()
-    {
+    public void fmlPostInit() {
     }
 
-    public List<VolumeBox> getVolumeBoxes(Level world)
-    {
+    public List<VolumeBox> getVolumeBoxes(Level world) {
         return WorldSavedDataVolumeBoxes.get(world).volumeBoxes;
     }
 
     //    @SideOnly(Side.SERVER)
-    public static class ServerProxy extends BCCoreProxy
-    {
+    public static class ServerProxy extends BCCoreProxy {
 
     }
 
     //    @SideOnly(Side.CLIENT)
-    public static class ClientProxy extends BCCoreProxy
-    {
+    public static class ClientProxy extends BCCoreProxy {
 //        @Override
 //        public Object getClientGuiElement(int ID, Player player, Level world, int x, int y, int z)
 //        {
@@ -100,8 +88,7 @@ public abstract class BCCoreProxy
 //        }
 
         @Override
-        public void fmlPreInit()
-        {
+        public void fmlPreInit() {
             super.fmlPreInit();
             BCCoreSprites.fmlPreInit();
             // Calen moved to Buildcraft.java
@@ -112,16 +99,14 @@ public abstract class BCCoreProxy
         }
 
         @Override
-        public void fmlInit()
-        {
+        public void fmlInit() {
             super.fmlInit();
             BCCoreModels.fmlInit();
             MinecraftForge.EVENT_BUS.register(RenderTickListener.class);
         }
 
         @Override
-        public List<VolumeBox> getVolumeBoxes(Level world)
-        {
+        public List<VolumeBox> getVolumeBoxes(Level world) {
             return world.isClientSide ? ClientVolumeBoxes.INSTANCE.volumeBoxes : super.getVolumeBoxes(world);
         }
     }

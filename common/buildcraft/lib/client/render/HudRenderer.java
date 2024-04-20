@@ -6,36 +6,33 @@
 
 package buildcraft.lib.client.render;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.level.ServerPlayer;
-import org.lwjgl.opengl.GL11;
+import net.minecraft.client.player.LocalPlayer;
 
-public abstract class HudRenderer
-{
-//    protected abstract void renderImpl(Minecraft mc, EntityPlayerSP player);
-    protected abstract void renderImpl(Minecraft mc, ServerPlayer player);
+public abstract class HudRenderer {
+    //    protected abstract void renderImpl(Minecraft mc, EntityPlayerSP player);
+    protected abstract void renderImpl(Minecraft mc, LocalPlayer player);
 
-//    protected abstract boolean shouldRender(Minecraft mc, EntityPlayerSP player);
-    protected abstract boolean shouldRender(Minecraft mc, ServerPlayer player);
+    //    protected abstract boolean shouldRender(Minecraft mc, EntityPlayerSP player);
+    protected abstract boolean shouldRender(Minecraft mc, LocalPlayer player);
 
-    protected void setupTransforms()
-    {
+    protected void setupTransforms() {
     }
 
-    public static void moveToHeldStack(Minecraft mc, int slot)
-    {
+    public static void moveToHeldStack(Minecraft mc, int slot) {
 
     }
 
-//    public final void render(Minecraft mc, EntityPlayerSP player)
-    public final void render(Minecraft mc, ServerPlayer player)
-    {
-        if (shouldRender(mc, player))
-        {
-            GL11.glPushMatrix();
+    //    public final void render(Minecraft mc, EntityPlayerSP player)
+    public final void render(Minecraft mc, PoseStack poseStack, LocalPlayer player) {
+        if (shouldRender(mc, player)) {
+//            GL11.glPushMatrix();
+            poseStack.pushPose();
             setupTransforms();
             renderImpl(mc, player);
-            GL11.glPopMatrix();
+//            GL11.glPopMatrix();
+            poseStack.popPose();
         }
     }
 }

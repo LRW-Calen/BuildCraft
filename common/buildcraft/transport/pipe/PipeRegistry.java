@@ -26,11 +26,10 @@ import java.util.HashMap;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-public enum PipeRegistry implements IPipeRegistry
-{
+public enum PipeRegistry implements IPipeRegistry {
     INSTANCE;
 
-    public static final DeferredRegister<Item> PIPE_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BCTransport.MOD_ID);
+    public static final DeferredRegister<Item> PIPE_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BCTransport.MODID);
 
     //    private final RegistrationHelper helper = new RegistrationHelper(NameSpaces.BUILDCRAFT_TRANSPORT);
     private final Map<ResourceLocation, PipeDefinition> definitions = new HashMap<>();
@@ -39,26 +38,20 @@ public enum PipeRegistry implements IPipeRegistry
     private final Map<PipeDefinition, Map<DyeColor, RegistryObject<? extends IItemPipe>>> pipeItems = new IdentityHashMap<>();
 
     @Override
-    public void registerPipe(PipeDefinition definition)
-    {
+    public void registerPipe(PipeDefinition definition) {
         definitions.put(definition.identifier, definition);
     }
 
     @Override
 //    public void setItemForPipe(PipeDefinition definition, @Nullable IItemPipe item)
 //    public void setItemForPipe(PipeDefinition definition, @Nullable RegistryObject<? extends IItemPipe> item)
-    public void setItemForPipe(PipeDefinition definition, Map<DyeColor, RegistryObject<? extends IItemPipe>> item)
-    {
-        if (definition == null)
-        {
+    public void setItemForPipe(PipeDefinition definition, Map<DyeColor, RegistryObject<? extends IItemPipe>> item) {
+        if (definition == null) {
             throw new NullPointerException("definition");
         }
-        if (item == null)
-        {
+        if (item == null) {
             pipeItems.remove(definition);
-        }
-        else
-        {
+        } else {
             pipeItems.put(definition, item);
         }
     }
@@ -66,20 +59,17 @@ public enum PipeRegistry implements IPipeRegistry
     @Override
 //    public ItemPipeHolder createItemForPipe(PipeDefinition definition)
 //    public RegistryObject<ItemPipeHolder> createItemForPipe(PipeDefinition definition)
-    public Map<DyeColor, RegistryObject<? extends IItemPipe>> createItemForPipe(PipeDefinition definition)
-    {
+    public Map<DyeColor, RegistryObject<? extends IItemPipe>> createItemForPipe(PipeDefinition definition) {
         Map<DyeColor, RegistryObject<? extends IItemPipe>> map = new HashMap<>();
 //        ItemPipeHolder item = ItemPipeHolder.createAndTag(definition);
 //        helper.addForcedItem(item);
         RegistryObject<ItemPipeHolder> item = ItemPipeHolder.createAndTag(definition, null);
-        if (definitions.values().contains(definition))
-        {
+        if (definitions.values().contains(definition)) {
 //            setItemForPipe(definition, item);
             setItemForPipe(definition, map);
         }
         map.put(null, item);
-        for (DyeColor colour : DyeColor.values())
-        {
+        for (DyeColor colour : DyeColor.values()) {
             item = ItemPipeHolder.createAndTag(definition, colour);
             map.put(colour, item);
         }
@@ -105,33 +95,28 @@ public enum PipeRegistry implements IPipeRegistry
     // Calen: reg different item object for different colour
     @Override
 //    public IItemPipe getItemForPipe(PipeDefinition definition)
-    public IItemPipe getItemForPipe(PipeDefinition definition, DyeColor colour)
-    {
+    public IItemPipe getItemForPipe(PipeDefinition definition, DyeColor colour) {
 //        return pipeItems.get(definition).get();
         return pipeItems.get(definition).get(colour).get();
     }
 
     @Override
     @Nullable
-    public PipeDefinition getDefinition(ResourceLocation identifier)
-    {
+    public PipeDefinition getDefinition(ResourceLocation identifier) {
         return definitions.get(identifier);
     }
 
     @Nonnull
-    public PipeDefinition loadDefinition(String identifier) throws InvalidInputDataException
-    {
+    public PipeDefinition loadDefinition(String identifier) throws InvalidInputDataException {
         PipeDefinition def = getDefinition(new ResourceLocation(identifier));
-        if (def == null)
-        {
+        if (def == null) {
             throw new InvalidInputDataException("Unknown pipe definition " + identifier);
         }
         return def;
     }
 
     @Override
-    public Iterable<PipeDefinition> getAllRegisteredPipes()
-    {
+    public Iterable<PipeDefinition> getAllRegisteredPipes() {
         return ImmutableList.copyOf(definitions.values());
     }
 }

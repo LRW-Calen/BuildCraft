@@ -6,8 +6,8 @@
 
 package buildcraft.transport.pipe.behaviour;
 
-import buildcraft.api.core.IStackFilter;
 import buildcraft.api.core.EnumPipePart;
+import buildcraft.api.core.IStackFilter;
 import buildcraft.api.transport.IItemPluggable;
 import buildcraft.api.transport.pipe.IFlowFluid;
 import buildcraft.api.transport.pipe.IFlowItems;
@@ -36,19 +36,15 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.io.IOException;
 
-public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
-{
+public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
 
-    public enum FilterMode
-    {
+    public enum FilterMode {
         WHITE_LIST,
         BLACK_LIST,
         ROUND_ROBIN;
 
-        public static FilterMode get(int index)
-        {
-            switch (index)
-            {
+        public static FilterMode get(int index) {
+            switch (index) {
                 default:
                 case 0:
                     return WHITE_LIST;
@@ -65,13 +61,11 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
     public int currentFilter = 0;
     public boolean filterValid = false;
 
-    public PipeBehaviourWoodDiamond(IPipe pipe)
-    {
+    public PipeBehaviourWoodDiamond(IPipe pipe) {
         super(pipe);
     }
 
-    public PipeBehaviourWoodDiamond(IPipe pipe, CompoundTag nbt)
-    {
+    public PipeBehaviourWoodDiamond(IPipe pipe, CompoundTag nbt) {
         super(pipe, nbt);
         filters.deserializeNBT(nbt.getCompound("filters"));
         filterMode = FilterMode.get(nbt.getByte("mode"));
@@ -80,8 +74,7 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
     }
 
     @Override
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = super.writeToNbt();
         nbt.put("filters", filters.serializeNBT());
         nbt.putByte("mode", (byte) filterMode.ordinal());
@@ -90,11 +83,9 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
     }
 
     @Override
-    public void readPayload(FriendlyByteBuf buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(FriendlyByteBuf buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
             filterMode = FilterMode.get(buffer.readUnsignedByte());
             currentFilter = buffer.readUnsignedByte() % filters.getSlots();
             filterValid = buffer.readBoolean();
@@ -102,11 +93,9 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
     }
 
     @Override
-    public void writePayload(FriendlyByteBuf buffer, Dist side)
-    {
+    public void writePayload(FriendlyByteBuf buffer, Dist side) {
         super.writePayload(buffer, side);
-        if (side == Dist.DEDICATED_SERVER)
-        {
+        if (side == Dist.DEDICATED_SERVER) {
             buffer.writeByte(filterMode.ordinal());
             buffer.writeByte(currentFilter);
             buffer.writeBoolean(filterValid);
@@ -115,52 +104,39 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
 
     @Override
     public boolean onPipeActivate(Player player, HitResult trace, float hitX, float hitY, float hitZ,
-                                  EnumPipePart part)
-    {
-        if (EntityUtil.getWrenchHand(player) != null)
-        {
+                                  EnumPipePart part) {
+        if (EntityUtil.getWrenchHand(player) != null) {
             return super.onPipeActivate(player, trace, hitX, hitY, hitZ, part);
         }
         ItemStack held = player.getMainHandItem();
-        if (!held.isEmpty())
-        {
-            if (held.getItem() instanceof IItemPluggable)
-            {
+        if (!held.isEmpty()) {
+            if (held.getItem() instanceof IItemPluggable) {
                 return false;
             }
         }
-        if (!player.level.isClientSide)
-        {
+        if (!player.level.isClientSide) {
 //            BCTransportGuis.PIPE_DIAMOND_WOOD.openGui(player, pipe.getHolder().getPipePos());
             BCTransportGuis.PIPE_DIAMOND_WOOD.openPipeGui(player, pipe.getHolder().getPipePos(), pipe.getHolder());
         }
         return true;
     }
 
-    private void onSlotChanged(IItemHandlerModifiable itemHandler, int slot, ItemStack before, ItemStack after)
-    {
-        if (!after.isEmpty())
-        {
-            if (!filterValid)
-            {
+    private void onSlotChanged(IItemHandlerModifiable itemHandler, int slot, ItemStack before, ItemStack after) {
+        if (!after.isEmpty()) {
+            if (!filterValid) {
                 currentFilter = slot;
                 filterValid = true;
             }
-        }
-        else if (slot == currentFilter)
-        {
+        } else if (slot == currentFilter) {
             advanceFilter();
         }
     }
 
-    private IStackFilter getStackFilter()
-    {
-        switch (filterMode)
-        {
+    private IStackFilter getStackFilter() {
+        switch (filterMode) {
             default:
             case WHITE_LIST:
-                if (filters.extract(s -> true, 1, 1, true).isEmpty())
-                {
+                if (filters.extract(s -> true, 1, 1, true).isEmpty()) {
                     return s -> true;
                 }
                 return new DelegatingItemHandlerFilter(StackUtil::isMatchingItemOrList, filters);
@@ -177,15 +153,12 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
     }
 
     @Override
-    protected int extractItems(IFlowItems flow, Direction dir, int count, boolean simulate)
-    {
-        if (filters.getStackInSlot(currentFilter).isEmpty())
-        {
+    protected int extractItems(IFlowItems flow, Direction dir, int count, boolean simulate) {
+        if (filters.getStackInSlot(currentFilter).isEmpty()) {
             advanceFilter();
         }
         int extracted = flow.tryExtractItems(1, getCurrentDir(), null, getStackFilter(), simulate);
-        if (extracted > 0 & filterMode == FilterMode.ROUND_ROBIN && !simulate)
-        {
+        if (extracted > 0 & filterMode == FilterMode.ROUND_ROBIN && !simulate) {
             advanceFilter();
         }
         return extracted;
@@ -193,19 +166,15 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
 
     @Override
 //    protected FluidStack extractFluid(IFlowFluid flow, Direction dir, int millibuckets, boolean simulate)
-    protected FluidStack extractFluid(IFlowFluid flow, Direction dir, int millibuckets, IFluidHandler.FluidAction action)
-    {
-        if (filters.getStackInSlot(currentFilter).isEmpty())
-        {
+    protected FluidStack extractFluid(IFlowFluid flow, Direction dir, int millibuckets, IFluidHandler.FluidAction action) {
+        if (filters.getStackInSlot(currentFilter).isEmpty()) {
             advanceFilter();
         }
 
-        switch (filterMode)
-        {
+        switch (filterMode) {
             default:
             case WHITE_LIST:
-                if (filters.extract(s -> true, 1, 1, true).isEmpty())
-                {
+                if (filters.extract(s -> true, 1, 1, true).isEmpty()) {
 //                    return flow.tryExtractFluid(millibuckets, dir, null, simulate);
                     return flow.tryExtractFluid(millibuckets, dir, null, action);
                 }
@@ -213,24 +182,19 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
 //                InteractionResultHolder<FluidStack> result = flow.tryExtractFluidAdv(millibuckets, dir, new ArrayFluidFilter(filters.stacks), simulate);
                 InteractionResultHolder<FluidStack> result = flow.tryExtractFluidAdv(millibuckets, dir, new ArrayFluidFilter(filters.stacks), action);
                 FluidStack extracted = result.getObject();
-                if (result.getResult() != InteractionResult.PASS)
-                {
+                if (result.getResult() != InteractionResult.PASS) {
                     return extracted;
                 }
 
-                if (extracted.isEmpty() || extracted.getAmount() <= 0)
-                {
-                    for (int i = 0; i < filters.getSlots(); i++)
-                    {
+                if (extracted.isEmpty() || extracted.getAmount() <= 0) {
+                    for (int i = 0; i < filters.getSlots(); i++) {
                         ItemStack stack = filters.getStackInSlot(i);
-                        if (stack.isEmpty())
-                        {
+                        if (stack.isEmpty()) {
                             continue;
                         }
 //                        extracted = flow.tryExtractFluid(millibuckets, dir, FluidUtil.getFluidContained(stack).orElse(StackUtil.EMPTY_FLUID), simulate);
                         extracted = flow.tryExtractFluid(millibuckets, dir, FluidUtil.getFluidContained(stack).orElse(StackUtil.EMPTY_FLUID), action);
-                        if (extracted != null && extracted.getAmount() > 0)
-                        {
+                        if (extracted != null && extracted.getAmount() > 0) {
                             return extracted;
                         }
                     }
@@ -247,29 +211,23 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood
         }
     }
 
-    private void advanceFilter()
-    {
+    private void advanceFilter() {
         int lastFilter = currentFilter;
         filterValid = false;
-        while (true)
-        {
+        while (true) {
             currentFilter++;
-            if (currentFilter >= filters.getSlots())
-            {
+            if (currentFilter >= filters.getSlots()) {
                 currentFilter = 0;
             }
-            if (!filters.getStackInSlot(currentFilter).isEmpty())
-            {
+            if (!filters.getStackInSlot(currentFilter).isEmpty()) {
                 filterValid = true;
                 break;
             }
-            if (currentFilter == lastFilter)
-            {
+            if (currentFilter == lastFilter) {
                 break;
             }
         }
-        if (lastFilter != currentFilter)
-        {
+        if (lastFilter != currentFilter) {
             pipe.getHolder().scheduleNetworkGuiUpdate(PipeMessageReceiver.BEHAVIOUR);
         }
     }

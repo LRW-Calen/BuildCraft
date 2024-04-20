@@ -21,29 +21,25 @@ import java.util.List;
  * @deprecated Help *should* be moved to GuiElementContainer rather than this.
  */
 @Deprecated
-public class GuiElementContainerHelp implements IGuiElement
-{
+public class GuiElementContainerHelp implements IGuiElement {
     public final BuildCraftGui gui;
     private final IGuiPosition position;
     private final List<IGuiElement> internalElements = new ArrayList<>();
     private double width, height;
     private boolean calc = false;
 
-    public GuiElementContainerHelp(BuildCraftGui gui, IGuiPosition position)
-    {
+    public GuiElementContainerHelp(BuildCraftGui gui, IGuiPosition position) {
         this.gui = gui;
         this.position = position;
     }
 
-    private void recalcSize()
-    {
+    private void recalcSize() {
         calc = true;
         width = 0;
         height = 0;
         double w = 0;
         double h = 0;
-        for (IGuiElement element : internalElements)
-        {
+        for (IGuiElement element : internalElements) {
             w = Math.max(w, element.getEndX());
             h = Math.max(h, element.getEndY());
         }
@@ -55,8 +51,7 @@ public class GuiElementContainerHelp implements IGuiElement
     /**
      * Adds the given element to be drawn. Note that the element must be based around (0, 0), NOT this element.
      */
-    public void add(IGuiElement element)
-    {
+    public void add(IGuiElement element) {
         internalElements.add(element);
         recalcSize();
     }
@@ -64,8 +59,7 @@ public class GuiElementContainerHelp implements IGuiElement
     /**
      * Adds all of the given elements, like in {@link #add(IGuiElement)}
      */
-    public void addAll(IGuiElement... elements)
-    {
+    public void addAll(IGuiElement... elements) {
         Collections.addAll(internalElements, elements);
         recalcSize();
     }
@@ -73,59 +67,48 @@ public class GuiElementContainerHelp implements IGuiElement
     /**
      * Adds all of the given elements, like in {@link #add(IGuiElement)}
      */
-    public void addAll(Collection<IGuiElement> elements)
-    {
+    public void addAll(Collection<IGuiElement> elements) {
         internalElements.addAll(elements);
         recalcSize();
     }
 
     @Override
-    public double getX()
-    {
+    public double getX() {
         return calc ? 0 : position.getX();
     }
 
     @Override
-    public double getY()
-    {
+    public double getY() {
         return calc ? 0 : position.getY();
     }
 
     @Override
-    public double getWidth()
-    {
+    public double getWidth() {
         return this.width;
     }
 
     @Override
-    public double getHeight()
-    {
+    public double getHeight() {
         return this.height;
     }
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
-        for (IGuiElement element : internalElements)
-        {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
+        for (IGuiElement element : internalElements) {
             element.drawBackground(partialTicks, poseStack);
         }
     }
 
     @Override
-    public void drawForeground(PoseStack poseStack, float partialTicks)
-    {
-        for (IGuiElement element : internalElements)
-        {
+    public void drawForeground(PoseStack poseStack, float partialTicks) {
+        for (IGuiElement element : internalElements) {
             element.drawForeground(poseStack, partialTicks);
         }
     }
 
     @Override
-    public void addToolTips(List<ToolTip> tooltips)
-    {
-        for (IGuiElement element : internalElements)
-        {
+    public void addToolTips(List<ToolTip> tooltips) {
+        for (IGuiElement element : internalElements) {
             element.addToolTips(tooltips);
         }
     }

@@ -9,17 +9,13 @@ package buildcraft.core.item;
 
 import buildcraft.core.block.BlockSpring;
 import buildcraft.lib.item.ItemBlockBCMulti;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.item.Item;
 
-public class ItemBlockSpring extends ItemBlockBCMulti
-{
+public class ItemBlockSpring extends ItemBlockBCMulti {
     private static final String[] NAMES = {"water", "oil"};
 
-    public ItemBlockSpring(BlockSpring block, Item.Properties properties)
-    {
-        super(block,properties);
+    public ItemBlockSpring(BlockSpring block, Item.Properties properties) {
+        super(block, properties);
     }
 
     // Calen: not still useful in 1.18.2

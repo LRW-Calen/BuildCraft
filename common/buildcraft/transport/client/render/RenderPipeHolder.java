@@ -12,10 +12,9 @@ import buildcraft.api.transport.pipe.PipeBehaviour;
 import buildcraft.api.transport.pipe.PipeFlow;
 import buildcraft.api.transport.pluggable.IPlugDynamicRenderer;
 import buildcraft.api.transport.pluggable.PipePluggable;
-import buildcraft.transport.tile.TilePipeHolder;
 import buildcraft.transport.client.PipeRegistryClient;
 import buildcraft.transport.pipe.Pipe;
-import com.mojang.blaze3d.platform.GlStateManager;
+import buildcraft.transport.tile.TilePipeHolder;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -27,16 +26,13 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Direction;
 
-public class RenderPipeHolder implements BlockEntityRenderer<TilePipeHolder>
-{
-    public RenderPipeHolder(BlockEntityRendererProvider.Context context)
-    {
+public class RenderPipeHolder implements BlockEntityRenderer<TilePipeHolder> {
+    public RenderPipeHolder(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void renderTileEntityFast(TilePipeHolder pipe, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer)
-    public void render(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 //        // Calen test
 //        RenderSystem.enableBlend();
 //        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -64,52 +60,41 @@ public class RenderPipeHolder implements BlockEntityRenderer<TilePipeHolder>
     }
 
     //    private static void renderPluggables(TilePipeHolder pipe, double x, double y, double z, float partialTicks, BufferBuilder bb)
-    public void renderPluggables(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay)
-    {
-        for (Direction face : Direction.values())
-        {
+    public void renderPluggables(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay) {
+        for (Direction face : Direction.values()) {
             PipePluggable plug = pipe.getPluggable(face);
-            if (plug == null)
-            {
+            if (plug == null) {
                 continue;
             }
             renderPlug(plug, partialTicks, poseStack, buffer, combinedLight, combinedOverlay);
         }
     }
 
-    private static <P extends PipePluggable> void renderPlug(P plug, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay)
-    {
+    private static <P extends PipePluggable> void renderPlug(P plug, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay) {
         IPlugDynamicRenderer<P> renderer = PipeRegistryClient.getPlugRenderer(plug);
-        if (renderer != null)
-        {
+        if (renderer != null) {
             Minecraft.getInstance().getProfiler().push(plug.getClass().getName());
             renderer.render(plug, partialTicks, poseStack, buffer, combinedLight, combinedOverlay);
             Minecraft.getInstance().getProfiler().pop();
         }
     }
 
-    private static void renderContents(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay)
-    {
+    private static void renderContents(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay) {
         Pipe p = pipe.getPipe();
-        if (p == null)
-        {
+        if (p == null) {
             return;
         }
-        if (p.flow != null)
-        {
+        if (p.flow != null) {
             renderFlow(p.flow, partialTicks, poseStack, buffer, combinedLight, combinedOverlay);
         }
-        if (p.behaviour != null)
-        {
+        if (p.behaviour != null) {
             renderBehaviour(p.behaviour, partialTicks, poseStack, buffer, combinedLight, combinedOverlay);
         }
     }
 
-    private static <F extends PipeFlow> void renderFlow(F flow, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay)
-    {
+    private static <F extends PipeFlow> void renderFlow(F flow, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay) {
         IPipeFlowRenderer<F> renderer = PipeRegistryClient.getFlowRenderer(flow);
-        if (renderer != null)
-        {
+        if (renderer != null) {
             Minecraft.getInstance().getProfiler().push(flow.getClass().getName());
             renderer.render(flow, partialTicks, poseStack, buffer, combinedLight, combinedOverlay);
             Minecraft.getInstance().getProfiler().pop();
@@ -117,11 +102,9 @@ public class RenderPipeHolder implements BlockEntityRenderer<TilePipeHolder>
     }
 
     //    private static <B extends PipeBehaviour> void renderBehaviour(B behaviour, double x, double y, double z, float partialTicks, BufferBuilder bb)
-    private static <B extends PipeBehaviour> void renderBehaviour(B behaviour, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay)
-    {
+    private static <B extends PipeBehaviour> void renderBehaviour(B behaviour, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay) {
         IPipeBehaviourRenderer<B> renderer = PipeRegistryClient.getBehaviourRenderer(behaviour);
-        if (renderer != null)
-        {
+        if (renderer != null) {
             Minecraft.getInstance().getProfiler().push(behaviour.getClass().getName());
 //            renderer.render(behaviour, x, y, z, partialTicks, bb);
             renderer.render(behaviour, partialTicks, poseStack, buffer, combinedLight, combinedOverlay);

@@ -19,22 +19,18 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public enum CoreTriggerProvider implements ITriggerProvider
-{
+public enum CoreTriggerProvider implements ITriggerProvider {
     INSTANCE;
 
     @Override
-    public void addInternalTriggers(Collection<ITriggerInternal> res, IStatementContainer container)
-    {
+    public void addInternalTriggers(Collection<ITriggerInternal> res, IStatementContainer container) {
         res.add(BCCoreStatements.TRIGGER_TRUE);
-        if (container instanceof IRedstoneStatementContainer)
-        {
+        if (container instanceof IRedstoneStatementContainer) {
             res.add(BCCoreStatements.TRIGGER_REDSTONE_ACTIVE);
             res.add(BCCoreStatements.TRIGGER_REDSTONE_INACTIVE);
         }
 
-        if (TriggerPower.isTriggeringTile(container.getTile()))
-        {
+        if (TriggerPower.isTriggeringTile(container.getTile())) {
             res.add(BCCoreStatements.TRIGGER_POWER_HIGH);
             res.add(BCCoreStatements.TRIGGER_POWER_LOW);
         }
@@ -42,16 +38,13 @@ public enum CoreTriggerProvider implements ITriggerProvider
 
     @Override
     public void addInternalSidedTriggers(Collection<ITriggerInternalSided> res, IStatementContainer container,
-                                         @Nonnull Direction side)
-    {
+                                         @Nonnull Direction side) {
     }
 
     @Override
-    public void addExternalTriggers(Collection<ITriggerExternal> res, @Nonnull Direction side, BlockEntity tile)
-    {
+    public void addExternalTriggers(Collection<ITriggerExternal> res, @Nonnull Direction side, BlockEntity tile) {
 
-        if (TriggerPower.isTriggeringTile(tile, side.getOpposite()))
-        {
+        if (TriggerPower.isTriggeringTile(tile, side.getOpposite())) {
             res.add(BCCoreStatements.TRIGGER_POWER_HIGH);
             res.add(BCCoreStatements.TRIGGER_POWER_LOW);
         }
@@ -59,17 +52,14 @@ public enum CoreTriggerProvider implements ITriggerProvider
         boolean blockInventoryTriggers = false;
         boolean blockFluidHandlerTriggers = false;
 
-        if (tile instanceof IBlockDefaultTriggers)
-        {
+        if (tile instanceof IBlockDefaultTriggers) {
             blockInventoryTriggers = ((IBlockDefaultTriggers) tile).blockInventoryTriggers(side);
             blockFluidHandlerTriggers = ((IBlockDefaultTriggers) tile).blockFluidHandlerTriggers(side);
         }
 
-        if (!blockInventoryTriggers)
-        {
+        if (!blockInventoryTriggers) {
             IItemHandler itemHandler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElseGet(() -> null);
-            if (itemHandler != null)
-            {
+            if (itemHandler != null) {
                 res.add(BCCoreStatements.TRIGGER_INVENTORY_EMPTY);
                 res.add(BCCoreStatements.TRIGGER_INVENTORY_SPACE);
                 res.add(BCCoreStatements.TRIGGER_INVENTORY_CONTAINS);
@@ -80,15 +70,12 @@ public enum CoreTriggerProvider implements ITriggerProvider
             }
         }
 
-        if (!blockFluidHandlerTriggers)
-        {
+        if (!blockFluidHandlerTriggers) {
             IFluidHandler fluidHandler = tile.getCapability(CapUtil.CAP_FLUIDS, side.getOpposite()).orElseGet(() -> null);
-            if (fluidHandler != null)
-            {
+            if (fluidHandler != null) {
 //                IFluidTankProperties[] liquids = fluidHandler.getTankProperties();
                 int liquids = fluidHandler.getTanks();
-                if (liquids > 0)
-                {
+                if (liquids > 0) {
                     res.add(BCCoreStatements.TRIGGER_FLUID_EMPTY);
                     res.add(BCCoreStatements.TRIGGER_FLUID_SPACE);
                     res.add(BCCoreStatements.TRIGGER_FLUID_CONTAINS);
@@ -101,14 +88,12 @@ public enum CoreTriggerProvider implements ITriggerProvider
         }
 
 //        if (tile.hasCapability(TilesAPI.CAP_HAS_WORK, null))
-        if (tile.getCapability(TilesAPI.CAP_HAS_WORK, null).isPresent())
-        {
+        if (tile.getCapability(TilesAPI.CAP_HAS_WORK, null).isPresent()) {
             res.add(BCCoreStatements.TRIGGER_MACHINE_ACTIVE);
             res.add(BCCoreStatements.TRIGGER_MACHINE_INACTIVE);
         }
 
-        if (TriggerEnginePowerStage.isTriggeringTile(tile))
-        {
+        if (TriggerEnginePowerStage.isTriggeringTile(tile)) {
             res.add(BCCoreStatements.TRIGGER_POWER_BLUE);
             res.add(BCCoreStatements.TRIGGER_POWER_GREEN);
             res.add(BCCoreStatements.TRIGGER_POWER_YELLOW);

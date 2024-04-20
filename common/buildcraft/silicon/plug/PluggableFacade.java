@@ -14,9 +14,9 @@ import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
 import buildcraft.api.transport.pluggable.PluggableModelKey;
-import buildcraft.silicon.BCSiliconItems;
 import buildcraft.lib.misc.MathUtil;
 import buildcraft.lib.net.PacketBufferBC;
+import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.client.model.key.KeyPlugFacade;
 import buildcraft.transport.client.model.key.KeyPlugBlocker;
 import net.minecraft.client.Minecraft;
@@ -33,7 +33,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -41,15 +40,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
-public class PluggableFacade extends PipePluggable implements IFacade
-{
+public class PluggableFacade extends PipePluggable implements IFacade {
 
     private static final VoxelShape[] BOXES = new VoxelShape[6];
 
-    static
-    {
+    static {
         double ll = 0 / 16.0;
         double lu = 2 / 16.0;
         double ul = 14 / 16.0;
@@ -74,8 +70,7 @@ public class PluggableFacade extends PipePluggable implements IFacade
 //    public final SupportType blockFaceShape;
     public int activeState;
 
-    public PluggableFacade(PluggableDefinition definition, IPipeHolder holder, Direction side, FacadeInstance states)
-    {
+    public PluggableFacade(PluggableDefinition definition, IPipeHolder holder, Direction side, FacadeInstance states) {
         super(definition, holder, side);
         this.states = states;
         isSideSolid = states.areAllStatesSolid(side);
@@ -83,14 +78,11 @@ public class PluggableFacade extends PipePluggable implements IFacade
 //        blockFaceShape = states.getBlockFaceShape(side);
     }
 
-    public PluggableFacade(PluggableDefinition def, IPipeHolder holder, Direction side, CompoundTag nbt)
-    {
+    public PluggableFacade(PluggableDefinition def, IPipeHolder holder, Direction side, CompoundTag nbt) {
         super(def, holder, side);
-        if (nbt.contains("states") && !nbt.contains("facade"))
-        {
+        if (nbt.contains("states") && !nbt.contains("facade")) {
             ListTag tagStates = nbt.getList("states", Tag.TAG_COMPOUND);
-            if (tagStates.size() > 0)
-            {
+            if (tagStates.size() > 0) {
                 boolean isHollow = tagStates.getCompound(0).getBoolean("isHollow");
                 CompoundTag tagFacade = new CompoundTag();
                 tagFacade.put("states", tagStates);
@@ -106,8 +98,7 @@ public class PluggableFacade extends PipePluggable implements IFacade
     }
 
     @Override
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = super.writeToNbt();
         nbt.put("facade", states.writeToNbt());
         nbt.putInt("activeState", activeState);
@@ -116,8 +107,7 @@ public class PluggableFacade extends PipePluggable implements IFacade
 
     // Networking
 
-    public PluggableFacade(PluggableDefinition def, IPipeHolder holder, Direction side, FriendlyByteBuf buffer)
-    {
+    public PluggableFacade(PluggableDefinition def, IPipeHolder holder, Direction side, FriendlyByteBuf buffer) {
         super(def, holder, side);
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         states = FacadeInstance.readFromBuffer(buf);
@@ -127,8 +117,7 @@ public class PluggableFacade extends PipePluggable implements IFacade
     }
 
     @Override
-    public void writeCreationPayload(FriendlyByteBuf buffer)
-    {
+    public void writeCreationPayload(FriendlyByteBuf buffer) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         states.writeToBuffer(buf);
         buf.writeBoolean(isSideSolid);
@@ -139,33 +128,28 @@ public class PluggableFacade extends PipePluggable implements IFacade
     // Pluggable methods
 
     @Override
-    public VoxelShape getBoundingBox()
-    {
+    public VoxelShape getBoundingBox() {
         return BOXES[side.ordinal()];
     }
 
     @Override
-    public boolean isBlocking()
-    {
+    public boolean isBlocking() {
         return !isHollow();
     }
 
     @Override
-    public boolean canBeConnected()
-    {
+    public boolean canBeConnected() {
         return !isHollow();
     }
 
     @Override
-    public boolean isSideSolid()
-    {
+    public boolean isSideSolid() {
         return isSideSolid;
     }
 
     @Override
 //    public float getExplosionResistance(@Nullable Entity exploder, Explosion explosion)
-    public float getExplosionResistance(@Nonnull Entity exploder, Explosion explosion)
-    {
+    public float getExplosionResistance(@Nonnull Entity exploder, Explosion explosion) {
 //        return states.phasedStates[activeState].stateInfo.state.getBlock().getExplosionResistance(exploder);
         BlockState state = states.phasedStates[activeState].stateInfo.state;
         Level level = exploder.getLevel();
@@ -182,37 +166,28 @@ public class PluggableFacade extends PipePluggable implements IFacade
 //    }
 
     @Override
-    public ItemStack getPickStack()
-    {
+    public ItemStack getPickStack() {
         return BCSiliconItems.plugFacade.get().createItemStack(states);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public PluggableModelKey getModelRenderKey(RenderType layer)
-    {
-        if (states.type == FacadeType.Basic)
-        {
+    public PluggableModelKey getModelRenderKey(RenderType layer) {
+        if (states.type == FacadeType.Basic) {
             FacadePhasedState facadeState = states.phasedStates[activeState];
             BlockState blockState = facadeState.stateInfo.state;
 //            RenderType targetLayer = blockState.getBlock().getBlockLayer();
             // Calen 最后这个boolean好像是 t=Block f=Item
             RenderType targetLayer = ItemBlockRenderTypes.getRenderType(blockState, true);
-            if (targetLayer == RenderType.translucent())
-            {
-                if (layer != targetLayer)
-                {
+            if (targetLayer == RenderType.translucent()) {
+                if (layer != targetLayer) {
                     return null;
                 }
-            }
-            else if (layer == RenderType.translucent())
-            {
+            } else if (layer == RenderType.translucent()) {
                 return null;
             }
             return new KeyPlugFacade(layer, side, blockState, isHollow());
-        }
-        else if (layer == RenderType.cutout() && BCModules.TRANSPORT.isLoaded())
-        {
+        } else if (layer == RenderType.cutout() && BCModules.TRANSPORT.isLoaded()) {
             return KeyPlugBlocker.create(side);
         }
         return null;
@@ -220,8 +195,7 @@ public class PluggableFacade extends PipePluggable implements IFacade
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public int getBlockColor(int tintIndex)
-    {
+    public int getBlockColor(int tintIndex) {
         FacadePhasedState state = states.phasedStates[activeState];
         BlockColors colours = Minecraft.getInstance().getBlockColors();
         return colours.getColor(state.stateInfo.state, holder.getPipeWorld(), holder.getPipePos(), tintIndex);
@@ -230,20 +204,17 @@ public class PluggableFacade extends PipePluggable implements IFacade
     // IFacade
 
     @Override
-    public FacadeType getType()
-    {
+    public FacadeType getType() {
         return states.getType();
     }
 
     @Override
-    public boolean isHollow()
-    {
+    public boolean isHollow() {
         return states.isHollow();
     }
 
     @Override
-    public IFacadePhasedState[] getPhasedStates()
-    {
+    public IFacadePhasedState[] getPhasedStates() {
         return states.getPhasedStates();
     }
 }

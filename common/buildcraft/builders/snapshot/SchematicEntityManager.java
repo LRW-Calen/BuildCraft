@@ -17,8 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public class SchematicEntityManager
-{
+public class SchematicEntityManager {
     @SuppressWarnings("WeakerAccess")
     public static ISchematicEntity getSchematicEntity(SchematicEntityContext context) {
         for (SchematicEntityFactory<?> schematicEntityFactory : Lists.reverse(SchematicEntityFactoryRegistry.getFactories())) {
@@ -34,20 +33,20 @@ public class SchematicEntityManager
     @SuppressWarnings("WeakerAccess")
     public static <S extends ISchematicEntity> S createCleanCopy(S schematicBlock) {
         return SchematicEntityFactoryRegistry
-            .getFactoryByInstance(schematicBlock)
-            .supplier
-            .get();
+                .getFactoryByInstance(schematicBlock)
+                .supplier
+                .get();
     }
 
     @Nonnull
     public static <S extends ISchematicEntity> CompoundTag writeToNBT(S schematicEntity) {
         CompoundTag schematicEntityTag = new CompoundTag();
         schematicEntityTag.putString(
-            "name",
-            SchematicEntityFactoryRegistry
-                .getFactoryByInstance(schematicEntity)
-                .name
-                .toString()
+                "name",
+                SchematicEntityFactoryRegistry
+                        .getFactoryByInstance(schematicEntity)
+                        .name
+                        .toString()
         );
         schematicEntityTag.put("data", schematicEntity.serializeNBT());
         return schematicEntityTag;
@@ -65,7 +64,8 @@ public class SchematicEntityManager
         try {
             schematicEntity.deserializeNBT(data);
             return schematicEntity;
-        } catch (InvalidInputDataException e) {
+        }
+        catch (InvalidInputDataException e) {
             throw new InvalidInputDataException("Failed to load the schematic from " + data, e);
         }
     }

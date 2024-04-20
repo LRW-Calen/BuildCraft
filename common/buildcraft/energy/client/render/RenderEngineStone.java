@@ -6,8 +6,8 @@
 
 package buildcraft.energy.client.render;
 
-import buildcraft.energy.tile.TileEngineStone_BC8;
 import buildcraft.energy.BCEnergyModels;
+import buildcraft.energy.tile.TileEngineStone_BC8;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.render.tile.RenderEngine_BC8;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -15,8 +15,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 public class RenderEngineStone extends RenderEngine_BC8<TileEngineStone_BC8> {
 //    public static final RenderEngineStone INSTANCE = new RenderEngineStone();
 
-    public RenderEngineStone(BlockEntityRendererProvider.Context context)
-    {
+    public RenderEngineStone(BlockEntityRendererProvider.Context context) {
         super(context);
     }
 

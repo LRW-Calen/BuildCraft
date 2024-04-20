@@ -12,12 +12,6 @@ import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
 import buildcraft.api.transport.pluggable.PluggableModelKey;
-import buildcraft.lib.misc.MessageUtil;
-import buildcraft.lib.net.MessageUpdateTile;
-import buildcraft.silicon.BCSiliconGuis;
-import buildcraft.silicon.BCSiliconMenuTypes;
-import buildcraft.silicon.container.ContainerGate;
-import buildcraft.silicon.item.ItemGateCopier;
 import buildcraft.lib.expression.DefaultContexts;
 import buildcraft.lib.expression.FunctionContext;
 import buildcraft.lib.expression.info.ContextInfo;
@@ -28,11 +22,17 @@ import buildcraft.lib.expression.info.VariableInfo.VariableInfoObject;
 import buildcraft.lib.expression.node.value.NodeVariableBoolean;
 import buildcraft.lib.expression.node.value.NodeVariableObject;
 import buildcraft.lib.misc.AdvancementUtil;
+import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.data.ModelVariableData;
 import buildcraft.lib.net.IPayloadWriter;
+import buildcraft.lib.net.MessageUpdateTile;
 import buildcraft.lib.net.PacketBufferBC;
+import buildcraft.silicon.BCSiliconGuis;
+import buildcraft.silicon.BCSiliconMenuTypes;
 import buildcraft.silicon.client.model.key.KeyPlugGate;
+import buildcraft.silicon.container.ContainerGate;
 import buildcraft.silicon.gate.*;
+import buildcraft.silicon.item.ItemGateCopier;
 import buildcraft.silicon.item.ItemPluggableGate;
 import buildcraft.transport.pipe.PluggableHolder;
 import net.minecraft.Util;
@@ -65,8 +65,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class PluggableGate extends PipePluggable implements IWireEmitter, MenuProvider
-{
+public class PluggableGate extends PipePluggable implements IWireEmitter, MenuProvider {
     public static final FunctionContext MODEL_FUNC_CTX_STATIC, MODEL_FUNC_CTX_DYNAMIC;
     private static final NodeVariableObject<String> MODEL_MATERIAL;
     private static final NodeVariableObject<String> MODEL_MODIFIER;
@@ -87,8 +86,7 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
 
     public final ModelVariableData clientModelData = new ModelVariableData();
 
-    static
-    {
+    static {
         double ll = 2 / 16.0;
         double lu = 4 / 16.0;
         double ul = 12 / 16.0;
@@ -145,23 +143,20 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
 
     // Manual constructor (called by the specific item pluggable gate code)
 
-    public PluggableGate(PluggableDefinition def, IPipeHolder holder, Direction side, GateVariant variant)
-    {
+    public PluggableGate(PluggableDefinition def, IPipeHolder holder, Direction side, GateVariant variant) {
         super(def, holder, side);
         logic = new GateLogic(this, variant);
     }
 
     // Saving + Loading
 
-    public PluggableGate(PluggableDefinition def, IPipeHolder holder, Direction side, CompoundTag nbt)
-    {
+    public PluggableGate(PluggableDefinition def, IPipeHolder holder, Direction side, CompoundTag nbt) {
         super(def, holder, side);
         logic = new GateLogic(this, nbt.getCompound("data"));
     }
 
     @Override
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = super.writeToNbt();
         nbt.put("data", logic.writeToNbt());
         return nbt;
@@ -169,20 +164,17 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
 
     // Networking
 
-    public PluggableGate(PluggableDefinition def, IPipeHolder holder, Direction side, FriendlyByteBuf buffer)
-    {
+    public PluggableGate(PluggableDefinition def, IPipeHolder holder, Direction side, FriendlyByteBuf buffer) {
         super(def, holder, side);
         logic = new GateLogic(this, PacketBufferBC.asPacketBufferBc(buffer));
     }
 
     @Override
-    public void writeCreationPayload(FriendlyByteBuf buffer)
-    {
+    public void writeCreationPayload(FriendlyByteBuf buffer) {
         logic.writeCreationToBuf(PacketBufferBC.asPacketBufferBc(buffer));
     }
 
-    public void sendMessage(IPayloadWriter writer)
-    {
+    public void sendMessage(IPayloadWriter writer) {
         PipeMessageReceiver to = PipeMessageReceiver.PLUGGABLES[side.ordinal()];
         holder.sendMessage(to, (buffer) ->
         {
@@ -193,8 +185,7 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
         });
     }
 
-    public void sendGuiMessage(IPayloadWriter writer)
-    {
+    public void sendGuiMessage(IPayloadWriter writer) {
         PipeMessageReceiver to = PipeMessageReceiver.PLUGGABLES[side.ordinal()];
         holder.sendGuiMessage(to, (buffer) ->
         {
@@ -206,75 +197,61 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
     }
 
     @Override
-    public void writePayload(FriendlyByteBuf buffer, Dist side)
-    {
+    public void writePayload(FriendlyByteBuf buffer, Dist side) {
         throw new Error("All messages must have an ID, and we can't just write a payload directly!");
     }
 
     @Override
 //    public void readPayload(FriendlyByteBuf b, Dist side, MessageContext ctx) throws IOException
-    public void readPayload(FriendlyByteBuf b, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(FriendlyByteBuf b, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         logic.readPayload(PacketBufferBC.asPacketBufferBc(b), side, ctx);
     }
 
     // PipePluggable
 
     @Override
-    public VoxelShape getBoundingBox()
-    {
+    public VoxelShape getBoundingBox() {
         return BOXES[side.ordinal()];
     }
 
     @Override
-    public boolean isBlocking()
-    {
+    public boolean isBlocking() {
         return true;
     }
 
     @Override
-    public ItemStack getPickStack()
-    {
+    public ItemStack getPickStack() {
 //        return BCSiliconItems.plugGate.get().getStack(logic.variant);
         return ItemPluggableGate.getStack(logic.variant);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public PluggableModelKey getModelRenderKey(RenderType layer)
-    {
-        if (layer == RenderType.cutout())
-        {
+    public PluggableModelKey getModelRenderKey(RenderType layer) {
+        if (layer == RenderType.cutout()) {
             return new KeyPlugGate(side, logic.variant);
         }
         return null;
     }
 
     @Override
-    public void onPlacedBy(Player player)
-    {
+    public void onPlacedBy(Player player) {
         super.onPlacedBy(player);
-        if (!holder.getPipeWorld().isClientSide)
-        {
+        if (!holder.getPipeWorld().isClientSide) {
             AdvancementUtil.unlockAdvancement(player, ADVANCEMENT_PLACE_GATE);
-            if (logic.variant.numActionArgs >= 1)
-            {
+            if (logic.variant.numActionArgs >= 1) {
                 AdvancementUtil.unlockAdvancement(player, ADVANCEMENT_PLACE_ADV_GATE);
             }
         }
     }
 
     @Override
-    public boolean onPluggableActivate(Player player, HitResult trace, float hitX, float hitY, float hitZ)
-    {
-        if (!player.level.isClientSide)
-        {
-            if (interactWithCopier(player, player.getMainHandItem()))
-            {
+    public boolean onPluggableActivate(Player player, HitResult trace, float hitX, float hitY, float hitZ) {
+        if (!player.level.isClientSide) {
+            if (interactWithCopier(player, player.getMainHandItem())) {
                 return true;
             }
-            if (interactWithCopier(player, player.getOffhandItem()))
-            {
+            if (interactWithCopier(player, player.getOffhandItem())) {
                 return true;
             }
 
@@ -291,30 +268,24 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
         return true;
     }
 
-    private boolean interactWithCopier(Player player, ItemStack stack)
-    {
-        if (!(stack.getItem() instanceof ItemGateCopier))
-        {
+    private boolean interactWithCopier(Player player, ItemStack stack) {
+        if (!(stack.getItem() instanceof ItemGateCopier)) {
             return false;
         }
 
         CompoundTag stored = ItemGateCopier.getCopiedGateData(stack);
 
-        if (stored != null)
-        {
+        if (stored != null) {
 
             logic.readConfigData(stored);
 
             player.sendMessage(new TranslatableComponent("chat.gateCopier.gatePasted"), Util.NIL_UUID);
 
-        }
-        else
-        {
+        } else {
             stored = logic.writeToNbt();
             stored.remove("wireBroadcasts");
 
-            if (stored.size() == 1)
-            {
+            if (stored.size() == 1) {
                 player.sendMessage(new TranslatableComponent("chat.gateCopier.noInformation"), Util.NIL_UUID);
                 return false;
             }
@@ -327,39 +298,33 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
     }
 
     @Override
-    public boolean isEmitting(DyeColor colour)
-    {
+    public boolean isEmitting(DyeColor colour) {
         return logic.isEmitting(colour);
     }
 
     @Override
-    public void emitWire(DyeColor colour)
-    {
+    public void emitWire(DyeColor colour) {
         logic.emitWire(colour);
     }
 
     // Gate methods
 
     @Override
-    public void onTick()
-    {
+    public void onTick() {
         logic.onTick();
-        if (holder.getPipeWorld().isClientSide)
-        {
+        if (holder.getPipeWorld().isClientSide) {
             clientModelData.tick();
         }
     }
 
     @Override
-    public boolean canConnectToRedstone(@Nullable Direction to)
-    {
+    public boolean canConnectToRedstone(@Nullable Direction to) {
         return true;
     }
 
     // Model
 
-    public static void setClientModelVariables(Direction side, GateVariant variant)
-    {
+    public static void setClientModelVariables(Direction side, GateVariant variant) {
         MODEL_SIDE.value = side;
         MODEL_MATERIAL.value = variant.material.tag;
         MODEL_MODIFIER.value = variant.modifier.tag;
@@ -367,24 +332,21 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
         MODEL_IS_ON.value = false;// Used by the item
     }
 
-    public void setClientModelVariables()
-    {
+    public void setClientModelVariables() {
         setClientModelVariables(side, logic.variant);
         MODEL_IS_ON.value = logic.isOn;
     }
 
     @NotNull
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return this.logic.variant.getLocalizedName();
     }
 
     // Calen：for Server
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         // Calen: from BCSiliconProxy implements IGuiHandler
 //                    ContainerGate container = new ContainerGate(player, ((PluggableGate) plug).logic);
         ContainerGate container = new ContainerGate(BCSiliconMenuTypes.GATE, id, player, this.logic);

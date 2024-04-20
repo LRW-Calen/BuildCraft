@@ -20,15 +20,12 @@ import buildcraft.transport.BCTransportSprites;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -43,16 +40,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public enum ModelPipeItem implements BakedModel
-{
+public enum ModelPipeItem implements BakedModel {
     INSTANCE;
 
     private static final MutableQuad[] QUADS_SAME;
     // private static final MutableQuad[][] QUADS_DIFFERENT;
     private static final MutableQuad[] QUADS_COLOUR;
 
-    static
-    {
+    static {
         // Same sprite for all 3 sections
         {
             QUADS_SAME = new MutableQuad[6];
@@ -60,8 +55,7 @@ public enum ModelPipeItem implements BakedModel
             Tuple3f radius = new Vector3f(0.25f, 0.5f, 0.25f);
             UvFaceData uvsY = UvFaceData.from16(4, 4, 12, 12);
             UvFaceData uvsXZ = UvFaceData.from16(4, 0, 12, 16);
-            for (Direction face : Direction.values())
-            {
+            for (Direction face : Direction.values()) {
                 UvFaceData uvs = face.getAxis() == Axis.Y ? uvsY : uvsXZ;
                 QUADS_SAME[face.ordinal()] = ModelUtil.createFace(face, center, radius, uvs);
             }
@@ -79,8 +73,7 @@ public enum ModelPipeItem implements BakedModel
             Tuple3f radius = new Vector3f(0.24f, 0.49f, 0.24f);
             UvFaceData uvsY = UvFaceData.from16(4, 4, 12, 12);
             UvFaceData uvsXZ = UvFaceData.from16(4, 0, 12, 16);
-            for (Direction face : Direction.values())
-            {
+            for (Direction face : Direction.values()) {
                 UvFaceData uvs = face.getAxis() == Axis.Y ? uvsY : uvsXZ;
                 QUADS_COLOUR[face.ordinal()] = ModelUtil.createFace(face, center, radius, uvs);
             }
@@ -89,14 +82,12 @@ public enum ModelPipeItem implements BakedModel
 
     @Override
 //    public List<BakedQuad> getQuads(IBlockState state, Direction side, long rand)
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand)
-    {
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random rand) {
         return ImmutableList.of();
     }
 
-//    private static List<BakedQuad> getQuads(PipeFaceTex center, PipeFaceTex top, PipeFaceTex bottom, TextureAtlasSprite[] sprites, int colour, EnumPipeColourType colourType)
-    private static List<BakedQuad> getQuads(PipeFaceTex center, PipeFaceTex top, PipeFaceTex bottom, TextureAtlasSprite[] sprites, DyeColor rColour, EnumPipeColourType colourType)
-    {
+    //    private static List<BakedQuad> getQuads(PipeFaceTex center, PipeFaceTex top, PipeFaceTex bottom, TextureAtlasSprite[] sprites, int colour, EnumPipeColourType colourType)
+    private static List<BakedQuad> getQuads(PipeFaceTex center, PipeFaceTex top, PipeFaceTex bottom, TextureAtlasSprite[] sprites, DyeColor rColour, EnumPipeColourType colourType) {
         // TEMP!
         top = center;
         bottom = center;
@@ -110,22 +101,16 @@ public enum ModelPipeItem implements BakedModel
         // }
 
 //        if (colour > 0 && colour <= 16)
-        if (rColour !=null)
-        {
+        if (rColour != null) {
 //            DyeColor rColour = DyeColor.byId(colour - 1);
             int rgb = 0xFF_00_00_00 | ColourUtil.swapArgbToAbgr(ColourUtil.getLightHex(rColour));
-            if (colourType == EnumPipeColourType.TRANSLUCENT)
-            {
+            if (colourType == EnumPipeColourType.TRANSLUCENT) {
                 TextureAtlasSprite sprite = BCTransportSprites.PIPE_COLOUR.getSprite();
                 addQuadsColoured(QUADS_COLOUR, quads, sprite, rgb);
-            }
-            else if (colourType == EnumPipeColourType.BORDER_OUTER)
-            {
+            } else if (colourType == EnumPipeColourType.BORDER_OUTER) {
                 TextureAtlasSprite sprite = BCTransportSprites.PIPE_COLOUR_BORDER_OUTER.getSprite();
                 addQuadsColoured(QUADS_SAME, quads, sprite, rgb);
-            }
-            else if (colourType == EnumPipeColourType.BORDER_INNER)
-            {
+            } else if (colourType == EnumPipeColourType.BORDER_INNER) {
                 TextureAtlasSprite sprite = BCTransportSprites.PIPE_COLOUR_BORDER_INNER.getSprite();
                 addQuadsColoured(QUADS_SAME, quads, sprite, rgb);
             }
@@ -135,23 +120,18 @@ public enum ModelPipeItem implements BakedModel
     }
 
     private static void addQuads(MutableQuad[] from, TextureAtlasSprite[] sprites, List<BakedQuad> to,
-                                 PipeFaceTex face)
-    {
+                                 PipeFaceTex face) {
         MutableQuad copy = new MutableQuad();
-        for (int i = 0; i < face.getCount(); i++)
-        {
+        for (int i = 0; i < face.getCount(); i++) {
             int colour = face.getColour(i);
             int spriteIndex = face.getTexture(i);
             TextureAtlasSprite sprite = getSprite(sprites, spriteIndex);
             // Calen: when reloading resource packs, sprite may be null and cause NPE
-            if(sprite==null)
-            {
+            if (sprite == null) {
                 return;
             }
-            for (MutableQuad f : from)
-            {
-                if (f == null)
-                {
+            for (MutableQuad f : from) {
+                if (f == null) {
                     continue;
                 }
                 copy.copyFrom(f);
@@ -162,27 +142,20 @@ public enum ModelPipeItem implements BakedModel
         }
     }
 
-    private static TextureAtlasSprite getSprite(TextureAtlasSprite[] sprites, int spriteIndex)
-    {
+    private static TextureAtlasSprite getSprite(TextureAtlasSprite[] sprites, int spriteIndex) {
         TextureAtlasSprite sprite;
-        if (spriteIndex < 0 || spriteIndex >= sprites.length)
-        {
+        if (spriteIndex < 0 || spriteIndex >= sprites.length) {
             sprite = SpriteUtil.missingSprite();
-        }
-        else
-        {
+        } else {
             sprite = sprites[spriteIndex];
         }
         return sprite;
     }
 
     private static void addQuadsColoured(MutableQuad[] from, List<BakedQuad> to, TextureAtlasSprite sprite,
-                                         int colour)
-    {
-        for (MutableQuad f : from)
-        {
-            if (f == null)
-            {
+                                         int colour) {
+        for (MutableQuad f : from) {
+            if (f == null) {
                 continue;
             }
             MutableQuad copy = new MutableQuad(f);
@@ -194,59 +167,50 @@ public enum ModelPipeItem implements BakedModel
 
     @Override
 //    public boolean isAmbientOcclusion()
-    public boolean useAmbientOcclusion()
-    {
+    public boolean useAmbientOcclusion() {
         return false;
     }
 
     @Override
-    public boolean isGui3d()
-    {
+    public boolean isGui3d() {
         return false;
     }
 
     @Override
 //    public boolean isBuiltInRenderer()
-    public boolean isCustomRenderer()
-    {
+    public boolean isCustomRenderer() {
         return false;
     }
 
     @Override
 //    public TextureAtlasSprite getParticleTexture()
-    public TextureAtlasSprite getParticleIcon()
-    {
+    public TextureAtlasSprite getParticleIcon() {
         return null;
     }
 
     @Override
 //    public ItemCameraTransforms getItemCameraTransforms()
-    public ItemTransforms getTransforms()
-    {
+    public ItemTransforms getTransforms() {
 //        return ItemCameraTransforms.DEFAULT;
         return ModelItemSimple.TRANSFORM_DEFAULT;
     }
 
     @Override
 //    public ItemOverrideList getOverrides()
-    public ItemOverrides getOverrides()
-    {
+    public ItemOverrides getOverrides() {
         return PipeItemOverride.PIPE_OVERRIDE;
     }
 
-    private static class PipeItemOverride extends ItemOverrides
-    {
+    private static class PipeItemOverride extends ItemOverrides {
         public static final PipeItemOverride PIPE_OVERRIDE = new PipeItemOverride();
 
-        public PipeItemOverride()
-        {
+        public PipeItemOverride() {
 //            super(rl,ImmutableList.of());
         }
 
         @Override
 //        public IBakedModel handleItemState(IBakedModel originalModel, ItemStack stack, World world, EntityLivingBase entity)
-        public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int p_173469_)
-        {
+        public BakedModel resolve(BakedModel originalModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int p_173469_) {
             Item item = stack.getItem();
             PipeFaceTex center = PipeFaceTex.NO_SPRITE;
             PipeFaceTex top = center;
@@ -255,18 +219,15 @@ public enum ModelPipeItem implements BakedModel
             DyeColor colour = null;
 
             EnumPipeColourType type;
-            if (item instanceof IItemPipe pipe)
-            {
+            if (item instanceof IItemPipe pipe) {
                 PipeDefinition def = pipe.getDefinition();
                 top = def.itemModelTop;
                 center = def.itemModelCenter;
                 bottom = def.itemModelBottom;
                 type = def.getColourType();
                 sprites = PipeModelCacheBase.generator.getItemSprites(def);
-                colour =pipe.getColour();
-            }
-            else
-            {
+                colour = pipe.getColour();
+            } else {
                 type = EnumPipeColourType.TRANSLUCENT;
             }
             // Calen add
@@ -289,8 +250,7 @@ public enum ModelPipeItem implements BakedModel
     }
 
     @Override
-    public boolean usesBlockLight()
-    {
+    public boolean usesBlockLight() {
         return true;
     }
 }

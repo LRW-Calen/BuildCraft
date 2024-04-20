@@ -11,13 +11,9 @@ import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.ItemHandlerFiltered;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
-import buildcraft.silicon.BCSiliconMenuTypes;
-import buildcraft.silicon.container.ContainerAssemblyTable;
 import buildcraft.transport.BCTransportBlocks;
 import buildcraft.transport.BCTransportMenuTypes;
-import buildcraft.transport.container.ContainerDiamondPipe;
 import buildcraft.transport.container.ContainerFilteredBuffer_BC8;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourDiamond;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -27,13 +23,11 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class TileFilteredBuffer extends TileBC_Neptune implements MenuProvider
-{
+public class TileFilteredBuffer extends TileBC_Neptune implements MenuProvider {
     public final ItemHandlerSimple invFilter;
     public final ItemHandlerFiltered invMain;
 
-    public TileFilteredBuffer(BlockPos pos, BlockState blockState)
-    {
+    public TileFilteredBuffer(BlockPos pos, BlockState blockState) {
         super(BCTransportBlocks.filteredBufferTile.get(), pos, blockState);
 
         invFilter = itemManager.addInvHandler("filter", 9, EnumAccess.PHANTOM);
@@ -44,15 +38,13 @@ public class TileFilteredBuffer extends TileBC_Neptune implements MenuProvider
     }
 
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerFilteredBuffer_BC8(BCTransportMenuTypes.FILTERED_BUFFER, id, player, this);
     }
 }

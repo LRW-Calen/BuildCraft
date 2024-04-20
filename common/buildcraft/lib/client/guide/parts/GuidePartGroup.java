@@ -13,46 +13,39 @@ import net.minecraft.network.chat.Component;
 
 import java.util.List;
 
-public class GuidePartGroup extends GuidePart
-{
+public class GuidePartGroup extends GuidePart {
 
     public final GuideGroupSet group;
     private final GuideText[] texts;
     private final Object[] values;
 
-    public GuidePartGroup(GuiGuide gui, GuideGroupSet group, GroupDirection direction)
-    {
+    public GuidePartGroup(GuiGuide gui, GuideGroupSet group, GroupDirection direction) {
         super(gui);
         this.group = group;
         List<PageValue<?>> groupValues = group.getValues(direction);
         values = new Object[groupValues.size()];
-        for (int i = 0; i < values.length; i++)
-        {
+        for (int i = 0; i < values.length; i++) {
             values[i] = groupValues.get(i).value;
         }
         texts = new GuideText[1 + values.length];
 //        texts[0] = new GuideText(gui, Component.nullToEmpty(group.getTitle(direction)));
         texts[0] = new GuideText(gui, group.getTitle(direction), Component.nullToEmpty(group.getTitle(direction)));
         int i = 1;
-        for (PageValue<?> single : groupValues)
-        {
+        for (PageValue<?> single : groupValues) {
             ISimpleDrawable icon = single.createDrawable();
             texts[i++] = new GuideText(gui, new PageLine(icon, icon, 1, single.titleKey, single.title, true, single::getTooltip));
         }
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return group.hashCode();
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj == this) return true;
-        if (obj == null || getClass() != obj.getClass())
-        {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         GuidePartGroup other = (GuidePartGroup) obj;
@@ -60,21 +53,17 @@ public class GuidePartGroup extends GuidePart
     }
 
     @Override
-    public void setFontRenderer(IFontRenderer fontRenderer)
-    {
+    public void setFontRenderer(IFontRenderer fontRenderer) {
         super.setFontRenderer(fontRenderer);
-        for (GuideText text : texts)
-        {
+        for (GuideText text : texts) {
             text.setFontRenderer(fontRenderer);
         }
     }
 
     @Override
-    public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index)
-    {
+    public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index) {
         current = current.guaranteeSpace(getFontRenderer().getMaxFontHeight() * 4, height);
-        for (GuideText text : texts)
-        {
+        for (GuideText text : texts) {
             current = text.renderIntoArea(poseStack, x, y, width, height, current, index);
         }
         return current;
@@ -82,19 +71,15 @@ public class GuidePartGroup extends GuidePart
 
     @Override
     public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
-                                         double mouseX, double mouseY)
-    {
+                                         double mouseX, double mouseY) {
         current = current.guaranteeSpace(getFontRenderer().getMaxFontHeight() * 4, height);
-        for (int i = 0; i < texts.length; i++)
-        {
+        for (int i = 0; i < texts.length; i++) {
             GuideText text = texts[i];
             current = text.handleMouseClick(poseStack, x, y, width, height, current, index, mouseX, mouseY);
-            if (text.wasHovered && current.page == index && i > 0)
-            {
+            if (text.wasHovered && current.page == index && i > 0) {
                 Object value = values[i - 1];
                 GuidePageFactory factory = GuideManager.INSTANCE.getFactoryFor(value);
-                if (factory != null)
-                {
+                if (factory != null) {
                     gui.openPage(factory.createNew(gui));
                     return new PagePosition(Integer.MAX_VALUE / 4, 0);
                 }

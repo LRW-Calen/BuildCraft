@@ -12,8 +12,7 @@ import net.minecraft.core.Direction.Axis;
 
 import java.util.Map;
 
-public enum EnumAxisOrder
-{
+public enum EnumAxisOrder {
     XYZ(Axis.X, Axis.Y, Axis.Z),
     XZY(Axis.X, Axis.Z, Axis.Y),
     YXZ(Axis.Y, Axis.X, Axis.Z),

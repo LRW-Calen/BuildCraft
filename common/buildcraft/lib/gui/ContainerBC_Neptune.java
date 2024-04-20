@@ -16,7 +16,6 @@ import buildcraft.lib.net.IPayloadWriter;
 import buildcraft.lib.net.MessageContainer;
 import buildcraft.lib.net.MessageManager;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.IItemHandlerAdv;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.NonNullList;
@@ -30,21 +29,18 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.network.NetworkDirection;
-import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
 
-import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 //public abstract class ContainerBC_Neptune extends Container
-public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> extends AbstractContainerMenu
-{
+public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> extends AbstractContainerMenu {
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.container");
 
     protected static final IdAllocator IDS = new IdAllocator("container");
@@ -60,8 +56,7 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
     public final Player player;
     private final List<Widget_Neptune<?>> widgets = new ArrayList<>();
 
-    public ContainerBC_Neptune(MenuType menuType, int id, Player player)
-    {
+    public ContainerBC_Neptune(MenuType menuType, int id, Player player) {
         super(menuType, id);
         this.player = player;
     }
@@ -71,51 +66,41 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
      * should override this if they allocate their own ids after calling
      * {@link IdAllocator#makeChild(String)}
      */
-    public IdAllocator getIdAllocator()
-    {
+    public IdAllocator getIdAllocator() {
         return IDS;
     }
 
-    protected void addFullPlayerInventory(int startX, int startY)
-    {
-        for (int sy = 0; sy < 3; sy++)
-        {
-            for (int sx = 0; sx < 9; sx++)
-            {
+    protected void addFullPlayerInventory(int startX, int startY) {
+        for (int sy = 0; sy < 3; sy++) {
+            for (int sx = 0; sx < 9; sx++) {
                 addSlot(new Slot(player.getInventory(), sx + sy * 9 + 9, startX + sx * 18, startY + sy * 18));
             }
         }
 
-        for (int sx = 0; sx < 9; sx++)
-        {
+        for (int sx = 0; sx < 9; sx++) {
             addSlot(new Slot(player.getInventory(), sx, startX + sx * 18, startY + 58));
         }
     }
 
-    protected void addFullPlayerInventory(int startY)
-    {
+    protected void addFullPlayerInventory(int startY) {
         addFullPlayerInventory(8, startY);
     }
 
-    protected <W extends Widget_Neptune<? extends ContainerBC_Neptune>> W addWidget(W widget)
-    {
+    protected <W extends Widget_Neptune<? extends ContainerBC_Neptune>> W addWidget(W widget) {
         if (widget == null) throw new NullPointerException("widget");
         widgets.add(widget);
         return widget;
     }
 
-    public ImmutableList<Widget_Neptune<?>> getWidgets()
-    {
+    public ImmutableList<Widget_Neptune<?>> getWidgets() {
         return ImmutableList.copyOf(widgets);
     }
 
     @Override
 //    public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player)
-    public void clicked(int slotId, int dragType, ClickType clickType, Player player)
-    {
+    public void clicked(int slotId, int dragType, ClickType clickType, Player player) {
         Slot slot = slotId < 0 ? null : this.slots.get(slotId);
-        if (slot == null)
-        {
+        if (slot == null) {
 //            return super.slotClick(slotId, dragType, clickType, player);
             super.clicked(slotId, dragType, clickType, player);
             return;
@@ -123,27 +108,20 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
 
 //        ItemStack playerStack = player.inventory.getItemStack();
         ItemStack playerStack = player.containerMenu.getCarried();
-        if (slot instanceof IPhantomSlot)
-        {
+        if (slot instanceof IPhantomSlot) {
             IPhantomSlot phantom = (IPhantomSlot) slot;
-            if (playerStack.isEmpty())
-            {
+            if (playerStack.isEmpty()) {
 //                slot.putStack(ItemStack.EMPTY);
                 slot.set(ItemStack.EMPTY);
-            }
-            else if (!StackUtil.canMerge(playerStack, StackUtil.asNonNull(slot.getItem())))
-            {
+            } else if (!StackUtil.canMerge(playerStack, StackUtil.asNonNull(slot.getItem()))) {
                 ItemStack copy = playerStack.copy();
                 copy.setCount(1);
 //                slot.putStack(copy);
                 slot.set(copy);
-            }
-            else if (phantom.canAdjustCount())
-            {
+            } else if (phantom.canAdjustCount()) {
 //                ItemStack stack = slot.getStack();
                 ItemStack stack = slot.getItem();
-                if (stack.getCount() < stack.getMaxStackSize())
-                {
+                if (stack.getCount() < stack.getMaxStackSize()) {
                     stack.grow(1);
 //                    slot.putStack(stack);
                     slot.set(stack);
@@ -157,57 +135,43 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
     }
 
     @Override
-    public ItemStack quickMoveStack(Player playerIn, int index)
-    {
+    public ItemStack quickMoveStack(Player playerIn, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
         Slot firstSlot = this.slots.get(0);
         int playerInventorySize = 36;
         boolean playerInventoryFirst = firstSlot.container instanceof Inventory;
 
-        if (slot != null && slot.hasItem())
-        {
+        if (slot != null && slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
 
             if (slots.size() == playerInventorySize) return ItemStack.EMPTY;
-            if (playerInventoryFirst)
-            {
-                if (index < playerInventorySize)
-                {
-                    if (!this.moveItemStackTo(itemstack1, playerInventorySize, this.slots.size(), false))
-                    {
+            if (playerInventoryFirst) {
+                if (index < playerInventorySize) {
+                    if (!this.moveItemStackTo(itemstack1, playerInventorySize, this.slots.size(), false)) {
                         return ItemStack.EMPTY;
                     }
-                }
-                else if (!this.moveItemStackTo(itemstack1, 0, playerInventorySize, true))
-                {
+                } else if (!this.moveItemStackTo(itemstack1, 0, playerInventorySize, true)) {
                     return ItemStack.EMPTY;
                 }
-            }
-            else
-            {
-                if (index < this.slots.size() - playerInventorySize)
-                {
+            } else {
+                if (index < this.slots.size() - playerInventorySize) {
                     if (!this.moveItemStackTo(itemstack1, this.slots.size() - playerInventorySize,
                             this.slots.size(), false))
                     {
                         return ItemStack.EMPTY;
                     }
-                }
-                else if (!this.moveItemStackTo(itemstack1, 0, this.slots.size() - playerInventorySize,
+                } else if (!this.moveItemStackTo(itemstack1, 0, this.slots.size() - playerInventorySize,
                         true))
                 {
                     return ItemStack.EMPTY;
                 }
             }
 
-            if (itemstack1.isEmpty())
-            {
+            if (itemstack1.isEmpty()) {
                 slot.set(ItemStack.EMPTY);
-            }
-            else
-            {
+            } else {
                 slot.setChanged();
             }
         }
@@ -215,24 +179,18 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
         return itemstack;
     }
 
-    public static ItemStack safeCopy(ItemStack in)
-    {
+    public static ItemStack safeCopy(ItemStack in) {
         return in == null ? null : in.copy();
     }
 
     // Package-private so that the widget itself can send this
-    void sendWidgetData(Widget_Neptune<?> widget, IPayloadWriter writer)
-    {
+    void sendWidgetData(Widget_Neptune<?> widget, IPayloadWriter writer) {
         int widgetId = widgets.indexOf(widget);
-        if (widgetId == -1)
-        {
-            if (DEBUG)
-            {
+        if (widgetId == -1) {
+            if (DEBUG) {
                 throw new IllegalArgumentException(
                         "Invalid Widget Request! (" + (widget == null ? "null" : widget.getClass()) + ")");
-            }
-            else
-            {
+            } else {
                 BCLog.logger.warn("[lib.container] Received an invalid widget sending request!");
                 BCLog.logger
                         .warn("[lib.container]   Widget {id = " + widgetId + ", class = " + widget.getClass() + "}");
@@ -240,9 +198,7 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
                 BCLog.logger.warn(
                         "[lib.container]   Player {class = " + player.getClass() + ", name = " + player.getName() + "}");
             }
-        }
-        else
-        {
+        } else {
             sendMessage(NET_WIDGET, (buffer) ->
             {
                 buffer.writeShort(widgetId);
@@ -251,95 +207,67 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
         }
     }
 
-    public final void sendMessage(int id)
-    {
+    public final void sendMessage(int id) {
         Dist side = player.level.isClientSide ? Dist.CLIENT : Dist.DEDICATED_SERVER;
         sendMessage(id, (buffer) -> writeMessage(id, buffer, side));
     }
 
-    public final void sendMessage(int id, IPayloadWriter writer)
-    {
+    public final void sendMessage(int id, IPayloadWriter writer) {
         PacketBufferBC payload = PacketBufferBC.write(writer);
 //        MessageContainer message = new MessageContainer(windowId, id, payload);
         MessageContainer message = new MessageContainer(containerId, id, payload);
-        if (player.level.isClientSide)
-        {
+        if (player.level.isClientSide) {
             MessageManager.sendToServer(message);
-        }
-        else
-        {
+        } else {
             MessageManager.sendTo(message, (ServerPlayer) player);
         }
     }
 
-    public void writeMessage(int id, PacketBufferBC buffer, Dist side)
-    {
+    public void writeMessage(int id, PacketBufferBC buffer, Dist side) {
     }
 
-    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection direction, NetworkEvent.Context ctx) throws IOException
-    {
-        if (id == NET_WIDGET)
-        {
+    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection direction, NetworkEvent.Context ctx) throws IOException {
+        if (id == NET_WIDGET) {
             int widgetId = buffer.readUnsignedShort();
-            if (widgetId < 0 || widgetId >= widgets.size())
-            {
-                if (DEBUG)
-                {
+            if (widgetId < 0 || widgetId >= widgets.size()) {
+                if (DEBUG) {
                     String string = "Received unknown or invalid widget ID " + widgetId + " on side " + direction;
-                    if (direction == NetworkDirection.PLAY_TO_SERVER)
-                    {
+                    if (direction == NetworkDirection.PLAY_TO_SERVER) {
                         string += " (for player " + player.getName() + ")";
                     }
                     BCLog.logger.warn(string);
                 }
-            }
-            else
-            {
+            } else {
                 Widget_Neptune<?> widget = widgets.get(widgetId);
-                if (direction == NetworkDirection.PLAY_TO_SERVER)
-                {
+                if (direction == NetworkDirection.PLAY_TO_SERVER) {
                     widget.handleWidgetDataServer(ctx, buffer);
-                }
-                else if (direction == NetworkDirection.PLAY_TO_CLIENT)
-                {
+                } else if (direction == NetworkDirection.PLAY_TO_CLIENT) {
                     widget.handleWidgetDataClient(ctx, buffer);
                 }
             }
-        }
-        else if (direction == NetworkDirection.PLAY_TO_SERVER)
-        {
-            if (id == NET_SET_PHANTOM)
-            {
+        } else if (direction == NetworkDirection.PLAY_TO_SERVER) {
+            if (id == NET_SET_PHANTOM) {
                 readSingleSetPhantom(buffer, ctx);
-            }
-            else if (id == NET_SET_PHANTOM_MULTI)
-            {
+            } else if (id == NET_SET_PHANTOM_MULTI) {
                 int count = buffer.readUnsignedByte();
-                for (int i = 0; i < count; i++)
-                {
+                for (int i = 0; i < count; i++) {
                     readSingleSetPhantom(buffer, ctx);
                 }
             }
         }
     }
 
-    private void readSingleSetPhantom(PacketBufferBC buffer, NetworkEvent.Context ctx) throws IOException
-    {
+    private void readSingleSetPhantom(PacketBufferBC buffer, NetworkEvent.Context ctx) throws IOException {
         int idx = buffer.readVarInt();
         ItemStack stack = buffer.readItem();
-        if (idx >= 0 && idx < slots.size())
-        {
+        if (idx >= 0 && idx < slots.size()) {
             Slot s = slots.get(idx);
-            if (s instanceof SlotPhantom)
-            {
+            if (s instanceof SlotPhantom) {
                 SlotPhantom ph = (SlotPhantom) s;
                 IItemHandlerAdv handler = ph.itemHandler;
-                if (handler instanceof IItemHandlerModifiable && handler.canSet(ph.handlerIndex, stack))
-                {
+                if (handler instanceof IItemHandlerModifiable && handler.canSet(ph.handlerIndex, stack)) {
                     ((IItemHandlerModifiable) handler).setStackInSlot(ph.handlerIndex, stack);
-                }
-                else
-                {
+                } else {
                     // log rather than throw an exception because of bugged/naughty clients
                     String s2 = "[lib.container] Received an illegal phantom slot setting request! ";
                     s2 += "[The item handler disallowed the replacement] (Client = ";
@@ -362,8 +290,7 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
     /**
      * @throws IllegalArgumentException if a {@link SlotPhantom} couldn't be found with that handler and index
      */
-    public void sendSetPhantomSlot(IItemHandler handler, int index, ItemStack to)
-    {
+    public void sendSetPhantomSlot(IItemHandler handler, int index, ItemStack to) {
         sendSetPhantomSlot(findPhantomSlot(handler, index), to);
     }
 
@@ -374,21 +301,17 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
      *                                  handler.getSlots()}, or if a {@link SlotPhantom} couldn't be found for that handler and any of the
      *                                  indexes associated with it.
      */
-    public void sendSetPhantomSlots(IItemHandler handler, List<ItemStack> stacks)
-    {
-        if (handler.getSlots() < stacks.size())
-        {
+    public void sendSetPhantomSlots(IItemHandler handler, List<ItemStack> stacks) {
+        if (handler.getSlots() < stacks.size()) {
             throw new IllegalStateException("Too many ItemStacks's in the list to change, compared to the "
                     + "size of the inventory! (list = " + stacks + ", handler = " + handler + ")");
         }
         int[] indexes = new int[stacks.size()];
         NonNullList<ItemStack> destinationStacks = NonNullList.create();
         int i2 = 0;
-        for (int i = 0; i < stacks.size(); i++)
-        {
+        for (int i = 0; i < stacks.size(); i++) {
             ItemStack stack = stacks.get(i);
-            if (stack == null)
-            {
+            if (stack == null) {
                 continue;
             }
             destinationStacks.add(stack);
@@ -402,16 +325,12 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
     /**
      * @throws IllegalArgumentException if a phantom slot cannot be found
      */
-    private int findPhantomSlot(IItemHandler handler, int index)
-    {
+    private int findPhantomSlot(IItemHandler handler, int index) {
         int i = 0;
-        for (Slot slot : slots)
-        {
-            if (slot instanceof SlotPhantom)
-            {
+        for (Slot slot : slots) {
+            if (slot instanceof SlotPhantom) {
                 SlotPhantom ph = (SlotPhantom) slot;
-                if (ph.itemHandler == handler && ph.handlerIndex == index)
-                {
+                if (ph.itemHandler == handler && ph.handlerIndex == index) {
                     return i;
                 }
             }
@@ -420,18 +339,15 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
         throw new IllegalArgumentException("Couldn't find a slot for " + index + " @ " + handler + " in " + getClass());
     }
 
-    public void sendSetPhantomSlot(SlotPhantom slot, ItemStack to)
-    {
+    public void sendSetPhantomSlot(SlotPhantom slot, ItemStack to) {
         int index = slots.indexOf(slot);
-        if (index == -1)
-        {
+        if (index == -1) {
             throw new IllegalArgumentException("Couldn't find a slot for " + slot + " in " + getClass());
         }
         sendSetPhantomSlot(index, to);
     }
 
-    private void sendSetPhantomSlot(int phIndex, ItemStack to)
-    {
+    private void sendSetPhantomSlot(int phIndex, ItemStack to) {
         sendMessage(NET_SET_PHANTOM, (buffer) ->
         {
             buffer.writeVarInt(phIndex);
@@ -439,17 +355,14 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
         });
     }
 
-    private void sendSetPhantomSlots(int[] indexes, NonNullList<ItemStack> stacks)
-    {
-        if (indexes.length != stacks.size())
-        {
+    private void sendSetPhantomSlots(int[] indexes, NonNullList<ItemStack> stacks) {
+        if (indexes.length != stacks.size()) {
             throw new IllegalArgumentException("Sizes don't match! (" + indexes.length + " vs " + stacks.size() + ")");
         }
         sendMessage(NET_SET_PHANTOM_MULTI, (buffer) ->
         {
             buffer.writeByte(indexes.length);
-            for (int i = 0; i < indexes.length; i++)
-            {
+            for (int i = 0; i < indexes.length; i++) {
                 int index = indexes[i];
                 ItemStack stack = stacks.get(i);
                 buffer.writeVarInt(index);

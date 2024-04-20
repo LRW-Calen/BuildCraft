@@ -21,71 +21,53 @@ import java.util.function.Consumer;
  * near the start - we don't want name clashes between addons or an addon and BC itself. If you want more types of tags
  * keys then just make an issue for it, and it will probably be added.
  */
-public class TagManager
-{
+public class TagManager {
     // Calen: thread safety
 //    private static final Map<String, TagEntry> idsToEntry = new HashMap<>();
     private static final Map<String, TagEntry> idsToEntry = new ConcurrentHashMap<>();
 
-    public static Item getItem(String id)
-    {
+    public static Item getItem(String id) {
         String regTag = getTag(id, EnumTagType.REGISTRY_NAME);
         ResourceLocation loc = new ResourceLocation(regTag);
-        if (ForgeRegistries.ITEMS.containsKey(loc))
-        {
+        if (ForgeRegistries.ITEMS.containsKey(loc)) {
             return ForgeRegistries.ITEMS.getValue(loc);
-        }
-        else
-        {
+        } else {
             return null;
         }
     }
 
     // getBlock?
 
-    public static String getTag(String id, EnumTagType type)
-    {
-        if (idsToEntry.containsKey(id))
-        {
+    public static String getTag(String id, EnumTagType type) {
+        if (idsToEntry.containsKey(id)) {
             TagEntry entry = idsToEntry.get(id);
             return entry.getSingleTag(type);
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException("Unknown id " + id);
         }
     }
 
-    public static boolean hasTag(String id, EnumTagType type)
-    {
-        if (idsToEntry.containsKey(id))
-        {
+    public static boolean hasTag(String id, EnumTagType type) {
+        if (idsToEntry.containsKey(id)) {
             TagEntry entry = idsToEntry.get(id);
             return entry.tags.containsKey(type);
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException("Unknown id " + id);
         }
     }
 
-    public static String[] getMultiTag(String id, EnumTagTypeMulti type)
-    {
-        if (idsToEntry.containsKey(id))
-        {
+    public static String[] getMultiTag(String id, EnumTagTypeMulti type) {
+        if (idsToEntry.containsKey(id)) {
             TagEntry entry = idsToEntry.get(id);
             return entry.getMultiTag(type);
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException("Unknown id " + id);
         }
     }
 
     // hasMultiTag?
 
-    public enum EnumTagType
-    {
+    public enum EnumTagType {
         UNLOCALIZED_NAME,
         OREDICT_NAME,
         REGISTRY_NAME,
@@ -94,13 +76,11 @@ public class TagManager
 //        MODEL_LOCATION,
     }
 
-    public enum EnumTagTypeMulti
-    {
+    public enum EnumTagTypeMulti {
         OLD_REGISTRY_NAME,
     }
 
-    public static class TagEntry
-    {
+    public static class TagEntry {
         /**
          * The actual ID
          */
@@ -108,56 +88,46 @@ public class TagManager
         private final Map<EnumTagType, String> tags = new EnumMap<>(EnumTagType.class);
         private final Map<EnumTagTypeMulti, List<String>> multiTags = new EnumMap<>(EnumTagTypeMulti.class);
 
-        public TagEntry(String id)
-        {
+        public TagEntry(String id) {
             this.id = id;
 
         }
 
-        public String getSingleTag(EnumTagType type)
-        {
-            if (!tags.containsKey(type))
-            {
+        public String getSingleTag(EnumTagType type) {
+            if (!tags.containsKey(type)) {
                 throw new IllegalArgumentException("Unknown tag type " + type + " for the entry " + id);
             }
             return tags.get(type);
         }
 
-        public boolean hasSingleTag(EnumTagType type)
-        {
+        public boolean hasSingleTag(EnumTagType type) {
             return tags.containsKey(type);
         }
 
-        public String[] getMultiTag(EnumTagTypeMulti type)
-        {
+        public String[] getMultiTag(EnumTagTypeMulti type) {
             List<String> ts = multiTags.get(type);
             if (ts == null) return new String[0];
             return ts.toArray(new String[ts.size()]);
         }
 
-        public TagEntry setSingleTag(EnumTagType type, String tag)
-        {
+        public TagEntry setSingleTag(EnumTagType type, String tag) {
             tags.put(type, tag);
             return this;
         }
 
-        public TagEntry reg(String name)
-        {
+        public TagEntry reg(String name) {
             return setSingleTag(EnumTagType.REGISTRY_NAME, name);
         }
 
-        public TagEntry locale(String name)
-        {
+        public TagEntry locale(String name) {
             return setSingleTag(EnumTagType.UNLOCALIZED_NAME, name);
         }
 
-        public TagEntry oreDict(String name)
-        {
+        public TagEntry oreDict(String name) {
             return setSingleTag(EnumTagType.OREDICT_NAME, name);
         }
 
-        public TagEntry tab(String creativeTab)
-        {
+        public TagEntry tab(String creativeTab) {
             return setSingleTag(EnumTagType.CREATIVE_TAB, creativeTab);
         }
 
@@ -167,14 +137,11 @@ public class TagManager
 //            return setSingleTag(EnumTagType.MODEL_LOCATION, modelLocation);
 //        }
 
-        public TagEntry addMultiTag(EnumTagTypeMulti type, String... tags)
-        {
-            if (!this.multiTags.containsKey(type))
-            {
+        public TagEntry addMultiTag(EnumTagTypeMulti type, String... tags) {
+            if (!this.multiTags.containsKey(type)) {
                 this.multiTags.put(type, new LinkedList<>());
             }
-            for (String tag : tags)
-            {
+            for (String tag : tags) {
                 multiTags.get(type).add(tag);
             }
             return this;
@@ -186,18 +153,15 @@ public class TagManager
 //        }
     }
 
-    public static TagEntry getTag(String id)
-    {
+    public static TagEntry getTag(String id) {
         return idsToEntry.get(id);
     }
 
-//    public static TagEntry registerTag(String id)
-    public TagEntry registerTag(String id)
-    {
+    //    public static TagEntry registerTag(String id)
+    public TagEntry registerTag(String id) {
         TagEntry entry = new TagEntry(id);
         idsToEntry.put(id, entry);
-        for (List<TagEntry> list : batchTasks)
-        {
+        for (List<TagEntry> list : batchTasks) {
             list.add(entry);
         }
         return entry;
@@ -209,33 +173,27 @@ public class TagManager
     //
     // #########################
 
-//    private static final Deque<List<TagEntry>> batchTasks = new ArrayDeque<>();
+    //    private static final Deque<List<TagEntry>> batchTasks = new ArrayDeque<>();
     private final Deque<List<TagEntry>> batchTasks = new ArrayDeque<>();
 
-//    public static void startBatch()
-    public void startBatch()
-    {
+    //    public static void startBatch()
+    public void startBatch() {
         batchTasks.push(new ArrayList<>());
     }
 
-//    public static void endBatch(Consumer<TagEntry> consumer)
-    public void endBatch(Consumer<TagEntry> consumer)
-    {
+    //    public static void endBatch(Consumer<TagEntry> consumer)
+    public void endBatch(Consumer<TagEntry> consumer) {
         batchTasks.pop().forEach(consumer);
     }
 
-    public static Consumer<TagEntry> prependTag(EnumTagType type, String prefix)
-    {
+    public static Consumer<TagEntry> prependTag(EnumTagType type, String prefix) {
         return tag ->
         {
-            if (tag == null)
-            {
-                try
-                {
+            if (tag == null) {
+                try {
                     throw new RuntimeException("666666666666666666666666666");
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     System.out.println("666666666666666666666666666666666666666666666");
                     System.out.println("666666666666666666666666666666666666666666666");
                     System.out.println("666666666666666666666666666666666666666666666");
@@ -245,36 +203,30 @@ public class TagManager
                     System.out.println("666666666666666666666666666666666666666666666");
                 }
             }
-            if (tag.hasSingleTag(type))
-            {
+            if (tag.hasSingleTag(type)) {
                 tag.setSingleTag(type, prefix + tag.getSingleTag(type));
             }
         };
     }
 
-    public static Consumer<TagEntry> prependTags(String prefix, EnumTagType... tags)
-    {
+    public static Consumer<TagEntry> prependTags(String prefix, EnumTagType... tags) {
         Consumer<TagEntry> consumer = tag ->
         {
         };
-        for (EnumTagType type : tags)
-        {
+        for (EnumTagType type : tags) {
             consumer = consumer.andThen(prependTag(type, prefix));
         }
         return consumer;
     }
 
-    public static Consumer<TagEntry> set(EnumTagType type, String value)
-    {
+    public static Consumer<TagEntry> set(EnumTagType type, String value) {
         return tag -> tag.setSingleTag(type, value);
     }
 
-    public static Consumer<TagEntry> setTab(String creativeTab)
-    {
+    public static Consumer<TagEntry> setTab(String creativeTab) {
         return tag ->
         {
-            if (tag.hasSingleTag(EnumTagType.REGISTRY_NAME) && !tag.hasSingleTag(EnumTagType.CREATIVE_TAB))
-            {
+            if (tag.hasSingleTag(EnumTagType.REGISTRY_NAME) && !tag.hasSingleTag(EnumTagType.CREATIVE_TAB)) {
                 tag.tab(creativeTab);
             }
         };

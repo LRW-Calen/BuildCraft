@@ -9,8 +9,7 @@ package buildcraft.lib;
 import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 
-public class BCLibSprites
-{
+public class BCLibSprites {
     public static final ISprite LOCK;
     public static final ISprite WARNING_MINOR;
     public static final ISprite WARNING_MAJOR;

@@ -1,28 +1,26 @@
 package buildcraft.datagen.factory;
 
 import buildcraft.datagen.base.BCBaseAdvancementProvider;
+import buildcraft.datagen.core.CoreAdvancementProvider;
 import buildcraft.factory.BCFactory;
 import buildcraft.factory.BCFactoryBlocks;
-import buildcraft.datagen.core.CoreAdvancementProvider;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import java.util.function.Consumer;
 
 // Calen Completed
-public class FactoryAdvancementProvider extends BCBaseAdvancementProvider
-{
-    private static final String NAMESPACE = BCFactory.MOD_ID;
+public class FactoryAdvancementProvider extends BCBaseAdvancementProvider {
+    private static final String NAMESPACE = BCFactory.MODID;
     private static Advancement ROOT;
 
     private static final ImpossibleTrigger.TriggerInstance IMPOSSIBLE = new ImpossibleTrigger.TriggerInstance();
 
-    public static void registerFactoryAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper)
-    {
+    public static void registerFactoryAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
         ROOT = CoreAdvancementProvider.ROOT;
         // fluid_storage
         Advancement fluid_storage = Advancement.Builder.advancement().display(

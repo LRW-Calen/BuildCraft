@@ -34,7 +34,7 @@ public class JsonGuiElement extends JsonVariableObject {
     private final Map<String, JsonGuiElement> types;
 
     private JsonGuiElement(String name, String fullName, FunctionContext context, JsonObject json,
-        ResolvedIterator iter) {
+                           ResolvedIterator iter) {
         this.name = name;
         this.fullName = fullName;
         this.context = new FunctionContext(context);
@@ -49,7 +49,7 @@ public class JsonGuiElement extends JsonVariableObject {
     }
 
     public JsonGuiElement(JsonObject json, String name, String fullName, Map<String, JsonGuiElement> typeLookup,
-        FunctionContext context) {
+                          FunctionContext context) {
         try {
             this.json = json;
             this.name = name;
@@ -82,7 +82,8 @@ public class JsonGuiElement extends JsonVariableObject {
                 }
             }
             finaliseVariables();
-        } catch (JsonSyntaxException jse) {
+        }
+        catch (JsonSyntaxException jse) {
             throw new JsonSyntaxException("Failed to read element " + name, jse);
         }
     }
@@ -117,7 +118,8 @@ public class JsonGuiElement extends JsonVariableObject {
                     elem.types.putAll(types);
                     elem.properties.putAll(properties);
                     list.add(elem);
-                } while (!resolvedIterator.iterate());
+                }
+                while (!resolvedIterator.iterate());
             }
         }
         return list;

@@ -15,8 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.io.IOException;
 
-public abstract class Addon
-{
+public abstract class Addon {
     public VolumeBox volumeBox;
 
     @OnlyIn(Dist.CLIENT)
@@ -24,10 +23,10 @@ public abstract class Addon
 
     public EnumAddonSlot getSlot() {
         return volumeBox.addons.entrySet().stream()
-            .filter(slotAddon -> slotAddon.getValue() == this)
-            .findFirst()
-            .orElseThrow(IllegalStateException::new)
-            .getKey();
+                .filter(slotAddon -> slotAddon.getValue() == this)
+                .findFirst()
+                .orElseThrow(IllegalStateException::new)
+                .getKey();
     }
 
     public AABB getBoundingBox() {
@@ -37,7 +36,7 @@ public abstract class Addon
     @SuppressWarnings("WeakerAccess")
     public boolean canBePlaceInto(VolumeBox volumeBox) {
         return !(this instanceof ISingleAddon &&
-            volumeBox.addons.values().stream().anyMatch(addon -> addon.getClass() == getClass()));
+                volumeBox.addons.values().stream().anyMatch(addon -> addon.getClass() == getClass()));
     }
 
     public void onAdded() {

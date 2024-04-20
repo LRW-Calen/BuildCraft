@@ -11,13 +11,10 @@ import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.core.BCCoreSprites;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
-import buildcraft.lib.misc.LocaleUtil;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
-public class TriggerTrue extends BCStatement implements ITriggerInternal
-{
+public class TriggerTrue extends BCStatement implements ITriggerInternal {
     public TriggerTrue() {
         super("buildcraftcore:trigger.true");
     }
@@ -37,6 +34,7 @@ public class TriggerTrue extends BCStatement implements ITriggerInternal
 //        return LocaleUtil.localize("gate.trigger.true");
         return new TranslatableComponent("gate.trigger.true");
     }
+
     @Override
     public String getDescriptionKey() {
         return "gate.trigger.true";

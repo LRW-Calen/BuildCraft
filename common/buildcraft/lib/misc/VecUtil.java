@@ -19,8 +19,7 @@ import javax.vecmath.Vector3f;
 
 /** Class for dealing with {@link Vec3}, {@link Vec3i}, {@link Direction}, {@link Axis} conversions and additions.
  * This is for simple functions ONLY, {@link PositionUtil} is for complex interactions */
-public class VecUtil
-{
+public class VecUtil {
     public static final BlockPos POS_ONE = new BlockPos(1, 1, 1);
     public static final Vec3 VEC_HALF = new Vec3(0.5, 0.5, 0.5);
     public static final Vec3 VEC_ONE = new Vec3(1, 1, 1);
@@ -52,18 +51,18 @@ public class VecUtil
 
     public static Vec3 replaceValue(Vec3 old, Axis axis, double with) {
         return new Vec3(//
-            axis == Axis.X ? with : old.x,//
-            axis == Axis.Y ? with : old.y,//
-            axis == Axis.Z ? with : old.z//
+                axis == Axis.X ? with : old.x,//
+                axis == Axis.Y ? with : old.y,//
+                axis == Axis.Z ? with : old.z//
         );
     }
 
     @Nonnull
     public static BlockPos replaceValue(Vec3i old, Axis axis, int with) {
         return new BlockPos(//
-            axis == Axis.X ? with : old.getX(),//
-            axis == Axis.Y ? with : old.getY(),//
-            axis == Axis.Z ? with : old.getZ()//
+                axis == Axis.X ? with : old.getX(),//
+                axis == Axis.Y ? with : old.getY(),//
+                axis == Axis.Z ? with : old.getZ()//
         );
     }
 
@@ -135,9 +134,9 @@ public class VecUtil
         if (a == null) return b;
         if (b == null) return a;
         return new BlockPos(//
-            Math.min(a.getX(), b.getX()),//
-            Math.min(a.getY(), b.getY()),//
-            Math.min(a.getZ(), b.getZ())//
+                Math.min(a.getX(), b.getX()),//
+                Math.min(a.getY(), b.getY()),//
+                Math.min(a.getZ(), b.getZ())//
         );
     }
 
@@ -153,9 +152,9 @@ public class VecUtil
         if (a == null) return b;
         if (b == null) return a;
         return new BlockPos(//
-            Math.max(a.getX(), b.getX()),//
-            Math.max(a.getY(), b.getY()),//
-            Math.max(a.getZ(), b.getZ())//
+                Math.max(a.getX(), b.getX()),//
+                Math.max(a.getY(), b.getY()),//
+                Math.max(a.getZ(), b.getZ())//
         );
     }
 
@@ -171,9 +170,9 @@ public class VecUtil
         if (a == null) return b;
         if (b == null) return a;
         return new Vec3(//
-            Math.min(a.x, b.x),//
-            Math.min(a.y, b.y),//
-            Math.min(a.z, b.z)//
+                Math.min(a.x, b.x),//
+                Math.min(a.y, b.y),//
+                Math.min(a.z, b.z)//
         );
     }
 
@@ -189,9 +188,9 @@ public class VecUtil
         if (a == null) return b;
         if (b == null) return a;
         return new Vec3(//
-            Math.max(a.x, b.x),//
-            Math.max(a.y, b.y),//
-            Math.max(a.z, b.z)//
+                Math.max(a.x, b.x),//
+                Math.max(a.y, b.y),//
+                Math.max(a.z, b.z)//
         );
     }
 

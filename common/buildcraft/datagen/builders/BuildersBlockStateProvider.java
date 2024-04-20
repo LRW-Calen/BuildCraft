@@ -15,16 +15,13 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class BuildersBlockStateProvider extends BlockStateProvider
-{
-    public BuildersBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
-    {
+public class BuildersBlockStateProvider extends BlockStateProvider {
+    public BuildersBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
         super(gen, modid, exFileHelper);
     }
 
     @Override
-    protected void registerStatesAndModels()
-    {
+    protected void registerStatesAndModels() {
         // Builder
 //        ModelBuilder builder_main = models().getBuilder("buildcraftbuilders:block/builder/main");
         ModelBuilder<BlockModelBuilder> builder_main =
@@ -76,10 +73,10 @@ public class BuildersBlockStateProvider extends BlockStateProvider
                         .face(Direction.EAST).texture("#template").uvs(3, 0, 13, 2).end()
                         .end();
         MultiPartBlockStateBuilder multiPartBuilder_block_builder = getMultipartBuilder(BCBuildersBlocks.builder.get());
-        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, builder_main,null,null);
-        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, slot_empty,BlockBuilder.SNAPSHOT_TYPE, EnumOptionalSnapshotType.NONE);
-        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, slot_blueprint,BlockBuilder.SNAPSHOT_TYPE, EnumOptionalSnapshotType.BLUEPRINT);
-        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, slot_template,BlockBuilder.SNAPSHOT_TYPE, EnumOptionalSnapshotType.TEMPLATE);
+        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, builder_main, null, null);
+        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, slot_empty, BlockBuilder.SNAPSHOT_TYPE, EnumOptionalSnapshotType.NONE);
+        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, slot_blueprint, BlockBuilder.SNAPSHOT_TYPE, EnumOptionalSnapshotType.BLUEPRINT);
+        BCBlockStateProvider.add4Facing(multiPartBuilder_block_builder, slot_template, BlockBuilder.SNAPSHOT_TYPE, EnumOptionalSnapshotType.TEMPLATE);
 
 //        getVariantBuilder(BCBuildersBlocks.builder.get())
 //                .forAllStates(state ->
@@ -245,21 +242,20 @@ public class BuildersBlockStateProvider extends BlockStateProvider
 
         // Quarry
         ResourceLocation quarry = BCBuildersBlocks.quarry.get().getRegistryName();
-        ResourceLocation normal_top = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/normal/top");
-        ResourceLocation normal_bottom = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/normal/bottom");
-        ResourceLocation normal_side = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/normal/side");
-        ResourceLocation normal_front = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/normal/front");
-        ResourceLocation normal_back = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/normal/back");
+        ResourceLocation normal_top = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/normal/top");
+        ResourceLocation normal_bottom = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/normal/bottom");
+        ResourceLocation normal_side = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/normal/side");
+        ResourceLocation normal_front = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/normal/front");
+        ResourceLocation normal_back = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/normal/back");
 
-        ResourceLocation connected_top = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/connected/top");
-        ResourceLocation connected_bottom = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/connected/bottom");
-        ResourceLocation connected_side = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/connected/side");
-        ResourceLocation connected_front = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/connected/front");
-        ResourceLocation connected_back = new ResourceLocation(BCBuilders.MOD_ID, "blocks/quarry/connected/back");
+        ResourceLocation connected_top = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/connected/top");
+        ResourceLocation connected_bottom = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/connected/bottom");
+        ResourceLocation connected_side = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/connected/side");
+        ResourceLocation connected_front = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/connected/front");
+        ResourceLocation connected_back = new ResourceLocation(BCBuilders.MODID, "blocks/quarry/connected/back");
         getVariantBuilder(BCBuildersBlocks.quarry.get()).forAllStates(s ->
         {
-            int rotY = switch (s.getValue(BlockBCBase_Neptune.PROP_FACING))
-            {
+            int rotY = switch (s.getValue(BlockBCBase_Neptune.PROP_FACING)) {
                 case EAST -> 90;
                 case SOUTH -> 180;
                 case WEST -> 270;
@@ -297,8 +293,7 @@ public class BuildersBlockStateProvider extends BlockStateProvider
         getVariantBuilder(BCBuildersBlocks.architect.get()).forAllStates(s ->
         {
             Direction direction = s.getValue(BlockBCBase_Neptune.PROP_FACING);
-            int rotY = switch (direction)
-            {
+            int rotY = switch (direction) {
                 case EAST -> 90;
                 case SOUTH -> 180;
                 case WEST -> 270;
@@ -306,8 +301,7 @@ public class BuildersBlockStateProvider extends BlockStateProvider
                 default -> throw new RuntimeException("Only Facing 4!");
             };
             boolean valid = s.getValue(BlockArchitectTable.PROP_VALID);
-            if (valid)
-            {
+            if (valid) {
                 return ConfiguredModel.builder().modelFile(
                                 models().withExistingParent(architect_on.toString(), new ResourceLocation("minecraft", "block/orientable"))
                                         .texture("particle", "buildcraftbuilders:blocks/architect/back")
@@ -320,9 +314,7 @@ public class BuildersBlockStateProvider extends BlockStateProvider
                         )
                         .rotationY(rotY)
                         .build();
-            }
-            else
-            {
+            } else {
                 return ConfiguredModel.builder().modelFile(
                                 models().withExistingParent(architect_off.toString(), new ResourceLocation("minecraft", "block/orientable"))
                                         .texture("particle", "buildcraftbuilders:blocks/architect/back")

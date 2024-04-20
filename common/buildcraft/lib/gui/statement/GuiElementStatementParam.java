@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GuiElementStatementParam extends GuiElementSimple
-        implements IInteractionElement, IReference<IStatementParameter>
-{
+        implements IInteractionElement, IReference<IStatementParameter> {
 
     private final IStatementContainer container;
     private final FullStatement<?> ref;
@@ -29,8 +28,7 @@ public class GuiElementStatementParam extends GuiElementSimple
     private final boolean draw;
 
     public GuiElementStatementParam(BuildCraftGui gui, IGuiArea element, IStatementContainer container,
-                                    FullStatement<?> ref, int index, boolean draw)
-    {
+                                    FullStatement<?> ref, int index, boolean draw) {
         super(gui, element);
         this.container = container;
         this.ref = ref;
@@ -41,40 +39,33 @@ public class GuiElementStatementParam extends GuiElementSimple
     // IReference
 
     @Override
-    public IStatementParameter get()
-    {
+    public IStatementParameter get() {
         return ref.get(paramIndex);
     }
 
     @Override
-    public void set(IStatementParameter to)
-    {
+    public void set(IStatementParameter to) {
         ref.set(paramIndex, to);
         ref.postSetFromGui(paramIndex);
     }
 
     @Override
-    public boolean canSet(IStatementParameter value)
-    {
+    public boolean canSet(IStatementParameter value) {
         return ref.canSet(paramIndex, value);
     }
 
     @Override
-    public Class<IStatementParameter> getHeldType()
-    {
+    public Class<IStatementParameter> getHeldType() {
         return IStatementParameter.class;
     }
 
     // ITooltipElement
 
     @Override
-    public void addToolTips(List<ToolTip> tooltips)
-    {
-        if (contains(gui.mouse))
-        {
+    public void addToolTips(List<ToolTip> tooltips) {
+        if (contains(gui.mouse)) {
             IStatementParameter s = get();
-            if (s != null)
-            {
+            if (s != null) {
                 tooltips.add(new ToolTip(s.getTooltip()));
             }
         }
@@ -83,16 +74,13 @@ public class GuiElementStatementParam extends GuiElementSimple
     // IGuiElement
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
-        if (draw)
-        {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
+        if (draw) {
             IStatement slot = ref.get();
             int max = slot == null ? 0 : slot.maxParameters();
             double x = getX();
             double y = getY();
-            if (paramIndex >= max)
-            {
+            if (paramIndex >= max) {
                 GuiElementStatement.SLOT_COLOUR.drawAt(poseStack, x, y);
                 GuiElementStatement.ICON_SLOT_BLOCKED.drawAt(poseStack, x, y);
                 return;
@@ -105,44 +93,32 @@ public class GuiElementStatementParam extends GuiElementSimple
     // IInteractionElement
 
     @Override
-    public void onMouseClicked(int button)
-    {
-        if (ref.canInteract && contains(gui.mouse) && button == 0)
-        {
+    public void onMouseClicked(int button) {
+        if (ref.canInteract && contains(gui.mouse) && button == 0) {
             IStatementParameter param = get();
-            if (param == null)
-            {
+            if (param == null) {
                 return;
             }
             StatementMouseClick clickEvent = new StatementMouseClick(0, false);
 
             final ItemStack heldStack;
             Player currentPlayer = Minecraft.getInstance().player;
-            if (currentPlayer == null)
-            {
+            if (currentPlayer == null) {
                 heldStack = ItemStack.EMPTY;
-            }
-            else
-            {
+            } else {
 //                heldStack = currentPlayer.inventory.getItemStack();
                 heldStack = currentPlayer.inventoryMenu.getCarried();
             }
 
             IStatementParameter pNew = param.onClick(container, ref.get(), heldStack, clickEvent);
-            if (pNew != null)
-            {
+            if (pNew != null) {
                 set(pNew);
-            }
-            else
-            {
+            } else {
                 IStatementParameter[] possible = param.getPossible(container);
-                if (!param.isPossibleOrdered())
-                {
+                if (!param.isPossibleOrdered()) {
                     List<IStatementParameter> list = new ArrayList<>();
-                    for (IStatementParameter p2 : possible)
-                    {
-                        if (p2 != null)
-                        {
+                    for (IStatementParameter p2 : possible) {
+                        if (p2 != null) {
                             list.add(p2);
                         }
                     }

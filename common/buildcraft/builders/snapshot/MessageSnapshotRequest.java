@@ -6,14 +6,13 @@
 
 package buildcraft.builders.snapshot;
 
+import buildcraft.lib.net.IMessage;
+import buildcraft.lib.net.IMessageHandler;
 import buildcraft.lib.net.PacketBufferBC;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
 
-public class MessageSnapshotRequest implements IMessage
-{
+public class MessageSnapshotRequest implements IMessage {
     private Snapshot.Key key;
 
     @SuppressWarnings("unused")
@@ -34,7 +33,8 @@ public class MessageSnapshotRequest implements IMessage
         key = new Snapshot.Key(new PacketBufferBC(buf));
     }
 
-    public static final IMessageHandler<MessageSnapshotRequest, MessageSnapshotResponse> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageSnapshotRequest, MessageSnapshotResponse> HANDLER = (message, ctx) ->
+    {
         Snapshot snapshot = GlobalSavedDataSnapshots.get(Dist.DEDICATED_SERVER).getSnapshot(message.key);
         return snapshot != null ? new MessageSnapshotResponse(snapshot) : null;
     };

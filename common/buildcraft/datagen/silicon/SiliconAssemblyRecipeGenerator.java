@@ -3,14 +3,10 @@ package buildcraft.datagen.silicon;
 import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumRedstoneChipset;
 import buildcraft.api.mj.MjAPI;
-import buildcraft.api.recipes.AssemblyRecipe;
-import buildcraft.api.recipes.AssemblyRecipeBasic;
 import buildcraft.api.recipes.IngredientStack;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.BCCoreItems;
-import buildcraft.datagen.energy.CoolantRecipeBuilder;
 import buildcraft.lib.misc.ColourUtil;
-import buildcraft.lib.recipe.AssemblyRecipeRegistry;
 import buildcraft.lib.recipe.IngredientNBTBC;
 import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.gate.EnumGateLogic;
@@ -18,7 +14,6 @@ import buildcraft.silicon.gate.EnumGateMaterial;
 import buildcraft.silicon.gate.EnumGateModifier;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.item.ItemPluggableGate;
-import buildcraft.silicon.recipe.FacadeAssemblyRecipes;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -31,41 +26,33 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.fluids.FluidStack;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class SiliconAssemblyRecipeGenerator extends RecipeProvider
-{
+public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
     private final ExistingFileHelper existingFileHelper;
 
     private Consumer<FinishedRecipe> consumer;
 
-    public SiliconAssemblyRecipeGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper)
-    {
+    public SiliconAssemblyRecipeGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator);
         this.existingFileHelper = existingFileHelper;
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         this.consumer = consumer;
 
         ItemStack output = new ItemStack(BCSiliconItems.plugPulsar.get());
 
         ItemStack redstoneEngine;
-        if (BCCoreBlocks.engineWood != null)
-        {
+        if (BCCoreBlocks.engineWood != null) {
             redstoneEngine = BCCoreBlocks.engineWood.get().getStack(EnumEngineType.WOOD);
-        }
-        else
-        {
+        } else {
             redstoneEngine = new ItemStack(Blocks.REDSTONE_BLOCK);
         }
 
@@ -106,7 +93,7 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider
                 IngredientStack.of(EnumRedstoneChipset.QUARTZ.getStack()));
         makeGateModifierAssembly(180_000, EnumGateMaterial.GOLD, EnumGateModifier.DIAMOND,
                 IngredientStack.of(EnumRedstoneChipset.DIAMOND.getStack()));
-        
+
         AssemblyRecipeBuilder.basic(
                 500 * MjAPI.MJ,
                 ImmutableSet.of(IngredientStack.of(Blocks.DAYLIGHT_DETECTOR)),
@@ -117,8 +104,7 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider
         AssemblyRecipeBuilder.facade().save(consumer, "facade");
 
 
-        for (DyeColor colour : ColourUtil.COLOURS)
-        {
+        for (DyeColor colour : ColourUtil.COLOURS) {
             String name = String.format("lens_regular_%s", colour.getName());
 //                IngredientStack stainedGlass = IngredientStack.of("blockGlass" + ColourUtil.getName(colour));
             IngredientStack stainedGlass = IngredientStack.of(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:glass/" + colour.getName())));
@@ -179,22 +165,16 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider
 
 
         ImmutableSet.Builder<IngredientStack> input4 = ImmutableSet.builder();
-        if (BCCoreItems.wrench != null)
-        {
+        if (BCCoreItems.wrench != null) {
             input4.add(IngredientStack.of(BCCoreItems.wrench.get()));
-        }
-        else
-        {
+        } else {
             input4.add(IngredientStack.of(Items.STICK));
             input4.add(IngredientStack.of(Items.IRON_INGOT));
         }
 
-        if (BCSiliconItems.chipsetRedstone != null)
-        {
+        if (BCSiliconItems.chipsetRedstone != null) {
             input4.add(IngredientStack.of(EnumRedstoneChipset.IRON.getStack(1)));
-        }
-        else
-        {
+        } else {
 //                input.add(IngredientStack.of("dustRedstone"));
             input4.add(IngredientStack.of(Tags.Items.DUSTS_REDSTONE));
 //                input.add(IngredientStack.of("dustRedstone"));
@@ -210,10 +190,8 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider
     }
 
     private void makeGateModifierAssembly(int multiplier, EnumGateMaterial material, EnumGateModifier modifier,
-                                          IngredientStack... mods)
-    {
-        for (EnumGateLogic logic : EnumGateLogic.VALUES)
-        {
+                                          IngredientStack... mods) {
+        for (EnumGateLogic logic : EnumGateLogic.VALUES) {
 //            String name = String.format("gate-modifier-%s-%s-%s", logic, material, modifier);
             String name = String.format("gate_modifier_%s_%s_%s", logic, material, modifier);
             GateVariant variantFrom = new GateVariant(logic, material, EnumGateModifier.NO_MODIFIER);
@@ -231,8 +209,7 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider
         }
     }
 
-    private void makeGateAssembly(int multiplier, EnumGateMaterial material, EnumGateModifier modifier, EnumRedstoneChipset chipset, IngredientStack... additional)
-    {
+    private void makeGateAssembly(int multiplier, EnumGateMaterial material, EnumGateModifier modifier, EnumRedstoneChipset chipset, IngredientStack... additional) {
         ImmutableSet.Builder<IngredientStack> temp = ImmutableSet.builder();
         temp.add(new IngredientStack(new IngredientNBTBC(chipset.getStack())));
         temp.add(additional);

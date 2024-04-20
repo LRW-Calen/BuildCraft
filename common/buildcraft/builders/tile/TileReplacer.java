@@ -22,6 +22,7 @@ import buildcraft.builders.snapshot.Snapshot;
 import buildcraft.builders.snapshot.Snapshot.Header;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.data.IdAllocator;
+import buildcraft.lib.tile.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.ItemHandlerManager;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
@@ -33,13 +34,11 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
-import buildcraft.lib.tile.ITickable;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
-public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvider
-{
+public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvider {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("replacer");
 
     public final ItemHandlerSimple invSnapshot = itemManager.addInvHandler(
@@ -64,17 +63,14 @@ public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvi
             ItemHandlerManager.EnumAccess.NONE
     );
 
-    public TileReplacer(BlockPos pos, BlockState blockState)
-    {
+    public TileReplacer(BlockPos pos, BlockState blockState) {
         super(BCBuildersBlocks.replacerTile.get(), pos, blockState);
     }
 
     @Override
-    public void update()
-    {
+    public void update() {
         ITickable.super.update();
-        if (level.isClientSide)
-        {
+        if (level.isClientSide) {
             return;
         }
         if (!invSnapshot.getStackInSlot(0).isEmpty() &&
@@ -84,14 +80,11 @@ public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvi
 //            Header header = BCBuildersItems.snapshot.getHeader(invSnapshot.getStackInSlot(0));
 //            Header header = BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getHeader(invSnapshot.getStackInSlot(0));
             Header header = BCBuildersItems.snapshotBLUEPRINT.get().getHeader(invSnapshot.getStackInSlot(0));
-            if (header != null)
-            {
+            if (header != null) {
                 Snapshot snapshot = GlobalSavedDataSnapshots.get(level).getSnapshot(header.key);
-                if (snapshot instanceof Blueprint)
-                {
+                if (snapshot instanceof Blueprint) {
                     Blueprint blueprint = (Blueprint) snapshot;
-                    try
-                    {
+                    try {
                         ISchematicBlock from = SchematicBlockManager.readFromNBT(
                                 NBTUtilBC.getItemData(invSchematicFrom.getStackInSlot(0))
                                         .getCompound(ItemSchematicSingle.NBT_KEY)
@@ -121,8 +114,7 @@ public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvi
                         invSchematicFrom.setStackInSlot(0, ItemStack.EMPTY);
                         invSchematicTo.setStackInSlot(0, ItemStack.EMPTY);
                     }
-                    catch (InvalidInputDataException e)
-                    {
+                    catch (InvalidInputDataException e) {
                         e.printStackTrace();
                     }
                 }
@@ -131,15 +123,13 @@ public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvi
     }
 
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();
     }
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerReplacer(BCBuildersMenuTypes.REPLACER, id, player, this);
     }
 }

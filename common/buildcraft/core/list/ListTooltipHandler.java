@@ -15,25 +15,20 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public enum ListTooltipHandler
-{
+public enum ListTooltipHandler {
     INSTANCE;
 
     @SubscribeEvent
-    public void itemTooltipEvent(ItemTooltipEvent event)
-    {
+    public void itemTooltipEvent(ItemTooltipEvent event) {
 //        final Player player = event.getEntityPlayer();
         final Player player = event.getPlayer();
         final ItemStack stack = event.getItemStack();
 //        if (!stack.isEmpty() && player != null && player.openContainer instanceof ContainerList)
-        if (!stack.isEmpty() && player != null && player.containerMenu instanceof ContainerList)
-        {
+        if (!stack.isEmpty() && player != null && player.containerMenu instanceof ContainerList) {
 //            ItemStack list = player.getHeldItemMainhand();
             ItemStack list = player.getMainHandItem();
-            if (!list.isEmpty() && list.getItem() instanceof IList)
-            {
-                if (((IList) list.getItem()).matches(list, stack))
-                {
+            if (!list.isEmpty() && list.getItem() instanceof IList) {
+                if (((IList) list.getItem()).matches(list, stack)) {
 //                    event.getToolTip().add(TextFormatting.GREEN + LocaleUtil.localize("tip.list.matches"));
                     event.getToolTip().add(new TextComponent(ChatFormatting.GREEN + LocaleUtil.localize("tip.list.matches")));
                 }

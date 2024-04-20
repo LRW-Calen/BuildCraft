@@ -39,8 +39,7 @@ import java.io.IOException;
 import java.util.EnumMap;
 import java.util.List;
 
-public final class Pipe implements IPipe, IDebuggable
-{
+public final class Pipe implements IPipe, IDebuggable {
     private static final float DEFAULT_CONNECTION_DISTANCE = 0.25f;
 
     public final IPipeHolder holder;
@@ -55,8 +54,7 @@ public final class Pipe implements IPipe, IDebuggable
     @OnlyIn(Dist.CLIENT)
     private PipeModelKey lastModel;
 
-    public Pipe(IPipeHolder holder, PipeDefinition definition)
-    {
+    public Pipe(IPipeHolder holder, PipeDefinition definition) {
         this.holder = holder;
         this.definition = definition;
         this.behaviour = definition.logicConstructor.createBehaviour(this);
@@ -65,41 +63,34 @@ public final class Pipe implements IPipe, IDebuggable
 
     // read + write
 
-    public Pipe(IPipeHolder holder, CompoundTag nbt) throws InvalidInputDataException
-    {
+    public Pipe(IPipeHolder holder, CompoundTag nbt) throws InvalidInputDataException {
         this.holder = holder;
         this.colour = NBTUtilBC.readEnum(nbt.get("col"), DyeColor.class);
         this.definition = PipeRegistry.INSTANCE.loadDefinition(nbt.getString("def"));
-        if (!definition.canBeColoured)
-        {
+        if (!definition.canBeColoured) {
             colour = null;
         }
         this.behaviour = definition.logicLoader.loadBehaviour(this, nbt.getCompound("beh"));
         this.flow = definition.flowType.loader.loadFlow(this, nbt.getCompound("flow"));
 
         int connectionData = nbt.getInt("con");
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             int data = (connectionData >>> (face.ordinal() * 2)) & 0b11;
             // The only important aspect of this is the pipe type
             // as the texture index is just used at the client (which is updated in the first tick)
             // and the distance is only used on the server for item pipe travel times.
             // (which is minor enough that it doesn't really matter)
-            if (data == 0b01)
-            {
+            if (data == 0b01) {
                 connected.put(face, DEFAULT_CONNECTION_DISTANCE);
                 types.put(face, ConnectedType.PIPE);
-            }
-            else if (data == 0b10)
-            {
+            } else if (data == 0b10) {
                 connected.put(face, DEFAULT_CONNECTION_DISTANCE);
                 types.put(face, ConnectedType.TILE);
             }
         }
     }
 
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = new CompoundTag();
         nbt.put("col", NBTUtilBC.writeEnum(colour));
         nbt.putString("def", definition.identifier.toString());
@@ -107,11 +98,9 @@ public final class Pipe implements IPipe, IDebuggable
         nbt.put("flow", flow.writeToNbt());
 
         int connectionData = 0;
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             ConnectedType type = types.get(face);
-            if (type != null)
-            {
+            if (type != null) {
                 int data = type == ConnectedType.PIPE ? 0b01 : 0b10;
                 connectionData |= data << (face.ordinal() * 2);
             }
@@ -122,15 +111,12 @@ public final class Pipe implements IPipe, IDebuggable
 
     // network
 
-    public Pipe(IPipeHolder holder, PacketBufferBC buffer, NetworkEvent.Context ctx) throws IOException
-    {
+    public Pipe(IPipeHolder holder, PacketBufferBC buffer, NetworkEvent.Context ctx) throws IOException {
         this.holder = holder;
-        try
-        {
+        try {
             this.definition = PipeRegistry.INSTANCE.loadDefinition(buffer.readUtf(256));
         }
-        catch (InvalidInputDataException e)
-        {
+        catch (InvalidInputDataException e) {
             throw new IOException(e);
         }
         this.behaviour = definition.logicConstructor.createBehaviour(this);
@@ -139,29 +125,22 @@ public final class Pipe implements IPipe, IDebuggable
         this.flow.readPayload(PipeFlow.NET_ID_FULL_STATE, buffer, NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    public void writeCreationPayload(PacketBufferBC buffer)
-    {
+    public void writeCreationPayload(PacketBufferBC buffer) {
         buffer.writeUtf(definition.identifier.toString());
         writePayload(buffer, Dist.DEDICATED_SERVER);
         flow.writePayload(PipeFlow.NET_ID_FULL_STATE, buffer, Dist.DEDICATED_SERVER);
     }
 
-    public void writePayload(PacketBufferBC buffer, Dist side)
-    {
-        if (side == Dist.DEDICATED_SERVER)
-        {
+    public void writePayload(PacketBufferBC buffer, Dist side) {
+        if (side == Dist.DEDICATED_SERVER) {
             buffer.writeByte(colour == null ? 0 : colour.getId() + 1);
-            for (Direction face : Direction.values())
-            {
+            for (Direction face : Direction.values()) {
                 Float con = connected.get(face);
-                if (con != null)
-                {
+                if (con != null) {
                     buffer.writeBoolean(true);
                     buffer.writeFloat(con);
                     MessageUtil.writeEnumOrNull(buffer, types.get(face));
-                }
-                else
-                {
+                } else {
                     buffer.writeBoolean(false);
                 }
             }
@@ -171,20 +150,16 @@ public final class Pipe implements IPipe, IDebuggable
 
     @OnlyIn(Dist.CLIENT)
 //    public void readPayload(PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    public void readPayload(PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
+    public void readPayload(PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
             connected.clear();
             types.clear();
 
             int nColour = buffer.readUnsignedByte();
             colour = nColour == 0 ? null : DyeColor.byId(nColour - 1);
 
-            for (Direction face : Direction.values())
-            {
-                if (buffer.readBoolean())
-                {
+            for (Direction face : Direction.values()) {
+                if (buffer.readBoolean()) {
                     float dist = buffer.readFloat();
 
                     connected.put(face, dist);
@@ -207,8 +182,7 @@ public final class Pipe implements IPipe, IDebuggable
                     () ->
                     {
                         PipeModelKey model = getModel();
-                        if (!model.equals(lastModel))
-                        {
+                        if (!model.equals(lastModel)) {
                             lastModel = model;
                             getHolder().scheduleRenderUpdate();
                         }
@@ -221,40 +195,33 @@ public final class Pipe implements IPipe, IDebuggable
     // IPipe
 
     @Override
-    public IPipeHolder getHolder()
-    {
+    public IPipeHolder getHolder() {
         return holder;
     }
 
     @Override
-    public PipeDefinition getDefinition()
-    {
+    public PipeDefinition getDefinition() {
         return definition;
     }
 
     @Override
-    public PipeBehaviour getBehaviour()
-    {
+    public PipeBehaviour getBehaviour() {
         return behaviour;
     }
 
     @Override
-    public PipeFlow getFlow()
-    {
+    public PipeFlow getFlow() {
         return flow;
     }
 
     @Override
-    public DyeColor getColour()
-    {
+    public DyeColor getColour() {
         return this.colour;
     }
 
     @Override
-    public void setColour(DyeColor colour)
-    {
-        if (definition.canBeColoured)
-        {
+    public void setColour(DyeColor colour) {
+        if (definition.canBeColoured) {
             this.colour = colour;
             markForUpdate();
         }
@@ -263,15 +230,13 @@ public final class Pipe implements IPipe, IDebuggable
     // Caps
 
     //    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, Direction facing)
-    {
+    public boolean hasCapability(@Nonnull Capability<?> capability, Direction facing) {
 //        return getCapability(capability, facing) != null;
         return getCapability(capability, facing).isPresent();
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing)
-    {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
         LazyOptional<T> val = behaviour.getCapability(capability, facing);
         if (val.isPresent()) return val;
         return flow.getCapability(capability, facing);
@@ -279,31 +244,25 @@ public final class Pipe implements IPipe, IDebuggable
 
     // misc
 
-    public void onLoad()
-    {
+    public void onLoad() {
         markForUpdate();
     }
 
-    public void onTick()
-    {
-        if (updateMarked)
-        {
+    public void onTick() {
+        if (updateMarked) {
             // Ensure that the behaviour and flow *always* get valid connection data
             // (for example if we just read from disk)
             updateConnections();
         }
         behaviour.onTick();
         flow.onTick();
-        if (updateMarked)
-        {
+        if (updateMarked) {
             updateConnections();
         }
     }
 
-    private void updateConnections()
-    {
-        if (holder.getPipeWorld().isClientSide)
-        {
+    private void updateConnections() {
+        if (holder.getPipeWorld().isClientSide) {
             return;
         }
         updateMarked = false;
@@ -313,34 +272,27 @@ public final class Pipe implements IPipe, IDebuggable
         connected.clear();
         types.clear();
 
-        for (Direction facing : Direction.values())
-        {
+        for (Direction facing : Direction.values()) {
             PipePluggable plug = getHolder().getPluggable(facing);
-            if (plug != null && plug.isBlocking())
-            {
+            if (plug != null && plug.isBlocking()) {
                 continue;
             }
             BlockEntity oTile = getHolder().getNeighbourTile(facing);
-            if (oTile == null)
-            {
+            if (oTile == null) {
                 continue;
             }
             IPipe oPipe = getHolder().getNeighbourPipe(facing);
-            if (oPipe != null)
-            {
+            if (oPipe != null) {
                 PipeBehaviour oBehaviour = oPipe.getBehaviour();
-                if (oBehaviour == null)
-                {
+                if (oBehaviour == null) {
                     continue;
                 }
 //                PipePluggable oPlug = oTile.getCapability(PipeApi.CAP_PLUG, facing.getOpposite());
                 LazyOptional<PipePluggable> capOptional = oTile.getCapability(PipeApi.CAP_PLUG, facing.getOpposite());
 //                PipePluggable oPlug = oTile.getCapability(PipeApi.CAP_PLUG, facing.getOpposite()).orElseGet(()->null);
 //                if (oPlug == null || !oPlug.isBlocking())
-                if ((!capOptional.isPresent()) || !capOptional.resolve().get().isBlocking())
-                {
-                    if (canPipesConnect(facing, this, oPipe))
-                    {
+                if ((!capOptional.isPresent()) || !capOptional.resolve().get().isBlocking()) {
+                    if (canPipesConnect(facing, this, oPipe)) {
                         connected.put(facing, DEFAULT_CONNECTION_DISTANCE);
                         types.put(facing, ConnectedType.PIPE);
                     }
@@ -352,8 +304,7 @@ public final class Pipe implements IPipe, IDebuggable
             BlockState neighbour = holder.getPipeWorld().getBlockState(nPos);
 
             ICustomPipeConnection cust = PipeConnectionAPI.getCustomConnection(neighbour.getBlock());
-            if (cust == null)
-            {
+            if (cust == null) {
                 cust = DefaultPipeConnection.INSTANCE;
             }
             float ext = DEFAULT_CONNECTION_DISTANCE
@@ -366,17 +317,13 @@ public final class Pipe implements IPipe, IDebuggable
                 types.put(facing, ConnectedType.TILE);
             }
         }
-        if (!old.equals(connected))
-        {
-            for (Direction face : Direction.values())
-            {
+        if (!old.equals(connected)) {
+            for (Direction face : Direction.values()) {
                 boolean o = old.containsKey(face);
                 boolean n = connected.containsKey(face);
-                if (o != n)
-                {
+                if (o != n) {
                     IPipe oPipe = getHolder().getNeighbourPipe(face);
-                    if (oPipe != null)
-                    {
+                    if (oPipe != null) {
                         oPipe.markForUpdate();
                     }
                     holder.fireEvent(new PipeEventConnectionChange(holder, face));
@@ -386,13 +333,11 @@ public final class Pipe implements IPipe, IDebuggable
         getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
     }
 
-    public void addDrops(NonNullList<ItemStack> toDrop, int fortune)
-    {
+    public void addDrops(NonNullList<ItemStack> toDrop, int fortune) {
         // Calen: reg different item object for different colour
 //        Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition);
         Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition, colour);
-        if (item != null)
-        {
+        if (item != null) {
 //            toDrop.add(new ItemStack(item, 1, colour == null ? 0 : 1 + colour.ordinal()));
 //            ItemStack stack = new ItemStack(item, 1);
 //            ColourUtil.addColorTagToStack(stack, colour == null ? 0 : 1 + colour.ordinal());
@@ -406,41 +351,34 @@ public final class Pipe implements IPipe, IDebuggable
         behaviour.addDrops(toDrop, fortune);
     }
 
-    public static boolean canPipesConnect(Direction to, IPipe one, IPipe two)
-    {
+    public static boolean canPipesConnect(Direction to, IPipe one, IPipe two) {
         return canColoursConnect(one.getColour(), two.getColour())//
                 && canBehavioursConnect(to, one.getBehaviour(), two.getBehaviour())//
                 && canFlowsConnect(to, one.getFlow(), two.getFlow());
     }
 
-    public static boolean canColoursConnect(DyeColor one, DyeColor two)
-    {
+    public static boolean canColoursConnect(DyeColor one, DyeColor two) {
         return one == null || two == null || one == two;
     }
 
-    public static boolean canBehavioursConnect(Direction to, PipeBehaviour one, PipeBehaviour two)
-    {
+    public static boolean canBehavioursConnect(Direction to, PipeBehaviour one, PipeBehaviour two) {
         return one.canConnect(to, two) && two.canConnect(to.getOpposite(), one);
     }
 
-    public static boolean canFlowsConnect(Direction to, PipeFlow one, PipeFlow two)
-    {
+    public static boolean canFlowsConnect(Direction to, PipeFlow one, PipeFlow two) {
         return one.canConnect(to, two) && two.canConnect(to.getOpposite(), one);
     }
 
     @Override
-    public void markForUpdate()
-    {
+    public void markForUpdate() {
         updateMarked = true;
     }
 
     @OnlyIn(Dist.CLIENT)
-    public PipeModelKey getModel()
-    {
+    public PipeModelKey getModel() {
         PipeFaceTex[] sides = new PipeFaceTex[6];
         float[] mc = new float[6];
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             int i = face.ordinal();
             sides[i] = behaviour.getTextureData(face);
             mc[i] = getConnectedDist(face);
@@ -449,17 +387,12 @@ public final class Pipe implements IPipe, IDebuggable
     }
 
     @Override
-    public BlockEntity getConnectedTile(Direction side)
-    {
-        if (connected.containsKey(side))
-        {
+    public BlockEntity getConnectedTile(Direction side) {
+        if (connected.containsKey(side)) {
             BlockEntity offset = getHolder().getNeighbourTile(side);
-            if (offset == null && !getHolder().getPipeWorld().isClientSide)
-            {
+            if (offset == null && !getHolder().getPipeWorld().isClientSide) {
                 markForUpdate();
-            }
-            else
-            {
+            } else {
                 return offset;
             }
         }
@@ -467,17 +400,12 @@ public final class Pipe implements IPipe, IDebuggable
     }
 
     @Override
-    public IPipe getConnectedPipe(Direction side)
-    {
-        if (connected.containsKey(side) && getConnectedType(side) == ConnectedType.PIPE)
-        {
+    public IPipe getConnectedPipe(Direction side) {
+        if (connected.containsKey(side) && getConnectedType(side) == ConnectedType.PIPE) {
             IPipe offset = getHolder().getNeighbourPipe(side);
-            if (offset == null && !getHolder().getPipeWorld().isClientSide)
-            {
+            if (offset == null && !getHolder().getPipeWorld().isClientSide) {
                 markForUpdate();
-            }
-            else
-            {
+            } else {
                 return offset;
             }
         }
@@ -485,60 +413,49 @@ public final class Pipe implements IPipe, IDebuggable
     }
 
     @Override
-    public ConnectedType getConnectedType(Direction side)
-    {
+    public ConnectedType getConnectedType(Direction side) {
         return types.get(side);
     }
 
     @Override
-    public boolean isConnected(Direction side)
-    {
+    public boolean isConnected(Direction side) {
         return connected.containsKey(side);
     }
 
-    public float getConnectedDist(Direction face)
-    {
+    public float getConnectedDist(Direction face) {
         Float custom = connected.get(face);
         return custom == null ? 0 : custom;
     }
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
 //        left.add("Colour = " + colour);
         left.add(new TextComponent("Colour = " + colour));
 //        left.add("Definition = " + definition.identifier);
         left.add(new TextComponent("Definition = " + definition.identifier));
-        if (behaviour instanceof IDebuggable)
-        {
+        if (behaviour instanceof IDebuggable) {
 //            left.add("Behaviour:");
             left.add(new TextComponent("Behaviour:"));
             ((IDebuggable) behaviour).getDebugInfo(left, right, side);
 //            left.add("");
             left.add(new TextComponent(""));
-        }
-        else
-        {
+        } else {
 //            left.add("Behaviour = " + behaviour.getClass());
             left.add(new TextComponent("Behaviour = " + behaviour.getClass()));
         }
 
-        if (flow instanceof IDebuggable)
-        {
+        if (flow instanceof IDebuggable) {
 //            left.add("Flow:");
             left.add(new TextComponent("Flow:"));
             ((IDebuggable) flow).getDebugInfo(left, right, side);
 //            left.add("");
             left.add(new TextComponent(""));
-        }
-        else
-        {
+        } else {
 //            left.add("Flow = " + flow.getClass());
             left.add(new TextComponent("Flow = " + flow.getClass()));
         }
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
 //            right.add(face + " = " + types.get(face) + ", " + getConnectedDist(face));
             right.add(new TextComponent(face + " = " + types.get(face) + ", " + getConnectedDist(face)));
         }

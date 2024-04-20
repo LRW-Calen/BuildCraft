@@ -11,7 +11,7 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BCFactoryBlocks {
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCFactory.MOD_ID);
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCFactory.MODID);
 
     public static RegistryObject<BlockAutoWorkbenchItems> autoWorkbenchItems;
     //    public static RegistryObject<BlockAutoWorkbenchFluids> autoWorkbenchFluids;
@@ -105,7 +105,7 @@ public class BCFactoryBlocks {
         heatExchangeTile = HELPER.registerTile("tile.heat_exchange", TileHeatExchange::new, heatExchange);
     }
 
-    public static void init() {
+    public static void fmlPreInit() {
 
     }
 

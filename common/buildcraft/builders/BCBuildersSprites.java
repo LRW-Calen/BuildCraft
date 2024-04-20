@@ -15,8 +15,7 @@ import net.minecraft.core.Direction;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class BCBuildersSprites
-{
+public class BCBuildersSprites {
     public static final SpriteHolder FILLER_PLANNER;
     public static final SpriteHolder ROBOT;
 

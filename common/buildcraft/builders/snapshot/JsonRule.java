@@ -12,8 +12,7 @@ import net.minecraft.nbt.CompoundTag;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
-public class JsonRule
-{
+public class JsonRule {
     public List<JsonSelector> selectors = null;
     public List<RequiredExtractor> requiredExtractors = null;
     public List<BlockPos> requiredBlockOffsets = null;

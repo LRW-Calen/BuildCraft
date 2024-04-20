@@ -24,10 +24,8 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge_1_12_2.common.config.Configuration;
 import net.minecraftforge_1_12_2.common.config.Property;
 
-public class BCTransportConfig
-{
-    public enum PowerLossMode
-    {
+public class BCTransportConfig {
+    public enum PowerLossMode {
         LOSSLESS,
         PERCENTAGE,
         ABSOLUTE;
@@ -51,8 +49,7 @@ public class BCTransportConfig
     private static Property propFluidPipeColourBorder;
     private static Property propLossMode;
 
-    public static void preInit()
-    {
+    public static void preInit() {
 //        Configuration config = BCCoreConfig.config;
         Configuration config = BCCoreConfig.getConfig(true);
         propMjPerMillibucket = config.get("general", "pipes.mjPerMillibucket", (int) mjPerMillibucket)
@@ -75,20 +72,16 @@ public class BCTransportConfig
         MinecraftForge.EVENT_BUS.register(BCTransportConfig.class);
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted)
-    {
+    public static void reloadConfig(EnumRestartRequirement restarted) {
 
-        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted))
-        {
+        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
             mjPerMillibucket = propMjPerMillibucket.getLong();
-            if (mjPerMillibucket < MJ_REQ_MILLIBUCKET_MIN)
-            {
+            if (mjPerMillibucket < MJ_REQ_MILLIBUCKET_MIN) {
                 mjPerMillibucket = MJ_REQ_MILLIBUCKET_MIN;
             }
 
             mjPerItem = propMjPerItem.getLong();
-            if (mjPerItem < MJ_REQ_ITEM_MIN)
-            {
+            if (mjPerItem < MJ_REQ_ITEM_MIN) {
                 mjPerItem = MJ_REQ_ITEM_MIN;
             }
 
@@ -127,13 +120,11 @@ public class BCTransportConfig
         }
     }
 
-    private static void fluidTransfer(PipeDefinition def, int rate, int delay)
-    {
+    private static void fluidTransfer(PipeDefinition def, int rate, int delay) {
         PipeApi.fluidTransferData.put(def, new PipeApi.FluidTransferInfo(rate, delay));
     }
 
-    private static void powerTransfer(PipeDefinition def, int transferMultiplier, int resistanceDivisor, boolean recv)
-    {
+    private static void powerTransfer(PipeDefinition def, int transferMultiplier, int resistanceDivisor, boolean recv) {
         long transfer = MjAPI.MJ * transferMultiplier;
         long resistance = MjAPI.MJ / resistanceDivisor;
         PipeApi.powerTransferData.put(def, PowerTransferInfo.createFromResistance(transfer, resistance, recv));
@@ -141,14 +132,11 @@ public class BCTransportConfig
 
     @SubscribeEvent
 //    public static void onConfigChange(OnConfigChangedEvent cce)
-    public static void onConfigChange(ModConfigEvent.Reloading cce)
-    {
-        if (BCModules.isBcMod(cce.getConfig().getModId()))
-        {
+    public static void onConfigChange(ModConfigEvent.Reloading cce) {
+        if (BCModules.isBcMod(cce.getConfig().getModId())) {
             EnumRestartRequirement req = EnumRestartRequirement.NONE;
 //            if (Loader.instance().isInState(LoaderState.AVAILABLE))
-            if (ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE)
-            {
+            if (ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE) {
                 // The loaders state will be LoaderState.SERVER_STARTED when we are in a world
                 req = EnumRestartRequirement.WORLD;
             }

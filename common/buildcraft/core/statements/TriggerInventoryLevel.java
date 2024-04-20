@@ -17,7 +17,6 @@ import buildcraft.lib.misc.ObjectUtilBC;
 import buildcraft.lib.misc.StackUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -27,12 +26,10 @@ import net.minecraftforge.items.IItemHandler;
 
 import java.util.Locale;
 
-public class TriggerInventoryLevel extends BCStatement implements ITriggerExternal
-{
+public class TriggerInventoryLevel extends BCStatement implements ITriggerExternal {
     public TriggerType type;
 
-    public TriggerInventoryLevel(TriggerType type)
-    {
+    public TriggerInventoryLevel(TriggerType type) {
         super("buildcraft:inventorylevel." + type.name().toLowerCase(Locale.ROOT),
                 "buildcraft.inventorylevel." + type.name().toLowerCase(Locale.ROOT),
                 "buildcraft.filteredBuffer." + type.name().toLowerCase(Locale.ROOT)
@@ -41,40 +38,34 @@ public class TriggerInventoryLevel extends BCStatement implements ITriggerExtern
     }
 
     @Override
-    public int maxParameters()
-    {
+    public int maxParameters() {
         return 1;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return BCCoreSprites.TRIGGER_INVENTORY_LEVEL.get(type);
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return String.format(LocaleUtil.localize("gate.trigger.inventorylevel.below"), (int) (type.level * 100));
         return new TranslatableComponent("gate.trigger.inventorylevel.below", (int) (type.level * 100));
     }
 
     // Calen
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
 //        return String.format(LocaleUtil.localize("gate.trigger.inventorylevel.below"), (int) (type.level * 100));
         return "gate.trigger.inventorylevel.below." + (int) (type.level * 100);
     }
 
     @Override
     public boolean isTriggerActive(BlockEntity tile, Direction side, IStatementContainer container,
-                                   IStatementParameter[] parameters)
-    {
+                                   IStatementParameter[] parameters) {
         IItemHandler itemHandler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElseGet(() -> null);
-        if (itemHandler == null)
-        {
+        if (itemHandler == null) {
             return false;
         }
         IItemHandlerFiltered filters = ObjectUtilBC.castOrNull(itemHandler, IItemHandlerFiltered.class);
@@ -83,56 +74,40 @@ public class TriggerInventoryLevel extends BCStatement implements ITriggerExtern
 
         int itemSpace = 0;
         int foundItems = 0;
-        for (int slot = 0; slot < itemHandler.getSlots(); slot++)
-        {
+        for (int slot = 0; slot < itemHandler.getSlots(); slot++) {
             ItemStack stackInSlot = itemHandler.getStackInSlot(slot);
-            if (stackInSlot.isEmpty())
-            {
-                if (searchStack.isEmpty())
-                {
+            if (stackInSlot.isEmpty()) {
+                if (searchStack.isEmpty()) {
                     itemSpace += itemHandler.getSlotLimit(slot);
-                }
-                else
-                {
-                    if (searchStack.getItem() instanceof IList)
-                    {
+                } else {
+                    if (searchStack.getItem() instanceof IList) {
                         // Unfortunately lists are too generic to work properly
                         // without a simple filtered inventory.
                         ItemStack filter = filters == null ? ItemStack.EMPTY : filters.getFilter(slot);
-                        if (StackUtil.matchesStackOrList(searchStack, filter))
-                        {
+                        if (StackUtil.matchesStackOrList(searchStack, filter)) {
                             itemSpace += Math.min(filter.getMaxStackSize(), itemHandler.getSlotLimit(slot));
                         }
-                    }
-                    else
-                    {
+                    } else {
                         ItemStack stack = searchStack.copy();
                         int count = Math.min(itemHandler.getSlotLimit(slot), searchStack.getMaxStackSize());
                         stack.setCount(count);
                         ItemStack leftOver = itemHandler.insertItem(slot, stack, true);
-                        if (leftOver.isEmpty())
-                        {
+                        if (leftOver.isEmpty()) {
                             itemSpace += count;
-                        }
-                        else
-                        {
+                        } else {
                             itemSpace += count - leftOver.getCount();
                         }
                     }
                 }
-            }
-            else
-            {
-                if (searchStack.isEmpty() || StackUtil.matchesStackOrList(searchStack, stackInSlot))
-                {
+            } else {
+                if (searchStack.isEmpty() || StackUtil.matchesStackOrList(searchStack, stackInSlot)) {
                     itemSpace += Math.min(stackInSlot.getMaxStackSize(), itemHandler.getSlotLimit(slot));
                     foundItems += stackInSlot.getCount();
                 }
             }
         }
 
-        if (itemSpace > 0)
-        {
+        if (itemSpace > 0) {
             float percentage = foundItems / (float) itemSpace;
             return percentage < type.level;
         }
@@ -141,25 +116,21 @@ public class TriggerInventoryLevel extends BCStatement implements ITriggerExtern
     }
 
     @Override
-    public IStatementParameter createParameter(int index)
-    {
+    public IStatementParameter createParameter(int index) {
         return new StatementParameterItemStack();
     }
 
     @Override
-    public IStatement[] getPossible()
-    {
+    public IStatement[] getPossible() {
         return BCCoreStatements.TRIGGER_INVENTORY_ALL;
     }
 
-    public enum TriggerType
-    {
+    public enum TriggerType {
         BELOW25(0.25F),
         BELOW50(0.5F),
         BELOW75(0.75F);
 
-        TriggerType(float level)
-        {
+        TriggerType(float level) {
             this.level = level;
         }
 

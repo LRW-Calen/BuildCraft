@@ -6,16 +6,13 @@ package buildcraft.core;
 
 import buildcraft.core.item.ItemList_BC8;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkHooks;
 
-public enum BCCoreGuis
-{
+public enum BCCoreGuis {
     LIST;
 
     //    public void openGUI(Player player)
@@ -27,17 +24,12 @@ public enum BCCoreGuis
 //    {
 ////        player.openGui(BuildCraft.INSTANCE, ordinal(), player.getLevel(), pos.getX(), pos.getY(), pos.getZ());
 //    }
-    public void openGUI(Player player, ItemStack stack)
-    {
-        if (player instanceof ServerPlayer serverPlayer)
-        {
+    public void openGUI(Player player, ItemStack stack) {
+        if (player instanceof ServerPlayer serverPlayer) {
 //            player.openMenu(state.getMenuProvider(player.level, pos));
-            if (stack.getItem() instanceof ItemList_BC8 list)
-            {
+            if (stack.getItem() instanceof ItemList_BC8 list) {
                 NetworkHooks.openGui(serverPlayer, list, serverPlayer.blockPosition());
-            }
-            else
-            {
+            } else {
                 player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
             }
         }

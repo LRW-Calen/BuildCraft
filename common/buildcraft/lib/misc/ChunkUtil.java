@@ -13,38 +13,29 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 
-public class ChunkUtil
-{
+public class ChunkUtil {
     private static final ThreadLocal<LevelChunk> lastChunk = new ThreadLocal<>();
 
-    public static LevelChunk getChunk(Level world, BlockPos pos, boolean force)
-    {
+    public static LevelChunk getChunk(Level world, BlockPos pos, boolean force) {
         return getChunk(world, pos.getX() >> 4, pos.getZ() >> 4, force);
     }
 
-    public static LevelChunk getChunk(Level world, ChunkPos pos, boolean force)
-    {
+    public static LevelChunk getChunk(Level world, ChunkPos pos, boolean force) {
         return getChunk(world, pos.x, pos.z, force);
     }
 
-    public static LevelChunk getChunk(Level world, int x, int z, boolean force)
-    {
+    public static LevelChunk getChunk(Level world, int x, int z, boolean force) {
         LevelChunk chunk = lastChunk.get();
 
-        if (chunk != null)
-        {
+        if (chunk != null) {
 //            if (chunk.isLoaded())
 //            if (WorldUtils.isChunkLoaded(world, new ChunkPos(x, z)))
             ChunkAccess chunkAccess = world.getChunkSource().getChunk(x, z, ChunkStatus.FULL, false);
-            if (chunkAccess != null)
-            {
-                if (chunk.getLevel() == world && chunk.getPos().x == x && chunk.getPos().z == z)
-                {
+            if (chunkAccess != null) {
+                if (chunk.getLevel() == world && chunk.getPos().x == x && chunk.getPos().z == z) {
                     return chunk;
                 }
-            }
-            else
-            {
+            } else {
                 lastChunk.set(null);
             }
         }
@@ -59,8 +50,7 @@ public class ChunkUtil
 //        }
         chunk = world.getChunkSource().getChunk(x, z, force);
 
-        if (chunk != null)
-        {
+        if (chunk != null) {
             lastChunk.set(chunk);
         }
         return chunk;

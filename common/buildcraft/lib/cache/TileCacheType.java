@@ -4,8 +4,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 import java.util.function.Function;
 
-public enum TileCacheType
-{
+public enum TileCacheType {
     NO_CACHE(tile -> NoopTileCache.INSTANCE),
     NEIGHBOUR_CACHE(NeighbourTileCache::new);
 

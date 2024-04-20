@@ -21,7 +21,10 @@ package buildcraft.energy.generation;
 import buildcraft.api.core.BCLog;
 import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyConfig;
-import buildcraft.energy.generation.structure.*;
+import buildcraft.energy.generation.structure.$OilStructurePlacement;
+import buildcraft.energy.generation.structure.EnergyStructureFeatureRegistry;
+import buildcraft.energy.generation.structure.OilFeatureConfiguration;
+import buildcraft.energy.generation.structure.OilStructureGenerator;
 import buildcraft.lib.oredicttag.OreDictTags;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
@@ -42,19 +45,16 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.List;
 
-public final class BCStructures
-{
+public final class BCStructures {
     // Calen for test
     public static final StructurePlacementType<$OilStructurePlacement> OIL = register("buildcraft:oil_well", $OilStructurePlacement.CODEC);
 
-    private static <SP extends StructurePlacement> StructurePlacementType<SP> register(String id, Codec<SP> codec)
-    {
+    private static <SP extends StructurePlacement> StructurePlacementType<SP> register(String id, Codec<SP> codec) {
         return Registry.register(Registry.STRUCTURE_PLACEMENT_TYPE, id, () -> codec);
     }
 
 
-    public static void register(RegistryEvent.Register<StructureFeature<?>> event)
-    {
+    public static void register(RegistryEvent.Register<StructureFeature<?>> event) {
         BCStructures.init(event.getRegistry());
 
     }
@@ -62,13 +62,11 @@ public final class BCStructures
     public static Holder<ConfiguredStructureFeature<?, ?>> CONFIGURED_INSTANCE_OIL_STRUCTURE;
 
     // Calen: called if config allows
-    public static void init(IForgeRegistry<StructureFeature<?>> registry)
-    {
-        if (BCEnergyConfig.enableOilGeneration)
-        {
+    public static void init(IForgeRegistry<StructureFeature<?>> registry) {
+        if (BCEnergyConfig.enableOilGeneration) {
             registerStructure(
                     registry,
-                    new ResourceLocation(BCEnergy.MOD_ID, BCWorldGenNames.STRUCTURE_OIL_WELL),
+                    new ResourceLocation(BCEnergy.MODID, BCWorldGenNames.STRUCTURE_OIL_WELL),
                     EnergyStructureFeatureRegistry.OIL_WELL,
 //                Decoration.TOP_LAYER_MODIFICATION
                     Decoration.FLUID_SPRINGS
@@ -99,9 +97,7 @@ public final class BCStructures
                     )
             );
             BCLog.logger.info("[energy.oilgen] Registered the oil spout generator");
-        }
-        else
-        {
+        } else {
             BCLog.logger.info("[energy.oilgen] Not registering the oil spout generator, as it has been disabled by the config file.");
         }
     }
@@ -113,8 +109,7 @@ public final class BCStructures
             ResourceLocation id,
             F structure,
             Decoration stage
-    )
-    {
+    ) {
         StructureFeature.STEP.put(structure, stage);
         structure.setRegistryName(id);
         registry.register(structure);

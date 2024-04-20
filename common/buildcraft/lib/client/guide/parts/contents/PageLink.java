@@ -6,15 +6,13 @@ import buildcraft.lib.client.guide.parts.GuidePageFactory;
 import buildcraft.lib.client.guide.parts.GuidePart;
 import buildcraft.lib.client.guide.parts.GuideText;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-public abstract class PageLink implements IContentsLeaf
-{
+public abstract class PageLink implements IContentsLeaf {
 
     public final PageLine text;
     public final String textKey;
@@ -23,8 +21,7 @@ public abstract class PageLink implements IContentsLeaf
     private final Component lowerCaseName;
     private boolean visible;
 
-    public PageLink(PageLine text, boolean startVisible)
-    {
+    public PageLink(PageLine text, boolean startVisible) {
         this.text = text;
         this.startVisible = startVisible;
 //        lowerCaseName = text.text.toLowerCase(Locale.ROOT);
@@ -36,16 +33,14 @@ public abstract class PageLink implements IContentsLeaf
 
     @Override
 //    public String getSearchName()
-    public Component getSearchName()
-    {
+    public Component getSearchName() {
         return lowerCaseName;
     }
     // Calen
 
 
     @Override
-    public String getKey()
-    {
+    public String getKey() {
         return textKey;
     }
 
@@ -53,46 +48,37 @@ public abstract class PageLink implements IContentsLeaf
      * @return The tooltip to be shown if it is different to the search name and displayed text.
      */
     @Nullable
-    protected List<Component> getTooltip()
-    {
+    protected List<Component> getTooltip() {
         return null;
     }
 
-    public void appendTooltip(GuiGuide gui)
-    {
+    public void appendTooltip(GuiGuide gui) {
         List<Component> tooltip = getTooltip();
-        if (tooltip != null && !tooltip.isEmpty())
-        {
+        if (tooltip != null && !tooltip.isEmpty()) {
             gui.tooltips.add(tooltip);
         }
     }
 
     @Override
-    public boolean isVisible()
-    {
+    public boolean isVisible() {
         return visible;
     }
 
     @Override
-    public void setVisible(Set<PageLink> matches)
-    {
+    public void setVisible(Set<PageLink> matches) {
         visible = matches.contains(this);
     }
 
     @Override
-    public void resetVisibility()
-    {
+    public void resetVisibility() {
         visible = startVisible;
     }
 
     @Override
-    public GuidePart createGuidePart(GuiGuide gui)
-    {
-        return new GuideText(gui, text)
-        {
+    public GuidePart createGuidePart(GuiGuide gui) {
+        return new GuideText(gui, text) {
             @Override
-            protected void renderTooltip()
-            {
+            protected void renderTooltip() {
                 appendTooltip(gui);
             }
         };

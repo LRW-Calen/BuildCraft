@@ -14,8 +14,7 @@ import java.util.Objects;
 
 /** Holds information on what a single laser in the world: its {@link LaserType}, is position, its size, and some other
  * misc rendering info. */
-public class LaserData_BC8
-{
+public class LaserData_BC8 {
     public final LaserType laserType;
     public final Vec3 start, end;
     public final double scale;

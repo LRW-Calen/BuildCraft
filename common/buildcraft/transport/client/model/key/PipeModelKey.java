@@ -22,8 +22,8 @@ public final class PipeModelKey {
 
     static {
         PipeFaceTex sprite = PipeFaceTex.get(0);
-        PipeFaceTex[] sides = { sprite, sprite, sprite, sprite, sprite, sprite };
-        float[] connected = { 0, 0, 0, 0, 0, 0 };
+        PipeFaceTex[] sides = {sprite, sprite, sprite, sprite, sprite, sprite};
+        float[] connected = {0, 0, 0, 0, 0, 0};
         DEFAULT_KEY = new PipeModelKey(null, sprite, sides, connected, null);
     }
 
@@ -35,18 +35,18 @@ public final class PipeModelKey {
     private final int hash;
 
     public PipeModelKey(PipeDefinition definition, PipeFaceTex center, PipeFaceTex[] sides, float[] connected,
-        DyeColor colour) {
+                        DyeColor colour) {
         this.definition = definition;
         this.center = center;
         this.sides = sides;
         this.connected = connected;
         this.colour = colour;
-        this.hash = Arrays.hashCode(new int[] { //
-            Objects.hashCode(definition), //
-            Objects.hashCode(center), //
-            Arrays.hashCode(sides), //
-            Arrays.hashCode(connected), //
-            Objects.hashCode(colour)//
+        this.hash = Arrays.hashCode(new int[]{ //
+                Objects.hashCode(definition), //
+                Objects.hashCode(center), //
+                Arrays.hashCode(sides), //
+                Arrays.hashCode(connected), //
+                Objects.hashCode(colour)//
         });
     }
 

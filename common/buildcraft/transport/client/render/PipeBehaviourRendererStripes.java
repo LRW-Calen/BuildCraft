@@ -12,29 +12,24 @@ import buildcraft.transport.BCTransportModels;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public enum PipeBehaviourRendererStripes implements IPipeBehaviourRenderer<PipeBehaviourStripes>
-{
+public enum PipeBehaviourRendererStripes implements IPipeBehaviourRenderer<PipeBehaviourStripes> {
     INSTANCE;
 
     @Override
 //    public void render(PipeBehaviourStripes stripes, double x, double y, double z, float partialTicks, BufferBuilder bb)
-    public void render(PipeBehaviourStripes stripes, float partialTicks, PoseStack poseStack, VertexConsumer bb, int combinedLight, int combinedOverlay)
-    {
+    public void render(PipeBehaviourStripes stripes, float partialTicks, PoseStack poseStack, VertexConsumer bb, int combinedLight, int combinedOverlay) {
         Direction dir = stripes.direction;
         if (dir == null) return;
         MutableQuad[] quads = BCTransportModels.getStripesDynQuads(dir);
         poseStack.pushPose();
 //        bb.setTranslation(x, y, z);
         int light = stripes.pipe.getHolder().getPipeWorld().getLightEngine().getRawBrightness(stripes.pipe.getHolder().getPipePos(), 0);
-        for (MutableQuad q : quads)
-        {
+        for (MutableQuad q : quads) {
             q.multShade();
             q.lighti(light);
             q.overlay(combinedOverlay);

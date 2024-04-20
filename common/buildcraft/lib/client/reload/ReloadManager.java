@@ -29,7 +29,8 @@ public enum ReloadManager {
     }
 
     public void addDependency(ReloadSource from, Runnable to) {
-        addDependency(from, (sources) -> {
+        addDependency(from, (sources) ->
+        {
             to.run();
             return false;
         }, null);
@@ -80,7 +81,8 @@ public enum ReloadManager {
             Iterator<Reloadable> potentialItr = potentialReloadables.iterator();
             while (potentialItr.hasNext()) {
                 Reloadable r = potentialItr.next();
-                searchForNonReloadedParent: {
+                searchForNonReloadedParent:
+                {
                     for (ReloadSource parent : parents.get(r)) {
                         if (allReloadable.contains(parent)) {
                             if (!reloaded.contains(parent)) {
@@ -108,7 +110,8 @@ public enum ReloadManager {
                 }
             }
             toReload.clear();
-        } while (hasChanged);
+        }
+        while (hasChanged);
         if (potentialReloadables.isEmpty()) {
             return;
         }
@@ -140,7 +143,7 @@ public enum ReloadManager {
             }
             Reloadable other = (Reloadable) obj;
             return reloadable == other.reloadable//
-                && Objects.equals(source, other.source);
+                    && Objects.equals(source, other.source);
         }
 
         @Override

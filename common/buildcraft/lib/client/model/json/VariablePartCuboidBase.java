@@ -9,9 +9,11 @@ package buildcraft.lib.client.model.json;
 import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.expression.FunctionContext;
+import buildcraft.lib.expression.api.IExpressionNode.INodeBoolean;
+import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
+import buildcraft.lib.expression.api.IExpressionNode.INodeLong;
 import buildcraft.lib.expression.node.value.NodeConstantBoolean;
 import buildcraft.lib.expression.node.value.NodeConstantLong;
-import buildcraft.lib.expression.api.IExpressionNode.*;
 import buildcraft.lib.misc.RenderUtil;
 import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -78,7 +80,7 @@ public abstract class VariablePartCuboidBase extends JsonVariableModelPart {
 
     public static class VariableFaceData {
         public ModelUtil.UvFaceData uvs = new ModelUtil.UvFaceData();
-//        public TextureAtlasSprite sprite;
+        //        public TextureAtlasSprite sprite;
         public LazyOptional<TextureAtlasSprite> sprite;
         public int rotations = 0;
         public boolean invertNormal = false;

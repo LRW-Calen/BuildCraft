@@ -1,25 +1,16 @@
-package buildcraft.builders;
+package buildcraft.builders.client;
 
+import buildcraft.builders.BCBuildersItems;
 import buildcraft.builders.item.ItemSchematicSingle;
 import buildcraft.builders.item.ItemSnapshot;
-import buildcraft.core.BCCore;
-import buildcraft.lib.misc.ColourUtil;
-import buildcraft.transport.BCTransportItems;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
-@Mod.EventBusSubscriber(modid = BCBuilders.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCBuildersModBusEventDist
-{
+public class BuildersItemModelPredicates {
     public static final ResourceLocation PREDICATE_USED = new ResourceLocation("buildcraft", "used");
 
-    @SubscribeEvent
-    public static void itemPropReg(FMLClientSetupEvent event)
-    {
+    public static void clientInit(FMLClientSetupEvent event) {
         event.enqueueWork(
                 () ->
                 {
@@ -41,13 +32,11 @@ public class BCBuildersModBusEventDist
                             (stack, world, entity, pSeed) ->
                             {
 //                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_USED && stack.getTag() != null && stack.getTag().contains(ItemSchematicSingle.NBT_KEY))
-                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_USED && stack.getTagElement(ItemSchematicSingle.NBT_KEY) != null)
-                                {
+                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_USED && stack.getTagElement(ItemSchematicSingle.NBT_KEY) != null) {
                                     return 1;
                                 }
 //                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_CLEAN || !stack.hasTag() || !stack.getTag().contains(ItemSchematicSingle.NBT_KEY))
-                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_CLEAN || stack.getTagElement(ItemSchematicSingle.NBT_KEY) == null)
-                                {
+                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_CLEAN || stack.getTagElement(ItemSchematicSingle.NBT_KEY) == null) {
                                     return 0;
                                 }
                                 throw new RuntimeException("[builders.item] damage not match nbt!");

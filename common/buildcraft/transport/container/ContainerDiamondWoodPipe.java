@@ -15,19 +15,16 @@ import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond.FilterMode;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.io.IOException;
 
-public class ContainerDiamondWoodPipe extends ContainerPipe
-{
+public class ContainerDiamondWoodPipe extends ContainerPipe {
     private final PipeBehaviourWoodDiamond behaviour;
     private final ItemHandlerSimple filterInv;
 
-    public ContainerDiamondWoodPipe(MenuType menuType, int id, Player player, PipeBehaviourWoodDiamond behaviour)
-    {
+    public ContainerDiamondWoodPipe(MenuType menuType, int id, Player player, PipeBehaviourWoodDiamond behaviour) {
         super(menuType, id, player, behaviour.pipe.getHolder());
         this.behaviour = behaviour;
         this.filterInv = behaviour.filters;
@@ -36,8 +33,7 @@ public class ContainerDiamondWoodPipe extends ContainerPipe
 
         addFullPlayerInventory(79);
 
-        for (int i = 0; i < 9; i++)
-        {
+        for (int i = 0; i < 9; i++) {
 //            addSlotToContainer(new SlotPhantom(filterInv, i, 8 + i * 18, 18));
             addSlot(new SlotPhantom(filterInv, i, 8 + i * 18, 18));
         }
@@ -45,24 +41,20 @@ public class ContainerDiamondWoodPipe extends ContainerPipe
 
     @Override
 //    public void onContainerClosed(Player player)
-    public void removed(Player player)
-    {
+    public void removed(Player player) {
 //        super.onContainerClosed(player);
         super.removed(player);
         behaviour.pipe.getHolder().onPlayerClose(player);
     }
 
-    public void sendNewFilterMode(FilterMode newFilterMode)
-    {
+    public void sendNewFilterMode(FilterMode newFilterMode) {
         this.sendMessage(NET_DATA, (buffer) -> buffer.writeEnum(newFilterMode));
     }
 
     @Override
-    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readMessage(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_SERVER)
-        {
+        if (side == NetworkDirection.PLAY_TO_SERVER) {
             behaviour.filterMode = buffer.readEnum(FilterMode.class);
             behaviour.pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
         }

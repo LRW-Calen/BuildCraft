@@ -11,8 +11,7 @@ import net.minecraft.world.level.block.Blocks;
 
 import java.util.Locale;
 
-public enum EnumGateMaterial
-{
+public enum EnumGateMaterial {
     CLAY_BRICK(Blocks.BRICKS, 1, false),
     IRON(Blocks.IRON_BLOCK, 2, true),
     NETHER_BRICK(Blocks.NETHER_BRICKS, 4, true),
@@ -25,17 +24,14 @@ public enum EnumGateMaterial
     public final boolean canBeModified;
     public final String tag = name().toLowerCase(Locale.ROOT);
 
-    EnumGateMaterial(Block block, int numSlots, boolean canBeModified)
-    {
+    EnumGateMaterial(Block block, int numSlots, boolean canBeModified) {
         this.block = block;
         this.numSlots = numSlots;
         this.canBeModified = canBeModified;
     }
 
-    public static EnumGateMaterial getByOrdinal(int ord)
-    {
-        if (ord < 0 || ord >= VALUES.length)
-        {
+    public static EnumGateMaterial getByOrdinal(int ord) {
+        if (ord < 0 || ord >= VALUES.length) {
             return EnumGateMaterial.CLAY_BRICK;
         }
         return VALUES[ord];
@@ -43,8 +39,7 @@ public enum EnumGateMaterial
 
     // Calen for create ResourceLocation
     @Override
-    public String toString()
-    {
+    public String toString() {
         return super.toString().toLowerCase();
     }
 }

@@ -4,7 +4,10 @@ import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.data.Box;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.IntArrayTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureFeatureManager;
 import net.minecraft.world.level.WorldGenLevel;
@@ -17,13 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class OilStructure extends StructurePiece
-{
+public class OilStructure extends StructurePiece {
     public final List<OilStructurePiece> pieces;
     public final Box containingBox;
 
-    public OilStructure(Box containingBox, List<OilStructurePiece> pieces)
-    {
+    public OilStructure(Box containingBox, List<OilStructurePiece> pieces) {
         super(EnergyStructureFeatureRegistry.STRUCTURE_PIECE_TYPE_OIL_STRUCTURE, 0, containingBox.getBB());
         this.pieces = pieces;
         this.containingBox = containingBox;
@@ -39,92 +40,71 @@ public class OilStructure extends StructurePiece
             BoundingBox bounds,
             ChunkPos chunkPos,
             BlockPos centerPos
-    )
-    {
+    ) {
         OilPlacer placer = new OilPlacer(level, this.pieces, bounds);
         placer.place();
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return pieces.isEmpty();
     }
 
     // Calen: StructurePiece Forced Override
     // Save as NBT
     @Override
-    protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag)
-    {
+    protected void addAdditionalSaveData(StructurePieceSerializationContext context, CompoundTag tag) {
         ListTag list = new ListTag();
-        for (OilStructurePiece piece : this.pieces)
-        {
+        for (OilStructurePiece piece : this.pieces) {
             CompoundTag tagOfPiece = new CompoundTag();
             CompoundTag fields = new CompoundTag();
-            if (piece.getClass() == OilStructurePiece.Spring.class)
-            {
+            if (piece.getClass() == OilStructurePiece.Spring.class) {
                 tagOfPiece.putString("class", "Spring");
                 IntArrayTag pos = NBTUtilBC.writeBlockPos(((OilStructurePiece.Spring) piece).pos);
                 fields.put("pos", pos);
-            }
-            else if (piece.getClass() == OilStructurePiece.Spout.class)
-            {
+            } else if (piece.getClass() == OilStructurePiece.Spout.class) {
                 tagOfPiece.putString("class", "Spout");
                 IntArrayTag start = NBTUtilBC.writeBlockPos(((OilStructurePiece.Spout) piece).start);
                 fields.put("start", start);
                 fields.putInt("radius", ((OilStructurePiece.Spout) piece).radius);
                 fields.putInt("height", ((OilStructurePiece.Spout) piece).height);
-            }
-            else if (piece.getClass() == OilStructurePiece.GenByPredicate.class)
-            {
+            } else if (piece.getClass() == OilStructurePiece.GenByPredicate.class) {
                 tagOfPiece.putString("class", "GenByPredicate");
                 Object[] predicateArgs = ((OilStructurePiece.GenByPredicate) piece).predicateArgs;
                 // BlockPos double
                 // center, radiusSq
-                if (predicateArgs.length == 2)
-                {
+                if (predicateArgs.length == 2) {
                     fields.put("center", NBTUtilBC.writeBlockPos((BlockPos) predicateArgs[0]));
                     fields.putDouble("radiusSq", (double) predicateArgs[1]);
                 }
                 // Axis int BlockPos double
                 // axis, toReplace, center, radiusSq
-                else if (predicateArgs.length == 4)
-                {
+                else if (predicateArgs.length == 4) {
                     fields.putString("axis", ((Direction.Axis) predicateArgs[0]).name());
                     fields.putInt("toReplace", (int) predicateArgs[1]);
                     fields.put("center", NBTUtilBC.writeBlockPos((BlockPos) predicateArgs[2]));
                     fields.putDouble("radiusSq", (double) predicateArgs[3]);
-                }
-                else
-                {
+                } else {
                     throw new RuntimeException("Unexpected Predicate Args Length!");
                 }
-            }
-            else if (piece.getClass() == OilStructurePiece.FlatPattern.class)
-            {
+            } else if (piece.getClass() == OilStructurePiece.FlatPattern.class) {
                 tagOfPiece.putString("class", "FlatPattern");
                 ListTag pattern = new ListTag();
-                for (boolean[] row : ((OilStructurePiece.FlatPattern) piece).pattern)
-                {
+                for (boolean[] row : ((OilStructurePiece.FlatPattern) piece).pattern) {
                     ListTag tagRow = NBTUtilBC.writeBooleanArray(row);
                     pattern.add(tagRow);
                 }
                 fields.put("pattern", pattern);
                 fields.putInt("depth", ((OilStructurePiece.FlatPattern) piece).depth);
-            }
-            else if (piece.getClass() == OilStructurePiece.PatternTerrainHeight.class)
-            {
+            } else if (piece.getClass() == OilStructurePiece.PatternTerrainHeight.class) {
                 tagOfPiece.putString("class", "PatternTerrainHeight");
                 ListTag pattern = new ListTag();
-                for (boolean[] row : ((OilStructurePiece.PatternTerrainHeight) piece).pattern)
-                {
+                for (boolean[] row : ((OilStructurePiece.PatternTerrainHeight) piece).pattern) {
                     ListTag tagRow = NBTUtilBC.writeBooleanArray(row);
                     pattern.add(tagRow);
                 }
                 fields.put("pattern", pattern);
                 fields.putInt("depth", ((OilStructurePiece.PatternTerrainHeight) piece).depth);
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException("Unexcepted Oil Structure Type!");
             }
             // replaceType
@@ -151,15 +131,12 @@ public class OilStructure extends StructurePiece
         tag.put("oil_structure_pieces", list.copy());
     }
 
-    public static OilStructure deserialize(CompoundTag tag)
-    {
+    public static OilStructure deserialize(CompoundTag tag) {
         List<OilStructurePiece> pieces = new ArrayList<>();
         ListTag pieceTags = tag.getList("oil_structure_pieces", Tag.TAG_COMPOUND);
-        for (Tag t : pieceTags)
-        {
+        for (Tag t : pieceTags) {
             OilStructurePiece currentPiece;
-            if (t instanceof CompoundTag tagOfPiece)
-            {
+            if (t instanceof CompoundTag tagOfPiece) {
                 CompoundTag fields = tagOfPiece.getCompound("fields");
                 // replaceType
                 OilStructurePiece.ReplaceType type = OilStructurePiece.ReplaceType.valueOf(fields.getString("replaceType"));
@@ -169,8 +146,7 @@ public class OilStructure extends StructurePiece
                 BlockPos box_min = NBTUtilBC.readBlockPos(boxTag.get("box_min"));
                 Box box = new Box(box_min, box_max);
                 // all fields above
-                switch (tagOfPiece.getString("class"))
-                {
+                switch (tagOfPiece.getString("class")) {
                     case "Spring":
                         BlockPos pos = NBTUtilBC.readBlockPos(fields.get("pos"));
                         currentPiece = new OilStructurePiece.Spring(pos);
@@ -184,8 +160,7 @@ public class OilStructure extends StructurePiece
                     case "GenByPredicate":
                         BlockPos center;
                         double radiusSq;
-                        switch (fields.getAllKeys().size())
-                        {
+                        switch (fields.getAllKeys().size()) {
                             // 2->replaceType box
                             // BlockPos double
                             // center, radiusSq
@@ -210,15 +185,11 @@ public class OilStructure extends StructurePiece
                     case "FlatPattern":
                         List<boolean[]> patternListOuterFlatPattern = new ArrayList<>();
                         ListTag patternListTagOuter = fields.getList("pattern", Tag.TAG_LIST);
-                        for (Tag rowTag : patternListTagOuter)
-                        {
-                            if (rowTag instanceof ListTag rowListTag)
-                            {
+                        for (Tag rowTag : patternListTagOuter) {
+                            if (rowTag instanceof ListTag rowListTag) {
                                 boolean[] row = NBTUtilBC.readBooleanArray(rowListTag);
                                 patternListOuterFlatPattern.add(row);
-                            }
-                            else
-                            {
+                            } else {
                                 throw new RuntimeException("Unexpected FlatPattern Pattern Tag Type!");
                             }
                         }
@@ -228,15 +199,11 @@ public class OilStructure extends StructurePiece
                     case "PatternTerrainHeight":
                         List<boolean[]> patternListOuterPatternTerrainHeight = new ArrayList<>();
                         ListTag patternListTagOuterPatternTerrainHeight = fields.getList("pattern", Tag.TAG_LIST);
-                        for (Tag rowTag : patternListTagOuterPatternTerrainHeight)
-                        {
-                            if (rowTag instanceof ListTag rowListTag)
-                            {
+                        for (Tag rowTag : patternListTagOuterPatternTerrainHeight) {
+                            if (rowTag instanceof ListTag rowListTag) {
                                 boolean[] row = NBTUtilBC.readBooleanArray(rowListTag);
                                 patternListOuterPatternTerrainHeight.add(row);
-                            }
-                            else
-                            {
+                            } else {
                                 throw new RuntimeException("Unexpected FlatPattern Pattern Tag Type!");
                             }
                         }
@@ -251,9 +218,7 @@ public class OilStructure extends StructurePiece
                     default:
                         throw new RuntimeException("Unexpected Oil Structure Piece Type!");
                 }
-            }
-            else
-            {
+            } else {
                 throw new RuntimeException("Only CompoundTag is Legal to Appear, What Happened?");
             }
             pieces.add(currentPiece);

@@ -8,11 +8,9 @@ import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.statements.StatementParameterItemStack;
 import buildcraft.api.transport.pipe.PipeFlow;
 import buildcraft.core.statements.BCStatement;
-import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.pipe.flow.PipeFlowItems;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.ItemStack;
 
@@ -27,6 +25,7 @@ public class TriggerItemsTraversing extends BCStatement implements ITriggerInter
 //        return LocaleUtil.localize("gate.trigger.pipe.containsItems");
         return new TranslatableComponent("gate.trigger.pipe.containsItems");
     }
+
     @Override
     public String getDescriptionKey() {
         return "gate.trigger.pipe.containsItems";

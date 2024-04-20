@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nonnull;
 
 @FunctionalInterface
-public interface StackInsertionChecker
-{
+public interface StackInsertionChecker {
     boolean canSet(int slot, @Nonnull ItemStack stack);
 }

@@ -19,8 +19,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GuiReplacer extends GuiBC8<ContainerReplacer>
-{
+public class GuiReplacer extends GuiBC8<ContainerReplacer> {
     private static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftbuilders:textures/gui/replacer.png");
     private static final int SIZE_X = 176, SIZE_Y = 241;
     private static final GuiIcon ICON_GUI = new GuiIcon(TEXTURE_BASE, 0, 0, SIZE_X, SIZE_Y);
@@ -28,8 +27,7 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer>
     //    private GuiTextField nameField;
     private EditBox nameField;
 
-    public GuiReplacer(ContainerReplacer container, Inventory inventory, Component component)
-    {
+    public GuiReplacer(ContainerReplacer container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -49,8 +47,7 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer>
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
         ClientSnapshots.INSTANCE.renderSnapshot(
 //                BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getHeader(container.tile.invSnapshot.getStackInSlot(0)),
@@ -66,8 +63,7 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer>
     }
 
     @Override
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
 //        nameField.drawTextBox();
         poseStack.pushPose();
         poseStack.translate(leftPos, topPos, 0);
@@ -77,8 +73,7 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer>
 
     @Override
 //    public void updateScreen()
-    public void tick()
-    {
+    public void tick() {
         // Calen FIXED: in 1.12.2 without super.tick(), theinfo icons will not spread
         super.tick();
 //        nameField.updateCursorCounter();
@@ -88,52 +83,43 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer>
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
 //    public boolean charTyped(char typedChar, int keyCode)
-    public boolean keyPressed(int typedChar, int keyCode, int modifiers)
-    {
+    public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
         boolean typed = false;
-        if (nameField.isFocused())
-        {
+        if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
 //            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.keyPressed(typedChar, keyCode, modifiers);
             // container.sendNameToServer(nameField.getText().trim());
         }
-        if (!typed)
-        {
+        if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
 //            super.charTyped(typedChar, keyCode);
             return super.keyPressed(typedChar, keyCode, modifiers);
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
-    public boolean charTyped(char typedChar, int keyCode)
-    {
+
+    public boolean charTyped(char typedChar, int keyCode) {
         boolean typed = false;
-        if (nameField.isFocused())
-        {
+        if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
 //            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.charTyped(typedChar, keyCode);
             // container.sendNameToServer(nameField.getText().trim());
         }
-        if (!typed)
-        {
+        if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
 //            super.charTyped(typedChar, keyCode);
             return super.charTyped(typedChar, keyCode);
-        }
-        else
-        {
+        } else {
             return true;
         }
     }
+
     @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
-    {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 //        nameField.mouseClicked(mouseX, mouseY, mouseButton);
         return nameField.mouseClicked(mouseX - leftPos, mouseY - topPos, mouseButton);

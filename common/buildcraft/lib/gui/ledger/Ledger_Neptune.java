@@ -31,8 +31,7 @@ import java.util.List;
 import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
-public class Ledger_Neptune implements IInteractionElement, IContainingElement
-{
+public class Ledger_Neptune implements IInteractionElement, IContainingElement {
     public static final ISprite SPRITE_EXP_NEG = BCLibSprites.LEDGER_LEFT;
     public static final ISprite SPRITE_EXP_POS = BCLibSprites.LEDGER_RIGHT;
 
@@ -76,19 +75,15 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     @Nullable
     private IVariableNodeBoolean isOpenProperty;
 
-    public Ledger_Neptune(BuildCraftGui gui, int colour, boolean expandPositive)
-    {
+    public Ledger_Neptune(BuildCraftGui gui, int colour, boolean expandPositive) {
         this.gui = gui;
         this.colour = colour;
         this.expandPositive = expandPositive;
-        if (expandPositive)
-        {
+        if (expandPositive) {
             positionLedgerStart = gui.lowerRightLedgerPos;
             gui.lowerRightLedgerPos = getPosition(-1, 1).offset(0, 5);
             positionLedgerIconStart = positionLedgerStart.offset(2, LEDGER_GAP);
-        }
-        else
-        {
+        } else {
             positionLedgerStart = gui.lowerLeftLedgerPos.offset(() -> -getWidth(), 0);
             gui.lowerLeftLedgerPos = getPosition(1, 1).offset(0, 5);
             positionLedgerIconStart = positionLedgerStart.offset(LEDGER_GAP, LEDGER_GAP);
@@ -103,44 +98,35 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
         calculateMaxSize();
     }
 
-    protected GuiElementText appendText(String text, int colour)
-    {
+    protected GuiElementText appendText(String text, int colour) {
         return appendText(() -> text, colour);
     }
 
-    protected GuiElementText appendText(Supplier<String> text, int colour)
-    {
+    protected GuiElementText appendText(Supplier<String> text, int colour) {
         return appendText(text, () -> colour);
     }
 
-    protected GuiElementText appendText(Supplier<String> text, IntSupplier colour)
-    {
+    protected GuiElementText appendText(Supplier<String> text, IntSupplier colour) {
         return append(new GuiElementText(gui, positionAppending, text, colour));
     }
 
-    protected <T extends IGuiElement> T append(T element)
-    {
+    protected <T extends IGuiElement> T append(T element) {
         openElements.add(element);
         positionAppending = positionAppending.offset(() -> 0, () -> 3 + element.getHeight());
         return element;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setOpenProperty(IVariableNodeBoolean prop)
-    {
+    public void setOpenProperty(IVariableNodeBoolean prop) {
         this.isOpenProperty = prop;
-        if (prop.evaluate())
-        {
+        if (prop.evaluate()) {
             currentDifference = 1;
             lastWidth = currentWidth = maxWidth;
             lastHeight = currentHeight = maxHeight;
-        }
-        else
-        {
+        } else {
             currentDifference = -1;
             lastWidth = currentWidth = CLOSED_WIDTH;
             lastHeight = currentHeight = CLOSED_HEIGHT;
@@ -148,11 +134,9 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     }
 
     @Override
-    public void calculateSizes()
-    {
+    public void calculateSizes() {
         calculateMaxSize();
-        if (isOpenProperty != null)
-        {
+        if (isOpenProperty != null) {
             setOpenProperty(isOpenProperty);
         }
     }
@@ -160,13 +144,11 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     /**
      * The default implementation only works if all the elements are based around {@link #positionLedgerStart}
      */
-    public void calculateMaxSize()
-    {
+    public void calculateMaxSize() {
         double w = CLOSED_WIDTH;
         double h = CLOSED_HEIGHT;
 
-        for (IGuiElement element : openElements)
-        {
+        for (IGuiElement element : openElements) {
             w = Math.max(w, element.getEndX());
             h = Math.max(h, element.getEndY());
         }
@@ -178,25 +160,19 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     }
 
     @Override
-    public void tick()
-    {
+    public void tick() {
         lastWidth = currentWidth;
         lastHeight = currentHeight;
 
         double targetWidth = currentWidth;
         double targetHeight = currentHeight;
-        if (currentDifference == 1)
-        {
+        if (currentDifference == 1) {
             targetWidth = maxWidth;
             targetHeight = maxHeight;
-        }
-        else if (currentDifference == -1)
-        {
+        } else if (currentDifference == -1) {
             targetWidth = CLOSED_WIDTH;
             targetHeight = CLOSED_HEIGHT;
-        }
-        else
-        {
+        } else {
             return;
         }
 
@@ -205,90 +181,70 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
         double ldgDiff = Mth.clamp(maxDiff / 5, 1, 15);
 
         // TODO: extract a method
-        if (currentWidth < targetWidth)
-        {
+        if (currentWidth < targetWidth) {
             currentWidth += ldgDiff;
-            if (currentWidth > targetWidth)
-            {
+            if (currentWidth > targetWidth) {
                 currentWidth = targetWidth;
             }
-        }
-        else if (currentWidth > targetWidth)
-        {
+        } else if (currentWidth > targetWidth) {
             currentWidth -= ldgDiff;
-            if (currentWidth < targetWidth)
-            {
+            if (currentWidth < targetWidth) {
                 currentWidth = targetWidth;
             }
         }
 
         // TODO: extract a method
-        if (currentHeight < targetHeight)
-        {
+        if (currentHeight < targetHeight) {
             currentHeight += ldgDiff;
-            if (currentHeight > targetHeight)
-            {
+            if (currentHeight > targetHeight) {
                 currentHeight = targetHeight;
             }
-        }
-        else if (currentHeight > targetHeight)
-        {
+        } else if (currentHeight > targetHeight) {
             currentHeight -= ldgDiff;
-            if (currentHeight < targetHeight)
-            {
+            if (currentHeight < targetHeight) {
                 currentHeight = targetHeight;
             }
         }
     }
 
-    private static double interp(double past, double current, float partialTicks)
-    {
-        if (past == current)
-        {
+    private static double interp(double past, double current, float partialTicks) {
+        if (past == current) {
             return current;
         }
-        if (partialTicks <= 0)
-        {
+        if (partialTicks <= 0) {
             return past;
         }
-        if (partialTicks >= 1)
-        {
+        if (partialTicks >= 1) {
             return current;
         }
         return past * (1 - partialTicks) + current * partialTicks;
     }
 
     @Deprecated
-    public GuiRectangle getEnclosingRectangle()
-    {
+    public GuiRectangle getEnclosingRectangle() {
         return asImmutable();
     }
 
-    public final boolean shouldDrawOpen()
-    {
+    public final boolean shouldDrawOpen() {
         return currentWidth > CLOSED_WIDTH || currentHeight > CLOSED_HEIGHT;
     }
 
     @Override
-    public List<IGuiElement> getChildElements()
-    {
+    public List<IGuiElement> getChildElements() {
         return openElements;
     }
 
     @Override
-    public IGuiPosition getChildElementPosition()
-    {
+    public IGuiPosition getChildElementPosition() {
         return positionLedgerInnerStart;
     }
 
-    public List<IGuiElement> getClosedElements()
-    {
+    public List<IGuiElement> getClosedElements() {
         return closedElements;
     }
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
         double startX = getX();
         double startY = getY();
         final SpriteNineSliced split;
@@ -296,12 +252,9 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
         interpWidth = interp(lastWidth, currentWidth, partialTicks);
         interpHeight = interp(lastHeight, currentHeight, partialTicks);
 
-        if (expandPositive)
-        {
+        if (expandPositive) {
             split = SPRITE_SPLIT_POS;
-        }
-        else
-        {
+        } else {
             split = SPRITE_SPLIT_NEG;
         }
 //
@@ -312,26 +265,19 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
 
         IGuiPosition pos2;
 
-        if (expandPositive)
-        {
+        if (expandPositive) {
             pos2 = positionLedgerIconStart;
-        }
-        else
-        {
+        } else {
             pos2 = positionLedgerIconStart;
         }
 
-        try (AutoGlScissor a = GuiUtil.scissor(pos2.getX(), pos2.getY(), interpWidth - 4, interpHeight - 8))
-        {
+        try (AutoGlScissor a = GuiUtil.scissor(pos2.getX(), pos2.getY(), interpWidth - 4, interpHeight - 8)) {
 
-            for (IGuiElement element : closedElements)
-            {
+            for (IGuiElement element : closedElements) {
                 element.drawBackground(partialTicks, poseStack);
             }
-            if (shouldDrawOpen())
-            {
-                for (IGuiElement element : openElements)
-                {
+            if (shouldDrawOpen()) {
+                for (IGuiElement element : openElements) {
                     element.drawBackground(partialTicks, poseStack);
                 }
             }
@@ -339,23 +285,18 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     }
 
     @Override
-    public void drawForeground(PoseStack poseStack, float partialTicks)
-    {
+    public void drawForeground(PoseStack poseStack, float partialTicks) {
         double scissorX = positionLedgerIconStart.getX();
         double scissorY = positionLedgerIconStart.getY();
         double scissorWidth = interpWidth - 8;
         double scissorHeight = interpHeight - 8;
-        try (AutoGlScissor a = GuiUtil.scissor(scissorX, scissorY, scissorWidth, scissorHeight))
-        {
+        try (AutoGlScissor a = GuiUtil.scissor(scissorX, scissorY, scissorWidth, scissorHeight)) {
 
-            for (IGuiElement element : closedElements)
-            {
+            for (IGuiElement element : closedElements) {
                 element.drawForeground(poseStack, partialTicks);
             }
-            if (shouldDrawOpen())
-            {
-                for (IGuiElement element : openElements)
-                {
+            if (shouldDrawOpen()) {
+                for (IGuiElement element : openElements) {
                     element.drawForeground(poseStack, partialTicks);
                 }
             }
@@ -363,39 +304,29 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     }
 
     @Override
-    public void onMouseClicked(int button)
-    {
+    public void onMouseClicked(int button) {
         boolean childClicked = false;
-        for (IGuiElement elem : openElements)
-        {
-            if (elem instanceof IInteractionElement)
-            {
+        for (IGuiElement elem : openElements) {
+            if (elem instanceof IInteractionElement) {
                 ((IInteractionElement) elem).onMouseClicked(button);
                 childClicked |= elem.contains(gui.mouse);
             }
         }
-        for (IGuiElement elem : closedElements)
-        {
-            if (elem instanceof IInteractionElement)
-            {
+        for (IGuiElement elem : closedElements) {
+            if (elem instanceof IInteractionElement) {
                 ((IInteractionElement) elem).onMouseClicked(button);
                 childClicked |= elem.contains(gui.mouse);
             }
         }
-        if (!childClicked && contains(gui.mouse))
-        {
+        if (!childClicked && contains(gui.mouse)) {
             boolean nowOpen = false;
-            if (currentDifference == 1)
-            {
+            if (currentDifference == 1) {
                 currentDifference = -1;
-            }
-            else
-            {
+            } else {
                 currentDifference = 1;
                 nowOpen = true;
             }
-            if (isOpenProperty != null)
-            {
+            if (isOpenProperty != null) {
                 isOpenProperty.set(nowOpen);
             }
         }
@@ -403,20 +334,15 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
 
     @Override
 //    public void onMouseDragged(int button, long ticksSinceClick)
-    public void onMouseDragged(int button)
-    {
-        for (IGuiElement elem : openElements)
-        {
-            if (elem instanceof IInteractionElement)
-            {
+    public void onMouseDragged(int button) {
+        for (IGuiElement elem : openElements) {
+            if (elem instanceof IInteractionElement) {
 //                ((IInteractionElement) elem).onMouseDragged(button, ticksSinceClick);
                 ((IInteractionElement) elem).onMouseDragged(button);
             }
         }
-        for (IGuiElement elem : closedElements)
-        {
-            if (elem instanceof IInteractionElement)
-            {
+        for (IGuiElement elem : closedElements) {
+            if (elem instanceof IInteractionElement) {
 //                ((IInteractionElement) elem).onMouseDragged(button, ticksSinceClick);
                 ((IInteractionElement) elem).onMouseDragged(button);
             }
@@ -424,44 +350,35 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     }
 
     @Override
-    public void onMouseReleased(int button)
-    {
-        for (IGuiElement elem : openElements)
-        {
-            if (elem instanceof IInteractionElement)
-            {
+    public void onMouseReleased(int button) {
+        for (IGuiElement elem : openElements) {
+            if (elem instanceof IInteractionElement) {
                 ((IInteractionElement) elem).onMouseReleased(button);
             }
         }
-        for (IGuiElement elem : closedElements)
-        {
-            if (elem instanceof IInteractionElement)
-            {
+        for (IGuiElement elem : closedElements) {
+            if (elem instanceof IInteractionElement) {
                 ((IInteractionElement) elem).onMouseReleased(button);
             }
         }
     }
 
-    protected void drawIcon(PoseStack poseStack, double x, double y)
-    {
+    protected void drawIcon(PoseStack poseStack, double x, double y) {
 
     }
 
     @Override
-    public double getX()
-    {
+    public double getX() {
         return positionLedgerStart.getX();
     }
 
     @Override
-    public double getY()
-    {
+    public double getY() {
         return positionLedgerStart.getY();
     }
 
     @Override
-    public double getWidth()
-    {
+    public double getWidth() {
         float partialTicks = gui.getLastPartialTicks();
         if (lastWidth == currentWidth) return currentWidth;
         else if (partialTicks <= 0) return lastWidth;
@@ -470,8 +387,7 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
     }
 
     @Override
-    public double getHeight()
-    {
+    public double getHeight() {
         float partialTicks = gui.getLastPartialTicks();
         if (lastHeight == currentHeight) return currentHeight;
         else if (partialTicks <= 0) return lastHeight;
@@ -479,50 +395,38 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement
         else return lastHeight * (1 - partialTicks) + currentHeight * partialTicks;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return I18n.get(title);
     }
 
-    public int getTitleColour()
-    {
+    public int getTitleColour() {
         return 0xFF_E1_C9_2F;
     }
 
     @Override
-    public void addToolTips(List<ToolTip> tooltips)
-    {
-        for (IGuiElement element : closedElements)
-        {
+    public void addToolTips(List<ToolTip> tooltips) {
+        for (IGuiElement element : closedElements) {
             element.addToolTips(tooltips);
         }
-        if (shouldDrawOpen())
-        {
-            for (IGuiElement element : openElements)
-            {
+        if (shouldDrawOpen()) {
+            for (IGuiElement element : openElements) {
                 element.addToolTips(tooltips);
             }
         }
-        if (currentWidth != maxWidth || currentHeight != maxHeight)
-        {
-            if (contains(gui.mouse))
-            {
+        if (currentWidth != maxWidth || currentHeight != maxHeight) {
+            if (contains(gui.mouse)) {
                 tooltips.add(new ToolTip(new TextComponent(getTitle())));
             }
         }
     }
 
     @Override
-    public void addHelpElements(List<HelpPosition> elements)
-    {
-        for (IGuiElement element : closedElements)
-        {
+    public void addHelpElements(List<HelpPosition> elements) {
+        for (IGuiElement element : closedElements) {
             element.addHelpElements(elements);
         }
-        if (currentWidth == maxWidth && currentHeight == maxHeight)
-        {
-            for (IGuiElement element : openElements)
-            {
+        if (currentWidth == maxWidth && currentHeight == maxHeight) {
+            for (IGuiElement element : openElements) {
                 element.addHelpElements(elements);
             }
         }

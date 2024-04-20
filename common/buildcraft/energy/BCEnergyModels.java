@@ -8,11 +8,11 @@ package buildcraft.energy;
 
 import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumPowerStage;
+import buildcraft.energy.client.render.RenderEngineIron;
+import buildcraft.energy.client.render.RenderEngineStone;
 import buildcraft.energy.event.ChristmasHandler;
 import buildcraft.energy.tile.TileEngineIron_BC8;
 import buildcraft.energy.tile.TileEngineStone_BC8;
-import buildcraft.energy.client.render.RenderEngineIron;
-import buildcraft.energy.client.render.RenderEngineStone;
 import buildcraft.lib.client.model.ModelHolderVariable;
 import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.client.model.MutableQuad;
@@ -24,7 +24,7 @@ import buildcraft.lib.expression.node.value.NodeVariableObject;
 import buildcraft.lib.misc.ExpressionCompat;
 import buildcraft.lib.misc.data.ModelVariableData;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -32,15 +32,13 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(modid = BCEnergy.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCEnergyModels
-{
+//@Mod.EventBusSubscriber(modid = BCEnergy.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class BCEnergyModels {
     private static final NodeVariableDouble ENGINE_PROGRESS;
     private static final NodeVariableObject<EnumPowerStage> ENGINE_STAGE;
     private static final NodeVariableObject<Direction> ENGINE_FACING;
@@ -48,8 +46,7 @@ public class BCEnergyModels
     private static final ModelHolderVariable ENGINE_STONE;
     private static final ModelHolderVariable ENGINE_IRON;
 
-    static
-    {
+    static {
         FunctionContext fnCtx = new FunctionContext(ExpressionCompat.ENUM_POWER_STAGE, DefaultContexts.createWithAll());
         ENGINE_PROGRESS = fnCtx.putVariableDouble("progress");
         ENGINE_STAGE = fnCtx.putVariableObject("stage", EnumPowerStage.class);
@@ -80,16 +77,14 @@ public class BCEnergyModels
 
 
     @SubscribeEvent
-    public static void onBlockEntityModelBind(EntityRenderersEvent.RegisterRenderers event)
-    {
+    public static void onBlockEntityModelBind(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCEnergyBlocks.engineStoneTile.get(), RenderEngineStone::new);
         BlockEntityRenderers.register(BCEnergyBlocks.engineIronTile.get(), RenderEngineIron::new);
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onModelRegistry(ModelRegistryEvent event)
-    {
+    public static void onModelRegistry(ModelRegistryEvent event) {
         ChristmasHandler.regBucketNoFlipModel(event);
 //        for (RegistryObject<BCFluidBase.Source> fluid : BCEnergyFluids.allStill)
 //        {
@@ -102,8 +97,7 @@ public class BCEnergyModels
     }
 
     @SubscribeEvent
-    public static void onModelBake(ModelBakeEvent event)
-    {
+    public static void onModelBake(ModelBakeEvent event) {
         ENGINE_PROGRESS.value = 0.2;
         ENGINE_STAGE.value = EnumPowerStage.BLUE;
         ENGINE_FACING.value = Direction.UP;
@@ -143,26 +137,22 @@ public class BCEnergyModels
 
     private static MutableQuad[] getEngineQuads(ModelHolderVariable model,
                                                 TileEngineBase_BC8 tile,
-                                                float partialTicks)
-    {
+                                                float partialTicks) {
         ENGINE_PROGRESS.value = tile.getProgressClient(partialTicks);
         ENGINE_STAGE.value = tile.getPowerStage();
         ENGINE_FACING.value = tile.getCurrentFacing();
-        if (tile.clientModelData.hasNoNodes())
-        {
+        if (tile.clientModelData.hasNoNodes()) {
             tile.clientModelData.setNodes(model.createTickableNodes());
         }
         tile.clientModelData.refresh();
         return model.getCutoutQuads();
     }
 
-    public static MutableQuad[] getStoneEngineQuads(TileEngineStone_BC8 tile, float partialTicks)
-    {
+    public static MutableQuad[] getStoneEngineQuads(TileEngineStone_BC8 tile, float partialTicks) {
         return getEngineQuads(ENGINE_STONE, tile, partialTicks);
     }
 
-    public static MutableQuad[] getIronEngineQuads(TileEngineIron_BC8 tile, float partialTicks)
-    {
+    public static MutableQuad[] getIronEngineQuads(TileEngineIron_BC8 tile, float partialTicks) {
         return getEngineQuads(ENGINE_IRON, tile, partialTicks);
     }
 }

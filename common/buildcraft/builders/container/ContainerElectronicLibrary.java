@@ -22,13 +22,11 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.io.IOException;
 
-public class ContainerElectronicLibrary extends ContainerBCTile<TileElectronicLibrary>
-{
+public class ContainerElectronicLibrary extends ContainerBCTile<TileElectronicLibrary> {
     private static final IdAllocator IDS = ContainerBC_Neptune.IDS.makeChild("electronic_library");
     private static final int ID_SELECTED = IDS.allocId("SELECTED");
 
-    public ContainerElectronicLibrary(MenuType menuType, int id, Player player, TileElectronicLibrary tile)
-    {
+    public ContainerElectronicLibrary(MenuType menuType, int id, Player player, TileElectronicLibrary tile) {
         super(menuType, id, player, tile);
         addFullPlayerInventory(138);
 
@@ -40,37 +38,28 @@ public class ContainerElectronicLibrary extends ContainerBCTile<TileElectronicLi
     }
 
     @Override
-    public IdAllocator getIdAllocator()
-    {
+    public IdAllocator getIdAllocator() {
         return IDS;
     }
 
-    public void sendSelectedToServer(Snapshot.Key selected)
-    {
+    public void sendSelectedToServer(Snapshot.Key selected) {
         sendMessage(ID_SELECTED, buffer ->
         {
             buffer.writeBoolean(selected != null);
-            if (selected != null)
-            {
+            if (selected != null) {
                 selected.writeToByteBuf(buffer);
             }
         });
     }
 
     @Override
-    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readMessage(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_SERVER)
-        {
-            if (id == ID_SELECTED)
-            {
-                if (buffer.readBoolean())
-                {
+        if (side == NetworkDirection.PLAY_TO_SERVER) {
+            if (id == ID_SELECTED) {
+                if (buffer.readBoolean()) {
                     tile.selected = new Snapshot.Key(buffer);
-                }
-                else
-                {
+                } else {
                     tile.selected = null;
                 }
                 tile.sendNetworkUpdate(TileBC_Neptune.NET_RENDER_DATA);

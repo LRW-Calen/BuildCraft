@@ -11,69 +11,58 @@ import net.minecraftforge.fluids.FluidStack;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-public class DistillationRecipeBuilder
-{
+public class DistillationRecipeBuilder {
     public final long powerRequired;
     public final FluidStack in;
     public final FluidStack outGas;
     public final FluidStack outLiquid;
 
-    private DistillationRecipeBuilder(long powerRequired, FluidStack in, FluidStack outGas, FluidStack outLiquid)
-    {
+    private DistillationRecipeBuilder(long powerRequired, FluidStack in, FluidStack outGas, FluidStack outLiquid) {
         this.powerRequired = powerRequired;
         this.in = in;
         this.outGas = outGas;
         this.outLiquid = outLiquid;
     }
 
-    public static DistillationRecipeBuilder distillation(long powerRequired, FluidStack in, FluidStack outGas, FluidStack outLiquid)
-    {
+    public static DistillationRecipeBuilder distillation(long powerRequired, FluidStack in, FluidStack outGas, FluidStack outLiquid) {
         return new DistillationRecipeBuilder(powerRequired, in, outGas, outLiquid);
     }
 
-    public void save(Consumer<FinishedRecipe> consumer, String name)
-    {
+    public void save(Consumer<FinishedRecipe> consumer, String name) {
         consumer.accept(new DistillationRecipeBuilder.DistillationRecipeResult(name));
     }
 
-    class DistillationRecipeResult implements FinishedRecipe
-    {
+    class DistillationRecipeResult implements FinishedRecipe {
         private final String name;
 
-        public DistillationRecipeResult(String name)
-        {
+        public DistillationRecipeResult(String name) {
             this.name = name;
         }
 
         @Override
-        public void serializeRecipeData(JsonObject json)
-        {
+        public void serializeRecipeData(JsonObject json) {
             DistillationRecipeSerializer.toJson(DistillationRecipeBuilder.this, json);
         }
 
         @Override
-        public ResourceLocation getId()
-        {
-            return new ResourceLocation(BCEnergy.MOD_ID, "distillation/" + name);
+        public ResourceLocation getId() {
+            return new ResourceLocation(BCEnergy.MODID, "distillation/" + name);
         }
 
         @Override
-        public RecipeSerializer<?> getType()
-        {
+        public RecipeSerializer<?> getType() {
             return DistillationRecipeSerializer.INSTANCE;
         }
 
         @Nullable
         @Override
-        public JsonObject serializeAdvancement()
-        {
+        public JsonObject serializeAdvancement() {
             return null;
         }
 
         @Nullable
         @Override
-        public ResourceLocation getAdvancementId()
-        {
+        public ResourceLocation getAdvancementId() {
             return null;
         }
     }

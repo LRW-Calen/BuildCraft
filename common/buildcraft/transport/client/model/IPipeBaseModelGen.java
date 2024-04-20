@@ -11,14 +11,12 @@ import buildcraft.lib.config.DetailedConfigOption;
 import buildcraft.transport.client.model.PipeModelCacheBase.PipeBaseCutoutKey;
 import buildcraft.transport.client.model.PipeModelCacheBase.PipeBaseTranslucentKey;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.client.event.TextureStitchEvent;
 
 import java.util.List;
 
-public interface IPipeBaseModelGen
-{
+public interface IPipeBaseModelGen {
     DetailedConfigOption OPTION_INSIDE_COLOUR_MULT = new DetailedConfigOption("render.pipe.misc.inside.shade", "0.725");
 
     List<BakedQuad> generateCutout(PipeBaseCutoutKey key);
@@ -28,5 +26,6 @@ public interface IPipeBaseModelGen
     TextureAtlasSprite[] getItemSprites(PipeDefinition def);
 
     void onTextureStitchPre(TextureStitchEvent.Pre event);
+
     void onTextureStitchPost(TextureStitchEvent.Post event);
 }

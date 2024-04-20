@@ -20,8 +20,7 @@ import java.util.EnumMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class BCCoreSprites
-{
+public class BCCoreSprites {
     public static final SpriteHolder MARKER_VOLUME_CONNECTED;
     public static final SpriteHolder MARKER_VOLUME_POSSIBLE;
     public static final SpriteHolder MARKER_VOLUME_SIGNAL;
@@ -76,7 +75,7 @@ public class BCCoreSprites
         LASER_POWER_MED = getHolder("lasers/power_med");
         LASER_POWER_HIGH = getHolder("lasers/power_high");
         LASER_POWER_FULL = getHolder("lasers/power_full");
-        
+
         TRIGGER_TRUE = getHolder("triggers/trigger_true");
         PARAM_GATE_SIDE_ONLY = getHolder("triggers/redstone_gate_side_only");
 

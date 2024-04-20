@@ -49,8 +49,7 @@ import java.util.OptionalLong;
 
 @SuppressWarnings("NullableProblems")
 @OnlyIn(Dist.CLIENT)
-public class FakeWorld extends Level
-{
+public class FakeWorld extends Level {
     private static final ResourceKey<Biome> BIOME = Biomes.PLAINS;
     @SuppressWarnings("WeakerAccess")
     public static final BlockPos BLUEPRINT_OFFSET = new BlockPos(0, 127, 0);
@@ -66,8 +65,7 @@ public class FakeWorld extends Level
     LevelEntityGetter<Entity> ENTITY_GETTER;
 
     @SuppressWarnings("WeakerAccess")
-    public FakeWorld()
-    {
+    public FakeWorld() {
 //        super(
 //                new SaveHandlerMP(),
 ////                new WorldInfo(
@@ -98,7 +96,7 @@ public class FakeWorld extends Level
                 LEVEL_DATA,
                 ResourceKey.create(
                         Registry.DIMENSION_REGISTRY,
-                        new ResourceLocation(BCBuilders.MOD_ID, "fake")
+                        new ResourceLocation(BCBuilders.MODID, "fake")
                 ),
                 DIMENSION_TYPE,
 //                Profiler::new,
@@ -118,42 +116,32 @@ public class FakeWorld extends Level
     }
 
 
-    public void clear()
-    {
+    public void clear() {
         ((FakeChunkProvider) chunkProvider).chunks.clear();
     }
 
     @SuppressWarnings("WeakerAccess")
-    public void uploadSnapshot(Snapshot snapshot)
-    {
-        for (int z = 0; z < snapshot.size.getZ(); z++)
-        {
-            for (int y = 0; y < snapshot.size.getY(); y++)
-            {
-                for (int x = 0; x < snapshot.size.getX(); x++)
-                {
+    public void uploadSnapshot(Snapshot snapshot) {
+        for (int z = 0; z < snapshot.size.getZ(); z++) {
+            for (int y = 0; y < snapshot.size.getY(); y++) {
+                for (int x = 0; x < snapshot.size.getX(); x++) {
                     BlockPos pos = new BlockPos(x, y, z).offset(BLUEPRINT_OFFSET);
-                    if (snapshot instanceof Blueprint)
-                    {
+                    if (snapshot instanceof Blueprint) {
                         ISchematicBlock schematicBlock = ((Blueprint) snapshot).palette
                                 .get(((Blueprint) snapshot).data[snapshot.posToIndex(x, y, z)]);
-                        if (!schematicBlock.isAir())
-                        {
+                        if (!schematicBlock.isAir()) {
                             schematicBlock.buildWithoutChecks(this, pos);
                         }
                     }
-                    if (snapshot instanceof Template)
-                    {
-                        if (((Template) snapshot).data.get(snapshot.posToIndex(x, y, z)))
-                        {
+                    if (snapshot instanceof Template) {
+                        if (((Template) snapshot).data.get(snapshot.posToIndex(x, y, z))) {
                             setBlock(pos, Blocks.QUARTZ_BLOCK.defaultBlockState(), Block.UPDATE_ALL);
                         }
                     }
                 }
             }
         }
-        if (snapshot instanceof Blueprint)
-        {
+        if (snapshot instanceof Blueprint) {
             ((Blueprint) snapshot).entities.forEach(schematicEntity ->
                     schematicEntity.buildWithoutChecks(this, FakeWorld.BLUEPRINT_OFFSET)
             );
@@ -162,8 +150,7 @@ public class FakeWorld extends Level
 
     @org.jetbrains.annotations.Nullable
     @Override
-    public BlockEntity getBlockEntity(BlockPos p_46716_)
-    {
+    public BlockEntity getBlockEntity(BlockPos p_46716_) {
         return this.getChunkAt(p_46716_).getBlockEntity(p_46716_, LevelChunk.EntityCreationType.IMMEDIATE);
     }
 
@@ -177,40 +164,34 @@ public class FakeWorld extends Level
 
     @Override
 
-    public LevelTickAccess<Block> getBlockTicks()
-    {
+    public LevelTickAccess<Block> getBlockTicks() {
         return BlackholeTickAccess.emptyLevelList();
     }
 
     @Override
-    public LevelTickAccess<Fluid> getFluidTicks()
-    {
+    public LevelTickAccess<Fluid> getFluidTicks() {
         return BlackholeTickAccess.emptyLevelList();
     }
 
     @Override
 //    protected IChunkProvider createChunkProvider()
-    public FakeChunkProvider getChunkSource()
-    {
+    public FakeChunkProvider getChunkSource() {
         return this.chunkProvider;
     }
 
     @Override
-    public void levelEvent(@Nullable Player p_46771_, int p_46772_, BlockPos p_46773_, int p_46774_)
-    {
+    public void levelEvent(@Nullable Player p_46771_, int p_46772_, BlockPos p_46773_, int p_46774_) {
 
     }
 
     @Override
-    public void gameEvent(@Nullable Entity p_151549_, GameEvent p_151550_, BlockPos p_151551_)
-    {
+    public void gameEvent(@Nullable Entity p_151549_, GameEvent p_151550_, BlockPos p_151551_) {
 
     }
 
     @Override
 //    protected boolean isChunkLoaded(int x, int z, boolean allowEmpty)
-    public boolean hasChunk(int v, int z)
-    {
+    public boolean hasChunk(int v, int z) {
         return true;
     }
 
@@ -221,8 +202,7 @@ public class FakeWorld extends Level
 //    }
 
     @Override
-    public Holder<Biome> getUncachedNoiseBiome(int p_204159_, int p_204160_, int p_204161_)
-    {
+    public Holder<Biome> getUncachedNoiseBiome(int p_204159_, int p_204160_, int p_204161_) {
         return null;
     }
 
@@ -234,94 +214,79 @@ public class FakeWorld extends Level
 
 
     @Override
-    public void sendBlockUpdated(BlockPos p_46612_, BlockState p_46613_, BlockState p_46614_, int p_46615_)
-    {
+    public void sendBlockUpdated(BlockPos p_46612_, BlockState p_46613_, BlockState p_46614_, int p_46615_) {
 
     }
 
     @Override
-    public void playSound(@org.jetbrains.annotations.Nullable Player p_46543_, double p_46544_, double p_46545_, double p_46546_, SoundEvent p_46547_, SoundSource p_46548_, float p_46549_, float p_46550_)
-    {
+    public void playSound(@org.jetbrains.annotations.Nullable Player p_46543_, double p_46544_, double p_46545_, double p_46546_, SoundEvent p_46547_, SoundSource p_46548_, float p_46549_, float p_46550_) {
 
     }
 
     @Override
-    public void playSound(@org.jetbrains.annotations.Nullable Player p_46551_, Entity p_46552_, SoundEvent p_46553_, SoundSource p_46554_, float p_46555_, float p_46556_)
-    {
+    public void playSound(@org.jetbrains.annotations.Nullable Player p_46551_, Entity p_46552_, SoundEvent p_46553_, SoundSource p_46554_, float p_46555_, float p_46556_) {
 
     }
 
     @Override
-    public String gatherChunkSourceStats()
-    {
+    public String gatherChunkSourceStats() {
         return null;
     }
 
     @Nullable
     @Override
-    public Entity getEntity(int p_46492_)
-    {
+    public Entity getEntity(int p_46492_) {
         return null;
     }
 
     @Nullable
     @Override
-    public MapItemSavedData getMapData(String p_46650_)
-    {
+    public MapItemSavedData getMapData(String p_46650_) {
         return null;
     }
 
     @Override
-    public void setMapData(String p_151533_, MapItemSavedData p_151534_)
-    {
+    public void setMapData(String p_151533_, MapItemSavedData p_151534_) {
 
     }
 
     @Override
-    public int getFreeMapId()
-    {
+    public int getFreeMapId() {
         return 0;
     }
 
     @Override
-    public void destroyBlockProgress(int p_46506_, BlockPos p_46507_, int p_46508_)
-    {
+    public void destroyBlockProgress(int p_46506_, BlockPos p_46507_, int p_46508_) {
 
     }
 
     @Override
-    public Scoreboard getScoreboard()
-    {
+    public Scoreboard getScoreboard() {
         return null;
     }
 
     @Override
-    public RecipeManager getRecipeManager()
-    {
+    public RecipeManager getRecipeManager() {
         return null;
     }
 
     @Override
-    protected LevelEntityGetter<Entity> getEntities()
-    {
+    protected LevelEntityGetter<Entity> getEntities() {
         return ENTITY_GETTER;
     }
 
     @Override
-    public RegistryAccess registryAccess()
-    {
+    public RegistryAccess registryAccess() {
         return REGISTRY_ACCESS;
     }
 
     @Override
-    public float getShade(Direction p_45522_, boolean p_45523_)
-    {
+    public float getShade(Direction p_45522_, boolean p_45523_) {
         return 0;
     }
 
     @Override
-    public List<? extends Player> players()
-    {
+    public List<? extends Player> players() {
         return Lists.newArrayList();
     }
 }

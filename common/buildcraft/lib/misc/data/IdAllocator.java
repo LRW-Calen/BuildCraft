@@ -13,8 +13,7 @@ import buildcraft.api.core.BCLog;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IdAllocator
-{
+public class IdAllocator {
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.id_alloc");
 
     private final IdAllocator parent;
@@ -54,7 +53,7 @@ public class IdAllocator
     public int allocId(String allocName) {
         if (hasChildren) {
             throw new IllegalStateException("A child of this object has already allocated ID's!"//
-                + " You have probably set the calling class up wrong!");
+                    + " You have probably set the calling class up wrong!");
         }
         if (DEBUG) {
             BCLog.logger.info("[lib.id_alloc] " + name + " allocated " + allocName + " as " + nextId);

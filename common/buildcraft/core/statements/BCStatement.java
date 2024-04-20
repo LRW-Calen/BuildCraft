@@ -10,8 +10,7 @@ import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.StatementManager;
 
-public abstract class BCStatement implements IStatement
-{
+public abstract class BCStatement implements IStatement {
 
     protected final String uniqueTag;
 
@@ -48,7 +47,7 @@ public abstract class BCStatement implements IStatement
 
     @Override
     public IStatement[] getPossible() {
-        return new IStatement[] { this };
+        return new IStatement[]{this};
     }
 
     @Override

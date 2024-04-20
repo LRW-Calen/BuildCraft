@@ -17,13 +17,12 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.function.Consumer;
 
@@ -34,28 +33,23 @@ import java.util.function.Consumer;
 //    version = BCLib.VERSION,
 //    dependencies = "required-after:buildcraftcore@[" + BCLib.VERSION + "]"
 //)
-@Mod(BCRobotics.MOD_ID)
-@Mod.EventBusSubscriber(modid = BCRobotics.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod(BCRobotics.MODID)
+@Mod.EventBusSubscriber(modid = BCRobotics.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 //@formatter:on
-public class BCRobotics
-{
-    public static final String MOD_ID = "buildcraftrobotics";
+public class BCRobotics {
+    public static final String MODID = "buildcraftrobotics";
 
     //    @Mod.Instance(MODID)
     public static BCRobotics INSTANCE = null;
 
-    public BCRobotics()
-    {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        modEventBus.addGenericListener(MenuType.class, BCRoboticsMenuTypes::registerAll);
+    public BCRobotics() {
+        INSTANCE = this;
     }
 
     @SubscribeEvent
 //    public static void preInit(FMLPreInitializationEvent evt)
-    public static void preInit(FMLConstructModEvent evt)
-    {
-        RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
+    public static void preInit(FMLConstructModEvent evt) {
+        RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
 
         BCRoboticsBlocks.preInit();
 
@@ -66,33 +60,34 @@ public class BCRobotics
 
     @SubscribeEvent
 //    public static void init(FMLInitializationEvent evt)
-    public static void init(FMLCommonSetupEvent evt)
-    {
+    public static void init(FMLCommonSetupEvent evt) {
         BCRoboticsProxy.getProxy().fmlInit();
-        BCRoboticsRecipes.init();
+//        BCRoboticsRecipes.init(); // 1.18.2: datagen
     }
 
     @SubscribeEvent
 //    public static void postInit(FMLPostInitializationEvent evt)
-    public static void postInit(FMLLoadCompleteEvent evt)
-    {
+    public static void postInit(FMLLoadCompleteEvent evt) {
         BCRoboticsProxy.getProxy().fmlPostInit();
     }
 
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event)
-    {
+    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCRoboticsBlocks.zonePlannerTile.get(), RenderZonePlanner::new);
+    }
+
+    @SubscribeEvent
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCRoboticsMenuTypes.registerAll(event);
     }
 
     // Calen: for thread safety
     private static final TagManager tagManager = new TagManager();
 
 
-    static
-    {
+    static {
         startBatch();
 
         // Items
@@ -113,20 +108,17 @@ public class BCRobotics
         endBatch(TagManager.prependTags("buildcraftrobotics:", EnumTagType.REGISTRY_NAME).andThen(TagManager.setTab("buildcraft.main")));
     }
 
-    private static TagEntry registerTag(String id)
-    {
+    private static TagEntry registerTag(String id) {
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
 //        TagManager.startBatch();
         tagManager.startBatch();
     }
 
-    private static void endBatch(Consumer<TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagEntry> consumer) {
 //        TagManager.endBatch(consumer);
         tagManager.endBatch(consumer);
     }

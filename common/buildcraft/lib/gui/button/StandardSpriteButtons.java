@@ -8,8 +8,7 @@ import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.misc.GuiUtil;
 import net.minecraft.resources.ResourceLocation;
 
-public class StandardSpriteButtons
-{
+public class StandardSpriteButtons {
 
     public static final GuiButtonDrawable.Builder LARGE_BUTTON_DRAWABLE;
     public static final GuiButtonDrawable.Builder SMALL_BUTTON_DRAWABLE;

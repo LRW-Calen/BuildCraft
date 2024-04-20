@@ -21,67 +21,56 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class GuiIcon implements ISimpleDrawable
-{
+public class GuiIcon implements ISimpleDrawable {
     public final ISprite sprite;
     public final int textureSize;
     public final int width, height;
 
-    public GuiIcon(ISprite sprite, int textureSize)
-    {
+    public GuiIcon(ISprite sprite, int textureSize) {
         this.sprite = sprite;
         this.textureSize = textureSize;
         this.width = (int) (Math.abs(sprite.getInterpU(1) - sprite.getInterpU(0)) * textureSize);
         this.height = (int) (Math.abs(sprite.getInterpV(1) - sprite.getInterpV(0)) * textureSize);
     }
 
-    public GuiIcon(ResourceLocation texture, double u, double v, double width, double height, int texSize)
-    {
+    public GuiIcon(ResourceLocation texture, double u, double v, double width, double height, int texSize) {
         this(new SpriteRaw(texture, u, v, width, height, texSize), texSize);
     }
 
-    public GuiIcon(ResourceLocation texture, double u, double v, double width, double height)
-    {
+    public GuiIcon(ResourceLocation texture, double u, double v, double width, double height) {
         this(texture, u, v, width, height, 256);
     }
 
-    public GuiIcon offset(double u, double v)
-    {
+    public GuiIcon offset(double u, double v) {
         SpriteRaw raw = (SpriteRaw) sprite;
         double uMin = raw.uMin + u / textureSize;
         double vMin = raw.vMin + v / textureSize;
         return new GuiIcon(new SpriteRaw(raw.location, uMin, vMin, raw.width, raw.height), textureSize);
     }
 
-    public boolean containsGuiPos(double x, double y, IGuiPosition pos)
-    {
+    public boolean containsGuiPos(double x, double y, IGuiPosition pos) {
         return new GuiRectangle(x, y, width, height).contains(pos);
     }
 
-    public DynamicTexture createDynamicTexture(int scale)
-    {
+    public DynamicTexture createDynamicTexture(int scale) {
         return new DynamicTexture(width * scale, height * scale, /*pUseCalloc*/ true);
     }
 
     @Override
-    public void drawAt(PoseStack poseStack, double x, double y)
-    {
+    public void drawAt(PoseStack poseStack, double x, double y) {
         this.drawScaledInside(poseStack, x, y, this.width, this.height);
     }
 
-    public void drawScaledInside(IGuiArea element, PoseStack poseStack)
-    {
+    public void drawScaledInside(IGuiArea element, PoseStack poseStack) {
         drawScaledInside(poseStack, element.getX(), element.getY(), element.getWidth(), element.getHeight());
     }
 
-    public void drawScaledInside(PoseStack poseStack, double x, double y, double drawnWidth, double drawnHeight)
-    {
+    public void drawScaledInside(PoseStack poseStack, double x, double y, double drawnWidth, double drawnHeight) {
         draw(sprite, poseStack, x, y, x + drawnWidth, y + drawnHeight);
     }
 
-//    public void drawCustomQuad(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
-    public void drawCustomQuad(PoseStack poseStack, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
-    {
+    //    public void drawCustomQuad(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
+    public void drawCustomQuad(PoseStack poseStack, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
         sprite.bindTexture();
 
         double uMin = sprite.getInterpU(0);
@@ -120,8 +109,7 @@ public class GuiIcon implements ISimpleDrawable
     }
 
     private static double[] calcQ(double x1, double y1, double x2, double y2, double x3, double y3, double x4,
-                                  double y4)
-    {
+                                  double y4) {
         // Method contents taken from http://www.bitlush.com/posts/arbitrary-quadrilaterals-in-opengl-es-2-0
         // (or github https://github.com/bitlush/android-arbitrary-quadrilaterals-in-opengl-es-2-0 if the site is down)
         // this code is by Keith Wood
@@ -133,19 +121,16 @@ public class GuiIcon implements ISimpleDrawable
 
         double cross = ax * by - ay * bx;
 
-        if (cross != 0)
-        {
+        if (cross != 0) {
             double cy = y1 - y2;
             double cx = x1 - x2;
 
             double s = (ax * cy - ay * cx) / cross;
 
-            if (s > 0 && s < 1)
-            {
+            if (s > 0 && s < 1) {
                 double t = (bx * cy - by * cx) / cross;
 
-                if (t > 0 && t < 1)
-                {
+                if (t > 0 && t < 1) {
                     double q0 = 1 / (1 - t);
                     double q1 = 1 / (1 - s);
                     double q2 = 1 / t;
@@ -174,13 +159,11 @@ public class GuiIcon implements ISimpleDrawable
 //        }
 //    }
 
-    public void drawCutInside(IGuiArea element, PoseStack poseStack)
-    {
+    public void drawCutInside(IGuiArea element, PoseStack poseStack) {
         drawCutInside(poseStack, element.getX(), element.getY(), element.getWidth(), element.getHeight());
     }
 
-    public void drawCutInside(PoseStack poseStack, double x, double y, double displayWidth, double displayHeight)
-    {
+    public void drawCutInside(PoseStack poseStack, double x, double y, double displayWidth, double displayHeight) {
         sprite.bindTexture();
 
         displayWidth = Math.min(this.width, displayWidth);
@@ -215,18 +198,15 @@ public class GuiIcon implements ISimpleDrawable
         tess.end();
     }
 
-    public static void drawAt(ISprite sprite, PoseStack poseStack, double x, double y, double size)
-    {
+    public static void drawAt(ISprite sprite, PoseStack poseStack, double x, double y, double size) {
         drawAt(sprite, poseStack, x, y, size, size);
     }
 
-    public static void drawAt(ISprite sprite, PoseStack poseStack, double x, double y, double width, double height)
-    {
+    public static void drawAt(ISprite sprite, PoseStack poseStack, double x, double y, double width, double height) {
         draw(sprite, poseStack, x, y, x + width, y + height);
     }
 
-    public static void draw(ISprite sprite, PoseStack poseStack, double xMin, double yMin, double xMax, double yMax)
-    {
+    public static void draw(ISprite sprite, PoseStack poseStack, double xMin, double yMin, double xMax, double yMax) {
         sprite.bindTexture();
 
         double uMin = sprite.getInterpU(0);
@@ -252,8 +232,7 @@ public class GuiIcon implements ISimpleDrawable
         tess.end();
     }
 
-    private static void vertex(PoseStack.Pose pose, BufferBuilder vb, double x, double y, double u, double v)
-    {
+    private static void vertex(PoseStack.Pose pose, BufferBuilder vb, double x, double y, double u, double v) {
         vb.vertex(pose.pose(), (float) x, (float) y, 0);
         vb.uv((float) u, (float) v);
         vb.endVertex();

@@ -10,8 +10,8 @@ package buildcraft.lib.engine;
 import buildcraft.api.blocks.ICustomRotationHandler;
 import buildcraft.api.core.IEngineType;
 import buildcraft.api.enums.EnumEngineType;
-import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.core.BCCoreBlocks;
+import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
@@ -20,7 +20,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -34,8 +33,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nonnull;
 import java.util.function.BiFunction;
 
-public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> extends BlockBCTile_Neptune<TileEngineBase_BC8> implements ICustomRotationHandler, IBlockWithTickableTE<TileEngineBase_BC8>
-{
+public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> extends BlockBCTile_Neptune<TileEngineBase_BC8> implements ICustomRotationHandler, IBlockWithTickableTE<TileEngineBase_BC8> {
     public final E engineType;
 
     //    private final Map<E, Supplier<? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(E);
@@ -48,8 +46,7 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
             E type
 //            BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor
 
-    )
-    {
+    ) {
         super(id, props);
         this.engineType = type;
 //        registerEngine(type, constructor);
@@ -77,8 +74,7 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 //    }
 
     @Nonnull
-    public ItemStack getStack(EnumEngineType type)
-    {
+    public ItemStack getStack(EnumEngineType type) {
 //        return new ItemStack(this, 1, type.ordinal());
         return new ItemStack(this, 1);
     }
@@ -93,8 +89,7 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 
     @Override
 //    protected BlockStateContainer createBlockState()
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         // Calen: 不super! engine没有facing属性
 //        super.createBlockStateDefinition(builder);
 //        builder.add(getEngineProperty());
@@ -175,12 +170,9 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
     private static final VoxelShape SOUTH = Shapes.or(BASE_S, TRUNK_S);
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
-    {
-        if (world.getBlockEntity(pos) instanceof TileEngineBase_BC8 engine)
-        {
-            return switch (engine.currentDirection)
-            {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        if (world.getBlockEntity(pos) instanceof TileEngineBase_BC8 engine) {
+            return switch (engine.currentDirection) {
                 case DOWN -> DOWN;
                 case UP -> UP;
                 case WEST -> WEST;
@@ -194,14 +186,12 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level world, BlockState state)
-    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
 //        E engineType = state.getValue(getEngineProperty());
         E engineType = this.engineType;
 //        BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor = engineTileConstructors.get(engineType);
         BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor = BCCoreBlocks.engineTileConstructors.get(engineType);
-        if (constructor == null)
-        {
+        if (constructor == null) {
             return null;
         }
         TileEngineBase_BC8 tile = constructor.apply(pos, state);
@@ -223,8 +213,7 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 
     @Override
 //    public EnumBlockRenderType getRenderType(BlockState state)
-    public RenderShape getRenderShape(BlockState state)
-    {
+    public RenderShape getRenderShape(BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }
 
@@ -248,13 +237,11 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 //    }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean p_60514_)
-    {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean p_60514_) {
         super.neighborChanged(state, world, pos, block, fromPos, p_60514_);
         if (world.isClientSide) return;
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileEngineBase_BC8)
-        {
+        if (tile instanceof TileEngineBase_BC8) {
             TileEngineBase_BC8 engine = (TileEngineBase_BC8) tile;
             engine.rotateIfInvalid();
         }
@@ -263,11 +250,9 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
     // ICustomRotationHandler
 
     @Override
-    public InteractionResult attemptRotation(Level world, BlockPos pos, BlockState state, Direction sideWrenched)
-    {
+    public InteractionResult attemptRotation(Level world, BlockPos pos, BlockState state, Direction sideWrenched) {
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileEngineBase_BC8)
-        {
+        if (tile instanceof TileEngineBase_BC8) {
             TileEngineBase_BC8 engine = (TileEngineBase_BC8) tile;
             return engine.attemptRotation();
         }

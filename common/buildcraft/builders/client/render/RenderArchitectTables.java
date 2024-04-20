@@ -11,26 +11,20 @@ import buildcraft.builders.BCBuildersSprites;
 import buildcraft.builders.client.ClientArchitectTables;
 import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.client.render.DetachedRenderer;
-import buildcraft.lib.misc.SpriteUtil;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.*;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 import javax.vecmath.Point3f;
 import java.util.ArrayList;
@@ -38,14 +32,13 @@ import java.util.Comparator;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer
-{
+@OnlyIn(Dist.CLIENT)
+public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer {
     INSTANCE;
 
     @Override
 //    public void render(Player player, float partialTicks)
-    public void render(Player player, float partialTicks, PoseStack poseStack)
-    {
+    public void render(Player player, float partialTicks, PoseStack poseStack) {
         List<AABB> boxes = new ArrayList<>(ClientArchitectTables.BOXES.keySet());
         boxes.sort(
                 Comparator.<AABB>comparingDouble(bb ->
@@ -64,15 +57,14 @@ public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer
 //        final boolean __STENCIL = BCBuildersConfig.enableStencil && Minecraft.getMinecraft().getFramebuffer().isStencilEnabled();
         final boolean __STENCIL = BCBuildersConfig.enableStencil;
 
-        for (AABB bb : boxes)
-        {
+        for (AABB bb : boxes) {
             // Calen
             MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
             VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
             // TODO Calen what does this do? seems nothing in 1.12.2
 //            if (__STENCIL)
 //            {
-                // Calen: these will destroy the mc rendering, only dark background with stars left
+            // Calen: these will destroy the mc rendering, only dark background with stars left
 ////                GL11.glStencilMask(0xff);
 //                RenderSystem.stencilMask(0xff);
 ////                GL11.glClearStencil(1);
@@ -172,16 +164,13 @@ public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer
             TextureAtlasSprite scan = BCBuildersSprites.ARCHITECT_SCAN.getSprite();
             float u0 = scan.getU0(), u1 = scan.getU1(), v0 = scan.getV0(), v1 = scan.getV1();
 //            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-            for (BlockPos pos : poses)
-            {
-                if (!bb.intersects(new AABB(pos)))
-                {
+            for (BlockPos pos : poses) {
+                if (!bb.intersects(new AABB(pos))) {
                     continue;
                 }
                 poseStack.pushPose();
 //                poseStack.translate(pos.getX(), pos.getY(), pos.getZ());
-                for (Direction face : Direction.values())
-                {
+                for (Direction face : Direction.values()) {
                     ModelUtil.createFace(
                                     face,
                                     new Point3f(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F),
@@ -216,13 +205,12 @@ public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer
         }
     }
 
-//    private final LazyLoadedValue<TextureAtlasSprite> white = new LazyLoadedValue<>(SpriteUtil::white);
+    //    private final LazyLoadedValue<TextureAtlasSprite> white = new LazyLoadedValue<>(SpriteUtil::white);
     private final int COLOUR = (15 << 20) | (15 << 4);
     private VertexConsumer buffer = null;
     private PoseStack.Pose pose = null;
 
-    private VertexConsumer vertex(double x, double y, double z, float u, float v)
-    {
+    private VertexConsumer vertex(double x, double y, double z, float u, float v) {
         buffer
 //                .vertex(pose.pose(), (float) (x - bb.minX), (float) (y - bb.minY), (float) (z - bb.minZ))
                 .vertex(pose.pose(), (float) (x), (float) (y), (float) (z))

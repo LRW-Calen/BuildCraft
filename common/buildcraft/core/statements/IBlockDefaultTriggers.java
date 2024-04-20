@@ -11,8 +11,7 @@ import net.minecraft.core.Direction;
  *
  * This does not block other statement providers from adding triggers or actions. See IOverrideDefaultStatements for a
  * more aggressive approach. */
-public interface IBlockDefaultTriggers
-{
+public interface IBlockDefaultTriggers {
     boolean blockInventoryTriggers(Direction side);
 
     boolean blockFluidHandlerTriggers(Direction side);

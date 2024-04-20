@@ -7,21 +7,15 @@ package buildcraft.core.item;
 import buildcraft.api.enums.EnumDecoratedBlock;
 import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.item.ItemBlockBCMulti;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ItemBlockDecorated extends ItemBlockBCMulti
-{
+public class ItemBlockDecorated extends ItemBlockBCMulti {
     public final EnumDecoratedBlock TYPE;
 
     //    public ItemBlockDecorated(BlockBCBase_Neptune block)
 //    public ItemBlockDecorated(BlockBCBase_Neptune block, Item.Properties properties)
-    public ItemBlockDecorated(BlockBCBase_Neptune block, Item.Properties properties, EnumDecoratedBlock type)
-    {
+    public ItemBlockDecorated(BlockBCBase_Neptune block, Item.Properties properties, EnumDecoratedBlock type) {
 //        super(block, createNameArray());
         super(block, properties);
         this.TYPE = type;
@@ -40,8 +34,7 @@ public class ItemBlockDecorated extends ItemBlockBCMulti
 
 
     @Override
-    public String getDescriptionId(ItemStack stack)
-    {
+    public String getDescriptionId(ItemStack stack) {
         return super.getDescriptionId(stack).replace(".name", "") + "." + this.TYPE.getSerializedName() + ".name";
     }
 

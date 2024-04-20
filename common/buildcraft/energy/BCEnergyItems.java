@@ -7,9 +7,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCEnergyItems
-{
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCEnergy.MOD_ID);
+public class BCEnergyItems {
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCEnergy.MODID);
 //    public static Item.Properties BC_ENERGY_BLOCKITEM_DEFAULT_PROP =
 //            new Item.Properties()
 //                    .tab(BCCreativeTab.BC_MAIN_TAB);
@@ -18,12 +17,11 @@ public class BCEnergyItems
 //    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, NameSpaces.BUILDCRAFT_ENERGY);
 
     // 油井放置器
-    public static final RegistryObject<Item> oilPlacer ;
+    public static final RegistryObject<Item> oilPlacer;
     // 油井放置器
-    public static final RegistryObject<Item> globOil ;
+    public static final RegistryObject<Item> globOil;
 
-    static
-    {
+    static {
         globOil = HELPER.addItem(
                 "item.glob_oil",
                 new Item.Properties()
@@ -41,8 +39,7 @@ public class BCEnergyItems
         );
     }
 
-    public static void preInit()
-    {
+    public static void preInit() {
 
     }
 }

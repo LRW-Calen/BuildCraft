@@ -12,10 +12,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCBuildersBlocks
-{
-
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCBuilders.MOD_ID);
+public class BCBuildersBlocks {
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCBuilders.MODID);
 
     public static RegistryObject<BlockFiller> filler;
     public static RegistryObject<BlockBuilder> builder;
@@ -32,8 +30,7 @@ public class BCBuildersBlocks
     public static RegistryObject<BlockEntityType<TileReplacer>> replacerTile;
     public static RegistryObject<BlockEntityType<TileQuarry>> quarryTile;
 
-    public static void fmlPreInit()
-    {
+    public static void fmlPreInit() {
         filler = HELPER.addBlockAndItem("block.filler", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFiller::new);
         builder = HELPER.addBlockAndItem("block.builder", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockBuilder::new);
         architect = HELPER.addBlockAndItem("block.architect", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockArchitectTable::new);

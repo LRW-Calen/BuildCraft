@@ -12,8 +12,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.concurrent.TimeUnit;
 
-public abstract class ZonePlannerMapData
-{
+public abstract class ZonePlannerMapData {
     protected final Cache<ZonePlannerMapChunkKey, ZonePlannerMapChunk> data = CacheBuilder.newBuilder()
             .expireAfterWrite(2, TimeUnit.MINUTES)
             .build();
@@ -23,17 +22,12 @@ public abstract class ZonePlannerMapData
      */
     protected abstract ZonePlannerMapChunk loadChunk(Level world, ZonePlannerMapChunkKey key);
 
-    public final ZonePlannerMapChunk getChunk(Level world, ZonePlannerMapChunkKey key)
-    {
-        if (data.getIfPresent(key) != null)
-        {
+    public final ZonePlannerMapChunk getChunk(Level world, ZonePlannerMapChunkKey key) {
+        if (data.getIfPresent(key) != null) {
             return data.getIfPresent(key);
-        }
-        else
-        {
+        } else {
             ZonePlannerMapChunk zonePlannerMapChunk = loadChunk(world, key);
-            if (zonePlannerMapChunk != null)
-            {
+            if (zonePlannerMapChunk != null) {
                 data.put(key, zonePlannerMapChunk);
                 return zonePlannerMapChunk;
             }

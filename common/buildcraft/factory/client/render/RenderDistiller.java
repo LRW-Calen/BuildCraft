@@ -6,10 +6,10 @@
 
 package buildcraft.factory.client.render;
 
-import buildcraft.factory.tile.TileDistiller_BC8;
 import buildcraft.factory.BCFactoryBlocks;
-import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.factory.BCFactoryModels;
+import buildcraft.factory.tile.TileDistiller_BC8;
+import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.render.fluid.FluidRenderer;
 import buildcraft.lib.client.render.fluid.FluidRenderer.TankSize;
@@ -39,37 +39,31 @@ import java.util.EnumMap;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8>
-{
+public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8> {
     private static final Map<Direction, TankRenderSizes> TANK_SIZES = new EnumMap<>(Direction.class);
 
-    static
-    {
+    static {
         Direction face = Direction.WEST;
         TankSize tankIn = new TankSize(0, 0, 4, 8, 16, 12).shrink(1 / 64.0);
         TankSize tankGasOut = new TankSize(8, 8, 0, 16, 16, 16).shrink(1 / 64.0);
         TankSize tankLiquidOut = new TankSize(8, 0, 0, 16, 8, 16).shrink(1 / 64.0);
         TankRenderSizes sizes = new TankRenderSizes(tankIn, tankGasOut, tankLiquidOut);
-        for (int i = 0; i < 4; i++)
-        {
+        for (int i = 0; i < 4; i++) {
             TANK_SIZES.put(face, sizes);
             face = face.getClockWise();
             sizes = sizes.rotateY();
         }
     }
 
-    public RenderDistiller(BlockEntityRendererProvider.Context context)
-    {
+    public RenderDistiller(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void render(TileDistiller_BC8 tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
-    public void render(TileDistiller_BC8 tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileDistiller_BC8 tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 
         BlockState state = tile.getLevel().getBlockState(tile.getBlockPos());
-        if (state.getBlock() != BCFactoryBlocks.distiller.get())
-        {
+        if (state.getBlock() != BCFactoryBlocks.distiller.get()) {
             return;
         }
 
@@ -100,8 +94,7 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8>
 
         profiler.push("model");
         profiler.push("compute");
-        if (tile.clientModelData.hasNoNodes())
-        {
+        if (tile.clientModelData.hasNoNodes()) {
             tile.clientModelData.setNodes(BCFactoryModels.DISTILLER.createTickableNodes());
         }
         tile.setClientModelVariables(partialTicks);
@@ -118,8 +111,7 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8>
         byte light_block = (byte) ((lightc >> 4) & 15);
         byte light_sky = (byte) ((lightc >> 20) & 15);
         VertexConsumer bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        for (MutableQuad q : quads)
-        {
+        for (MutableQuad q : quads) {
             copy.copyFrom(q);
             copy.maxLighti(light_block, light_sky);
             copy.overlay(combinedOverlay);
@@ -156,11 +148,9 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8>
             int combinedOverlay,
             float partialTicks,
             MultiBufferSource bufferSource
-    )
-    {
+    ) {
         FluidStackInterp fluid = tank.getFluidForRender(partialTicks);
-        if (fluid == null || fluid.amount <= 0)
-        {
+        if (fluid == null || fluid.amount <= 0) {
             return;
         }
         int blockLight = fluid.fluid.getRawFluid().getAttributes().getLuminosity(fluid.fluid) & 0xF;
@@ -182,52 +172,43 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8>
         );
     }
 
-    static class TankRenderSizes
-    {
+    static class TankRenderSizes {
         final TankSize tankIn, tankOutGas, tankOutLiquid;
 
-        public TankRenderSizes(TankSize tankIn, TankSize tankOutGas, TankSize tankOutLiquid)
-        {
+        public TankRenderSizes(TankSize tankIn, TankSize tankOutGas, TankSize tankOutLiquid) {
             this.tankIn = tankIn;
             this.tankOutGas = tankOutGas;
             this.tankOutLiquid = tankOutLiquid;
         }
 
-        public TankRenderSizes rotateY()
-        {
+        public TankRenderSizes rotateY() {
             return new TankRenderSizes(tankIn.rotateY(), tankOutGas.rotateY(), tankOutLiquid.rotateY());
         }
     }
 
-    static class Size
-    {
+    static class Size {
         final Vec3 min, max;
 
-        public Size(int sx, int sy, int sz, int ex, int ey, int ez)
-        {
+        public Size(int sx, int sy, int sz, int ex, int ey, int ez) {
             this(new Vec3(sx, sy, sz).scale(1 / 16.0), new Vec3(ex, ey, ez).scale(1 / 16.0));
         }
 
-        public Size(Vec3 min, Vec3 max)
-        {
+        public Size(Vec3 min, Vec3 max) {
             this.min = min;
             this.max = max;
         }
 
-        public Size shrink(double by)
-        {
+        public Size shrink(double by) {
             return new Size(min.add(by, by, by), max.subtract(by, by, by));
         }
 
-        public Size rotateY()
-        {
+        public Size rotateY() {
             Vec3 _min = rotateY(min);
             Vec3 _max = rotateY(max);
             return new Size(VecUtil.min(_min, _max), VecUtil.max(_min, _max));
         }
 
-        private static Vec3 rotateY(Vec3 vec)
-        {
+        private static Vec3 rotateY(Vec3 vec) {
             return new Vec3(//
                     1 - vec.z, //
                     vec.y, //

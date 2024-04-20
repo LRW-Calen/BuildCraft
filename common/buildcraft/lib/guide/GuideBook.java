@@ -8,8 +8,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 
-public final class GuideBook
-{
+public final class GuideBook {
 
     public static final ISimpleEntryDeserializer<GuideBook> DESERIALISER = GuideBook::deserialize;
 

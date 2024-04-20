@@ -30,24 +30,20 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderTank implements BlockEntityRenderer<TileTank>
-{
+public class RenderTank implements BlockEntityRenderer<TileTank> {
     private static final Vec3 MIN = new Vec3(0.13, 0.01, 0.13);
     private static final Vec3 MAX = new Vec3(0.86, 0.99, 0.86);
     private static final Vec3 MIN_CONNECTED = new Vec3(0.13, 0, 0.13);
     private static final Vec3 MAX_CONNECTED = new Vec3(0.86, 1 - 1e-5, 0.86);
 
-    public RenderTank(BlockEntityRendererProvider.Context context)
-    {
+    public RenderTank(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void render(TileTank tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
-    public void render(TileTank tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileTank tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         FluidStackInterp forRender = tile.getFluidForRender(partialTicks);
-        if (forRender == null)
-        {
+        if (forRender == null) {
             return;
         }
         Minecraft.getInstance().getProfiler().push("bc");
@@ -115,40 +111,31 @@ public class RenderTank implements BlockEntityRenderer<TileTank>
         Minecraft.getInstance().getProfiler().pop();
     }
 
-    private static boolean isFullyConnected(TileTank thisTank, Direction face, float partialTicks)
-    {
+    private static boolean isFullyConnected(TileTank thisTank, Direction face, float partialTicks) {
         BlockPos pos = thisTank.getBlockPos().relative(face);
         BlockEntity oTile = thisTank.getLevel().getBlockEntity(pos);
-        if (oTile instanceof TileTank)
-        {
+        if (oTile instanceof TileTank) {
             TileTank oTank = (TileTank) oTile;
-            if (!TileTank.canTanksConnect(thisTank, oTank, face))
-            {
+            if (!TileTank.canTanksConnect(thisTank, oTank, face)) {
                 return false;
             }
             FluidStackInterp forRender = oTank.getFluidForRender(partialTicks);
-            if (forRender == null)
-            {
+            if (forRender == null) {
                 return false;
             }
             FluidStack fluid = forRender.fluid;
-            if (fluid == null || forRender.amount <= 0)
-            {
+            if (fluid == null || forRender.amount <= 0) {
                 return false;
-            }
-            else if (thisTank.getFluidForRender(partialTicks) == null
+            } else if (thisTank.getFluidForRender(partialTicks) == null
                     || !fluid.isFluidEqual(thisTank.getFluidForRender(partialTicks).fluid))
             {
                 return false;
             }
-            if (fluid.getRawFluid().getAttributes().isGaseous(fluid))
-            {
+            if (fluid.getRawFluid().getAttributes().isGaseous(fluid)) {
                 face = face.getOpposite();
             }
             return forRender.amount >= oTank.tank.getCapacity() || face == Direction.UP;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }

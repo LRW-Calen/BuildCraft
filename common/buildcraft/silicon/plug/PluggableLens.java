@@ -12,10 +12,10 @@ import buildcraft.api.transport.pipe.PipeEventItem;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
 import buildcraft.api.transport.pluggable.PluggableModelKey;
-import buildcraft.silicon.BCSiliconItems;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.net.PacketBufferBC;
+import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.client.model.key.KeyPlugLens;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
@@ -28,12 +28,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class PluggableLens extends PipePluggable
-{
+public class PluggableLens extends PipePluggable {
     private static final VoxelShape[] BOXES = new VoxelShape[6];
 
-    static
-    {
+    static {
         double ll = 0 / 16.0;
         double lu = 2 / 16.0;
         double ul = 14 / 16.0;
@@ -56,8 +54,7 @@ public class PluggableLens extends PipePluggable
     // Manual constructor (called by the specific item pluggable code)
 
     public PluggableLens(PluggableDefinition def, IPipeHolder holder, Direction side, DyeColor colour,
-                         boolean isFilter)
-    {
+                         boolean isFilter) {
         super(def, holder, side);
         this.colour = colour;
         this.isFilter = isFilter;
@@ -65,23 +62,18 @@ public class PluggableLens extends PipePluggable
 
     // Saving + Loading
 
-    public PluggableLens(PluggableDefinition def, IPipeHolder holder, Direction side, CompoundTag nbt)
-    {
+    public PluggableLens(PluggableDefinition def, IPipeHolder holder, Direction side, CompoundTag nbt) {
         super(def, holder, side);
-        if (nbt.contains("colour"))
-        {
+        if (nbt.contains("colour")) {
             colour = NBTUtilBC.readEnum(nbt.get("colour"), DyeColor.class);
-        }
-        else
-        {
+        } else {
             colour = DyeColor.byId(nbt.getByte("c"));
         }
         isFilter = nbt.getBoolean("f");
     }
 
     @Override
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = super.writeToNbt();
         nbt.put("colour", NBTUtilBC.writeEnum(colour));
         nbt.putBoolean("f", isFilter);
@@ -90,8 +82,7 @@ public class PluggableLens extends PipePluggable
 
     // Networking
 
-    public PluggableLens(PluggableDefinition def, IPipeHolder holder, Direction side, FriendlyByteBuf buffer)
-    {
+    public PluggableLens(PluggableDefinition def, IPipeHolder holder, Direction side, FriendlyByteBuf buffer) {
         super(def, holder, side);
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         colour = MessageUtil.readEnumOrNull(buf, DyeColor.class);
@@ -99,8 +90,7 @@ public class PluggableLens extends PipePluggable
     }
 
     @Override
-    public void writeCreationPayload(FriendlyByteBuf buffer)
-    {
+    public void writeCreationPayload(FriendlyByteBuf buffer) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         MessageUtil.writeEnumOrNull(buf, colour);
         buf.writeBoolean(isFilter);
@@ -109,33 +99,26 @@ public class PluggableLens extends PipePluggable
     // Pluggable methods
 
     @Override
-    public VoxelShape getBoundingBox()
-    {
+    public VoxelShape getBoundingBox() {
         return BOXES[side.ordinal()];
     }
 
     @Override
-    public ItemStack getPickStack()
-    {
+    public ItemStack getPickStack() {
         return BCSiliconItems.plugLens.get().getStack(colour, isFilter);
     }
 
     @Override
-    public boolean isBlocking()
-    {
+    public boolean isBlocking() {
         return false;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public PluggableModelKey getModelRenderKey(RenderType layer)
-    {
-        if (layer == RenderType.cutout() || layer == RenderType.translucent())
-        {
+    public PluggableModelKey getModelRenderKey(RenderType layer) {
+        if (layer == RenderType.cutout() || layer == RenderType.translucent()) {
             return new KeyPlugLens(layer, side, colour, isFilter);
-        }
-        else
-        {
+        } else {
             return null;
         }
 //        switch (layer)
@@ -149,33 +132,23 @@ public class PluggableLens extends PipePluggable
     }
 
     @PipeEventHandler
-    public void tryInsert(PipeEventItem.TryInsert tryInsert)
-    {
-        if (isFilter && tryInsert.from == side)
-        {
+    public void tryInsert(PipeEventItem.TryInsert tryInsert) {
+        if (isFilter && tryInsert.from == side) {
             DyeColor itemColour = tryInsert.colour;
-            if (itemColour != null && itemColour != colour)
-            {
+            if (itemColour != null && itemColour != colour) {
                 tryInsert.cancel();
             }
         }
     }
 
     @PipeEventHandler
-    public void sideCheck(PipeEventItem.SideCheck event)
-    {
-        if (isFilter)
-        {
-            if (event.colour == colour)
-            {
+    public void sideCheck(PipeEventItem.SideCheck event) {
+        if (isFilter) {
+            if (event.colour == colour) {
                 event.increasePriority(side);
-            }
-            else if (event.colour != null)
-            {
+            } else if (event.colour != null) {
                 event.disallow(side);
-            }
-            else
-            {
+            } else {
                 event.decreasePriority(side);
             }
         }
@@ -184,48 +157,34 @@ public class PluggableLens extends PipePluggable
     /**
      * Called from either *this* pipe, or the neighbouring pipe as given in compareSide.
      */
-    void sideCheckAnyPos(PipeEventItem.SideCheck event, Direction compareSide)
-    {
+    void sideCheckAnyPos(PipeEventItem.SideCheck event, Direction compareSide) {
         // Note that this should *never* use "this.side" as it may be wrong!
-        if (isFilter)
-        {
-            if (event.colour == colour)
-            {
+        if (isFilter) {
+            if (event.colour == colour) {
                 event.increasePriority(compareSide);
-            }
-            else if (event.colour != null)
-            {
-                if (compareSide == side)
-                {
+            } else if (event.colour != null) {
+                if (compareSide == side) {
                     event.disallow(compareSide);
                 }
-            }
-            else
-            {
+            } else {
                 event.decreasePriority(compareSide);
             }
         }
     }
 
     @PipeEventHandler
-    public void beforeInsert(PipeEventItem.OnInsert event)
-    {
-        if (!isFilter)
-        {
-            if (event.from == side)
-            {
+    public void beforeInsert(PipeEventItem.OnInsert event) {
+        if (!isFilter) {
+            if (event.from == side) {
                 event.colour = colour;
             }
         }
     }
 
     @PipeEventHandler
-    public void reachEnd(PipeEventItem.ReachEnd event)
-    {
-        if (!isFilter)
-        {
-            if (event.to == side)
-            {
+    public void reachEnd(PipeEventItem.ReachEnd event) {
+        if (!isFilter) {
+            if (event.to == side) {
                 event.colour = colour;
             }
         }

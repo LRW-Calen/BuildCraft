@@ -6,18 +6,13 @@ package buildcraft.lib.block;
 
 import buildcraft.api.blocks.ICustomRotationHandler;
 import buildcraft.api.properties.BuildCraftProperties;
-import buildcraft.lib.tile.TileBC_Neptune;
-import buildcraft.lib.tile.TileMarker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -30,8 +25,7 @@ import javax.annotation.Nonnull;
 import java.util.EnumMap;
 import java.util.Map;
 
-public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICustomRotationHandler
-{
+public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICustomRotationHandler {
     private static final Map<Direction, VoxelShape> BOUNDING_BOXES = new EnumMap<>(Direction.class);
 
     private static final double halfWidth = 0.1;
@@ -47,8 +41,7 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
     private static final VoxelShape BOUNDING_BOX_EAST = Shapes.box(0, nw, nw, h, pw, pw);
     private static final VoxelShape BOUNDING_BOX_WEST = Shapes.box(ih, nw, nw, 1, pw, pw);
 
-    static
-    {
+    static {
         BOUNDING_BOXES.put(Direction.DOWN, BOUNDING_BOX_DOWN);
         BOUNDING_BOXES.put(Direction.UP, BOUNDING_BOX_UP);
         BOUNDING_BOXES.put(Direction.SOUTH, BOUNDING_BOX_SOUTH);
@@ -57,8 +50,7 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
         BOUNDING_BOXES.put(Direction.WEST, BOUNDING_BOX_WEST);
     }
 
-    public BlockMarkerBase(String id, BlockBehaviour.Properties props)
-    {
+    public BlockMarkerBase(String id, BlockBehaviour.Properties props) {
         super(
                 id,
                 props
@@ -75,8 +67,7 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
 
     @Override
 //    protected BlockStateContainer createBlockState()
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(BuildCraftProperties.BLOCK_FACING_6);
 //        builder.add(BuildCraftProperties.ACTIVE); // Calen: only changes, never used
@@ -124,22 +115,19 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
 
     @Override
 //    public AABB getCollisionShape(BlockState state, BlockAccess world, BlockPos pos)
-    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return Shapes.empty();
     }
 
     @Override
 //    public AABB getBoundingBox(BlockState state, BlockAccess source, BlockPos pos)
-    public VoxelShape getShape(BlockState state, BlockGetter source, BlockPos pos, CollisionContext context)
-    {
+    public VoxelShape getShape(BlockState state, BlockGetter source, BlockPos pos, CollisionContext context) {
         return BOUNDING_BOXES.get(state.getValue(BuildCraftProperties.BLOCK_FACING_6));
     }
 
     @Override
 //    public BlockState getStateForPlacement(Level world, BlockPos pos, Direction facing, float hitX, float hitY, float hitZ, int meta, LivingEntity placer, InteractionHand hand)
-    public BlockState getStateForPlacement(BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction facing = context.getClickedFace();
         BlockState state = defaultBlockState();
         state = state.setValue(BuildCraftProperties.BLOCK_FACING_6, facing);
@@ -148,36 +136,28 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
 
     // TODO Calen canPlaceBlockOnSide??? canSurvive?
 //    @Override
-    public boolean canPlaceBlockOnSide(Level world, BlockPos pos, Direction side)
-    {
+    public boolean canPlaceBlockOnSide(Level world, BlockPos pos, Direction side) {
         BlockState state = world.getBlockState(pos);
         return state.isFaceSturdy(world, pos.relative(side.getOpposite()), side);
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_60514_)
-    {
-        if (state.getBlock() != this)
-        {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block blockIn, BlockPos fromPos, boolean p_60514_) {
+        if (state.getBlock() != this) {
             return;
         }
         Direction sideOn = state.getValue(BuildCraftProperties.BLOCK_FACING_6);
-        if (!canPlaceBlockOnSide(world, pos, sideOn))
-        {
+        if (!canPlaceBlockOnSide(world, pos, sideOn)) {
             world.destroyBlock(pos, true);
         }
     }
 
     @Override
-    public InteractionResult attemptRotation(Level world, BlockPos pos, BlockState state, Direction sideWrenched)
-    {
-        if (state.getBlock() instanceof BlockMarkerBase)
-        {// Just check to make sure we have the right core...
+    public InteractionResult attemptRotation(Level world, BlockPos pos, BlockState state, Direction sideWrenched) {
+        if (state.getBlock() instanceof BlockMarkerBase) {// Just check to make sure we have the right core...
             Property<Direction> prop = BuildCraftProperties.BLOCK_FACING_6;
             return VanillaRotationHandlers.rotateEnumFacing(world, pos, state, prop, VanillaRotationHandlers.ROTATE_FACING);
-        }
-        else
-        {
+        } else {
             return InteractionResult.PASS;
         }
     }

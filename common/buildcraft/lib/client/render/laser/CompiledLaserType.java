@@ -6,7 +6,9 @@
 
 package buildcraft.lib.client.render.laser;
 
-import buildcraft.lib.client.render.laser.LaserData_BC8.*;
+import buildcraft.lib.client.render.laser.LaserData_BC8.LaserRow;
+import buildcraft.lib.client.render.laser.LaserData_BC8.LaserSide;
+import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import net.minecraft.util.Mth;
 
 import java.util.ArrayList;

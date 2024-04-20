@@ -61,12 +61,13 @@ public class MessageMarker implements IMessage {
 
     @Override
     public String toString() {
-        boolean[] flags = { add, multiple, connection };
+        boolean[] flags = {add, multiple, connection};
         return "Message Marker [" + Arrays.toString(flags) + ", cacheId " + cacheId + ", count = " + count
-            + ", positions = " + positions + "]";
+                + ", positions = " + positions + "]";
     }
 
-    public static final IMessageHandler<MessageMarker, IMessage> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageMarker, IMessage> HANDLER = (message, ctx) ->
+    {
         Level world = BCLibProxy.getProxy().getClientWorld();
         if (world == null) {
             if (DEBUG) {

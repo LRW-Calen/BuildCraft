@@ -21,8 +21,7 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 
 /** Various methods operating on (and creating) {@link AABB} */
-public class BoundingBoxUtil
-{
+public class BoundingBoxUtil {
 
     /** Creates an {@link AABB} from a core pos and a box. Note that additional must NOT be null, but the box
      * can be. */
@@ -61,9 +60,11 @@ public class BoundingBoxUtil
     public static AABB makeFrom(Vec3 from, Vec3 to) {
         return new AABB(from.x, from.y, from.z, to.x, to.y, to.z);
     }
+
     public static VoxelShape makeVoxelShapeFrom(Vec3 from, Vec3 to) {
         return Shapes.box(from.x, from.y, from.z, to.x, to.y, to.z);
     }
+
     public static VoxelShape makeVoxelShapeFrom(Vec3 from, Vec3 to, double radius) {
         return Shapes.create(makeFrom(from, to, radius));
     }
@@ -90,8 +91,8 @@ public class BoundingBoxUtil
 
     /** Creates a box that extrudes from the specified face of the given core position. */
     public static AABB extrudeFace(BlockPos pos, Direction face, double depth) {
-        Vec3 from = new Vec3(pos.getX(),pos.getY(),pos.getZ());
-        Vec3 to = new Vec3(pos.getX(),pos.getY(),pos.getZ()).add(1, 1, 1);
+        Vec3 from = new Vec3(pos.getX(), pos.getY(), pos.getZ());
+        Vec3 to = new Vec3(pos.getX(), pos.getY(), pos.getZ()).add(1, 1, 1);
 
         Axis axis = face.getAxis();
         if (face.getAxisDirection() == AxisDirection.POSITIVE) {

@@ -14,10 +14,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.client.Minecraft;
-import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fml.loading.targets.FMLServerDevLaunchHandler;
-import net.minecraftforge.fml.loading.targets.FMLServerLaunchHandler;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,8 +32,7 @@ import java.util.function.Supplier;
  * Note that all custom instances should be added to {@link BuildCraftObjectCaches#registerCache(NetworkedObjectCache)},
  * in order to work properly
  */
-public abstract class NetworkedObjectCache<T>
-{
+public abstract class NetworkedObjectCache<T> {
 
     static final boolean DEBUG_LOG = BCDebugging.shouldDebugLog("lib.net.cache");
     static final boolean DEBUG_CPLX = BCDebugging.shouldDebugComplex("lib.net.cache");
@@ -76,8 +72,7 @@ public abstract class NetworkedObjectCache<T>
     private final ServerView serverView = new ServerView();
     private final ClientView clientView = new ClientView();
 
-    public NetworkedObjectCache(T defaultObject)
-    {
+    public NetworkedObjectCache(T defaultObject) {
         this.defaultObject = defaultObject;
         serverObjectToId.defaultReturnValue(-1);
     }
@@ -90,10 +85,8 @@ public abstract class NetworkedObjectCache<T>
      * @return The server view of this cache. If the debug option "lib.net.cache" is enabled then this will check to
      * make sure that this really is the server thread.
      */
-    public ServerView server()
-    {
-        if (DEBUG_LOG)
-        {
+    public ServerView server() {
+        if (DEBUG_LOG) {
             // TODO Calen how to get server???
 //            MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 //            MinecraftServer server = Minecraft.getInstance().getSingleplayerServer();
@@ -109,12 +102,9 @@ public abstract class NetworkedObjectCache<T>
      * @return The server view of this cache. If the debug option "lib.net.cache" is enabled then this will check to
      * make sure that this really is the client thread.
      */
-    public ClientView client()
-    {
-        if (DEBUG_LOG)
-        {
-            if (!Minecraft.getInstance().isSameThread())
-            {
+    public ClientView client() {
+        if (DEBUG_LOG) {
+            if (!Minecraft.getInstance().isSameThread()) {
                 throw new IllegalStateException("");
             }
         }
@@ -124,10 +114,8 @@ public abstract class NetworkedObjectCache<T>
     /**
      * The server view of the cache.
      */
-    public class ServerView
-    {
-        private ServerView()
-        {
+    public class ServerView {
+        private ServerView() {
         }
 
         /**
@@ -136,8 +124,7 @@ public abstract class NetworkedObjectCache<T>
          * @param value The object to store
          * @return The id that maps back to the canonicalised version of the value.
          */
-        public int store(T value)
-        {
+        public int store(T value) {
             return serverStore(value);
         }
 
@@ -148,8 +135,7 @@ public abstract class NetworkedObjectCache<T>
          * @param value The value to get an id for
          * @return
          */
-        public int getId(T value)
-        {
+        public int getId(T value) {
             return serverGetId(value);
         }
     }
@@ -157,10 +143,8 @@ public abstract class NetworkedObjectCache<T>
     /**
      * The client view of the cache.
      */
-    public class ClientView
-    {
-        private ClientView()
-        {
+    public class ClientView {
+        private ClientView() {
         }
 
         /**
@@ -169,8 +153,7 @@ public abstract class NetworkedObjectCache<T>
          * integer ID) in preference to calling this method, as then you can avoid the map lookup. Th returned
          * link object is updated if
          */
-        public Link retrieve(int id)
-        {
+        public Link retrieve(int id) {
             return clientRetrieve(id);
         }
     }
@@ -178,8 +161,7 @@ public abstract class NetworkedObjectCache<T>
     /**
      * Defines a link to a cached object (on the client - don't use this on the server). If
      */
-    public class Link implements Supplier<T>
-    {
+    public class Link implements Supplier<T> {
 
         /**
          * The stored, cached value.
@@ -191,19 +173,16 @@ public abstract class NetworkedObjectCache<T>
          */
         final int id;
 
-        Link(int id)
-        {
+        Link(int id) {
             this.id = id;
         }
 
         @Override
-        public T get()
-        {
+        public T get() {
             return actual == null ? defaultObject : actual;
         }
 
-        public boolean hasBeenReceived()
-        {
+        public boolean hasBeenReceived() {
             return actual != null;
         }
     }
@@ -229,8 +208,7 @@ public abstract class NetworkedObjectCache<T>
     /**
      * @return The name of this cache to be used in debug messages.
      */
-    protected String getCacheName()
-    {
+    protected String getCacheName() {
         return getClass().getSimpleName();
     }
 
@@ -242,33 +220,25 @@ public abstract class NetworkedObjectCache<T>
      * @param object
      * @return
      */
-    private int serverStore(T object)
-    {
+    private int serverStore(T object) {
         Integer current = serverObjectToId.get(object);
-        if (current == null)
-        {
+        if (current == null) {
             // new entry
             int id = serverCurrentId++;
             T copy = copyOf(object);
             serverObjectToId.put(copy, id);
             serverIdToObject.put(id, copy);
-            if (DEBUG_CPLX)
-            {
+            if (DEBUG_CPLX) {
                 String toString;
-                if (copy instanceof FluidStack fluid)
-                {
+                if (copy instanceof FluidStack fluid) {
                     toString = fluid.getTranslationKey();
-                }
-                else
-                {
+                } else {
                     toString = copy.toString();
                 }
                 BCLog.logger.info("[lib.net.cache] The cache " + getNameAndId() + " stored #" + id + " as " + toString);
             }
             return id;
-        }
-        else
-        {
+        } else {
             // existing entry
             return current;
         }
@@ -284,8 +254,7 @@ public abstract class NetworkedObjectCache<T>
      * @param object
      * @return
      */
-    private int serverGetId(T object)
-    {
+    private int serverGetId(T object) {
         return serverObjectToId.getInt(object);
     }
 
@@ -295,13 +264,10 @@ public abstract class NetworkedObjectCache<T>
      * @param id
      * @return
      */
-    private Link clientRetrieve(int id)
-    {
+    private Link clientRetrieve(int id) {
         Link current = clientObjects.get(id);
-        if (current == null)
-        {
-            if (DEBUG_CPLX)
-            {
+        if (current == null) {
+            if (DEBUG_CPLX) {
                 BCLog.logger.info("[lib.net.cache] The cache " + getNameAndId() + " tried to retrieve #" + id
                         + " for the first time");
             }
@@ -315,8 +281,7 @@ public abstract class NetworkedObjectCache<T>
     /**
      * Used by {@link MessageObjectCacheRequest#HANDLER} to write the actual object out.
      */
-    void writeObjectServer(int id, PacketBufferBC buffer)
-    {
+    void writeObjectServer(int id, PacketBufferBC buffer) {
         T obj = serverIdToObject.get(id);
         writeObject(obj, buffer);
     }
@@ -328,21 +293,16 @@ public abstract class NetworkedObjectCache<T>
      * @param buffer
      * @throws IOException
      */
-    void readObjectClient(int id, PacketBufferBC buffer) throws IOException
-    {
+    void readObjectClient(int id, PacketBufferBC buffer) throws IOException {
         Link link = clientRetrieve(id);
         link.actual = readObject(buffer);
-        if (DEBUG_CPLX)
-        {
+        if (DEBUG_CPLX) {
             T read = link.actual;
             String toString;
-            if (read instanceof FluidStack)
-            {
+            if (read instanceof FluidStack) {
                 FluidStack fluid = (FluidStack) read;
                 toString = fluid.getTranslationKey();
-            }
-            else
-            {
+            } else {
                 toString = read.toString();
             }
             BCLog.logger
@@ -350,22 +310,17 @@ public abstract class NetworkedObjectCache<T>
         }
     }
 
-    final String getNameAndId()
-    {
+    final String getNameAndId() {
         return "(" + BuildCraftObjectCaches.CACHES.indexOf(this) + " = " + getCacheName() + ")";
     }
 
-    void onClientWorldTick()
-    {
+    void onClientWorldTick() {
         int[] ids = new int[clientUnknowns.size()];
-        for (int i = 0; i < ids.length; i++)
-        {
+        for (int i = 0; i < ids.length; i++) {
             ids[i] = clientUnknowns.remove().id;
         }
-        if (ids.length > 0)
-        {
-            if (DEBUG_CPLX)
-            {
+        if (ids.length > 0) {
+            if (DEBUG_CPLX) {
                 BCLog.logger
                         .info("[lib.net.cache] The cache " + getNameAndId() + " requests ID's " + Arrays.toString(ids));
             }
@@ -373,8 +328,7 @@ public abstract class NetworkedObjectCache<T>
         }
     }
 
-    void onClientJoinServer()
-    {
+    void onClientJoinServer() {
         clientObjects.clear();
         clientUnknowns.clear();
     }

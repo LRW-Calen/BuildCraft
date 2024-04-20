@@ -12,8 +12,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkHooks;
 
-public enum BCBuildersGuis
-{
+public enum BCBuildersGuis {
     ARCHITECT,
     BUILDER,
     FILLER,
@@ -21,24 +20,18 @@ public enum BCBuildersGuis
     REPLACER,
     FILLER_PLANNER;
 
-    public void openGUI(Player player)
-    {
+    public void openGUI(Player player) {
 //        player.openGui(BCBuilders.INSTANCE, ordinal(), player.getEntityWorld(), 0, 0, 0);
         openGUI(player, BlockPos.ZERO);
     }
 
-    public void openGUI(Player player, BlockPos pos)
-    {
+    public void openGUI(Player player, BlockPos pos) {
 //        player.openGui(BCBuilders.INSTANCE, ordinal(), player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
-        if (player instanceof ServerPlayer serverPlayer)
-        {
+        if (player instanceof ServerPlayer serverPlayer) {
 //            player.openMenu(state.getMenuProvider(player.level, pos));
-            if (serverPlayer.level.getBlockEntity(pos) instanceof MenuProvider menuProvider)
-            {
+            if (serverPlayer.level.getBlockEntity(pos) instanceof MenuProvider menuProvider) {
                 NetworkHooks.openGui(serverPlayer, menuProvider, pos);
-            }
-            else
-            {
+            } else {
                 player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
             }
         }

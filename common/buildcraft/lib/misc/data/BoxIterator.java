@@ -113,8 +113,8 @@ public class BoxIterator implements Iterator<BlockPos> {
     @Override
     public String toString() {
         return "{BoxIterator [" + StringUtilBC.blockPosToString(min) + "] -> [" + StringUtilBC
-            .blockPosToString(max) + "] @ " + StringUtilBC.blockPosToString(current) + " order: [" + order + "]"
-            + (invert ? " inverting" : "") + (repeat ? " repeating" : "") + " }";
+                .blockPosToString(max) + "] @ " + StringUtilBC.blockPosToString(current) + " order: [" + order + "]"
+                + (invert ? " inverting" : "") + (repeat ? " repeating" : "") + " }";
     }
 
     /** Moves on to the next core. Unlike {@link #next()} this returns the one AFTER that one, so you cannot use
@@ -224,7 +224,7 @@ public class BoxIterator implements Iterator<BlockPos> {
     }
 
     /** Moves this iterator so that {@link #advance()} will return the given core position next.
-     * 
+     *
      * @throws IllegalArgumentException if {@link #contains(BlockPos)} doesn't return true. */
     public void moveTo(BlockPos pos) {
         if (!contains(pos)) {

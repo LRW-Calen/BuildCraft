@@ -6,37 +6,25 @@ package buildcraft.builders;
 
 import buildcraft.api.BCModules;
 import buildcraft.api.core.BCLog;
-import buildcraft.builders.client.render.*;
-import buildcraft.builders.container.*;
-import buildcraft.builders.gui.*;
+import buildcraft.builders.client.render.RenderArchitectTables;
+import buildcraft.builders.client.render.RenderQuarry;
 import buildcraft.builders.snapshot.MessageSnapshotRequest;
 import buildcraft.builders.snapshot.MessageSnapshotResponse;
-import buildcraft.builders.tile.*;
 import buildcraft.core.BCCoreConfig;
 import buildcraft.lib.client.render.DetachedRenderer;
 import buildcraft.lib.net.MessageManager;
-import buildcraft.silicon.BCSiliconProxy;
-import net.minecraft.client.Minecraft;
-import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.loading.FMLLoader;
 
-import java.util.logging.Level;
-
 //public abstract class BCBuildersProxy implements IGuiHandler
-public abstract class BCBuildersProxy
-{
-//    @SidedProxy
+public abstract class BCBuildersProxy {
+    //    @SidedProxy
     private static BCBuildersProxy proxy;
 
-    public static BCBuildersProxy getProxy()
-    {
-        if (proxy == null)
-        {
-            switch (FMLLoader.getDist())
-            {
-                case  CLIENT:
+    public static BCBuildersProxy getProxy() {
+        if (proxy == null) {
+            switch (FMLLoader.getDist()) {
+                case CLIENT:
                     proxy = new BCBuildersProxy.ClientProxy();
                     break;
                 case DEDICATED_SERVER:
@@ -104,30 +92,25 @@ public abstract class BCBuildersProxy
 //        return null;
 //    }
 
-    public void fmlPreInit()
-    {
+    public void fmlPreInit() {
         MessageManager.registerMessageClass(BCModules.BUILDERS, MessageSnapshotRequest.class, MessageSnapshotRequest.HANDLER, Dist.DEDICATED_SERVER);
         MessageManager.registerMessageClass(BCModules.BUILDERS, MessageSnapshotResponse.class, Dist.CLIENT);
     }
 
-    public void fmlInit()
-    {
+    public void fmlInit() {
     }
 
-    public void fmlPostInit()
-    {
+    public void fmlPostInit() {
     }
 
     @SuppressWarnings("unused")
 //    @OnlyIn(Dist.DEDICATED_SERVER)
-    public static class ServerProxy extends BCBuildersProxy
-    {
+    public static class ServerProxy extends BCBuildersProxy {
     }
 
     @SuppressWarnings("unused")
 //    @OnlyIn(Dist.CLIENT)
-    public static class ClientProxy extends BCBuildersProxy
-    {
+    public static class ClientProxy extends BCBuildersProxy {
 //        @Override
 //        public Object getClientGuiElement(int id, Player player, World world, int x, int y, int z)
 //        {
@@ -180,17 +163,12 @@ public abstract class BCBuildersProxy
 //        }
 
         @Override
-        public void fmlPreInit()
-        {
+        public void fmlPreInit() {
             super.fmlPreInit();
-            if (BCBuildersConfig.enableStencil)
-            {
-                if (BCBuildersConfig.internalStencilCrashTest.getBoolean())
-                {
+            if (BCBuildersConfig.enableStencil) {
+                if (BCBuildersConfig.internalStencilCrashTest.getBoolean()) {
                     BCLog.logger.warn("[builders.architect] Not enabling stencils because they have been force-disabled!");
-                }
-                else
-                {
+                } else {
                     BCBuildersConfig.internalStencilCrashTest.set(true);
                     BCCoreConfig.saveConfigs();
                     // TODO Calen Framebuffer???
@@ -210,8 +188,7 @@ public abstract class BCBuildersProxy
         }
 
         @Override
-        public void fmlInit()
-        {
+        public void fmlInit() {
             super.fmlInit();
             // Calen: moved to bcbuilders
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileArchitectTable.class, new RenderArchitectTable());

@@ -6,10 +6,7 @@
 
 package buildcraft.builders.snapshot;
 
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -22,12 +19,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-public class ItemBlocks
-{
+public class ItemBlocks {
     private static final List<Item> LIST = new ArrayList<>();
 
-    static
-    {
+    static {
 //        StreamSupport.stream(Item.REGISTRY.spliterator(), false)
         StreamSupport.stream(ForgeRegistries.ITEMS.spliterator(), false)
 //                .filter(item -> item instanceof BlockItem || item instanceof BlockItemSpecial)
@@ -50,13 +45,11 @@ public class ItemBlocks
         ForgeRegistries.ITEMS.tags().getTag(ItemTags.SIGNS).forEach(ItemBlocks::add);
     }
 
-    public static void add(Item... items)
-    {
+    public static void add(Item... items) {
         LIST.addAll(Arrays.asList(items));
     }
 
-    public static List<Item> getList()
-    {
+    public static List<Item> getList() {
         return Collections.unmodifiableList(LIST);
     }
 }

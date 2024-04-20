@@ -18,18 +18,15 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.profiling.ProfilerFiller;
 
 //public abstract class RenderEngine_BC8<T extends TileEngineBase_BC8> extends FastTESR<T>
-public abstract class RenderEngine_BC8<T extends TileEngineBase_BC8> implements BlockEntityRenderer<T>
-{
-    public RenderEngine_BC8(BlockEntityRendererProvider.Context context)
-    {
+public abstract class RenderEngine_BC8<T extends TileEngineBase_BC8> implements BlockEntityRenderer<T> {
+    public RenderEngine_BC8(BlockEntityRendererProvider.Context context) {
     }
 
     // TODO: Cache the model!
 
     @Override
 //    public void renderTileEntityFast(@Nonnull T engine, double x, double y, double z, float partialTicks, int destroyStage, float partial, @Nonnull BufferBuilder vb)
-    public void render(T engine, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int lightc, int combinedOverlay)
-    {
+    public void render(T engine, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int lightc, int combinedOverlay) {
         ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("bc");
         profiler.push("engine");
@@ -44,10 +41,9 @@ public abstract class RenderEngine_BC8<T extends TileEngineBase_BC8> implements 
         int light_block = (lightc >> 4) & 15;
         int light_sky = (lightc >> 20) & 15;
         VertexConsumer vb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        for (MutableQuad q : quads)
-        {
+        for (MutableQuad q : quads) {
             copy.copyFrom(q);
-            copy.maxLighti((byte)light_block, (byte)light_sky);
+            copy.maxLighti((byte) light_block, (byte) light_sky);
             copy.overlay(combinedOverlay);
             copy.multShade();
             copy.render(poseStack.last(), vb);

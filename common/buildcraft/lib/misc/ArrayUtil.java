@@ -11,8 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.function.*;
 
-public class ArrayUtil
-{
+public class ArrayUtil {
     public static <F, T> T[] map(F[] from, Function<F, T> mapper, IntFunction<T[]> arrayConstructor) {
         T[] array = arrayConstructor.apply(from.length);
         int i = from.length;

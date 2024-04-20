@@ -14,8 +14,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import java.util.Objects;
 
-public class FacadeBlockStateInfo implements IFacadeState
-{
+public class FacadeBlockStateInfo implements IFacadeState {
     public final BlockState state;
     public final ItemStack requiredStack;
     public final ImmutableSet<Property<?>> varyingProperties;
@@ -26,8 +25,7 @@ public class FacadeBlockStateInfo implements IFacadeState
     public final SupportType[] blockFaceShape = new SupportType[6];
 
     public FacadeBlockStateInfo(BlockState state, ItemStack requiredStack,
-                                ImmutableSet<Property<?>> varyingProperties)
-    {
+                                ImmutableSet<Property<?>> varyingProperties) {
         this.state = Objects.requireNonNull(state, "state must not be null!");
         Objects.requireNonNull(state.getBlock(), "state.getBlock must not be null!");
         Objects.requireNonNull(state.getBlock().getRegistryName(),
@@ -39,8 +37,7 @@ public class FacadeBlockStateInfo implements IFacadeState
         this.isTransparent = state.canOcclude();
         this.isVisible = !requiredStack.isEmpty();
         BlockGetter access = new SingleBlockAccess(state);
-        for (Direction side : Direction.values())
-        {
+        for (Direction side : Direction.values()) {
 //            isSideSolid[side.ordinal()] = state.isSideSolid(access, BlockPos.ZERO, side);
             isSideSolid[side.ordinal()] = state.isFaceSturdy(access, BlockPos.ZERO, side);
             // Calen: use VoxelShape, no blockFaceShape
@@ -51,14 +48,12 @@ public class FacadeBlockStateInfo implements IFacadeState
 
     // Helper methods
 
-    public FacadePhasedState createPhased(DyeColor activeColour)
-    {
+    public FacadePhasedState createPhased(DyeColor activeColour) {
         return new FacadePhasedState(this, activeColour);
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "StateInfo [id=" + System.identityHashCode(this) + ", block = " + state.getBlock() + ", state =  "
                 + state.toString() + "]";
     }
@@ -66,20 +61,17 @@ public class FacadeBlockStateInfo implements IFacadeState
     // IFacadeState
 
     @Override
-    public BlockState getBlockState()
-    {
+    public BlockState getBlockState() {
         return state;
     }
 
     @Override
-    public boolean isTransparent()
-    {
+    public boolean isTransparent() {
         return isTransparent;
     }
 
     @Override
-    public ItemStack getRequiredStack()
-    {
+    public ItemStack getRequiredStack() {
         return requiredStack;
     }
 }

@@ -15,7 +15,7 @@ public class GuidePartNewPage extends GuidePart {
     }
 
     @Override
-    public PagePosition renderIntoArea(PoseStack poseStack,int x, int y, int width, int height, PagePosition current, int index) {
+    public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index) {
         return current.newPage();
     }
 

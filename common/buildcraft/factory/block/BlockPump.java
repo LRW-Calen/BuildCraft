@@ -7,27 +7,20 @@
 package buildcraft.factory.block;
 
 import buildcraft.factory.BCFactoryBlocks;
-import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.factory.tile.TilePump;
+import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
-import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-import javax.annotation.Nullable;
-
-public class BlockPump<T extends TilePump> extends BlockBCTile_Neptune<TilePump> implements IBlockWithTickableTE<TilePump>
-{
-    public BlockPump(String idBC, Properties props)
-    {
+public class BlockPump<T extends TilePump> extends BlockBCTile_Neptune<TilePump> implements IBlockWithTickableTE<TilePump> {
+    public BlockPump(String idBC, Properties props) {
         super(idBC, props);
     }
 
     @Override
-    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return BCFactoryBlocks.pumpTile.get().create(pos, state);
     }
 

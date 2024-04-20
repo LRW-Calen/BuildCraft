@@ -16,13 +16,11 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 
-public class LedgerOwnership extends Ledger_Neptune
-{
+public class LedgerOwnership extends Ledger_Neptune {
 
     private final TileBC_Neptune tile;
 
-    public LedgerOwnership(BuildCraftGui gui, TileBC_Neptune tile, boolean expandPositive)
-    {
+    public LedgerOwnership(BuildCraftGui gui, TileBC_Neptune tile, boolean expandPositive) {
         super(gui, 0xFF_E0_F0_FF, expandPositive);
         this.title = "gui.ledger.ownership";
         this.tile = tile;
@@ -35,22 +33,18 @@ public class LedgerOwnership extends Ledger_Neptune
     }
 
     @Override
-    protected void drawIcon(PoseStack poseStack, double x, double y)
-    {
+    protected void drawIcon(PoseStack poseStack, double x, double y) {
         ISprite sprite = SpriteUtil.getFaceSprite(tile.getOwner());
         GuiIcon.draw(sprite, poseStack, x, y, x + 16, y + 16);
         sprite = SpriteUtil.getFaceOverlaySprite(tile.getOwner());
-        if (sprite != null)
-        {
+        if (sprite != null) {
             GuiIcon.draw(sprite, poseStack, x - 0.5, y - 0.5, x + 17, y + 17);
         }
     }
 
-    private String getOwnerName()
-    {
+    private String getOwnerName() {
         GameProfile owner = tile.getOwner();
-        if (owner == null)
-        {
+        if (owner == null) {
             return "no-one";
         }
         return owner.getName();

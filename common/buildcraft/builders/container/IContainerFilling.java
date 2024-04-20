@@ -20,8 +20,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.io.IOException;
 import java.util.stream.IntStream;
 
-public interface IContainerFilling
-{
+public interface IContainerFilling {
     Player getPlayer();
 
     void sendMessage(int id, IPayloadWriter writer);
@@ -34,23 +33,19 @@ public interface IContainerFilling
 
     void setInverted(boolean value);
 
-    default boolean isLocked()
-    {
+    default boolean isLocked() {
         return false;
     }
 
     void valuesChanged();
 
-    default void init()
-    {
-        if (!getPlayer().level.isClientSide)
-        {
+    default void init() {
+        if (!getPlayer().level.isClientSide) {
             MessageUtil.doDelayedServer(this::sendData);
         }
     }
 
-    default void sendData()
-    {
+    default void sendData() {
         sendMessage(ContainerBC_Neptune.NET_DATA, buffer ->
         {
             (getPlayer().level.isClientSide
@@ -60,26 +55,20 @@ public interface IContainerFilling
         });
     }
 
-    default void onStatementChange()
-    {
+    default void onStatementChange() {
         sendData();
     }
 
-    default void sendInverted(boolean value)
-    {
+    default void sendInverted(boolean value) {
         setInverted(value);
         sendData();
     }
 
-//    default void readMessage(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    default void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
-        if (side == NetworkDirection.PLAY_TO_SERVER)
-        {
-            if (id == ContainerBC_Neptune.NET_DATA)
-            {
-                if (isLocked())
-                {
+    // default void readMessage(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
+    default void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
+        if (side == NetworkDirection.PLAY_TO_SERVER) {
+            if (id == ContainerBC_Neptune.NET_DATA) {
+                if (isLocked()) {
                     new FullStatement<>(
                             FillerType.INSTANCE,
                             4,
@@ -87,20 +76,15 @@ public interface IContainerFilling
                             {
                             }
                     ).readFromBuffer(buffer);
-                }
-                else
-                {
+                } else {
                     getPatternStatement().readFromBuffer(buffer);
                 }
                 setInverted(buffer.readBoolean());
                 valuesChanged();
                 sendData();
             }
-        }
-        else if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == ContainerBC_Neptune.NET_DATA)
-            {
+        } else if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == ContainerBC_Neptune.NET_DATA) {
                 getPatternStatement().readFromBuffer(buffer);
                 setInverted(buffer.readBoolean());
                 getPatternStatementClient().set(getPatternStatement().get());

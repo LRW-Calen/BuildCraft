@@ -20,8 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GuiEngineStone_BC8 extends GuiBC8<ContainerEngineStone_BC8>
-{
+public class GuiEngineStone_BC8 extends GuiBC8<ContainerEngineStone_BC8> {
     private static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftenergy:textures/gui/steam_engine_gui.png");
     private static final int SIZE_X = 176, SIZE_Y = 166;
     private static final GuiIcon ICON_GUI = new GuiIcon(TEXTURE_BASE, 0, 0, SIZE_X, SIZE_Y);
@@ -30,8 +29,7 @@ public class GuiEngineStone_BC8 extends GuiBC8<ContainerEngineStone_BC8>
     private final IGuiArea fuelSlotRect = new GuiRectangle(78, 39, 20, 20).offset(mainGui.rootElement);
     private final ElementHelpInfo helpFlame, helpFuel;
 
-    public GuiEngineStone_BC8(ContainerEngineStone_BC8 container, Inventory inventory, Component component)
-    {
+    public GuiEngineStone_BC8(ContainerEngineStone_BC8 container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -55,14 +53,12 @@ public class GuiEngineStone_BC8 extends GuiBC8<ContainerEngineStone_BC8>
 
     @Override
 //    protected void drawBackgroundLayer(float partialTicks)
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
 
         double amount = container.tile.deltaFuelLeft.getDynamic(partialTicks) / 100;
 
-        if (amount > 0)
-        {
+        if (amount > 0) {
             int flameHeight = (int) Math.ceil(amount * flameRect.getHeight());
 
 //            drawTexturedModalRect(//
@@ -76,14 +72,13 @@ public class GuiEngineStone_BC8 extends GuiBC8<ContainerEngineStone_BC8>
                     (int) flameRect.getX(),//
                     (int) (flameRect.getY() + flameRect.getHeight() - flameHeight),//
                     176, 14 - flameHeight, 14, flameHeight + 2
-                    );
+            );
         }
     }
 
     @Override
 //    protected void drawForegroundLayer()
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
         String str = LocaleUtil.localize("tile.engineStone.name");
 //        int strWidth = fontRenderer.getStringWidth(str);
         int strWidth = font.width(str);

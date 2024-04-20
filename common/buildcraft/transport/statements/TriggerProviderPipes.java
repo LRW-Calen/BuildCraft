@@ -13,7 +13,6 @@ import buildcraft.api.transport.pipe.PipeEventStatement;
 import buildcraft.lib.misc.ColourUtil;
 import buildcraft.transport.BCTransportStatements;
 import buildcraft.transport.pipe.flow.PipeFlowPower;
-
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -21,8 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import javax.annotation.Nonnull;
 import java.util.Collection;
 
-public enum TriggerProviderPipes implements ITriggerProvider
-{
+public enum TriggerProviderPipes implements ITriggerProvider {
     INSTANCE;
 
     @Override

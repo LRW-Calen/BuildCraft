@@ -31,11 +31,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.io.IOException;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * Can render 3D fluid cuboid's, up to 1x1x1 in size. Note that they *must* be contained within the 1x1x1 core space -
@@ -45,8 +43,7 @@ import java.util.function.Function;
 // TODO: thread safety (per thread context?)
 // Perhaps move this into IModelRenderer? And that way we get the buffer, force shaders to cope with fluids (?!), etc
 @OnlyIn(Dist.CLIENT)
-public class FluidRenderer
-{
+public class FluidRenderer {
 
     private static final EnumMap<FluidSpriteType, Map<String, TextureAtlasSprite>> fluidSprites =
             new EnumMap<>(FluidSpriteType.class);
@@ -62,51 +59,41 @@ public class FluidRenderer
     private static boolean invertU, invertV;
     private static double xTexDiff, yTexDiff, zTexDiff;
 
-    static
-    {
+    static {
         // TODO: allow the caller to change the light level
         vertex.lighti((byte) (0xF >> 4), (byte) (0xF >> 4));
-        for (FluidSpriteType type : FluidSpriteType.values())
-        {
+        for (FluidSpriteType type : FluidSpriteType.values()) {
             fluidSprites.put(type, new HashMap<>());
         }
     }
 
     // TODO Calen frozen
 //    public static void onTextureStitchPre(TextureAtlas map)
-    public static void onTextureStitchPre(TextureStitchEvent.Pre event)
-    {
-        for (FluidSpriteType type : FluidSpriteType.values())
-        {
+    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
+        for (FluidSpriteType type : FluidSpriteType.values()) {
             fluidSprites.get(type).clear();
         }
         Map<ResourceLocation, SpriteFluidFrozen> spritesStitched = new HashMap<>();
 
-        for (Fluid fluid : ForgeRegistries.FLUIDS.getValues())
-        {
+        for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
             // Calen
-            if (fluid.getClass() == EmptyFluid.class)
-            {
+            if (fluid.getClass() == EmptyFluid.class) {
                 continue;
             }
             // BC 1.12.2
             ResourceLocation still = fluid.getAttributes().getStillTexture();
             ResourceLocation flowing = fluid.getAttributes().getFlowingTexture();
-            if (still == null || flowing == null)
-            {
+            if (still == null || flowing == null) {
                 // Calen: for uncompleted fluid, continue
 //                throw new IllegalStateException("Encountered a fluid with a null still sprite! (" + fluid.getRegistryName().toString()
 //                        + " - " + ForgeRegistries.FLUIDS.getKey(fluid) + ")");
                 continue;
             }
-            if (spritesStitched.containsKey(still))
-            {
+            if (spritesStitched.containsKey(still)) {
                 // TODO Calen frozen?
 //                fluidSprites.get(FluidSpriteType.FROZEN).put(fluid.getRegistryName().toString(), spritesStitched.get(still));
 //                event.addSprite(frozen);
-            }
-            else
-            {
+            } else {
                 // TODO Calen frozen
 //                try
 //                {
@@ -135,25 +122,20 @@ public class FluidRenderer
     }
 
     // Calen: part of onTextureStitchPre in 1.12.2
-    public static void onTextureStitchPost(TextureStitchEvent.Post event)
-    {
+    public static void onTextureStitchPost(TextureStitchEvent.Post event) {
         // ensure LOCATION_BLOCKS
         // or will get wrong texture
         TextureAtlas map = event.getAtlas();
-        if (map.location().equals(TextureAtlas.LOCATION_BLOCKS))
-        {
+        if (map.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
             // Calen: BC
-            for (Fluid fluid : ForgeRegistries.FLUIDS.getValues())
-            {
+            for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
                 // Calen
-                if (fluid.getClass() == EmptyFluid.class)
-                {
+                if (fluid.getClass() == EmptyFluid.class) {
                     continue;
                 }
                 ResourceLocation still = fluid.getAttributes().getStillTexture();
                 ResourceLocation flowing = fluid.getAttributes().getFlowingTexture();
-                if (still == null || flowing == null)
-                {
+                if (still == null || flowing == null) {
                     // Calen: for uncompleted fluid, continue
                     BCLog.logger.warn("[lib.fluid.renderder] Found fluid [" + fluid.getRegistryName() + "] has no still or flow textuer ResourceLocation, unable to get sprite.");
                     continue;
@@ -178,8 +160,7 @@ public class FluidRenderer
      * @see #renderFluid(FluidSpriteType, FluidStack, double, double, Vec3, Vec3, PoseStack.Pose, VertexConsumer, boolean[])
      */
     public static void renderFluid(FluidSpriteType type, IFluidTank tank, Vec3 min, Vec3 max, PoseStack.Pose pose, VertexConsumer bbIn,
-                                   boolean[] sideRender)
-    {
+                                   boolean[] sideRender) {
         renderFluid(type, tank.getFluid(), tank.getCapacity(), min, max, pose, bbIn, sideRender);
     }
 
@@ -206,8 +187,7 @@ public class FluidRenderer
             PoseStack.Pose pose,
             VertexConsumer bbIn,
             boolean[] sideRender
-    )
-    {
+    ) {
         renderFluid(type, fluid, fluid == null ? 0 : fluid.getAmount(), cap, min, max, pose, bbIn, sideRender);
     }
 
@@ -237,29 +217,23 @@ public class FluidRenderer
             PoseStack.Pose pose,
             VertexConsumer bb,
             boolean[] sideRender
-    )
-    {
-        if (fluid == null || fluid.getRawFluid() == null || amount <= 0)
-        {
+    ) {
+        if (fluid == null || fluid.getRawFluid() == null || amount <= 0) {
             return;
         }
         ProfilerFiller prof = Minecraft.getInstance().getProfiler();
         prof.push("fluid");
-        if (sideRender == null)
-        {
+        if (sideRender == null) {
             sideRender = DEFAULT_FACES;
         }
 
 //        double height = MathHelper.clamp(amount / cap, 0, 1);
         double height = Mth.clamp(amount / cap, 0, 1);
         final Vec3 realMin, realMax;
-        if (fluid.getRawFluid().getAttributes().isGaseous(fluid))
-        {
+        if (fluid.getRawFluid().getAttributes().isGaseous(fluid)) {
             realMin = VecUtil.replaceValue(min, Axis.Y, MathUtil.interp(1 - height, min.y, max.y));
             realMax = max;
-        }
-        else
-        {
+        } else {
             realMin = min;
             realMax = VecUtil.replaceValue(max, Axis.Y, MathUtil.interp(height, min.y, max.y));
         }
@@ -268,8 +242,7 @@ public class FluidRenderer
 //        FluidRenderer.poseStack = poseStack;
         FluidRenderer.pose = pose;
 
-        if (type == null)
-        {
+        if (type == null) {
             type = FluidSpriteType.STILL;
         }
         sprite = getFluidSprite(type, fluid);
@@ -286,45 +259,28 @@ public class FluidRenderer
         if (type == FluidSpriteType.FROZEN)
 //        if (false)
         {
-            if (min.x > 1)
-            {
+            if (min.x > 1) {
                 xTexDiff = Math.floor(min.x);
-            }
-            else if (min.x < 0)
-            {
+            } else if (min.x < 0) {
                 xTexDiff = Math.floor(min.x);
-            }
-            else
-            {
+            } else {
                 xTexDiff = 0;
             }
-            if (min.y > 1)
-            {
+            if (min.y > 1) {
                 yTexDiff = Math.floor(min.y);
-            }
-            else if (min.y < 0)
-            {
+            } else if (min.y < 0) {
                 yTexDiff = Math.floor(min.y);
-            }
-            else
-            {
+            } else {
                 yTexDiff = 0;
             }
-            if (min.z > 1)
-            {
+            if (min.z > 1) {
                 zTexDiff = Math.floor(min.z);
-            }
-            else if (min.z < 0)
-            {
+            } else if (min.z < 0) {
                 zTexDiff = Math.floor(min.z);
-            }
-            else
-            {
+            } else {
                 zTexDiff = 0;
             }
-        }
-        else
-        {
+        } else {
             xTexDiff = 0;
             yTexDiff = 0;
             zTexDiff = 0;
@@ -336,16 +292,14 @@ public class FluidRenderer
         // TODO: Enable/disable inversion for the correct faces
         invertU = false;
         invertV = false;
-        if (sideRender[Direction.UP.ordinal()])
-        {
+        if (sideRender[Direction.UP.ordinal()]) {
             vertex(xs, yb, zb);
             vertex(xb, yb, zb);
             vertex(xb, yb, zs);
             vertex(xs, yb, zs);
         }
 
-        if (sideRender[Direction.DOWN.ordinal()])
-        {
+        if (sideRender[Direction.DOWN.ordinal()]) {
             vertex(xs, ys, zs);
             vertex(xb, ys, zs);
             vertex(xb, ys, zb);
@@ -353,16 +307,14 @@ public class FluidRenderer
         }
 
         texmap = TexMap.ZY;
-        if (sideRender[Direction.WEST.ordinal()])
-        {
+        if (sideRender[Direction.WEST.ordinal()]) {
             vertex(xs, ys, zs);
             vertex(xs, ys, zb);
             vertex(xs, yb, zb);
             vertex(xs, yb, zs);
         }
 
-        if (sideRender[Direction.EAST.ordinal()])
-        {
+        if (sideRender[Direction.EAST.ordinal()]) {
             vertex(xb, yb, zs);
             vertex(xb, yb, zb);
             vertex(xb, ys, zb);
@@ -370,16 +322,14 @@ public class FluidRenderer
         }
 
         texmap = TexMap.XY;
-        if (sideRender[Direction.NORTH.ordinal()])
-        {
+        if (sideRender[Direction.NORTH.ordinal()]) {
             vertex(xs, yb, zs);
             vertex(xb, yb, zs);
             vertex(xb, ys, zs);
             vertex(xs, ys, zs);
         }
 
-        if (sideRender[Direction.SOUTH.ordinal()])
-        {
+        if (sideRender[Direction.SOUTH.ordinal()]) {
             vertex(xs, ys, zb);
             vertex(xb, ys, zb);
             vertex(xb, yb, zb);
@@ -393,23 +343,18 @@ public class FluidRenderer
         prof.pop();
     }
 
-    public static TextureAtlasSprite getFluidSprite(FluidSpriteType type, FluidStack fluid)
-    {
+    public static TextureAtlasSprite getFluidSprite(FluidSpriteType type, FluidStack fluid) {
         return getFluidSprite(type, fluid.getRawFluid());
     }
 
-    public static TextureAtlasSprite getFluidSprite(FluidSpriteType type, Fluid fluid)
-    {
-        if (fluid == null)
-        {
+    public static TextureAtlasSprite getFluidSprite(FluidSpriteType type, Fluid fluid) {
+        if (fluid == null) {
             return SpriteUtil.missingSprite();
         }
         TextureAtlasSprite s = fluidSprites.get(type).get(fluid.getRegistryName().toString());
-        if (s == null)
-        {
+        if (s == null) {
             ResourceLocation spriteLocation;
-            spriteLocation = switch (type)
-            {
+            spriteLocation = switch (type) {
                 case STILL -> fluid.getAttributes().getStillTexture();
                 case FLOWING -> fluid.getAttributes().getFlowingTexture();
                 // TODO Calen FROZEN??? 这个是临时的……
@@ -417,8 +362,7 @@ public class FluidRenderer
                 case FROZEN -> fluid.getAttributes().getStillTexture();
             };
             s = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(spriteLocation);
-            if (s != null)
-            {
+            if (s != null) {
                 fluidSprites.get(type).put(fluid.getRegistryName().toString(), s);
             }
         }
@@ -428,8 +372,7 @@ public class FluidRenderer
     /**
      * Helper function to add a vertex.
      */
-    private static void vertex(double x, double y, double z)
-    {
+    private static void vertex(double x, double y, double z) {
         vertex.positiond(x, y, z);
         texmap.apply(x - xTexDiff, y - yTexDiff, z - zTexDiff);
         vertex.renderAsBlock(pose, bb);
@@ -439,14 +382,12 @@ public class FluidRenderer
      * Fills up the given region with the fluids texture, repeated. Ignores the value of {@link FluidStack#getAmount()}. Use
      * {@link GuiUtil}'s fluid drawing methods in preference to this.
      */
-    public static void drawFluidForGui(FluidStack fluid, double startX, double startY, double endX, double endY, PoseStack poseStack)
-    {
+    public static void drawFluidForGui(FluidStack fluid, double startX, double startY, double endX, double endY, PoseStack poseStack) {
         PoseStack.Pose pose = poseStack.last();
         Matrix4f poseMatrix = pose.pose();
 
         sprite = FluidRenderer.fluidSprites.get(FluidSpriteType.STILL).get(fluid.getRawFluid().getRegistryName().toString());
-        if (sprite == null)
-        {
+        if (sprite == null) {
 //            sprite = Minecraft.getInstance().getTextureMapBlocks().getMissingSprite();
             sprite = SpriteUtil.missingSprite();
         }
@@ -475,11 +416,9 @@ public class FluidRenderer
         int loopCountY = (int) Math.abs(diffY / 16);
 
         double x = startX;
-        for (int xc = 0; xc < loopCountX; xc++)
-        {
+        for (int xc = 0; xc < loopCountX; xc++) {
             double y = startY;
-            for (int yc = 0; yc < loopCountY; yc++)
-            {
+            for (int yc = 0; yc < loopCountY; yc++) {
                 guiVertex(poseMatrix, x, y, 0, 0);
                 guiVertex(poseMatrix, x + stepX, y, 16, 0);
                 guiVertex(poseMatrix, x + stepX, y + stepY, 16, 16);
@@ -489,14 +428,12 @@ public class FluidRenderer
             x += stepX;
         }
 
-        if (diffX % 16 != 0)
-        {
+        if (diffX % 16 != 0) {
             double additionalWidth = diffX % 16;
             x = endX - additionalWidth;
             double xTex = Math.abs(additionalWidth);
             double y = startY;
-            for (int yc = 0; yc < loopCountY; y++)
-            {
+            for (int yc = 0; yc < loopCountY; y++) {
                 guiVertex(poseMatrix, x, y, 0, 0);
                 guiVertex(poseMatrix, endX, y, xTex, 0);
                 guiVertex(poseMatrix, endX, y + stepY, xTex, 16);
@@ -505,14 +442,12 @@ public class FluidRenderer
             }
         }
 
-        if (diffY % 16 != 0)
-        {
+        if (diffY % 16 != 0) {
             double additionalHeight = diffY % 16;
             double y = endY - additionalHeight;
             double yTex = Math.abs(additionalHeight);
             x = startX;
-            for (int xc = 0; xc < loopCountX; xc++)
-            {
+            for (int xc = 0; xc < loopCountX; xc++) {
                 guiVertex(poseMatrix, x, y, 0, 0);
                 guiVertex(poseMatrix, x + stepX, y, 16, 0);
                 guiVertex(poseMatrix, x + stepX, endY, 16, yTex);
@@ -521,8 +456,7 @@ public class FluidRenderer
             }
         }
 
-        if (diffX % 16 != 0 && diffY % 16 != 0)
-        {
+        if (diffX % 16 != 0 && diffY % 16 != 0) {
             double w = diffX % 16;
             double h = diffY % 16;
             x = endX - w;
@@ -543,8 +477,7 @@ public class FluidRenderer
         bb = null;
     }
 
-    private static void guiVertex(Matrix4f poseMatrix, double x, double y, double u, double v)
-    {
+    private static void guiVertex(Matrix4f poseMatrix, double x, double y, double u, double v) {
         // TODO Calen getUOffset?
 //        float ru = sprite.getInterpolatedU(u);
         float ru = sprite.getU(u);
@@ -562,8 +495,7 @@ public class FluidRenderer
      * <p>
      * For example XY maps X to U and Y to V, and ignores Z
      */
-    private enum TexMap
-    {
+    private enum TexMap {
         XY(true, true),
         XZ(true, false),
         ZY(false, true);
@@ -577,8 +509,7 @@ public class FluidRenderer
          */
         private final boolean vy;
 
-        TexMap(boolean ux, boolean vy)
-        {
+        TexMap(boolean ux, boolean vy) {
             this.ux = ux;
             this.vy = vy;
         }
@@ -587,16 +518,13 @@ public class FluidRenderer
          * Changes the vertex's texture co-ord to be the same as the position, for that face. (Uses {@link #ux} and
          * {@link #vy} to determine how they are mapped).
          */
-        private void apply(double x, double y, double z)
-        {
+        private void apply(double x, double y, double z) {
             double realu = ux ? x : z;
             double realv = vy ? y : z;
-            if (invertU)
-            {
+            if (invertU) {
                 realu = 1 - realu;
             }
-            if (invertV)
-            {
+            if (invertV) {
                 realv = 1 - realv;
             }
 //            vertex.texf(sprite.getInterpolatedU(realu * 16), sprite.getInterpolatedV(realv * 16));
@@ -604,46 +532,38 @@ public class FluidRenderer
         }
     }
 
-    public static class TankSize
-    {
+    public static class TankSize {
         public final Vec3 min;
         public final Vec3 max;
 
-        public TankSize(int sx, int sy, int sz, int ex, int ey, int ez)
-        {
+        public TankSize(int sx, int sy, int sz, int ex, int ey, int ez) {
             this(new Vec3(sx, sy, sz).scale(1 / 16.0), new Vec3(ex, ey, ez).scale(1 / 16.0));
         }
 
-        public TankSize(Vec3 min, Vec3 max)
-        {
+        public TankSize(Vec3 min, Vec3 max) {
             this.min = min;
             this.max = max;
         }
 
-        public TankSize shrink(double by)
-        {
+        public TankSize shrink(double by) {
             return shrink(by, by, by);
         }
 
-        public TankSize shrink(double x, double y, double z)
-        {
+        public TankSize shrink(double x, double y, double z) {
             return new TankSize(min.add(x, y, z), max.subtract(x, y, z));
         }
 
-        public TankSize shink(Vec3 by)
-        {
+        public TankSize shink(Vec3 by) {
             return shrink(by.x, by.y, by.z);
         }
 
-        public TankSize rotateY()
-        {
+        public TankSize rotateY() {
             Vec3 _min = rotateY(min);
             Vec3 _max = rotateY(max);
             return new TankSize(VecUtil.min(_min, _max), VecUtil.max(_min, _max));
         }
 
-        private static Vec3 rotateY(Vec3 vec)
-        {
+        private static Vec3 rotateY(Vec3 vec) {
             return new Vec3(//
                     1 - vec.z, //
                     vec.y, //

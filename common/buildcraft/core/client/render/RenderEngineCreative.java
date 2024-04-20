@@ -6,20 +6,19 @@
 
 package buildcraft.core.client.render;
 
-import buildcraft.factory.tile.TileEngineCreative;
 import buildcraft.core.BCCoreModels;
+import buildcraft.factory.tile.TileEngineCreative;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.render.tile.RenderEngine_BC8;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
-public class RenderEngineCreative extends RenderEngine_BC8<TileEngineCreative>
-{
+public class RenderEngineCreative extends RenderEngine_BC8<TileEngineCreative> {
 //    public static final RenderEngineCreative INSTANCE = new RenderEngineCreative();
 
-    public RenderEngineCreative(BlockEntityRendererProvider.Context context)
-    {
+    public RenderEngineCreative(BlockEntityRendererProvider.Context context) {
         super(context);
     }
+
     @Override
     protected MutableQuad[] getEngineModel(TileEngineCreative engine, float partialTicks) {
         return BCCoreModels.getCreativeEngineQuads(engine, partialTicks);

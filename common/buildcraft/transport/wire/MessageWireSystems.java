@@ -6,18 +6,17 @@
 
 package buildcraft.transport.wire;
 
-import com.google.common.collect.ImmutableList;
-import net.minecraft.network.FriendlyByteBuf;
 import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.IMessageHandler;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MessageWireSystems implements IMessage
-{
+public class MessageWireSystems implements IMessage {
     private Map<Integer, WireSystem> wireSystems = new HashMap<>();
 
     @SuppressWarnings("unused")
@@ -32,7 +31,8 @@ public class MessageWireSystems implements IMessage
     public void toBytes(FriendlyByteBuf buf) {
         FriendlyByteBuf pb = new FriendlyByteBuf(buf);
         pb.writeInt(wireSystems.size());
-        wireSystems.forEach((wiresHashCode, wireSystem) -> {
+        wireSystems.forEach((wiresHashCode, wireSystem) ->
+        {
             pb.writeInt(wiresHashCode);
             List<WireSystem.WireElement> elements = wireSystem.elements.stream()
                     .filter(element -> element.type == WireSystem.WireElement.Type.WIRE_PART)
@@ -61,7 +61,8 @@ public class MessageWireSystems implements IMessage
         }
     }
 
-    public static final IMessageHandler<MessageWireSystems, IMessage> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageWireSystems, IMessage> HANDLER = (message, ctx) ->
+    {
         ClientWireSystems.INSTANCE.wireSystems.clear();
         ClientWireSystems.INSTANCE.wireSystems.putAll(message.wireSystems);
         return null;

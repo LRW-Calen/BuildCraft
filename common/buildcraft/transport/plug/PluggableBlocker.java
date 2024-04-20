@@ -10,8 +10,8 @@ import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
 import buildcraft.api.transport.pluggable.PluggableModelKey;
-import buildcraft.transport.BCTransportItems;
 import buildcraft.lib.misc.AdvancementUtil;
+import buildcraft.transport.BCTransportItems;
 import buildcraft.transport.client.model.key.KeyPlugBlocker;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.Direction;
@@ -23,16 +23,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class PluggableBlocker extends PipePluggable
-{
+public class PluggableBlocker extends PipePluggable {
     private static final VoxelShape[] BOXES = new VoxelShape[6];
 
     private static final ResourceLocation ADVANCEMENT_PLACE_PLUG = new ResourceLocation(
             "buildcrafttransport:plugging_the_gap"
     );
 
-    static
-    {
+    static {
         double ll = 2 / 16.0;
         double lu = 4 / 16.0;
         double ul = 12 / 16.0;
@@ -49,43 +47,36 @@ public class PluggableBlocker extends PipePluggable
         BOXES[Direction.EAST.ordinal()] = Shapes.box(ul, min, min, uu, max, max);
     }
 
-    public PluggableBlocker(PluggableDefinition definition, IPipeHolder holder, Direction side)
-    {
+    public PluggableBlocker(PluggableDefinition definition, IPipeHolder holder, Direction side) {
         super(definition, holder, side);
     }
 
     @Override
-    public VoxelShape getBoundingBox()
-    {
+    public VoxelShape getBoundingBox() {
         return BOXES[side.ordinal()];
     }
 
     @Override
-    public boolean isBlocking()
-    {
+    public boolean isBlocking() {
         return true;
     }
 
     @Override
-    public ItemStack getPickStack()
-    {
+    public ItemStack getPickStack() {
         return new ItemStack(BCTransportItems.plugBlocker.get());
     }
 
     @Override
-    public void onPlacedBy(Player player)
-    {
+    public void onPlacedBy(Player player) {
         super.onPlacedBy(player);
-        if (!holder.getPipeWorld().isClientSide && holder.getPipe().isConnected(side))
-        {
+        if (!holder.getPipeWorld().isClientSide && holder.getPipe().isConnected(side)) {
             AdvancementUtil.unlockAdvancement(player, ADVANCEMENT_PLACE_PLUG);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public PluggableModelKey getModelRenderKey(RenderType layer)
-    {
+    public PluggableModelKey getModelRenderKey(RenderType layer) {
         if (layer == RenderType.cutout()) return new KeyPlugBlocker(side);
         return null;
     }

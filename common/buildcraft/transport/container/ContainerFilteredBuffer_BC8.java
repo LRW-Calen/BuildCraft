@@ -14,31 +14,24 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
-import org.jetbrains.annotations.Nullable;
 
-public class ContainerFilteredBuffer_BC8 extends ContainerBCTile<TileFilteredBuffer>
-{
-    public ContainerFilteredBuffer_BC8(MenuType menuType, int id, Player player, TileFilteredBuffer tile)
-    {
+public class ContainerFilteredBuffer_BC8 extends ContainerBCTile<TileFilteredBuffer> {
+    public ContainerFilteredBuffer_BC8(MenuType menuType, int id, Player player, TileFilteredBuffer tile) {
         super(menuType, id, player, tile);
         addFullPlayerInventory(86);
 
-        for (int i = 0; i < 9; i++)
-        {
+        for (int i = 0; i < 9; i++) {
             // Filtered Buffer filter slots
-            addSlot(new SlotPhantom(tile.invFilter, i, 8 + i * 18, 27)
-            {
+            addSlot(new SlotPhantom(tile.invFilter, i, 8 + i * 18, 27) {
                 @Override
 //                public TextureAtlasSprite getBackgroundSprite()
-                public Pair<ResourceLocation, ResourceLocation> getNoItemIcon()
-                {
+                public Pair<ResourceLocation, ResourceLocation> getNoItemIcon() {
 //                    return BCTransportSprites.EMPTY_FILTERED_BUFFER_SLOT.getSprite();
                     return Pair.of(TextureAtlas.LOCATION_BLOCKS, BCTransportSprites.EMPTY_FILTERED_BUFFER_SLOT.getSprite().getName());
                 }
 
                 @Override
-                public boolean canAdjustCount()
-                {
+                public boolean canAdjustCount() {
                     return false;
                 }
             });

@@ -14,8 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
 /** Future class for checking to see if a given player can actually do something. */
-public class PermissionUtil
-{
+public class PermissionUtil {
     // Just object types so that we can change these later without needing to change callers
     public static final Object PERM_VIEW = "buildcraft.view";
     public static final Object PERM_EDIT = "buildcraft.edit";
@@ -42,7 +41,7 @@ public class PermissionUtil
 
     public static boolean hasPermission(Object type, Player attempting, PermissionBlock target) {
         // TODO: fire a forge core-break event if its a break event
-        if (attempting.distanceToSqr(target.pos.getX(),target.pos.getY(),target.pos.getZ()) > MAX_INTERACT_DISTANCE_SQ) {
+        if (attempting.distanceToSqr(target.pos.getX(), target.pos.getY(), target.pos.getZ()) > MAX_INTERACT_DISTANCE_SQ) {
             return false;
         }
 

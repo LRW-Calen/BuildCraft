@@ -8,7 +8,6 @@ package buildcraft.transport.client.render;
 
 import buildcraft.api.core.render.ISprite;
 import buildcraft.api.transport.EnumWirePart;
-import buildcraft.transport.tile.TilePipeHolder;
 import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.client.model.ModelUtil.UvFaceData;
 import buildcraft.lib.client.model.MutableQuad;
@@ -16,8 +15,8 @@ import buildcraft.lib.client.model.MutableVertex;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.VecUtil;
+import buildcraft.transport.tile.TilePipeHolder;
 import buildcraft.transport.wire.EnumWireBetween;
-
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -37,8 +36,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 @OnlyIn(Dist.CLIENT)
-public class PipeWireRenderer
-{
+public class PipeWireRenderer {
 
     private static final Map<EnumWirePart, MutableQuad[]> partQuads = new EnumMap<>(EnumWirePart.class);
     private static final Map<EnumWireBetween, MutableQuad[]> betweenQuads = new EnumMap<>(EnumWireBetween.class);
@@ -50,37 +48,30 @@ public class PipeWireRenderer
 
     final static int WIRE_COUNT = EnumWirePart.VALUES.length * ColourUtil.COLOURS.length * 2;
 
-    static
-    {
+    static {
         Arrays.fill(wireRenderingCache, -1);
 
-        for (DyeColor color : DyeColor.values())
-        {
+        for (DyeColor color : DyeColor.values()) {
             wireSprites.put(color, SpriteHolderRegistry.getHolder("buildcrafttransport:wires/" + color.getName()));
         }
 
-        for (EnumWirePart part : EnumWirePart.VALUES)
-        {
+        for (EnumWirePart part : EnumWirePart.VALUES) {
             partQuads.put(part, getQuads(part));
         }
-        for (EnumWireBetween part : EnumWireBetween.VALUES)
-        {
+        for (EnumWireBetween part : EnumWireBetween.VALUES) {
             betweenQuads.put(part, getQuads(part));
         }
     }
 
-    public static void clearWireCache()
-    {
+    public static void clearWireCache() {
         Arrays.fill(wireRenderingCache, -1);
     }
 
-    public static SpriteHolderRegistry.SpriteHolder getWireSprite(DyeColor colour)
-    {
+    public static SpriteHolderRegistry.SpriteHolder getWireSprite(DyeColor colour) {
         return wireSprites.get(colour);
     }
 
-    private static MutableQuad[] getQuads(EnumWirePart part)
-    {
+    private static MutableQuad[] getQuads(EnumWirePart part) {
         MutableQuad[] quads = new MutableQuad[6];
 
         Tuple3f center = new Point3f(//
@@ -95,20 +86,17 @@ public class PipeWireRenderer
         uvs.maxU = (off + 1) / 16f;
         uvs.minV = 0;
         uvs.maxV = 1 / 16f;
-        for (Direction face : Direction.values())
-        {
+        for (Direction face : Direction.values()) {
             quads[face.ordinal()] = ModelUtil.createFace(face, center, radius, uvs);
         }
         return quads;
     }
 
-    private static int func(AxisDirection dir)
-    {
+    private static int func(AxisDirection dir) {
         return dir == AxisDirection.POSITIVE ? 1 : 0;
     }
 
-    private static MutableQuad[] getQuads(EnumWireBetween between)
-    {
+    private static MutableQuad[] getQuads(EnumWireBetween between) {
         // 4 rather than 6 -- don't render the end caps
         MutableQuad[] quads = new MutableQuad[4];
 
@@ -121,8 +109,7 @@ public class PipeWireRenderer
         boolean ay = between.mainAxis == Axis.Y;
         boolean az = between.mainAxis == Axis.Z;
 
-        if (between.to == null)
-        {
+        if (between.to == null) {
             double cL = 0.5f - 4.51f / 16f;
             double cU = 0.5f + 4.51f / 16f;
             center = new Vec3(//
@@ -137,9 +124,7 @@ public class PipeWireRenderer
                     ay ? rC : rN, //
                     az ? rC : rN //
             );
-        }
-        else
-        {// we are a connection
+        } else {// we are a connection
             double cL = (8 - 4.51) / 16;
             double cU = (8 + 4.51) / 16;
             radius = new Vec3(//
@@ -163,10 +148,8 @@ public class PipeWireRenderer
         Tuple3f centerFloat = VecUtil.convertFloat(center);
         Tuple3f radiusFloat = VecUtil.convertFloat(radius);
 
-        for (Direction face : Direction.values())
-        {
-            if (face.getAxis() == between.mainAxis)
-            {
+        for (Direction face : Direction.values()) {
+            if (face.getAxis() == between.mainAxis) {
                 continue;
             }
             UvFaceData uvs = new UvFaceData(uvBase);
@@ -179,34 +162,26 @@ public class PipeWireRenderer
             boolean swapU = false;
             boolean swapV = false;
 
-            if (aAxis == Axis.X)
-            {
+            if (aAxis == Axis.X) {
                 swapV = fPositive;
-            }
-            else if (aAxis == Axis.Y)
-            {
+            } else if (aAxis == Axis.Y) {
                 rotations = 1;
                 swapU = (fAxis == Axis.X) != fPositive;
                 swapV = fAxis == Axis.Z;
-            }
-            else
-            {// aAxis == Axis.Z
-                if (fAxis == Axis.Y)
-                {
+            } else {// aAxis == Axis.Z
+                if (fAxis == Axis.Y) {
                     rotations = 1;
                 }
                 swapU = face == Direction.DOWN;
                 swapV = face != Direction.EAST;
             }
 
-            if (swapU)
-            {
+            if (swapU) {
                 float t = uvs.minU;
                 uvs.minU = uvs.maxU;
                 uvs.maxU = t;
             }
-            if (swapV)
-            {
+            if (swapV) {
                 float t = uvs.minV;
                 uvs.minV = uvs.maxV;
                 uvs.maxV = t;
@@ -219,8 +194,7 @@ public class PipeWireRenderer
         return quads;
     }
 
-    private static void renderQuads(MutableQuad[] quads, ISprite sprite, int level, PoseStack.Pose pose, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    private static void renderQuads(MutableQuad[] quads, ISprite sprite, int level, PoseStack.Pose pose, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 //        VertexFormat vf = DefaultVertexFormats.POSITION_TEX_COLOR;
 //        Tessellator tessellator = new Tessellator(quads.length * vf.getNextOffset());
 //        BufferBuilder bb = tessellator.getBuffer();
@@ -229,10 +203,8 @@ public class PipeWireRenderer
         VertexConsumer bb = bufferSource.getBuffer(Sheets.solidBlockSheet());
 
         float vOffset = (level & 0xF) / 16f;
-        for (MutableQuad q : quads)
-        {
-            if (q.getFace() != Direction.UP && level != 15)
-            {
+        for (MutableQuad q : quads) {
+            if (q.getFace() != Direction.UP && level != 15) {
                 q = new MutableQuad(q);
                 float shade = 1 - q.getCalculatedDiffuse();
                 shade = shade * (15 - level) / 15;
@@ -247,8 +219,7 @@ public class PipeWireRenderer
 //        tessellator.draw();
     }
 
-    private static void renderVertex(VertexConsumer bb, MutableVertex vertex, ISprite sprite, float vOffset, PoseStack.Pose pose, int combinedLight, int combinedOverlay)
-    {
+    private static void renderVertex(VertexConsumer bb, MutableVertex vertex, ISprite sprite, float vOffset, PoseStack.Pose pose, int combinedLight, int combinedOverlay) {
         vertex.renderPosition(bb, pose.pose());
         vertex.renderColour(bb);
         double u = sprite.getInterpU(vertex.tex_u);
@@ -262,8 +233,7 @@ public class PipeWireRenderer
     }
 
     //    private static int compileQuads(MutableQuad[] quads, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
-    private static void compileQuads(MutableQuad[] quads, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay)
-    {
+    private static void compileQuads(MutableQuad[] quads, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay) {
         // Calen: it seems that gl compile is not supported in 1.18.2 so just render with MultiBufferSource
 //        int index = GlStateManager.glGenLists(1);
 //        GlStateManager.glNewList(index, GL11.GL_COMPILE);
@@ -280,33 +250,28 @@ public class PipeWireRenderer
 //        return index;
     }
 
-    private static int getIndex(EnumWirePart part, DyeColor colour, boolean isOn)
-    {
+    private static int getIndex(EnumWirePart part, DyeColor colour, boolean isOn) {
         return part.ordinal() * 32 + colour.ordinal() * 2 + (isOn ? 1 : 0);
     }
 
-    private static int getIndex(EnumWireBetween bet, DyeColor colour, boolean isOn)
-    {
+    private static int getIndex(EnumWireBetween bet, DyeColor colour, boolean isOn) {
         return WIRE_COUNT + bet.ordinal() * 32 + colour.ordinal() * 2 + (isOn ? 1 : 0);
     }
 
     //    private static int compileWire(EnumWirePart part, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
-    private static void compileWire(EnumWirePart part, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay)
-    {
+    private static void compileWire(EnumWirePart part, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay) {
 //        return compileQuads(getQuads(part), colour, isOn, pose, vb, combinedLight, combinedOverlay);
         compileQuads(getQuads(part), colour, isOn, pose, vb, combinedLight, combinedOverlay);
     }
 
     //    private static int compileWire(EnumWireBetween between, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
-    private static void compileWire(EnumWireBetween between, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay)
-    {
+    private static void compileWire(EnumWireBetween between, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay) {
 //        return compileQuads(getQuads(between), colour, isOn, pose, vb, combinedLight, combinedOverlay);
         compileQuads(getQuads(between), colour, isOn, pose, vb, combinedLight, combinedOverlay);
     }
 
     //    public static void renderWires(TilePipeHolder pipe, double x, double y, double z, BufferBuilder bb)
-    public static void renderWires(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public static void renderWires(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 //        int combinedLight = pipe.getLevel().getLightEngine().getRawBrightness(pipe.getPipePos(), 0);
         int skyLight = combinedLight >> 16 & 0xFFFF;
         int blockLight = combinedLight & 0xFFFF;
@@ -315,31 +280,27 @@ public class PipeWireRenderer
 //        GlStateManager.pushMatrix();
 //        GlStateManager.translate(x, y, z);
         poseStack.pushPose();
-        for (Map.Entry<EnumWirePart, DyeColor> partColor : pipe.getWireManager().parts.entrySet())
-        {
+        for (Map.Entry<EnumWirePart, DyeColor> partColor : pipe.getWireManager().parts.entrySet()) {
             EnumWirePart part = partColor.getKey();
             DyeColor color = partColor.getValue();
             boolean isOn = pipe.wireManager.isPowered(part);
             int idx = getIndex(part, color, isOn);
 //            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, isOn ? 240 : blockLight, skyLight);
             int combinedLight_New = (isOn ? 240 : blockLight) + (skyLight << 16);
-            if (wireRenderingCache[idx] == -1)
-            {
+            if (wireRenderingCache[idx] == -1) {
 //                wireRenderingCache[idx] = compileWire(part, color, isOn, poseStack.last(), vb, combinedLight_New, combinedOverlay);
                 compileWire(part, color, isOn, poseStack.last(), bufferSource, combinedLight_New, combinedOverlay);
             }
 //            GlStateManager.callList(wireRenderingCache[idx]);
         }
-        for (Map.Entry<EnumWireBetween, DyeColor> betweenColor : pipe.getWireManager().betweens.entrySet())
-        {
+        for (Map.Entry<EnumWireBetween, DyeColor> betweenColor : pipe.getWireManager().betweens.entrySet()) {
             EnumWireBetween between = betweenColor.getKey();
             DyeColor color = betweenColor.getValue();
             boolean isOn = pipe.wireManager.isPowered(between.parts[0]);
             int idx = getIndex(between, color, isOn);
 //            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, isOn ? 240 : blockLight, skyLight);
             int combinedLight_New = (isOn ? 240 : blockLight) + (skyLight << 16);
-            if (wireRenderingCache[idx] == -1)
-            {
+            if (wireRenderingCache[idx] == -1) {
 //                wireRenderingCache[idx] = compileWire(between, color, isOn);
                 compileWire(between, color, isOn, poseStack.last(), bufferSource, combinedLight_New, combinedOverlay);
             }
@@ -356,8 +317,7 @@ public class PipeWireRenderer
 //        GlStateManager.color(1, 1, 1, 1);
     }
 
-    public static void init()
-    {
+    public static void init() {
         // make sure static runs
     }
 }

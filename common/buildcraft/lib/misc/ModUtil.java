@@ -6,8 +6,7 @@ import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 
-public class ModUtil
-{
+public class ModUtil {
 
     @Nullable
     public static String getNameOfMod(String domain) {

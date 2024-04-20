@@ -11,10 +11,8 @@ import buildcraft.silicon.tile.TileProgrammingTable_Neptune;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
-public class ContainerProgrammingTable_Neptune extends ContainerBCTile<TileProgrammingTable_Neptune>
-{
-    public ContainerProgrammingTable_Neptune(MenuType menuType, int id, Player player, TileProgrammingTable_Neptune tile)
-    {
+public class ContainerProgrammingTable_Neptune extends ContainerBCTile<TileProgrammingTable_Neptune> {
+    public ContainerProgrammingTable_Neptune(MenuType menuType, int id, Player player, TileProgrammingTable_Neptune tile) {
         super(menuType, id, player, tile);
     }
 }

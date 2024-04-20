@@ -16,25 +16,21 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
-public abstract class BCTextureProvider implements DataProvider
-{
+public abstract class BCTextureProvider implements DataProvider {
     protected static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
     protected static final Logger LOGGER = LogManager.getLogger();
     protected final DataGenerator generator;
     protected final ExistingFileHelper exFileHelper;
 
-    protected BCTextureProvider(DataGenerator gen, ExistingFileHelper exFileHelper)
-    {
+    protected BCTextureProvider(DataGenerator gen, ExistingFileHelper exFileHelper) {
         this.generator = gen;
         this.exFileHelper = exFileHelper;
     }
 
-    protected void save(BufferedImage image, HashCache cache, Path path) throws IOException
-    {
+    protected void save(BufferedImage image, HashCache cache, Path path) throws IOException {
         String s = image.toString();
         String s1 = SHA1.hashUnencodedChars(s).toString();
-        if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path))
-        {
+        if (!Objects.equals(cache.getHash(path), s1) || !Files.exists(path)) {
             Files.createDirectories(path.getParent());
 
             ImageIO.write(image, "png", path.toFile());

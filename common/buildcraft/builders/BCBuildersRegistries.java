@@ -15,14 +15,13 @@ import buildcraft.builders.snapshot.TemplateRegistry;
 import buildcraft.core.marker.volume.AddonsRegistry;
 import net.minecraft.resources.ResourceLocation;
 
-public class BCBuildersRegistries
-{
+public class BCBuildersRegistries {
     public static void preInit() {
         TemplateApi.templateRegistry = TemplateRegistry.INSTANCE;
         FillerManager.registry = FillerRegistry.INSTANCE;
 
         AddonsRegistry.INSTANCE.register(new ResourceLocation("buildcraftbuilders:filler_planner"),
-            AddonFillerPlanner.class);
+                AddonFillerPlanner.class);
     }
 
     public static void init() {

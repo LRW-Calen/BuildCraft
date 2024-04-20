@@ -7,34 +7,22 @@ import buildcraft.api.schematics.SchematicEntityFactoryRegistry;
 import buildcraft.builders.snapshot.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.BannerItem;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.EmptyBlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BannerBlock;
 import net.minecraft.world.level.block.BedBlock;
 import net.minecraft.world.level.block.VineBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.Shapes;
 
-import javax.annotation.Nonnull;
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.StreamSupport;
 
-public class BCBuildersSchematics
-{
-    public static void preInit()
-    {
+public class BCBuildersSchematics {
+    public static void preInit() {
         registerSchematicFactory("air", 0, SchematicBlockAir::predicate, SchematicBlockAir::new);
         // Calen debug
-        if (!SchematicBlockFactoryRegistry.getFactoriesSynchronized().stream().anyMatch(f -> f.name.getPath().equals("air")))
-        {
+        if (!SchematicBlockFactoryRegistry.getFactoriesSynchronized().stream().anyMatch(f -> f.name.getPath().equals("air"))) {
             throw new RuntimeException("[builders.schematics.debug] Added Schematic Factory [air], but not found, something wrong...");
         }
         registerSchematicFactory("default", 100, SchematicBlockDefault::predicate, SchematicBlockDefault::new);
@@ -49,13 +37,11 @@ public class BCBuildersSchematics
     }
 
     private static <S extends ISchematicBlock> void registerSchematicFactory(String name, int priority,
-                                                                             Predicate<SchematicBlockContext> predicate, Supplier<S> supplier)
-    {
+                                                                             Predicate<SchematicBlockContext> predicate, Supplier<S> supplier) {
         SchematicBlockFactoryRegistry.registerFactory(name, priority, predicate, supplier);
     }
 
-    private static SchematicBlockDefault getBanner()
-    {
+    private static SchematicBlockDefault getBanner() {
         // Calen: moved to SchematicBlockBanner#computeRequiredItems
 //        return new SchematicBlockDefault() {
 //            @Nonnull
@@ -68,13 +54,10 @@ public class BCBuildersSchematics
         return new SchematicBlockBanner();
     }
 
-    private static SchematicBlockDefault getVine()
-    {
-        return new SchematicBlockDefault()
-        {
+    private static SchematicBlockDefault getVine() {
+        return new SchematicBlockDefault() {
             @Override
-            public boolean isReadyToBuild(Level world, BlockPos blockPos)
-            {
+            public boolean isReadyToBuild(Level world, BlockPos blockPos) {
                 return super.isReadyToBuild(world, blockPos)
                         && (world.getBlockState(blockPos.above()).getBlock() instanceof VineBlock
                         || StreamSupport.stream(Direction.Plane.HORIZONTAL.spliterator(), false).map(blockPos::relative)

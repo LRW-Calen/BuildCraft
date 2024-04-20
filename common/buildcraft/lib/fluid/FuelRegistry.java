@@ -19,8 +19,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
-public enum FuelRegistry implements IFuelManager
-{
+public enum FuelRegistry implements IFuelManager {
     INSTANCE;
 
     //    private final List<IFuel> fuels = new LinkedList<>();
@@ -28,8 +27,7 @@ public enum FuelRegistry implements IFuelManager
 
     @Override
 //    public <F extends IFuel> F addFuel(F fuel)
-    public <F extends IFuel> F addUnregisteredFuel(F fuel)
-    {
+    public <F extends IFuel> F addUnregisteredFuel(F fuel) {
 //        fuels.add(fuel);
         unregisteredFuels.add(fuel);
         return fuel;
@@ -37,24 +35,21 @@ public enum FuelRegistry implements IFuelManager
 
     @Override
 //    public IFuel addFuel(FluidStack fluid, long powerPerCycle, int totalBurningTime)
-    public IFuel addUnregisteredFuel(ResourceLocation id, FluidStack fluid, long powerPerCycle, int totalBurningTime)
-    {
+    public IFuel addUnregisteredFuel(ResourceLocation id, FluidStack fluid, long powerPerCycle, int totalBurningTime) {
 //        return addFuel(new Fuel(fluid, powerPerCycle, totalBurningTime));
         return addUnregisteredFuel(new Fuel(id, fluid, powerPerCycle, totalBurningTime));
     }
 
     @Override
 //    public IDirtyFuel addDirtyFuel(FluidStack fuel, long powerPerCycle, int totalBurningTime, FluidStack residue)
-    public IDirtyFuel addUnregisteredDirtyFuel(ResourceLocation id, FluidStack fuel, long powerPerCycle, int totalBurningTime, FluidStack residue)
-    {
+    public IDirtyFuel addUnregisteredDirtyFuel(ResourceLocation id, FluidStack fuel, long powerPerCycle, int totalBurningTime, FluidStack residue) {
 //        return addFuel(new DirtyFuel(fuel, powerPerCycle, totalBurningTime, residue));
         return addUnregisteredFuel(new DirtyFuel(id, fuel, powerPerCycle, totalBurningTime, residue));
     }
 
     @Override
 //    public Collection<IFuel> getFuels()
-    public Collection<IFuel> getFuels(Level world)
-    {
+    public Collection<IFuel> getFuels(Level world) {
         Collection<IFuel> ret = Lists.newArrayList();
         ret.addAll(unregisteredFuels);
         world.getRecipeManager().byType(IFuel.TYPE).values().forEach(r -> ret.add((Fuel) r));
@@ -64,27 +59,22 @@ public enum FuelRegistry implements IFuelManager
 
     @Override
 //    public IFuel getFuel(FluidStack fluid)
-    public IFuel getFuel(Level world, FluidStack fluid)
-    {
-        if (fluid == null)
-        {
+    public IFuel getFuel(Level world, FluidStack fluid) {
+        if (fluid == null) {
             return null;
         }
         Collection<IFuel> fuels = Lists.newArrayList();
         fuels.addAll(unregisteredFuels);
         world.getRecipeManager().byType(IFuel.TYPE).values().forEach(r -> fuels.add((Fuel) r));
-        for (IFuel fuel : fuels)
-        {
-            if (fuel.getFluid().isFluidEqual(fluid))
-            {
+        for (IFuel fuel : fuels) {
+            if (fuel.getFluid().isFluidEqual(fluid)) {
                 return fuel;
             }
         }
         return null;
     }
 
-    public static class Fuel implements IFuel
-    {
+    public static class Fuel implements IFuel {
         private final ResourceLocation id;
 
         private final FluidStack fluid;
@@ -92,8 +82,7 @@ public enum FuelRegistry implements IFuelManager
         private final int totalBurningTime;
 
         //        public Fuel(FluidStack fluid, long powerPerCycle, int totalBurningTime)
-        public Fuel(ResourceLocation id, FluidStack fluid, long powerPerCycle, int totalBurningTime)
-        {
+        public Fuel(ResourceLocation id, FluidStack fluid, long powerPerCycle, int totalBurningTime) {
             this.id = id;
             this.fluid = fluid;
             this.powerPerCycle = powerPerCycle;
@@ -101,51 +90,43 @@ public enum FuelRegistry implements IFuelManager
         }
 
         @Override
-        public FluidStack getFluid()
-        {
+        public FluidStack getFluid() {
             return fluid;
         }
 
         @Override
-        public long getPowerPerCycle()
-        {
+        public long getPowerPerCycle() {
             return powerPerCycle;
         }
 
         @Override
-        public int getTotalBurningTime()
-        {
+        public int getTotalBurningTime() {
             return totalBurningTime;
         }
 
         @Override
-        public ResourceLocation getId()
-        {
+        public ResourceLocation getId() {
             return id;
         }
 
         @Override
-        public RecipeSerializer<?> getSerializer()
-        {
+        public RecipeSerializer<?> getSerializer() {
             return FuelRecipeSerializer.INSTANCE;
         }
     }
 
-    public static class DirtyFuel extends Fuel implements IDirtyFuel
-    {
+    public static class DirtyFuel extends Fuel implements IDirtyFuel {
         private final FluidStack residue;
 
         //        public DirtyFuel(FluidStack fluid, long powerPerCycle, int totalBurningTime, FluidStack residue)
-        public DirtyFuel(ResourceLocation id, FluidStack fluid, long powerPerCycle, int totalBurningTime, FluidStack residue)
-        {
+        public DirtyFuel(ResourceLocation id, FluidStack fluid, long powerPerCycle, int totalBurningTime, FluidStack residue) {
 //            super(fluid, powerPerCycle, totalBurningTime);
             super(id, fluid, powerPerCycle, totalBurningTime);
             this.residue = residue;
         }
 
         @Override
-        public FluidStack getResidue()
-        {
+        public FluidStack getResidue() {
             return residue;
         }
     }

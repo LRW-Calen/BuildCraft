@@ -8,6 +8,5 @@ import buildcraft.factory.tile.TileTank;
  * visually connecting below. This should only really be implemented when the block creates an instance of
  * {@link TileTank}.
  */
-public interface ITankBlockConnector
-{
+public interface ITankBlockConnector {
 }

@@ -16,7 +16,8 @@ public class ItemHandlerFiltered extends ItemHandlerSimple implements IItemHandl
         super(filter.getSlots());
         this.emptyIsAnything = emptyIsAnything;
         this.filter = filter;
-        setChecker((slot, stack) -> {
+        setChecker((slot, stack) ->
+        {
             ItemStack inSlot = filter.getStackInSlot(slot);
             if (inSlot.isEmpty()) {
                 return emptyIsAnything;

@@ -30,28 +30,23 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate>
-{
+public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate> {
     public static final Map<Direction, Property<Boolean>> CONNECTED_MAP;
 
-    static
-    {
+    static {
         CONNECTED_MAP = new HashMap<>(BuildCraftProperties.CONNECTED_MAP);
         CONNECTED_MAP.remove(Direction.UP);
     }
 
-    public BlockFloodGate(String idBC, BlockBehaviour.Properties props)
-    {
+    public BlockFloodGate(String idBC, BlockBehaviour.Properties props) {
         super(idBC, props);
     }
 
     @Override
 //    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
 //        super.addProperties(properties);
         super.createBlockStateDefinition(builder);
 //        properties.addAll(CONNECTED_MAP.values());
@@ -60,15 +55,13 @@ public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate>
 
     @Override
 //    public TileBC_Neptune createTileEntity(World world, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new TileFloodGate(pos, state);
     }
 
     // Calen: for custom call getActualState
     @Override
-    public BlockState updateShape(BlockState thisState, Direction facing, BlockState otherState, LevelAccessor world, BlockPos thisPos, BlockPos otherPos)
-    {
+    public BlockState updateShape(BlockState thisState, Direction facing, BlockState otherState, LevelAccessor world, BlockPos thisPos, BlockPos otherPos) {
         BlockEntity tile = world.getBlockEntity(thisPos);
         thisState = super.updateShape(thisState, facing, otherState, world, thisPos, otherPos);
         return getActualState(thisState, world, thisPos, tile);
@@ -76,8 +69,7 @@ public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate>
 
     // Calen: for custom call getActualState
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         BlockState state = super.getStateForPlacement(context);
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
@@ -85,12 +77,9 @@ public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate>
     }
 
     @Override
-    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile)
-    {
-        if (tile instanceof TileFloodGate floodGate)
-        {
-            for (Direction side : CONNECTED_MAP.keySet())
-            {
+    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
+        if (tile instanceof TileFloodGate floodGate) {
+            for (Direction side : CONNECTED_MAP.keySet()) {
                 state = state.setValue(CONNECTED_MAP.get(side), floodGate.openSides.contains(side));
             }
         }
@@ -100,25 +89,18 @@ public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate>
     @Override
 //    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand,
 //                                    Direction side, float hitX, float hitY, float hitZ)
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         Direction side = hitResult.getDirection();
 
         ItemStack heldItem = player.getItemInHand(hand);
-        if (heldItem.getItem() instanceof IToolWrench)
-        {
-            if (!world.isClientSide)
-            {
-                if (side != Direction.UP)
-                {
+        if (heldItem.getItem() instanceof IToolWrench) {
+            if (!world.isClientSide) {
+                if (side != Direction.UP) {
                     BlockEntity tile = world.getBlockEntity(pos);
-                    if (tile instanceof TileFloodGate)
-                    {
-                        if (CONNECTED_MAP.containsKey(side))
-                        {
+                    if (tile instanceof TileFloodGate) {
+                        if (CONNECTED_MAP.containsKey(side)) {
                             TileFloodGate floodGate = (TileFloodGate) tile;
-                            if (!floodGate.openSides.remove(side))
-                            {
+                            if (!floodGate.openSides.remove(side)) {
                                 floodGate.openSides.add(side);
                             }
                             floodGate.queue.clear();

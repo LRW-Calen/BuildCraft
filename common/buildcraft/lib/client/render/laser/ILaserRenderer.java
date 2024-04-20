@@ -9,8 +9,7 @@ package buildcraft.lib.client.render.laser;
 import javax.vecmath.Matrix4f;
 import javax.vecmath.Vector4f;
 
-public interface ILaserRenderer
-{
+public interface ILaserRenderer {
     void vertex(
 //            PoseStack.Pose pose,
 //            VertexConsumer bufferBuilder,

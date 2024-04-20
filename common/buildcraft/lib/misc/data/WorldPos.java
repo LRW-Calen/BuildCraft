@@ -10,32 +10,27 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public final class WorldPos
-{
+public final class WorldPos {
     @SuppressWarnings("WeakerAccess")
     public final String dimension; // BC: int
     public final BlockPos pos;
 
     @SuppressWarnings("WeakerAccess")
-    public WorldPos(String dimension, BlockPos pos)
-    {
+    public WorldPos(String dimension, BlockPos pos) {
         this.dimension = dimension;
         this.pos = pos.getClass() == BlockPos.class ? pos : new BlockPos(pos);
     }
 
-    public WorldPos(Level world, BlockPos pos)
-    {
+    public WorldPos(Level world, BlockPos pos) {
         this(world.dimension().location().getPath(), pos);
     }
 
-    public WorldPos(BlockEntity tile)
-    {
+    public WorldPos(BlockEntity tile) {
         this(tile.getLevel(), tile.getBlockPos());
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return this == o ||
                 o != null &&
                         getClass() == o.getClass() &&
@@ -45,8 +40,7 @@ public final class WorldPos
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
 //        return 31 * dimension + pos.hashCode();
         return 31 * dimension.hashCode() + pos.hashCode();
     }

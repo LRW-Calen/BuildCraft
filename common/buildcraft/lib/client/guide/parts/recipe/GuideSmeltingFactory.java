@@ -20,8 +20,7 @@ import net.minecraft.world.item.crafting.SmeltingRecipe;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 
-public class GuideSmeltingFactory implements GuidePartFactory
-{
+public class GuideSmeltingFactory implements GuidePartFactory {
     @Nonnull
 //    private final ItemStack input;
     private final NonNullList<Ingredient> input;
@@ -29,8 +28,7 @@ public class GuideSmeltingFactory implements GuidePartFactory
     private final int hash;
 
     //    public GuideSmeltingFactory(ItemStack input, ItemStack output)
-    public GuideSmeltingFactory(NonNullList<Ingredient> input, ItemStack output)
-    {
+    public GuideSmeltingFactory(NonNullList<Ingredient> input, ItemStack output) {
 //        this.input = StackUtil.asNonNull(input);
         this.input = input;
         this.output = StackUtil.asNonNull(output);
@@ -38,14 +36,11 @@ public class GuideSmeltingFactory implements GuidePartFactory
         this.hash = Arrays.hashCode(new int[]{input.hashCode(), output.serializeNBT().hashCode()});
     }
 
-    public static GuideSmeltingFactory create(ItemStack stack)
-    {
+    public static GuideSmeltingFactory create(ItemStack stack) {
 //        for (Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet())
-        for (SmeltingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING))
-        {
+        for (SmeltingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING)) {
 //            if (ItemStack.areItemsEqual(stack, entry.getValue()))
-            if (ItemStack.isSame(stack, recipe.getResultItem()))
-            {
+            if (ItemStack.isSame(stack, recipe.getResultItem())) {
 //                return new GuideSmeltingFactory(entry.getKey(), stack);
                 return new GuideSmeltingFactory(recipe.getIngredients(), stack);
             }
@@ -53,26 +48,22 @@ public class GuideSmeltingFactory implements GuidePartFactory
         return null;
     }
 
-    public static GuideSmeltingFactory create(Item output)
-    {
+    public static GuideSmeltingFactory create(Item output) {
         return create(new ItemStack(output));
     }
 
     @Override
-    public GuideSmelting createNew(GuiGuide gui)
-    {
+    public GuideSmelting createNew(GuiGuide gui) {
         return new GuideSmelting(gui, input, output);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return hash;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (obj == this) return true;
         if (obj == null) return false;
         if (obj.getClass() != getClass()) return false;

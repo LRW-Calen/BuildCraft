@@ -11,8 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 import java.util.*;
 
-public enum ReloadableRegistryManager implements IReloadableRegistryManager
-{
+public enum ReloadableRegistryManager implements IReloadableRegistryManager {
     DATA_PACKS(PackType.DATA_PACK),
     RESOURCE_PACKS(PackType.RESOURCE_PACK);
 
@@ -36,7 +35,8 @@ public enum ReloadableRegistryManager implements IReloadableRegistryManager
                 RESOURCE_PACKS.reloadAll();
             }
 
-        } finally {
+        }
+        finally {
             isLoadingAll = false;
         }
     }
@@ -94,7 +94,8 @@ public enum ReloadableRegistryManager implements IReloadableRegistryManager
             }
 
             MinecraftForge.EVENT_BUS.post(new EventBuildCraftReload.PostLoad(this, set));
-        } finally {
+        }
+        finally {
             reloadCount++;
             isReloading = false;
         }
@@ -136,7 +137,7 @@ public enum ReloadableRegistryManager implements IReloadableRegistryManager
     public void registerRegistry(String entryType, IScriptableRegistry<?> registry) {
         if (entryType.indexOf(':') != -1) {
             throw new IllegalArgumentException(
-                "The entry type must be a valid resource path! (so it must not contain a colon)");
+                    "The entry type must be a valid resource path! (so it must not contain a colon)");
         }
         registries.put(entryType, registry);
     }

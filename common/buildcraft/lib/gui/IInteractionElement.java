@@ -2,29 +2,25 @@ package buildcraft.lib.gui;
 
 import com.mojang.blaze3d.platform.InputConstants;
 
-public interface IInteractionElement extends IGuiElement
-{
+public interface IInteractionElement extends IGuiElement {
 
     /**
      * This is called EVEN IF the mouse is not inside your width and height!
      */
-    default void onMouseClicked(int button)
-    {
+    default void onMouseClicked(int button) {
     }
 
     /**
      * This is called EVEN IF the mouse is not inside your width and height!
      */
 //    default void onMouseDragged(int button, long ticksSinceClick) {}
-    default void onMouseDragged(int button)
-    {
+    default void onMouseDragged(int button) {
     }
 
     /**
      * This is called EVEN IF the mouse is not inside your width and height!
      */
-    default void onMouseReleased(int button)
-    {
+    default void onMouseReleased(int button) {
     }
 
     /**
@@ -36,12 +32,11 @@ public interface IInteractionElement extends IGuiElement
      * if {@link InputConstants#KEY_ESCAPE escape} is pressed.
      */
 //    default boolean onKeyPress(char typedChar, int keyCode)
-    default boolean onKeyPress(int typedChar, int keyCode, int modifiers)
-    {
+    default boolean onKeyPress(int typedChar, int keyCode, int modifiers) {
         return false;
     }
-    default boolean charTyped(char typedChar, int keyCode)
-    {
+
+    default boolean charTyped(char typedChar, int keyCode) {
         return false;
     }
 }

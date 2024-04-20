@@ -6,53 +6,41 @@ package buildcraft.lib.registry;
 
 
 import buildcraft.api.transport.pipe.IItemPipe;
-import buildcraft.transport.BCTransportItems;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.RegistryObject;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
-public class CreativeTabManager
-{
+public class CreativeTabManager {
     // Calen: thread safety, avoid creating duplicate tabs
 //    private static final Map<String, CreativeTabBC> tabMap = new HashMap<>();
     private static final Map<String, CreativeTabBC> tabMap = new ConcurrentHashMap<>();
 
-    public static CreativeModeTab getTab(String name)
-    {
-        if (name.startsWith("vanilla."))
-        {
+    public static CreativeModeTab getTab(String name) {
+        if (name.startsWith("vanilla.")) {
             String after = name.substring("vanilla.".length());
-            switch (after)
-            {
+            switch (after) {
                 case "misc":
                     return CreativeModeTab.TAB_MISC;
                 case "materials":
                     return CreativeModeTab.TAB_MATERIALS;
             }
         }
-        if (tabMap.containsKey(name))
-        {
+        if (tabMap.containsKey(name)) {
             return tabMap.get(name);
-        }
-        else
-        {
+        } else {
             throw new IllegalArgumentException("Unknown tab " + name);
         }
     }
 
-//    public static CreativeTabBC createTab(String name)
-    public static synchronized CreativeTabBC createTab(String name)
-    {
+    //    public static CreativeTabBC createTab(String name)
+    public static synchronized CreativeTabBC createTab(String name) {
         CreativeTabBC tab = tabMap.get(name);
-        if (tab != null)
-        {
+        if (tab != null) {
             return tab;
         }
         tab = new CreativeTabBC(name);
@@ -61,60 +49,49 @@ public class CreativeTabManager
     }
 
     //    public static void setItem(String name, Item item)
-    public static void setItem(String name, Supplier<? extends Item> item)
-    {
-        if (item != null)
-        {
+    public static void setItem(String name, Supplier<? extends Item> item) {
+        if (item != null) {
 //            setItemStack(name, new ItemStack(item));
             setItemStack(name, () -> new ItemStack(item.get()));
         }
     }
 
     //    public static void setItemStack(String name, ItemStack item)
-    public static void setItemStack(String name, Supplier<ItemStack> item)
-    {
+    public static void setItemStack(String name, Supplier<ItemStack> item) {
         CreativeTabBC tab = tabMap.get(name);
-        if (tab != null)
-        {
+        if (tab != null) {
 //            tab.setItem(item);
             tab.setItemStack(item);
         }
     }
 
-    public static class CreativeTabBC extends CreativeModeTab
-    {
+    public static class CreativeTabBC extends CreativeModeTab {
         //        private ItemStack item = new ItemStack(Items.COMPARATOR); // Temp.
         private Supplier<ItemStack> iconItem = () -> new ItemStack(Items.COMPARATOR); // Temp.
 
         //        private CreativeTabBC(String name)
-        private CreativeTabBC(String name)
-        {
+        private CreativeTabBC(String name) {
             super(name);
         }
 
 
         //        public void setItem(Item item)
-        public void setItem(Supplier<? extends Item> item)
-        {
-            if (item != null)
-            {
+        public void setItem(Supplier<? extends Item> item) {
+            if (item != null) {
 //                this.item = new ItemStack(item);
                 this.iconItem = () -> new ItemStack(item.get());
             }
         }
 
-        public void setItemPipe(Supplier<? extends IItemPipe> item)
-        {
-            if (item != null)
-            {
+        public void setItemPipe(Supplier<? extends IItemPipe> item) {
+            if (item != null) {
 //                this.item = new ItemStack(item);
                 this.iconItem = () -> new ItemStack((Item) item.get());
             }
         }
 
         //        public void setItem(ItemStack stack)
-        public void setItemStack(Supplier<ItemStack> stack)
-        {
+        public void setItemStack(Supplier<ItemStack> stack) {
 //            if (stack == null || stack.isEmpty()) return;
 //            item = stack;
             this.iconItem = stack;
@@ -122,8 +99,7 @@ public class CreativeTabManager
 
         @Override
 //        public ItemStack getTabIconItem()
-        public ItemStack makeIcon()
-        {
+        public ItemStack makeIcon() {
 //            return item;
             return iconItem.get();
         }

@@ -6,8 +6,7 @@
 
 package buildcraft.silicon;
 
-public enum EnumAssemblyRecipeState
-{
+public enum EnumAssemblyRecipeState {
     POSSIBLE,
     SAVED,
     SAVED_ENOUGH,

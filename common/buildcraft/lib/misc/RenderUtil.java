@@ -18,8 +18,8 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.MinecraftForgeClient;
 
@@ -29,15 +29,13 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class RenderUtil
-{
+public class RenderUtil {
 
     private static final ThreadLocal<TessellatorQueue> threadLocalTessellators;
     private static final MethodHandle HANDLE_FORGE_TESSELLATOR;
     private static final MethodHandle HANDLE_IS_BUFFER_DRAWING;
 
-    static
-    {
+    static {
         threadLocalTessellators = ThreadLocal.withInitial(TessellatorQueue::new);
         HANDLE_FORGE_TESSELLATOR = null;
 //        HANDLE_IS_BUFFER_DRAWING = null;
@@ -47,47 +45,37 @@ public class RenderUtil
         HANDLE_IS_BUFFER_DRAWING = createGetter(BufferBuilder.class, boolean.class, "isDrawing", "field_179010_r", "building", "f_85661_");
     }
 
-    private static MethodHandle createGetter(Class<?> owner, Class<?> type, String... names)
-    {
-        try
-        {
+    private static MethodHandle createGetter(Class<?> owner, Class<?> type, String... names) {
+        try {
             Set<String> nameSet = new HashSet<>();
             Collections.addAll(nameSet, names);
             List<Field> validFields = new ArrayList<>();
-            for (Field field : owner.getDeclaredFields())
-            {
-                if (field.getType() == type && nameSet.contains(field.getName()))
-                {
+            for (Field field : owner.getDeclaredFields()) {
+                if (field.getType() == type && nameSet.contains(field.getName())) {
                     validFields.add(field);
                 }
             }
 
-            if (validFields.size() != 1)
-            {
+            if (validFields.size() != 1) {
                 throw new Error("Incorrect number of fields! (Expected 1, but got " + validFields + ")");
             }
             Field fld = validFields.get(0);
             fld.setAccessible(true);
             return MethodHandles.publicLookup().unreflectGetter(fld);
         }
-        catch (ReflectiveOperationException roe)
-        {
+        catch (ReflectiveOperationException roe) {
             throw new Error("Failed to obtain forge's batch buffer!", roe);
         }
     }
 
-    public static void registerBlockColour(@Nullable Block block, BlockColor colour)
-    {
-        if (block != null)
-        {
+    public static void registerBlockColour(@Nullable Block block, BlockColor colour) {
+        if (block != null) {
             Minecraft.getInstance().getBlockColors().register(colour, block);
         }
     }
 
-    public static void registerItemColour(@Nullable Item item, ItemColor colour)
-    {
-        if (item != null)
-        {
+    public static void registerItemColour(@Nullable Item item, ItemColor colour) {
+        if (item != null) {
             Minecraft.getInstance().getItemColors().register(colour, item);
         }
     }
@@ -95,8 +83,7 @@ public class RenderUtil
     /**
      * Takes _RGB (alpha is set to 1)
      */
-    public static void setGLColorFromInt(int color)
-    {
+    public static void setGLColorFromInt(int color) {
         float red = (color >> 16 & 255) / 255.0F;
         float green = (color >> 8 & 255) / 255.0F;
         float blue = (color & 255) / 255.0F;
@@ -108,8 +95,7 @@ public class RenderUtil
     /**
      * Takes ARGB
      */
-    public static void setGLColorFromIntPlusAlpha(int color)
-    {
+    public static void setGLColorFromIntPlusAlpha(int color) {
         float alpha = (color >>> 24 & 255) / 255.0F;
         float red = (color >> 16 & 255) / 255.0F;
         float green = (color >> 8 & 255) / 255.0F;
@@ -119,8 +105,7 @@ public class RenderUtil
         RenderSystem.setShaderColor(red, green, blue, alpha);
     }
 
-    public static int swapARGBforABGR(int argb)
-    {
+    public static int swapARGBforABGR(int argb) {
         int a = (argb >>> 24) & 255;
         int r = (argb >> 16) & 255;
         int g = (argb >> 8) & 255;
@@ -128,31 +113,26 @@ public class RenderUtil
         return (a << 24) | (b << 16) | (g << 8) | r;
     }
 
-    public static int combineWithFluidLight(int combinedLight, byte fluidLight)
-    {
+    public static int combineWithFluidLight(int combinedLight, byte fluidLight) {
         return (combinedLight & 0xFFFF0000) | Math.max(fluidLight << 4, combinedLight & 0xFFFF);
     }
 
     // Calen
-    public static int getCombinedLight(Level level, BlockPos pos)
-    {
+    public static int getCombinedLight(Level level, BlockPos pos) {
         byte sky = (byte) level.getLightEngine().getRawBrightness(pos, 0);
         byte block = (byte) level.getLightEmission(pos);
         return (sky << 20) | (block << 4);
     }
 
-    public static byte getSkyLightFromCombined(int combinedLight)
-    {
+    public static byte getSkyLightFromCombined(int combinedLight) {
         return (byte) ((combinedLight & 0xFFFF0000) >>> 20);
     }
 
-    public static byte getBlockLightFromCombined(int combinedLight)
-    {
+    public static byte getBlockLightFromCombined(int combinedLight) {
         return (byte) ((combinedLight & 0x0000FFFF) >>> 4);
     }
 
-    public static boolean isRenderingTranslucent()
-    {
+    public static boolean isRenderingTranslucent() {
 //        return MinecraftForgeClient.getRenderLayer() == BlockRenderLayer.TRANSLUCENT || MinecraftForgeClient.getRenderPass() == 1;
         return MinecraftForgeClient.getRenderType() == RenderType.translucent();
     }
@@ -161,8 +141,7 @@ public class RenderUtil
      * @return true if this thread is the main minecraft thread, used for all client side game logic and (by default)
      * tile entity rendering.
      */
-    public static boolean isMainRenderThread()
-    {
+    public static boolean isMainRenderThread() {
         return Minecraft.getInstance().renderOnThread();
     }
 
@@ -175,8 +154,7 @@ public class RenderUtil
      * @return The first unused {@link Tesselator} for the current thread that uses the given vertex format. (Unused =
      * {@link #isDrawing(BufferBuilder)} returns false).
      */
-    public static AutoTessellator getThreadLocalUnusedTessellator()
-    {
+    public static AutoTessellator getThreadLocalUnusedTessellator() {
         return threadLocalTessellators.get().nextFreeTessellator();
     }
 
@@ -188,19 +166,15 @@ public class RenderUtil
      * @return The forge {@link Tesselator} used for rendering {@link BlockEntityRenderer}'s.
      */
 //    public static Tessellator getMainTessellator()
-    public static Tesselator getMainTessellator()
-    {
-        if (!isMainRenderThread())
-        {
+    public static Tesselator getMainTessellator() {
+        if (!isMainRenderThread()) {
             throw new IllegalStateException("Not the main thread!");
         }
-        try
-        {
+        try {
 //            return (Tessellator) HANDLE_FORGE_TESSELLATOR.invokeExact(Minecraft.getInstance().getBlockEntityRenderDispatcher());
             return (Tesselator) HANDLE_FORGE_TESSELLATOR.invokeExact(Minecraft.getInstance().getBlockEntityRenderDispatcher());
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             throw new Error(t);
         }
     }
@@ -209,63 +183,52 @@ public class RenderUtil
      * @return True if the given {@link BufferBuilder} is currently in the middle of drawing. Essentially returns true
      * if {@link BufferBuilder#begin(VertexFormat.Mode, VertexFormat)} would throw an exception.
      */
-    public static boolean isDrawing(BufferBuilder bb)
-    {
-        try
-        {
+    public static boolean isDrawing(BufferBuilder bb) {
+        try {
             return (boolean) HANDLE_IS_BUFFER_DRAWING.invokeExact(bb);
         }
-        catch (Throwable t)
-        {
+        catch (Throwable t) {
             throw new Error(t);
         }
     }
 
-    private static Tesselator newTessellator()
-    {
+    private static Tesselator newTessellator() {
         // The same as what minecraft expands a tessellator by
         return new Tesselator(0x200_000);
     }
 
     // Calen add
     // 1.12.2 GlStateManager#color
-    public static void color(float colorRed, float colorGreen, float colorBlue)
-    {
+    public static void color(float colorRed, float colorGreen, float colorBlue) {
         color(colorRed, colorGreen, colorBlue, 1.0F);
     }
 
-    public static void color(float colorRed, float colorGreen, float colorBlue, float alpha)
-    {
+    public static void color(float colorRed, float colorGreen, float colorBlue, float alpha) {
         RenderSystem.setShaderColor(colorRed, colorGreen, colorBlue, alpha);
     }
 
     // Calen
-    public static void disableBlend()
-    {
+    public static void disableBlend() {
         RenderSystem.disableBlend();
     }
 
     // Calen
-    public static void enableBlend()
-    {
+    public static void enableBlend() {
         RenderSystem.enableBlend();
     }
 
     // Calen
-    public static void disableDepth()
-    {
+    public static void disableDepth() {
         RenderSystem.disableDepthTest();
     }
 
     // Calen
-    public static void enableDepth()
-    {
+    public static void enableDepth() {
         RenderSystem.enableDepthTest();
     }
 
     // Calen
-    public static void bindTexture(ResourceLocation texture)
-    {
+    public static void bindTexture(ResourceLocation texture) {
         RenderSystem.setShaderTexture(0, texture);
     }
 
@@ -274,8 +237,7 @@ public class RenderUtil
     /**
      * Sets OpenGL lighting for rendering blocks as items inside GUI screens (such as containers).
      */
-    public static void enableGUIStandardItemLighting()
-    {
+    public static void enableGUIStandardItemLighting() {
         // Calen: maybe not right
         Lighting.setupFor3DItems();
         // from 1.12.2 RenderHelper.class
@@ -290,11 +252,11 @@ public class RenderUtil
     }
 
     // Calen
+
     /**
      * Disables the OpenGL lighting properties enabled by enableStandardItemLighting
      */
-    public static void disableStandardItemLighting()
-    {
+    public static void disableStandardItemLighting() {
         // TODO Calen disableStandardItemLighting???
 //        GlStateManager.disableLighting();
 //        GlStateManager.disableLight(0);
@@ -302,8 +264,7 @@ public class RenderUtil
 //        GlStateManager.disableColorMaterial();
     }
 
-    static class TessellatorQueue
-    {
+    static class TessellatorQueue {
         // Max size of 20: if we go over this then something has gone very wrong
         // In theory this shouldn't even go above about 3.
         private static final int BUFFER_COUNT = 20;
@@ -311,17 +272,13 @@ public class RenderUtil
         final Tesselator[] tessellators = new Tesselator[BUFFER_COUNT];
         final boolean[] tessellatorInUse = new boolean[BUFFER_COUNT];
 
-        AutoTessellator nextFreeTessellator()
-        {
-            for (int i = 0; i < tessellators.length; i++)
-            {
-                if (tessellatorInUse[i])
-                {
+        AutoTessellator nextFreeTessellator() {
+            for (int i = 0; i < tessellators.length; i++) {
+                if (tessellatorInUse[i]) {
                     continue;
                 }
                 Tesselator tess = tessellators[i];
-                if (tess == null)
-                {
+                if (tess == null) {
                     tess = newTessellator();
                     tessellators[i] = tess;
                 }
@@ -333,14 +290,12 @@ public class RenderUtil
         }
     }
 
-    public static final class AutoTessellator implements AutoCloseable
-    {
+    public static final class AutoTessellator implements AutoCloseable {
         private final TessellatorQueue queue;
         private final int index;
         public final Tesselator tessellator;
 
-        public AutoTessellator(TessellatorQueue queue, int index)
-        {
+        public AutoTessellator(TessellatorQueue queue, int index) {
             this.queue = queue;
             this.index = index;
             this.tessellator = queue.tessellators[index];
@@ -348,8 +303,7 @@ public class RenderUtil
         }
 
         @Override
-        public void close()
-        {
+        public void close() {
             queue.tessellatorInUse[index] = false;
         }
     }

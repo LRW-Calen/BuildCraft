@@ -6,42 +6,28 @@
 
 package buildcraft.builders.snapshot;
 
-import buildcraft.lib.misc.RenderUtil;
 import buildcraft.lib.net.MessageManager;
-import com.google.common.base.Predicates;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.gui.GuiUtils;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public enum ClientSnapshots
-{
+public enum ClientSnapshots {
     INSTANCE;
 
     private final List<Snapshot> snapshots = new ArrayList<>();
@@ -49,41 +35,34 @@ public enum ClientSnapshots
     private final Map<Snapshot.Key, FakeWorld> worlds = new HashMap<>();
     private final Map<Snapshot.Key, BufferBuilder> buffers = new HashMap<>();
 
-    public Snapshot getSnapshot(Snapshot.Key key)
-    {
+    public Snapshot getSnapshot(Snapshot.Key key) {
         Snapshot found = snapshots.stream().filter(snapshot -> snapshot.key.equals(key)).findFirst().orElse(null);
-        if (found == null && !pending.contains(key))
-        {
+        if (found == null && !pending.contains(key)) {
             pending.add(key);
             MessageManager.sendToServer(new MessageSnapshotRequest(key));
         }
         return found;
     }
 
-    public void onSnapshotReceived(Snapshot snapshot)
-    {
+    public void onSnapshotReceived(Snapshot snapshot) {
         pending.remove(snapshot.key);
         snapshots.add(snapshot);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderSnapshot(Snapshot.Header header, int offsetX, int offsetY, int sizeX, int sizeY, PoseStack poseStack)
-    {
-        if (header == null)
-        {
+    public void renderSnapshot(Snapshot.Header header, int offsetX, int offsetY, int sizeX, int sizeY, PoseStack poseStack) {
+        if (header == null) {
             return;
         }
         Snapshot snapshot = getSnapshot(header.key);
-        if (snapshot == null)
-        {
+        if (snapshot == null) {
             return;
         }
         renderSnapshot(snapshot, offsetX, offsetY, sizeX, sizeY, poseStack);
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void renderSnapshot(Snapshot snapshot, int offsetX, int offsetY, int sizeX, int sizeY, PoseStack poseStack)
-    {
+    public void renderSnapshot(Snapshot snapshot, int offsetX, int offsetY, int sizeX, int sizeY, PoseStack poseStack) {
         FakeWorld world = worlds.computeIfAbsent(snapshot.key, key ->
         {
             FakeWorld localWorld = new FakeWorld();
@@ -119,12 +98,10 @@ public enum ClientSnapshots
 //            BufferBuilder buffer = Tesselator.getInstance().getBuilder();
 //            buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
 
-            BufferBuilder localBuffer = new BufferBuilder(1024)
-            {
+            BufferBuilder localBuffer = new BufferBuilder(1024) {
                 @Override
 //                public void reset()
-                public void clear()
-                {
+                public void clear() {
                 }
             };
 //            localBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
@@ -136,12 +113,9 @@ public enum ClientSnapshots
 //                    -FakeWorld.BLUEPRINT_OFFSET.getZ()
 //            );
             poseStack.translate(0, 0, 800);
-            for (int z = 0; z < snapshot.size.getZ(); z++)
-            {
-                for (int y = 0; y < snapshot.size.getY(); y++)
-                {
-                    for (int x = 0; x < snapshot.size.getX(); x++)
-                    {
+            for (int z = 0; z < snapshot.size.getZ(); z++) {
+                for (int y = 0; y < snapshot.size.getY(); y++) {
+                    for (int x = 0; x < snapshot.size.getX(); x++) {
                         BlockPos pos = new BlockPos(x, y, z).offset(FakeWorld.BLUEPRINT_OFFSET);
 //                        localBuffer.setTranslation(
 //                                -FakeWorld.BLUEPRINT_OFFSET.getX(),
@@ -278,19 +252,15 @@ public enum ClientSnapshots
 
 //        MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
 
-        if (snapshotSize < 32)
-        {
+        if (snapshotSize < 32) {
             // Calen
             BufferBuilder buffer = Tesselator.getInstance().getBuilder();
             buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
 
 //            TileEntityRendererDispatcher.instance.preDrawBatch();
-            for (int z = 0; z < snapshot.size.getZ(); z++)
-            {
-                for (int y = 0; y < snapshot.size.getY(); y++)
-                {
-                    for (int x = 0; x < snapshot.size.getX(); x++)
-                    {
+            for (int z = 0; z < snapshot.size.getZ(); z++) {
+                for (int y = 0; y < snapshot.size.getY(); y++) {
+                    for (int x = 0; x < snapshot.size.getX(); x++) {
                         BlockPos pos = new BlockPos(x, y, z).offset(FakeWorld.BLUEPRINT_OFFSET);
 //                        // Calen test
 //                        BlockPos pos = new BlockPos(0, 0, 0);
@@ -320,8 +290,7 @@ public enum ClientSnapshots
 //                                OverlayTexture.NO_OVERLAY
 //                        );
                         BlockEntity te = world.getBlockEntity(pos);
-                        if (te != null)
-                        {
+                        if (te != null) {
                             Minecraft.getInstance().getBlockEntityRenderDispatcher().render(
 //                                    world.getBlockEntity(pos),
                                     te,
@@ -345,8 +314,7 @@ public enum ClientSnapshots
         buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
 
 //        for (Entity entity : world.getEntities(Entity.class, Predicates.alwaysTrue()))
-        for (Entity entity : world.getEntities().getAll())
-        {
+        for (Entity entity : world.getEntities().getAll()) {
 //            Vec3 pos = entity.getPositionVector();
             Vec3 pos = entity.position();
 //            GlStateManager.pushAttrib();

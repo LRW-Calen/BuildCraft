@@ -10,29 +10,24 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
-public class PipeItemMessageQueue
-{
+public class PipeItemMessageQueue {
 
     private static final Map<ServerPlayer, MessageMultiPipeItem> cachedPlayerPackets = new WeakHashMap<>();
 
-    public static void serverTick()
-    {
-        for (Entry<ServerPlayer, MessageMultiPipeItem> entry : cachedPlayerPackets.entrySet())
-        {
+    public static void serverTick() {
+        for (Entry<ServerPlayer, MessageMultiPipeItem> entry : cachedPlayerPackets.entrySet()) {
             MessageManager.sendTo(entry.getValue(), entry.getKey());
         }
         cachedPlayerPackets.clear();
     }
 
     public static void appendTravellingItem(Level world, BlockPos pos, int stackId, byte stackCount, boolean toCenter,
-                                            Direction side, @Nullable DyeColor colour, byte timeToDest)
-    {
+                                            Direction side, @Nullable DyeColor colour, byte timeToDest) {
         ServerLevel server = (ServerLevel) world;
 //        PlayerChunkMapEntry playerChunkMap = server.getPlayerChunkMap().getEntry(pos.getX() >> 4, pos.getZ() >> 4);
 //        if (playerChunkMap == null)
@@ -50,8 +45,7 @@ public class PipeItemMessageQueue
 //        });
 
         List<ServerPlayer> players = server.getChunkSource().chunkMap.getPlayers(new ChunkPos(pos),/*pBoundaryOnly*/false);
-        for (ServerPlayer player : players)
-        {
+        for (ServerPlayer player : players) {
             cachedPlayerPackets.computeIfAbsent(player, pl -> new MessageMultiPipeItem()).append(pos, stackId,
                     stackCount, toCenter, side, colour, timeToDest);
         }

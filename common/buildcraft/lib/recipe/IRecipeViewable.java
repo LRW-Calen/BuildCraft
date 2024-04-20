@@ -6,8 +6,7 @@
 
 package buildcraft.lib.recipe;
 
-public interface IRecipeViewable
-{
+public interface IRecipeViewable {
     ChangingItemStack[] getRecipeInputs();
 
     ChangingItemStack getRecipeOutputs();

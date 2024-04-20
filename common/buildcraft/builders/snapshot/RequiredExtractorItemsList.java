@@ -25,21 +25,21 @@ public class RequiredExtractorItemsList extends RequiredExtractor {
     @Override
     public List<ItemStack> extractItemsFromBlock(@Nonnull BlockState blockState, @Nullable CompoundTag tileNbt) {
         return Optional.ofNullable(path.get(tileNbt))
-            .map(NBTUtilBC::readCompoundList)
+                .map(NBTUtilBC::readCompoundList)
 //            .map(stream -> stream.map(ItemStack::new).collect(Collectors.toList()))
-            .map(stream -> stream.map(ItemStack::of).collect(Collectors.toList()))
-            .map(Collections::unmodifiableList)
-            .orElseGet(Collections::emptyList);
+                .map(stream -> stream.map(ItemStack::of).collect(Collectors.toList()))
+                .map(Collections::unmodifiableList)
+                .orElseGet(Collections::emptyList);
     }
 
     @Nonnull
     @Override
     public List<ItemStack> extractItemsFromEntity(@Nonnull CompoundTag entityNbt) {
         return Optional.ofNullable(path.get(entityNbt))
-            .map(NBTUtilBC::readCompoundList)
+                .map(NBTUtilBC::readCompoundList)
 //            .map(stream -> stream.map(ItemStack::new).collect(Collectors.toList()))
-            .map(stream -> stream.map(ItemStack::of).collect(Collectors.toList()))
-            .map(Collections::unmodifiableList)
-            .orElseGet(Collections::emptyList);
+                .map(stream -> stream.map(ItemStack::of).collect(Collectors.toList()))
+                .map(Collections::unmodifiableList)
+                .orElseGet(Collections::emptyList);
     }
 }

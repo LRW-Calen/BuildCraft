@@ -9,16 +9,15 @@ package buildcraft.energy;
 
 import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumSpring;
-import buildcraft.energy.tile.TileSpringOil;
+import buildcraft.core.BCCoreBlocks;
+import buildcraft.core.block.BlockEngine_BC8;
 import buildcraft.energy.tile.TileEngineIron_BC8;
 import buildcraft.energy.tile.TileEngineStone_BC8;
-import buildcraft.core.block.BlockEngine_BC8;
-import buildcraft.core.BCCoreBlocks;
+import buildcraft.energy.tile.TileSpringOil;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.RegistryObject;
 
-public class BCEnergyBlocks
-{
+public class BCEnergyBlocks {
 
 
     // Calen: 1.12.2 use core namespace with meta
@@ -35,15 +34,11 @@ public class BCEnergyBlocks
     // 燃油引擎
     public static final RegistryObject<BlockEntityType<TileEngineIron_BC8>> engineIronTile;
 
-    static
-    {
-        if (BCCoreBlocks.engineWood != null)
-        {
+    static {
+        if (BCCoreBlocks.engineWood != null) {
             engineStone = BCCoreBlocks.registerEngine(EnumEngineType.STONE, TileEngineStone_BC8::new);
             engineIron = BCCoreBlocks.registerEngine(EnumEngineType.IRON, TileEngineIron_BC8::new);
-        }
-        else
-        {
+        } else {
             engineStone = null;
             engineIron = null;
         }
@@ -52,12 +47,11 @@ public class BCEnergyBlocks
         EnumSpring.OIL.tileConstructor = TileSpringOil::new;
 
         springTile = BCCoreBlocks.HELPER.registerTile("tile.spring.oil", TileSpringOil::new, BCCoreBlocks.springOil);
-        engineStoneTile = BCCoreBlocks.HELPER.registerTile( "tile.engine.stone", TileEngineStone_BC8::new, BCEnergyBlocks.engineStone);
+        engineStoneTile = BCCoreBlocks.HELPER.registerTile("tile.engine.stone", TileEngineStone_BC8::new, BCEnergyBlocks.engineStone);
         engineIronTile = BCCoreBlocks.HELPER.registerTile("tile.engine.iron", TileEngineIron_BC8::new, BCEnergyBlocks.engineIron);
     }
 
-    public static void preInit()
-    {
+    public static void preInit() {
 
     }
 }

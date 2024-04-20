@@ -15,8 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public enum StripesHandlerPlant implements IStripesHandlerItem
-{
+public enum StripesHandlerPlant implements IStripesHandlerItem {
     INSTANCE;
 
     @Override
@@ -25,8 +24,7 @@ public enum StripesHandlerPlant implements IStripesHandlerItem
                           Direction direction,
                           ItemStack stack,
                           Player player,
-                          IStripesActivator activator)
-    {
+                          IStripesActivator activator) {
         return CropManager.plantCrop(world, player, stack, pos.relative(direction).below())
                 || CropManager.plantCrop(world, player, stack, pos.relative(direction));
     }

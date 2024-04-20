@@ -21,18 +21,15 @@ import net.minecraftforge.common.Tags;
 import java.util.function.Consumer;
 
 // TODO Calen Recipe too_many_pipe_filters, file in 1.12.2:buildcrafttransport/advancements
-public class CoreRecipeGenerator extends RecipeProvider
-{
-    private static final String MOD_ID = BCCore.MOD_ID;
+public class CoreRecipeGenerator extends RecipeProvider {
+    private static final String MOD_ID = BCCore.MODID;
 
-    public CoreRecipeGenerator(DataGenerator generator)
-    {
+    public CoreRecipeGenerator(DataGenerator generator) {
         super(generator);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         // Calen: unlock the recipe before got the item... some gamerules...
         // Gears
         ShapedRecipeBuilder.shaped(BCCoreItems.gearWood.get())
@@ -155,8 +152,7 @@ public class CoreRecipeGenerator extends RecipeProvider
                 .unlockedBy("has_item", has(Tags.Items.RODS_WOODEN))
                 .group(MOD_ID)
                 .save(consumer);
-        for (DyeColor colour : DyeColor.values())
-        {
+        for (DyeColor colour : DyeColor.values()) {
             ShapelessRecipeBuilder.shapeless(BCCoreItems.colourBrushMap.get(colour).get())
                     .requires(OreDictTags.PAINT_BRUSH)
                     .requires(colour.getTag())
@@ -179,8 +175,7 @@ public class CoreRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Core Recipe Generator";
     }
 }

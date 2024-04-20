@@ -41,7 +41,7 @@ public class ElementTypeSlot extends ElementType {
 
         if (index < 0 || index >= holder.slots.length) {
             throw new JsonSyntaxException(
-                "Invalid slot index! (" + index + ", min = 0, max = " + (holder.slots.length - 1) + ")");
+                    "Invalid slot index! (" + index + ", min = 0, max = " + (holder.slots.length - 1) + ")");
         }
         return new GuiElementSlotMover(gui, pos, visible, holder.slots[index]);
     }

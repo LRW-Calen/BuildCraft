@@ -28,7 +28,8 @@ public final class PageLinkItemPermutations extends PageLink {
 
     @Override
     public GuidePageFactory getFactoryLink() {
-        return gui -> {
+        return gui ->
+        {
             List<GuidePart> parts = new ArrayList<>();
 
 //            Profiler prof = new Profiler();

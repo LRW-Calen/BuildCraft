@@ -2,7 +2,8 @@ package buildcraft.lib.cap;
 
 import buildcraft.api.core.EnumPipePart;
 import net.minecraft.core.Direction;
-import net.minecraftforge.common.capabilities.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,60 +13,47 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class CapabilityHelper implements ICapabilityProvider
-{
+public class CapabilityHelper implements ICapabilityProvider {
     private final Map<EnumPipePart, Map<Capability<?>, Supplier<?>>> caps = new EnumMap<>(EnumPipePart.class);
 
     private final List<ICapabilityProvider> additional = new ArrayList<>();
 
 
-    public CapabilityHelper()
-    {
-        for (EnumPipePart face : EnumPipePart.VALUES)
-        {
+    public CapabilityHelper() {
+        for (EnumPipePart face : EnumPipePart.VALUES) {
             caps.put(face, new HashMap<>());
         }
     }
 
-    private Map<Capability<?>, Supplier<?>> getCapMap(Direction facing)
-    {
+    private Map<Capability<?>, Supplier<?>> getCapMap(Direction facing) {
         return caps.get(EnumPipePart.fromFacing(facing));
     }
 
-    public <T> void addCapabilityInstance(@Nullable Capability<T> cap, T instance, EnumPipePart... parts)
-    {
+    public <T> void addCapabilityInstance(@Nullable Capability<T> cap, T instance, EnumPipePart... parts) {
         Supplier<T> supplier = () -> instance;
         addCapability(cap, supplier, parts);
     }
 
-    public <T> void addCapability(@Nullable Capability<T> cap, Supplier<T> getter, EnumPipePart... parts)
-    {
-        if (cap == null)
-        {
+    public <T> void addCapability(@Nullable Capability<T> cap, Supplier<T> getter, EnumPipePart... parts) {
+        if (cap == null) {
             return;
         }
-        for (EnumPipePart part : parts)
-        {
+        for (EnumPipePart part : parts) {
             caps.get(part).put(cap, getter);
         }
     }
 
-    public <T> void addCapability(@Nullable Capability<T> cap, Function<Direction, T> getter, EnumPipePart... parts)
-    {
-        if (cap == null)
-        {
+    public <T> void addCapability(@Nullable Capability<T> cap, Function<Direction, T> getter, EnumPipePart... parts) {
+        if (cap == null) {
             return;
         }
-        for (EnumPipePart part : parts)
-        {
+        for (EnumPipePart part : parts) {
             caps.get(part).put(cap, () -> getter.apply(part.face));
         }
     }
 
-    public <T extends ICapabilityProvider> T addProvider(T provider)
-    {
-        if (provider != null)
-        {
+    public <T extends ICapabilityProvider> T addProvider(T provider) {
+        if (provider != null) {
             additional.add(provider);
         }
         return provider;
@@ -80,21 +68,17 @@ public class CapabilityHelper implements ICapabilityProvider
 
     @NotNull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing)
-    {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
         Map<Capability<?>, Supplier<?>> capMap = getCapMap(facing);
         Supplier<?> supplier = capMap.get(capability);
-        if (supplier != null)
-        {
+        if (supplier != null) {
             Object ret = supplier.get();
             return ret == null ? LazyOptional.empty() : LazyOptional.of(() -> (T) ret);
         }
-        for (ICapabilityProvider provider : additional)
-        {
+        for (ICapabilityProvider provider : additional) {
 //            if (provider.hasCapability(capability, facing))
             LazyOptional<T> result = provider.getCapability(capability, facing);
-            if (result.isPresent())
-            {
+            if (result.isPresent()) {
                 return result;
             }
         }
@@ -106,10 +90,8 @@ public class CapabilityHelper implements ICapabilityProvider
      * null.
      */
     @Nullable
-    public static <T> LazyOptional<T> getCapability(ICapabilityProvider provider, Capability<T> capability, Direction facing)
-    {
-        if (provider == null || capability == null)
-        {
+    public static <T> LazyOptional<T> getCapability(ICapabilityProvider provider, Capability<T> capability, Direction facing) {
+        if (provider == null || capability == null) {
 //            return null;
             return LazyOptional.empty();
         }

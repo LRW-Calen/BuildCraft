@@ -64,10 +64,12 @@ public class ElementTypeToolTip extends ElementType {
                 for (String s : text) {
                     nodes.add(GenericExpressionCompiler.compileExpressionString(s, ctx));
                 }
-            } catch (InvalidExpressionException e) {
+            }
+            catch (InvalidExpressionException e) {
                 throw new JsonSyntaxException(e);
             }
-            source = (list) -> {
+            source = (list) ->
+            {
                 if (visible.evaluate()) {
                     String[] arr = new String[nodes.size()];
                     for (int i = 0; i < arr.length; i++) {
@@ -78,7 +80,8 @@ public class ElementTypeToolTip extends ElementType {
             };
         } else {
             ToolTip tooltip = ToolTip.createLocalized(text.toArray(new String[0]));
-            source = (list) -> {
+            source = (list) ->
+            {
                 if (visible.evaluate()) {
                     list.add(tooltip);
                 }

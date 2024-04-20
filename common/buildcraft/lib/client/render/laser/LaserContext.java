@@ -18,8 +18,7 @@ import javax.vecmath.Point3f;
 import javax.vecmath.Vector3f;
 import javax.vecmath.Vector4f;
 
-public class LaserContext
-{
+public class LaserContext {
     public final Matrix4f matrix = new Matrix4f();
     private final Point3f point = new Point3f();
     private final Vector4f normal = new Vector4f();
@@ -28,8 +27,7 @@ public class LaserContext
     private final boolean useNormalColour, drawBothSides;
     private final int minBlockLight;
 
-    public LaserContext(ILaserRenderer renderer, LaserData_BC8 data, boolean useNormalColour, boolean isCullEnabled)
-    {
+    public LaserContext(ILaserRenderer renderer, LaserData_BC8 data, boolean useNormalColour, boolean isCullEnabled) {
         this.renderer = renderer;
         this.useNormalColour = useNormalColour;
         this.drawBothSides = isCullEnabled;
@@ -46,20 +44,14 @@ public class LaserContext
         angleZ = Math.PI - Math.atan2(dz, dx);
         double rl_squared = realLength * realLength;
         double dy_dy = dy * dy;
-        if (dx == 0 && dz == 0)
-        {
+        if (dx == 0 && dz == 0) {
             final double angle = Math.PI / 2;
-            if (dy < 0)
-            {
+            if (dy < 0) {
                 angleY = angle;
-            }
-            else
-            {
+            } else {
                 angleY = -angle;
             }
-        }
-        else
-        {
+        } else {
             dx = Math.sqrt(rl_squared - dy_dy);
             angleY = -Math.atan2(dy, dx);
         }
@@ -102,10 +94,8 @@ public class LaserContext
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void setFaceNormal(double nx, double ny, double nz)
-    {
-        if (useNormalColour)
-        {
+    public void setFaceNormal(double nx, double ny, double nz) {
+        if (useNormalColour) {
             normal.x = (float) nx;
             normal.y = (float) ny;
             normal.z = (float) nz;
@@ -131,8 +121,7 @@ public class LaserContext
     private float diffuse;
 
     @OnlyIn(Dist.CLIENT)
-    public void addPoint(double xIn, double yIn, double zIn, double uIn, double vIn)
-    {
+    public void addPoint(double xIn, double yIn, double zIn, double uIn, double vIn) {
         point.x = (float) xIn;
         point.y = (float) yIn;
         point.z = (float) zIn;
@@ -145,15 +134,13 @@ public class LaserContext
         v[index] = vIn;
         l[index] = lmap;
         index++;
-        if (index == 4)
-        {
+        if (index == 4) {
             index = 0;
             vertex(0);
             vertex(1);
             vertex(2);
             vertex(3);
-            if (drawBothSides)
-            {
+            if (drawBothSides) {
                 n[0] = -n[0];
                 n[1] = -n[1];
                 n[2] = -n[2];
@@ -169,15 +156,11 @@ public class LaserContext
         }
     }
 
-    private void vertex(int i)
-    {
-        if (useNormalColour)
-        {
-            renderer.vertex(matrix,normal,x[i], y[i], z[i], u[i], v[i], l[i], overlay, n[0], n[1], n[2], diffuse);
-        }
-        else
-        {
-            renderer.vertex(matrix,normal,x[i], y[i], z[i], u[i], v[i], l[i], overlay, 0, 1, 0, 1);
+    private void vertex(int i) {
+        if (useNormalColour) {
+            renderer.vertex(matrix, normal, x[i], y[i], z[i], u[i], v[i], l[i], overlay, n[0], n[1], n[2], diffuse);
+        } else {
+            renderer.vertex(matrix, normal, x[i], y[i], z[i], u[i], v[i], l[i], overlay, 0, 1, 0, 1);
         }
     }
 }

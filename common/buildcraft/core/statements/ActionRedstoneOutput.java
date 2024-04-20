@@ -20,17 +20,14 @@ import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public class ActionRedstoneOutput extends BCStatement implements IActionInternal
-{
+public class ActionRedstoneOutput extends BCStatement implements IActionInternal {
 
-    protected ActionRedstoneOutput(String s)
-    {
+    protected ActionRedstoneOutput(String s) {
         // Used by fader output
         super(s);
     }
 
-    public ActionRedstoneOutput()
-    {
+    public ActionRedstoneOutput() {
         super(
                 "buildcraft:redstone.output",
                 "buildcraft.redstone.output"
@@ -38,23 +35,19 @@ public class ActionRedstoneOutput extends BCStatement implements IActionInternal
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return LocaleUtil.localize("gate.action.redstone.signal");
         return new TranslatableComponent("gate.action.redstone.signal");
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return "gate.action.redstone.signal";
     }
 
     @Override
-    public IStatementParameter createParameter(int index)
-    {
-        switch (index)
-        {
+    public IStatementParameter createParameter(int index) {
+        switch (index) {
             case 0:
                 return StatementParamGateSideOnly.ANY;
             default:
@@ -63,13 +56,11 @@ public class ActionRedstoneOutput extends BCStatement implements IActionInternal
     }
 
     @Override
-    public int maxParameters()
-    {
+    public int maxParameters() {
         return 1;
     }
 
-    protected boolean isSideOnly(IStatementParameter[] parameters)
-    {
+    protected boolean isSideOnly(IStatementParameter[] parameters) {
         if (parameters != null && parameters.length >= (getRGSOSlot() + 1)
                 && parameters[getRGSOSlot()] instanceof StatementParamGateSideOnly)
         {
@@ -80,46 +71,37 @@ public class ActionRedstoneOutput extends BCStatement implements IActionInternal
     }
 
     @Override
-    public void actionActivate(IStatementContainer source, IStatementParameter[] parameters)
-    {
-        if (source instanceof IRedstoneStatementContainer)
-        {
+    public void actionActivate(IStatementContainer source, IStatementParameter[] parameters) {
+        if (source instanceof IRedstoneStatementContainer) {
             Direction side = null;
-            if (source instanceof ISidedStatementContainer && isSideOnly(parameters))
-            {
+            if (source instanceof ISidedStatementContainer && isSideOnly(parameters)) {
                 side = ((ISidedStatementContainer) source).getSide();
             }
             ((IRedstoneStatementContainer) source).setRedstoneOutput(side, getSignalLevel(parameters));
         }
     }
 
-    protected int getRGSOSlot()
-    {
+    protected int getRGSOSlot() {
         return 0;
     }
 
-    protected int getSignalLevel(IStatementParameter[] parameters)
-    {
+    protected int getSignalLevel(IStatementParameter[] parameters) {
         return 15;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return BCCoreSprites.ACTION_REDSTONE;
     }
 
     @Override
-    public <T> T convertTo(Class<T> clazz)
-    {
+    public <T> T convertTo(Class<T> clazz) {
         T obj = super.convertTo(clazz);
-        if (obj != null)
-        {
+        if (obj != null) {
             return obj;
         }
-        if (clazz.isInstance(BCCoreStatements.TRIGGER_REDSTONE_ACTIVE))
-        {
+        if (clazz.isInstance(BCCoreStatements.TRIGGER_REDSTONE_ACTIVE)) {
             return clazz.cast(BCCoreStatements.TRIGGER_REDSTONE_ACTIVE);
         }
         return null;

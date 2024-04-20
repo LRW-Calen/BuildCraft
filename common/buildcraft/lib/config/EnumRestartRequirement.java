@@ -9,8 +9,7 @@ package buildcraft.lib.config;
 
 import net.minecraftforge_1_12_2.common.config.Property;
 
-public enum EnumRestartRequirement
-{
+public enum EnumRestartRequirement {
     NONE(false, false),
     WORLD(true, false),
     GAME(true, true);

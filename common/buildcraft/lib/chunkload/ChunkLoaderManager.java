@@ -21,31 +21,26 @@ import net.minecraftforge.common.world.ForgeChunkManager.TicketHelper;
 
 import java.util.*;
 
-public class ChunkLoaderManager
-{
-//    private static final Map<WorldPos, Ticket> TICKETS = new HashMap<>();
+public class ChunkLoaderManager {
+    //    private static final Map<WorldPos, Ticket> TICKETS = new HashMap<>();
     private static final Map<WorldPos, Pair<LongSet, LongSet>> TICKETS = new HashMap<>();
 
     /**
      * This should be called in {@link BlockEntity#validate()}, if a tile entity might be able to load. A check is
      * performed to see if the config allows it
      */
-    public static <T extends BlockEntity & IChunkLoadingTile> void loadChunksForTile(T tile)
-    {
-        if (!(tile.getLevel() instanceof ServerLevel))
-        {
+    public static <T extends BlockEntity & IChunkLoadingTile> void loadChunksForTile(T tile) {
+        if (!(tile.getLevel() instanceof ServerLevel)) {
             return;
         }
-        if (!canLoadFor(tile))
-        {
+        if (!canLoadFor(tile)) {
             releaseChunksFor(tile);
             return;
         }
         updateChunksFor(tile);
     }
 
-    public static <T extends BlockEntity & IChunkLoadingTile> void releaseChunksFor(T tile)
-    {
+    public static <T extends BlockEntity & IChunkLoadingTile> void releaseChunksFor(T tile) {
 //        ForgeChunkManager.releaseTicket(TICKETS.remove(new WorldPos(tile)));
 //        if (tile.getLevel() instanceof ServerLevel serverLevel)
 //        {
@@ -54,8 +49,7 @@ public class ChunkLoaderManager
 //                releaseChunk(serverLevel, tile.getBlockPos(), chunkPos_i, true);
 //            }
 //        }
-        if (!(tile.getLevel() instanceof ServerLevel))
-        {
+        if (!(tile.getLevel() instanceof ServerLevel)) {
             return;
         }
 //        ForgeChunkManager.releaseTicket(TICKETS.remove(new WorldPos(tile)));
@@ -63,17 +57,14 @@ public class ChunkLoaderManager
         removed.getSecond().forEach(cp -> unforceChunk((ServerLevel) tile.getLevel(), tile.getBlockPos(), new ChunkPos(cp)));
     }
 
-    private static <T extends BlockEntity & IChunkLoadingTile> void updateChunksFor(T tile)
-    {
-        if (!(tile.getLevel() instanceof ServerLevel))
-        {
+    private static <T extends BlockEntity & IChunkLoadingTile> void updateChunksFor(T tile) {
+        if (!(tile.getLevel() instanceof ServerLevel)) {
             return;
         }
         WorldPos wPos = new WorldPos(tile);
 //        Ticket ticket = TICKETS.get(wPos);
         Pair<LongSet, LongSet> ticket = TICKETS.get(wPos);
-        if (ticket == null)
-        {
+        if (ticket == null) {
 //            ticket = ForgeChunkManager.requestTicket(
 //                    BCLib.INSTANCE,
 //                    tile.getLevel(),
@@ -91,20 +82,16 @@ public class ChunkLoaderManager
         Set<ChunkPos> chunks = getChunksToLoad(tile);
         // Calen: unload invalid chunks
 //        for (ChunkPos pos : ticket.getChunkList())
-        for (Long pos : ticket.getSecond())
-        {
-            if (!chunks.contains(new ChunkPos(pos)))
-            {
+        for (Long pos : ticket.getSecond()) {
+            if (!chunks.contains(new ChunkPos(pos))) {
 //                ForgeChunkManager.unforceChunk(ticket, pos);
                 unforceChunk((ServerLevel) tile.getLevel(), tile.getBlockPos(), new ChunkPos(pos));
             }
         }
         // Calen: load chunks should load but not
-        for (ChunkPos pos : chunks)
-        {
+        for (ChunkPos pos : chunks) {
 //            if (!ticket.getChunkList().contains(pos))
-            if (!ticket.getSecond().contains(pos.toLong()))
-            {
+            if (!ticket.getSecond().contains(pos.toLong())) {
 //                ForgeChunkManager.forceChunk(ticket, pos);
                 forceChunk((ServerLevel) tile.getLevel(), tile.getBlockPos(), pos);
                 ticket.getSecond().add(pos.toLong());
@@ -113,20 +100,17 @@ public class ChunkLoaderManager
     }
 
     // Calen
-    public static boolean unforceChunk(ServerLevel world, BlockPos owner, ChunkPos chunkPos)
-    {
+    public static boolean unforceChunk(ServerLevel world, BlockPos owner, ChunkPos chunkPos) {
 //        world.getChunkSource().removeRegionTicket(TicketType.FORCED, chunkPos, 0, chunkPos);
         return ForgeChunkManager.forceChunk(world, BCLib.MODID, owner, chunkPos.x, chunkPos.z, false, true);
     }
 
-    public static boolean forceChunk(ServerLevel world, BlockPos owner, ChunkPos chunkPos)
-    {
+    public static boolean forceChunk(ServerLevel world, BlockPos owner, ChunkPos chunkPos) {
 //        world.getChunkSource().addRegionTicket(TicketType.FORCED, chunkPos, 0, chunkPos);
         return ForgeChunkManager.forceChunk(world, BCLib.MODID, owner, chunkPos.x, chunkPos.z, true, true);
     }
 
-    public static <T extends BlockEntity & IChunkLoadingTile> Set<ChunkPos> getChunksToLoad(T tile)
-    {
+    public static <T extends BlockEntity & IChunkLoadingTile> Set<ChunkPos> getChunksToLoad(T tile) {
         Set<ChunkPos> chunksToLoad = tile.getChunksToLoad();
         Set<ChunkPos> chunkPoses = new HashSet<>(chunksToLoad != null ? chunksToLoad : Collections.emptyList());
         chunkPoses.add(new ChunkPos(tile.getBlockPos()));
@@ -134,26 +118,21 @@ public class ChunkLoaderManager
     }
 
     //    public static void rebindTickets(List<TicketTracker> tickets, Level world)
-    public static void rebindTickets(ServerLevel world, TicketHelper ticketHelper)
-    {
+    public static void rebindTickets(ServerLevel world, TicketHelper ticketHelper) {
         Map<BlockPos, Pair<LongSet, LongSet>> tickets = ticketHelper.getBlockTickets();
         TICKETS.clear();
-        if (BCLibConfig.chunkLoadingLevel != BCLibConfig.ChunkLoaderLevel.NONE)
-        {
+        if (BCLibConfig.chunkLoadingLevel != BCLibConfig.ChunkLoaderLevel.NONE) {
 //            for (TicketTracker ticket : tickets)
-            for (BlockPos pos : tickets.keySet())
-            {
+            for (BlockPos pos : tickets.keySet()) {
 //                BlockPos pos = NBTUtilBC.readBlockPos(ticket.getModData().getTag("location"));
-                if (pos == null)
-                {
+                if (pos == null) {
                     // Calen: should not run here, because pos should not be null
 //                    ForgeChunkManager.releaseTicket(ticket);
                     ticketHelper.removeAllTickets(pos);
                     continue;
                 }
                 WorldPos wPos = new WorldPos(world, pos);
-                if (TICKETS.containsKey(wPos))
-                {
+                if (TICKETS.containsKey(wPos)) {
                     // Calen: should not run here, because duplicated pos should not appear in Map<BlockPos, Pair<LongSet, LongSet>> tickets
                     // and should not be duplicated WorldPos added into TICKETS
 //                    ForgeChunkManager.releaseTicket(ticket);
@@ -161,8 +140,7 @@ public class ChunkLoaderManager
                     continue;
                 }
                 BlockEntity tile = world.getBlockEntity(pos);
-                if (tile == null || !(tile instanceof IChunkLoadingTile) || !canLoadFor((IChunkLoadingTile) tile))
-                {
+                if (tile == null || !(tile instanceof IChunkLoadingTile) || !canLoadFor((IChunkLoadingTile) tile)) {
                     // Calen: if the tile is no longer a chunk loader, release
                     TICKETS.remove(wPos);
 //                    ForgeChunkManager.releaseTicket(ticket);
@@ -171,8 +149,7 @@ public class ChunkLoaderManager
                 }
 //                TICKETS.put(wPos, ticket);
                 TICKETS.put(wPos, tickets.get(pos));
-                for (ChunkPos chunkPos : getChunksToLoad((BlockEntity & IChunkLoadingTile) tile))
-                {
+                for (ChunkPos chunkPos : getChunksToLoad((BlockEntity & IChunkLoadingTile) tile)) {
 //                    ForgeChunkManager.forceChunk(ticket, chunkPos);
                     ForgeChunkManager.forceChunk(world, BCLib.MODID, tile.getBlockPos(), chunkPos.x, chunkPos.z, true, true);
                 }
@@ -181,8 +158,7 @@ public class ChunkLoaderManager
     }
 
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    private static boolean canLoadFor(IChunkLoadingTile tile)
-    {
+    private static boolean canLoadFor(IChunkLoadingTile tile) {
         return BCLibConfig.chunkLoadingLevel.canLoad(tile.getLoadType());
     }
 }

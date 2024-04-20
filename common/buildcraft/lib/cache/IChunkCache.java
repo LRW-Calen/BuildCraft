@@ -5,8 +5,7 @@ import net.minecraft.world.level.chunk.LevelChunk;
 
 import javax.annotation.Nullable;
 
-public interface IChunkCache
-{
+public interface IChunkCache {
 
     void invalidate();
 

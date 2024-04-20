@@ -5,19 +5,14 @@
 package buildcraft.core.item;
 
 import buildcraft.api.core.IEngineType;
-import buildcraft.api.enums.EnumEngineType;
-import buildcraft.lib.item.ItemBlockBCMulti;
 import buildcraft.lib.engine.BlockEngineBase_BC8;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import buildcraft.lib.item.ItemBlockBCMulti;
 import net.minecraft.world.item.Item;
 
-public class ItemEngine_BC8<E extends Enum<E> & IEngineType> extends ItemBlockBCMulti
-{
+public class ItemEngine_BC8<E extends Enum<E> & IEngineType> extends ItemBlockBCMulti {
     private final BlockEngineBase_BC8<E> engineBlock;
 
-    public ItemEngine_BC8(BlockEngineBase_BC8<E> block, Item.Properties properties)
-    {
+    public ItemEngine_BC8(BlockEngineBase_BC8<E> block, Item.Properties properties) {
 //        super(block, (stack) -> block.getUnlocalizedName(block.getEngineType(stack.getItemDamage())));
         super(block, properties);
         engineBlock = block;

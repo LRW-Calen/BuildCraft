@@ -37,8 +37,7 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 //@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_SILICON, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCSiliconModels
-{
+public class BCSiliconModels {
     public static final ModelHolderStatic LIGHT_SENSOR;
 
     public static final ModelHolderVariable GATE_STATIC;
@@ -56,8 +55,7 @@ public class BCSiliconModels
     public static final IPluggableStaticBaker<KeyPlugPulsar> BAKER_PLUG_PULSAR;
     public static final IPluggableStaticBaker<KeyPlugLightSensor> BAKER_PLUG_LIGHT_SENSOR;
 
-    static
-    {
+    static {
         // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); runned, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
         ExpressionCompat.setup();
 
@@ -80,26 +78,22 @@ public class BCSiliconModels
         }
     }
 
-    private static ModelHolderStatic getStaticModel(String str)
-    {
+    private static ModelHolderStatic getStaticModel(String str) {
         return new ModelHolderStatic("buildcraftsilicon:models/" + str + ".json");
     }
 
-    private static ModelHolderVariable getModel(String str, FunctionContext fnCtx)
-    {
+    private static ModelHolderVariable getModel(String str, FunctionContext fnCtx) {
         return new ModelHolderVariable("buildcraftsilicon:models/" + str + ".json", fnCtx);
     }
 
-    public static void fmlPreInit()
-    {
+    public static void fmlPreInit() {
         // Calen: ModBusEvent in 1.18.2
 //        MinecraftForge.EVENT_BUS.register(BCSiliconModels.class);
 //        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 //        modEventBus.register(BCSiliconModels.class);
     }
 
-    public static void fmlInit()
-    {
+    public static void fmlInit() {
 ////        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(BCSiliconItems.plugGate, GateMeshDefinition.INSTANCE);
 //        BCSiliconItems.variantGateMap.values().forEach(r ->
 //                Minecraft.getInstance().getItemRenderer().getItemModelShaper().register(r.get(), GateMeshDefinition.INSTANCE)
@@ -111,8 +105,7 @@ public class BCSiliconModels
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileProgrammingTable_Neptune.class, new RenderProgrammingTable());
 
         IClientRegistry pipeRegistryClient = PipeApiClient.registry;
-        if (pipeRegistryClient != null)
-        {
+        if (pipeRegistryClient != null) {
             pipeRegistryClient.registerBaker(KeyPlugGate.class, PlugGateBaker.INSTANCE);
             pipeRegistryClient.registerBaker(KeyPlugPulsar.class, BAKER_PLUG_PULSAR);
             pipeRegistryClient.registerBaker(KeyPlugLightSensor.class, BAKER_PLUG_LIGHT_SENSOR);
@@ -124,31 +117,25 @@ public class BCSiliconModels
         }
     }
 
-    public static void fmlPostInit()
-    {
+    public static void fmlPostInit() {
         RenderUtil.registerItemColour(BCSiliconItems.plugFacade.get(), FacadeItemColours.INSTANCE);
     }
 
     @SubscribeEvent
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event)
-    {
+    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCSiliconBlocks.laserTile.get(), RenderLaser::new);
         BlockEntityRenderers.register(BCSiliconBlocks.programmingTableTile.get(), RenderProgrammingTable::new);
     }
 
     @SubscribeEvent
-    public static void onModelBake(ModelBakeEvent event)
-    {
+    public static void onModelBake(ModelBakeEvent event) {
 //        putModel(event, "gate_item#inventory", ModelGateItem.INSTANCE);
 //        putModel(event, "plug_gate#inventory", ModelGateItem.INSTANCE);
         event.getModelRegistry().replaceAll((rl, model) ->
                 {
-                    if (rl instanceof ModelResourceLocation m && m.getPath().startsWith("plug_gate"))
-                    {
+                    if (rl instanceof ModelResourceLocation m && m.getPath().startsWith("plug_gate")) {
                         return ModelGateItem.INSTANCE;
-                    }
-                    else
-                    {
+                    } else {
                         return model;
                     }
                 }
@@ -169,25 +156,21 @@ public class BCSiliconModels
         PlugGateRenderer.onModelBake();
     }
 
-    private static void putModel(ModelBakeEvent event, String str, BakedModel model)
-    {
+    private static void putModel(ModelBakeEvent event, String str, BakedModel model) {
 //        event.getModelRegistry().put(BCModules.SILICON.createModelLocation(str), model);
         event.getModelRegistry().replace(BCModules.SILICON.createModelLocation(str), model);
     }
 
-    public static MutableQuad[] getGateStaticQuads(Direction side, GateVariant variant)
-    {
+    public static MutableQuad[] getGateStaticQuads(Direction side, GateVariant variant) {
         PluggableGate.setClientModelVariables(side, variant);
-        if (GATE_VAR_DATA_STATIC.hasNoNodes())
-        {
+        if (GATE_VAR_DATA_STATIC.hasNoNodes()) {
             GATE_VAR_DATA_STATIC.setNodes(GATE_STATIC.createTickableNodes());
         }
         GATE_VAR_DATA_STATIC.refresh();
         return GATE_STATIC.getCutoutQuads();
     }
 
-    private static void setupLensVariables(ModelHolderVariable model, Direction side, DyeColor colour)
-    {
+    private static void setupLensVariables(ModelHolderVariable model, Direction side, DyeColor colour) {
         LENS_COLOUR.value = colour == null ? DyeColor.WHITE : colour;
         LENS_SIDE.value = side;
         LENS_HAS_COLOUR.value = colour != null;
@@ -197,26 +180,22 @@ public class BCSiliconModels
         varData.refresh();
     }
 
-    public static MutableQuad[] getLensCutoutQuads(Direction side, DyeColor colour)
-    {
+    public static MutableQuad[] getLensCutoutQuads(Direction side, DyeColor colour) {
         setupLensVariables(LENS, side, colour);
         return LENS.getCutoutQuads();
     }
 
-    public static MutableQuad[] getLensTranslucentQuads(Direction side, DyeColor colour)
-    {
+    public static MutableQuad[] getLensTranslucentQuads(Direction side, DyeColor colour) {
         setupLensVariables(LENS, side, colour);
         return LENS.getTranslucentQuads();
     }
 
-    public static MutableQuad[] getFilterCutoutQuads(Direction side, DyeColor colour)
-    {
+    public static MutableQuad[] getFilterCutoutQuads(Direction side, DyeColor colour) {
         setupLensVariables(FILTER, side, colour);
         return FILTER.getCutoutQuads();
     }
 
-    public static MutableQuad[] getFilterTranslucentQuads(Direction side, DyeColor colour)
-    {
+    public static MutableQuad[] getFilterTranslucentQuads(Direction side, DyeColor colour) {
         setupLensVariables(FILTER, side, colour);
         return FILTER.getTranslucentQuads();
     }

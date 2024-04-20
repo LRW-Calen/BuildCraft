@@ -6,8 +6,7 @@
 
 package buildcraft.lib.gui.button;
 
-public interface IButtonBehaviour
-{
+public interface IButtonBehaviour {
     void mousePressed(GuiAbstractButton button, int bkey);
 
     void mouseReleased(GuiAbstractButton button, int bkey);
@@ -37,7 +36,8 @@ public interface IButtonBehaviour
         }
 
         @Override
-        public void mouseReleased(GuiAbstractButton button, int bkey) {}
+        public void mouseReleased(GuiAbstractButton button, int bkey) {
+        }
     };
 
     static Radio createAndSetRadioButtons(GuiAbstractButton... buttons) {

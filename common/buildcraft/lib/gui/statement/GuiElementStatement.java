@@ -23,8 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class GuiElementStatement<S extends IStatement> extends GuiElementSimple
-        implements IInteractionElement, IReference<S>
-{
+        implements IInteractionElement, IReference<S> {
 
     public static final ResourceLocation TEXTURE_SELECTOR;
 
@@ -35,8 +34,7 @@ public class GuiElementStatement<S extends IStatement> extends GuiElementSimple
     public static final SpriteRaw ICON_SELECT_HOVER;
     public static final SpriteNineSliced SELECTION_HOVER;
 
-    static
-    {
+    static {
         TEXTURE_SELECTOR = new ResourceLocation("buildcraftlib:textures/gui/misc_slots.png");
         SLOT_COLOUR = new GuiIcon(TEXTURE_SELECTOR, 0, 0, 18, 18);
         ICON_SLOT_BLOCKED = SLOT_COLOUR.offset(18, 0);
@@ -50,8 +48,7 @@ public class GuiElementStatement<S extends IStatement> extends GuiElementSimple
     private final boolean draw;
 
     public GuiElementStatement(BuildCraftGui gui, IGuiArea element, FullStatement<S> ref, StatementContext<?> ctx,
-                               boolean draw)
-    {
+                               boolean draw) {
         super(gui, element);
         this.ref = ref;
         this.ctx = ctx;
@@ -61,46 +58,38 @@ public class GuiElementStatement<S extends IStatement> extends GuiElementSimple
     // IReference
 
     @Override
-    public S get()
-    {
+    public S get() {
         return ref.get();
     }
 
     @Override
-    public void set(S to)
-    {
+    public void set(S to) {
         ref.set(to);
         ref.postSetFromGui(-1);
     }
 
     @Override
-    public boolean canSet(S value)
-    {
+    public boolean canSet(S value) {
         return ref.canSet(value);
     }
 
     @Override
-    public S convertToType(Object value)
-    {
+    public S convertToType(Object value) {
         return ref.convertToType(value);
     }
 
     @Override
-    public Class<S> getHeldType()
-    {
+    public Class<S> getHeldType() {
         return ref.getHeldType();
     }
 
     // ITooltipElement
 
     @Override
-    public void addToolTips(List<ToolTip> tooltips)
-    {
-        if (contains(gui.mouse))
-        {
+    public void addToolTips(List<ToolTip> tooltips) {
+        if (contains(gui.mouse)) {
             S s = get();
-            if (s != null)
-            {
+            if (s != null) {
                 tooltips.add(new ToolTip(s.getTooltip()));
             }
         }
@@ -109,16 +98,13 @@ public class GuiElementStatement<S extends IStatement> extends GuiElementSimple
     // IGuiElement
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
-        if (draw)
-        {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
+        if (draw) {
             S statement = ref.get();
             double x = getX();
             double y = getY();
             GuiElementStatementSource.drawGuiSlot(statement, poseStack, x, y);
-            if (!ref.canInteract)
-            {
+            if (!ref.canInteract) {
                 GuiIcon.drawAt(BCLibSprites.LOCK, poseStack, x + 1, y + 1, 16);
             }
         }
@@ -127,47 +113,36 @@ public class GuiElementStatement<S extends IStatement> extends GuiElementSimple
     // IInteractionElement
 
     @Override
-    public void onMouseClicked(int button)
-    {
-        if (!contains(gui.mouse))
-        {
+    public void onMouseClicked(int button) {
+        if (!contains(gui.mouse)) {
             return;
         }
-        if (ref.canInteract && button == 0)
-        {
-            if (Screen.hasShiftDown())
-            {
+        if (ref.canInteract && button == 0) {
+            if (Screen.hasShiftDown()) {
                 set(null);
                 return;
             }
             S s = get();
-            if (s == null)
-            {
+            if (s == null) {
                 return;
             }
             List<IStatement> possible = new ArrayList<>();
             Collections.addAll(possible, s.getPossible());
-            if (!s.isPossibleOrdered())
-            {
+            if (!s.isPossibleOrdered()) {
                 List<IStatement> list = new ArrayList<>();
                 list.add(null);
-                for (IStatement p2 : possible)
-                {
-                    if (p2 != null)
-                    {
+                for (IStatement p2 : possible) {
+                    if (p2 != null) {
                         list.add(p2);
                     }
                 }
                 possible = list;
             }
-            if (ctx != null)
-            {
+            if (ctx != null) {
                 possible.removeIf(f ->
                 {
-                    for (StatementGroup<?> group : ctx.getAllPossible())
-                    {
-                        if (group.getValues().contains(f))
-                        {
+                    for (StatementGroup<?> group : ctx.getAllPossible()) {
+                        if (group.getValues().contains(f)) {
                             return false;
                         }
                     }

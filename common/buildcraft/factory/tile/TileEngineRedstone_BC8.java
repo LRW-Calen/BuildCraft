@@ -17,112 +17,90 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
 
-public class TileEngineRedstone_BC8 extends TileEngineBase_BC8
-{
+public class TileEngineRedstone_BC8 extends TileEngineBase_BC8 {
     private static final ResourceLocation ADVANCEMENT = new ResourceLocation("buildcraftcore:free_power");
     private boolean givenAdvancement = false;
 
-    public TileEngineRedstone_BC8(BlockPos pos, BlockState blockState)
-    {
+    public TileEngineRedstone_BC8(BlockPos pos, BlockState blockState) {
         super(BCCoreBlocks.engineWoodTile.get(), pos, blockState);
     }
 
     @Nonnull
     @Override
-    protected IMjConnector createConnector()
-    {
+    protected IMjConnector createConnector() {
         return new EngineConnector(true);
     }
 
     @Override
-    public boolean isBurning()
-    {
+    public boolean isBurning() {
         return isRedstonePowered;
     }
 
     @Override
-    protected void engineUpdate()
-    {
+    protected void engineUpdate() {
         super.engineUpdate();
-        if (isRedstonePowered)
-        {
+        if (isRedstonePowered) {
             power = getMaxPower();
-            if (level.getGameTime() % 16 == 0)
-            {
-                if (getHeatLevel() < 0.8)
-                {
+            if (level.getGameTime() % 16 == 0) {
+                if (getHeatLevel() < 0.8) {
                     heat += 4;
                 }
-                if (isPumping && !givenAdvancement)
-                {
+                if (isPumping && !givenAdvancement) {
                     givenAdvancement = AdvancementUtil.unlockAdvancement(this.getOwner().getId(), ADVANCEMENT);
                 }
             }
-        }
-        else
-        {
+        } else {
             power = 0;
         }
     }
 
     @Override
-    public double getPistonSpeed()
-    {
+    public double getPistonSpeed() {
         return super.getPistonSpeed() / 2;
     }
 
     @Override
-    public void updateHeatLevel()
-    {
-        if (heat > MIN_HEAT)
-        {
+    public void updateHeatLevel() {
+        if (heat > MIN_HEAT) {
             heat -= 0.2f;
-            if (heat < MIN_HEAT)
-            {
+            if (heat < MIN_HEAT) {
                 heat = MIN_HEAT;
             }
         }
     }
 
     @Override
-    protected int getMaxChainLength()
-    {
+    protected int getMaxChainLength() {
         return 0;
     }
 
     @Override
-    public long getMaxPower()
-    {
+    public long getMaxPower() {
         return MjAPI.MJ * 1;
     }
 
     @Override
-    public long minPowerReceived()
-    {
+    public long minPowerReceived() {
         return MjAPI.MJ / 10;
     }
 
     @Override
-    public long maxPowerReceived()
-    {
+    public long maxPowerReceived() {
         return 4 * MjAPI.MJ;
     }
 
     @Override
-    public long maxPowerExtracted()
-    {
+    public long maxPowerExtracted() {
         return 4 * MjAPI.MJ;
     }
 
     @Override
-    public float explosionRange()
-    {
+    public float explosionRange() {
         return 0;
     }
 
     @Override
-    public long getCurrentOutput()
-    {
+    public long getCurrentOutput() {
         return MjAPI.MJ / 20;
     }
 }

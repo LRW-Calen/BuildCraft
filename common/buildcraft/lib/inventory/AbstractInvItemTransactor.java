@@ -98,7 +98,7 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
             // We have a bad implementation that doesn't respect simulation properly- we are in an invalid state at this
             // point with no chance of recovery
             throw new IllegalStateException("Somehow inserting a lot of items at once failed when we thought it shouldn't! ("
-                + getClass() + ")");
+                    + getClass() + ")");
         }
         return StackUtil.EMPTY;
     }

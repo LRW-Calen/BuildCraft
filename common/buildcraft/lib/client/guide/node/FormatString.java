@@ -106,7 +106,8 @@ public class FormatString {
                 String text = segment.toFormatString();
                 int allowedLength = 1;
                 boolean words = onWords;
-                outer: while(true) {
+                outer:
+                while (true) {
                     for (int i = text.length(); i > 1; i--) {
                         String c = text.substring(i - 1, i);
                         if (words && !WORD_GAP.contains(c)) {
@@ -135,9 +136,9 @@ public class FormatString {
                     for (int j = 1; j < left; j++) {
                         next[j] = segments[segmentIndex + j];
                     }
-                    return new FormatString[] { //
-                        new FormatString(thisLine.toArray(new FormatSegment[0])), //
-                        new FormatString(next)//
+                    return new FormatString[]{ //
+                            new FormatString(thisLine.toArray(new FormatSegment[0])), //
+                            new FormatString(next)//
                     };
                 } else {
                     int left = segments.length - segmentIndex;
@@ -145,13 +146,13 @@ public class FormatString {
                     for (int j = 0; j < left; j++) {
                         next[j] = segments[j + 1];
                     }
-                    return new FormatString[] { //
-                        new FormatString(thisLine.toArray(new FormatSegment[0])), //
-                        new FormatString(next)//
+                    return new FormatString[]{ //
+                            new FormatString(thisLine.toArray(new FormatSegment[0])), //
+                            new FormatString(next)//
                     };
                 }
             }
         }
-        return new FormatString[] { this };
+        return new FormatString[]{this};
     }
 }

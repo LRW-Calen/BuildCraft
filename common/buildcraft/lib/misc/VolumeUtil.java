@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 /** Provides methods for iterating over a specific volume in a world. */
-public class VolumeUtil
-{
+public class VolumeUtil {
     public static void iterateCone(Level world, BlockPos start, Direction direction, int distance, boolean edges, VolumeIterator iter) {
         Cone cone = edges ? Cone.SQUARE : Cone.SQUARE;
         iterateVolume(world, start, direction, distance, cone, iter);

@@ -19,8 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.TreeMap;
 
-public class HashUtil
-{
+public class HashUtil {
     public static final int DIGEST_LENGTH = 32;
     private static final MessageDigest SHA_256;
     private static final MethodHandle HANDLE_NBT_WRITE;
@@ -28,7 +27,8 @@ public class HashUtil
     static {
         try {
             SHA_256 = MessageDigest.getInstance("sha-256");
-        } catch (NoSuchAlgorithmException e) {
+        }
+        catch (NoSuchAlgorithmException e) {
             throw new IllegalStateException(e);
         }
         int realLength = SHA_256.getDigestLength();
@@ -37,7 +37,7 @@ public class HashUtil
             throw new IllegalStateException("Digest length of sha-256 is meant to be 32, but returned " + realLength);
         }
         Method[] methods = Tag.class.getDeclaredMethods();
-        Class<?>[] expectedParams = { DataOutput.class };
+        Class<?>[] expectedParams = {DataOutput.class};
         Method read = null;
         for (Method m : methods) {
             // Target is NbtBase.write(DataOutput output)
@@ -53,7 +53,8 @@ public class HashUtil
         try {
             Lookup lookup = MethodHandles.lookup();
             HANDLE_NBT_WRITE = lookup.unreflect(read);
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             throw new Error(e);
         }
         // Test the method -- just in case
@@ -73,7 +74,8 @@ public class HashUtil
 
             writeStableCompound(nbt, new DataOutputStream(dos));
 
-        } catch (IOException io) {
+        }
+        catch (IOException io) {
             throw new RuntimeException("Failed to write to a perfectly good DigestOutputStream!", io);
         }
         return SHA_256.digest();
@@ -153,7 +155,8 @@ public class HashUtil
             // We can skip around it with hacks though
             try {
                 HANDLE_NBT_WRITE.invokeExact(nbt, out);
-            } catch (Throwable t) {
+            }
+            catch (Throwable t) {
                 throw Throwables.propagate(t);
             }
         }

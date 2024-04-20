@@ -35,74 +35,57 @@ import java.util.List;
  * Provides a simple way to save+load and send+receive data for any number of tanks. This also attempts to fill all of
  * the tanks one by one via the {@link #fill(FluidStack, FluidAction)} and {@link #drain(FluidStack, FluidAction)} methods.
  */
-public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAdv, INBTSerializable<CompoundTag>
-{
+public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAdv, INBTSerializable<CompoundTag> {
     private final List<Tank> tanks = new ArrayList<>();
 
-    public TankManager()
-    {
+    public TankManager() {
     }
 
-    public TankManager(Tank... tanks)
-    {
+    public TankManager(Tank... tanks) {
         addAll(Arrays.asList(tanks));
     }
 
     @Override
-    protected List<Tank> delegate()
-    {
+    protected List<Tank> delegate() {
         return tanks;
     }
 
-    public void addAll(Tank... values)
-    {
+    public void addAll(Tank... values) {
         Collections.addAll(this, values);
     }
 
-    public void addDrops(NonNullList<ItemStack> toDrop)
-    {
+    public void addDrops(NonNullList<ItemStack> toDrop) {
         FluidItemDrops.addFluidDrops(toDrop, toArray(new Tank[0]));
     }
 
-    public InteractionResult onActivated(Player player, BlockPos pos, InteractionHand hand)
-    {
+    public InteractionResult onActivated(Player player, BlockPos pos, InteractionHand hand) {
         return FluidUtilBC.onTankActivated(player, pos, hand, this);
     }
 
-    private List<Tank> getFillOrderTanks()
-    {
+    private List<Tank> getFillOrderTanks() {
         List<Tank> list = new ArrayList<>();
-        for (Tank t : tanks)
-        {
-            if (t.canFill() && !t.canDrain())
-            {
+        for (Tank t : tanks) {
+            if (t.canFill() && !t.canDrain()) {
                 list.add(t);
             }
         }
-        for (Tank t : tanks)
-        {
-            if (t.canFill() && t.canDrain())
-            {
+        for (Tank t : tanks) {
+            if (t.canFill() && t.canDrain()) {
                 list.add(t);
             }
         }
         return list;
     }
 
-    private List<Tank> getDrainOrderTanks()
-    {
+    private List<Tank> getDrainOrderTanks() {
         List<Tank> list = new ArrayList<>();
-        for (Tank t : tanks)
-        {
-            if (!t.canFill() && t.canDrain())
-            {
+        for (Tank t : tanks) {
+            if (!t.canFill() && t.canDrain()) {
                 list.add(t);
             }
         }
-        for (Tank t : tanks)
-        {
-            if (t.canFill() && t.canDrain())
-            {
+        for (Tank t : tanks) {
+            if (t.canFill() && t.canDrain()) {
                 list.add(t);
             }
         }
@@ -110,19 +93,15 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
     }
 
     @Override
-    public int fill(FluidStack resource, FluidAction doFill)
-    {
+    public int fill(FluidStack resource, FluidAction doFill) {
         int filled = 0;
-        for (Tank tank : getFillOrderTanks())
-        {
+        for (Tank tank : getFillOrderTanks()) {
             int used = tank.fill(resource, doFill);
-            if (used > 0)
-            {
+            if (used > 0) {
                 resource = resource.copy();
                 resource.setAmount(resource.getAmount() - used);
                 filled += used;
-                if (resource.getAmount() <= 0)
-                {
+                if (resource.getAmount() <= 0) {
                     return filled;
                 }
             }
@@ -131,17 +110,14 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
     }
 
     @Override
-    public FluidStack drain(FluidStack resource, FluidAction doDrain)
-    {
-        if (resource == null)
-        {
+    public FluidStack drain(FluidStack resource, FluidAction doDrain) {
+        if (resource == null) {
 //            return null;
             return StackUtil.EMPTY_FLUID;
         }
         FluidStack draining = new FluidStack(resource, 0);
         int left = resource.getAmount();
-        for (Tank tank : getDrainOrderTanks())
-        {
+        for (Tank tank : getDrainOrderTanks()) {
             // Calen: in 1.18.2 isFluidEqual may ret f if amount of one is 0
 //            if (!draining.isFluidEqual(tank.getFluid()))
             if (tank.getFluid().getRawFluid() != resource.getRawFluid()) // Calen: should use resource, draining.getFluid() will ret EMPTY
@@ -150,8 +126,7 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
             }
             FluidStack drained = tank.drain(left, doDrain);
 //            if (drained != null && drained.getAmount() > 0)
-            if (!drained.isEmpty() && drained.getAmount() > 0)
-            {
+            if (!drained.isEmpty() && drained.getAmount() > 0) {
                 draining.setAmount(draining.getAmount() + drained.getAmount());
                 left -= drained.getAmount();
             }
@@ -161,27 +136,20 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
     }
 
     @Override
-    public FluidStack drain(int maxDrain, FluidAction doDrain)
-    {
+    public FluidStack drain(int maxDrain, FluidAction doDrain) {
         FluidStack draining = null;
-        for (Tank tank : getDrainOrderTanks())
-        {
-            if (draining == null)
-            {
+        for (Tank tank : getDrainOrderTanks()) {
+            if (draining == null) {
                 FluidStack drained = tank.drain(maxDrain, doDrain);
 //                if (drained != null && drained.getAmount() > 0)
-                if (!drained.isEmpty() && drained.getAmount() > 0)
-                {
+                if (!drained.isEmpty() && drained.getAmount() > 0) {
                     draining = drained;
                     maxDrain -= drained.getAmount();
                 }
-            }
-            else if (draining.isFluidEqual(tank.getFluid()))
-            {
+            } else if (draining.isFluidEqual(tank.getFluid())) {
                 FluidStack drained = tank.drain(maxDrain, doDrain);
 //                if (drained != null && drained.getAmount() > 0)
-                if (!drained.isEmpty() && drained.getAmount() > 0)
-                {
+                if (!drained.isEmpty() && drained.getAmount() > 0) {
                     draining.setAmount(draining.getAmount() + drained.getAmount());
                     maxDrain -= drained.getAmount();
                 }
@@ -191,36 +159,27 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
     }
 
     @Override
-    public FluidStack drain(IFluidFilter filter, int maxDrain, FluidAction doDrain)
-    {
-        if (filter == null)
-        {
+    public FluidStack drain(IFluidFilter filter, int maxDrain, FluidAction doDrain) {
+        if (filter == null) {
 //            return null;
             return StackUtil.EMPTY_FLUID;
         }
         FluidStack draining = null;
-        for (Tank tank : getDrainOrderTanks())
-        {
-            if (!filter.matches(tank.getFluid()))
-            {
+        for (Tank tank : getDrainOrderTanks()) {
+            if (!filter.matches(tank.getFluid())) {
                 continue;
             }
-            if (draining == null)
-            {
+            if (draining == null) {
                 FluidStack drained = tank.drain(maxDrain, doDrain);
 //                if (drained != null && drained.getAmount() > 0)
-                if (!drained.isEmpty() && drained.getAmount() > 0)
-                {
+                if (!drained.isEmpty() && drained.getAmount() > 0) {
                     draining = drained;
                     maxDrain -= drained.getAmount();
                 }
-            }
-            else if (draining.isFluidEqual(tank.getFluid()))
-            {
+            } else if (draining.isFluidEqual(tank.getFluid())) {
                 FluidStack drained = tank.drain(maxDrain, doDrain);
 //                if (drained != null && drained.getAmount() > 0)
-                if (!drained.isEmpty() && drained.getAmount() > 0)
-                {
+                if (!drained.isEmpty() && drained.getAmount() > 0) {
                     draining.setAmount(draining.getAmount() + drained.getAmount());
                     maxDrain -= drained.getAmount();
                 }
@@ -240,64 +199,52 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
 //    }
 
     @Override
-    public int getTanks()
-    {
+    public int getTanks() {
         return size();
     }
 
     @NotNull
     @Override
-    public FluidStack getFluidInTank(int tank)
-    {
+    public FluidStack getFluidInTank(int tank) {
         return get(tank).getFluid();
     }
 
     @Override
-    public int getTankCapacity(int tank)
-    {
+    public int getTankCapacity(int tank) {
         return get(tank).getCapacity();
     }
 
     @Override
-    public CompoundTag serializeNBT()
-    {
+    public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        for (Tank t : tanks)
-        {
+        for (Tank t : tanks) {
             nbt.put(t.getTankName(), t.serializeNBT());
         }
         return nbt;
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt)
-    {
-        for (Tank t : tanks)
-        {
+    public void deserializeNBT(CompoundTag nbt) {
+        for (Tank t : tanks) {
             t.readFromNBT(nbt.getCompound(t.getTankName()));
         }
     }
 
-    public void writeData(PacketBufferBC buffer)
-    {
-        for (Tank tank : tanks)
-        {
+    public void writeData(PacketBufferBC buffer) {
+        for (Tank tank : tanks) {
             tank.writeToBuffer(buffer);
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void readData(PacketBufferBC buffer)
-    {
-        for (Tank tank : tanks)
-        {
+    public void readData(PacketBufferBC buffer) {
+        for (Tank tank : tanks) {
             tank.readFromBuffer(buffer);
         }
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack)
-    {
+    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
         return true;
     }
 }

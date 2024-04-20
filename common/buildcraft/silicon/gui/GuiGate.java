@@ -13,13 +13,11 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GuiGate extends GuiBC8<ContainerGate>
-{
+public class GuiGate extends GuiBC8<ContainerGate> {
 
     public static final ResourceLocation GUI_DEFINITION = new ResourceLocation("buildcraftsilicon:gui/gate.json");
 
-    public GuiGate(ContainerGate container, Inventory inventory, Component component)
-    {
+    public GuiGate(ContainerGate container, Inventory inventory, Component component) {
         super(container, GUI_DEFINITION, inventory, component);
 
         BuildCraftJsonGui jsonGui = (BuildCraftJsonGui) mainGui;
@@ -31,8 +29,7 @@ public class GuiGate extends GuiBC8<ContainerGate>
         imageHeight = jsonGui.getSizeY();
     }
 
-    protected void preLoad(BuildCraftJsonGui json)
-    {
+    protected void preLoad(BuildCraftJsonGui json) {
         GateLogic gate = container.gate;
         TypedKeyMap<String, Object> properties = json.properties;
         FunctionContext context = json.context;
@@ -52,8 +49,7 @@ public class GuiGate extends GuiBC8<ContainerGate>
 
         context.put_l_b("gate.is_connected", (i) ->
         {
-            if (i < 0 || i >= gate.connections.length)
-            {
+            if (i < 0 || i >= gate.connections.length) {
                 return false;
             }
             return gate.connections[(int) i];
@@ -61,8 +57,7 @@ public class GuiGate extends GuiBC8<ContainerGate>
 
         context.put_l_b("gate.trigger.is_on", (i) ->
         {
-            if (i < 0 || i >= gate.triggerOn.length)
-            {
+            if (i < 0 || i >= gate.triggerOn.length) {
                 return false;
             }
             return gate.triggerOn[(int) i];
@@ -70,8 +65,7 @@ public class GuiGate extends GuiBC8<ContainerGate>
 
         context.put_l_b("gate.set.is_on", (i) ->
         {
-            if (i < 0 || i >= gate.triggerOn.length)
-            {
+            if (i < 0 || i >= gate.triggerOn.length) {
                 return false;
             }
             return gate.actionOn[(int) i];
@@ -79,15 +73,13 @@ public class GuiGate extends GuiBC8<ContainerGate>
 
         context.put_l_b("gate.action.is_on", (i) ->
         {
-            if (i < 0 || i >= gate.actionOn.length)
-            {
+            if (i < 0 || i >= gate.actionOn.length) {
                 return false;
             }
             return gate.actionOn[(int) i] && gate.statements[(int) i].action.get() != null;
         }).setNeverInline();
 
-        for (int s = 0; s < gate.variant.numSlots; s++)
-        {
+        for (int s = 0; s < gate.variant.numSlots; s++) {
             final int i = s;
             String tName = "gate.trigger/" + i;
             String aName = "gate.action/" + i;
@@ -97,8 +89,7 @@ public class GuiGate extends GuiBC8<ContainerGate>
             properties.put(aName, container.possibleActionsContext);
         }
 
-        for (int c = 0; c < gate.connections.length; c++)
-        {
+        for (int c = 0; c < gate.connections.length; c++) {
             final int connection = c;
             String name = "gate.connection/" + c;
             properties.put(name, gate.connections[c]);

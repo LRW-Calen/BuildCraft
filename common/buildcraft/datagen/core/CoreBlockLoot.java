@@ -8,12 +8,10 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CoreBlockLoot extends BlockLoot
-{
+public class CoreBlockLoot extends BlockLoot {
     @Override
-    protected void addTables()
-    {
-        BCCoreBlocks.decoratedMap.values().forEach(r->
+    protected void addTables() {
+        BCCoreBlocks.decoratedMap.values().forEach(r ->
                 dropSelf(r.get())
         );
         dropSelf(BCCoreBlocks.engineWood.get());
@@ -28,15 +26,13 @@ public class CoreBlockLoot extends BlockLoot
     private final Set<Block> knownBlocks = new HashSet<>();
 
     @Override
-    protected void add(Block block, LootTable.Builder builder)
-    {
+    protected void add(Block block, LootTable.Builder builder) {
         super.add(block, builder);
         knownBlocks.add(block);
     }
 
     @Override
-    protected Iterable<Block> getKnownBlocks()
-    {
+    protected Iterable<Block> getKnownBlocks() {
         return knownBlocks;
     }
 }

@@ -6,8 +6,8 @@ import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.BCCoreItems;
 import buildcraft.energy.BCEnergyBlocks;
 import buildcraft.factory.BCFactoryBlocks;
-import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.lib.client.guide.entry.*;
+import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.silicon.BCSiliconItems;
 import buildcraft.transport.BCTransportItems;
 import net.minecraft.resources.ResourceLocation;
@@ -19,16 +19,14 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Function;
 
-public class GuideGroupManager
-{
+public class GuideGroupManager {
     public static final List<PageValueType<?>> knownTypes = new ArrayList<>();
     public static final Map<ResourceLocation, GuideGroupSet> sets = new HashMap<>();
 
     private static final Map<Class<?>, PageValueType<?>> knownClasses = new WeakHashMap<>();
     private static final Map<Class<?>, Function<Object, PageValue<?>>> transformers = new WeakHashMap<>();
 
-    static
-    {
+    static {
         addValidClass(ItemStackValueFilter.class, PageEntryItemStack.INSTANCE);
         addValidClass(IStatement.class, PageEntryStatement.INSTANCE);
         addTransformer(ItemStack.class, ItemStackValueFilter.class, ItemStackValueFilter::new);
@@ -38,8 +36,7 @@ public class GuideGroupManager
         temp();
     }
 
-    private static void temp()
-    {
+    private static void temp() {
 //        addEntries("buildcraftcore", "pipe_power_providers",
 //                BCCoreItems.Silicon.PLUG_PULSAR,
 //                BCCoreItems.Transport.PLUG_POWER_ADAPTOR,
@@ -120,19 +117,15 @@ public class GuideGroupManager
 
     // Known types
 
-    public static <F, T> void addTransformer(Class<F> fromClass, Class<T> toClass, Function<F, T> transform)
-    {
-        if (isValidClass(fromClass))
-        {
+    public static <F, T> void addTransformer(Class<F> fromClass, Class<T> toClass, Function<F, T> transform) {
+        if (isValidClass(fromClass)) {
             throw new IllegalArgumentException("You cannot register a transformer from an already-registered class!");
         }
         PageValueType<?> destType = getEntryType(toClass);
-        if (destType == null)
-        {
+        if (destType == null) {
             // Function<T, PageValue<Dest>> where Dest is presumed to be a valid type
             Function<Object, PageValue<?>> destTransform = getTransform(toClass);
-            if (destTransform != null)
-            {
+            if (destTransform != null) {
                 Function<Object, PageValue<?>> realTransform = o ->
                 {
                     F from = fromClass.cast(o);
@@ -154,10 +147,8 @@ public class GuideGroupManager
         transformers.put(fromClass, realTransform);
     }
 
-    public static <T> void addValidClass(Class<T> clazz, PageValueType<T> type)
-    {
-        if (clazz.isArray())
-        {
+    public static <T> void addValidClass(Class<T> clazz, PageValueType<T> type) {
+        if (clazz.isArray()) {
             throw new IllegalArgumentException("Arrays are never valid!");
         }
         knownClasses.put(clazz, type);
@@ -173,71 +164,56 @@ public class GuideGroupManager
      * This will throw an exception if the value is not of a registered class, and return false if it is an invalid
      * value in some other way (for example if it is null).
      */
-    static boolean isValidObject(Object value)
-    {
-        if (value == null)
-        {
+    static boolean isValidObject(Object value) {
+        if (value == null) {
             return false;
         }
 
         return isValidClass(value.getClass());
     }
 
-    public static PageValue<?> toPageValue(Object value)
-    {
-        if (value == null)
-        {
+    public static PageValue<?> toPageValue(Object value) {
+        if (value == null) {
             return null;
         }
-        if (value instanceof PageValue)
-        {
+        if (value instanceof PageValue) {
             return (PageValue<?>) value;
         }
         PageValueType<?> entryType = getEntryType(value.getClass());
-        if (entryType != null)
-        {
+        if (entryType != null) {
             return entryType.wrap(value);
         }
         Function<Object, PageValue<?>> transform = getTransform(value.getClass());
-        if (transform != null)
-        {
+        if (transform != null) {
             return transform.apply(value);
         }
         throw new IllegalArgumentException("Unknown " + value.getClass()
                 + " - is this a programming mistake, or have you forgotton to register the class as valid?");
     }
 
-    private static boolean isValidClass(Class<?> clazz)
-    {
+    private static boolean isValidClass(Class<?> clazz) {
         return getEntryType(clazz) != null;
     }
 
     @Nullable
-    private static PageValueType<?> getEntryType(Class<?> clazz)
-    {
-        if (knownClasses.containsKey(clazz))
-        {
+    private static PageValueType<?> getEntryType(Class<?> clazz) {
+        if (knownClasses.containsKey(clazz)) {
             return knownClasses.get(clazz);
         }
         PageValueType<?> type = null;
-        if (!clazz.isArray())
-        {
+        if (!clazz.isArray()) {
             search:
             {
                 Class<?> superClazz = clazz.getSuperclass();
-                if (superClazz != null)
-                {
+                if (superClazz != null) {
                     type = getEntryType(superClazz);
-                    if (type != null)
-                    {
+                    if (type != null) {
                         break search;
                     }
                 }
-                for (Class<?> cls : clazz.getInterfaces())
-                {
+                for (Class<?> cls : clazz.getInterfaces()) {
                     type = getEntryType(cls);
-                    if (type != null)
-                    {
+                    if (type != null) {
                         break search;
                     }
                 }
@@ -247,31 +223,24 @@ public class GuideGroupManager
         return type;
     }
 
-    private static Function<Object, PageValue<?>> getTransform(Class<? extends Object> clazz)
-    {
+    private static Function<Object, PageValue<?>> getTransform(Class<? extends Object> clazz) {
         Function<Object, PageValue<?>> func = transformers.get(clazz);
-        if (func != null)
-        {
+        if (func != null) {
             return func;
         }
-        if (!clazz.isArray())
-        {
+        if (!clazz.isArray()) {
             search:
             {
                 Class<?> superClazz = clazz.getSuperclass();
-                if (superClazz != null)
-                {
+                if (superClazz != null) {
                     func = getTransform(superClazz);
-                    if (func != null)
-                    {
+                    if (func != null) {
                         break search;
                     }
                 }
-                for (Class<?> cls : clazz.getInterfaces())
-                {
+                for (Class<?> cls : clazz.getInterfaces()) {
                     func = getTransform(cls);
-                    if (func != null)
-                    {
+                    if (func != null) {
                         break search;
                     }
                 }
@@ -284,51 +253,42 @@ public class GuideGroupManager
     // Internals
 
     @Nullable
-    public static GuideGroupSet get(ResourceLocation group)
-    {
+    public static GuideGroupSet get(ResourceLocation group) {
         return sets.get(group);
     }
 
     @Nullable
-    public static GuideGroupSet get(String domain, String group)
-    {
+    public static GuideGroupSet get(String domain, String group) {
         return get(new ResourceLocation(domain, group));
     }
 
-    public static GuideGroupSet getOrCreate(String domain, String group)
-    {
+    public static GuideGroupSet getOrCreate(String domain, String group) {
         return sets.computeIfAbsent(new ResourceLocation(domain, group), GuideGroupSet::new);
     }
 
     // Basic adders
 
-    public static GuideGroupSet addEntry(String domain, String group, Object value)
-    {
+    public static GuideGroupSet addEntry(String domain, String group, Object value) {
         return getOrCreate(domain, group).addSingle(value);
     }
 
-    public static GuideGroupSet addEntries(String domain, String group, Object... values)
-    {
+    public static GuideGroupSet addEntries(String domain, String group, Object... values) {
         return getOrCreate(domain, group).addArray(values);
     }
 
-    public static GuideGroupSet addEntries(String domain, String group, Collection<Object> values)
-    {
+    public static GuideGroupSet addEntries(String domain, String group, Collection<Object> values) {
         return getOrCreate(domain, group).addCollection(values);
     }
 
-    public static GuideGroupSet addKey(String domain, String group, Object value)
-    {
+    public static GuideGroupSet addKey(String domain, String group, Object value) {
         return getOrCreate(domain, group).addKey(value);
     }
 
-    public static GuideGroupSet addKeys(String domain, String group, Object... values)
-    {
+    public static GuideGroupSet addKeys(String domain, String group, Object... values) {
         return getOrCreate(domain, group).addKeyArray(values);
     }
 
-    public static GuideGroupSet addKeys(String domain, String group, Collection<Object> values)
-    {
+    public static GuideGroupSet addKeys(String domain, String group, Collection<Object> values) {
         return getOrCreate(domain, group).addKeyCollection(values);
     }
 }

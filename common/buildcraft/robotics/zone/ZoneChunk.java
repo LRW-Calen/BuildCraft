@@ -16,12 +16,12 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
 
-public class ZoneChunk
-{
+public class ZoneChunk {
     public BitSet property;
     private boolean fullSet = false;
 
-    public ZoneChunk() {}
+    public ZoneChunk() {
+    }
 
     public ZoneChunk(ZoneChunk old) {
         if (old.property != null) {

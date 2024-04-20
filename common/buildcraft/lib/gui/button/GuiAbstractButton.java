@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 
 /** If this only has 1 subclass (GuiButtonDrawable), then why not merge them? */
 public abstract class GuiAbstractButton extends GuiElementSimple
-    implements IButtonClickEventTrigger, IInteractionElement {
+        implements IButtonClickEventTrigger, IInteractionElement {
     private final List<IButtonClickEventListener> listeners = new ArrayList<>();
 
     public final String id;

@@ -6,8 +6,7 @@
 
 package buildcraft.lib.client.guide;
 
-public enum ETypeTag
-{
+public enum ETypeTag {
     MOD("mod."),
     SUB_MOD("submod."),
     TYPE("type."),

@@ -33,18 +33,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
+@OnlyIn(Dist.CLIENT)
 //public class RenderQuarry extends TileEntitySpecialRenderer<TileQuarry>
-public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
-{
+public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
     public static final LaserData_BC8.LaserType FRAME;
     public static final LaserData_BC8.LaserType FRAME_BOTTOM;
     public static final LaserData_BC8.LaserType DRILL;
     public static final LaserData_BC8.LaserType LASER;
 
-    static
-    {
+    static {
         {
             SpriteHolderRegistry.SpriteHolder sprite = SpriteHolderRegistry.getHolder("buildcraftbuilders:blocks/frame/default");
             LaserData_BC8.LaserRow capStart = new LaserData_BC8.LaserRow(sprite, 0, 0, 0, 0);
@@ -77,14 +78,12 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
         }
     }
 
-    public RenderQuarry(BlockEntityRendererProvider.Context context)
-    {
+    public RenderQuarry(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void render(TileQuarry tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha)
-    public void render(TileQuarry tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileQuarry tile, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("bc");
         profiler.push("quarry");
@@ -98,13 +97,10 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
         RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 //        if (Minecraft.isAmbientOcclusionEnabled())
-        if (Minecraft.useAmbientOcclusion())
-        {
+        if (Minecraft.useAmbientOcclusion()) {
 //            GlStateManager.shadeModel(GL11.GL_SMOOTH);
             RenderSystem.setShader(GameRenderer::getRendertypeEntitySmoothCutoutShader);
-        }
-        else
-        {
+        } else {
 //            GlStateManager.shadeModel(GL11.GL_FLAT);
             RenderSystem.setShader(GameRenderer::getBlockShader);
         }
@@ -119,20 +115,16 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
 
 
         profiler.pop();
-        if (tile.frameBox.isInitialized())
-        {
+        if (tile.frameBox.isInitialized()) {
             double yOffset = 1 + 4 / 16D;
 
             VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet()); // Calen
             profiler.push("laser");
-            if (tile.currentTask != null && tile.currentTask instanceof TileQuarry.TaskBreakBlock taskBreakBlock)
-            {
+            if (tile.currentTask != null && tile.currentTask instanceof TileQuarry.TaskBreakBlock taskBreakBlock) {
                 BlockPos pos = taskBreakBlock.breakPos;
 
-                if (tile.drillPos == null)
-                {
-                    if (taskBreakBlock.clientPower != 0)
-                    {
+                if (tile.drillPos == null) {
+                    if (taskBreakBlock.clientPower != 0) {
                         // Don't render a laser before we have any power
                         Vec3 from = VecUtil.convertCenter(tile.getBlockPos());
                         Vec3 to = VecUtil.convertCenter(pos);
@@ -140,9 +132,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
 //                        LaserRenderer_BC8.renderLaserStatic(laser);
                         LaserRenderer_BC8.renderLaserDynamic(laser, poseStack.last(), buffer);
                     }
-                }
-                else
-                {
+                } else {
                     long power = (long) (
                             taskBreakBlock.prevClientPower +
                                     (taskBreakBlock.clientPower - taskBreakBlock.prevClientPower) * (double) partialTicks
@@ -151,12 +141,9 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
                     VoxelShape shape = tile.getLevel().getBlockState(pos).getCollisionShape(tile.getLevel(), pos); // Calen: if shape is empty, .bounds() will cause UnsupportedOperationException (ArrayVoxelShape:28)
                     AABB aabb = shape.isEmpty() ? new AABB(0, 0, 0, 0, 0, 0) : shape.bounds();
                     double value = (double) power / taskBreakBlock.getTarget();
-                    if (value < 0.9)
-                    {
+                    if (value < 0.9) {
                         value = 1 - value / 0.9;
-                    }
-                    else
-                    {
+                    } else {
                         value = (value - 0.9) / 0.1;
                     }
                     double scaleMin = 1 - (1 - aabb.maxY) - (aabb.maxY - aabb.minY) / 2;
@@ -166,8 +153,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
             }
 
             profiler.popPush("frame");
-            if (tile.clientDrillPos != null && tile.prevClientDrillPos != null)
-            {
+            if (tile.clientDrillPos != null && tile.prevClientDrillPos != null) {
                 Vec3 interpolatedPos = tile.prevClientDrillPos.add(tile.clientDrillPos.subtract(tile.prevClientDrillPos).scale(partialTicks));
 
 //                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
@@ -224,9 +210,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
                         poseStack.last(),
                         buffer
                 );
-            }
-            else
-            {
+            } else {
 //                LaserBoxRenderer.renderLaserBoxStatic(tile.frameBox, BuildCraftLaserManager.STRIPES_WRITE, true);
                 LaserBoxRenderer.renderLaserBoxDynamic(tile.frameBox, BuildCraftLaserManager.STRIPES_WRITE, poseStack.last(), buffer, true);
             }
@@ -237,12 +221,10 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
         poseStack.popPose();
         profiler.push("items");
 
-        if (tile.frameBox.isInitialized() && false)
-        {
+        if (tile.frameBox.isInitialized() && false) {
             TileQuarry.TaskAddFrame currentTask = (TileQuarry.TaskAddFrame) tile.currentTask;
             int index = tile.framePoses.indexOf(currentTask.framePos);
-            if (index > 1)
-            {
+            if (index > 1) {
                 double progress = (double) currentTask.power / currentTask.getTarget() * (index - 1) / tile.framePoses.size();
                 double progress1 = (progress >= 0 && progress <= 0.25) ? progress * 4 ://
                         (progress >= 0.25 && progress <= 0.5) ? 1 ://
@@ -254,52 +236,39 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
                 double zProgress = -1;
                 Direction side = tile.getLevel().getBlockState(tile.getBlockPos()).getValue(BuildCraftProperties.BLOCK_FACING).getOpposite();
                 BlockPos firstPos = tile.getBlockPos().relative(side);
-                switch (side)
-                {
+                switch (side) {
                     case SOUTH:
-                        if (firstPos.getX() == min.getX())
-                        {
+                        if (firstPos.getX() == min.getX()) {
                             xProgress = 1 - progress2;
                             zProgress = progress1;
-                        }
-                        else
-                        {
+                        } else {
                             xProgress = progress2;
                             zProgress = progress1;
                         }
                         break;
                     case WEST:
-                        if (firstPos.getZ() == min.getZ())
-                        {
+                        if (firstPos.getZ() == min.getZ()) {
                             xProgress = 1 - progress1;
                             zProgress = 1 - progress2;
-                        }
-                        else
-                        {
+                        } else {
                             xProgress = 1 - progress1;
                             zProgress = progress2;
                         }
                         break;
                     case NORTH:
-                        if (firstPos.getX() == min.getX())
-                        {
+                        if (firstPos.getX() == min.getX()) {
                             xProgress = 1 - progress2;
                             zProgress = 1 - progress1;
-                        }
-                        else
-                        {
+                        } else {
                             xProgress = progress2;
                             zProgress = 1 - progress1;
                         }
                         break;
                     case EAST:
-                        if (firstPos.getZ() == min.getZ())
-                        {
+                        if (firstPos.getZ() == min.getZ()) {
                             xProgress = progress1;
                             zProgress = 1 - progress2;
-                        }
-                        else
-                        {
+                        } else {
                             xProgress = progress1;
                             zProgress = progress2;
                         }
@@ -344,19 +313,16 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry>
 
     @Override
 //    public boolean isGlobalRenderer(TileQuarry te)
-    public boolean shouldRenderOffScreen(TileQuarry tile)
-    {
+    public boolean shouldRenderOffScreen(TileQuarry tile) {
         return true;
     }
 
     @Override
-    public int getViewDistance()
-    {
+    public int getViewDistance() {
         return 512;
     }
 
-    public static void init()
-    {
+    public static void init() {
 
     }
 }

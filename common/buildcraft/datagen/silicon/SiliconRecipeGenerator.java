@@ -22,18 +22,15 @@ import net.minecraftforge.common.Tags;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class SiliconRecipeGenerator extends RecipeProvider
-{
-    private static final String MOD_ID = BCSilicon.MOD_ID;
+public class SiliconRecipeGenerator extends RecipeProvider {
+    private static final String MOD_ID = BCSilicon.MODID;
 
-    public SiliconRecipeGenerator(DataGenerator generator)
-    {
+    public SiliconRecipeGenerator(DataGenerator generator) {
         super(generator);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         // advanced_crafting_table
         ShapedRecipeBuilder.shaped(BCSiliconBlocks.advancedCraftingTable.get())
                 .pattern("OtO")
@@ -94,14 +91,11 @@ public class SiliconRecipeGenerator extends RecipeProvider
         makeGateRecipe2(Tags.Items.GEMS_QUARTZ, EnumGateLogic.AND, EnumGateMaterial.IRON, EnumGateModifier.QUARTZ, consumer);
 
         // And Gate <-> Or Gate (shapeless)
-        for (EnumGateMaterial material : EnumGateMaterial.VALUES)
-        {
-            if (material == EnumGateMaterial.CLAY_BRICK)
-            {
+        for (EnumGateMaterial material : EnumGateMaterial.VALUES) {
+            if (material == EnumGateMaterial.CLAY_BRICK) {
                 continue;
             }
-            for (EnumGateModifier modifier : EnumGateModifier.VALUES)
-            {
+            for (EnumGateModifier modifier : EnumGateModifier.VALUES) {
                 GateVariant varAnd = new GateVariant(EnumGateLogic.AND, material, modifier);
                 ItemPluggableGate resultAnd = BCSiliconItems.variantGateMap.get(varAnd).get();
 
@@ -126,8 +120,7 @@ public class SiliconRecipeGenerator extends RecipeProvider
     }
 
     //    private static void makeGateRecipe(RecipeBuilderShaped builder, EnumGateMaterial material, EnumGateModifier modifier)
-    private static void makeGateRecipe1(TagKey<Item> m, EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier, Consumer<FinishedRecipe> consumer)
-    {
+    private static void makeGateRecipe1(TagKey<Item> m, EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier, Consumer<FinishedRecipe> consumer) {
         GateVariant variant = new GateVariant(logic, material, modifier);
         ShapedRecipeBuilder.shaped(BCSiliconItems.variantGateMap.get(variant).get())
                 .pattern(" m ")
@@ -151,8 +144,7 @@ public class SiliconRecipeGenerator extends RecipeProvider
                 .save(consumer, "buildcraftsilicon:plug_gate_create_" + material + "_" + modifier + "_blocker");
     }
 
-    private static void makeGateRecipe2(TagKey<Item> m, EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier, Consumer<FinishedRecipe> consumer)
-    {
+    private static void makeGateRecipe2(TagKey<Item> m, EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier, Consumer<FinishedRecipe> consumer) {
         GateVariant variantG = new GateVariant(EnumGateLogic.AND, EnumGateMaterial.IRON, EnumGateModifier.NO_MODIFIER);
         ItemPluggableGate ironGateG = BCSiliconItems.variantGateMap.get(variantG).get();
         GateVariant variant = new GateVariant(logic, material, modifier);
@@ -168,8 +160,7 @@ public class SiliconRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Silicon Recipe Generator";
     }
 }

@@ -9,23 +9,19 @@ package buildcraft.energy;
 import buildcraft.lib.net.MessageUpdateTile;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.Util;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.network.NetworkHooks;
 
-public enum BCEnergyGuis
-{
+public enum BCEnergyGuis {
     ENGINE_STONE,
     ENGINE_IRON;
 
     public static final BCEnergyGuis[] VALUES = values();
 
-    public static BCEnergyGuis get(int id)
-    {
+    public static BCEnergyGuis get(int id) {
         if (id < 0 || id >= VALUES.length) return null;
         return VALUES[id];
     }
@@ -38,15 +34,12 @@ public enum BCEnergyGuis
 //    }
 
     //    public void openGUI(Player player, BlockPos pos, BlockState blockState)
-    public void openGUI(Player player, TileBC_Neptune tile)
-    {
+    public void openGUI(Player player, TileBC_Neptune tile) {
 //        player.openGui(BCEnergy.INSTANCE, ordinal(), player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
 //        player.openMenu(blockState.getMenuProvider(player.level, pos));
-        if (player instanceof ServerPlayer serverPlayer)
-        {
+        if (player instanceof ServerPlayer serverPlayer) {
 //            player.openMenu(state.getMenuProvider(player.level, pos));
-            if (tile instanceof MenuProvider menuProvider)
-            {
+            if (tile instanceof MenuProvider menuProvider) {
 //                NetworkHooks.openGui(serverPlayer, menuProvider, pos);
 
                 MessageUpdateTile msg = tile.onServerPlayerOpenNoSend(player);
@@ -58,9 +51,7 @@ public enum BCEnergyGuis
                             msg.toBytes(buf);
                         }
                 );
-            }
-            else
-            {
+            } else {
                 player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
             }
         }

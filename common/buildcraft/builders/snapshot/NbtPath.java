@@ -13,8 +13,7 @@ import net.minecraft.nbt.*;
 
 import java.util.List;
 
-public class NbtPath
-{
+public class NbtPath {
     private final List<String> elements;
 
     private NbtPath(List<String> elements) {
@@ -74,7 +73,8 @@ public class NbtPath
             int key;
             try {
                 key = Integer.parseInt(elements.get(0));
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 return NBTUtilBC.NBT_NULL;
             }
             if (key >= 0 && key < tag.getAsByteArray().length) {
@@ -102,7 +102,8 @@ public class NbtPath
             int key;
             try {
                 key = Integer.parseInt(elements.get(0));
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 return NBTUtilBC.NBT_NULL;
             }
             if (key >= 0 && key < tag.size()) {
@@ -135,7 +136,8 @@ public class NbtPath
             int key;
             try {
                 key = Integer.parseInt(elements.get(0));
-            } catch (NumberFormatException e) {
+            }
+            catch (NumberFormatException e) {
                 return NBTUtilBC.NBT_NULL;
             }
             if (key >= 0 && key < tag.getAsIntArray().length) {
@@ -186,11 +188,11 @@ public class NbtPath
 
     @SuppressWarnings("WeakerAccess")
     public static final JsonDeserializer<NbtPath> DESERIALIZER = (json, typeOfT, context) ->
-        new NbtPath(
-            context.deserialize(
-                json,
-                new TypeToken<List<String>>() {
-                }.getType()
-            )
-        );
+            new NbtPath(
+                    context.deserialize(
+                            json,
+                            new TypeToken<List<String>>() {
+                            }.getType()
+                    )
+            );
 }

@@ -42,6 +42,6 @@ public final class FormatSegment {
             miscStr.append(' ');
         }
         return (colour == null ? "" : (colour.getName() + ""))//
-            + miscStr + text;
+                + miscStr + text;
     }
 }

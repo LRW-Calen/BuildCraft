@@ -8,7 +8,7 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class EnergyBiomeTagsProvider extends net.minecraft.data.tags.BiomeTagsProvider {
     public EnergyBiomeTagsProvider(DataGenerator generator, ExistingFileHelper existingFileHelper) {
-        super(generator, BCCore.MOD_ID, existingFileHelper);
+        super(generator, BCCore.MODID, existingFileHelper);
     }
 
     @Override

@@ -4,6 +4,7 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.builders;
 
+import buildcraft.builders.client.BuildersItemModelPredicates;
 import buildcraft.builders.client.render.RenderArchitectTable;
 import buildcraft.builders.client.render.RenderBuilder;
 import buildcraft.builders.client.render.RenderFiller;
@@ -23,12 +24,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.function.Consumer;
 
@@ -39,42 +38,29 @@ import java.util.function.Consumer;
 //    version = BCLib.VERSION,
 //    dependencies = "required-after:buildcraftcore@[" + BCLib.VERSION + "]"
 //)
-@Mod(BCBuilders.MOD_ID)
+@Mod(BCBuilders.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 //@formatter:on
-public class BCBuilders
-{
-    public static final String MOD_ID = "buildcraftbuilders";
+public class BCBuilders {
+    public static final String MODID = "buildcraftbuilders";
 
     //    @Mod.Instance(MODID)
     public static BCBuilders INSTANCE = null;
 
-    public BCBuilders()
-    {
+    public BCBuilders() {
         INSTANCE = this;
-
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        if (FMLEnvironment.dist == Dist.CLIENT)
-        {
-        }
-        modEventBus.addGenericListener(MenuType.class, BCBuildersMenuTypes::registerAll);
     }
 
     //    @Mod.EventHandler
     @SubscribeEvent
 //    public static void preInit(FMLPreInitializationEvent evt)
-    public static void preInit(FMLConstructModEvent evt)
-    {
-//        RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
-        RegistryConfig.useOtherModConfigFor(MOD_ID, BCCore.MOD_ID);
+    public static void preInit(FMLConstructModEvent evt) {
+        RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
 
         BCBuildersConfig.preInit();
-//        evt.enqueueWork(BCBuildersConfig::preInit); // Calen: BCBuildersProxy.getProxy().fmlPreInit() needs config
         BCBuildersRegistries.preInit();
-        BCBuildersBlocks.fmlPreInit();
         BCBuildersItems.fmlPreInit();
-//        BCBuildersBlocks.fmlPreInit(); Calen: merged into BCBuildersBlocks::init
+        BCBuildersBlocks.fmlPreInit();
         BCBuildersStatements.preInit();
         BCBuildersSchematics.preInit();
 
@@ -88,54 +74,53 @@ public class BCBuilders
     //    @Mod.EventHandler
     @SubscribeEvent
 //    public static void init(FMLInitializationEvent evt)
-    public static void init(FMLCommonSetupEvent evt)
-    {
+    public static void init(FMLCommonSetupEvent evt) {
         BCBuildersProxy.getProxy().fmlInit();
         BCBuildersRegistries.init();
         BCBuildersRecipes.init();
-//        BCBuildersBlocks.fmlInit();
+//        BCBuildersBlocks.fmlInit(); // 1.18.2: tiles reg with blocks together
     }
 
     //    @Mod.EventHandler
     @SubscribeEvent
 //    public static void postInit(FMLPostInitializationEvent evt)
-    public static void postInit(FMLLoadCompleteEvent evt)
-    {
+    public static void postInit(FMLLoadCompleteEvent evt) {
         BCBuildersProxy.getProxy().fmlPostInit();
         RulesLoader.loadAll();
     }
 
     //    @Mod.EventHandler
-    @OnlyIn(Dist.DEDICATED_SERVER)
     @SubscribeEvent
+    @OnlyIn(Dist.DEDICATED_SERVER)
 //    public static void onServerStarting(FMLServerStartingEvent event)
-    public static void onServerStarting(FMLDedicatedServerSetupEvent event)
-    {
+    public static void onServerStarting(FMLDedicatedServerSetupEvent event) {
         GlobalSavedDataSnapshots.reInit(Dist.DEDICATED_SERVER);
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event)
-    {
+    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCBuildersBlocks.architectTile.get(), RenderArchitectTable::new);
         BlockEntityRenderers.register(BCBuildersBlocks.builderTile.get(), RenderBuilder::new);
         BlockEntityRenderers.register(BCBuildersBlocks.fillerTile.get(), RenderFiller::new);
         BlockEntityRenderers.register(BCBuildersBlocks.quarryTile.get(), RenderQuarry::new);
     }
 
-    // Calen add
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event)
-    {
+    public static void clientSetup(FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(BCBuildersBlocks.frame.get(), RenderType.cutout());
+        BuildersItemModelPredicates.clientInit(event);
+    }
+
+    @SubscribeEvent
+    public static void registerGui(RegistryEvent.Register<MenuType<?>> event) {
+        BCBuildersMenuTypes.registerAll(event);
     }
 
     private static final TagManager tagManager = new TagManager();
 
-    static
-    {
+    static {
         startBatch();
         // Items
 //        registerTag("item.schematic.single").reg("schematic_single").locale("schematicSingle").model("schematic_single/");
@@ -191,20 +176,17 @@ public class BCBuilders
         endBatch(TagManager.prependTags("buildcraftbuilders:", EnumTagType.REGISTRY_NAME).andThen(TagManager.setTab("buildcraft.main")));
     }
 
-    private static TagEntry registerTag(String id)
-    {
+    private static TagEntry registerTag(String id) {
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }
 
-    private static void startBatch()
-    {
+    private static void startBatch() {
 //        TagManager.startBatch();
         tagManager.startBatch();
     }
 
-    private static void endBatch(Consumer<TagEntry> consumer)
-    {
+    private static void endBatch(Consumer<TagEntry> consumer) {
 //        TagManager.endBatch(consumer);
         tagManager.endBatch(consumer);
     }

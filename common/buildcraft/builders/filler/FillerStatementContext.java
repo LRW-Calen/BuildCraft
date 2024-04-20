@@ -2,7 +2,6 @@ package buildcraft.builders.filler;
 
 import buildcraft.api.filler.FillerManager;
 import buildcraft.api.filler.IFillerPattern;
-import buildcraft.api.statements.IGuiSlot;
 import buildcraft.builders.BCBuildersStatements;
 import buildcraft.builders.snapshot.pattern.PatternShape2d;
 import buildcraft.lib.gui.ISimpleDrawable;
@@ -13,67 +12,53 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public enum FillerStatementContext implements StatementContext<IFillerPattern>
-{
+public enum FillerStatementContext implements StatementContext<IFillerPattern> {
     CONTEXT_ALL;
 
     private static final List<Group> groups = ImmutableList.copyOf(Group.values());
 
-    static
-    {
+    static {
         setupPossible();
     }
 
-    public static void setupPossible()
-    {
-        for (Group group : Group.values())
-        {
+    public static void setupPossible() {
+        for (Group group : Group.values()) {
             group.patterns.clear();
         }
-        for (IFillerPattern pattern : FillerManager.registry.getPatterns())
-        {
+        for (IFillerPattern pattern : FillerManager.registry.getPatterns()) {
             // TODO (AlexIIL): 8.1.x: add support for other groups
-            if (pattern instanceof PatternShape2d)
-            {
+            if (pattern instanceof PatternShape2d) {
                 Group.SHAPES_2D.patterns.add(pattern);
-            }
-            else
-            {
+            } else {
                 Group.DEFAULT.patterns.add(pattern);
             }
         }
-        for (Group group : Group.values())
-        {
+        for (Group group : Group.values()) {
             group.patterns.sort(Comparator.comparing(IFillerPattern::getUniqueTag));
         }
-        if (Group.DEFAULT.patterns.remove(BCBuildersStatements.PATTERN_NONE))
-        {
+        if (Group.DEFAULT.patterns.remove(BCBuildersStatements.PATTERN_NONE)) {
             Group.DEFAULT.patterns.add(0, BCBuildersStatements.PATTERN_NONE);
         }
     }
 
     @Override
-    public List<Group> getAllPossible()
-    {
+    public List<Group> getAllPossible() {
         return groups;
     }
 
-    public enum Group implements StatementGroup<IFillerPattern>
-    {
+    public enum Group implements StatementGroup<IFillerPattern> {
         DEFAULT,
         SHAPES_2D;
 
         final List<IFillerPattern> patterns = new ArrayList<>();
 
         @Override
-        public ISimpleDrawable getSourceIcon()
-        {
+        public ISimpleDrawable getSourceIcon() {
             return null;
         }
 
         @Override
-        public List<IFillerPattern> getValues()
-        {
+        public List<IFillerPattern> getValues() {
             return patterns;
         }
     }

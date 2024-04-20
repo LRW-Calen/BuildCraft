@@ -16,25 +16,20 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public enum BCCoreEventDist
-{
+public enum BCCoreEventDist {
     INSTANCE;
 
     @SubscribeEvent
-    public void onWorldTick(TickEvent.WorldTickEvent event)
-    {
+    public void onWorldTick(TickEvent.WorldTickEvent event) {
 //        if (event.world != null && !event.world.isClientSide && event.world.getMinecraftServer() != null)
-        if (event.world != null && !event.world.isClientSide && event.world.getServer() != null)
-        {
+        if (event.world != null && !event.world.isClientSide && event.world.getServer() != null) {
             WorldSavedDataVolumeBoxes.get(event.world).tick();
         }
     }
 
     @SubscribeEvent
-    public void onEntityJoinWorld(EntityJoinWorldEvent event)
-    {
-        if (event.getEntity() instanceof ServerPlayer serverPlayer)
-        {
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+        if (event.getEntity() instanceof ServerPlayer serverPlayer) {
             // Delay sending join messages to player as it makes it work when in single-player
             MessageUtil.doDelayedServer(() ->
                     MessageManager.sendTo(

@@ -26,10 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 
-import javax.annotation.Nonnull;
-
-public class TileMiningWell extends TileMiner
-{
+public class TileMiningWell extends TileMiner {
     private boolean shouldCheck = true;
     private final SafeTimeTracker tracker = new SafeTimeTracker(256);
 
@@ -52,23 +49,19 @@ public class TileMiningWell extends TileMiner
 //            }
 //        }
 //    };
-    ILocalBlockUpdateSubscriber subscriber = new ILocalBlockUpdateSubscriber()
-    {
+    ILocalBlockUpdateSubscriber subscriber = new ILocalBlockUpdateSubscriber() {
         @Override
-        public BlockPos getSubscriberPos()
-        {
+        public BlockPos getSubscriberPos() {
             return TileMiningWell.this.worldPosition;
         }
 
         @Override
-        public int getUpdateRange()
-        {
+        public int getUpdateRange() {
             return level.getMaxBuildHeight() - level.getMinBuildHeight();
         }
 
         @Override
-        public void setWorldUpdated(Level world, BlockPos pos)
-        {
+        public void setWorldUpdated(Level world, BlockPos pos) {
             if (pos.getX() == TileMiningWell.this.worldPosition.getX() &&
                     pos.getY() <= TileMiningWell.this.worldPosition.getY() &&
                     pos.getZ() == TileMiningWell.this.worldPosition.getZ())
@@ -78,22 +71,18 @@ public class TileMiningWell extends TileMiner
         }
     };
 
-    public TileMiningWell(BlockPos pos, BlockState blockState)
-    {
+    public TileMiningWell(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.miningWellTile.get(), pos, blockState);
         caps.addCapabilityInstance(CapUtil.CAP_ITEM_TRANSACTOR, AutomaticProvidingTransactor.INSTANCE, EnumPipePart.VALUES);
     }
 
     @Override
-    protected void mine()
-    {
-        if (currentPos != null && canBreak())
-        {
+    protected void mine() {
+        if (currentPos != null && canBreak()) {
             shouldCheck = true;
             long target = BlockUtil.computeBlockBreakPower(level, currentPos);
             progress += battery.extractPower(0, target - progress);
-            if (progress >= target)
-            {
+            if (progress >= target) {
                 progress = 0;
 //                level.sendBlockBreakProgress(currentPos.hashCode(), currentPos, -1);
                 level.destroyBlockProgress(currentPos.hashCode(), currentPos, -1);
@@ -106,30 +95,22 @@ public class TileMiningWell extends TileMiner
                         stacks.forEach(stack -> InventoryUtil.addToBestAcceptor(level, worldPosition, null, stack))
                 );
                 nextPos();
-            }
-            else
-            {
-                if (!level.isEmptyBlock(currentPos))
-                {
+            } else {
+                if (!level.isEmptyBlock(currentPos)) {
 //                    level.sendBlockBreakProgress(currentPos.hashCode(), currentPos, (int) ((progress * 9) / target));
                     level.destroyBlockProgress(currentPos.hashCode(), currentPos, (int) ((progress * 9) / target));
                 }
             }
-        }
-        else if (shouldCheck || tracker.markTimeIfDelay(level))
-        {
+        } else if (shouldCheck || tracker.markTimeIfDelay(level)) {
             nextPos();
-            if (currentPos == null)
-            {
+            if (currentPos == null) {
                 shouldCheck = false;
             }
         }
     }
 
-    private boolean canBreak()
-    {
-        if (level.isEmptyBlock(currentPos) || BlockUtil.isUnbreakableBlock(level, currentPos, getOwner()))
-        {
+    private boolean canBreak() {
+        if (level.isEmptyBlock(currentPos) || BlockUtil.isUnbreakableBlock(level, currentPos, getOwner())) {
             return false;
         }
 
@@ -137,27 +118,20 @@ public class TileMiningWell extends TileMiner
         return fluid == null || fluid.getAttributes().getViscosity() <= 1000;
     }
 
-    private void nextPos()
-    {
+    private void nextPos() {
         currentPos = worldPosition;
-        while (true)
-        {
+        while (true) {
             currentPos = currentPos.below();
-            if (level.isOutsideBuildHeight(currentPos))
-            {
+            if (level.isOutsideBuildHeight(currentPos)) {
                 break;
             }
-            if (worldPosition.getY() - currentPos.getY() > BCCoreConfig.miningMaxDepth)
-            {
+            if (worldPosition.getY() - currentPos.getY() > BCCoreConfig.miningMaxDepth) {
                 break;
             }
-            if (canBreak())
-            {
+            if (canBreak()) {
                 updateLength();
                 return;
-            }
-            else if (!level.isEmptyBlock(currentPos) && level.getBlockState(currentPos).getBlock() != BCFactoryBlocks.tube.get())
-            {
+            } else if (!level.isEmptyBlock(currentPos) && level.getBlockState(currentPos).getBlock() != BCFactoryBlocks.tube.get()) {
                 break;
             }
         }
@@ -167,12 +141,10 @@ public class TileMiningWell extends TileMiner
 
     @Override
 //    public void validate()
-    public void clearRemoved()
-    {
+    public void clearRemoved() {
 //        super.validate();
         super.clearRemoved();
-        if (!level.isClientSide)
-        {
+        if (!level.isClientSide) {
 //            level.addEventListener(worldEventListener);
             LocalBlockUpdateNotifier.instance(level).registerSubscriberForUpdateNotifications(this.subscriber);
         }
@@ -180,16 +152,13 @@ public class TileMiningWell extends TileMiner
 
     @Override
 //    public void invalidate()
-    public void setRemoved()
-    {
+    public void setRemoved() {
 //        super.invalidate();
         super.setRemoved();
-        if (!level.isClientSide)
-        {
+        if (!level.isClientSide) {
 //            level.removeEventListener(worldEventListener);
             LocalBlockUpdateNotifier.instance(level).removeSubscriberFromUpdateNotifications(this.subscriber);
-            if (currentPos != null)
-            {
+            if (currentPos != null) {
 //                level.sendBlockBreakProgress(currentPos.hashCode(), currentPos, -1);
                 level.destroyBlockProgress(currentPos.hashCode(), currentPos, -1);
             }
@@ -197,8 +166,7 @@ public class TileMiningWell extends TileMiner
     }
 
     @Override
-    protected IMjReceiver createMjReceiver()
-    {
+    protected IMjReceiver createMjReceiver() {
         return new MjBatteryReceiver(battery);
     }
 }

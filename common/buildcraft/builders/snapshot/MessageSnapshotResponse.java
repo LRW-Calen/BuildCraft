@@ -6,14 +6,13 @@
 
 package buildcraft.builders.snapshot;
 
-import net.minecraft.network.FriendlyByteBuf;
 import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.IMessageHandler;
+import net.minecraft.network.FriendlyByteBuf;
 
 import java.io.IOException;
 
-public class MessageSnapshotResponse implements IMessage
-{
+public class MessageSnapshotResponse implements IMessage {
     private Snapshot snapshot;
 
     @SuppressWarnings("unused")
@@ -51,12 +50,14 @@ public class MessageSnapshotResponse implements IMessage
 //            snapshot = Snapshot.readFromNBT(CompressedStreamTools.read(new ByteBufInputStream(buf), NBTSizeTracker.INFINITE));
 //            snapshot = Snapshot.readFromNBT(CompressedStreamTools.readCompressed(new ByteBufInputStream(buf)));
             snapshot = Snapshot.readFromNBT(buf.readNbt());
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static final IMessageHandler<MessageSnapshotResponse, IMessage> HANDLER = (message, ctx) -> {
+    public static final IMessageHandler<MessageSnapshotResponse, IMessage> HANDLER = (message, ctx) ->
+    {
         ClientSnapshots.INSTANCE.onSnapshotReceived(message.snapshot);
         return null;
     };

@@ -14,23 +14,19 @@ import buildcraft.lib.statement.FullStatement;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.Rotation;
 
-public class FillerUtil
-{
+public class FillerUtil {
     public static Template.BuildingInfo createBuildingInfo(IFillerStatementContainer filler,
                                                            FullStatement<IFillerPattern> patternStatement,
                                                            IStatementParameter[] params,
-                                                           boolean inverted)
-    {
+                                                           boolean inverted) {
         Template.FilledTemplate filledTemplate = (Template.FilledTemplate) patternStatement.get().createTemplate(
                 filler,
                 params
         );
-        if (filledTemplate == null)
-        {
+        if (filledTemplate == null) {
             return null;
         }
-        if (inverted)
-        {
+        if (inverted) {
             filledTemplate.getTemplate().invert();
         }
         return filledTemplate.getTemplate().new BuildingInfo(BlockPos.ZERO, Rotation.NONE);

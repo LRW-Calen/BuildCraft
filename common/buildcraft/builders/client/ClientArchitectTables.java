@@ -12,8 +12,7 @@ import net.minecraft.world.phys.AABB;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientArchitectTables
-{
+public class ClientArchitectTables {
     public static final int START_BOX_VALUE = 3;
     public static final int START_SCANNED_BLOCK_VALUE = 50;
     public static final Map<AABB, Integer> BOXES = new HashMap<>();

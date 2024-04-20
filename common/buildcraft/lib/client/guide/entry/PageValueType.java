@@ -15,8 +15,8 @@ import buildcraft.lib.gui.ISimpleDrawable;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.network.chat.Component;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.profiling.ProfilerFiller;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.Objects;
 public abstract class PageValueType<T> {
 
     public abstract OptionallyDisabled<PageEntry<T>> deserialize(ResourceLocation name, JsonObject json,
-        JsonDeserializationContext ctx);
+                                                                 JsonDeserializationContext ctx);
 
     public abstract Class<T> getEntryClass();
 
@@ -43,6 +43,7 @@ public abstract class PageValueType<T> {
     }
 
     public abstract Component getTitle(T value);
+
     public abstract String getTitleKey(T value);
 
     public abstract List<Component> getTooltip(T value);

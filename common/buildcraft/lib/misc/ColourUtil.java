@@ -11,7 +11,10 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 
@@ -23,8 +26,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
-public class ColourUtil
-{
+public class ColourUtil {
     public static final char MINECRAFT_FORMAT_CHAR;
     public static final String COLOUR_SPECIAL_START;
 
@@ -69,12 +71,10 @@ public class ColourUtil
 
     private static final Pattern ALL_FORMAT_MATCHER = Pattern.compile("(?i)\u00a7[0-9A-Za-z]");
 
-    static
-    {
+    static {
         MINECRAFT_FORMAT_CHAR = '\u00a7';
         COLOUR_SPECIAL_START = MINECRAFT_FORMAT_CHAR + "z" + MINECRAFT_FORMAT_CHAR;
-        for (int i = 0; i < 16; i++)
-        {
+        for (int i = 0; i < 16; i++) {
             DYES[i] = "dye" + NAMES[i];
             REPLACE_FOR_WHITE[i] = REPLACE_FOR_WHITE_HIGH_CONTRAST[i] = FORMATTING_VALUES[i];
             REPLACE_FOR_BLACK[i] = REPLACE_FOR_BLACK_HIGH_CONTRAST[i] = FORMATTING_VALUES[i];
@@ -121,8 +121,7 @@ public class ColourUtil
         FACE_TO_FORMAT[Direction.WEST.ordinal()] = ChatFormatting.GREEN;
 
         ImmutableMap.Builder<String, DyeColor> builder = ImmutableMap.builder();
-        for (DyeColor c : COLOURS)
-        {
+        for (DyeColor c : COLOURS) {
             builder.put(c.getName(), c);
         }
         nameToColourMap = builder.build();
@@ -132,67 +131,56 @@ public class ColourUtil
         FACE_TO_COLOUR[Direction.UP.ordinal()] = 0xFF_CC_CC_CC;
     }
 
-    private static void replaceColourForBlack(ChatFormatting colour, ChatFormatting with)
-    {
+    private static void replaceColourForBlack(ChatFormatting colour, ChatFormatting with) {
         replaceColourForBlack(colour, with, with);
     }
 
     private static void replaceColourForBlack(ChatFormatting colour, ChatFormatting normal,
-                                              ChatFormatting highContrast)
-    {
+                                              ChatFormatting highContrast) {
         REPLACE_FOR_BLACK[colour.ordinal()] = normal;
         REPLACE_FOR_BLACK_HIGH_CONTRAST[colour.ordinal()] = highContrast;
     }
 
-    private static void replaceColourForWhite(ChatFormatting colour, ChatFormatting with)
-    {
+    private static void replaceColourForWhite(ChatFormatting colour, ChatFormatting with) {
         replaceColourForWhite(colour, with, with);
     }
 
     private static void replaceColourForWhite(ChatFormatting colour, ChatFormatting normal,
-                                              ChatFormatting highContrast)
-    {
+                                              ChatFormatting highContrast) {
         REPLACE_FOR_WHITE[colour.ordinal()] = normal;
         REPLACE_FOR_WHITE_HIGH_CONTRAST[colour.ordinal()] = highContrast;
     }
 
     @Nullable
-    public static DyeColor parseColourOrNull(String string)
-    {
+    public static DyeColor parseColourOrNull(String string) {
         return nameToColourMap.get(string);
     }
 
-    public static String getDyeName(DyeColor colour)
-    {
+    public static String getDyeName(DyeColor colour) {
 //        return DYES[colour.getDyeDamage()];
         return DYES[15 - colour.getId()];
     }
 
-    public static String getName(DyeColor colour)
-    {
+    public static String getName(DyeColor colour) {
 //        return NAMES[colour.getDyeDamage()];
         return NAMES[15 - colour.getId()];
     }
 
-    public static int getDarkHex(DyeColor colour)
-    {
+    public static int getDarkHex(DyeColor colour) {
 //        return DARK_HEX[colour.getDyeDamage()];
         return DARK_HEX[15 - colour.getId()];
     }
 
-    public static int getLightHex(DyeColor colour)
-    {
+    public static int getLightHex(DyeColor colour) {
 //        return LIGHT_HEX[colour.getDyeDamage()];
         return LIGHT_HEX[15 - colour.getId()];
     }
 
-    public static int getColourForSide(Direction face)
-    {
+    public static int getColourForSide(Direction face) {
         return FACE_TO_COLOUR[face.ordinal()];
     }
 
-    public static String[] getNameArray()
-    {
+    public static String[] getNameArray() {
         return Arrays.copyOf(NAMES, NAMES.length);
     }
 
@@ -201,69 +189,50 @@ public class ColourUtil
      * {@link BCLibConfig#useColouredLabels} is true then this will make prefix the string with an appropriate
      * {@link ChatFormatting} colour, and postfix with {@link ChatFormatting#RESET}
      */
-    public static String getTextFullTooltip(DyeColor colour)
-    {
-        if (BCLibConfig.useColouredLabels)
-        {
+    public static String getTextFullTooltip(DyeColor colour) {
+        if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
             return formatColour.toString() + getTextFormatForBlack(formatColour) + LocaleUtil.localizeColour(colour)
                     + ChatFormatting.RESET;
-        }
-        else
-        {
+        } else {
             return LocaleUtil.localizeColour(colour);
         }
     }
 
     // Calen
-    public static MutableComponent getTextFullTooltipComponent(MutableComponent base, @Nullable DyeColor colour)
-    {
-        if (BCLibConfig.useColouredLabels)
-        {
+    public static MutableComponent getTextFullTooltipComponent(MutableComponent base, @Nullable DyeColor colour) {
+        if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
 //            return base.append(new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour))).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
 //                    .append(new TextComponent(ChatFormatting.RESET.toString()));
-            if (formatColour == null)
-            {
+            if (formatColour == null) {
                 return base.append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
                         .append(new TextComponent(ChatFormatting.RESET.toString()));
-            }
-            else
-            {
+            } else {
                 return base.append(new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour))).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
                         .append(new TextComponent(ChatFormatting.RESET.toString()));
             }
-        }
-        else
-        {
+        } else {
             return base.append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)));
         }
     }
 
-    public static MutableComponent getTextFullTooltipComponent(DyeColor colour)
-    {
-        if (BCLibConfig.useColouredLabels)
-        {
+    public static MutableComponent getTextFullTooltipComponent(DyeColor colour) {
+        if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
             return new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour)).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
                     .append(new TextComponent(ChatFormatting.RESET.toString()));
-        }
-        else
-        {
+        } else {
             return new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour));
         }
     }
 
-    public static MutableComponent getTextFullTooltipComponent(@Nonnull DyeColor colour, MutableComponent after)
-    {
-        if (BCLibConfig.useColouredLabels)
-        {
+    public static MutableComponent getTextFullTooltipComponent(@Nonnull DyeColor colour, MutableComponent after) {
+        if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
             return new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour) + " ").append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
                     .append(new TextComponent(ChatFormatting.RESET.toString())).append(after);
-        }
-        else
-        {
+        } else {
             return new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)).append(after);
         }
     }
@@ -276,90 +245,63 @@ public class ColourUtil
     // Calen: without cache, thin method will decrease FPS when item in hand or creative tab
     private static final Map<DyeColor, String> colorStringCache = new HashMap<>();
 
-    public static String getTextFullTooltipSpecial(DyeColor colour)
-    {
+    public static String getTextFullTooltipSpecial(DyeColor colour) {
         // Calen
-        if (colour == null)
-        {
+        if (colour == null) {
             return "";
         }
-        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE)
-        {
+        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE) {
             return getTextFullTooltip(colour);
-        }
-        else if (BCLibConfig.useColouredLabels)
-        {
+        } else if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
             return COLOUR_SPECIAL_START + Integer.toHexString(colour.getId())//
                     + getTextFormatForBlack(formatColour) + LocaleUtil.localizeColour(colour) + ChatFormatting.RESET;
-        }
-        else
-        {
+        } else {
             return LocaleUtil.localizeColour(colour);
         }
     }
 
-    public static MutableComponent getTextFullTooltipSpecialComponent(MutableComponent base, DyeColor colour)
-    {
-        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE)
-        {
+    public static MutableComponent getTextFullTooltipSpecialComponent(MutableComponent base, DyeColor colour) {
+        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE) {
             return getTextFullTooltipComponent(base, colour);
-        }
-        else if (BCLibConfig.useColouredLabels)
-        {
+        } else if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
             return base.append(new TextComponent(COLOUR_SPECIAL_START + Integer.toHexString(colour.getId())//
                     + getTextFormatForBlack(formatColour))).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour))).append(new TextComponent(ChatFormatting.RESET.toString()));
-        }
-        else
-        {
+        } else {
             return base.append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)));
         }
     }
 
-    public static MutableComponent getTextFullTooltipSpecialComponent(DyeColor colour)
-    {
+    public static MutableComponent getTextFullTooltipSpecialComponent(DyeColor colour) {
         // Calen
-        if (colour == null)
-        {
+        if (colour == null) {
             return new TextComponent("");
         }
-        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE)
-        {
+        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE) {
             return getTextFullTooltipComponent(colour);
-        }
-        else if (BCLibConfig.useColouredLabels)
-        {
+        } else if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
             return new TextComponent(COLOUR_SPECIAL_START + Integer.toHexString(colour.getId()) + getTextFormatForBlack(formatColour))
                     .append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour))).append(new TextComponent(ChatFormatting.RESET.toString()));
-        }
-        else
-        {
+        } else {
             return new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour));
         }
     }
 
-    public static MutableComponent getTextFullTooltipSpecialComponent(DyeColor colour, MutableComponent after)
-    {
-        if (colour == null)
-        {
+    public static MutableComponent getTextFullTooltipSpecialComponent(DyeColor colour, MutableComponent after) {
+        if (colour == null) {
             return after;
         }
-        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE)
-        {
+        if (colour == DyeColor.BLACK || colour == DyeColor.BLUE) {
             return getTextFullTooltipComponent(colour, after);
-        }
-        else if (BCLibConfig.useColouredLabels)
-        {
+        } else if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
             return new TextComponent(COLOUR_SPECIAL_START + Integer.toHexString(colour.getId())//
                     + getTextFormatForBlack(formatColour))
                     .append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
                     .append(new TextComponent(" " + ChatFormatting.RESET.toString())).append(after);
-        }
-        else
-        {
+        } else {
             return new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)).append(after);
         }
     }
@@ -370,31 +312,23 @@ public class ColourUtil
      * {@link BCLibConfig#useColouredLabels} is true then this will make prefix the string with an appropriate
      * {@link ChatFormatting} colour, and postfixed with {@link ChatFormatting#RESET}
      */
-    public static String getTextFullTooltip(Direction face)
-    {
-        if (BCLibConfig.useColouredLabels)
-        {
+    public static String getTextFullTooltip(Direction face) {
+        if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertFaceToTextFormat(face);
             return formatColour.toString() + getTextFormatForBlack(formatColour) + LocaleUtil.localizeFacing(face)
                     + ChatFormatting.RESET;
-        }
-        else
-        {
+        } else {
             return LocaleUtil.localizeFacing(face);
         }
     }
 
     // Calen
-    public static Component getTextFullTooltipComponent(Direction face)
-    {
-        if (BCLibConfig.useColouredLabels)
-        {
+    public static Component getTextFullTooltipComponent(Direction face) {
+        if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertFaceToTextFormat(face);
             return new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour)).append(LocaleUtil.localizeFacingComponent(face))
                     .append(new TextComponent(ChatFormatting.RESET.toString()));
-        }
-        else
-        {
+        } else {
             return LocaleUtil.localizeFacingComponent(face);
         }
     }
@@ -403,21 +337,14 @@ public class ColourUtil
      * Returns a {@link ChatFormatting} colour that will display correctly on a black background, so it won't use any
      * of the darker colours (as they will be difficult to see).
      */
-    public static ChatFormatting getTextFormatForBlack(ChatFormatting in)
-    {
-        if (in.isColor())
-        {
-            if (BCLibConfig.useHighContrastLabelColours)
-            {
+    public static ChatFormatting getTextFormatForBlack(ChatFormatting in) {
+        if (in.isColor()) {
+            if (BCLibConfig.useHighContrastLabelColours) {
                 return REPLACE_FOR_BLACK_HIGH_CONTRAST[in.ordinal()];
-            }
-            else
-            {
+            } else {
                 return REPLACE_FOR_BLACK[in.ordinal()];
             }
-        }
-        else
-        {
+        } else {
             return in;
         }
     }
@@ -426,21 +353,14 @@ public class ColourUtil
      * Returns a {@link ChatFormatting} colour that will display correctly on a white background, so it won't use any
      * of the lighter colours (as they will be difficult to see).
      */
-    public static ChatFormatting getTextFormatForWhite(ChatFormatting in)
-    {
-        if (in.isColor())
-        {
-            if (BCLibConfig.useHighContrastLabelColours)
-            {
+    public static ChatFormatting getTextFormatForWhite(ChatFormatting in) {
+        if (in.isColor()) {
+            if (BCLibConfig.useHighContrastLabelColours) {
                 return REPLACE_FOR_WHITE_HIGH_CONTRAST[in.ordinal()];
-            }
-            else
-            {
+            } else {
                 return REPLACE_FOR_WHITE[in.ordinal()];
             }
-        }
-        else
-        {
+        } else {
             return in;
         }
     }
@@ -449,8 +369,7 @@ public class ColourUtil
      * Converts an {@link DyeColor} into an equivalent {@link ChatFormatting} for display.
      */
 //    public static ChatFormatting convertColourToTextFormat(DyeColor colour)
-    public static ChatFormatting convertColourToTextFormat(@Nullable DyeColor colour)
-    {
+    public static ChatFormatting convertColourToTextFormat(@Nullable DyeColor colour) {
 //        return COLOUR_TO_FORMAT[colour.ordinal()];
         // Calen
         return colour == null ? null : COLOUR_TO_FORMAT[colour.ordinal()];
@@ -459,13 +378,11 @@ public class ColourUtil
     /**
      * Converts an {@link Direction} into an equivalent {@link ChatFormatting} for display.
      */
-    public static ChatFormatting convertFaceToTextFormat(Direction face)
-    {
+    public static ChatFormatting convertFaceToTextFormat(Direction face) {
         return FACE_TO_FORMAT[face.ordinal()];
     }
 
-    public static int swapArgbToAbgr(int argb)
-    {
+    public static int swapArgbToAbgr(int argb) {
         int a = (argb >> 24) & 0xFF;
         int r = (argb >> 16) & 0xFF;
         int g = (argb >> 8) & 0xFF;
@@ -473,46 +390,32 @@ public class ColourUtil
         return (a << 24) | (b << 16) | (g << 8) | r;
     }
 
-    public static DyeColor getNext(DyeColor colour)
-    {
+    public static DyeColor getNext(DyeColor colour) {
         int ord = colour.ordinal() + 1;
         return COLOURS[ord & 15];
     }
 
-    public static DyeColor getNextOrNull(@Nullable DyeColor colour)
-    {
-        if (colour == null)
-        {
+    public static DyeColor getNextOrNull(@Nullable DyeColor colour) {
+        if (colour == null) {
             return COLOURS[0];
-        }
-        else if (colour == COLOURS[COLOURS.length - 1])
-        {
+        } else if (colour == COLOURS[COLOURS.length - 1]) {
             return null;
-        }
-        else
-        {
+        } else {
             return getNext(colour);
         }
     }
 
-    public static DyeColor getPrev(DyeColor colour)
-    {
+    public static DyeColor getPrev(DyeColor colour) {
         int ord = colour.ordinal() + 16 - 1;
         return COLOURS[ord & 15];
     }
 
-    public static DyeColor getPrevOrNull(@Nullable DyeColor colour)
-    {
-        if (colour == null)
-        {
+    public static DyeColor getPrevOrNull(@Nullable DyeColor colour) {
+        if (colour == null) {
             return COLOURS[COLOURS.length - 1];
-        }
-        else if (colour == COLOURS[0])
-        {
+        } else if (colour == COLOURS[0]) {
             return null;
-        }
-        else
-        {
+        } else {
             return getPrev(colour);
         }
     }
@@ -521,24 +424,20 @@ public class ColourUtil
      * Similar to {@link ChatFormatting#stripFormatting(String)}, but also removes every special char
      * that {@link #getTextFullTooltipSpecial(DyeColor)} can add.
      */
-    public static String stripAllFormatCodes(String string)
-    {
+    public static String stripAllFormatCodes(String string) {
         return ALL_FORMAT_MATCHER.matcher(string).replaceAll("");
     }
 
     // Calen
-    public static ItemStack addColorTagToStack(ItemStack stack, DyeColor colour)
-    {
+    public static ItemStack addColorTagToStack(ItemStack stack, DyeColor colour) {
         CompoundTag tag = new CompoundTag();
         tag.putString("colour", colour.getName());
         stack.setTag(tag);
         return stack;
     }
 
-    public static ItemStack addColorTagToStack(ItemStack stack, int colour)
-    {
-        if (colour >= 0 && colour < 16)
-        {
+    public static ItemStack addColorTagToStack(ItemStack stack, int colour) {
+        if (colour >= 0 && colour < 16) {
             CompoundTag tag = new CompoundTag();
             tag.putString("colour", DyeColor.byId(colour).getName());
             stack.setTag(tag);
@@ -548,20 +447,14 @@ public class ColourUtil
 
     // Colors: 0->no color 1-15->
     @Nullable
-    public static DyeColor getStackColourFromTag(ItemStack stack)
-    {
+    public static DyeColor getStackColourFromTag(ItemStack stack) {
         CompoundTag tag = stack.getTag();
-        if (tag != null)
-        {
-            if (tag.contains("colour"))
-            {
+        if (tag != null) {
+            if (tag.contains("colour")) {
                 DyeColor colour = DyeColor.byName(tag.getString("colour"), null);
-                if (colour != null)
-                {
+                if (colour != null) {
                     return colour;
-                }
-                else
-                {
+                } else {
                     throw new RuntimeException("Invalid colour!");
                 }
             }
@@ -570,8 +463,7 @@ public class ColourUtil
     }
 
     @Nonnull
-    public static int getStackColourIdFromTag(ItemStack stack)
-    {
+    public static int getStackColourIdFromTag(ItemStack stack) {
         DyeColor colour = getStackColourFromTag(stack);
         return colour == null ? -1 : colour.getId();
     }

@@ -12,16 +12,14 @@ import net.minecraftforge.fluids.FluidStack;
 import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
-public class FuelRecipeBuilder
-{
+public class FuelRecipeBuilder {
     public final FluidStack fluid;
     public final long powerPerCycle;
     public final int totalBurningTime;
     public final boolean dirty;
     public final FluidStack residue;
 
-    private FuelRecipeBuilder(FluidStack fluid, long powerPerCycle, int totalBurningTime, boolean dirty, FluidStack residue)
-    {
+    private FuelRecipeBuilder(FluidStack fluid, long powerPerCycle, int totalBurningTime, boolean dirty, FluidStack residue) {
         this.fluid = fluid;
         this.powerPerCycle = powerPerCycle;
         this.totalBurningTime = totalBurningTime;
@@ -29,59 +27,49 @@ public class FuelRecipeBuilder
         this.residue = residue;
     }
 
-    public static FuelRecipeBuilder fuel(FluidStack fluid, long powerPerCycle, int totalBurningTime)
-    {
+    public static FuelRecipeBuilder fuel(FluidStack fluid, long powerPerCycle, int totalBurningTime) {
         return new FuelRecipeBuilder(fluid, powerPerCycle, totalBurningTime, false, StackUtil.EMPTY_FLUID);
     }
 
-    public static FuelRecipeBuilder dirtyFuel(FluidStack fluid, long powerPerCycle, int totalBurningTime, FluidStack residue)
-    {
+    public static FuelRecipeBuilder dirtyFuel(FluidStack fluid, long powerPerCycle, int totalBurningTime, FluidStack residue) {
         return new FuelRecipeBuilder(fluid, powerPerCycle, totalBurningTime, true, residue);
     }
 
-    public void save(Consumer<FinishedRecipe> consumer, String name)
-    {
+    public void save(Consumer<FinishedRecipe> consumer, String name) {
         consumer.accept(new FuelRecipeBuilder.FuelRecipeResult(name));
     }
 
-    class FuelRecipeResult implements FinishedRecipe
-    {
+    class FuelRecipeResult implements FinishedRecipe {
         private final String name;
 
-        public FuelRecipeResult(String name)
-        {
+        public FuelRecipeResult(String name) {
             this.name = name;
         }
 
         @Override
-        public void serializeRecipeData(JsonObject json)
-        {
+        public void serializeRecipeData(JsonObject json) {
             FuelRecipeSerializer.toJson(FuelRecipeBuilder.this, json);
         }
 
         @Override
-        public ResourceLocation getId()
-        {
-            return new ResourceLocation(BCEnergy.MOD_ID, "fuel/" + name);
+        public ResourceLocation getId() {
+            return new ResourceLocation(BCEnergy.MODID, "fuel/" + name);
         }
 
         @Override
-        public RecipeSerializer<?> getType()
-        {
+        public RecipeSerializer<?> getType() {
             return FuelRecipeSerializer.INSTANCE;
         }
 
         @Nullable
         @Override
-        public JsonObject serializeAdvancement()
-        {
+        public JsonObject serializeAdvancement() {
             return null;
         }
 
         @Nullable
         @Override
-        public ResourceLocation getAdvancementId()
-        {
+        public ResourceLocation getAdvancementId() {
             return null;
         }
     }

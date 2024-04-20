@@ -18,32 +18,27 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-public class ScrollbarElement extends GuiElementSimple implements IInteractionElement
-{
+public class ScrollbarElement extends GuiElementSimple implements IInteractionElement {
     private static final int HEIGHT = 14;
     private final GuiIcon background, scroller;
     private int pos, len;
     private boolean isClicking;
 
-    public ScrollbarElement(BuildCraftGui gui, IGuiPosition parent, int height, GuiIcon background, GuiIcon scroller)
-    {
+    public ScrollbarElement(BuildCraftGui gui, IGuiPosition parent, int height, GuiIcon background, GuiIcon scroller) {
         super(gui, new GuiRectangle(0, 0, 6, height).offset(parent));
         this.background = background;
         this.scroller = scroller;
     }
 
     @Override
-    public void drawBackground(float partialTicks, PoseStack poseStack)
-    {
-        if (len > 0)
-        {
+    public void drawBackground(float partialTicks, PoseStack poseStack) {
+        if (len > 0) {
             background.drawAt(this, poseStack);
             scroller.drawAt(this.offset(0, pos * (getHeight() - HEIGHT + 2) / len), poseStack);
         }
     }
 
-    private void updatePositionFromMouse()
-    {
+    private void updatePositionFromMouse() {
         double h = getHeight();
         setPosition(((gui.mouse.getY() - getY()) * len + (h / 2)) / h);
     }
@@ -52,12 +47,9 @@ public class ScrollbarElement extends GuiElementSimple implements IInteractionEl
      * This is called EVEN IF the mouse is not inside your width and height!
      */
     @Override
-    public void onMouseClicked(int button)
-    {
-        if (contains(gui.mouse))
-        {
-            if (button == 0)
-            {
+    public void onMouseClicked(int button) {
+        if (contains(gui.mouse)) {
+            if (button == 0) {
                 isClicking = true;
                 updatePositionFromMouse();
             }
@@ -69,10 +61,8 @@ public class ScrollbarElement extends GuiElementSimple implements IInteractionEl
      */
     @Override
 //    public void onMouseDragged(int button, long ticksSinceClick)
-    public void onMouseDragged(int button)
-    {
-        if (isClicking && button == 0)
-        {
+    public void onMouseDragged(int button) {
+        if (isClicking && button == 0) {
             updatePositionFromMouse();
         }
     }
@@ -81,27 +71,22 @@ public class ScrollbarElement extends GuiElementSimple implements IInteractionEl
      * This is called EVEN IF the mouse is not inside your width and height!
      */
     @Override
-    public void onMouseReleased(int button)
-    {
-        if (isClicking && button == 0)
-        {
+    public void onMouseReleased(int button) {
+        if (isClicking && button == 0) {
             updatePositionFromMouse();
             isClicking = false;
         }
     }
 
-    public int getPosition()
-    {
+    public int getPosition() {
         return pos;
     }
 
-    public void setPosition(double pos)
-    {
+    public void setPosition(double pos) {
         this.pos = MathUtil.clamp(pos, 0, len);
     }
 
-    public void setLength(int len)
-    {
+    public void setLength(int len) {
         this.len = len;
         setPosition(this.pos);
     }

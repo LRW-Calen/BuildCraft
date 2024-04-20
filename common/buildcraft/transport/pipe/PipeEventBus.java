@@ -66,7 +66,8 @@ public class PipeEventBus {
                 MethodHandle mh;
                 try {
                     mh = MethodHandles.publicLookup().unreflect(m);
-                } catch (IllegalAccessException e) {
+                }
+                catch (IllegalAccessException e) {
                     throw new IllegalStateException("Cannot annotate " + m + " with @PipeEventHandler as there was a problem with it!", e);
                 }
                 boolean isStatic = Modifier.isStatic(m.getModifiers());
@@ -97,7 +98,7 @@ public class PipeEventBus {
     }
 
     /** Sends this event to all of the registered handlers.
-     * 
+     *
      * @return True if at least 1 event handler was called, 0 if no handlers were called. */
     public boolean fireEvent(PipeEvent event) {
         boolean handled = false;
@@ -105,7 +106,7 @@ public class PipeEventBus {
             String error = event.checkStateForErrors();
             if (error != null) {
                 throw new IllegalArgumentException("The event " + event.getClass() + " was in an invalid state when firing! This is DEFINITELY a bug!\n"//
-                    + "(error = " + error + ")");
+                        + "(error = " + error + ")");
             }
         }
         for (LocalHandler handler : currentHandlers) {
@@ -114,7 +115,7 @@ public class PipeEventBus {
                 String error = event.checkStateForErrors();
                 if (error != null) {
                     throw new IllegalStateException("The event " + event.getClass() + " was in an invalid state after being handled by "//
-                        + handler.methodName + " (error = " + error + ")");
+                            + handler.methodName + " (error = " + error + ")");
                 }
             }
         }
@@ -173,7 +174,8 @@ public class PipeEventBus {
                 try {
                     handle.invoke(event);
                     return true;
-                } catch (Throwable e) {
+                }
+                catch (Throwable e) {
                     throw new IllegalStateException(e);
                 }
             }

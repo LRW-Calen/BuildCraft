@@ -9,7 +9,10 @@ import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.DispensibleContainerItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
@@ -19,6 +22,7 @@ import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -28,41 +32,35 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BCEnergyFluids
-{
-    private static final DeferredRegister<Fluid> fluidRegister = DeferredRegister.create(ForgeRegistries.FLUIDS, BCEnergy.MOD_ID);
-    private static final DeferredRegister<Block> blockRegister = DeferredRegister.create(ForgeRegistries.BLOCKS, BCEnergy.MOD_ID);
-    private static final DeferredRegister<Item> itemRegister = DeferredRegister.create(ForgeRegistries.ITEMS, BCEnergy.MOD_ID);
+public class BCEnergyFluids {
+    private static final DeferredRegister<Fluid> fluidRegister = DeferredRegister.create(ForgeRegistries.FLUIDS, BCEnergy.MODID);
+    private static final DeferredRegister<Block> blockRegister = DeferredRegister.create(ForgeRegistries.BLOCKS, BCEnergy.MODID);
+    private static final DeferredRegister<Item> itemRegister = DeferredRegister.create(ForgeRegistries.ITEMS, BCEnergy.MODID);
 
 
-    public static void register(IEventBus bus)
-    {
+    static {
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         blockRegister.register(bus);
         fluidRegister.register(bus);
         itemRegister.register(bus);
     }
 
-    public static List<RegistryObject<BCFluid.Source>> getAllStill()
-    {
+    public static List<RegistryObject<BCFluid.Source>> getAllStill() {
         return Collections.unmodifiableList(allStill);
     }
 
-    public static List<RegistryObject<BCFluid.Flowing>> getAllFlow()
-    {
+    public static List<RegistryObject<BCFluid.Flowing>> getAllFlow() {
         return Collections.unmodifiableList(allFlow);
     }
 
-    private static final DispenseItemBehavior BUCKET_DISPENSE_BEHAVIOR = new DefaultDispenseItemBehavior()
-    {
+    private static final DispenseItemBehavior BUCKET_DISPENSE_BEHAVIOR = new DefaultDispenseItemBehavior() {
         @Nonnull
         @Override
-        public ItemStack execute(@Nonnull BlockSource source, @Nonnull ItemStack stack)
-        {
+        public ItemStack execute(@Nonnull BlockSource source, @Nonnull ItemStack stack) {
             Level world = source.getLevel();
             DispensibleContainerItem bucket = (DispensibleContainerItem) stack.getItem();
             BlockPos pos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
-            if (bucket.emptyContents(null, world, pos, null))
-            {
+            if (bucket.emptyContents(null, world, pos, null)) {
                 bucket.checkExtraContent(null, world, stack, pos);
                 return new ItemStack(Items.BUCKET);
             }
@@ -70,10 +68,8 @@ public class BCEnergyFluids
         }
     };
 
-    public static void registerBucketDispenserBehavior()
-    {
-        for (RegistryObject<BCFluid.Source> fluid : getAllStill())
-        {
+    public static void registerBucketDispenserBehavior() {
+        for (RegistryObject<BCFluid.Source> fluid : getAllStill()) {
             DispenserBlock.registerBehavior(fluid.get().getBucket(), BUCKET_DISPENSE_BEHAVIOR);
         }
     }
@@ -134,10 +130,8 @@ public class BCEnergyFluids
     public static String HEAT_TRANSLATION_PREFIX = "fluid.";
     public static boolean allowGas = true;
 
-    public static void preInit()
-    {
-        if (BCModules.FACTORY.isLoaded())
-        {
+    public static void preInit() {
+        if (BCModules.FACTORY.isLoaded()) {
             int index = 0;
 
             // Add all of the fluid states
@@ -151,9 +145,7 @@ public class BCEnergyFluids
             fuelLight = defineFluids(data[index++], "fuel_light");
             fuelMixedLight = defineFluids(data[index++], "fuel_mixed_light");
             fuelGaseous = defineFluids(data[index++], "fuel_gaseous");
-        }
-        else
-        {
+        } else {
             crudeOil = new RegistryObject[]{defineFluid(data[0], 0, "oil")};
             oilResidue = new RegistryObject[0];
             oilHeavy = new RegistryObject[0];
@@ -167,18 +159,15 @@ public class BCEnergyFluids
         }
     }
 
-    private static RegistryObject<BCFluid.Source>[] defineFluids(int[] data, String name)
-    {
+    private static RegistryObject<BCFluid.Source>[] defineFluids(int[] data, String name) {
         RegistryObject<BCFluid.Source>[] arr = new RegistryObject[3];
-        for (int h = 0; h < 3; h++)
-        {
+        for (int h = 0; h < 3; h++) {
             arr[h] = defineFluid(data, h, name);
         }
         return arr;
     }
 
-    private static RegistryObject<BCFluid.Source> defineFluid(int[] data, int heat, String name)
-    {
+    private static RegistryObject<BCFluid.Source> defineFluid(int[] data, int heat, String name) {
         final int density = data[0];
         final int baseViscosity = data[1];
         final int boilPoint = data[2];
@@ -229,8 +218,7 @@ public class BCEnergyFluids
                 // 1.18.2 here is decrease, not range
                 .levelDecreasePerBlock(8 / Math.min((baseQuanta + (baseQuanta > 6 ? heat : heat / 2)) / 2, 8));
 //        if (boilAdjustedDensity < 0)
-        if (boilAdjustedDensity < 0 && allowGas)
-        {
+        if (boilAdjustedDensity < 0 && allowGas) {
             attributeBuilder.gaseous();
         }
         RegistryObject<BCFluid.Source> still = fluidRegister.register(
@@ -306,8 +294,7 @@ public class BCEnergyFluids
     }
 
     //    private static MapColor getMapColor(int color)
-    private static MaterialColor getMapColor(int color)
-    {
+    private static MaterialColor getMapColor(int color) {
 //        MapColor bestMapColor = MapColor.BLACK;
         MaterialColor bestMapColor = MaterialColor.COLOR_BLACK;
         int currentDifference = Integer.MAX_VALUE;
@@ -317,11 +304,9 @@ public class BCEnergyFluids
         int b = color & 0xFF;
 
 //        for (MapColor mapColor : MapColor.COLORS)
-        for (MaterialColor mapColor : MaterialColor.MATERIAL_COLORS)
-        {
+        for (MaterialColor mapColor : MaterialColor.MATERIAL_COLORS) {
 //            if (mapColor == null || mapColor.colorValue == 0)
-            if (mapColor == null || mapColor.col == 0)
-            {
+            if (mapColor == null || mapColor.col == 0) {
                 continue;
             }
 //            int mr = (mapColor.colorValue >> 16) & 0xFF;
@@ -337,8 +322,7 @@ public class BCEnergyFluids
 
             int difference = dr * dr + dg * dg + db * db;
 
-            if (difference < currentDifference)
-            {
+            if (difference < currentDifference) {
                 currentDifference = difference;
                 bestMapColor = mapColor;
             }

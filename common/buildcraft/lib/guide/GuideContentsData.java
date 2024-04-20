@@ -7,8 +7,7 @@ import buildcraft.lib.misc.ModUtil;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class GuideContentsData
-{
+public class GuideContentsData {
 
     public final @Nullable GuideBook book;
 

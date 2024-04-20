@@ -22,8 +22,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public class PositionUtil
-{
+public class PositionUtil {
     /** @return The exact direction from the first position to the second. Returns null if more than one axis value is
      *         different, or they are the same position. */
     @Nullable
@@ -381,7 +380,7 @@ public class PositionUtil
 
     /** Calculates the total number of blocks on the edge. This is identical to (but faster than) calling
      * {@link #getAllOnEdge(BlockPos, BlockPos)}.{@link List#size() size()}
-     * 
+     *
      * @return The size of the list returned by {@link #getAllOnEdge(BlockPos, BlockPos)}. */
     public static int getCountOnEdge(BlockPos min, BlockPos max) {
 
@@ -562,17 +561,17 @@ public class PositionUtil
 
     public static BlockPos randomBlockPos(Random rand, BlockPos size) {
         return new BlockPos(//
-            rand.nextInt(size.getX()), //
-            rand.nextInt(size.getY()), //
-            rand.nextInt(size.getZ())//
+                rand.nextInt(size.getX()), //
+                rand.nextInt(size.getY()), //
+                rand.nextInt(size.getZ())//
         );
     }
 
     public static BlockPos randomBlockPos(Random rand, BlockPos min, BlockPos max) {
         return new BlockPos(//
-            min.getX() + rand.nextInt(max.getX() - min.getX()), //
-            min.getY() + rand.nextInt(max.getY() - min.getY()), //
-            min.getZ() + rand.nextInt(max.getZ() - min.getZ())//
+                min.getX() + rand.nextInt(max.getX() - min.getX()), //
+                min.getY() + rand.nextInt(max.getY() - min.getY()), //
+                min.getZ() + rand.nextInt(max.getZ() - min.getZ())//
         );
     }
 }

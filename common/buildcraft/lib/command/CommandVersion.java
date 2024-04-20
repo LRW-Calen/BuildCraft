@@ -2,27 +2,18 @@ package buildcraft.lib.command;
 
 import buildcraft.api.core.BCLog;
 import buildcraft.lib.BCLib;
-import buildcraft.lib.script.ReloadableRegistryManager;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.commands.Commands;
-import net.minecraft.commands.arguments.coordinates.BlockPosArgument;
 import net.minecraft.network.chat.Style;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraftforge.forgespi.language.IModInfo;
 import net.minecraftforge.versions.forge.ForgeVersion;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 
 //public class CommandVersion extends CommandBase
-public class CommandVersion extends BCSubCommandBase
-{
-    CommandVersion()
-    {
+public class CommandVersion extends BCSubCommandBase {
+    CommandVersion() {
         super(
                 "version",
                 "command.buildcraft.buildcraft.version.help",
@@ -30,8 +21,7 @@ public class CommandVersion extends BCSubCommandBase
                 (arg) ->
                 {
                     Entity sender = arg.getSource().getEntity();
-                    if (sender == null)
-                    {
+                    if (sender == null) {
                         return 0;
                     }
 //                    ForgeVersion.CheckResult result = ForgeVersion.getResult(BCLib.MOD_CONTAINER);
@@ -64,8 +54,7 @@ public class CommandVersion extends BCSubCommandBase
 //                    BCLog.logger.info("[lib.command.version] Result changes = " + result.changes);
 
                     String currentVersion = BCLib.VERSION;
-                    if (currentVersion.startsWith("$"))
-                    {
+                    if (currentVersion.startsWith("$")) {
                         currentVersion = "?.??.??";
 //                        style.setColor(ChatFormatting.GRAY);
                         style.withColor(ChatFormatting.GRAY);
@@ -76,8 +65,7 @@ public class CommandVersion extends BCSubCommandBase
 //                    sender.sendMessage(new TextComponentTranslation("command.buildcraft.version", textArgs).setStyle(style));
                     sender.sendMessage(new TranslatableComponent("command.buildcraft.version", textArgs).setStyle(style), Util.NIL_UUID);
 
-                    if (currentVersion.contains("-pre"))
-                    {
+                    if (currentVersion.contains("-pre")) {
 //                        sender.sendMessage(new TextComponentTranslation("command.buildcraft.version.prerelease"));
                         sender.sendMessage(new TranslatableComponent("command.buildcraft.version.prerelease"), Util.NIL_UUID);
                     }

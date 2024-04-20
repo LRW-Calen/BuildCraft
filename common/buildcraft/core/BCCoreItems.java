@@ -17,8 +17,7 @@ import java.util.Map;
  * Internal implementation for the API items
  */
 @SuppressWarnings("unused")
-public final class BCCoreItems
-{
+public final class BCCoreItems {
     public static Item.Properties BC_CORE_ITEM_PROP_DEFAULT =
             new Item.Properties()
 //                    .tab(BCCreativeTab.BC_MAIN_TAB)
@@ -51,7 +50,7 @@ public final class BCCoreItems
                     .rarity(Rarity.COMMON);
 
 
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCCore.MOD_ID);
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCCore.MODID);
 
     public static RegistryObject<ItemWrench_Neptune> wrench;
     public static RegistryObject<ItemBC_Neptune> gearWood;
@@ -59,7 +58,7 @@ public final class BCCoreItems
     public static RegistryObject<ItemBC_Neptune> gearIron;
     public static RegistryObject<ItemBC_Neptune> gearGold;
     public static RegistryObject<ItemBC_Neptune> gearDiamond;
-//    public static RegistryObject<ItemPaintbrush_BC8> paintbrush;
+    //    public static RegistryObject<ItemPaintbrush_BC8> paintbrush;
     public static RegistryObject<ItemPaintbrush_BC8> paintbrushClean;
     public static RegistryObject<ItemPaintbrush_BC8> paintbrushWhite;
     public static RegistryObject<ItemPaintbrush_BC8> paintbrushOrange;
@@ -86,8 +85,7 @@ public final class BCCoreItems
 
     public static Map<DyeColor, RegistryObject<ItemPaintbrush_BC8>> colourBrushMap = new HashMap<>();
 
-    public static void preInit()
-    {
+    public static void preInit() {
         wrench = HELPER.addItem("item.wrench", BC_CORE_ITEM_PROP_NO_STACK.setNoRepair(), ItemWrench_Neptune::new);
         gearWood = HELPER.addItem("item.gear.wood", BC_CORE_ITEM_PROP_DEFAULT, ItemBC_Neptune::new);
         gearStone = HELPER.addItem("item.gear.stone", BC_CORE_ITEM_PROP_DEFAULT, ItemBC_Neptune::new);
@@ -117,15 +115,13 @@ public final class BCCoreItems
         markerConnector = HELPER.addItem("item.marker_connector", BC_CORE_ITEM_PROP_DEFAULT, ItemMarkerConnector::new);
         volumeBox = HELPER.addItem("item.volume_box", BC_CORE_ITEM_PROP_DEFAULT, ItemVolumeBox::new);
         fragileFluidShard = HELPER.addItem("item.fragile_fluid_shard", FRAGILE_FLUID_SHARD_PROPERTIES, ItemFragileFluidContainer::new);
-        if (BCLib.DEV)
-        {
+        if (BCLib.DEV) {
             goggles = HELPER.addItem("item.goggles", HELMET_PROPERTIES, ItemGoggles::new);
         }
         FluidItemDrops.item = fragileFluidShard;
     }
 
-    private static RegistryObject<ItemPaintbrush_BC8> regPaintBrush(DyeColor colour)
-    {
+    private static RegistryObject<ItemPaintbrush_BC8> regPaintBrush(DyeColor colour) {
         RegistryObject<ItemPaintbrush_BC8> brush = HELPER.addItem("item.paintbrush." + (colour == null ? "clean" : colour.getName()), BC_CORE_ITEM_PROP_NO_STACK, (idBC, prop) -> new ItemPaintbrush_BC8(idBC, prop, colour));
         colourBrushMap.put(colour, brush);
         return brush;

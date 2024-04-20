@@ -15,8 +15,7 @@ import buildcraft.lib.expression.node.value.NodeUpdatable;
 import java.util.Arrays;
 import java.util.List;
 
-public class ModelVariableData
-{
+public class ModelVariableData {
     private static int currentBakeId = 0;
 
     private int bakeId = -1;

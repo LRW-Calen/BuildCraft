@@ -11,24 +11,19 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nullable;
 
-public enum PipeBlockColours implements BlockColor
-{
+public enum PipeBlockColours implements BlockColor {
     INSTANCE;
 
     @Override
 //    public int colorMultiplier(BlockState state, @Nullable IBlockAccess world, @Nullable BlockPos pos, int tintIndex) {
-    public int getColor(BlockState state, @Nullable BlockAndTintGetter world, @Nullable BlockPos pos, int tintIndex)
-    {
-        if (world != null && pos != null)
-        {
+    public int getColor(BlockState state, @Nullable BlockAndTintGetter world, @Nullable BlockPos pos, int tintIndex) {
+        if (world != null && pos != null) {
             BlockEntity tile = world.getBlockEntity(pos);
-            if (tile instanceof TilePipeHolder)
-            {
+            if (tile instanceof TilePipeHolder) {
                 TilePipeHolder tilePipeHolder = (TilePipeHolder) tile;
                 Direction side = Direction.from3DDataValue(tintIndex % Direction.values().length);
                 PipePluggable pluggable = tilePipeHolder.getPluggable(side);
-                if (pluggable != null)
-                {
+                if (pluggable != null) {
                     return pluggable.getBlockColor(tintIndex / 6);
                 }
             }

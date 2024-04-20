@@ -18,6 +18,7 @@
 
 package buildcraft.lib.block;
 
+import buildcraft.lib.tile.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -34,15 +35,13 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import buildcraft.lib.tile.ITickable;
 
 /**
  * Base class for blocks that have a {@link BlockEntity}.
  *
  * @param <T> The type of {@link BlockEntity} or this block.
  */
-public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBCBase_Neptune implements EntityBlock
-{
+public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBCBase_Neptune implements EntityBlock {
 
     public BlockBCTile_Neptune(String idBC, BlockBehaviour.Properties props)
 //    public BlockBCTile_Neptune(String idBC, BlockBehaviour.Properties props, Class<T> tileEntityClass)
@@ -51,17 +50,14 @@ public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBC
     }
 
     @Override
-    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving)
-    {
+    public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         // Calen
-        if (!TileBC_Neptune.shouldRefresh(world, pos, state, newState))
-        {
+        if (!TileBC_Neptune.shouldRefresh(world, pos, state, newState)) {
             return;
         }
         // BC
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileBC_Neptune)
-        {
+        if (tile instanceof TileBC_Neptune) {
             TileBC_Neptune tileBC = (TileBC_Neptune) tile;
             tileBC.onRemove();
         }
@@ -69,8 +65,7 @@ public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBC
     }
 
     @Override
-    public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int eventID, int eventParam)
-    {
+    public boolean triggerEvent(BlockState state, Level level, BlockPos pos, int eventID, int eventParam) {
         super.triggerEvent(state, level, pos, eventID, eventParam);
         final BlockEntity blockEntity = level.getBlockEntity(pos);
         return blockEntity != null ? blockEntity.triggerEvent(eventID, eventParam) : false;
@@ -103,11 +98,9 @@ public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBC
     // Calen: here the block has been set to the new one and the tileEntity has been created
     @Override
     public void setPlacedBy(Level world, BlockPos pos, BlockState state, LivingEntity placer,
-                            ItemStack stack)
-    {
+                            ItemStack stack) {
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileBC_Neptune)
-        {
+        if (tile instanceof TileBC_Neptune) {
             TileBC_Neptune tileBC = (TileBC_Neptune) tile;
             tileBC.onPlacedBy(placer, stack);
         }
@@ -117,11 +110,9 @@ public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBC
     @Override
 //    public boolean onBlockActivated(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand,
 //                                    Direction facing, float hitX, float hitY, float hitZ)
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileBC_Neptune)
-        {
+        if (tile instanceof TileBC_Neptune) {
             TileBC_Neptune tileBC = (TileBC_Neptune) tile;
             return tileBC.onActivated(player, hand, hitResult.getDirection(), hitResult.getBlockPos().getX(), hitResult.getBlockPos().getY(), hitResult.getBlockPos().getZ());
         }
@@ -129,27 +120,21 @@ public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBC
     }
 
     @Override
-    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean p_60514_)
-    {
+    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos fromPos, boolean p_60514_) {
         super.neighborChanged(state, world, pos, block, fromPos, p_60514_);
         BlockEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof TileBC_Neptune tileBC)
-        {
+        if (tile instanceof TileBC_Neptune tileBC) {
             tileBC.onNeighbourBlockChanged(block, fromPos);
         }
     }
 
     // Calen
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> pBlockEntityType)
-    {
-        if (this instanceof IBlockWithTickableTE)
-        {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> pBlockEntityType) {
+        if (this instanceof IBlockWithTickableTE) {
 //            return t.getTicker(pState, pBlockEntityType);
             return (w, p, s, te) -> ((ITickable) te).update();
-        }
-        else
-        {
+        } else {
             // Calen: default in EntityBlock
             return null;
         }

@@ -17,14 +17,12 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GuiFiller extends GuiBC8<ContainerFiller>
-{
+public class GuiFiller extends GuiBC8<ContainerFiller> {
     private static final ResourceLocation LOCATION = new ResourceLocation("buildcraftbuilders:gui/filler.json");
     private static final SpriteDelegate SPRITE_PATTERN = new SpriteDelegate();
     private static final SpriteDelegate SPRITE_CONTROL_MODE = new SpriteDelegate();
 
-    public GuiFiller(ContainerFiller container, Inventory inventory, Component component)
-    {
+    public GuiFiller(ContainerFiller container, Inventory inventory, Component component) {
         super(container, LOCATION, inventory, component);
 
         BuildCraftJsonGui jsonGui = (BuildCraftJsonGui) mainGui;
@@ -36,8 +34,7 @@ public class GuiFiller extends GuiBC8<ContainerFiller>
         imageHeight = jsonGui.getSizeY();
     }
 
-    protected void preLoad(BuildCraftJsonGui json)
-    {
+    protected void preLoad(BuildCraftJsonGui json) {
 
         TypedKeyMap<String, Object> properties = json.properties;
         FunctionContext context = json.context;
@@ -70,8 +67,7 @@ public class GuiFiller extends GuiBC8<ContainerFiller>
 
     @Override
 //    public void updateScreen()
-    public void tick()
-    {
+    public void tick() {
 //        super.updateScreen();
         super.tick();
         IFillerPattern pattern = container.getPatternStatementClient().get();

@@ -58,8 +58,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     //    private GuiButtonImage recipeButton;
 //    private ImageButton recipeButton;
 
-    public GuiAutoCraftItems(ContainerAutoCraftItems container, Inventory inventory, Component component)
-    {
+    public GuiAutoCraftItems(ContainerAutoCraftItems container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -82,8 +81,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     }
 
     //    private void sendRecipe(Recipe recipe)
-    private void sendRecipe(CraftingRecipe recipe)
-    {
+    private void sendRecipe(CraftingRecipe recipe) {
         List<ItemStack> stacks = new ArrayList<>(9);
 
         int maxX = recipe instanceof IShapedRecipe ? ((IShapedRecipe) recipe).getRecipeWidth() : 3;
@@ -91,35 +89,25 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
         int offsetX = maxX == 1 ? 1 : 0;
         int offsetY = maxY == 1 ? 1 : 0;
         List<Ingredient> ingredients = recipe.getIngredients();
-        if (ingredients.isEmpty())
-        {
+        if (ingredients.isEmpty()) {
             return;
         }
-        for (int y = 0; y < 3; y++)
-        {
-            for (int x = 0; x < 3; x++)
-            {
-                if (x < offsetX || y < offsetY)
-                {
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                if (x < offsetX || y < offsetY) {
                     stacks.add(ItemStack.EMPTY);
                     continue;
                 }
                 int i = x - offsetX + (y - offsetY) * maxX;
-                if (i >= ingredients.size() || x - offsetX >= maxX)
-                {
+                if (i >= ingredients.size() || x - offsetX >= maxX) {
                     stacks.add(ItemStack.EMPTY);
-                }
-                else
-                {
+                } else {
                     Ingredient ing = ingredients.get(i);
 //                    ItemStack[] matching = ing.getMatchingStacks();
                     ItemStack[] matching = ing.getItems();
-                    if (matching.length >= 1)
-                    {
+                    if (matching.length >= 1) {
                         stacks.add(matching[0]);
-                    }
-                    else
-                    {
+                    } else {
                         stacks.add(ItemStack.EMPTY);
                     }
                 }
@@ -130,15 +118,13 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     }
 
     @Override
-    protected boolean shouldAddHelpLedger()
-    {
+    protected boolean shouldAddHelpLedger() {
         // Don't add it on the left side because it clashes with the recipe book
         return false;
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         super.initGui();
 //        widthTooNarrow = this.width < SIZE_X + 176; // Calen: moved to <init>
 //        if (recipeBook != null)
@@ -182,8 +168,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    public void updateScreen()
-    public void tick()
-    {
+    public void tick() {
 //        super.updateScreen();
         super.tick();
 //        if (recipeBook != null)
@@ -194,8 +179,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    public void drawScreen(int mouseX, int mouseY, float partialTicks)
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
-    {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 //        if (recipeBook == null)
 //        {
 ////            super.drawScreen(mouseX, mouseY, partialTicks);
@@ -232,16 +216,14 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
 
         double progress = container.tile.getProgress(partialTicks);
 
         drawProgress(RECT_PROGRESS, ICON_PROGRESS, poseStack, progress, 1);
 
-        if (hasFilters())
-        {
+        if (hasFilters()) {
 //            RenderHelper.enableGUIStandardItemLighting();
             Lighting.setupForFlatItems();
             forEachFilter((slot, filterStack) ->
@@ -268,12 +250,9 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 //                ItemStack real = slot.getStack();
                 ItemStack real = slot.getItem();
                 final GuiIcon icon;
-                if (real.isEmpty() || StackUtil.canMerge(real, filterStack))
-                {
+                if (real.isEmpty() || StackUtil.canMerge(real, filterStack)) {
                     icon = ICON_FILTER_OVERLAY_SAME;
-                }
-                else
-                {
+                } else {
                     icon = ICON_FILTER_OVERLAY_DIFFERENT;
                 }
 //                int x = slot.xPos + (int) mainGui.rootElement.getX();
@@ -287,36 +266,29 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
         }
     }
 
-    private boolean hasFilters()
-    {
+    private boolean hasFilters() {
         ItemHandlerSimple filters = container.tile.invMaterialFilter;
-        for (int s = 0; s < filters.getSlots(); s++)
-        {
+        for (int s = 0; s < filters.getSlots(); s++) {
             ItemStack filter = filters.getStackInSlot(s);
-            if (!filter.isEmpty())
-            {
+            if (!filter.isEmpty()) {
                 return true;
             }
         }
         return false;
     }
 
-    private void forEachFilter(IFilterSlotIterator iter)
-    {
+    private void forEachFilter(IFilterSlotIterator iter) {
         ItemHandlerSimple filters = container.tile.invMaterialFilter;
-        for (int s = 0; s < filters.getSlots(); s++)
-        {
+        for (int s = 0; s < filters.getSlots(); s++) {
             ItemStack filter = filters.getStackInSlot(s);
-            if (!filter.isEmpty())
-            {
+            if (!filter.isEmpty()) {
                 iter.iterate(container.materialSlots[s], filter);
             }
         }
     }
 
     @FunctionalInterface
-    private interface IFilterSlotIterator
-    {
+    private interface IFilterSlotIterator {
         void iterate(SlotBase drawSlot, ItemStack filterStack);
     }
 
@@ -336,8 +308,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
-    {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 //        if (recipeBook == null)
 //        {
 //            return super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -359,8 +330,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
 //    public boolean charTyped(char typedChar, int keyCode)
-    public boolean keyPressed(int typedChar, int keyCode, int modifiers)
-    {
+    public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
 //        if (recipeBook == null)
 //        {
 ////            super.keyTyped(typedChar, keyCode);
@@ -383,8 +353,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     }
 
     @Override
-    public boolean charTyped(char typedChar, int keyCode)
-    {
+    public boolean charTyped(char typedChar, int keyCode) {
 //        if (recipeBook == null)
 //        {
 ////            super.keyTyped(typedChar, keyCode);
@@ -407,8 +376,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    protected void handleMouseClick(Slot slot, int slotId, int mouseButton, ClickType type)
-    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type)
-    {
+    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
 //        super.handleMouseClick(slot, slotId, mouseButton, type);
         super.slotClicked(slot, slotId, mouseButton, type);
 //        if (recipeBook != null)
@@ -419,8 +387,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    protected boolean isPointInRegion(int rectX, int rectY, int rectWidth, int rectHeight, int pointX, int pointY)
-    protected boolean isHovering(int rectX, int rectY, int rectWidth, int rectHeight, double pointX, double pointY)
-    {
+    protected boolean isHovering(int rectX, int rectY, int rectWidth, int rectHeight, double pointX, double pointY) {
 //        if (recipeBook == null)
 //        {
 ////            return super.isPointInRegion(rectX, rectY, rectWidth, rectHeight, pointX, pointY);
@@ -436,8 +403,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    protected boolean hasClickedOutside(int mouseX, int mouseY, int _guiLeft, int _guiTop)
-    protected boolean hasClickedOutside(double mouseX, double mouseY, int _guiLeft, int _guiTop, int p_97761_)
-    {
+    protected boolean hasClickedOutside(double mouseX, double mouseY, int _guiLeft, int _guiTop, int p_97761_) {
 //        if (recipeBook == null)
 //        {
 ////            return super.hasClickedOutside(mouseX, mouseY, _guiLeft, _guiTop);
@@ -455,8 +421,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    public void onGuiClosed()
-    public void onClose()
-    {
+    public void onClose() {
 //        if (recipeBook != null)
 //        {
 //            recipeBook.removed();
@@ -478,12 +443,10 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    public GuiRecipeBook func_194310_f()
-    public void recipesShown(List<Recipe<?>> p_100518_)
-    {
+    public void recipesShown(List<Recipe<?>> p_100518_) {
 //        return recipeBook;
         // Calen: From RecipeBookComponent
-        for (Recipe<?> recipe : p_100518_)
-        {
+        for (Recipe<?> recipe : p_100518_) {
             this.minecraft.player.removeRecipeHighlight(recipe);
         }
     }

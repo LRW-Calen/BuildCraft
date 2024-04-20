@@ -7,34 +7,28 @@ package buildcraft.factory.tile;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.BCFactoryMenuTypes;
 import buildcraft.factory.container.ContainerAutoCraftItems;
-import buildcraft.factory.container.ContainerChute;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 //public class TileAutoWorkbenchItems extends TileAutoWorkbenchBase
-public class TileAutoWorkbenchItems extends TileAutoWorkbenchBase implements MenuProvider
-{
-    public TileAutoWorkbenchItems(BlockPos pos, BlockState blockState)
-    {
+public class TileAutoWorkbenchItems extends TileAutoWorkbenchBase implements MenuProvider {
+    public TileAutoWorkbenchItems(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.autoWorkbenchItemsTile.get(), 3, 3, pos, blockState);
     }
 
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();
     }
 
     @Nullable
     @Override
-    public ContainerAutoCraftItems createMenu(int id, Inventory inventory, Player player)
-    {
+    public ContainerAutoCraftItems createMenu(int id, Inventory inventory, Player player) {
         return new ContainerAutoCraftItems(BCFactoryMenuTypes.AUTO_WORKBENCH_ITEMS, id, player, this);
     }
 }

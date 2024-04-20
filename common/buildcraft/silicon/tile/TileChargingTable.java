@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.Nullable;
 
 public class TileChargingTable extends TileLaserTableBase {
-    public TileChargingTable(BlockPos pos, BlockState blockState)
-    {
+    public TileChargingTable(BlockPos pos, BlockState blockState) {
         super(BCSiliconBlocks.chargingTableTile.get(), pos, blockState);
     }
 
@@ -29,8 +28,7 @@ public class TileChargingTable extends TileLaserTableBase {
     // Calen added from MenuProvider
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player)
-    {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
 //        return new ContainerAssemblyTable(BCSiliconMenuTypes.CHARGING_TABLE,id,player, this);
         return null;
     }

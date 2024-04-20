@@ -9,35 +9,28 @@ import net.minecraftforge.items.SlotItemHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InventorySlotHolder
-{
+public class InventorySlotHolder {
 
     public final Slot[] slots;
 
-//    public InventorySlotHolder(Container container, IInventory inventory)
-    public InventorySlotHolder(AbstractContainerMenu container, Container inventory)
-    {
+    //    public InventorySlotHolder(Container container, IInventory inventory)
+    public InventorySlotHolder(AbstractContainerMenu container, Container inventory) {
         List<Slot> list = new ArrayList<>();
 //        for (Slot s : container.inventorySlots)
-        for (Slot s : container.slots)
-        {
+        for (Slot s : container.slots) {
 //            if (s.inventory == inventory)
-            if (s.container == inventory)
-            {
+            if (s.container == inventory) {
                 list.add(s);
             }
         }
         slots = list.toArray(new Slot[0]);
     }
 
-    public InventorySlotHolder(AbstractContainerMenu container, IItemHandler inventory)
-    {
+    public InventorySlotHolder(AbstractContainerMenu container, IItemHandler inventory) {
         List<Slot> list = new ArrayList<>();
 //        for (Slot s : container.inventorySlots)
-        for (Slot s : container.slots)
-        {
-            if (s instanceof SlotItemHandler && ((SlotItemHandler) s).getItemHandler() == inventory)
-            {
+        for (Slot s : container.slots) {
+            if (s instanceof SlotItemHandler && ((SlotItemHandler) s).getItemHandler() == inventory) {
                 list.add(s);
             }
         }

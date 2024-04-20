@@ -7,13 +7,10 @@
 package buildcraft.lib.client.guide.parts;
 
 import buildcraft.lib.client.guide.GuiGuide;
-import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.TranslatableComponent;
 
-public class GuideChapterContents extends GuideChapter
-{
-    public GuideChapterContents(GuiGuide gui)
-    {
+public class GuideChapterContents extends GuideChapter {
+    public GuideChapterContents(GuiGuide gui) {
 //        super(gui, I18n.format("buildcraft.guide.chapter.contents"));
 //        super(gui, I18n.get("buildcraft.guide.chapter.contents"));
 //        super(gui, new TranslatableComponent("buildcraft.guide.chapter.contents"));
@@ -21,14 +18,12 @@ public class GuideChapterContents extends GuideChapter
     }
 
     @Override
-    public void reset()
-    {
+    public void reset() {
         lastDrawn = EnumGuiSide.LEFT;
     }
 
     @Override
-    protected boolean onClick()
-    {
+    protected boolean onClick() {
         gui.goBackToMenu();
         return true;
     }

@@ -23,60 +23,48 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-public enum MarkdownPageLoader implements IPageLoaderText
-{
+public enum MarkdownPageLoader implements IPageLoaderText {
     INSTANCE;
 
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.markdown");
 
-    public static ItemStack loadComplexItemStack(String line)
-    {
+    public static ItemStack loadComplexItemStack(String line) {
         OptionallyDisabled<ItemStack> stackq = parseItemStack(line);
-        if (stackq.isPresent())
-        {
+        if (stackq.isPresent()) {
             return stackq.get();
         }
         BCLog.logger.warn("[lib.guide.loader.markdown] " + stackq.getDisabledReason());
         return ItemStack.EMPTY;
     }
 
-    public static OptionallyDisabled<ItemStack> parseItemStack(String line)
-    {
+    public static OptionallyDisabled<ItemStack> parseItemStack(String line) {
         String[] args = line.split(",");
-        if (args.length == 0)
-        {
+        if (args.length == 0) {
             return new OptionallyDisabled<>(line + " was not a valid complex item string!");
         }
         ItemStack stack = null;
 //        Item item = Item.getByNameOrId(args[0].trim());
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(args[0].trim()));
-        if (item != null)
-        {
+        if (item != null) {
             stack = new ItemStack(item);
-        }
-        else
-        {
+        } else {
             return new OptionallyDisabled<>(args[0] + " was not a valid item!");
         }
 
-        if (args.length == 1)
-        {
+        if (args.length == 1) {
             return new OptionallyDisabled<>(stack);
         }
 
         int stackSize = 1;
-        try
-        {
+        try {
             stackSize = Integer.parseInt(args[1].trim());
         }
-        catch (NumberFormatException nfe)
-        {
+        catch (NumberFormatException nfe) {
             return new OptionallyDisabled<>(args[1] + " was not a valid number: " + nfe.getLocalizedMessage());
         }
         stack.setCount(stackSize);
 
-        if (args.length == 2)
-        {
+        if (args.length == 2) {
             return new OptionallyDisabled<>(stack);
         }
 
@@ -94,25 +82,21 @@ public enum MarkdownPageLoader implements IPageLoaderText
 //        }
         // Calen
         int meta = Integer.parseInt(args[2].trim());
-        if (meta != -1)
-        {
+        if (meta != -1) {
             throw new RuntimeException("[lib.guide.loader.xml] Found meta data [" + meta + "] in line [" + line + "] but meta data is not supported in this ms version.");
         }
 
-        if (args.length == 3)
-        {
+        if (args.length == 3) {
             return new OptionallyDisabled<>(stack);
         }
 
         String nbtString = args[3];
-        try
-        {
+        try {
 //            stack.setTag(JsonToNBT.getTagFromJson(nbtString));
             stack.setTag(TagParser.parseTag(nbtString));
         }
 //        catch (NBTException e)
-        catch (CommandSyntaxException e)
-        {
+        catch (CommandSyntaxException e) {
             return new OptionallyDisabled<>(nbtString + " was not a valid nbt tag: " + e.getLocalizedMessage());
         }
         return new OptionallyDisabled<>(stack);
@@ -120,13 +104,11 @@ public enum MarkdownPageLoader implements IPageLoaderText
 
     @Override
     public GuidePageFactory loadPage(BufferedReader reader, ResourceLocation name, PageEntry<?> entry, ProfilerFiller prof)
-            throws IOException
-    {
+            throws IOException {
         prof.push("md");
         StringBuilder replaced = new StringBuilder();
         String line;
-        while ((line = reader.readLine()) != null)
-        {
+        while ((line = reader.readLine()) != null) {
             // First replace special tags (at the start of a line) with xml ones
             line = replaceSpecialForXml(line);
             replaced.append(line);
@@ -138,49 +120,37 @@ public enum MarkdownPageLoader implements IPageLoaderText
         return XmlPageLoader.INSTANCE.loadPage(nReader, name, entry, prof);
     }
 
-    private static String replaceSpecialForXml(String line)
-    {
-        if (line.startsWith("$[special.") && line.indexOf(']') > 0)
-        {
+    private static String replaceSpecialForXml(String line) {
+        if (line.startsWith("$[special.") && line.indexOf(']') > 0) {
             int end = line.indexOf(']');
             String post = line.substring("$[special.".length(), end);
-            switch (post)
-            {
-                case "new_page":
-                {
+            switch (post) {
+                case "new_page": {
                     BCLog.logger.warn(
                             "[lib.guide.markdown] Found deprecated element '" + line
                                     + "', it should be replaced with '<new_page/>'"
                     );
                     return "<new_page/>";
                 }
-                case "all_crafting":
-                {
+                case "all_crafting": {
                     String stack = line.substring(end + 1);
                     String additional = "";
-                    if (stack.startsWith("\"") && stack.endsWith("\""))
-                    {
+                    if (stack.startsWith("\"") && stack.endsWith("\"")) {
                         stack = stack.substring(1, stack.length() - 1);
                     }
-                    if (stack.startsWith("(") && stack.endsWith(")"))
-                    {
+                    if (stack.startsWith("(") && stack.endsWith(")")) {
                         stack = stack.substring(1, stack.length() - 1);
-                    }
-                    else if (stack.startsWith("{") && stack.contains("}"))
-                    {
+                    } else if (stack.startsWith("{") && stack.contains("}")) {
                         int curlyStart = stack.indexOf('}');
                         stack = stack.substring(1, curlyStart);
                         String[] split = stack.split(",");
-                        if (split.length > 0)
-                        {
+                        if (split.length > 0) {
                             stack = split[0];
                         }
-                        if (split.length > 1)
-                        {
+                        if (split.length > 1) {
                             additional += " count=\"" + split[1] + "\"";
                         }
-                        if (split.length > 2)
-                        {
+                        if (split.length > 2) {
                             additional += " data=\"" + split[2] + "\"";
                         }
                     }
@@ -193,22 +163,16 @@ public enum MarkdownPageLoader implements IPageLoaderText
                 }
                 default:
             }
-        }
-        else if (line.startsWith("#"))
-        {
+        } else if (line.startsWith("#")) {
             int level = -1;
-            while (line.startsWith("#"))
-            {
+            while (line.startsWith("#")) {
                 line = line.substring(1);
                 level++;
             }
             line = line.trim();
-            if (level == 0)
-            {
+            if (level == 0) {
                 return "<chapter name=\"" + line + "\"/>";
-            }
-            else
-            {
+            } else {
                 return "<chapter name=\"" + line + "\" level=\"" + level + "\"/>";
             }
         }

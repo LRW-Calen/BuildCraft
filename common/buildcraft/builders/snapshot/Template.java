@@ -54,9 +54,9 @@ public class Template extends Snapshot {
         data = BitSet.valueOf(nbt.getByteArray("data"));
         if (data.length() > getDataSize()) {
             throw new InvalidInputDataException(
-                "Serialized data has length of " + data.length() +
-                    ", but we expected at most " +
-                    getDataSize() + " (" + size.toString() + ")"
+                    "Serialized data has length of " + data.length() +
+                            ", but we expected at most " +
+                            getDataSize() + " (" + size.toString() + ")"
             );
         }
     }
@@ -202,8 +202,8 @@ public class Template extends Snapshot {
                 zParts.add(String.join("\n", yParts));
             }
             return String.join(
-                "\n" + String.join("", Collections.nCopies(getSize().getX(), "-")) + "\n",
-                zParts
+                    "\n" + String.join("", Collections.nCopies(getSize().getX(), "-")) + "\n",
+                    zParts
             );
         }
     }

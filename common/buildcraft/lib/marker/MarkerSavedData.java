@@ -16,8 +16,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class MarkerSavedData<S extends MarkerSubCache<C>, C extends MarkerConnection<C>> extends SavedData
-{
+public abstract class MarkerSavedData<S extends MarkerSubCache<C>, C extends MarkerConnection<C>> extends SavedData {
     protected static final boolean DEBUG_FULL = MarkerSubCache.DEBUG_FULL;
 
     protected final List<BlockPos> markerPositions = new ArrayList<>();
@@ -25,12 +24,13 @@ public abstract class MarkerSavedData<S extends MarkerSubCache<C>, C extends Mar
     private S subCache;
 
     private String mapName;
+
     public MarkerSavedData(String name) {
 //        super(name);
         this.mapName = name;
     }
 
-//    @Override
+    //    @Override
     public void readFromNBT(CompoundTag nbt) {
         markerPositions.clear();
         markerConnections.clear();

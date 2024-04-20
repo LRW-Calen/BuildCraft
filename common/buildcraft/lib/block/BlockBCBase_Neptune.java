@@ -4,19 +4,13 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.lib.block;
 
-import buildcraft.api.enums.EnumOptionalSnapshotType;
 import buildcraft.api.properties.BuildCraftProperties;
 import buildcraft.lib.registry.TagManager;
-import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -30,8 +24,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 import javax.annotation.Nonnull;
 
-public class BlockBCBase_Neptune extends Block
-{
+public class BlockBCBase_Neptune extends Block {
     public static final Property<Direction> PROP_FACING = BuildCraftProperties.BLOCK_FACING;
     public static final Property<Direction> BLOCK_FACING_6 = BuildCraftProperties.BLOCK_FACING_6;
 
@@ -46,8 +39,7 @@ public class BlockBCBase_Neptune extends Block
      * @param id The ID that will be looked up in the {@link TagManager} when registering blocks. Pass null or the
      *           empty string to bypass the {@link TagManager} entirely.
      */
-    public BlockBCBase_Neptune(String id, Properties props)
-    {
+    public BlockBCBase_Neptune(String id, Properties props) {
         super(props);
 //        if (id == null)
 //        {
@@ -61,18 +53,14 @@ public class BlockBCBase_Neptune extends Block
 //        setResistance(10.0F);
 //        setSoundType(SoundType.METAL);
 
-        if (!id.isEmpty())
-        {
+        if (!id.isEmpty()) {
             // Init names from the tag manager
 //            setUnlocalizedName("tile." + TagManager.getTag(id, TagManager.EnumTagType.UNLOCALIZED_NAME) + ".name");
             // Calen: for BCEnergy chocolate engine
             String unlocalizedName = TagManager.getTag(id, TagManager.EnumTagType.UNLOCALIZED_NAME);
-            if (unlocalizedName.startsWith("buildcraft.christmas."))
-            {
+            if (unlocalizedName.startsWith("buildcraft.christmas.")) {
                 unlocalizedName = unlocalizedName.replace("buildcraft.christmas.", "buildcraft.christmas.tile.") + ".name";
-            }
-            else
-            {
+            } else {
                 unlocalizedName = "tile." + unlocalizedName + ".name";
             }
             setUnlocalizedName(unlocalizedName);
@@ -80,8 +68,7 @@ public class BlockBCBase_Neptune extends Block
 //            setCreativeTab(CreativeTabManager.getTab(TagManager.getTag(id, TagManager.EnumTagType.CREATIVE_TAB)));
         }
 
-        if (this instanceof IBlockWithFacing)
-        {
+        if (this instanceof IBlockWithFacing) {
             Property<Direction> facingProp = ((IBlockWithFacing) this).getFacingProperty();
 //            setDefaultState(defaultBlockState().setValue(facingProp, Direction.NORTH));
             registerDefaultState(
@@ -95,11 +82,9 @@ public class BlockBCBase_Neptune extends Block
     // @Override
     @Override
 //    protected BlockStateContainer createBlockState()
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        if (this instanceof IBlockWithFacing)
-        {
+        if (this instanceof IBlockWithFacing) {
             builder.add(((IBlockWithFacing) this).getFacingProperty());
         }
     }
@@ -138,10 +123,8 @@ public class BlockBCBase_Neptune extends Block
 //    }
 
     @Override
-    public BlockState rotate(BlockState state, Rotation rot)
-    {
-        if (this instanceof IBlockWithFacing)
-        {
+    public BlockState rotate(BlockState state, Rotation rot) {
+        if (this instanceof IBlockWithFacing) {
             Property<Direction> prop = ((IBlockWithFacing) this).getFacingProperty();
             Direction facing = state.getValue(prop);
             state = state.setValue(prop, rot.rotate(facing));
@@ -150,10 +133,8 @@ public class BlockBCBase_Neptune extends Block
     }
 
     @Override
-    public BlockState mirror(BlockState state, Mirror mirror)
-    {
-        if (this instanceof IBlockWithFacing)
-        {
+    public BlockState mirror(BlockState state, Mirror mirror) {
+        if (this instanceof IBlockWithFacing) {
             Property<Direction> prop = ((IBlockWithFacing) this).getFacingProperty();
             Direction facing = state.getValue(prop);
             state = state.setValue(prop, mirror.mirror(facing));
@@ -180,11 +161,9 @@ public class BlockBCBase_Neptune extends Block
         InteractionHand hand = context.getHand();
 //        BlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
         BlockState state = super.getStateForPlacement(context);
-        if (this instanceof IBlockWithFacing b)
-        {
+        if (this instanceof IBlockWithFacing b) {
             Direction orientation = placer.getDirection();
-            if (b.canFaceVertically())
-            {
+            if (b.canFaceVertically()) {
 //                if (MathHelper.abs((float) placer.getX() - pos.getX()) < 2.0F
                 if (Mth.abs((float) placer.getX() - pos.getX()) < 2.0F
 //                        && MathHelper.abs((float) placer.getZ() - pos.getZ()) < 2.0F)
@@ -192,13 +171,11 @@ public class BlockBCBase_Neptune extends Block
                 {
                     double y = placer.getY() + placer.getEyeHeight();
 
-                    if (y - pos.getY() > 2.0D)
-                    {
+                    if (y - pos.getY() > 2.0D) {
                         orientation = Direction.DOWN;
                     }
 
-                    if (pos.getY() - y > 0.0D)
-                    {
+                    if (pos.getY() - y > 0.0D) {
                         orientation = Direction.UP;
                     }
                 }
@@ -209,12 +186,9 @@ public class BlockBCBase_Neptune extends Block
     }
 
     //    @Override
-    public boolean rotate(Level world, BlockPos pos, Direction axis)
-    {
-        if (this instanceof IBlockWithFacing)
-        {
-            if (!((IBlockWithFacing) this).canBeRotated(world, pos, world.getBlockState(pos)))
-            {
+    public boolean rotate(Level world, BlockPos pos, Direction axis) {
+        if (this instanceof IBlockWithFacing) {
+            if (!((IBlockWithFacing) this).canBeRotated(world, pos, world.getBlockState(pos))) {
                 return false;
             }
         }
@@ -236,22 +210,19 @@ public class BlockBCBase_Neptune extends Block
     // Calen:
     // in 1.18.2 setUnlocalizedName setRegistryName are unvailable
     @Override
-    public String getDescriptionId()
-    {
+    public String getDescriptionId() {
         return this.unlocalizedName;
     }
 
     private String unlocalizedName;
 
-    public void setUnlocalizedName(String unlocalizedName)
-    {
+    public void setUnlocalizedName(String unlocalizedName) {
         this.unlocalizedName = unlocalizedName;
     }
 
     // Calen: from mc 1.12.2
     // should be custom called, not by mc
-    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile)
-    {
+    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
         return state;
     }
 
@@ -264,12 +235,10 @@ public class BlockBCBase_Neptune extends Block
 //        checkActualStateAndUpdate(state, world, pos);
 //    }
 
-    public void checkActualStateAndUpdate(BlockState state, Level world, BlockPos pos, BlockEntity tile)
-    {
+    public void checkActualStateAndUpdate(BlockState state, Level world, BlockPos pos, BlockEntity tile) {
         // Calen
         BlockState newState = getActualState(state, world, pos, tile);
-        if (!newState.equals(state))
-        {
+        if (!newState.equals(state)) {
             world.setBlockAndUpdate(pos, newState);
         }
     }

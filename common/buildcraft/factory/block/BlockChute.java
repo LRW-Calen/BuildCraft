@@ -7,22 +7,17 @@
 package buildcraft.factory.block;
 
 import buildcraft.api.properties.BuildCraftProperties;
-import buildcraft.factory.BCFactoryGuis;
 import buildcraft.factory.tile.TileChute;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.block.IBlockWithTickableTE;
-import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.MessageUtil;
-import buildcraft.lib.misc.RotationUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -39,16 +34,13 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.Map;
 
 //public class BlockChute extends BlockBCTile_Neptune implements IBlockWithFacing
-public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlockWithFacing, IBlockWithTickableTE<TileChute>
-{
+public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlockWithFacing, IBlockWithTickableTE<TileChute> {
     public static final Map<Direction, Property<Boolean>> CONNECTED_MAP = BuildCraftProperties.CONNECTED_MAP;
 
-    public BlockChute(String idBC, BlockBehaviour.Properties props)
-    {
+    public BlockChute(String idBC, BlockBehaviour.Properties props) {
         super(idBC, props);
         // Calen
         this.registerDefaultState(this.getStateDefinition().any()
@@ -63,22 +55,18 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
 
     @Override
 //    public TileBC_Neptune createTileEntity(World world, IBlockState state)
-    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state)
-    {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return new TileChute(pos, state);
     }
 
     @Override
 //    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand,
 //                                    Direction side, float hitX, float hitY, float hitZ)
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
-    {
-        if (!world.isClientSide)
-        {
+    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        if (!world.isClientSide) {
 //            BCFactoryGuis.CHUTE.openGUI(player, pos);
             // Calen
-            if (world.getBlockEntity(pos) instanceof TileChute tile)
-            {
+            if (world.getBlockEntity(pos) instanceof TileChute tile) {
                 MessageUtil.serverOpenTileGUI(player, tile);
             }
         }
@@ -100,8 +88,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
 
     @Override
 //    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder)
-    {
+    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
 //        super.addProperties(properties);
         super.createBlockStateDefinition(builder);
 //        properties.addAll(CONNECTED_MAP.values());
@@ -110,8 +97,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
 
     // Calen: for custom call getActualState
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
-    {
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
         state = super.updateShape(state, facing, facingState, world, pos, facingPos);
         return getActualState(state, world, pos, null);
     }
@@ -120,8 +106,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     // 1.18.2 not found a similar method like getActualState to update
     // Calen: for custom call getActualState
     @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context)
-    {
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
         BlockState state = super.getStateForPlacement(context);
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();
@@ -129,10 +114,8 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     }
 
     @Override
-    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile)
-    {
-        for (Direction side : Direction.values())
-        {
+    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
+        for (Direction side : Direction.values()) {
             state = state.setValue(CONNECTED_MAP.get(side), side != state.getValue(getFacingProperty())
                     && TileChute.hasInventoryAtPosition(world, pos.relative(side), side));
         }
@@ -199,10 +182,8 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
 
     //
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
-    {
-        VoxelShape shape = switch (state.getValue(getFacingProperty()))
-        {
+    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
+        VoxelShape shape = switch (state.getValue(getFacingProperty())) {
             case UP -> U;
             case DOWN -> D;
             case EAST -> E;
@@ -210,28 +191,22 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
             case NORTH -> N;
             case SOUTH -> S;
         };
-        if (state.getValue(BuildCraftProperties.CONNECTED_SOUTH))
-        {
+        if (state.getValue(BuildCraftProperties.CONNECTED_SOUTH)) {
             shape = Shapes.or(shape, CONNECT_S);
         }
-        if (state.getValue(BuildCraftProperties.CONNECTED_NORTH))
-        {
+        if (state.getValue(BuildCraftProperties.CONNECTED_NORTH)) {
             shape = Shapes.or(shape, CONNECT_N);
         }
-        if (state.getValue(BuildCraftProperties.CONNECTED_EAST))
-        {
+        if (state.getValue(BuildCraftProperties.CONNECTED_EAST)) {
             shape = Shapes.or(shape, CONNECT_E);
         }
-        if (state.getValue(BuildCraftProperties.CONNECTED_WEST))
-        {
+        if (state.getValue(BuildCraftProperties.CONNECTED_WEST)) {
             shape = Shapes.or(shape, CONNECT_W);
         }
-        if (state.getValue(BuildCraftProperties.CONNECTED_UP))
-        {
+        if (state.getValue(BuildCraftProperties.CONNECTED_UP)) {
             shape = Shapes.or(shape, CONNECT_U);
         }
-        if (state.getValue(BuildCraftProperties.CONNECTED_DOWN))
-        {
+        if (state.getValue(BuildCraftProperties.CONNECTED_DOWN)) {
             shape = Shapes.or(shape, CONNECT_D);
         }
         return shape;
@@ -241,8 +216,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     // IBlockWithFacing
 
     @Override
-    public boolean canFaceVertically()
-    {
+    public boolean canFaceVertically() {
         return true;
     }
 }

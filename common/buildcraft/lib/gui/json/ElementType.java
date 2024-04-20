@@ -35,10 +35,10 @@ public abstract class ElementType {
     }
 
     protected abstract IGuiElement deserialize0(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info,
-        JsonGuiElement json);
+                                                JsonGuiElement json);
 
     public final IGuiElement deserialize(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info,
-        JsonGuiElement json) {
+                                         JsonGuiElement json) {
         IGuiElement element = deserialize0(gui, parent, info, json);
         if (element instanceof GuiElementSimple) {
             ((GuiElementSimple) element).name = json.fullName;
@@ -77,7 +77,7 @@ public abstract class ElementType {
     }
 
     protected static void addChildren(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json,
-        String subName, Consumer<IGuiElement> to) {
+                                      String subName, Consumer<IGuiElement> to) {
         List<JsonGuiElement> children = json.getChildren(subName);
         for (JsonGuiElement child : children) {
             for (JsonGuiElement c : child.iterate(child.context)) {
@@ -93,10 +93,11 @@ public abstract class ElementType {
     }
 
     protected static void addType(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json,
-        String subName, Consumer<IGuiElement> to, ElementType type) {
+                                  String subName, Consumer<IGuiElement> to, ElementType type) {
         JsonGuiElement ch = json.getChildElement(subName, json.json.get(subName));
         if (!ch.properties.containsKey("area") && !ch.properties.containsKey("area[0]")
-            && !ch.properties.containsKey("pos[0]")) {
+                && !ch.properties.containsKey("pos[0]"))
+        {
             ch.properties.put("area", json.fullName + ".area");
         }
         to.accept(type.deserialize(gui, parent, info, ch));
@@ -118,7 +119,8 @@ public abstract class ElementType {
                 try {
                     IExpressionNode node = InternalCompiler.compileExpression(value, ctx);
                     ctx.putVariable(argName, NodeTypes.createConstantNode(node));
-                } catch (InvalidExpressionException e) {
+                }
+                catch (InvalidExpressionException e) {
                     // Ignore the error
                     BCLog.logger.info("Failed to compile expression for " + key + " because " + e.getMessage());
                 }
@@ -133,7 +135,8 @@ public abstract class ElementType {
             try {
                 IExpressionNode node = InternalCompiler.compileExpression(value, ctx);
                 ctx.putVariable(key, NodeTypes.createConstantNode(node));
-            } catch (InvalidExpressionException e) {
+            }
+            catch (InvalidExpressionException e) {
                 // Ignore the error
                 // BCLog.logger.info("Failed to compile expression for " + key + " because " + e.getMessage());
             }
@@ -154,7 +157,8 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionString(eqn, ctx).evaluate();
-        } catch (InvalidExpressionException iee) {
+        }
+        catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
@@ -170,7 +174,8 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionLong(eqn, ctx);
-        } catch (InvalidExpressionException iee) {
+        }
+        catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
@@ -186,31 +191,33 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionDouble(eqn, ctx);
-        } catch (InvalidExpressionException iee) {
+        }
+        catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
 
     public static boolean resolveEquationBool(JsonGuiElement json, String member, FunctionContext ctx,
-        boolean _default) {
+                                              boolean _default) {
         return getEquationBool(json, member, ctx, _default).evaluate();
     }
 
     public static INodeBoolean getEquationBool(JsonGuiElement json, String member, FunctionContext ctx,
-        boolean _default) {
+                                               boolean _default) {
         String eqn = json.properties.get(member);
         if (eqn == null) {
             return NodeConstantBoolean.of(_default);
         }
         try {
             return GenericExpressionCompiler.compileExpressionBoolean(eqn, ctx);
-        } catch (InvalidExpressionException iee) {
+        }
+        catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
 
     public static IGuiPosition resolvePosition(JsonGuiElement json, String name, IGuiPosition parent,
-        FunctionContext ctx) {
+                                               FunctionContext ctx) {
         String eqn = json.properties.get(name);
         if (eqn == null) {
             INodeDouble x = getEquationDouble(json, name + "[0]", ctx);
@@ -219,7 +226,8 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionObject(IGuiPosition.class, eqn, ctx).evaluate();
-        } catch (InvalidExpressionException e) {
+        }
+        catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Failed to resolve a position for " + json.fullName, e);
         }
     }
@@ -235,7 +243,8 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionObject(IGuiArea.class, eqn, ctx).evaluate();
-        } catch (InvalidExpressionException e) {
+        }
+        catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Failed to resolve an area for " + json.fullName, e);
         }
     }

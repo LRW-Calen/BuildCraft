@@ -19,8 +19,7 @@ import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
-public class SoundUtil
-{
+public class SoundUtil {
     public static void playBlockPlace(Level world, BlockPos pos) {
         playBlockPlace(world, pos, world.getBlockState(pos));
     }

@@ -15,12 +15,10 @@ import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class RequiredExtractorItemFromBlock extends RequiredExtractor
-{
+public class RequiredExtractorItemFromBlock extends RequiredExtractor {
     @Nonnull
     @Override
-    public List<ItemStack> extractItemsFromBlock(@Nonnull BlockState blockState, @Nullable CompoundTag tileNbt)
-    {
+    public List<ItemStack> extractItemsFromBlock(@Nonnull BlockState blockState, @Nullable CompoundTag tileNbt) {
         return Collections.singletonList(
                 new ItemStack(
 //                Item.getItemFromBlock(blockState.getBlock()),

@@ -18,7 +18,7 @@ public enum WrittenType {
     MEDIUM(3, (1 << 24) - 1),
     INT(4, Integer.MAX_VALUE);
 
-    public static final WrittenType[] ORDERED_VALUES = { BYTE, SHORT, MEDIUM, INT };
+    public static final WrittenType[] ORDERED_VALUES = {BYTE, SHORT, MEDIUM, INT};
 
     public final int numBytes;
     private final int maxStorableValue;
@@ -54,7 +54,7 @@ public enum WrittenType {
     public void writeIndex(DataOutput out, int index) throws IOException {
         if (index > maxStorableValue) {
             throw new IllegalArgumentException("Tried to write a value that was too large! (" + index + " > "
-                + maxStorableValue + " for " + this + ")");
+                    + maxStorableValue + " for " + this + ")");
         }
         switch (this) {
             case BYTE: {

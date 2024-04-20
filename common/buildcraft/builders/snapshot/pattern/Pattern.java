@@ -8,53 +8,42 @@ import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.containers.IFillerStatementContainer;
 import buildcraft.builders.BCBuildersStatements;
 import buildcraft.core.statements.BCStatement;
-import buildcraft.lib.misc.LocaleUtil;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
-public abstract class Pattern extends BCStatement implements IFillerPattern, IActionExternal
-{
+public abstract class Pattern extends BCStatement implements IFillerPattern, IActionExternal {
     private final String desc;
 
-    public Pattern(String tag)
-    {
+    public Pattern(String tag) {
         super("buildcraft:" + tag);
         desc = "fillerpattern." + tag;
         FillerManager.registry.addPattern(this);
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return LocaleUtil.localize(desc);
         return new TranslatableComponent(desc);
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return desc;
     }
 
     @Override
-    public void actionActivate(BlockEntity target, Direction side, IStatementContainer source, IStatementParameter[] parameters)
-    {
-        if (source instanceof IFillerStatementContainer)
-        {
+    public void actionActivate(BlockEntity target, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
+        if (source instanceof IFillerStatementContainer) {
             ((IFillerStatementContainer) source).setPattern(this, parameters);
-        }
-        else if (target instanceof IFillerStatementContainer)
-        {
+        } else if (target instanceof IFillerStatementContainer) {
             ((IFillerStatementContainer) target).setPattern(this, parameters);
         }
     }
 
     @Override
-    public IFillerPattern[] getPossible()
-    {
+    public IFillerPattern[] getPossible() {
         return BCBuildersStatements.PATTERNS;
     }
 }

@@ -8,8 +8,7 @@ package buildcraft.lib.misc.data;
 
 import net.minecraft.nbt.CompoundTag;
 
-public class AverageLong
-{
+public class AverageLong {
     private long[] data;
     private final int precise;
     private int pos;

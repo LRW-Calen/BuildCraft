@@ -2,7 +2,6 @@ package buildcraft.datagen.core;
 
 import buildcraft.api.enums.EnumDecoratedBlock;
 import buildcraft.api.properties.BuildCraftProperties;
-import buildcraft.core.BCCore;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.block.BlockDecoration;
 import buildcraft.datagen.base.BCBlockStateProvider;
@@ -16,16 +15,13 @@ import net.minecraftforge.client.model.generators.ModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class CoreBlockStateProvider extends BlockStateProvider
-{
-    public CoreBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
-    {
+public class CoreBlockStateProvider extends BlockStateProvider {
+    public CoreBlockStateProvider(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
         super(gen, modid, exFileHelper);
     }
 
     @Override
-    protected void registerStatesAndModels()
-    {
+    protected void registerStatesAndModels() {
         models().withExistingParent("buildcraftcore:block/default_cube", "minecraft:block/cube")
                 .transforms()
                 .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND)
@@ -56,8 +52,7 @@ public class CoreBlockStateProvider extends BlockStateProvider
                     BlockDecoration block = decorated.get();
                     ResourceLocation rl = block.getRegistryName();
                     EnumDecoratedBlock type = block.DECORATED_TYPE;
-                    String texture = switch (type)
-                    {
+                    String texture = switch (type) {
                         case BLUEPRINT -> "buildcraftcore:blocks/blueprint/blue";
                         case DESTROY -> "buildcraftcore:blocks/misc/texture_red_dark";
                         case LASER_BACK -> "buildcraftsilicon:blocks/laser/bottom";

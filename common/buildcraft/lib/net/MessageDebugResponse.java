@@ -14,27 +14,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class MessageDebugResponse implements IMessage
-{
-//    private final List<String> left = new ArrayList<>();
+public class MessageDebugResponse implements IMessage {
+    //    private final List<String> left = new ArrayList<>();
 //    private final List<String> right = new ArrayList<>();
     private final List<Component> left = new ArrayList<>();
     private final List<Component> right = new ArrayList<>();
 
-    public MessageDebugResponse()
-    {
+    public MessageDebugResponse() {
     }
 
-//    public MessageDebugResponse(List<String> left, List<String> right)
-    public MessageDebugResponse(List<Component> left, List<Component> right)
-    {
+    //    public MessageDebugResponse(List<String> left, List<String> right)
+    public MessageDebugResponse(List<Component> left, List<Component> right) {
         this.left.addAll(left);
         this.right.addAll(right);
     }
 
     @Override
-    public void toBytes(FriendlyByteBuf buffer)
-    {
+    public void toBytes(FriendlyByteBuf buffer) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         buf.writeInt(left.size());
 //        left.forEach(buf::writeUtf);
@@ -45,8 +41,7 @@ public class MessageDebugResponse implements IMessage
     }
 
     @Override
-    public void fromBytes(FriendlyByteBuf buffer)
-    {
+    public void fromBytes(FriendlyByteBuf buffer) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         IntStream.range(0, buf.readInt())
 //                .mapToObj(i -> new PacketBufferBC(buf).readString())

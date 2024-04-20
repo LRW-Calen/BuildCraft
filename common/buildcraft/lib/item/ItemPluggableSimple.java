@@ -24,8 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class ItemPluggableSimple extends ItemBC_Neptune implements IItemPluggable
-{
+public class ItemPluggableSimple extends ItemBC_Neptune implements IItemPluggable {
 
     private static final IPlacementPredicate ALWAYS_CAN = (item, h, s) -> true;
 
@@ -37,8 +36,7 @@ public class ItemPluggableSimple extends ItemBC_Neptune implements IItemPluggabl
     public static final IPlacementPredicate PIPE_BEHAVIOUR_ACCEPTS_RS_POWER = (item, pipeHolder, side) ->
     {
         IPipe pipe = pipeHolder.getPipe();
-        if (pipe != null)
-        {
+        if (pipe != null) {
             return pipe.getBehaviour().getCapability(MjAPI.CAP_REDSTONE_RECEIVER, side).isPresent();
         }
         return false;
@@ -49,38 +47,31 @@ public class ItemPluggableSimple extends ItemBC_Neptune implements IItemPluggabl
     private final IPluggableCreator creator;
 
     public ItemPluggableSimple(String id, Item.Properties properties, PluggableDefinition definition, IPluggableCreator creator,
-                               @Nullable IPlacementPredicate canPlace)
-    {
+                               @Nullable IPlacementPredicate canPlace) {
         super(id, properties);
         this.definition = definition;
         this.creator = creator;
-        if (creator == null)
-        {
+        if (creator == null) {
             throw new NullPointerException("Creator was null!");
         }
         this.canPlace = canPlace == null ? ALWAYS_CAN : canPlace;
     }
 
-    public ItemPluggableSimple(String id,Item.Properties properties,  PluggableDefinition definition, @Nullable IPlacementPredicate canPlace)
-    {
+    public ItemPluggableSimple(String id, Item.Properties properties, PluggableDefinition definition, @Nullable IPlacementPredicate canPlace) {
         this(id, properties, definition, definition.creator, canPlace);
     }
 
-    public ItemPluggableSimple(String id, Item.Properties properties, PluggableDefinition definition, @Nonnull IPluggableCreator creator)
-    {
+    public ItemPluggableSimple(String id, Item.Properties properties, PluggableDefinition definition, @Nonnull IPluggableCreator creator) {
         this(id, properties, definition, creator, null);
     }
 
-    public ItemPluggableSimple(String id, Item.Properties properties, PluggableDefinition definition)
-    {
+    public ItemPluggableSimple(String id, Item.Properties properties, PluggableDefinition definition) {
         this(id, properties, definition, definition.creator, null);
     }
 
     @Override
-    public PipePluggable onPlace(@Nonnull ItemStack stack, IPipeHolder holder, Direction side, Player player, InteractionHand hand)
-    {
-        if (!canPlace.canPlace(stack, holder, side))
-        {
+    public PipePluggable onPlace(@Nonnull ItemStack stack, IPipeHolder holder, Direction side, Player player, InteractionHand hand) {
+        if (!canPlace.canPlace(stack, holder, side)) {
             return null;
         }
         SoundUtil.playBlockPlace(holder.getPipeWorld(), holder.getPipePos());
@@ -88,8 +79,7 @@ public class ItemPluggableSimple extends ItemBC_Neptune implements IItemPluggabl
     }
 
     @FunctionalInterface
-    public interface IPlacementPredicate
-    {
+    public interface IPlacementPredicate {
         boolean canPlace(ItemStack stack, IPipeHolder holder, Direction side);
     }
 }

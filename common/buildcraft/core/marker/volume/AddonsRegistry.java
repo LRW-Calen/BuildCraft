@@ -12,8 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum AddonsRegistry
-{
+public enum AddonsRegistry {
     INSTANCE;
 
     private final Map<ResourceLocation, Class<? extends Addon>> addonClasses = new HashMap<>();

@@ -14,8 +14,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class OreDictTags
-{
+public class OreDictTags {
     // 齿轮
     public static TagKey<Item> GEARS = itemTag("forge:gears");
 
@@ -52,8 +51,7 @@ public class OreDictTags
     // pipes
     public static final Map<DyeColor, TagKey<Item>> pipeColorTags = new HashMap<>();
 
-    static
-    {
+    static {
         Arrays.stream(DyeColor.values()).forEach(c -> pipeColorTags.put(c, itemTag("buildcraft:pipe/" + c.name().toLowerCase(Locale.ROOT))));
         pipeColorTags.put(null, itemTag("buildcraft:pipe/colorless"));
     }
@@ -110,23 +108,19 @@ public class OreDictTags
     public static final TagKey<Item> pipeItemEmzuli = itemTag("buildcraft:pipe/items_emzuli");
     public static final TagKey<Item> pipeItemStripes = itemTag("buildcraft:pipe/items_stripes");
 
-    private static TagKey<Item> itemTag(String name)
-    {
+    private static TagKey<Item> itemTag(String name) {
         return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(name));
     }
 
-    private static TagKey<Fluid> fluidTag(String name)
-    {
+    private static TagKey<Fluid> fluidTag(String name) {
         return TagKey.create(Registry.FLUID_REGISTRY, new ResourceLocation(name));
     }
 
-    private static TagKey<Block> blockTag(String name)
-    {
+    private static TagKey<Block> blockTag(String name) {
         return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(name));
     }
 
-    private static TagKey<Biome> biomeTag(String name)
-    {
+    private static TagKey<Biome> biomeTag(String name) {
         return TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(name));
     }
 }

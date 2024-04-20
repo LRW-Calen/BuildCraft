@@ -16,7 +16,7 @@ public class PageLinkNormal extends PageLink {
         super(text, startVisible);
         this.factory = factory;
         this.tooltip =
-            (tooltip == null || tooltip.size() != 1 || strip(tooltip.get(0).getString()).equals(strip(text.text.getString()))) ? null : tooltip;
+                (tooltip == null || tooltip.size() != 1 || strip(tooltip.get(0).getString()).equals(strip(text.text.getString()))) ? null : tooltip;
     }
 
     private static String strip(String text) {

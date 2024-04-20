@@ -16,18 +16,15 @@ import net.minecraftforge.common.Tags;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class BuildersRecipeGenerator extends RecipeProvider
-{
-    private static final String MOD_ID = BCBuilders.MOD_ID;
+public class BuildersRecipeGenerator extends RecipeProvider {
+    private static final String MOD_ID = BCBuilders.MODID;
 
-    public BuildersRecipeGenerator(DataGenerator generator)
-    {
+    public BuildersRecipeGenerator(DataGenerator generator) {
         super(generator);
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         // architect
         ShapedRecipeBuilder.shaped(BCBuildersBlocks.architect.get())
                 .pattern("bmb")
@@ -110,8 +107,7 @@ public class BuildersRecipeGenerator extends RecipeProvider
     }
 
     @Override
-    public String getName()
-    {
+    public String getName() {
         return "BuildCraft Builders Recipe Generator";
     }
 }

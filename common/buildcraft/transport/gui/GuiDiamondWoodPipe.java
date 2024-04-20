@@ -23,10 +23,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
 
-public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> implements IButtonClickEventListener
-{
+public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> implements IButtonClickEventListener {
     private static final ResourceLocation TEXTURE = new ResourceLocation("buildcrafttransport:textures/gui/pipe_emerald.png");
     private static final ResourceLocation TEXTURE_BUTTON = new ResourceLocation("buildcrafttransport:textures/gui/pipe_emerald_button.png");
     private static final int WHITE_LIST_BUTTON_ID = FilterMode.WHITE_LIST.ordinal();
@@ -43,15 +41,14 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
 
     private PipeBehaviourWoodDiamond pipe;
 
-//    public GuiDiamondWoodPipe(Player player, PipeBehaviourWoodDiamond pipe, Inventory inventory, Component component)
-    public GuiDiamondWoodPipe(ContainerDiamondWoodPipe container, Inventory inventory, Component component)
-    {
+    //    public GuiDiamondWoodPipe(Player player, PipeBehaviourWoodDiamond pipe, Inventory inventory, Component component)
+    public GuiDiamondWoodPipe(ContainerDiamondWoodPipe container, Inventory inventory, Component component) {
 //        super(new ContainerDiamondWoodPipe(player, pipe));
 //        super(new ContainerDiamondWoodPipe(player, pipe), inventory, component);
         super(container, inventory, component);
 
 //        this.pipe = pipe;
-        this.pipe = ((PipeBehaviourWoodDiamond)container.pipeHolder.getPipe().getBehaviour());
+        this.pipe = ((PipeBehaviourWoodDiamond) container.pipeHolder.getPipe().getBehaviour());
 
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -60,8 +57,7 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
         super.initGui();
 
         this.whiteListButton = new GuiImageButton(mainGui, WHITE_LIST_BUTTON_ID, this.leftPos + 7, this.topPos + 41, 18, TEXTURE_BUTTON, 19, 19);
@@ -74,22 +70,18 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
         this.blackListButton.registerListener(this);
         this.mainGui.shownElements.add(this.blackListButton);
 
-        if (pipe.pipe.getFlow() instanceof IFlowItems)
-        {
+        if (pipe.pipe.getFlow() instanceof IFlowItems) {
             // Don't show round robin for the fluid pipe - its not yet implemented
             this.roundRobinButton = new GuiImageButton(mainGui, ROUND_ROBIN_BUTTON_ID, this.leftPos + 7 + 36, this.topPos + 41, 18, TEXTURE_BUTTON, 55, 19);
             this.roundRobinButton.setToolTip(ToolTip.createLocalized("tip.PipeItemsEmerald.roundrobin"));
             this.roundRobinButton.registerListener(this);
             this.mainGui.shownElements.add(this.roundRobinButton);
             IButtonBehaviour.createAndSetRadioButtons(whiteListButton, blackListButton, roundRobinButton);
-        }
-        else
-        {
+        } else {
             IButtonBehaviour.createAndSetRadioButtons(whiteListButton, blackListButton);
         }
 
-        switch (pipe.filterMode)
-        {
+        switch (pipe.filterMode) {
             case WHITE_LIST:
                 this.whiteListButton.activate();
                 break;
@@ -97,8 +89,7 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
                 this.blackListButton.activate();
                 break;
             case ROUND_ROBIN:
-                if (roundRobinButton != null)
-                {
+                if (roundRobinButton != null) {
                     this.roundRobinButton.activate();
                 }
                 break;
@@ -106,10 +97,8 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
     }
 
     @Override
-    public void handleButtonClick(IButtonClickEventTrigger sender, int buttonKey)
-    {
-        if (!(sender instanceof GuiImageButton))
-        {
+    public void handleButtonClick(IButtonClickEventTrigger sender, int buttonKey) {
+        if (!(sender instanceof GuiImageButton)) {
             return;
         }
         int id = Integer.parseInt(((GuiImageButton) sender).id);
@@ -119,14 +108,12 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
     }
 
     @Override
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
         String title = LocaleUtil.localize("gui.pipes.emerald.title");
 //        double titleX = mainGui.rootElement.getX() + (xSize - fontRenderer.getStringWidth(title)) / 2;
         double titleX = mainGui.rootElement.getX() + (imageWidth - font.width(title)) / 2;
@@ -134,8 +121,7 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
         font.draw(poseStack, title, (int) titleX, (int) mainGui.rootElement.getY() + 6, 0x404040);
 //        fontRenderer.drawString(LocaleUtil.localize("gui.inventory"), (int) mainGui.rootElement.getX() + 8, (int) mainGui.rootElement.getY() + ySize - 93, 0x404040);
         font.draw(poseStack, LocaleUtil.localize("gui.inventory"), (int) mainGui.rootElement.getX() + 8, (int) mainGui.rootElement.getY() + imageHeight - 93, 0x404040);
-        if (pipe.filterMode == FilterMode.ROUND_ROBIN)
-        {
+        if (pipe.filterMode == FilterMode.ROUND_ROBIN) {
 //            GlStateManager.color(1, 1, 1, 1);
             RenderSystem.setShaderColor(1, 1, 1, 1);
             GuiIcon icon = pipe.filterValid ? ICON_ROUND_ROBIN_INDEX : ICON_ROUND_ROBIN_NONE;

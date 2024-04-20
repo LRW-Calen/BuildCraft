@@ -14,76 +14,63 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Rotation;
 
-public final class SchematicBlockAir implements ISchematicBlock
-{
+public final class SchematicBlockAir implements ISchematicBlock {
     @SuppressWarnings("unused")
-    public static boolean predicate(SchematicBlockContext context)
-    {
+    public static boolean predicate(SchematicBlockContext context) {
         return true;
     }
 
     @Override
-    public void init(SchematicBlockContext context)
-    {
+    public void init(SchematicBlockContext context) {
     }
 
     @Override
-    public boolean isAir()
-    {
+    public boolean isAir() {
         return true;
     }
 
     @Override
-    public SchematicBlockAir getRotated(Rotation rotation)
-    {
+    public SchematicBlockAir getRotated(Rotation rotation) {
         return SchematicBlockManager.createCleanCopy(this);
     }
 
     @Override
-    public boolean canBuild(Level world, BlockPos blockPos)
-    {
+    public boolean canBuild(Level world, BlockPos blockPos) {
         return false;
     }
 
     @Override
-    public boolean build(Level world, BlockPos blockPos)
-    {
+    public boolean build(Level world, BlockPos blockPos) {
         return true;
     }
 
     @Override
 //    public boolean buildWithoutChecks(Level world, BlockPos blockPos)
-    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos)
-    {
+    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos) {
         return true;
     }
 
     @Override
-    public boolean isBuilt(Level world, BlockPos blockPos)
-    {
+    public boolean isBuilt(Level world, BlockPos blockPos) {
         return true;
     }
 
     @Override
-    public CompoundTag serializeNBT()
-    {
+    public CompoundTag serializeNBT() {
         return new CompoundTag();
     }
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException
-    {
+    public void deserializeNBT(CompoundTag nbt) throws InvalidInputDataException {
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         return this == o || !(o == null || getClass() != o.getClass());
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return 0;
     }
 }

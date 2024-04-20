@@ -9,7 +9,8 @@ import buildcraft.lib.oredicttag.OreDictTags;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
-import net.minecraft.advancements.critereon.*;
+import net.minecraft.advancements.critereon.ImpossibleTrigger;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Items;
@@ -19,9 +20,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class CoreAdvancementProvider extends BCBaseAdvancementProvider
-{
-    private static final String NAMESPACE = BCCore.MOD_ID;
+public class CoreAdvancementProvider extends BCBaseAdvancementProvider {
+    private static final String NAMESPACE = BCCore.MODID;
 
     public static Advancement ROOT;
     public static Advancement GUIDE;
@@ -31,8 +31,7 @@ public class CoreAdvancementProvider extends BCBaseAdvancementProvider
 
     private static final ImpossibleTrigger.TriggerInstance IMPOSSIBLE = new ImpossibleTrigger.TriggerInstance();
 
-    public static void registerCoreAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper)
-    {
+    public static void registerCoreAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
         // root
         Advancement root = Advancement.Builder.advancement().display(
                         BCCoreItems.gearWood.get(),

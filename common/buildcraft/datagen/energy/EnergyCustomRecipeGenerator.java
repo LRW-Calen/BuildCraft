@@ -4,8 +4,8 @@ import buildcraft.api.mj.MjAPI;
 import buildcraft.datagen.factory.DistillationRecipeBuilder;
 import buildcraft.datagen.factory.HeatExchangeRecipeBuilder;
 import buildcraft.energy.BCEnergyFluids;
-import buildcraft.lib.fluid.BCFluidAttributes;
 import buildcraft.lib.fluid.BCFluid;
+import buildcraft.lib.fluid.BCFluidAttributes;
 import buildcraft.lib.misc.MathUtil;
 import buildcraft.lib.misc.StackUtil;
 import net.minecraft.data.DataGenerator;
@@ -21,8 +21,7 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.util.function.Consumer;
 
-public class EnergyCustomRecipeGenerator extends RecipeProvider
-{
+public class EnergyCustomRecipeGenerator extends RecipeProvider {
     private final ExistingFileHelper existingFileHelper;
 
     private Consumer<FinishedRecipe> consumer;
@@ -48,15 +47,13 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
 
     private static final int TIME_BASE = 240_000; // 240_000 - multiple of 3, 5, 16, 1000
 
-    public EnergyCustomRecipeGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper)
-    {
+    public EnergyCustomRecipeGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
         super(generator);
         this.existingFileHelper = existingFileHelper;
     }
 
     @Override
-    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer)
-    {
+    protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         this.consumer = consumer;
         buildHeatExchangeRecipes();
         buildDistillationRecipes();
@@ -64,8 +61,7 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
         buildCoolantRecipes();
     }
 
-    private void buildCoolantRecipes()
-    {
+    private void buildCoolantRecipes() {
 //        BuildcraftFuelRegistry.coolant.addCoolant(Fluids.WATER, 0.0023f);
         CoolantRecipeBuilder.fluidCoolant(new FluidStack(Fluids.WATER, 1), 0.0023f).save(consumer, Fluids.WATER.getRegistryName().getPath());
 //        BuildcraftFuelRegistry.coolant.addSolidCoolant(new ItemStack(Blocks.ICE), new FluidStack(Fluids.WATER, 1000), 1.5f);
@@ -75,8 +71,7 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
 
     }
 
-    private void buildHeatExchangeRecipes()
-    {
+    private void buildHeatExchangeRecipes() {
         addHeatExchange(BCEnergyFluids.crudeOil);
         addHeatExchange(BCEnergyFluids.oilDistilled);
         addHeatExchange(BCEnergyFluids.oilHeavy);
@@ -98,8 +93,7 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
         HeatExchangeRecipeBuilder.coolable(lava, EMPTY, 4, 2).save(consumer, Fluids.LAVA.getRegistryName().getPath() + "__to__" + Fluids.EMPTY.getRegistryName().getPath());
     }
 
-    private void buildDistillationRecipes()
-    {
+    private void buildDistillationRecipes() {
         FluidStack[] gas_light_dense_residue = createFluidStack(BCEnergyFluids.crudeOil, _oil);
         FluidStack[] gas_light_dense = createFluidStack(BCEnergyFluids.oilDistilled, _gas_light_dense);
         FluidStack[] gas_light = createFluidStack(BCEnergyFluids.fuelMixedLight, _gas_light);
@@ -129,8 +123,7 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
 
     }
 
-    private void buildIFuelRecipes()
-    {
+    private void buildIFuelRecipes() {
 
         addFuel(BCEnergyFluids.fuelGaseous, _gas, 8, 4);
         addFuel(BCEnergyFluids.fuelLight, _light, 6, 6);
@@ -147,16 +140,14 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
 
     }
 
-    private void addHeatExchange(RegistryObject<BCFluid.Source>[] fluid)
-    {
-        for (int i = 0; i < fluid.length - 1; i++)
-        {
+    private void addHeatExchange(RegistryObject<BCFluid.Source>[] fluid) {
+        for (int i = 0; i < fluid.length - 1; i++) {
             BCFluid.Source cool = fluid[i].get();
             BCFluid.Source hot = fluid[i + 1].get();
             FluidStack cool_f = new FluidStack(cool, 10);
             FluidStack hot_f = new FluidStack(hot, 10);
-            int ch = ((BCFluidAttributes)cool.getAttributes()).getHeat();
-            int hh = ((BCFluidAttributes)hot.getAttributes()).getHeat();
+            int ch = ((BCFluidAttributes) cool.getAttributes()).getHeat();
+            int hh = ((BCFluidAttributes) hot.getAttributes()).getHeat();
 //            BuildcraftRecipeRegistry.refineryRecipes.addHeatableRecipe(cool_f, hot_f, ch, hh);
 //            BuildcraftRecipeRegistry.refineryRecipes.addCoolableRecipe(hot_f, cool_f, hh, ch);
 
@@ -165,15 +156,13 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
         }
     }
 
-    private void addDistillation(FluidStack[] in, FluidStack[] outGas, FluidStack[] outLiquid, int heat, long mjCost)
-    {
+    private void addDistillation(FluidStack[] in, FluidStack[] outGas, FluidStack[] outLiquid, int heat, long mjCost) {
         FluidStack _in = in[heat];
         FluidStack _outGas = outGas[heat];
         FluidStack _outLiquid = outLiquid[heat];
         int hcf = MathUtil.findHighestCommonFactor(_in.getAmount(), _outGas.getAmount());
         hcf = MathUtil.findHighestCommonFactor(hcf, _outLiquid.getAmount());
-        if (hcf > 1)
-        {
+        if (hcf > 1) {
 //            (_in = _in.copy()).amount /= hcf;
             _in = _in.copy();
             _in.setAmount(_in.getAmount() / hcf);
@@ -189,21 +178,17 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
         DistillationRecipeBuilder.distillation(mjCost, _in, _outGas, _outLiquid).save(consumer, _in.getFluid().getRegistryName().getPath());
     }
 
-    private static FluidStack[] createFluidStack(RegistryObject<? extends Fluid>[] fluid, int amount)
-    {
+    private static FluidStack[] createFluidStack(RegistryObject<? extends Fluid>[] fluid, int amount) {
         FluidStack[] arr = new FluidStack[fluid.length];
-        for (int i = 0; i < arr.length; i++)
-        {
+        for (int i = 0; i < arr.length; i++) {
             arr[i] = new FluidStack(fluid[i].get(), amount);
         }
         return arr;
     }
 
-    private void addFuel(RegistryObject<? extends Fluid>[] in, int amountDiff, int multiplier, int boostOver4)
-    {
+    private void addFuel(RegistryObject<? extends Fluid>[] in, int amountDiff, int multiplier, int boostOver4) {
         Fluid fuel = getFirstOrNull(in);
-        if (fuel == null)
-        {// It may have been disabled
+        if (fuel == null) {// It may have been disabled
             return;
         }
         long powerPerCycle = multiplier * MjAPI.MJ;
@@ -212,32 +197,25 @@ public class EnergyCustomRecipeGenerator extends RecipeProvider
         FuelRecipeBuilder.fuel(new FluidStack(fuel, 1), powerPerCycle, totalTime).save(consumer, fuel.getRegistryName().getPath());
     }
 
-    private void addDirtyFuel(RegistryObject<? extends Fluid>[] in, int amountDiff, int multiplier, int boostOver4)
-    {
+    private void addDirtyFuel(RegistryObject<? extends Fluid>[] in, int amountDiff, int multiplier, int boostOver4) {
         Fluid fuel = getFirstOrNull(in);
-        if (fuel == null)
-        {// It may have been disabled
+        if (fuel == null) {// It may have been disabled
             return;
         }
         long powerPerCycle = multiplier * MjAPI.MJ;
         int totalTime = TIME_BASE * boostOver4 / 4 / multiplier / amountDiff;
         Fluid residue = getFirstOrNull(BCEnergyFluids.oilResidue);
-        if (residue == null)
-        {// residue might have been disabled
+        if (residue == null) {// residue might have been disabled
 //            BuildcraftFuelRegistry.fuel.addFuel(fuel, powerPerCycle, totalTime);
             FuelRecipeBuilder.fuel(new FluidStack(fuel, 1), powerPerCycle, totalTime).save(consumer, fuel.getRegistryName().getPath());
-        }
-        else
-        {
+        } else {
 //            BuildcraftFuelRegistry.fuel.addDirtyFuel(fuel, powerPerCycle, totalTime, new FluidStack(residue, 1000 / amountDiff));
             FuelRecipeBuilder.dirtyFuel(new FluidStack(fuel, 1), powerPerCycle, totalTime, new FluidStack(residue, 1000 / amountDiff)).save(consumer, fuel.getRegistryName().getPath());
         }
     }
 
-    private static Fluid getFirstOrNull(RegistryObject<? extends Fluid>[] array)
-    {
-        if (array == null || array.length == 0)
-        {
+    private static Fluid getFirstOrNull(RegistryObject<? extends Fluid>[] array) {
+        if (array == null || array.length == 0) {
             return null;
         }
         return array[0].get();

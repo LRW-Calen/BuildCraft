@@ -22,15 +22,13 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
-{
+public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder> {
     private static final double MAX_ENTITY_DISTANCE = 0.1D;
     private static final String FLUID_STACK_KEY = "BuilderFluidStack";
 
@@ -40,13 +38,11 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     private final Map<Pair<List<ItemStack>, List<FluidStack>>, Optional<List<ItemStack>>> extractRequiredCache =
             new HashMap<>();
 
-    public BlueprintBuilder(ITileForBlueprintBuilder tile)
-    {
+    public BlueprintBuilder(ITileForBlueprintBuilder tile) {
         super(tile);
     }
 
-    private ISchematicBlock getSchematicBlock(BlockPos blockPos)
-    {
+    private ISchematicBlock getSchematicBlock(BlockPos blockPos) {
         return getBuildingInfo().box.contains(blockPos)
                 ?
                 getBuildingInfo().rotatedPalette.get(
@@ -58,21 +54,18 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    protected boolean isAir(BlockPos blockPos)
-    {
+    protected boolean isAir(BlockPos blockPos) {
         // noinspection ConstantConditions
         return getSchematicBlock(blockPos) == null || getSchematicBlock(blockPos).isAir();
     }
 
     @Override
-    protected Blueprint.BuildingInfo getBuildingInfo()
-    {
+    protected Blueprint.BuildingInfo getBuildingInfo() {
         return tile.getBlueprintBuildingInfo();
     }
 
     @Override
-    public void updateSnapshot()
-    {
+    public void updateSnapshot() {
         super.updateSnapshot();
         // noinspection unchecked
         remainingDisplayRequiredBlocks = (List<ItemStack>[]) new List<?>[getBuildingInfo().getSnapshot().getDataSize()];
@@ -80,21 +73,18 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    public void resourcesChanged()
-    {
+    public void resourcesChanged() {
         super.resourcesChanged();
         extractRequiredCache.clear();
     }
 
     @Override
-    public void cancel()
-    {
+    public void cancel() {
         super.cancel();
         remainingDisplayRequiredBlocks = null;
     }
 
-    private Stream<ItemStack> getDisplayRequired(List<ItemStack> requiredItems, List<FluidStack> requiredFluids)
-    {
+    private Stream<ItemStack> getDisplayRequired(List<ItemStack> requiredItems, List<FluidStack> requiredFluids) {
         return Stream.concat(
                 requiredItems == null ? Stream.empty() : requiredItems.stream(),
                 requiredFluids == null ? Stream.empty() : requiredFluids.stream()
@@ -104,8 +94,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
 
     private Optional<List<ItemStack>> tryExtractRequired(List<ItemStack> requiredItems,
                                                          List<FluidStack> requiredFluids,
-                                                         boolean simulate)
-    {
+                                                         boolean simulate) {
         Supplier<Optional<List<ItemStack>>> function = () ->
                 (
                         StackUtil.mergeSameItems(requiredItems).stream()
@@ -142,8 +131,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
                                                         .map(fluidStack ->
                                                         {
                                                             ItemStack stack = FluidUtil.getFilledBucket(fluidStack);
-                                                            if (!stack.hasTag())
-                                                            {
+                                                            if (!stack.hasTag()) {
                                                                 stack.setTag(new CompoundTag());
                                                             }
                                                             // noinspection ConstantConditions
@@ -157,8 +145,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
                                 )
                         )
                         : Optional.empty();
-        if (!simulate)
-        {
+        if (!simulate) {
             return function.get();
         }
         return extractRequiredCache.computeIfAbsent(
@@ -168,15 +155,13 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    protected boolean canPlace(BlockPos blockPos)
-    {
+    protected boolean canPlace(BlockPos blockPos) {
         // noinspection ConstantConditions
         return !isAir(blockPos) && getSchematicBlock(blockPos).canBuild(tile.getWorldBC(), blockPos);
     }
 
     @Override
-    protected boolean isReadyToPlace(BlockPos blockPos)
-    {
+    protected boolean isReadyToPlace(BlockPos blockPos) {
         // noinspection ConstantConditions
         return getSchematicBlock(blockPos).getRequiredBlockOffsets().stream()
                 .map(blockPos::offset)
@@ -185,8 +170,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    protected boolean hasEnoughToPlaceItems(BlockPos blockPos)
-    {
+    protected boolean hasEnoughToPlaceItems(BlockPos blockPos) {
         return tryExtractRequired(
                 getBuildingInfo().toPlaceRequiredItems[posToIndex(blockPos)],
                 getBuildingInfo().toPlaceRequiredFluids[posToIndex(blockPos)],
@@ -195,8 +179,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    protected List<ItemStack> getToPlaceItems(BlockPos blockPos)
-    {
+    protected List<ItemStack> getToPlaceItems(BlockPos blockPos) {
         return tryExtractRequired(
                 getBuildingInfo().toPlaceRequiredItems[posToIndex(blockPos)],
                 getBuildingInfo().toPlaceRequiredFluids[posToIndex(blockPos)],
@@ -205,8 +188,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    protected void cancelPlaceTask(PlaceTask placeTask)
-    {
+    protected void cancelPlaceTask(PlaceTask placeTask) {
         super.cancelPlaceTask(placeTask);
         // noinspection ConstantConditions
         placeTask.items.stream()
@@ -219,8 +201,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
                 .map(countNbt ->
                 {
                     FluidStack fluidStack = FluidStack.loadFluidStackFromNBT(countNbt.getRight());
-                    if (fluidStack != null)
-                    {
+                    if (fluidStack != null) {
                         fluidStack.setAmount(fluidStack.getAmount() * countNbt.getLeft());
                     }
                     return fluidStack;
@@ -229,8 +210,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    protected boolean isBlockCorrect(BlockPos blockPos)
-    {
+    protected boolean isBlockCorrect(BlockPos blockPos) {
         // noinspection ConstantConditions
         return getBuildingInfo() != null &&
                 getSchematicBlock(blockPos) != null &&
@@ -238,8 +218,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    protected boolean doPlaceTask(PlaceTask placeTask)
-    {
+    protected boolean doPlaceTask(PlaceTask placeTask) {
         // noinspection ConstantConditions
         return getBuildingInfo() != null &&
                 getSchematicBlock(placeTask.pos) != null &&
@@ -247,10 +226,8 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    public boolean tick()
-    {
-        if (tile.getWorldBC().isClientSide)
-        {
+    public boolean tick() {
+        if (tile.getWorldBC().isClientSide) {
             return super.tick();
         }
         tile.getWorldBC().getProfiler().push("entitiesWithinBox");
@@ -309,14 +286,10 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
                                         )) != null
                 )
                 .collect(Collectors.toList());
-        if (!toKill.isEmpty())
-        {
-            if (!tile.getBattery().isFull())
-            {
+        if (!toKill.isEmpty()) {
+            if (!tile.getBattery().isFull()) {
                 return false;
-            }
-            else
-            {
+            } else {
                 tile.getWorldBC().getProfiler().push("kill");
 //                toKill.forEach(Entity::setDead);
                 toKill.forEach(Entity::kill);
@@ -325,17 +298,12 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
         }
         tile.getWorldBC().getProfiler().pop();
         // Call superclass method
-        if (super.tick())
-        {
+        if (super.tick()) {
             // Spawn needed entities
-            if (!toSpawn.isEmpty())
-            {
-                if (!tile.getBattery().isFull())
-                {
+            if (!toSpawn.isEmpty()) {
+                if (!tile.getBattery().isFull()) {
                     return false;
-                }
-                else
-                {
+                } else {
                     tile.getWorldBC().getProfiler().push("spawn");
                     toSpawn.stream()
                             .filter(schematicEntity ->
@@ -359,18 +327,14 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
                 }
             }
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    protected boolean check(BlockPos blockPos)
-    {
-        if (super.check(blockPos))
-        {
+    protected boolean check(BlockPos blockPos) {
+        if (super.check(blockPos)) {
             remainingDisplayRequiredBlocks[posToIndex(blockPos)] =
                     checkResults[posToIndex(blockPos)] != CHECK_RESULT_CORRECT
                             ?
@@ -380,16 +344,13 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
                             ).collect(Collectors.toList())
                             : Collections.emptyList();
             return true;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    protected void afterChecks()
-    {
+    protected void afterChecks() {
         remainingDisplayRequiredBlocksConcat = StackUtil.mergeSameItems(
                 Arrays.stream(remainingDisplayRequiredBlocks)
                         .flatMap(Collection::stream)
@@ -398,8 +359,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    public void writeToByteBuf(PacketBufferBC buffer)
-    {
+    public void writeToByteBuf(PacketBufferBC buffer) {
         super.writeToByteBuf(buffer);
         buffer.writeInt(remainingDisplayRequired.size());
         remainingDisplayRequired.forEach(stack ->
@@ -411,8 +371,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder>
     }
 
     @Override
-    public void readFromByteBuf(PacketBufferBC buffer)
-    {
+    public void readFromByteBuf(PacketBufferBC buffer) {
         super.readFromByteBuf(buffer);
         remainingDisplayRequired.clear();
         IntStream.range(0, buffer.readInt()).mapToObj(i ->

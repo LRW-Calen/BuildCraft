@@ -7,11 +7,9 @@ import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.transport.pipe.PipeFlow;
 import buildcraft.core.statements.BCStatement;
-import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.pipe.flow.PipeFlowPower;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
 import javax.annotation.Nullable;
@@ -41,6 +39,7 @@ public class TriggerPowerRequested extends BCStatement implements ITriggerIntern
 //        return LocaleUtil.localize("gate.trigger.pipe.requestsEnergy");
         return new TranslatableComponent("gate.trigger.pipe.requestsEnergy");
     }
+
     @Override
     public String getDescriptionKey() {
         return "gate.trigger.pipe.requestsEnergy";

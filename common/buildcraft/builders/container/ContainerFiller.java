@@ -21,24 +21,20 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.io.IOException;
 
-public class ContainerFiller extends ContainerBCTile<TileFiller> implements IContainerFilling
-{
+public class ContainerFiller extends ContainerBCTile<TileFiller> implements IContainerFilling {
     private final FullStatement<IFillerPattern> patternStatementClient = new FullStatement<>(
             FillerType.INSTANCE,
             4,
             (statement, paramIndex) -> onStatementChange()
     );
 
-    public ContainerFiller(MenuType menuType, int id, Player player, TileFiller tile)
-    {
+    public ContainerFiller(MenuType menuType, int id, Player player, TileFiller tile) {
         super(menuType, id, player, tile);
 
         addFullPlayerInventory(153);
 
-        for (int sy = 0; sy < 3; sy++)
-        {
-            for (int sx = 0; sx < 9; sx++)
-            {
+        for (int sy = 0; sy < 3; sy++) {
+            for (int sx = 0; sx < 9; sx++) {
 //                addSlotToContainer(new SlotBase(tile.invResources, sx + sy * 9, sx * 18 + 8, sy * 18 + 40));
                 addSlot(new SlotBase(tile.invResources, sx + sy * 9, sx * 18 + 8, sy * 18 + 40));
             }
@@ -48,63 +44,50 @@ public class ContainerFiller extends ContainerBCTile<TileFiller> implements ICon
     }
 
     @Override
-    public Player getPlayer()
-    {
+    public Player getPlayer() {
         return player;
     }
 
     @Override
-    public FullStatement<IFillerPattern> getPatternStatementClient()
-    {
+    public FullStatement<IFillerPattern> getPatternStatementClient() {
         return patternStatementClient;
     }
 
     @Override
-    public FullStatement<IFillerPattern> getPatternStatement()
-    {
+    public FullStatement<IFillerPattern> getPatternStatement() {
         return tile.addon != null ? tile.addon.patternStatement : tile.patternStatement;
     }
 
     @Override
-    public boolean isInverted()
-    {
+    public boolean isInverted() {
         return tile.addon != null ? tile.addon.inverted : tile.inverted;
     }
 
     @Override
-    public void setInverted(boolean value)
-    {
-        if (tile.addon != null)
-        {
+    public void setInverted(boolean value) {
+        if (tile.addon != null) {
             tile.addon.inverted = value;
-        }
-        else
-        {
+        } else {
             tile.inverted = value;
         }
     }
 
     @Override
-    public void valuesChanged()
-    {
-        if (tile.addon != null)
-        {
+    public void valuesChanged() {
+        if (tile.addon != null) {
             tile.addon.updateBuildingInfo();
-            if (!player.level.isClientSide)
-            {
+            if (!player.level.isClientSide) {
                 WorldSavedDataVolumeBoxes.get(getPlayer().level).setDirty();
             }
         }
-        if (!player.level.isClientSide)
-        {
+        if (!player.level.isClientSide) {
             tile.onStatementChange();
         }
     }
 
     @Override
 //    public void readMessage(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
-    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readMessage(id, buffer, side, ctx);
         IContainerFilling.super.readMessage(id, buffer, side, ctx);
     }

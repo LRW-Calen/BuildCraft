@@ -16,7 +16,8 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -45,8 +46,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
     //    private GuiButtonImage recipeButton;
 //    private ImageButton recipeButton;
 
-    public GuiAdvancedCraftingTable(ContainerAdvancedCraftingTable container, Inventory inventory, Component component)
-    {
+    public GuiAdvancedCraftingTable(ContainerAdvancedCraftingTable container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -77,8 +77,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 //        recipeBook.init(width, height, minecraft, widthTooNarrow, container);
 //    }
 
-    private void sendRecipe(Recipe recipe)
-    {
+    private void sendRecipe(Recipe recipe) {
         List<ItemStack> stacks = new ArrayList<>(9);
 
         int maxX = recipe instanceof IShapedRecipe ? ((IShapedRecipe) recipe).getRecipeWidth() : 3;
@@ -86,35 +85,25 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
         int offsetX = maxX == 1 ? 1 : 0;
         int offsetY = maxY == 1 ? 1 : 0;
         List<Ingredient> ingredients = recipe.getIngredients();
-        if (ingredients.isEmpty())
-        {
+        if (ingredients.isEmpty()) {
             return;
         }
-        for (int y = 0; y < 3; y++)
-        {
-            for (int x = 0; x < 3; x++)
-            {
-                if (x < offsetX || y < offsetY)
-                {
+        for (int y = 0; y < 3; y++) {
+            for (int x = 0; x < 3; x++) {
+                if (x < offsetX || y < offsetY) {
                     stacks.add(ItemStack.EMPTY);
                     continue;
                 }
                 int i = x - offsetX + (y - offsetY) * maxX;
-                if (i >= ingredients.size() || x - offsetX >= maxX)
-                {
+                if (i >= ingredients.size() || x - offsetX >= maxX) {
                     stacks.add(ItemStack.EMPTY);
-                }
-                else
-                {
+                } else {
                     Ingredient ing = ingredients.get(i);
 //                    ItemStack[] matching = ing.getMatchingStacks();
                     ItemStack[] matching = ing.getItems();
-                    if (matching.length >= 1)
-                    {
+                    if (matching.length >= 1) {
                         stacks.add(matching[0]);
-                    }
-                    else
-                    {
+                    } else {
                         stacks.add(ItemStack.EMPTY);
                     }
                 }
@@ -125,8 +114,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
     }
 
     @Override
-    protected boolean shouldAddHelpLedger()
-    {
+    protected boolean shouldAddHelpLedger() {
         // Don't add it on the left side because it clashes with the recipe book
         return false;
     }
@@ -199,8 +187,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    public void updateScreen()
-    public void tick()
-    {
+    public void tick() {
 //        super.updateScreen();
         super.tick();
 //        if (recipeBook != null)
@@ -211,8 +198,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    public void drawScreen(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
-    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks)
-    {
+    public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
 //        if (recipeBook == null)
 //        {
 ////            super.drawScreen(mouseX, mouseY, partialTicks);
@@ -248,13 +234,11 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
 
         long target = container.tile.getTarget();
-        if (target != 0)
-        {
+        if (target != 0) {
             double v = (double) container.tile.power / target;
             ICON_PROGRESS.drawCutInside(
                     new GuiRectangle(
@@ -269,8 +253,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
     }
 
     @Override
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
         String title = I18n.get("tile." + TagManager.getTag("block.advanced_crafting_table", TagManager.EnumTagType.UNLOCALIZED_NAME) + ".name");
 //        fontRenderer.drawString(title, guiLeft + (xSize - fontRenderer.getStringWidth(title)) / 2, guiTop + 5, 0x404040);
         font.draw(poseStack, title, leftPos + (imageWidth - font.width(title)) / 2, topPos + 5, 0x404040);
@@ -278,8 +261,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton)
-    {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
 //        if (recipeBook == null)
 //        {
 //            super.mouseClicked(mouseX, mouseY, mouseButton);
@@ -301,8 +283,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
 //    public boolean charTyped(char typedChar, int keyCode)
-    public boolean keyPressed(int typedChar, int keyCode, int modifiers)
-    {
+    public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
 //        if (recipeBook == null)
 //        {
 ////            super.keyTyped(typedChar, keyCode);
@@ -324,8 +305,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
         return super.keyPressed(typedChar, keyCode, modifiers);
     }
 
-    public boolean charTyped(char typedChar, int keyCode)
-    {
+    public boolean charTyped(char typedChar, int keyCode) {
 //        if (recipeBook == null)
 //        {
 ////            super.keyTyped(typedChar, keyCode);
@@ -349,8 +329,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    protected void handleMouseClick(Slot slot, int slotId, int mouseButton, ClickType type)
-    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type)
-    {
+    protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
 //        super.handleMouseClick(slot, slotId, mouseButton, type);
         super.slotClicked(slot, slotId, mouseButton, type);
 //        if (recipeBook != null)
@@ -361,8 +340,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    protected boolean isPointInRegion(int rectX, int rectY, int rectWidth, int rectHeight, int pointX, int pointY)
-    protected boolean isHovering(int rectX, int rectY, int rectWidth, int rectHeight, double pointX, double pointY)
-    {
+    protected boolean isHovering(int rectX, int rectY, int rectWidth, int rectHeight, double pointX, double pointY) {
 //        if (recipeBook == null)
 //        {
 ////            return super.isPointInRegion(rectX, rectY, rectWidth, rectHeight, pointX, pointY);
@@ -377,8 +355,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    protected boolean hasClickedOutside(int mouseX, int mouseY, int _guiLeft, int _guiTop)
-    protected boolean hasClickedOutside(double mouseX, double mouseY, int _guiLeft, int _guiTop, int p_97761_)
-    {
+    protected boolean hasClickedOutside(double mouseX, double mouseY, int _guiLeft, int _guiTop, int p_97761_) {
 //        if (recipeBook == null)
 //        {
 //            return super.hasClickedOutside(mouseX, mouseY, _guiLeft, _guiTop, p_97761_);
@@ -394,8 +371,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    public void onGuiClosed()
-    public void onClose()
-    {
+    public void onClose() {
 //        if (recipeBook != null)
 //        {
 //            recipeBook.removed();
@@ -416,12 +392,10 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
 
     @Override
 //    public GuiRecipeBook func_194310_f()
-    public void recipesShown(List<Recipe<?>> p_100518_)
-    {
+    public void recipesShown(List<Recipe<?>> p_100518_) {
 //        return recipeBook;
         // Calen: From RecipeBookComponent
-        for (Recipe<?> recipe : p_100518_)
-        {
+        for (Recipe<?> recipe : p_100518_) {
             this.minecraft.player.removeRecipeHighlight(recipe);
         }
     }

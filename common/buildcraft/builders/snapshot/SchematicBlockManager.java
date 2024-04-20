@@ -17,15 +17,11 @@ import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nonnull;
 
-public class SchematicBlockManager
-{
+public class SchematicBlockManager {
     @SuppressWarnings("WeakerAccess")
-    public static ISchematicBlock getSchematicBlock(SchematicBlockContext context)
-    {
-        for (SchematicBlockFactory<?> schematicBlockFactory : Lists.reverse(SchematicBlockFactoryRegistry.getFactories()))
-        {
-            if (schematicBlockFactory.predicate.test(context))
-            {
+    public static ISchematicBlock getSchematicBlock(SchematicBlockContext context) {
+        for (SchematicBlockFactory<?> schematicBlockFactory : Lists.reverse(SchematicBlockFactoryRegistry.getFactories())) {
+            if (schematicBlockFactory.predicate.test(context)) {
                 ISchematicBlock schematicBlock = schematicBlockFactory.supplier.get();
                 schematicBlock.init(context);
                 return schematicBlock;
@@ -35,8 +31,7 @@ public class SchematicBlockManager
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static <S extends ISchematicBlock> S createCleanCopy(S schematicBlock)
-    {
+    public static <S extends ISchematicBlock> S createCleanCopy(S schematicBlock) {
         return SchematicBlockFactoryRegistry
                 .getFactoryByInstance(schematicBlock)
                 .supplier
@@ -44,8 +39,7 @@ public class SchematicBlockManager
     }
 
     @Nonnull
-    public static <S extends ISchematicBlock> CompoundTag writeToNBT(S schematicBlock)
-    {
+    public static <S extends ISchematicBlock> CompoundTag writeToNBT(S schematicBlock) {
         CompoundTag schematicBlockTag = new CompoundTag();
         schematicBlockTag.putString(
                 "name",
@@ -59,23 +53,19 @@ public class SchematicBlockManager
     }
 
     @Nonnull
-    public static ISchematicBlock readFromNBT(CompoundTag schematicBlockTag) throws InvalidInputDataException
-    {
+    public static ISchematicBlock readFromNBT(CompoundTag schematicBlockTag) throws InvalidInputDataException {
         ResourceLocation name = new ResourceLocation(schematicBlockTag.getString("name"));
         SchematicBlockFactory<?> factory = SchematicBlockFactoryRegistry.getFactoryByName(name);
-        if (factory == null)
-        {
+        if (factory == null) {
             throw new InvalidInputDataException("Unknown schematic type " + name);
         }
         ISchematicBlock schematicBlock = factory.supplier.get();
         CompoundTag data = schematicBlockTag.getCompound("data");
-        try
-        {
+        try {
             schematicBlock.deserializeNBT(data);
             return schematicBlock;
         }
-        catch (InvalidInputDataException e)
-        {
+        catch (InvalidInputDataException e) {
             throw new InvalidInputDataException("Failed to load the schematic from " + data, e);
         }
     }

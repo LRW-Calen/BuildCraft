@@ -11,15 +11,13 @@ import buildcraft.lib.client.guide.GuiGuide;
 import buildcraft.lib.gui.GuiSpriteScaled;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-public class GuideImage extends GuidePart
-{
+public class GuideImage extends GuidePart {
     public static final int PIXEL_HEIGHT = 42;
     final ISprite sprite;
     final GuiSpriteScaled icon, full;
     final int width, height;
 
-    public GuideImage(GuiGuide gui, ISprite sprite, int srcWidth, int srcHeight, int width, int height)
-    {
+    public GuideImage(GuiGuide gui, ISprite sprite, int srcWidth, int srcHeight, int width, int height) {
         super(gui);
         this.sprite = sprite;
 /*
@@ -47,14 +45,11 @@ public class GuideImage extends GuidePart
     }
 
     @Override
-    public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index)
-    {
-        if (height - current.pixel < this.height)
-        {
+    public PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index) {
+        if (height - current.pixel < this.height) {
             current = current.nextPage();
         }
-        if (index == current.page)
-        {
+        if (index == current.page) {
             y += current.pixel;
             int w = this.width;
             int h = this.height;
@@ -70,14 +65,11 @@ public class GuideImage extends GuidePart
 
     @Override
     public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
-                                         double mouseX, double mouseY)
-    {
-        if (height - current.pixel < this.height)
-        {
+                                         double mouseX, double mouseY) {
+        if (height - current.pixel < this.height) {
             current = current.nextPage();
         }
-        if (index == current.page)
-        {
+        if (index == current.page) {
             // icon.drawScaledInside(x, y + current.pixel, this.width, this.height);
         }
         return current.nextLine(this.height + 1, height);

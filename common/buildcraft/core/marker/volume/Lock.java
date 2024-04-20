@@ -29,8 +29,7 @@ import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 
-public class Lock
-{
+public class Lock {
     public Cause cause;
     public List<Target> targets = new ArrayList<>();
 
@@ -48,7 +47,8 @@ public class Lock
         causeTag.put("type", NBTUtilBC.writeEnum(Cause.EnumCause.getForClass(cause.getClass())));
         causeTag.put("data", cause.writeToNBT(new CompoundTag()));
         nbt.put("cause", causeTag);
-        nbt.put("targets", NBTUtilBC.writeCompoundList(targets.stream().map(target -> {
+        nbt.put("targets", NBTUtilBC.writeCompoundList(targets.stream().map(target ->
+        {
             CompoundTag targetTag = new CompoundTag();
             targetTag.put("type", NBTUtilBC.writeEnum(Target.EnumTarget.getForClass(target.getClass())));
             targetTag.put("data", target.writeToNBT(new CompoundTag()));
@@ -61,7 +61,8 @@ public class Lock
         CompoundTag causeTag = nbt.getCompound("cause");
         cause = NBTUtilBC.readEnum(causeTag.get("type"), Cause.EnumCause.class).supplier.get();
         cause.readFromNBT(causeTag.getCompound("data"));
-        NBTUtilBC.readCompoundList(nbt.get("targets")).map(targetTag -> {
+        NBTUtilBC.readCompoundList(nbt.get("targets")).map(targetTag ->
+        {
             Target target;
             target = NBTUtilBC.readEnum(targetTag.get("type"), Target.EnumTarget.class).supplier.get();
             target.readFromNBT(targetTag.getCompound("data"));
@@ -73,7 +74,8 @@ public class Lock
         new PacketBufferBC(buf).writeEnum(Cause.EnumCause.getForClass(cause.getClass()));
         cause.toBytes(buf);
         buf.writeInt(targets.size());
-        targets.forEach(target -> {
+        targets.forEach(target ->
+        {
             new FriendlyByteBuf(buf).writeEnum(Target.EnumTarget.getForClass(target.getClass()));
             target.toBytes(buf);
         });
@@ -83,7 +85,8 @@ public class Lock
         cause = new PacketBufferBC(buf).readEnum(Cause.EnumCause.class).supplier.get();
         cause.fromBytes(buf);
         targets.clear();
-        IntStream.range(0, buf.readInt()).mapToObj(i -> {
+        IntStream.range(0, buf.readInt()).mapToObj(i ->
+        {
             Target target;
             target = new PacketBufferBC(buf).readEnum(Target.EnumTarget.class).supplier.get();
             target.fromBytes(buf);
@@ -160,9 +163,9 @@ public class Lock
 
             public static EnumCause getForClass(Class<? extends Cause> clazz) {
                 return Arrays.stream(values())
-                    .filter(enumCause -> enumCause.supplier.get().getClass() == clazz)
-                    .findFirst()
-                    .orElse(null);
+                        .filter(enumCause -> enumCause.supplier.get().getClass() == clazz)
+                        .findFirst()
+                        .orElse(null);
             }
         }
     }
@@ -312,9 +315,9 @@ public class Lock
 
             public static EnumTarget getForClass(Class<? extends Target> clazz) {
                 return Arrays.stream(values())
-                    .filter(enumTarget -> enumTarget.supplier.get().getClass() == clazz)
-                    .findFirst()
-                    .orElse(null);
+                        .filter(enumTarget -> enumTarget.supplier.get().getClass() == clazz)
+                        .findFirst()
+                        .orElse(null);
             }
         }
     }

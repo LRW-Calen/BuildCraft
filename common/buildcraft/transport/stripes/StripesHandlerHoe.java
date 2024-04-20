@@ -20,8 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public enum StripesHandlerHoe implements IStripesHandlerItem
-{
+public enum StripesHandlerHoe implements IStripesHandlerItem {
     INSTANCE;
 
     @Override
@@ -30,11 +29,9 @@ public enum StripesHandlerHoe implements IStripesHandlerItem
                           Direction direction,
                           ItemStack stack,
                           Player player,
-                          IStripesActivator activator)
-    {
+                          IStripesActivator activator) {
 
-        if (!(stack.getItem() instanceof HoeItem))
-        {
+        if (!(stack.getItem() instanceof HoeItem)) {
             return false;
         }
 

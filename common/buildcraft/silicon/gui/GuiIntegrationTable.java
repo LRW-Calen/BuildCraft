@@ -14,16 +14,14 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-public class GuiIntegrationTable extends GuiBC8<ContainerIntegrationTable>
-{
+public class GuiIntegrationTable extends GuiBC8<ContainerIntegrationTable> {
     private static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftsilicon:textures/gui/integration_table.png");
     private static final int SIZE_X = 176, SIZE_Y = 191;
     private static final GuiIcon ICON_GUI = new GuiIcon(TEXTURE_BASE, 0, 0, SIZE_X, SIZE_Y);
     private static final GuiIcon ICON_PROGRESS = new GuiIcon(TEXTURE_BASE, SIZE_X, 0, 4, 70);
     private static final GuiRectangle RECT_PROGRESS = new GuiRectangle(164, 22, 4, 70);
 
-    public GuiIntegrationTable(ContainerIntegrationTable container, Inventory inventory, Component component)
-    {
+    public GuiIntegrationTable(ContainerIntegrationTable container, Inventory inventory, Component component) {
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -32,13 +30,11 @@ public class GuiIntegrationTable extends GuiBC8<ContainerIntegrationTable>
     }
 
     @Override
-    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack)
-    {
+    protected void drawBackgroundLayer(float partialTicks, PoseStack poseStack) {
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
 
         long target = container.tile.getTarget();
-        if (target != 0)
-        {
+        if (target != 0) {
             double v = (double) container.tile.power / target;
             ICON_PROGRESS.drawCutInside(
                     new GuiRectangle(
@@ -53,8 +49,7 @@ public class GuiIntegrationTable extends GuiBC8<ContainerIntegrationTable>
     }
 
     @Override
-    protected void drawForegroundLayer(PoseStack poseStack)
-    {
+    protected void drawForegroundLayer(PoseStack poseStack) {
         String title = I18n.get("tile.integrationTableBlock.name");
 //        font.draw(title, guiLeft + (xSize - fontRenderer.getStringWidth(title)) / 2, guiTop + 10, 0x404040);
         font.draw(poseStack, title, leftPos + (imageWidth - font.width(title)) / 2, topPos + 10, 0x404040);

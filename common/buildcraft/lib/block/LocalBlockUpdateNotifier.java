@@ -2,8 +2,8 @@ package buildcraft.lib.block;
 
 import buildcraft.lib.BCLib;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.event.VanillaGameEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -16,8 +16,7 @@ import java.util.*;
  * it was within the update range of the ILocalBlockUpdateSubscriber
  */
 @Mod.EventBusSubscriber(modid = BCLib.MODID) // Calen
-public class LocalBlockUpdateNotifier
-{
+public class LocalBlockUpdateNotifier {
 
     private static final Map<Level, LocalBlockUpdateNotifier> instanceMap = new WeakHashMap<>();
     private final Set<ILocalBlockUpdateSubscriber> subscriberSet = new HashSet<>();
@@ -65,16 +64,13 @@ public class LocalBlockUpdateNotifier
 
     // Calen
     @SubscribeEvent
-    public static void handleForgeEvent(VanillaGameEvent event)
-    {
+    public static void handleForgeEvent(VanillaGameEvent event) {
         GameEvent gameEvent = event.getVanillaEvent();
-        if (listenedEvents.contains(gameEvent))
-        {
+        if (listenedEvents.contains(gameEvent)) {
             instanceMap.forEach(
                     (level, notifier) ->
                     {
-                        if (level == event.getLevel())
-                        {
+                        if (level == event.getLevel()) {
                             notifier.notifySubscribersInRange(event.getLevel(), event.getEventPosition());
                         }
                     }
@@ -92,8 +88,7 @@ public class LocalBlockUpdateNotifier
     public static LocalBlockUpdateNotifier instance(Level world)
 //    public static LocalBlockUpdateNotifier instance(Level world, BlockPos pos)
     {
-        if (!instanceMap.containsKey(world))
-        {
+        if (!instanceMap.containsKey(world)) {
             instanceMap.put(world, new LocalBlockUpdateNotifier(world));
 //            instanceMap.put(world, new LocalBlockUpdateNotifier(world, pos));
         }
@@ -105,8 +100,7 @@ public class LocalBlockUpdateNotifier
      *
      * @param subscriber the subscriber to receive notifications about local core updates
      */
-    public void registerSubscriberForUpdateNotifications(ILocalBlockUpdateSubscriber subscriber)
-    {
+    public void registerSubscriberForUpdateNotifications(ILocalBlockUpdateSubscriber subscriber) {
         subscriberSet.add(subscriber);
     }
 
@@ -115,8 +109,7 @@ public class LocalBlockUpdateNotifier
      *
      * @param subscriber the subscriber to no longer receive notifications about local core update
      */
-    public void removeSubscriberFromUpdateNotifications(ILocalBlockUpdateSubscriber subscriber)
-    {
+    public void removeSubscriberFromUpdateNotifications(ILocalBlockUpdateSubscriber subscriber) {
         subscriberSet.remove(subscriber);
     }
 
@@ -132,10 +125,8 @@ public class LocalBlockUpdateNotifier
      * @param flags    from the Block Update
      */
 //    private void notifySubscribersInRange(Level world, BlockPos eventPos, BlockState oldState, BlockState newState, int flags)
-    private void notifySubscribersInRange(Level world, BlockPos eventPos)
-    {
-        for (ILocalBlockUpdateSubscriber subscriber : subscriberSet)
-        {
+    private void notifySubscribersInRange(Level world, BlockPos eventPos) {
+        for (ILocalBlockUpdateSubscriber subscriber : subscriberSet) {
             BlockPos keyPos = subscriber.getSubscriberPos();
             int updateRange = subscriber.getUpdateRange();
             if (Math.abs(keyPos.getX() - eventPos.getX()) <= updateRange &&

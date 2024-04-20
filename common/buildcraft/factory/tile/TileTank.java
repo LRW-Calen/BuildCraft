@@ -6,9 +6,9 @@
 
 package buildcraft.factory.tile;
 
+import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.core.IFluidFilter;
 import buildcraft.api.core.IFluidHandlerAdv;
-import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.tiles.IDebuggable;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.lib.fluid.FluidSmoother;
@@ -19,6 +19,7 @@ import buildcraft.lib.misc.FluidUtilBC;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.data.IdAllocator;
 import buildcraft.lib.net.PacketBufferBC;
+import buildcraft.lib.tile.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +33,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import buildcraft.lib.tile.ITickable;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -44,8 +44,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.util.*;
 
-public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandlerAdv, ITickable
-{
+public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandlerAdv, ITickable {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("tank");
     public static final int NET_FLUID_DELTA = IDS.allocId("FLUID_DELTA");
 
@@ -60,8 +59,7 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
 
     private int lastComparatorLevel;
 
-    public TileTank(BlockPos pos, BlockState blockState)
-    {
+    public TileTank(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.tankTile.get(), pos, blockState);
         tank = new Tank("tank", 16 * FluidAttributes.BUCKET_VOLUME, null);
         tank.setTileEntity(this);
@@ -91,13 +89,11 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
 //    }
 
     @Override
-    public IdAllocator getIdAllocator()
-    {
+    public IdAllocator getIdAllocator() {
         return IDS;
     }
 
-    public int getComparatorLevel()
-    {
+    public int getComparatorLevel() {
         int amount = tank.getFluidAmount();
         int cap = tank.getCapacity();
         return amount * 14 / cap + (amount > 0 ? 1 : 0);
@@ -105,16 +101,13 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
 
     // ITickable
     @Override
-    public void update()
-    {
+    public void update() {
         ITickable.super.update();
         smoothedTank.tick(level);
 
-        if (!level.isClientSide)
-        {
+        if (!level.isClientSide) {
             int compLevel = getComparatorLevel();
-            if (compLevel != lastComparatorLevel)
-            {
+            if (compLevel != lastComparatorLevel) {
                 lastComparatorLevel = compLevel;
 //                markDirty();
                 setChanged();
@@ -125,11 +118,9 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
     // TileEntity
 
     @Override
-    public void onPlacedBy(LivingEntity placer, ItemStack stack)
-    {
+    public void onPlacedBy(LivingEntity placer, ItemStack stack) {
         super.onPlacedBy(placer, stack);
-        if (!placer.level.isClientSide)
-        {
+        if (!placer.level.isClientSide) {
             isPlayerInteracting = true;
             balanceTankFluids();
             isPlayerInteracting = false;
@@ -140,40 +131,30 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
      * Moves fluids around to their preferred positions. (For gaseous fluids this will move everything as high as
      * possible, for liquid fluids this will move everything as low as possible.)
      */
-    public void balanceTankFluids()
-    {
+    public void balanceTankFluids() {
         List<TileTank> tanks = getAllTanks();
         FluidStack fluid = null;
-        for (TileTank tile : tanks)
-        {
+        for (TileTank tile : tanks) {
             FluidStack held = tile.tank.getFluid();
 //            if (held == null)
-            if (held == null || held.isEmpty())
-            {
+            if (held == null || held.isEmpty()) {
                 continue;
             }
-            if (fluid == null)
-            {
+            if (fluid == null) {
                 fluid = held;
-            }
-            else if (!fluid.isFluidEqual(held))
-            {
+            } else if (!fluid.isFluidEqual(held)) {
                 return;
             }
         }
-        if (fluid == null)
-        {
+        if (fluid == null) {
             return;
         }
-        if (fluid.getRawFluid().getAttributes().isGaseous())
-        {
+        if (fluid.getRawFluid().getAttributes().isGaseous()) {
             Collections.reverse(tanks);
         }
         TileTank prev = null;
-        for (TileTank tile : tanks)
-        {
-            if (prev != null)
-            {
+        for (TileTank tile : tanks) {
+            if (prev != null) {
                 FluidUtilBC.move(tile.tank, prev.tank);
             }
             prev = tile;
@@ -182,14 +163,12 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
 
     @Override
     public InteractionResult onActivated(Player player, InteractionHand hand, Direction facing, float hitX, float hitY,
-                                         float hitZ)
-    {
+                                         float hitZ) {
         int amountBefore = tank.getFluidAmount();
         isPlayerInteracting = true;
         InteractionResult didChange = FluidUtilBC.onTankActivated(player, getBlockPos(), hand, this);
         isPlayerInteracting = false;
-        if (didChange == InteractionResult.SUCCESS && !player.level.isClientSide && amountBefore < tank.getFluidAmount())
-        {
+        if (didChange == InteractionResult.SUCCESS && !player.level.isClientSide && amountBefore < tank.getFluidAmount()) {
             AdvancementUtil.unlockAdvancement(player, ADVANCEMENT_STORE_FLUIDS);
         }
         return didChange;
@@ -198,35 +177,25 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
     // Networking
 
     @Override
-    public void writePayload(int id, PacketBufferBC buffer, Dist side)
-    {
+    public void writePayload(int id, PacketBufferBC buffer, Dist side) {
         super.writePayload(id, buffer, side);
-        if (side == Dist.DEDICATED_SERVER)
-        {
-            if (id == NET_RENDER_DATA)
-            {
+        if (side == Dist.DEDICATED_SERVER) {
+            if (id == NET_RENDER_DATA) {
                 writePayload(NET_FLUID_DELTA, buffer, side);
-            }
-            else if (id == NET_FLUID_DELTA)
-            {
+            } else if (id == NET_FLUID_DELTA) {
                 smoothedTank.writeInit(buffer);
             }
         }
     }
 
     @Override
-    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException
-    {
+    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(id, buffer, side, ctx);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == NET_RENDER_DATA)
-            {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == NET_RENDER_DATA) {
                 readPayload(NET_FLUID_DELTA, buffer, side, ctx);
                 smoothedTank.resetSmoothing(getLevel());
-            }
-            else if (id == NET_FLUID_DELTA)
-            {
+            } else if (id == NET_FLUID_DELTA) {
                 smoothedTank.handleMessage(getLevel(), buffer);
             }
         }
@@ -236,8 +205,7 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
 //        left.add("fluid = " + tank.getDebugString());
         left.add(new TextComponent("fluid = " + tank.getDebugString()));
         smoothedTank.getDebugInfo(left, right, side);
@@ -246,8 +214,7 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
     // Rendering
 
     @OnlyIn(Dist.CLIENT)
-    public FluidSmoother.FluidStackInterp getFluidForRender(float partialTicks)
-    {
+    public FluidSmoother.FluidStackInterp getFluidForRender(float partialTicks) {
         return smoothedTank.getFluidForRender(partialTicks);
     }
 
@@ -262,8 +229,7 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
      * @param direction The direction that the other tank is, from this tank.
      * @return True if this can connect, false otherwise.
      */
-    public boolean canConnectTo(TileTank other, Direction direction)
-    {
+    public boolean canConnectTo(TileTank other, Direction direction) {
         return true;
     }
 
@@ -279,54 +245,42 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
      *                  to.getPos()}) returns true.
      * @return True if both could connect, false otherwise.
      */
-    public static boolean canTanksConnect(TileTank from, TileTank to, Direction direction)
-    {
+    public static boolean canTanksConnect(TileTank from, TileTank to, Direction direction) {
         return from.canConnectTo(to, direction) && to.canConnectTo(from, direction.getOpposite());
     }
 
     /**
      * @return A list of all connected tanks around this block, ordered by position from bottom to top.
      */
-    public List<TileTank> getAllTanks()
-    {
+    public List<TileTank> getAllTanks() {
         // double-ended queue rather than array list to avoid
         // the copy operation when we search downwards
         Deque<TileTank> tanks = new ArrayDeque<>();
         tanks.add(this);
         TileTank prevTank = this;
-        while (true)
-        {
+        while (true) {
             BlockEntity tileAbove = prevTank.getNeighbourTile(Direction.UP);
-            if (!(tileAbove instanceof TileTank))
-            {
+            if (!(tileAbove instanceof TileTank)) {
                 break;
             }
             TileTank tankUp = (TileTank) tileAbove;
-            if (tankUp != null && canTanksConnect(prevTank, tankUp, Direction.UP))
-            {
+            if (tankUp != null && canTanksConnect(prevTank, tankUp, Direction.UP)) {
                 tanks.addLast(tankUp);
-            }
-            else
-            {
+            } else {
                 break;
             }
             prevTank = tankUp;
         }
         prevTank = this;
-        while (true)
-        {
+        while (true) {
             BlockEntity tileBelow = prevTank.getNeighbourTile(Direction.DOWN);
-            if (!(tileBelow instanceof TileTank))
-            {
+            if (!(tileBelow instanceof TileTank)) {
                 break;
             }
             TileTank tankBelow = (TileTank) tileBelow;
-            if (tankBelow != null && canTanksConnect(prevTank, tankBelow, Direction.DOWN))
-            {
+            if (tankBelow != null && canTanksConnect(prevTank, tankBelow, Direction.DOWN)) {
                 tanks.addFirst(tankBelow);
-            }
-            else
-            {
+            } else {
                 break;
             }
             prevTank = tankBelow;
@@ -374,38 +328,30 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
 //    }
 
     @Override
-    public int getTanks()
-    {
+    public int getTanks() {
         return 1;
     }
 
     @NotNull
     @Override
-    public FluidStack getFluidInTank(int tank)
-    {
+    public FluidStack getFluidInTank(int tank) {
         List<TileTank> tanks = getAllTanks();
         TileTank bottom = tanks.get(0);
         TileTank top = tanks.get(tanks.size() - 1);
         FluidStack total = bottom.tank.getFluid();
 //        FluidStack total = level.isClientSide ? bottom.tank.getFluidForRender() : bottom.tank.getFluid();
-        if (total.isEmpty())
-        {
+        if (total.isEmpty()) {
             total = top.tank.getFluid();
 //            total = level.isClientSide ? top.tank.getFluidForRender() : top.tank.getFluid();
         }
-        if (total.isEmpty())
-        {
-        }
-        else
-        {
+        if (total.isEmpty()) {
+        } else {
             total = total.copy();
             total.setAmount(0);
-            for (TileTank t : tanks)
-            {
+            for (TileTank t : tanks) {
                 FluidStack other = t.tank.getFluid();
 //                FluidStack other = level.isClientSide ? t.tank.getFluidForRender() : t.tank.getFluid();
-                if (!other.isEmpty())
-                {
+                if (!other.isEmpty()) {
                     total.setAmount(total.getAmount() + other.getAmount());
                 }
             }
@@ -414,59 +360,47 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
     }
 
     @Override
-    public int getTankCapacity(int tank)
-    {
+    public int getTankCapacity(int tank) {
         List<TileTank> tanks = getAllTanks();
         int capacity = 0;
-        for (TileTank t : tanks)
-        {
+        for (TileTank t : tanks) {
             capacity += t.tank.getCapacity();
         }
         return capacity;
     }
 
     @Override
-    public boolean isFluidValid(int tank, @NotNull FluidStack stack)
-    {
+    public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
         return true;
     }
 
     @Override
-    public int fill(FluidStack resource, FluidAction doFill)
-    {
-        if (resource == null || resource.getAmount() <= 0)
-        {
+    public int fill(FluidStack resource, FluidAction doFill) {
+        if (resource == null || resource.getAmount() <= 0) {
             return 0;
         }
         int filled = 0;
         List<TileTank> tanks = getAllTanks();
-        for (TileTank t : tanks)
-        {
+        for (TileTank t : tanks) {
             FluidStack current = t.tank.getFluid();
-            if (current != null && !current.isEmpty() && !current.isFluidEqual(resource))
-            {
+            if (current != null && !current.isEmpty() && !current.isFluidEqual(resource)) {
                 return 0;
             }
         }
         boolean gas = resource.getRawFluid().getAttributes().isGaseous();
-        if (gas)
-        {
+        if (gas) {
             Collections.reverse(tanks);
         }
         resource = resource.copy();
-        for (TileTank t : tanks)
-        {
+        for (TileTank t : tanks) {
             int tankFilled = t.tank.fill(resource, doFill);
-            if (tankFilled > 0)
-            {
-                if (isPlayerInteracting & doFill == FluidAction.EXECUTE)
-                {
+            if (tankFilled > 0) {
+                if (isPlayerInteracting & doFill == FluidAction.EXECUTE) {
                     t.sendNetworkUpdate(NET_RENDER_DATA);
                 }
                 resource.setAmount(resource.getAmount() - tankFilled);
                 filled += tankFilled;
-                if (resource.getAmount() == 0)
-                {
+                if (resource.getAmount() == 0) {
                     break;
                 }
             }
@@ -475,16 +409,13 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
     }
 
     @Override
-    public FluidStack drain(int maxDrain, FluidAction doDrain)
-    {
+    public FluidStack drain(int maxDrain, FluidAction doDrain) {
         return drain((fluid) -> true, maxDrain, doDrain);
     }
 
     @Override
-    public FluidStack drain(FluidStack resource, FluidAction doDrain)
-    {
-        if (resource == null)
-        {
+    public FluidStack drain(FluidStack resource, FluidAction doDrain) {
+        if (resource == null) {
             return null;
         }
         return drain(resource::isFluidEqual, resource.getAmount(), doDrain);
@@ -493,45 +424,36 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
     // IFluidHandlerAdv
 
     @Override
-    public FluidStack drain(IFluidFilter filter, int maxDrain, FluidAction doDrain)
-    {
-        if (maxDrain <= 0)
-        {
+    public FluidStack drain(IFluidFilter filter, int maxDrain, FluidAction doDrain) {
+        if (maxDrain <= 0) {
             return null;
         }
         List<TileTank> tanks = getAllTanks();
         boolean gas = false;
-        for (TileTank tile : tanks)
-        {
+        for (TileTank tile : tanks) {
             FluidStack fluid = tile.tank.getFluid();
 //            if (fluid != null)
-            if (!fluid.isEmpty())
-            {
+            if (!fluid.isEmpty()) {
                 gas = fluid.getRawFluid().getAttributes().isGaseous();
                 break;
             }
         }
-        if (!gas)
-        {
+        if (!gas) {
             Collections.reverse(tanks);
         }
         FluidStack total = null;
-        for (TileTank t : tanks)
-        {
+        for (TileTank t : tanks) {
             int realMax = maxDrain - (total == null ? 0 : total.getAmount());
-            if (realMax <= 0)
-            {
+            if (realMax <= 0) {
                 break;
             }
             FluidStack drained = t.tank.drain(filter, realMax, doDrain);
 //            if (drained == null) continue;
             if (drained.isEmpty()) continue;
-            if (isPlayerInteracting & doDrain == FluidAction.EXECUTE)
-            {
+            if (isPlayerInteracting & doDrain == FluidAction.EXECUTE) {
                 t.sendNetworkUpdate(NET_RENDER_DATA);
             }
-            if (total == null)
-            {
+            if (total == null) {
                 total = drained.copy();
                 total.setAmount(0);
             }

@@ -7,7 +7,6 @@
 package buildcraft.lib.block;
 
 import buildcraft.api.blocks.ICustomRotationHandler;
-import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.misc.RotationUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -18,8 +17,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 
 /** Marker interface used by {@link BlockBCBase_Neptune} to automatically add an {@link Direction} property to blocks,
  * and go to and from meta. */
-public interface IBlockWithFacing extends ICustomRotationHandler
-{
+public interface IBlockWithFacing extends ICustomRotationHandler {
     default boolean canFaceVertically() {
         return false;
     }
@@ -39,7 +37,7 @@ public interface IBlockWithFacing extends ICustomRotationHandler
         }
         Direction currentFacing = state.getValue(getFacingProperty());
         Direction newFacing = canFaceVertically() ? RotationUtil.rotateAll(currentFacing) : currentFacing.getClockWise();
-        world.setBlock(pos, state.setValue(getFacingProperty(), newFacing),3);
+        world.setBlock(pos, state.setValue(getFacingProperty(), newFacing), 3);
         return InteractionResult.SUCCESS;
     }
 }

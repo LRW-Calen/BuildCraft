@@ -1,14 +1,14 @@
 package buildcraft.datagen.energy;
 
 import buildcraft.core.BCCoreBlocks;
+import buildcraft.core.BCCoreItems;
 import buildcraft.datagen.base.BCBaseAdvancementProvider;
+import buildcraft.datagen.core.CoreAdvancementProvider;
 import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyBlocks;
-import buildcraft.datagen.core.CoreAdvancementProvider;
-import buildcraft.energy.generation.biome.BCBiomeRegistry;
 import buildcraft.energy.BCEnergyFluids;
-import buildcraft.core.BCCoreItems;
 import buildcraft.energy.BCEnergyItems;
+import buildcraft.energy.generation.biome.BCBiomeRegistry;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
@@ -20,18 +20,16 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.util.function.Consumer;
 
 // Calen Completed
-public class EnergyAdvancementProvider extends BCBaseAdvancementProvider
-{
-    private static final String NAMESPACE = BCEnergy.MOD_ID;
-//    private static Advancement ROOT = CoreAdvancementProvider.ROOT;
+public class EnergyAdvancementProvider extends BCBaseAdvancementProvider {
+    private static final String NAMESPACE = BCEnergy.MODID;
+    //    private static Advancement ROOT = CoreAdvancementProvider.ROOT;
     private static Advancement ROOT;
-//    private static Advancement GUIDE = CoreAdvancementProvider.GUIDE;
+    //    private static Advancement GUIDE = CoreAdvancementProvider.GUIDE;
     private static Advancement GUIDE;
 
     private static final ImpossibleTrigger.TriggerInstance IMPOSSIBLE = new ImpossibleTrigger.TriggerInstance();
 
-    public static void registerEnergyAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper)
-    {
+    public static void registerEnergyAdvancements(Consumer<Advancement> consumer, ExistingFileHelper fileHelper) {
         ROOT = CoreAdvancementProvider.ROOT;
         GUIDE = CoreAdvancementProvider.GUIDE;
         // engine

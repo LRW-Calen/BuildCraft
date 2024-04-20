@@ -5,24 +5,16 @@
 package buildcraft.core.item;
 
 import buildcraft.api.items.IList;
-import buildcraft.builders.item.ItemSnapshot;
 import buildcraft.core.BCCoreGuis;
 import buildcraft.core.BCCoreMenuTypes;
 import buildcraft.core.list.ContainerList;
-import buildcraft.lib.BCLibMenuTypes;
-import buildcraft.lib.container.ContainerGuide;
 import buildcraft.lib.item.ItemBC_Neptune;
-import buildcraft.lib.item.ItemGuide;
 import buildcraft.lib.list.ListHandler;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.StringUtilBC;
-import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
@@ -44,23 +36,20 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 //public class ItemList_BC8 extends ItemBC_Neptune implements IList
-public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider
-{
+public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider {
     private static final ResourceLocation ADVANCEMENT = new ResourceLocation("buildcraftcore:list");
 
     // Calen
     public static final String NBT_KEY = "label";
 
-    public ItemList_BC8(String idBC, Item.Properties properties)
-    {
+    public ItemList_BC8(String idBC, Item.Properties properties) {
         super(idBC, properties);
 //        setMaxStackSize(1);
     }
 
     @Override
 //    public ActionResult<ItemStack> onItemRightClick(Level world, Player player, EnumHand hand)
-    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand)
-    {
+    public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         AdvancementUtil.unlockAdvancement(player, ADVANCEMENT);
         ItemStack handItemStack = player.getItemInHand(hand);
 //        BCCoreGuis.LIST.openGUI(player);
@@ -86,8 +75,7 @@ public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider
     @Override
     @OnlyIn(Dist.CLIENT)
 //    public void addInformation(ItemStack stack, Level world, List<String> tooltip, ITooltipFlag flag)
-    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag)
-    {
+    public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
         String name = getName_INamedItem(StackUtil.asNonNull(stack));
 //        if (StringUtils.isNullOrEmpty(name)) return;
         if (StringUtilBC.isNullOrEmpty(name)) return;
@@ -99,44 +87,38 @@ public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider
 
     @Override
 //    public Component getName(@Nonnull ItemStack stack)
-    public String getName_INamedItem(@Nonnull ItemStack stack)
-    {
+    public String getName_INamedItem(@Nonnull ItemStack stack) {
 //        return new TextComponent(NBTUtilBC.getItemData(stack).getString("label"));
 //        return new TextComponent(NBTUtilBC.getItemData(stack).getString(NBT_KEY));
         return NBTUtilBC.getItemData(stack).getString(NBT_KEY);
     }
 
     @Override
-    public boolean setName(@Nonnull ItemStack stack, String name)
-    {
+    public boolean setName(@Nonnull ItemStack stack, String name) {
 //        NBTUtilBC.getItemData(stack).putString("label", name);
         NBTUtilBC.getItemData(stack).putString(NBT_KEY, name);
         return true;
     }
 
     @Override
-    public boolean matches(@Nonnull ItemStack stackList, @Nonnull ItemStack item)
-    {
+    public boolean matches(@Nonnull ItemStack stackList, @Nonnull ItemStack item) {
         return ListHandler.matches(stackList, item);
     }
 
     // Calen
-    public static boolean isUsed(ItemStack stack)
-    {
+    public static boolean isUsed(ItemStack stack) {
         return ListHandler.hasItems(StackUtil.asNonNull(stack));
     }
 
     // Calen: GUI
     @Override
-    public Component getDisplayName()
-    {
+    public Component getDisplayName() {
         return new TextComponent("list");
     }
 
     @Nullable
     @Override
-    public ContainerList createMenu(int id, Inventory inv, Player player)
-    {
+    public ContainerList createMenu(int id, Inventory inv, Player player) {
         return new ContainerList(BCCoreMenuTypes.LIST, id, player);
     }
 }

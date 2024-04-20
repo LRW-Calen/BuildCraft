@@ -6,33 +6,31 @@
 
 package buildcraft.factory;
 
-import buildcraft.factory.tile.TileDistiller_BC8;
 import buildcraft.factory.client.model.ModelHeatExchange;
 import buildcraft.factory.client.render.*;
+import buildcraft.factory.tile.TileDistiller_BC8;
 import buildcraft.lib.client.model.ModelHolderVariable;
 import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.misc.ExpressionCompat;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
-import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-import java.util.*;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 //@Mod.EventBusSubscriber
 //@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_FACTORY, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
-public class BCFactoryModels
-{
+public class BCFactoryModels {
     public static final ModelHolderVariable DISTILLER;
     public static final ModelHolderVariable HEAT_EXCHANGE_STATIC;
 
-    static
-    {
+    static {
         // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); runned, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
         ExpressionCompat.setup();
 
@@ -69,8 +67,7 @@ public class BCFactoryModels
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event)
-    {
+    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileMiningWell.class, new RenderMiningWell());
         BlockEntityRenderers.register(BCFactoryBlocks.miningWellTile.get(), RenderMiningWell::new);
 //        ClientRegistry.bindTileEntitySpecialRenderer(TilePump.class, new RenderPump());
@@ -85,8 +82,7 @@ public class BCFactoryModels
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onModelBake(ModelBakeEvent event)
-    {
+    public static void onModelBake(ModelBakeEvent event) {
         // Calen: to set model for each blockState, the model path contains blockstate props
         ModelHeatExchange modelHeatExchange = new ModelHeatExchange();
         event.getModelRegistry().replaceAll((rl, m) -> (rl.getPath().contains("heat_exchange") && !rl.getPath().contains("inventory")) ? modelHeatExchange : m);

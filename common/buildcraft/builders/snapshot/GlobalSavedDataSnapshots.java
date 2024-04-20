@@ -29,12 +29,12 @@ public class GlobalSavedDataSnapshots {
     private static final String SNAPSHOT_FILE_EXTENSION = ".bcnbt";
     private static final Map<Dist, GlobalSavedDataSnapshots> INSTANCES = new EnumMap<>(Dist.class);
     private final LoadingCache<Snapshot.Key, Optional<Snapshot>> snapshotsCache = CacheBuilder.newBuilder()
-        .expireAfterAccess(10, TimeUnit.MINUTES)
-        .build(CacheLoader.from(key -> Optional.ofNullable(readSnapshot(key)).map(Pair::getLeft)));
+            .expireAfterAccess(10, TimeUnit.MINUTES)
+            .build(CacheLoader.from(key -> Optional.ofNullable(readSnapshot(key)).map(Pair::getLeft)));
     private final SingleCache<List<Snapshot.Key>> listCache = new SingleCache<>(
-        this::readList,
-        1,
-        TimeUnit.SECONDS
+            this::readList,
+            1,
+            TimeUnit.SECONDS
     );
     private final File snapshotsFile;
 
@@ -42,7 +42,7 @@ public class GlobalSavedDataSnapshots {
         snapshotsFile = new File(
 //            FMLCommonHandler.instance().getSavesDirectory().getParentFile(),
                 FMLPaths.GAMEDIR.get().toFile(),
-            "snapshots-" + side.name().toLowerCase(Locale.ROOT)
+                "snapshots-" + side.name().toLowerCase(Locale.ROOT)
         );
         if (!snapshotsFile.exists()) {
             if (!snapshotsFile.mkdirs()) {
@@ -73,13 +73,15 @@ public class GlobalSavedDataSnapshots {
         if (files != null) {
             for (File snapshotFile : files) {
                 if (snapshotFile.getName().startsWith(key.toString()) &&
-                    snapshotFile.getName().endsWith(SNAPSHOT_FILE_EXTENSION)) {
+                        snapshotFile.getName().endsWith(SNAPSHOT_FILE_EXTENSION))
+                {
                     try (FileInputStream fileInputStream = new FileInputStream(snapshotFile)) {
                         Snapshot snapshot = Snapshot.readFromNBT(NbtSquisher.expand(fileInputStream));
                         if (Objects.equals(snapshot.key, key)) {
                             return Pair.of(snapshot, snapshotFile);
                         }
-                    } catch (IOException e) {
+                    }
+                    catch (IOException e) {
                         new IOException("Failed to read the snapshot " + snapshotFile, e).printStackTrace();
                     }
                 }
@@ -99,7 +101,8 @@ public class GlobalSavedDataSnapshots {
                         if (snapshotFile.getName().startsWith(snapshot.key.toString())) {
                             listBuilder.add(snapshot.key);
                         }
-                    } catch (IOException io) {
+                    }
+                    catch (IOException io) {
                         new IOException("Failed to read the snapshot " + snapshotFile, io).printStackTrace();
                     }
                 }
@@ -110,13 +113,14 @@ public class GlobalSavedDataSnapshots {
 
     public void addSnapshot(Snapshot snapshot) {
         File snapshotFile = new File(
-            snapshotsFile,
-            snapshot.key.toString() + SNAPSHOT_FILE_EXTENSION
+                snapshotsFile,
+                snapshot.key.toString() + SNAPSHOT_FILE_EXTENSION
         );
         if (!snapshotFile.exists()) {
             try (FileOutputStream fileOutputStream = new FileOutputStream(snapshotFile)) {
                 NbtSquisher.squishVanilla(Snapshot.writeToNBT(snapshot), fileOutputStream);
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 new IOException("Failed to write the snapshot file: " + snapshotFile, e).printStackTrace();
             }
         }
@@ -125,7 +129,8 @@ public class GlobalSavedDataSnapshots {
     }
 
     public void removeSnapshot(Snapshot.Key key) {
-        Optional.ofNullable(readSnapshot(key)).map(Pair::getRight).ifPresent(snapshotFile -> {
+        Optional.ofNullable(readSnapshot(key)).map(Pair::getRight).ifPresent(snapshotFile ->
+        {
             if (!snapshotFile.delete()) {
                 new IOException("Failed to read the snapshot file: " + snapshotFile).printStackTrace();
             }

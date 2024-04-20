@@ -6,16 +6,12 @@
 
 package buildcraft.transport.pipe.flow;
 
-import buildcraft.api.core.BCLog;
-import buildcraft.api.core.IFluidFilter;
-import buildcraft.api.core.IFluidHandlerAdv;
-import buildcraft.api.core.SafeTimeTracker;
-import buildcraft.api.core.EnumPipePart;
+import buildcraft.api.core.*;
 import buildcraft.api.tiles.IDebuggable;
+import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pipe.PipeApi.FluidTransferInfo;
 import buildcraft.api.transport.pipe.PipeEventFluid.OnMoveToCentre;
 import buildcraft.api.transport.pipe.PipeEventFluid.PreMoveToCentre;
-import buildcraft.api.transport.pipe.*;
 import buildcraft.core.BCCoreConfig;
 import buildcraft.core.BCCoreItems;
 import buildcraft.lib.misc.*;
@@ -52,8 +48,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
-public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
-{
+public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable {
 
     private static final int DIRECTION_COOLDOWN = 60;
     private static final int COOLDOWN_INPUT = -DIRECTION_COOLDOWN;
@@ -84,51 +79,37 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     private long lastMessage, lastMessageMinus1;
     private NetworkedObjectCache<FluidStack>.Link clientFluid = null;
 
-    public PipeFlowFluids(IPipe pipe)
-    {
+    public PipeFlowFluids(IPipe pipe) {
         super(pipe);
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
             sections.put(part, new Section(part));
         }
     }
 
-    public PipeFlowFluids(IPipe pipe, CompoundTag nbt)
-    {
+    public PipeFlowFluids(IPipe pipe, CompoundTag nbt) {
         super(pipe, nbt);
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
             sections.put(part, new Section(part));
         }
-        if (nbt.contains("fluid"))
-        {
+        if (nbt.contains("fluid")) {
             setFluid(FluidStack.loadFluidStackFromNBT(nbt.getCompound("fluid")));
-        }
-        else
-        {
+        } else {
             setFluid(null);
         }
 
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
             int direction = part.getIndex();
-            if (nbt.contains("tank[" + direction + "]"))
-            {
+            if (nbt.contains("tank[" + direction + "]")) {
                 CompoundTag compound = nbt.getCompound("tank[" + direction + "]");
-                if (compound.contains("FluidType"))
-                {
+                if (compound.contains("FluidType")) {
                     FluidStack stack = FluidStack.loadFluidStackFromNBT(compound);
-                    if (currentFluid == null)
-                    {
+                    if (currentFluid == null) {
                         setFluid(stack);
                     }
-                    if (stack != null && stack.isFluidEqual(currentFluid))
-                    {
+                    if (stack != null && stack.isFluidEqual(currentFluid)) {
                         sections.get(part).readFromNbt(compound);
                     }
-                }
-                else
-                {
+                } else {
                     sections.get(part).readFromNbt(compound);
                 }
             }
@@ -136,18 +117,15 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @Override
-    public CompoundTag writeToNbt()
-    {
+    public CompoundTag writeToNbt() {
         CompoundTag nbt = super.writeToNbt();
 
-        if (currentFluid != null)
-        {
+        if (currentFluid != null) {
             CompoundTag fluidTag = new CompoundTag();
             currentFluid.writeToNBT(fluidTag);
             nbt.put("fluid", fluidTag);
 
-            for (EnumPipePart part : EnumPipePart.VALUES)
-            {
+            for (EnumPipePart part : EnumPipePart.VALUES) {
                 int direction = part.getIndex();
                 CompoundTag subTag = new CompoundTag();
                 sections.get(part).writeToNbt(subTag);
@@ -159,22 +137,18 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @Override
-    public boolean canConnect(Direction face, PipeFlow other)
-    {
+    public boolean canConnect(Direction face, PipeFlow other) {
         return other instanceof IFlowFluid;
     }
 
     @Override
-    public boolean canConnect(Direction face, BlockEntity oTile)
-    {
+    public boolean canConnect(Direction face, BlockEntity oTile) {
         return oTile.getCapability(CapUtil.CAP_FLUIDS, face.getOpposite()).isPresent();
     }
 
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing)
-    {
-        if (capability == CapUtil.CAP_FLUIDS)
-        {
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
+        if (capability == CapUtil.CAP_FLUIDS) {
 //            return CapUtil.CAP_FLUIDS.cast(sections.get(EnumPipePart.fromFacing(facing)));
             return LazyOptional.of(() -> sections.get(EnumPipePart.fromFacing(facing))).cast();
         }
@@ -182,29 +156,22 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @Override
-    public void addDrops(NonNullList<ItemStack> toDrop, int fortune)
-    {
+    public void addDrops(NonNullList<ItemStack> toDrop, int fortune) {
         super.addDrops(toDrop, fortune);
-        if (currentFluid != null && BCCoreItems.fragileFluidShard != null)
-        {
+        if (currentFluid != null && BCCoreItems.fragileFluidShard != null) {
             int totalAmount = 0;
-            for (EnumPipePart part : EnumPipePart.VALUES)
-            {
+            for (EnumPipePart part : EnumPipePart.VALUES) {
                 totalAmount += sections.get(part).amount;
             }
-            if (totalAmount > 0)
-            {
+            if (totalAmount > 0) {
                 BCCoreItems.fragileFluidShard.get().addFluidDrops(toDrop, new FluidStack(currentFluid, totalAmount));
             }
         }
     }
 
-    public boolean doesContainFluid()
-    {
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
-            if (sections.get(part).amount > 0)
-            {
+    public boolean doesContainFluid() {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
+            if (sections.get(part).amount > 0) {
                 return true;
             }
         }
@@ -212,8 +179,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @PipeEventHandler
-    public static void addTriggers(PipeEventStatement.AddTriggerInternal event)
-    {
+    public static void addTriggers(PipeEventStatement.AddTriggerInternal event) {
         event.triggers.add(BCTransportStatements.TRIGGER_FLUIDS_TRAVERSING);
     }
 
@@ -221,8 +187,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
     @Override
 //    public FluidStack tryExtractFluid(int millibuckets, Direction from, FluidStack filter, boolean simulate)
-    public FluidStack tryExtractFluid(int millibuckets, Direction from, FluidStack filter, IFluidHandler.FluidAction action)
-    {
+    public FluidStack tryExtractFluid(int millibuckets, Direction from, FluidStack filter, IFluidHandler.FluidAction action) {
         FluidExtractor extractor = (mb, c, handler) ->
         {
             FluidStack f = filter == null ? c : filter;
@@ -236,21 +201,17 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
     @Override
 //    public InteractionResultHolder<FluidStack> tryExtractFluidAdv(int millibuckets, Direction from, IFluidFilter filter, boolean simulate)
-    public InteractionResultHolder<FluidStack> tryExtractFluidAdv(int millibuckets, Direction from, IFluidFilter filter, IFluidHandler.FluidAction action)
-    {
+    public InteractionResultHolder<FluidStack> tryExtractFluidAdv(int millibuckets, Direction from, IFluidFilter filter, IFluidHandler.FluidAction action) {
         FluidExtractor extractor = (mb, c, handler) ->
         {
-            if (c != null)
-            {
-                if (!filter.matches(c))
-                {
+            if (c != null) {
+                if (!filter.matches(c)) {
                     return null;
                 }
 //                return extractSimple(mb, c, handler, simulate);
                 return extractSimple(mb, c, handler, action);
             }
-            if (handler instanceof IFluidHandlerAdv handlerAdv)
-            {
+            if (handler instanceof IFluidHandlerAdv handlerAdv) {
                 // This will likely be cheaper
 //                IFluidHandlerAdv handlerAdv = (IFluidHandlerAdv) handler;
 //                return handlerAdv.drain(filter, mb, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
@@ -262,23 +223,19 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 //            IFluidTankProperties[] tanks = handler.getTankProperties();
             int tanks = handler.getTanks();
 //            if (tanks == null)
-            if (tanks == 0)
-            {
+            if (tanks == 0) {
                 return null;
             }
 //            for (IFluidTankProperties tank : tanks)
-            for (int i = 0; i < tanks; i++)
-            {
+            for (int i = 0; i < tanks; i++) {
 //                FluidStack contents = tank.getContents();
                 FluidStack contents = handler.getFluidInTank(i);
 //                if (contents != null && filter.matches(contents))
-                if (!contents.isEmpty() && filter.matches(contents))
-                {
+                if (!contents.isEmpty() && filter.matches(contents)) {
 //                    FluidStack extracted = extractSimple(mb, contents, handler, simulate);
                     FluidStack extracted = extractSimple(mb, contents, handler, action);
 //                    if (extracted != null)
-                    if (!extracted.isEmpty())
-                    {
+                    if (!extracted.isEmpty()) {
                         return extracted;
                     }
                 }
@@ -290,40 +247,33 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @FunctionalInterface
-    private interface FluidExtractor
-    {
+    private interface FluidExtractor {
         FluidStack extract(int millibuckets, FluidStack current, IFluidHandler handler);
     }
 
     //    private InteractionResultHolder<FluidStack> tryExtractFluidInternal(int millibuckets, Direction from, FluidExtractor extractor, boolean simulate)
-    private InteractionResultHolder<FluidStack> tryExtractFluidInternal(int millibuckets, Direction from, FluidExtractor extractor, IFluidHandler.FluidAction action)
-    {
-        if (from == null || millibuckets <= 0)
-        {
+    private InteractionResultHolder<FluidStack> tryExtractFluidInternal(int millibuckets, Direction from, FluidExtractor extractor, IFluidHandler.FluidAction action) {
+        if (from == null || millibuckets <= 0) {
             return FAILED_EXTRACT;
         }
         IFluidHandler fluidHandler = pipe.getHolder().getCapabilityFromPipe(from, CapUtil.CAP_FLUIDS);
-        if (fluidHandler == null)
-        {
+        if (fluidHandler == null) {
             // FIXME: WRONG PLACE!!!
             return PASSED_EXTRACT;
         }
         Section section = sections.get(EnumPipePart.fromFacing(from));
         Section middle = sections.get(EnumPipePart.CENTER);
         millibuckets = Math.min(millibuckets, capacity * 2 - section.amount - middle.amount);
-        if (millibuckets <= 0)
-        {
+        if (millibuckets <= 0) {
             return FAILED_EXTRACT;
         }
         FluidStack toAdd = extractor.extract(millibuckets, currentFluid, fluidHandler);
-        if (toAdd == null || toAdd.getAmount() <= 0)
-        {
+        if (toAdd == null || toAdd.getAmount() <= 0) {
             return FAILED_EXTRACT;
         }
         millibuckets = toAdd.getAmount();
 //        if (currentFluid == null && !simulate)
-        if (currentFluid == null && action.execute())
-        {
+        if (currentFluid == null && action.execute()) {
             setFluid(toAdd);
         }
 //        int reallyFilled = section.fillInternal(millibuckets, !simulate);
@@ -332,12 +282,10 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 //        reallyFilled += middle.fillInternal(leftOver, !simulate);
         reallyFilled += middle.fillInternal(leftOver, action.execute());
 //        if (!simulate)
-        if (action.execute())
-        {
+        if (action.execute()) {
             section.ticksInDirection = COOLDOWN_INPUT;
         }
-        if (reallyFilled != millibuckets)
-        {
+        if (reallyFilled != millibuckets) {
             BCLog.logger.warn(
                     "[tryExtractFluidAdv] Filled "
                             + reallyFilled + " != extracted " + millibuckets //
@@ -348,10 +296,8 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     //    private static FluidStack extractSimple(int millibuckets, FluidStack filter, IFluidHandler handler, boolean simulate)
-    private static FluidStack extractSimple(int millibuckets, FluidStack filter, IFluidHandler handler, IFluidHandler.FluidAction action)
-    {
-        if (filter == null)
-        {
+    private static FluidStack extractSimple(int millibuckets, FluidStack filter, IFluidHandler handler, IFluidHandler.FluidAction action) {
+        if (filter == null) {
 //            return handler.drain(millibuckets, !simulate);
 //            return handler.drain(millibuckets, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
             return handler.drain(millibuckets, action);
@@ -362,10 +308,8 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 //        FluidStack drained = handler.drain(filter, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
         FluidStack drained = handler.drain(filter, action);
 //        if (drained != null)
-        if (!drained.isEmpty())
-        {
-            if (!filter.isFluidEqual(filter))
-            {
+        if (!drained.isEmpty()) {
+            if (!filter.isFluidEqual(filter)) {
                 String detail = "(Filter = " + StringUtilBC.fluidToString(filter);
                 detail += ",\nactually drained = " + StringUtilBC.fluidToString(drained) + ")";
                 detail += ",\nIFluidHandler = " + handler.getClass() + "(" + handler + ")";
@@ -376,32 +320,25 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @Override
-    public int insertFluidsForce(FluidStack fluid, @Nullable Direction from, boolean simulate)
-    {
+    public int insertFluidsForce(FluidStack fluid, @Nullable Direction from, boolean simulate) {
         Section s = sections.get(EnumPipePart.CENTER);
-        if (fluid == null || fluid.getAmount() == 0)
-        {
+        if (fluid == null || fluid.getAmount() == 0) {
             return 0;
         }
-        if (currentFluid != null && !currentFluid.isFluidEqual(fluid))
-        {
+        if (currentFluid != null && !currentFluid.isFluidEqual(fluid)) {
             return 0;
         }
-        if (currentFluid == null && !simulate)
-        {
+        if (currentFluid == null && !simulate) {
             setFluid(fluid.copy());
         }
         int filled = s.fill(fluid.getAmount(), !simulate);
-        if (filled == 0)
-        {
+        if (filled == 0) {
             return 0;
         }
-        if (simulate)
-        {
+        if (simulate) {
             return filled;
         }
-        if (from != null)
-        {
+        if (from != null) {
             sections.get(EnumPipePart.fromFacing(from)).ticksInDirection = COOLDOWN_INPUT;
         }
         return filled;
@@ -409,36 +346,28 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
     @Override
     @Nullable
-    public FluidStack extractFluidsForce(int min, int max, @Nullable Direction section, boolean simulate)
-    {
-        if (min > max)
-        {
+    public FluidStack extractFluidsForce(int min, int max, @Nullable Direction section, boolean simulate) {
+        if (min > max) {
             throw new IllegalArgumentException("Minimum (" + min + ") > maximum (" + max + ")");
         }
-        if (max < 0)
-        {
+        if (max < 0) {
             return null;
         }
         Section s = sections.get(EnumPipePart.fromFacing(section));
-        if (s.amount < min)
-        {
+        if (s.amount < min) {
             return null;
         }
         int amount = MathUtil.clamp(s.amount, min, max);
         FluidStack fluid = new FluidStack(currentFluid, amount);
-        if (!simulate)
-        {
+        if (!simulate) {
             s.amount -= amount;
             s.drainInternal(amount, false);
-            if (s.amount == 0)
-            {
+            if (s.amount == 0) {
                 boolean isEmpty = true;
-                for (Section s2 : sections.values())
-                {
+                for (Section s2 : sections.values()) {
                     isEmpty &= s2.amount == 0;
                 }
-                if (isEmpty)
-                {
+                if (isEmpty) {
                     setFluid(null);
                 }
             }
@@ -450,19 +379,16 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
-    public void getDebugInfo(List<Component> left, List<Component> right, Direction side)
-    {
+    public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
         boolean isRemote = pipe.getHolder().getPipeWorld().isClientSide;
 
         FluidStack fluid = isRemote ? getFluidStackForRender() : currentFluid;
 //        left.add(" - FluidType = " + (fluid == null ? "empty" : fluid.getDisplayName()));
         left.add(new TextComponent(" - FluidType = ").append(fluid == null ? new TextComponent("empty") : fluid.getDisplayName()));
 
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
             Section section = sections.get(part);
-            if (section == null)
-            {
+            if (section == null) {
                 continue;
             }
 //            StringBuilder line = new StringBuilder(" - " + LocaleUtil.localizeFacing(part.face) + " = ");
@@ -479,25 +405,19 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
             int last = -1;
             int skipped = 0;
 
-            for (int i : section.incoming)
-            {
-                if (i != last)
-                {
-                    if (skipped > 0)
-                    {
+            for (int i : section.incoming) {
+                if (i != last) {
+                    if (skipped > 0) {
                         line.append("...").append(skipped).append("... ");
                         skipped = 0;
                     }
                     last = i;
                     line.append(i).append(", ");
-                }
-                else
-                {
+                } else {
                     skipped++;
                 }
             }
-            if (skipped > 0)
-            {
+            if (skipped > 0) {
                 line.append("...").append(skipped).append("... ");
                 skipped = 0;
             }
@@ -511,17 +431,14 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     // Rendering
 
     @OnlyIn(Dist.CLIENT)
-    public FluidStack getFluidStackForRender()
-    {
+    public FluidStack getFluidStackForRender() {
         return clientFluid == null ? null : clientFluid.get();
     }
 
     @OnlyIn(Dist.CLIENT)
-    public double[] getAmountsForRender(float partialTicks)
-    {
+    public double[] getAmountsForRender(float partialTicks) {
         double[] arr = new double[7];
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
             Section s = sections.get(part);
             arr[part.getIndex()] = s.clientAmountLast * (1 - partialTicks) + s.clientAmountThis * (partialTicks);
         }
@@ -529,14 +446,11 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @OnlyIn(Dist.CLIENT)
-    public Vec3[] getOffsetsForRender(float partialTicks)
-    {
+    public Vec3[] getOffsetsForRender(float partialTicks) {
         Vec3[] arr = new Vec3[7];
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
             Section s = sections.get(part);
-            if (s.offsetLast != null & s.offsetThis != null)
-            {
+            if (s.offsetLast != null & s.offsetThis != null) {
                 arr[part.getIndex()] = s.offsetLast.scale(1 - partialTicks).add(s.offsetThis.scale(partialTicks));
             }
         }
@@ -545,20 +459,15 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
     // Internal logic
 
-    private void setFluid(FluidStack fluid)
-    {
+    private void setFluid(FluidStack fluid) {
         currentFluid = fluid;
-        if (fluid != null)
-        {
+        if (fluid != null) {
             currentDelay = (int) PipeApi.getFluidTransferInfo(pipe.getDefinition()).transferDelayMultiplier;
             // (int) (fluidTransferInfo.transferDelayMultiplier * fluid.getFluid().getViscosity(fluid) / 100);
-        }
-        else
-        {
+        } else {
             currentDelay = (int) PipeApi.getFluidTransferInfo(pipe.getDefinition()).transferDelayMultiplier;
         }
-        for (Section section : sections.values())
-        {
+        for (Section section : sections.values()) {
             section.incoming = new int[currentDelay];
             section.currentTime = 0;
             section.ticksInDirection = 0;
@@ -566,48 +475,38 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @Override
-    public void onTick()
-    {
+    public void onTick() {
         Level world = pipe.getHolder().getPipeWorld();
-        if (world.isClientSide)
-        {
-            for (EnumPipePart part : EnumPipePart.VALUES)
-            {
+        if (world.isClientSide) {
+            for (EnumPipePart part : EnumPipePart.VALUES) {
                 sections.get(part).tickClient();
             }
             return;
         }
 
-        if (currentFluid != null)
-        {
+        if (currentFluid != null) {
             // int timeSlot = (int) (world.getTotalWorldTime() % currentDelay);
             int totalFluid = 0;
             boolean canOutput = false;
 
-            for (EnumPipePart part : EnumPipePart.VALUES)
-            {
+            for (EnumPipePart part : EnumPipePart.VALUES) {
                 Section section = sections.get(part);
                 section.currentTime = (section.currentTime + 1) % currentDelay;
                 section.advanceForMovement();
                 totalFluid += section.amount;
-                if (section.getCurrentDirection().canOutput())
-                {
+                if (section.getCurrentDirection().canOutput()) {
                     canOutput = true;
                 }
             }
-            if (totalFluid == 0)
-            {
+            if (totalFluid == 0) {
                 setFluid(null);
-            }
-            else
-            {
+            } else {
                 // Fluid movement is split into 3 parts
                 // - move from pipe (to other tiles)
                 // - move from center (to sides)
                 // - move into center (from sides)
 
-                if (canOutput)
-                {
+                if (canOutput) {
                     moveFromPipe();
                 }
                 moveFromCenter();
@@ -615,15 +514,11 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
             }
 
             // tick cooldowns
-            for (EnumPipePart part : EnumPipePart.VALUES)
-            {
+            for (EnumPipePart part : EnumPipePart.VALUES) {
                 Section section = sections.get(part);
-                if (section.ticksInDirection > 0)
-                {
+                if (section.ticksInDirection > 0) {
                     section.ticksInDirection--;
-                }
-                else if (section.ticksInDirection < 0)
-                {
+                } else if (section.ticksInDirection < 0) {
                     section.ticksInDirection++;
                 }
             }
@@ -631,59 +526,46 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
         boolean send = false;
 
-        for (EnumPipePart part : EnumPipePart.VALUES)
-        {
+        for (EnumPipePart part : EnumPipePart.VALUES) {
             Section section = sections.get(part);
-            if (section.amount != section.lastSentAmount)
-            {
+            if (section.amount != section.lastSentAmount) {
                 send = true;
                 break;
-            }
-            else
-            {
+            } else {
                 Dir should = Dir.get(section.ticksInDirection);
-                if (section.lastSentDirection != should)
-                {
+                if (section.lastSentDirection != should) {
                     send = true;
                     break;
                 }
             }
         }
 
-        if (send && tracker.markTimeIfDelay(world))
-        {
+        if (send && tracker.markTimeIfDelay(world)) {
             // send a net update
             sendPayload(NET_FLUID_AMOUNTS);
         }
     }
 
-    private void moveFromPipe()
-    {
-        for (EnumPipePart part : EnumPipePart.FACES)
-        {
+    private void moveFromPipe() {
+        for (EnumPipePart part : EnumPipePart.FACES) {
             Section section = sections.get(part);
-            if (section.getCurrentDirection().canOutput())
-            {
+            if (section.getCurrentDirection().canOutput()) {
                 int maxDrain = section.drainInternal(fluidTransferInfo.transferPerTick, false);
-                if (maxDrain <= 0)
-                {
+                if (maxDrain <= 0) {
                     continue;
                 }
                 PipeEventFluid.SideCheck sideCheck = new PipeEventFluid.SideCheck(pipe.getHolder(), this, currentFluid);
                 sideCheck.disallowAllExcept(part.face);
                 pipe.getHolder().fireEvent(sideCheck);
-                if (sideCheck.getOrder().size() == 1)
-                {
+                if (sideCheck.getOrder().size() == 1) {
                     IFluidHandler fluidHandler = pipe.getHolder().getCapabilityFromPipe(part.face, CapUtil.CAP_FLUIDS);
                     if (fluidHandler == null) continue;
 
                     FluidStack fluidToPush = new FluidStack(currentFluid, maxDrain);
 
-                    if (fluidToPush.getAmount() > 0)
-                    {
+                    if (fluidToPush.getAmount() > 0) {
                         int filled = fluidHandler.fill(fluidToPush, IFluidHandler.FluidAction.EXECUTE);
-                        if (filled > 0)
-                        {
+                        if (filled > 0) {
                             section.drainInternal(filled, true);
                             section.ticksInDirection = COOLDOWN_OUTPUT;
                         }
@@ -693,13 +575,11 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         }
     }
 
-    private void moveFromCenter()
-    {
+    private void moveFromCenter() {
         Section center = sections.get(EnumPipePart.CENTER);
         // Split liquids moving to output equally based on flowrate, how much each side can accept and available liquid
         int totalAvailable = center.getMaxDrained();
-        if (totalAvailable < 1)
-        {
+        if (totalAvailable < 1) {
             return;
         }
 
@@ -707,11 +587,9 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         Set<Direction> realDirections = EnumSet.noneOf(Direction.class);
 
         // Move liquid from the center to the output sides
-        for (Direction direction : Direction.values())
-        {
+        for (Direction direction : Direction.values()) {
             Section section = sections.get(EnumPipePart.fromFacing(direction));
-            if (!section.getCurrentDirection().canOutput())
-            {
+            if (!section.getCurrentDirection().canOutput()) {
                 continue;
             }
             if (
@@ -723,8 +601,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
             }
         }
 
-        if (realDirections.size() > 0)
-        {
+        if (realDirections.size() > 0) {
             PipeEventFluid.SideCheck sideCheck = new PipeEventFluid.SideCheck(pipe.getHolder(), this, currentFluid);
             sideCheck.disallowAllExcept(realDirections);
             pipe.getHolder().fireEvent(sideCheck);
@@ -737,22 +614,18 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
             float min = Math.min(flowRate * realDirections.size(), totalAvailable)
                     / (float) flowRate / realDirections.size();
 
-            for (Direction direction : random)
-            {
+            for (Direction direction : random) {
                 Section section = sections.get(EnumPipePart.fromFacing(direction));
                 int available = section.fill(flowRate, false);
                 int amountToPush = (int) (available * min);
-                if (amountToPush < 1)
-                {
+                if (amountToPush < 1) {
                     amountToPush++;
                 }
 
                 amountToPush = center.drainInternal(amountToPush, false);
-                if (amountToPush > 0)
-                {
+                if (amountToPush > 0) {
                     int filled = section.fill(amountToPush, true);
-                    if (filled > 0)
-                    {
+                    if (filled > 0) {
                         center.drainInternal(filled, true);
                         section.ticksInDirection = COOLDOWN_OUTPUT;
                     }
@@ -763,13 +636,11 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         }
     }
 
-    private void moveToCenter()
-    {
+    private void moveToCenter() {
         int transferInCount = 0;
         Section center = sections.get(EnumPipePart.CENTER);
         int spaceAvailable = capacity - center.amount;
-        if (spaceAvailable <= 0 || center.getMaxFilled() <= 0)
-        {
+        if (spaceAvailable <= 0 || center.getMaxFilled() <= 0) {
             return;
         }
         int flowRate = fluidTransferInfo.transferPerTick;
@@ -779,15 +650,12 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         Collections.shuffle(faces);
 
         int[] inputPerTick = new int[6];
-        for (EnumPipePart part : faces)
-        {
+        for (EnumPipePart part : faces) {
             Section section = sections.get(part);
             inputPerTick[part.getIndex()] = 0;
-            if (section.getCurrentDirection().canInput())
-            {
+            if (section.getCurrentDirection().canInput()) {
                 inputPerTick[part.getIndex()] = section.drainInternal(flowRate, false);
-                if (inputPerTick[part.getIndex()] > 0)
-                {
+                if (inputPerTick[part.getIndex()] > 0) {
                     transferInCount++;
                 }
             }
@@ -805,25 +673,20 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         // Work out how much fluid should leave
         int left = Math.min(flowRate, spaceAvailable);
         float min = Math.min(flowRate * transferInCount, spaceAvailable) / (float) flowRate / transferInCount;
-        for (EnumPipePart part : EnumPipePart.FACES)
-        {
+        for (EnumPipePart part : EnumPipePart.FACES) {
             Section section = sections.get(part);
             // Move liquid from input sides to the centre
             int i = part.getIndex();
-            if (inputPerTick[i] > 0)
-            {
+            if (inputPerTick[i] > 0) {
                 int amountToDrain = (int) (inputPerTick[i] * min);
-                if (amountToDrain < 1)
-                {
+                if (amountToDrain < 1) {
                     amountToDrain++;
                 }
-                if (amountToDrain > left)
-                {
+                if (amountToDrain > left) {
                     amountToDrain = left;
                 }
                 int amountToPush = section.drainInternal(amountToDrain, false);
-                if (amountToPush > 0)
-                {
+                if (amountToPush > 0) {
                     fluidLeavingSide[i] = amountToPush;
                     left -= amountToPush;
                 }
@@ -836,30 +699,24 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         );
         pipe.getHolder().fireEvent(move);
 
-        for (EnumPipePart part : EnumPipePart.FACES)
-        {
+        for (EnumPipePart part : EnumPipePart.FACES) {
             Section section = sections.get(part);
             int i = part.getIndex();
             int leaving = fluidLeavingSide[i];
-            if (leaving > 0)
-            {
+            if (leaving > 0) {
                 int actuallyDrained = section.drainInternal(leaving, true);
-                if (actuallyDrained != leaving)
-                {
+                if (actuallyDrained != leaving) {
                     throw new IllegalStateException(
                             "Couldn't drain " + leaving + " from " + part + ", only drained " + actuallyDrained
                     );
                 }
-                if (actuallyDrained > 0)
-                {
+                if (actuallyDrained > 0) {
                     section.ticksInDirection = COOLDOWN_INPUT;
                 }
                 int entering = fluidEnteringCentre[i];
-                if (entering > 0)
-                {
+                if (entering > 0) {
                     int actuallyFilled = center.fill(entering, true);
-                    if (actuallyFilled != entering)
-                    {
+                    if (actuallyFilled != entering) {
                         throw new IllegalStateException(
                                 "Couldn't fill " + entering + " from " + part + ", only filled " + actuallyFilled
                         );
@@ -870,36 +727,24 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     }
 
     @Override
-    public void writePayload(int id, FriendlyByteBuf buf, Dist side)
-    {
+    public void writePayload(int id, FriendlyByteBuf buf, Dist side) {
         PacketBufferBC buffer = PacketBufferBC.asPacketBufferBc(buf);
-        if (side == Dist.DEDICATED_SERVER)
-        {
-            if (id == NET_FLUID_AMOUNTS || id == NET_ID_FULL_STATE)
-            {
+        if (side == Dist.DEDICATED_SERVER) {
+            if (id == NET_FLUID_AMOUNTS || id == NET_ID_FULL_STATE) {
                 boolean full = id == NET_ID_FULL_STATE;
-                if (currentFluid == null)
-                {
+                if (currentFluid == null) {
                     buffer.writeBoolean(false);
-                }
-                else
-                {
+                } else {
                     buffer.writeBoolean(true);
                     buffer.writeInt(BuildCraftObjectCaches.CACHE_FLUIDS.server().store(currentFluid));
                 }
-                for (EnumPipePart part : EnumPipePart.VALUES)
-                {
+                for (EnumPipePart part : EnumPipePart.VALUES) {
                     Section section = sections.get(part);
-                    if (full)
-                    {
+                    if (full) {
                         buffer.writeShort(section.amount);
-                    }
-                    else if (section.amount == section.lastSentAmount)
-                    {
+                    } else if (section.amount == section.lastSentAmount) {
                         buffer.writeBoolean(false);
-                    }
-                    else
-                    {
+                    } else {
                         buffer.writeBoolean(true);
                         buffer.writeShort(section.amount);
                         section.lastSentAmount = section.amount;
@@ -914,27 +759,20 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
     @Override
 //    public void readPayload(int id, PacketBuffer buf, Dist side) throws IOException
-    public void readPayload(int id, FriendlyByteBuf buf, NetworkDirection side) throws IOException
-    {
+    public void readPayload(int id, FriendlyByteBuf buf, NetworkDirection side) throws IOException {
         PacketBufferBC buffer = PacketBufferBC.asPacketBufferBc(buf);
-        if (side == NetworkDirection.PLAY_TO_CLIENT)
-        {
-            if (id == NET_FLUID_AMOUNTS || id == NET_ID_FULL_STATE)
-            {
+        if (side == NetworkDirection.PLAY_TO_CLIENT) {
+            if (id == NET_FLUID_AMOUNTS || id == NET_ID_FULL_STATE) {
                 boolean full = id == NET_ID_FULL_STATE;
-                if (buffer.readBoolean())
-                {
+                if (buffer.readBoolean()) {
                     int fluidId = buffer.readInt();
                     clientFluid = BuildCraftObjectCaches.CACHE_FLUIDS.client().retrieve(fluidId);
                 }
-                for (EnumPipePart part : EnumPipePart.VALUES)
-                {
+                for (EnumPipePart part : EnumPipePart.VALUES) {
                     Section section = sections.get(part);
-                    if (full || buffer.readBoolean())
-                    {
+                    if (full || buffer.readBoolean()) {
                         section.target = buffer.readShort();
-                        if (full)
-                        {
+                        if (full) {
                             section.clientAmountLast = section.clientAmountThis = section.target;
                         }
                     }
@@ -951,8 +789,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     /**
      * Holds data about a single section of this pipe.
      */
-    class Section implements IFluidHandler
-    {
+    class Section implements IFluidHandler {
         final EnumPipePart part;
 
         int amount = 0;
@@ -991,32 +828,27 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
 
         Vec3 offsetLast, offsetThis;
 
-        Section(EnumPipePart part)
-        {
+        Section(EnumPipePart part) {
             this.part = part;
         }
 
-        void writeToNbt(CompoundTag nbt)
-        {
+        void writeToNbt(CompoundTag nbt) {
             nbt.putShort("capacity", (short) amount);
             nbt.putShort("lastSentAmount", (short) lastSentAmount);
             nbt.putShort("ticksInDirection", (short) ticksInDirection);
 
-            for (int i = 0; i < incoming.length; ++i)
-            {
+            for (int i = 0; i < incoming.length; ++i) {
                 nbt.putShort("in[" + i + "]", (short) incoming[i]);
             }
         }
 
-        void readFromNbt(CompoundTag nbt)
-        {
+        void readFromNbt(CompoundTag nbt) {
             this.amount = nbt.getShort("capacity");
             this.lastSentAmount = nbt.getShort("lastSentAmount");
             this.ticksInDirection = nbt.getShort("ticksInDirection");
 
             incomingTotalCache = 0;
-            for (int i = 0; i < incoming.length; ++i)
-            {
+            for (int i = 0; i < incoming.length; ++i) {
                 incomingTotalCache += incoming[i] = nbt.getShort("in[" + i + "]");
             }
         }
@@ -1024,8 +856,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         /**
          * @return The maximum amount of fluid that can be inserted into this pipe on this tick.
          */
-        int getMaxFilled()
-        {
+        int getMaxFilled() {
             int availableTotal = capacity - amount;
             int availableThisTick = fluidTransferInfo.transferPerTick - incoming[currentTime];
             return Math.min(availableTotal, availableThisTick);
@@ -1034,23 +865,19 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         /**
          * @return The maximum amount of fluid that can be extracted out of this pipe this tick.
          */
-        int getMaxDrained()
-        {
+        int getMaxDrained() {
             return Math.min(amount - incomingTotalCache, fluidTransferInfo.transferPerTick);
         }
 
         /**
          * @return The fluid filled
          */
-        int fill(int maxFill, boolean doFill)
-        {
+        int fill(int maxFill, boolean doFill) {
             int amountToFill = Math.min(getMaxFilled(), maxFill);
-            if (amountToFill <= 0)
-            {
+            if (amountToFill <= 0) {
                 return 0;
             }
-            if (doFill)
-            {
+            if (doFill) {
                 incoming[currentTime] += amountToFill;
                 incomingTotalCache += amountToFill;
                 amount += amountToFill;
@@ -1058,15 +885,12 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
             return amountToFill;
         }
 
-        public int fillInternal(int maxFill, boolean doFill)
-        {
+        public int fillInternal(int maxFill, boolean doFill) {
             int amountToFill = Math.min(capacity - amount, maxFill);
-            if (amountToFill <= 0)
-            {
+            if (amountToFill <= 0) {
                 return 0;
             }
-            if (doFill)
-            {
+            if (doFill) {
                 incoming[currentTime] += amountToFill;
                 incomingTotalCache += amountToFill;
                 amount += amountToFill;
@@ -1079,36 +903,28 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
          * @param doDrain
          * @return The amount drained
          */
-        int drainInternal(int maxDrain, boolean doDrain)
-        {
+        int drainInternal(int maxDrain, boolean doDrain) {
             maxDrain = Math.min(maxDrain, getMaxDrained());
-            if (maxDrain <= 0)
-            {
+            if (maxDrain <= 0) {
                 return 0;
-            }
-            else
-            {
-                if (doDrain)
-                {
+            } else {
+                if (doDrain) {
                     amount -= maxDrain;
                 }
                 return maxDrain;
             }
         }
 
-        void advanceForMovement()
-        {
+        void advanceForMovement() {
             incomingTotalCache -= incoming[currentTime];
             incoming[currentTime] = 0;
         }
 
-        void setTime(int current)
-        {
+        void setTime(int current) {
             currentTime = current;
         }
 
-        Dir getCurrentDirection()
-        {
+        Dir getCurrentDirection() {
             Dir dir = ticksInDirection == 0 ? Dir.NONE : ticksInDirection < 0 ? Dir.IN : Dir.OUT;
             return dir;
         }
@@ -1116,57 +932,44 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         /**
          * @return True if this still contains fluid, false if not.
          */
-        boolean tickClient()
-        {
+        boolean tickClient() {
             clientAmountLast = clientAmountThis;
 
-            if (target != clientAmountThis)
-            {
+            if (target != clientAmountThis) {
                 int delta = target - clientAmountThis;
                 long msgDelta = lastMessage - lastMessageMinus1;
                 msgDelta = MathUtil.clamp((int) msgDelta, 1, 60);
-                if (Math.abs(delta) < msgDelta)
-                {
+                if (Math.abs(delta) < msgDelta) {
                     clientAmountThis += delta;
-                }
-                else
-                {
+                } else {
                     clientAmountThis += delta / (int) msgDelta;
                 }
             }
 
-            if (offsetThis == null || (clientAmountThis == 0 && clientAmountLast == 0))
-            {
+            if (offsetThis == null || (clientAmountThis == 0 && clientAmountLast == 0)) {
                 offsetThis = Vec3.ZERO;
             }
             offsetLast = offsetThis;
 
-            if (part.face == null)
-            {
+            if (part.face == null) {
                 Vec3 dir = Vec3.ZERO;
                 // Firstly find all the outgoing faces
-                for (EnumPipePart p : EnumPipePart.FACES)
-                {
+                for (EnumPipePart p : EnumPipePart.FACES) {
                     Section s = sections.get(p);
-                    if (s.ticksInDirection > 0)
-                    {
+                    if (s.ticksInDirection > 0) {
                         dir = dir.add(Vec3.atLowerCornerOf(p.face.getNormal()));
                     }
                 }
                 // If that failed then find all of the incoming faces
-                for (EnumPipePart p : EnumPipePart.FACES)
-                {
+                for (EnumPipePart p : EnumPipePart.FACES) {
                     Section s = sections.get(p);
-                    if (s.ticksInDirection < 0)
-                    {
+                    if (s.ticksInDirection < 0) {
                         dir = dir.add(Vec3.atLowerCornerOf(p.face.getNormal()).scale(-1));
                     }
                 }
                 dir = new Vec3(Math.signum(dir.x), Math.signum(dir.y), Math.signum(dir.z));
                 offsetThis = offsetThis.add(dir.scale(-FLOW_MULTIPLIER));
-            }
-            else
-            {
+            } else {
                 double mult = Math.signum(ticksInDirection);
                 offsetThis = VecUtil.offset(offsetLast, part.face, -FLOW_MULTIPLIER * (mult));
             }
@@ -1174,8 +977,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
             double dx = offsetThis.x >= 0.5 ? -1 : offsetThis.x <= 0.5 ? 1 : 0;
             double dy = offsetThis.y >= 0.5 ? -1 : offsetThis.y <= 0.5 ? 1 : 0;
             double dz = offsetThis.z >= 0.5 ? -1 : offsetThis.z <= 0.5 ? 1 : 0;
-            if (dx != 0 || dy != 0 || dz != 0)
-            {
+            if (dx != 0 || dy != 0 || dz != 0) {
                 offsetThis = offsetThis.add(dx, dy, dz);
                 offsetLast = offsetLast.add(dx, dy, dz);
             }
@@ -1187,8 +989,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         @NotNull
         @Override
         @Deprecated
-        public FluidStack drain(FluidStack resource, FluidAction doDrain)
-        {
+        public FluidStack drain(FluidStack resource, FluidAction doDrain) {
             return StackUtil.EMPTY_FLUID;
         }
 
@@ -1198,15 +999,13 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         @NotNull
         @Override
         @Deprecated
-        public FluidStack drain(int maxDrain, FluidAction doDrain)
-        {
+        public FluidStack drain(int maxDrain, FluidAction doDrain) {
             return StackUtil.EMPTY_FLUID;
         }
 
         @Override
 //        public IFluidTankProperties[] getTankProperties()
-        public int getTanks()
-        {
+        public int getTanks() {
 //            return new IFluidTankProperties[0];
             return 0;
         }
@@ -1214,30 +1013,25 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
         // Calen forced override
         @NotNull
         @Override
-        public FluidStack getFluidInTank(int tank)
-        {
+        public FluidStack getFluidInTank(int tank) {
             return StackUtil.EMPTY_FLUID;
         }
 
         // Calen forced override
         @Override
-        public int getTankCapacity(int tank)
-        {
+        public int getTankCapacity(int tank) {
             return 0;
         }
 
         // Calen forced override
         @Override
-        public boolean isFluidValid(int tank, @NotNull FluidStack stack)
-        {
+        public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
             return false;
         }
 
         @Override
-        public int fill(FluidStack resource, FluidAction doFill)
-        {
-            if (!getCurrentDirection().canInput() || !pipe.isConnected(part.face) || resource == null)
-            {
+        public int fill(FluidStack resource, FluidAction doFill) {
+            if (!getCurrentDirection().canInput() || !pipe.isConnected(part.face) || resource == null) {
                 return 0;
             }
             resource = resource.copy();
@@ -1245,23 +1039,18 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
                     pipe.getHolder(), PipeFlowFluids.this, part.face, resource
             );
             pipe.getHolder().fireEvent(tryInsert);
-            if (tryInsert.isCanceled())
-            {
+            if (tryInsert.isCanceled()) {
                 return 0;
             }
 
-            if (currentFluid == null || currentFluid.isFluidEqual(resource))
-            {
-                if (doFill == FluidAction.EXECUTE)
-                {
-                    if (currentFluid == null)
-                    {
+            if (currentFluid == null || currentFluid.isFluidEqual(resource)) {
+                if (doFill == FluidAction.EXECUTE) {
+                    if (currentFluid == null) {
                         setFluid(resource.copy());
                     }
                 }
                 int filled = fill(resource.getAmount(), doFill == FluidAction.EXECUTE);
-                if (filled > 0 && doFill == FluidAction.EXECUTE)
-                {
+                if (filled > 0 && doFill == FluidAction.EXECUTE) {
                     ticksInDirection = COOLDOWN_INPUT;
                 }
                 return filled;
@@ -1273,51 +1062,39 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable
     /**
      * Enum used for the current direction that a fluid is flowing.
      */
-    enum Dir
-    {
+    enum Dir {
         IN(-1),
         NONE(0),
         OUT(1);
 
         final byte nbtValue;
 
-        private Dir(int nbtValue)
-        {
+        private Dir(int nbtValue) {
             this.nbtValue = (byte) nbtValue;
         }
 
-        public boolean isInput()
-        {
+        public boolean isInput() {
             return this == IN;
         }
 
-        public boolean canInput()
-        {
+        public boolean canInput() {
             return this != OUT;
         }
 
-        public boolean isOutput()
-        {
+        public boolean isOutput() {
             return this == OUT;
         }
 
-        public boolean canOutput()
-        {
+        public boolean canOutput() {
             return this != IN;
         }
 
-        public static Dir get(int dir)
-        {
-            if (dir == 0)
-            {
+        public static Dir get(int dir) {
+            if (dir == 0) {
                 return Dir.NONE;
-            }
-            else if (dir < 0)
-            {
+            } else if (dir < 0) {
                 return IN;
-            }
-            else
-            {
+            } else {
                 return OUT;
             }
         }

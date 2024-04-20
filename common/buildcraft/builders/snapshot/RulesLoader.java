@@ -19,9 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,8 +32,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-public class RulesLoader
-{
+public class RulesLoader {
     private static final Gson GSON = JsonUtil.registerNbtSerializersDeserializers(new GsonBuilder())
             .registerTypeAdapter(
                     BlockPos.class,
@@ -62,19 +59,16 @@ public class RulesLoader
             .expireAfterAccess(5, TimeUnit.MINUTES)
             .build(CacheLoader.from(pair -> getBlockRulesInternal(pair.getLeft(), pair.getRight())));
 
-    public static void loadAll()
-    {
+    public static void loadAll() {
         RULES.clear();
         READ_DOMAINS.clear();
 //        for (ModContainer modContainer : Loader.instance().getModList())
         ModList.get().forEachModContainer((domain, modContainer) ->
         {
 //            String domain = modContainer.getModId();
-            if (!READ_DOMAINS.contains(domain))
-            {
+            if (!READ_DOMAINS.contains(domain)) {
                 String base = "assets/" + domain + "/compat/buildcraft/builders/";
-                if (modContainer.getMod() == null)
-                {
+                if (modContainer.getMod() == null) {
 //                    continue;
                     return;
                 }
@@ -82,12 +76,10 @@ public class RulesLoader
                 InputStream inputStream = modContainer.getMod().getClass().getResourceAsStream(
                         base + "index.json"
                 );
-                if (inputStream != null)
-                {
+                if (inputStream != null) {
                     GSON.<List<String>>fromJson(
                                     new InputStreamReader(inputStream, StandardCharsets.UTF_8),
-                                    new TypeToken<List<String>>()
-                                    {
+                                    new TypeToken<List<String>>() {
                                     }.getType()
                             ).stream()
                             .map(name -> base + name + ".json")
@@ -97,8 +89,7 @@ public class RulesLoader
                                         .getClass()
                                         .getClassLoader()
                                         .getResourceAsStream(name);
-                                if (resourceAsStream == null)
-                                {
+                                if (resourceAsStream == null) {
                                     throw new RuntimeException(new IOException("Can't read " + name));
                                 }
                                 return resourceAsStream;
@@ -106,8 +97,7 @@ public class RulesLoader
                             .flatMap(localInputStream ->
                                     GSON.<List<JsonRule>>fromJson(
                                             new InputStreamReader(localInputStream),
-                                            new TypeToken<List<JsonRule>>()
-                                            {
+                                            new TypeToken<List<JsonRule>>() {
                                             }.getType()
                                     ).stream()
                             )
@@ -125,14 +115,12 @@ public class RulesLoader
         READ_DOMAINS.add("buildcraftrobotics");
         READ_DOMAINS.add("buildcraftsilicon");
         READ_DOMAINS.add("buildcrafttransport");
-        if (!BCLib.DEV)
-        {
+        if (!BCLib.DEV) {
             READ_DOMAINS.removeIf(domain -> domain.startsWith("buildcraft"));
         }
     }
 
-    private static Set<JsonRule> getBlockRulesInternal(BlockState blockState, CompoundTag tileNbt)
-    {
+    private static Set<JsonRule> getBlockRulesInternal(BlockState blockState, CompoundTag tileNbt) {
         return RulesLoader.RULES.stream()
                 .filter(rule -> rule.selectors != null)
                 .filter(rule ->
@@ -183,14 +171,12 @@ public class RulesLoader
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static Set<JsonRule> getRules(BlockState blockState, CompoundTag tileNbt)
-    {
+    public static Set<JsonRule> getRules(BlockState blockState, CompoundTag tileNbt) {
         return BLOCK_RULES_CACHE.getUnchecked(Pair.of(blockState, tileNbt));
     }
 
     @SuppressWarnings("WeakerAccess")
-    public static Set<JsonRule> getRules(ResourceLocation entityId, CompoundTag tileNbt)
-    {
+    public static Set<JsonRule> getRules(ResourceLocation entityId, CompoundTag tileNbt) {
         // noinspection ConstantConditions
         return RulesLoader.RULES.stream()
                 .filter(rule -> rule.selectors != null)

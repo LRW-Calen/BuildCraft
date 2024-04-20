@@ -23,21 +23,18 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 //public class RenderProgrammingTable extends FastTESR<TileProgrammingTable_Neptune>
-public class RenderProgrammingTable implements BlockEntityRenderer<TileProgrammingTable_Neptune>
-{
+public class RenderProgrammingTable implements BlockEntityRenderer<TileProgrammingTable_Neptune> {
     // Calen
     private final LazyLoadedValue<TextureAtlasSprite> glass_white = new LazyLoadedValue<>(() ->
             Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation("block/white_stained_glass"))
     );
 
-    public RenderProgrammingTable(BlockEntityRendererProvider.Context context)
-    {
+    public RenderProgrammingTable(BlockEntityRendererProvider.Context context) {
     }
 
     @Override
 //    public void renderTileEntityFast(@Nonnull TileProgrammingTable_Neptune tile, double x, double y, double z, float partialTicks, int destroyStage, float partial, @Nonnull BufferBuilder buffer)
-    public void render(TileProgrammingTable_Neptune tile, float partial, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay)
-    {
+    public void render(TileProgrammingTable_Neptune tile, float partial, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
         Minecraft.getInstance().getProfiler().push("bc");
         Minecraft.getInstance().getProfiler().push("table");
         Minecraft.getInstance().getProfiler().push("programming");

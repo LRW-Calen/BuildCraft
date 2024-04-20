@@ -15,17 +15,13 @@ import buildcraft.api.statements.containers.ISidedStatementContainer;
 import buildcraft.core.BCCoreSprites;
 import buildcraft.core.BCCoreStatements;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
-import buildcraft.lib.misc.LocaleUtil;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 
-public class TriggerRedstoneInput extends BCStatement implements ITriggerInternal
-{
+public class TriggerRedstoneInput extends BCStatement implements ITriggerInternal {
     public final boolean active;
 
-    public TriggerRedstoneInput(boolean active)
-    {
+    public TriggerRedstoneInput(boolean active) {
         super(
                 "buildcraft:redstone.input." + (active ? "active" : "inactive"), //
                 "buildcraft.redstone.input." + (active ? "active" : "inactive")
@@ -34,29 +30,24 @@ public class TriggerRedstoneInput extends BCStatement implements ITriggerInterna
     }
 
     @Override
-    public SpriteHolder getSprite()
-    {
+    public SpriteHolder getSprite() {
         return active ? BCCoreSprites.TRIGGER_REDSTONE_ACTIVE : BCCoreSprites.TRIGGER_REDSTONE_INACTIVE;
     }
 
     @Override
-    public Component getDescription()
-    {
+    public Component getDescription() {
 //        return LocaleUtil.localize("gate.trigger.redstone.input." + (active ? "active" : "inactive"));
         return new TranslatableComponent("gate.trigger.redstone.input." + (active ? "active" : "inactive"));
     }
 
     @Override
-    public String getDescriptionKey()
-    {
+    public String getDescriptionKey() {
         return "gate.trigger.redstone.input." + (active ? "active" : "inactive");
     }
 
     @Override
-    public IStatementParameter createParameter(int index)
-    {
-        switch (index)
-        {
+    public IStatementParameter createParameter(int index) {
+        switch (index) {
             case 0:
                 return StatementParamGateSideOnly.ANY;
             default:
@@ -65,16 +56,13 @@ public class TriggerRedstoneInput extends BCStatement implements ITriggerInterna
     }
 
     @Override
-    public int maxParameters()
-    {
+    public int maxParameters() {
         return 1;
     }
 
     @Override
-    public boolean isTriggerActive(IStatementContainer container, IStatementParameter[] parameters)
-    {
-        if (container instanceof IRedstoneStatementContainer)
-        {
+    public boolean isTriggerActive(IStatementContainer container, IStatementParameter[] parameters) {
+        if (container instanceof IRedstoneStatementContainer) {
             int level = ((IRedstoneStatementContainer) container).getRedstoneInput(null);
             if (parameters.length > 0 && parameters[0] instanceof StatementParamGateSideOnly
                     && ((StatementParamGateSideOnly) parameters[0]).isSpecific
@@ -85,32 +73,25 @@ public class TriggerRedstoneInput extends BCStatement implements ITriggerInterna
             }
 
             return active ? level > 0 : level == 0;
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
 
     @Override
-    public IStatement[] getPossible()
-    {
+    public IStatement[] getPossible() {
         return BCCoreStatements.TRIGGER_REDSTONE;
     }
 
     @Override
-    public <T> T convertTo(Class<T> clazz)
-    {
+    public <T> T convertTo(Class<T> clazz) {
         T obj = super.convertTo(clazz);
-        if (obj != null)
-        {
+        if (obj != null) {
             return obj;
         }
 
-        if (active)
-        {
-            if (clazz.isInstance(BCCoreStatements.ACTION_REDSTONE))
-            {
+        if (active) {
+            if (clazz.isInstance(BCCoreStatements.ACTION_REDSTONE)) {
                 return clazz.cast(BCCoreStatements.ACTION_REDSTONE);
             }
         }

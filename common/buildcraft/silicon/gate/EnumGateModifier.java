@@ -8,8 +8,7 @@ package buildcraft.silicon.gate;
 
 import java.util.Locale;
 
-public enum EnumGateModifier
-{
+public enum EnumGateModifier {
     NO_MODIFIER(0, 0, 1),
     LAPIS(1, 0, 1),
     QUARTZ(1, 1, 2),
@@ -21,17 +20,14 @@ public enum EnumGateModifier
     public final int slotDivisor;
     public final String tag = name().toLowerCase(Locale.ROOT);
 
-    EnumGateModifier(int triggerParams, int actionParams, int slotDivisor)
-    {
+    EnumGateModifier(int triggerParams, int actionParams, int slotDivisor) {
         this.triggerParams = triggerParams;
         this.actionParams = actionParams;
         this.slotDivisor = slotDivisor;
     }
 
-    public static EnumGateModifier getByOrdinal(int ord)
-    {
-        if (ord < 0 || ord >= VALUES.length)
-        {
+    public static EnumGateModifier getByOrdinal(int ord) {
+        if (ord < 0 || ord >= VALUES.length) {
             return EnumGateModifier.NO_MODIFIER;
         }
         return VALUES[ord];
@@ -39,8 +35,7 @@ public enum EnumGateModifier
 
     // Calen for create ResourceLocation
     @Override
-    public String toString()
-    {
+    public String toString() {
         return super.toString().toLowerCase();
     }
 }

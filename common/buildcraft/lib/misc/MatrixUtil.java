@@ -14,8 +14,7 @@ import net.minecraft.world.phys.AABB;
 import javax.vecmath.*;
 import java.util.Map;
 
-public class MatrixUtil
-{
+public class MatrixUtil {
     /** Rotation map for gates */
     private static final Map<Direction, Matrix4f> rotationMap;
 
