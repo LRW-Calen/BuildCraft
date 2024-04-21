@@ -10,7 +10,7 @@ import buildcraft.api.core.IBox;
 import buildcraft.api.filler.IFillerPattern;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.containers.IFillerStatementContainer;
-import buildcraft.builders.BCBuildersGuis;
+import buildcraft.builders.BCBuildersItems;
 import buildcraft.builders.BCBuildersSprites;
 import buildcraft.builders.filler.FillerType;
 import buildcraft.builders.filler.FillerUtil;
@@ -19,6 +19,7 @@ import buildcraft.core.marker.volume.Addon;
 import buildcraft.core.marker.volume.AddonDefaultRenderer;
 import buildcraft.core.marker.volume.IFastAddonRenderer;
 import buildcraft.core.marker.volume.ISingleAddon;
+import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.lib.statement.FullStatement;
 import net.minecraft.core.Direction;
@@ -78,7 +79,8 @@ public class AddonFillerPlanner extends Addon implements ISingleAddon, IFillerSt
     @Override
     public void onPlayerRightClick(Player player) {
         super.onPlayerRightClick(player);
-        BCBuildersGuis.FILLER_PLANNER.openGUI(player);
+//        BCBuildersGuis.FILLER_PLANNER.openGUI(player);
+        MessageUtil.serverOpenItemGui(player, BCBuildersItems.addonFillerPlanner.get());
     }
 
     @Override

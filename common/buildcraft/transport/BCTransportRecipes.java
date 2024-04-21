@@ -11,7 +11,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 // 1.18.2: use datagen!
 @Deprecated(forRemoval = true)
-//@Mod.EventBusSubscriber(modid = BCTransport.MODID)
 public class BCTransportRecipes {
 //    @GameRegistry.ObjectHolder("buildcraftsilicon:assembly_table")
 //    private static final Block SILICON_TABLE_ASSEMBLY = null;

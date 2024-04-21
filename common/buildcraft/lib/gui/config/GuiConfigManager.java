@@ -51,7 +51,7 @@ public class GuiConfigManager {
 
     public static void markDirty() {
 //        if (!isDirty && BCLibConfig.guiConfigFile != null)
-        if (!isDirty && BCLibConfig.getGuiConfigFile() != null) {
+        if (!isDirty && BCLibConfig.getGuiConfigFileAndEnsureCreated() != null) {
             // Minimise successive file writes -- add a little bit of a delay
             MessageUtil.doDelayedClient(10, () ->
             {
@@ -59,7 +59,7 @@ public class GuiConfigManager {
                     return;
                 }
 //                try (FileWriter fw = new FileWriter(BCLibConfig.guiConfigFile))
-                try (FileWriter fw = new FileWriter(BCLibConfig.getGuiConfigFile())) {
+                try (FileWriter fw = new FileWriter(BCLibConfig.getGuiConfigFileAndEnsureCreated())) {
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     try (BufferedWriter bw = new BufferedWriter(fw)) {
                         JsonObject json = writeToJson();
@@ -80,12 +80,12 @@ public class GuiConfigManager {
 
     public static void loadFromConfigFile() {
 //        if (BCLibConfig.guiConfigFile != null)
-        if (BCLibConfig.getGuiConfigFile() != null) {
+        if (BCLibConfig.getGuiConfigFileAndEnsureCreated() != null) {
             Gson gson = new Gson();
             List<String> lines;
             try {
 //                lines = Files.readAllLines(BCLibConfig.guiConfigFile.toPath());
-                lines = Files.readAllLines(BCLibConfig.getGuiConfigFile().toPath());
+                lines = Files.readAllLines(BCLibConfig.getGuiConfigFileAndEnsureCreated().toPath());
             }
             catch (IOException io) {
                 BCLog.logger.warn("[lib.gui.cfg] Failed to read the config file! " + io.getMessage());

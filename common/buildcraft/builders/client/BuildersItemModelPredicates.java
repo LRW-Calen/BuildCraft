@@ -17,13 +17,11 @@ public class BuildersItemModelPredicates {
                     ItemProperties.register(
                             BCBuildersItems.snapshotBLUEPRINT.get(),
                             PREDICATE_USED,
-//                            (stack, world, entity, pSeed) -> (stack.hasTag() && stack.getTag().contains(ItemSnapshot.TAG_KEY, Tag.TAG_COMPOUND)) ? 1 : 0
                             (stack, world, entity, pSeed) -> stack.getTagElement(ItemSnapshot.TAG_KEY) != null ? 1 : 0
                     );
                     ItemProperties.register(
                             BCBuildersItems.snapshotTEMPLATE.get(),
                             PREDICATE_USED,
-//                            (stack, world, entity, pSeed) -> (stack.hasTag() && stack.getTag().contains(ItemSnapshot.TAG_KEY, Tag.TAG_COMPOUND)) ? 1 : 0
                             (stack, world, entity, pSeed) -> stack.getTagElement(ItemSnapshot.TAG_KEY) != null ? 1 : 0
                     );
                     ItemProperties.register(
@@ -31,11 +29,9 @@ public class BuildersItemModelPredicates {
                             PREDICATE_USED,
                             (stack, world, entity, pSeed) ->
                             {
-//                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_USED && stack.getTag() != null && stack.getTag().contains(ItemSchematicSingle.NBT_KEY))
                                 if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_USED && stack.getTagElement(ItemSchematicSingle.NBT_KEY) != null) {
                                     return 1;
                                 }
-//                                if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_CLEAN || !stack.hasTag() || !stack.getTag().contains(ItemSchematicSingle.NBT_KEY))
                                 if (stack.getDamageValue() == ItemSchematicSingle.DAMAGE_CLEAN || stack.getTagElement(ItemSchematicSingle.NBT_KEY) == null) {
                                     return 0;
                                 }

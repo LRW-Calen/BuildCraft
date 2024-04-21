@@ -173,19 +173,7 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection> {
 
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Sheets.solidBlockSheet());
-//        bb.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
-//        poseStack.pushPose();
-//        Vec3 vec3 = camera.getPosition();
-//        double d0 = vec3.x();
-//        double d1 = vec3.y();
-//        double d2 = vec3.z();
-//        BlockPos blockpos3 = box.min();
-//        poseStack.translate((double)blockpos3.getX() - d0, (double)blockpos3.getY() - d1, (double)blockpos3.getZ() - d2);
-//        poseStack.translate(-box.min().getX(), -box.min().getY(), -box.min().getZ());
-//        poseStack.translate(-d0, -d1, -d2);
 //        LaserBoxRenderer.renderLaserBoxStatic(box, BuildCraftLaserManager.MARKER_VOLUME_CONNECTED, true);
         LaserBoxRenderer.renderLaserBoxDynamic(box, BuildCraftLaserManager.MARKER_VOLUME_CONNECTED, poseStack.last(), bb, true);
-//        poseStack.popPose();
-//        RenderSystem.renderThreadTesselator().end();
     }
 }

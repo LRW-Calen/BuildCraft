@@ -10,28 +10,26 @@ import buildcraft.lib.item.ItemBlockBCMulti;
 import net.minecraft.world.item.Item;
 
 public class ItemEngine_BC8<E extends Enum<E> & IEngineType> extends ItemBlockBCMulti {
-    private final BlockEngineBase_BC8<E> engineBlock;
+//    private final BlockEngineBase_BC8<E> engineBlock;
 
     public ItemEngine_BC8(BlockEngineBase_BC8<E> block, Item.Properties properties) {
 //        super(block, (stack) -> block.getUnlocalizedName(block.getEngineType(stack.getItemDamage())));
         super(block, properties);
-        engineBlock = block;
+//        engineBlock = block;
     }
 
 //    @Override
-//    public String getDescriptionId(ItemStack stack)
-////    public String getUnlocalizedName(ItemStack stack)
-//    {
-//        return "tile." + engineBlock.getUnlocalizedName() + ".name";
+//    public String getUnlocalizedName(ItemStack stack)
+//    public String getDescriptionId(ItemStack stack) {
+//        IBlockState state = engineBlock.getStateFromMeta(stack == null ? 0 : stack.getItemDamage());
+//        E engine = state.getValue(engineBlock.getEngineProperty());
+//        return "tile." + engineBlock.getUnlocalizedName(engine);
 //    }
 
     // Calen: not still useful in 1.18.2
 //    @Override
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
-////        for (E type : engineBlock.getEngineProperty().getAllowedValues())
-//        for (EnumEngineType type : EnumEngineType.values())
-//        {
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
+//        for (E type : engineBlock.getEngineProperty().getAllowedValues()) {
 //            int index = type.ordinal();
 //            addVariant(variants, index, type.getItemModelLocation());
 //        }

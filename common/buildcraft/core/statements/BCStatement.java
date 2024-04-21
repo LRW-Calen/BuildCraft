@@ -47,7 +47,7 @@ public abstract class BCStatement implements IStatement {
 
     @Override
     public IStatement[] getPossible() {
-        return new IStatement[]{this};
+        return new IStatement[] { this };
     }
 
     @Override

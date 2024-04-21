@@ -70,8 +70,7 @@ public class VolumeBox {
                 EnumAddonSlot slot = NBTUtilBC.readEnum(addonsEntryTag.get("slot"), EnumAddonSlot.class);
                 addons.put(slot, addon);
                 addon.postReadFromNbt();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
@@ -139,6 +138,7 @@ public class VolumeBox {
 
     @SuppressWarnings("WeakerAccess")
     public Player getPlayer(Level world) {
+//        return world.getPlayerEntityByUUID(player);
         return world.getPlayerByUUID(player);
     }
 
@@ -240,8 +240,7 @@ public class VolumeBox {
                 addon.onAdded();
                 addon.fromBytes(buf);
                 newAddons.put(slot, addon);
-            }
-            catch (InstantiationException | IllegalAccessException e) {
+            } catch (InstantiationException | IllegalAccessException e) {
                 throw new IOException("Failed to deserialize addon!", e);
             }
         }

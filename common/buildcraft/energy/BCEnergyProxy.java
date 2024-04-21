@@ -72,7 +72,7 @@ public abstract class BCEnergyProxy {
 //        return null;
 //    }
 
-    //    @SideOnly(Side.SERVER)
+    // @SideOnly(Side.SERVER)
     public static class ServerProxy extends BCEnergyProxy {
         @Override
         public void fmlPreInit() {
@@ -81,14 +81,14 @@ public abstract class BCEnergyProxy {
         }
     }
 
-    //    @SideOnly(Side.CLIENT)
+    // @SideOnly(Side.CLIENT)
     public static class ClientProxy extends BCEnergyProxy {
         @Override
         public void fmlPreInit() {
             super.fmlPreInit();
             ChristmasHandler.fmlPreInitClient();
-//            BCEnergyModels.fmlPreInit(); // Calen: use @Mod.EventBusSubscriber on class to ensure the renderer be registered early enough
-//            BCEnergySprites.fmlPreInit(); // Calen: moved to BCEnergySprites @Mod.EventbusSubscriber...
+            BCEnergyModels.fmlPreInit();
+            BCEnergySprites.fmlPreInit();
         }
 
         @Override

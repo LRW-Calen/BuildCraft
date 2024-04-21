@@ -51,7 +51,7 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
 
         ItemStack redstoneEngine;
         if (BCCoreBlocks.engineWood != null) {
-            redstoneEngine = BCCoreBlocks.engineWood.get().getStack(EnumEngineType.WOOD);
+            redstoneEngine = BCCoreBlocks.engineWood.get().getStack();
         } else {
             redstoneEngine = new ItemStack(Blocks.REDSTONE_BLOCK);
         }

@@ -86,6 +86,6 @@ public class BuildCraftLaserManager {
         POWER_MED = new LaserType(MARKER_VOLUME_POSSIBLE, BCCoreSprites.LASER_POWER_MED);
         POWER_HIGH = new LaserType(MARKER_VOLUME_POSSIBLE, BCCoreSprites.LASER_POWER_HIGH);
         POWER_FULL = new LaserType(MARKER_VOLUME_POSSIBLE, BCCoreSprites.LASER_POWER_FULL);
-        POWERS = new LaserType[]{POWER_LOW, POWER_MED, POWER_HIGH, POWER_FULL};
+        POWERS = new LaserType[] { POWER_LOW, POWER_MED, POWER_HIGH, POWER_FULL };
     }
 }

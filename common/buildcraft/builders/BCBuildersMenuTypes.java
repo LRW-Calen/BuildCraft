@@ -62,6 +62,11 @@ public class BCBuildersMenuTypes {
                 }
             }
     );
+    public static final MenuType<ContainerFillerPlanner> FILLER_PLANNER = IForgeMenuType.create((windowId, inv, data) ->
+            {
+                return new ContainerFillerPlanner(BCBuildersMenuTypes.FILLER_PLANNER, windowId, inv.player);
+            }
+    );
 
     public static void registerAll(RegistryEvent.Register<MenuType<?>> event) {
         event.getRegistry().registerAll(
@@ -69,7 +74,8 @@ public class BCBuildersMenuTypes {
                 ARCHITECT_TABLE.setRegistryName("architect_table"),
                 ELECTRONIC_LIBRARY.setRegistryName("electronic_library"),
                 REPLACER.setRegistryName("replacer"),
-                FILLER.setRegistryName("filler")
+                FILLER.setRegistryName("filler"),
+                FILLER_PLANNER.setRegistryName("filler_planner")
         );
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
@@ -78,6 +84,7 @@ public class BCBuildersMenuTypes {
             MenuScreens.register(ELECTRONIC_LIBRARY, GuiElectronicLibrary::new);
             MenuScreens.register(REPLACER, GuiReplacer::new);
             MenuScreens.register(FILLER, GuiFiller::new);
+            MenuScreens.register(FILLER_PLANNER, GuiFillerPlanner::new);
         }
     }
 }

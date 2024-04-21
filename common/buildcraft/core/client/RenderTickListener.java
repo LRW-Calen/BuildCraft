@@ -59,11 +59,11 @@ public class RenderTickListener {
 
     static {
         double[][][] upFace = { // Comments for formatting
-                {{0.5, 0.9, 0.5}, {0.5, 1.6, 0.5}}, // Main line
-                {{0.5, 0.9, 0.5}, {0.8, 1.2, 0.5}}, // First arrow part (+X)
-                {{0.5, 0.9, 0.5}, {0.2, 1.2, 0.5}}, // Second arrow part (-X)
-                {{0.5, 0.9, 0.5}, {0.5, 1.2, 0.8}}, // Third arrow part (+Z)
-                {{0.5, 0.9, 0.5}, {0.5, 1.2, 0.2}}, // Forth arrow part (-Z)
+                { { 0.5, 0.9, 0.5 }, { 0.5, 1.6, 0.5 } }, // Main line
+                { { 0.5, 0.9, 0.5 }, { 0.8, 1.2, 0.5 } }, // First arrow part (+X)
+                { { 0.5, 0.9, 0.5 }, { 0.2, 1.2, 0.5 } }, // Second arrow part (-X)
+                { { 0.5, 0.9, 0.5 }, { 0.5, 1.2, 0.8 } }, // Third arrow part (+Z)
+                { { 0.5, 0.9, 0.5 }, { 0.5, 1.2, 0.2 } }, // Forth arrow part (-Z)
         };
 
         for (Direction face : Direction.values()) {
@@ -113,7 +113,7 @@ public class RenderTickListener {
         }
     }
 
-    //    private static void appendDiff(List<String> dest, List<String> first, List<String> second, String headerFirst, String headerSecond)
+    // private static void appendDiff(List<String> dest, List<String> first, List<String> second, String headerFirst, String headerSecond)
     private static void appendDiff(List<String> dest, List<Component> first, List<Component> second, String headerFirst, String headerSecond) {
         dest.add("");
         dest.add(headerFirst);
@@ -146,7 +146,7 @@ public class RenderTickListener {
 
     @SubscribeEvent
     public static void renderLast(RenderLevelStageEvent event) {
-        // Calen: AFTER_SKY is the right state for this render
+        // Calen: AFTER_SKY is the correct state for this render
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SKY) {
             return;
         }
@@ -216,7 +216,7 @@ public class RenderTickListener {
             LaserBoxRenderer.renderLaserBoxDynamic(LAST_RENDERED_MAP_LOC, BuildCraftLaserManager.STRIPES_WRITE, poseStack.last(), bb, true);
 
         } else if (type == MapLocationType.PATH) {
-            List<BlockPos> path = ((ItemMapLocation) BCCoreItems.mapLocation.get()).getPath(stack);
+            List<BlockPos> path = BCCoreItems.mapLocation.get().getPath(stack);
             if (path != null && path.size() > 1) {
                 BlockPos last = null;
                 for (BlockPos p : path) {

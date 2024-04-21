@@ -11,8 +11,8 @@ import buildcraft.api.enums.EnumPowerStage;
 import buildcraft.core.client.render.RenderEngineCreative;
 import buildcraft.core.client.render.RenderEngineWood;
 import buildcraft.core.client.render.RenderMarkerVolume;
-import buildcraft.factory.tile.TileEngineCreative;
-import buildcraft.factory.tile.TileEngineRedstone_BC8;
+import buildcraft.core.tile.TileEngineCreative;
+import buildcraft.core.tile.TileEngineRedstone_BC8;
 import buildcraft.lib.client.model.ModelHolderVariable;
 import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.client.model.MutableQuad;
@@ -30,13 +30,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-@Mod.EventBusSubscriber(modid = BCCore.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 @OnlyIn(Dist.CLIENT)
 public class BCCoreModels {
     private static final NodeVariableDouble ENGINE_PROGRESS;
@@ -66,24 +67,30 @@ public class BCCoreModels {
         EnumEngineType.CREATIVE.setModel(ENGINE_CREATIVE); // Calen
     }
 
-//        // Calen: moved to @Mod.EventBusSubscriber for only exist in Client
-//    public static void fmlPreInit()
-//    {
-//        // Calen: should reg mod bus
-////        MinecraftForge.EVENT_BUS.register(BCCoreModels.class);
-//        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        modEventBus.register(BCCoreModels.class);
+    public static void fmlPreInit() {
+        // 1.18.2: following events are IModBusEvent
+//        MinecraftForge.EVENT_BUS.register(BCCoreModels.class);
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(BCCore.MODID).get()).getEventBus();
+        modEventBus.register(BCCoreModels.class);
+    }
+
+//    @SubscribeEvent
+//    @SideOnly(Side.CLIENT)
+//    public static void onModelRegistry(ModelRegistryEvent event) {
+//        if (BCCoreBlocks.engine != null) {
+//            ModelLoader.setCustomStateMapper(BCCoreBlocks.engine, b -> Collections.emptyMap());
+//        }
 //    }
 
-    public static void fmlInit() {
-        // Calen move to onBlockEntityModelBind(event)
+    // Calen: use onTesrReg(event)
+//    public static void fmlInit() {
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileMarkerVolume.class, RenderMarkerVolume.INSTANCE);
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileEngineRedstone_BC8.class, RenderEngineWood.INSTANCE);
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileEngineCreative.class, RenderEngineCreative.INSTANCE);
-    }
+//    }
 
     @SubscribeEvent
-    public static void onBlockEntityModelBind(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCCoreBlocks.markerVolumeTile.get(), RenderMarkerVolume::new);
         BlockEntityRenderers.register(BCCoreBlocks.engineWoodTile.get(), RenderEngineWood::new);
         BlockEntityRenderers.register(BCCoreBlocks.engineCreativeTile.get(), RenderEngineCreative::new);

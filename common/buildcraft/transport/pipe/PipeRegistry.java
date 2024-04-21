@@ -31,7 +31,7 @@ public enum PipeRegistry implements IPipeRegistry {
 
     public static final DeferredRegister<Item> PIPE_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BCTransport.MODID);
 
-    //    private final RegistrationHelper helper = new RegistrationHelper(NameSpaces.BUILDCRAFT_TRANSPORT);
+    // private final RegistrationHelper helper = new RegistrationHelper(NameSpaces.BUILDCRAFT_TRANSPORT);
     private final Map<ResourceLocation, PipeDefinition> definitions = new HashMap<>();
     //    private final Map<PipeDefinition, IItemPipe> pipeItems = new IdentityHashMap<>();
 //    private final Map<PipeDefinition, RegistryObject<? extends IItemPipe>> pipeItems = new IdentityHashMap<>();

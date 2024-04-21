@@ -75,25 +75,15 @@ public class BCEnergyFluids {
     }
 
     public static RegistryObject<BCFluid.Source>[] crudeOil;
-    /**
-     * All 3 fuels (no residue)
-     */
+    /** All 3 fuels (no residue) */
     public static RegistryObject<BCFluid.Source>[] oilDistilled;
-    /**
-     * The 3 heaviest components (fuelLight, fuelDense and oilResidue)
-     */
+    /** The 3 heaviest components (fuelLight, fuelDense and oilResidue) */
     public static RegistryObject<BCFluid.Source>[] oilHeavy;
-    /**
-     * The 2 lightest fuels (no dense fuel)
-     */
+    /** The 2 lightest fuels (no dense fuel) */
     public static RegistryObject<BCFluid.Source>[] fuelMixedLight;
-    /**
-     * The 2 heaviest fuels (no gaseous fuel)
-     */
+    /** The 2 heaviest fuels (no gaseous fuel) */
     public static RegistryObject<BCFluid.Source>[] fuelMixedHeavy;
-    /**
-     * The 2 heaviest products (fuelDense and oilResidue)
-     */
+    /** The 2 heaviest products (fuelDense and oilResidue) */
     public static RegistryObject<BCFluid.Source>[] oilDense;
 
     // End products in order from least to most dense

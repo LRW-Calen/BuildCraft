@@ -71,7 +71,6 @@ public class CoreBlockStateProvider extends BlockStateProvider {
                 }
         );
 
-
         // markerVolume
         ModelBuilder torch_center_lit = models().getBuilder("buildcraftcore:block/torch_center_lit")
                 .texture("particle", "#all")
@@ -129,6 +128,7 @@ public class CoreBlockStateProvider extends BlockStateProvider {
                 .condition(BuildCraftProperties.BLOCK_FACING_6, Direction.NORTH)
                 .end()
         ;
+
         // markerPath
         ModelBuilder markerPath = models().getBuilder("buildcraftcore:block/marker_path")
                 .parent(torch_center_lit)
@@ -173,5 +173,14 @@ public class CoreBlockStateProvider extends BlockStateProvider {
                 .condition(BuildCraftProperties.BLOCK_FACING_6, Direction.NORTH)
                 .end()
         ;
+
+        // power_tester
+        getVariantBuilder(BCCoreBlocks.powerTester.get()).forAllStates(s ->
+                ConfiguredModel.builder().modelFile(
+                                models().withExistingParent("buildcraftcore:block/power_tester", new ResourceLocation("minecraft", "block/cube_all"))
+                                        .texture("all", "buildcraftcore:blocks/power_tester")
+                        )
+                        .build()
+        );
     }
 }

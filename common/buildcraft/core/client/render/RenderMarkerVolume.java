@@ -20,7 +20,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.phys.Vec3;
@@ -30,7 +29,7 @@ import java.util.Set;
 public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume> {
     private static final double SCALE = 1 / 16.2; // smaller than normal lasers
 
-//    public static final RenderMarkerVolume<TileMarkerVolume> INSTANCE = new RenderMarkerVolume(null);
+//    public static final RenderMarkerVolume INSTANCE = new RenderMarkerVolume();
 
     private static final LaserType LASER_TYPE = BuildCraftLaserManager.MARKER_VOLUME_SIGNAL;
     private static final Vec3 VEC_HALF = new Vec3(0.5, 0.5, 0.5);
@@ -44,7 +43,6 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
         return true;
     }
 
-    // Calen: default 64
     @Override
     public int getViewDistance() {
         // Calen: as beacon and endGateway
@@ -54,34 +52,26 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
     @Override
 //    public void render(TileMarkerVolume marker, double tileX, double tileY, double tileZ, float partialTicks, int destroyStage, float alpha)
     public void render(TileMarkerVolume marker, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
-        // Calen: in 1.12.2 this never called
-        // rendered at VolumeConnection#renderInWorld
-        if (marker == null || !marker.isShowingSignals()) {
-            return;
-        }
+        // Calen: red laser rendered in VolumeConnection#renderInWorld, blue laser rendered here
+        if (marker == null || !marker.isShowingSignals()) return;
 
         Minecraft.getInstance().getProfiler().push("bc");
         Minecraft.getInstance().getProfiler().push("marker");
         Minecraft.getInstance().getProfiler().push("volume");
 
-//        DetachedRenderer.fromWorldOriginPre(Minecraft.getInstance().player, partialTicks);// Calen: not need
+        // Calen: 1.18.2 should not call these
+//        DetachedRenderer.fromWorldOriginPre(Minecraft.getMinecraft().player, partialTicks);
 //        RenderHelper.disableStandardItemLighting();
 //        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-//        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
-//        RenderSystem.disableBlend(); // Calen test
-
-        // solidBlockSheet or translucent seems not different here?
-        VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet()); // Calen
-//        VertexConsumer buffer = bufferSource.getBuffer(RenderType.translucent()); // Calen
 
         VolumeConnection volume = marker.getCurrentConnection();
         Set<Axis> taken = volume == null ? ImmutableSet.of() : volume.getConnectedAxis();
 
-        BlockPos from = marker.getBlockPos(); // Calen
-//        Vec3 start = VecUtil.add(VEC_HALF, marker.getBlockPos());
-        Vec3 start = VecUtil.add(VEC_HALF, from);
-        poseStack.pushPose();
-        poseStack.translate(-from.getX(), -from.getY(), -from.getZ());
+        // 1.18.2 poseStack has translated to marker pos before #render called
+//        Vec3d start = VecUtil.add(VEC_HALF, marker.getPos());
+        Vec3 start = VEC_HALF;
+
+        VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
         for (Direction face : Direction.values()) {
             if (taken.contains(face.getAxis())) {
                 continue;
@@ -89,7 +79,6 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
             Vec3 end = VecUtil.offset(start, face, BCCoreConfig.markerMaxDistance);
             renderLaser(start, end, face.getAxis(), poseStack, buffer);
         }
-        poseStack.popPose();
 
 //        RenderHelper.enableStandardItemLighting();
 //        DetachedRenderer.fromWorldOriginPost();

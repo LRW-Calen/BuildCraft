@@ -19,13 +19,14 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 import java.util.EnumMap;
 import java.util.Locale;
 
-@Mod.EventBusSubscriber(modid = BCTransport.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 @OnlyIn(Dist.CLIENT)
 public class BCTransportSprites {
     public static final SpriteHolder EMPTY_FILTERED_BUFFER_SLOT;
@@ -96,10 +97,12 @@ public class BCTransportSprites {
         return SpriteHolderRegistry.getHolder("buildcraft" + module + ":" + loc);
     }
 
-//    public static void fmlPreInit()
-//    {
+    public static void fmlPreInit() {
+        // 1.18.2: following events are IModBusEvent
 //        MinecraftForge.EVENT_BUS.register(BCTransportSprites.class);
-//    }
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(BCTransport.MODID).get()).getEventBus();
+        modEventBus.register(BCTransportSprites.class);
+    }
 
     @SubscribeEvent
     public static void onTextureStitchPre(TextureStitchEvent.Pre event) {

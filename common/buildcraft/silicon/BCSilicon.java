@@ -59,12 +59,6 @@ public class BCSilicon {
 
     public BCSilicon() {
         INSTANCE = this;
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            modEventBus.register(BCSiliconModels.class);
-        }
-
     }
 
     @SubscribeEvent

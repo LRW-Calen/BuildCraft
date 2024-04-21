@@ -7,10 +7,7 @@ import buildcraft.core.block.*;
 import buildcraft.core.item.ItemBlockDecorated;
 import buildcraft.core.item.ItemBlockSpring;
 import buildcraft.core.item.ItemEngine_BC8;
-import buildcraft.core.tile.TileMarkerPath;
-import buildcraft.core.tile.TileMarkerVolume;
-import buildcraft.factory.tile.TileEngineCreative;
-import buildcraft.factory.tile.TileEngineRedstone_BC8;
+import buildcraft.core.tile.*;
 import buildcraft.lib.BCLib;
 import buildcraft.lib.block.BlockPropertiesCreator;
 import buildcraft.lib.engine.BlockEngineBase_BC8;
@@ -35,33 +32,31 @@ import java.util.function.BiFunction;
 public class BCCoreBlocks {
     public static final RegistrationHelper HELPER = new RegistrationHelper(BCCore.MODID);
 
-    public static final Map<EnumEngineType, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap(EnumEngineType.class);
-    public static final Map<EnumEngineType, RegistryObject<? extends BlockEngineBase_BC8>> engineBlockMap = new EnumMap(EnumEngineType.class);
-    public static final Map<EnumDecoratedBlock, RegistryObject<BlockDecoration>> decoratedMap = new HashMap<>();
+    public static final Map<EnumEngineType, RegistryObject<? extends BlockEngineBase_BC8<EnumEngineType>>> engineBlockMap = new EnumMap<>(EnumEngineType.class);
 
     public static RegistryObject<BlockEngine_BC8> engineWood;
     public static RegistryObject<BlockEngine_BC8> engineCreative;
     public static RegistryObject<BlockSpring> springWater;
     public static RegistryObject<BlockSpring> springOil;
     //    public static RegistryObject<BlockDecoration> decorated;
+    public static final Map<EnumDecoratedBlock, RegistryObject<BlockDecoration>> decoratedMap = new HashMap<>();
     public static RegistryObject<BlockMarkerVolume> markerVolume;
     public static RegistryObject<BlockMarkerPath> markerPath;
-//    public static BlockPowerConsumerTester powerTester;
+    public static RegistryObject<BlockPowerConsumerTester> powerTester;
 
+    public static final Map<EnumEngineType, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap(EnumEngineType.class);
     public static RegistryObject<BlockEntityType<TileEngineRedstone_BC8>> engineWoodTile;
     public static RegistryObject<BlockEntityType<TileEngineCreative>> engineCreativeTile;
     public static RegistryObject<BlockEntityType<TileMarkerVolume>> markerVolumeTile;
     public static RegistryObject<BlockEntityType<TileMarkerPath>> markerPathTile;
-//    public static RegistryObject<BlockEntityType<TilePowerConsumerTester>> powerTesterTile;
-//    public static RegistryObject<BlockEntityType<TileSpringOil>> springOiltILE;
+    public static RegistryObject<BlockEntityType<TilePowerConsumerTester>> powerTesterTile;
 
     private static final BlockBehaviour.Properties SPRING_PROPERTIES =
             BlockBehaviour.Properties.of(Material.STONE)
                     .strength(-1.0F, 3600000.0F)
                     .noDrops()
                     .sound(SoundType.STONE)
-                    .randomTicks() // 需要随机tick
-            ;
+                    .randomTicks();
 
     // Calen: static initialize for energy module access
     static {
@@ -88,16 +83,10 @@ public class BCCoreBlocks {
             );
             decoratedMap.put(decoratedBlock, reg);
         }
-//        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.DESTROY), ItemBlockDecorated::new);
-//        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.BLUEPRINT), ItemBlockDecorated::new);
-//        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.LEATHER), ItemBlockDecorated::new);
-//        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.LASER_BACK), ItemBlockDecorated::new);
-//        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.PAPER), ItemBlockDecorated::new);
-//        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.TEMPLATE), ItemBlockDecorated::new);
         markerVolume = HELPER.addBlockAndItem("block.marker.volume", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION).strength(0.25F), BlockMarkerVolume::new);
         markerPath = HELPER.addBlockAndItem("block.marker.path", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION), BlockMarkerPath::new);
         if (BCLib.DEV) {
-//            powerTester = HELPER.addBlockAndItem(new BlockPowerConsumerTester(Material.IRON,"block.power_tester"));
+            powerTester = HELPER.addBlockAndItem("block.power_tester", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockPowerConsumerTester::new);
         }
 
         engineWood = registerEngine(EnumEngineType.WOOD, TileEngineRedstone_BC8::new);
@@ -108,7 +97,7 @@ public class BCCoreBlocks {
         engineWoodTile = HELPER.registerTile("tile.engine.wood", TileEngineRedstone_BC8::new, engineWood);
         engineCreativeTile = HELPER.registerTile("tile.engine.creative", TileEngineCreative::new, engineCreative);
         if (BCLib.DEV) {
-//            HELPER.registerTile(TilePowerConsumerTester.class, "tile.power_tester");
+            powerTesterTile = HELPER.registerTile("tile.power_tester", TilePowerConsumerTester::new, powerTester);
         }
     }
 

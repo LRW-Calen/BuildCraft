@@ -12,17 +12,17 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.network.NetworkHooks;
 
+// Calen: use MessageUtil#serverOpenItemGui
+@Deprecated(forRemoval = true)
 public enum BCCoreGuis {
     LIST;
 
-    //    public void openGUI(Player player)
-//    {
-////        player.openGui(BuildCraft.INSTANCE, ordinal(), player.getLevel(), 0, 0, 0);
+//    public void openGUI(EntityPlayer player) {
+//        player.openGui(BCCore.INSTANCE, ordinal(), player.getEntityWorld(), 0, 0, 0);
 //    }
-//
-//    public void openGUI(Player player, BlockPos pos)
-//    {
-////        player.openGui(BuildCraft.INSTANCE, ordinal(), player.getLevel(), pos.getX(), pos.getY(), pos.getZ());
+
+    //    public void openGUI(EntityPlayer player, BlockPos pos) {
+//        player.openGui(BCCore.INSTANCE, ordinal(), player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
 //    }
     public void openGUI(Player player, ItemStack stack) {
         if (player instanceof ServerPlayer serverPlayer) {

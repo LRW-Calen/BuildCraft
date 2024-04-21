@@ -13,25 +13,20 @@ import net.minecraft.world.item.ItemStack;
 public class ItemBlockDecorated extends ItemBlockBCMulti {
     public final EnumDecoratedBlock TYPE;
 
-    //    public ItemBlockDecorated(BlockBCBase_Neptune block)
-//    public ItemBlockDecorated(BlockBCBase_Neptune block, Item.Properties properties)
     public ItemBlockDecorated(BlockBCBase_Neptune block, Item.Properties properties, EnumDecoratedBlock type) {
 //        super(block, createNameArray());
         super(block, properties);
         this.TYPE = type;
     }
 
-//    private static String[] createNameArray()
-//    {
+//    private static String[] createNameArray() {
 //        String[] names = new String[EnumDecoratedBlock.VALUES.length];
-//        for (int i = 0; i < names.length; i++)
-//        {
+//        for (int i = 0; i < names.length; i++) {
 ////            names[i] = EnumDecoratedBlock.VALUES[i].getName();
 //            names[i] = EnumDecoratedBlock.VALUES[i].getSerializedName();
 //        }
 //        return names;
 //    }
-
 
     @Override
     public String getDescriptionId(ItemStack stack) {
@@ -41,12 +36,9 @@ public class ItemBlockDecorated extends ItemBlockBCMulti {
     // Calen: not still useful in 1.18.2
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
-////        for (EnumDecoratedBlock type : EnumDecoratedBlock.VALUES)
-////        {
-//////            addVariant(variants, type.ordinal(), type.getName());
-////            addVariant(variants, type.ordinal(), type.getSerializedName());
-////        }
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
+//        for (EnumDecoratedBlock type : EnumDecoratedBlock.VALUES) {
+//            addVariant(variants, type.ordinal(), type.getName());
+//        }
 //    }
 }

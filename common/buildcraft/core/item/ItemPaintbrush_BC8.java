@@ -35,9 +35,8 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
     private static final String DAMAGE = "damage";
     private static final int MAX_USES = 64;
 
-    private DyeColor colour;
+    private final DyeColor colour;
 
-    //    public ItemPaintbrush_BC8(String idBC, Item.Properties properties)
     public ItemPaintbrush_BC8(String idBC, Item.Properties properties, DyeColor colour) {
         super(idBC, properties);
         this.colour = colour;
@@ -46,29 +45,17 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
     }
 
 //    @Override
-//    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems)
-//    {
-////        // Calen: Without Color
-////        ItemStack stack = new ItemStack(this, 1);
-////        subItems.add(stack);
-////        // Calen: 16 Colors
-////        for (DyeColor color : DyeColor.values())
-////        {
-////            stack = new ItemStack(this, 1);
-////            CompoundTag stackTag = new CompoundTag();
-////            dyeColorToTag(color, stackTag);
-////            stack.setTag(stackTag);
-////            subItems.add(stack);
-////        }
+//    protected void addSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
+//        for (int i = 0; i < 17; i++) {
+//            subItems.add(new ItemStack(this, 1, i));
+//        }
 //    }
 
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
+//    @SideOnly(Side.CLIENT)
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
 //        addVariant(variants, 0, "clean");
-//        for (DyeColor colour : DyeColor.values())
-//        {
+//        for (EnumDyeColor colour : EnumDyeColor.values()) {
 //            addVariant(variants, colour.getMetadata() + 1, colour.getName());
 //        }
 //    }
@@ -102,17 +89,14 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
     @Override
 //    public String getItemStackDisplayName(ItemStack stack)
     public Component getName(ItemStack stack) {
-////        Brush brush = getBrushFromStack(stack);
+//        Brush brush = getBrushFromStack(stack);
 //        String colourComponent = "";
-////        if (brush.colour != null)
-//        if (this.colour != null)
-//        {
-////            colourComponent = ColourUtil.getTextFullTooltipSpecial(brush.colour) + " ";
-//            colourComponent = ColourUtil.getTextFullTooltipSpecial(this.colour) + " ";
+//        if (brush.colour != null) {
+//            colourComponent = ColourUtil.getTextFullTooltipSpecial(brush.colour) + " ";
 //        }
-//        return new TextComponent(colourComponent).append(new TranslatableComponent(this.unlocalizedName));
-
+//        return colourComponent + super.getItemStackDisplayName(stack);
         if (LocaleUtil.modLangResourceNotLoaded()) {
+            // For guide book: when this called, the lang files may not be loaded
             if (this.colour != null) {
                 MutableComponent colourComponent = ColourUtil.getTextFullTooltipSpecialComponent(this.colour).append(new TextComponent(" "));
                 return colourComponent.append(new TranslatableComponent(this.unlocalizedName));
@@ -156,64 +140,39 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
     }
 
     @Override
+//    public boolean showDurabilityBar(ItemStack stack)
     public boolean isBarVisible(ItemStack stack) {
         return isDamaged(stack);
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
-        super.appendHoverText(stack, world, tooltip, flag);
-        Brush brush = new Brush(stack);
-        tooltip.add(new TextComponent(brush.usesLeft + " / " + MAX_USES));
-    }
-
     // Calen: in 1.18.2 durability is calced by mc with #getDamage and #getMaxDamage
 //    @Override
-//    public double getDurabilityForDisplay(ItemStack stack)
-////    public int getDamage(ItemStack stack)
-//    {
+//    public double getDurabilityForDisplay(ItemStack stack) {
 //        Brush brush = new Brush(stack);
 //        return 1 - (brush.usesLeft / (double) MAX_USES);
 //    }
+
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level world, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, world, tooltip, flag);
+        if (this.colour != null) {
+            Brush brush = new Brush(stack);
+            tooltip.add(new TextComponent(brush.usesLeft + " / " + MAX_USES));
+        }
+    }
 
     @Override
     public int getMaxDamage(ItemStack stack) {
         return MAX_USES;
     }
 
-    // Calen: in 1.18.2 use different item to differ brush colours
-//    public DyeColor getColorFromStack(ItemStack stack)
-//    {
-////        CompoundTag tag = stack.getTag();
-////        if (tag != null && tag.contains("colour"))
-////        {
-////            return DyeColor.valueOf(tag.getString("colour"));
-////        }
-////        else
-////        {
-////            return null;
-////        }
-//        return ColourUtil.getStackColourFromTag(stack);
+//    @Override
+//    public int getMetadata(ItemStack stack) {
+//        return super.getDamage(stack);
 //    }
 
-    ////    @Override
-    //    public int getMetadata(ItemStack stack)
-//    public void dyeColorToTag(@Nullable DyeColor color, @Nonnull CompoundTag tag)
-//    {
-//        if (color == null)
-//        {
-//            // 无色的刷子
-//            return;
-//        }
-//        else
-//        {
-//            tag.putString("colour", color.getName());
-//        }
-//    }
-
-    /**
-     * Delegate class for handling
-     */
+    /** Delegate class for handling */
     public class Brush {
         public DyeColor colour;
         public int usesLeft;
@@ -224,8 +183,7 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
         }
 
         public Brush(ItemStack stack) {
-//            DyeColor meta = getColorFromStack(stack);
-//            DyeColor meta = ColourUtil.getStackColourFromTag(stack);
+//            int meta = stack.getMetadata();
             DyeColor meta = ((ItemPaintbrush_BC8) stack.getItem()).colour;
             if (meta != null) {
                 colour = meta;
@@ -251,9 +209,6 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
 //            if (existing.isEmpty() || getColorFromStack(existing) != getMeta())
             if (existing.isEmpty() || ColourUtil.getStackColourFromTag(stack) != getMeta()) {
                 stack = new ItemStack(ItemPaintbrush_BC8.this, 1);
-//                CompoundTag stackTag = new CompoundTag();
-//                dyeColorToTag(getMeta(), stackTag);
-//                stack.setTag(stackTag);
             }
             if (usesLeft != MAX_USES && colour != null) {
                 CompoundTag nbt = stack.getTag();
@@ -266,10 +221,11 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
                 stack = new ItemStack(BCCoreItems.colourBrushMap.get(null).get());
             }
             return stack == existing ? StackUtil.EMPTY : stack;
-//            return stack;
         }
 
+        //        public int getMeta()
         public DyeColor getMeta() {
+//            return (usesLeft <= 0 || colour == null) ? 0 : colour.getMetadata() + 1;
             return (usesLeft <= 0 || colour == null) ? null : colour;
         }
 

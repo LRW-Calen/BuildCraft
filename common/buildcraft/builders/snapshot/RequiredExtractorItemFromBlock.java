@@ -24,7 +24,7 @@ public class RequiredExtractorItemFromBlock extends RequiredExtractor {
 //                        Item.getItemFromBlock(blockState.getBlock()),
                         blockState.getBlock().asItem(),
                         1
-//                        blockState.getBlock().damageDropped(blockState)
+//                        blockState.getBlock().damageDropped(blockState) // 1.18.2: no meta
                 )
         );
     }

@@ -23,10 +23,7 @@ import java.util.Random;
 
 public class BlockMarkerVolume extends BlockMarkerBase {
     public BlockMarkerVolume(String idBC, BlockBehaviour.Properties properties) {
-        super(
-                idBC,
-                properties
-        );
+        super(idBC, properties);
     }
 
     @Override
@@ -57,7 +54,6 @@ public class BlockMarkerVolume extends BlockMarkerBase {
             if (volume.isShowingSignals() != powered) {
                 volume.switchSignals();
             }
-//            world.setBlock(pos, BlockMarkerBase.getActualState(world.getBlockState(pos), world, pos, tile), Block.UPDATE_ALL);
         }
     }
 
@@ -66,7 +62,9 @@ public class BlockMarkerVolume extends BlockMarkerBase {
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!world.isClientSide) {
             BlockEntity tile = world.getBlockEntity(pos);
-            if (tile instanceof TileMarkerVolume volume) {
+            if (tile instanceof TileMarkerVolume) {
+                TileMarkerVolume volume = (TileMarkerVolume) tile;
+
                 volume.onManualConnectionAttempt(player);
             }
         }

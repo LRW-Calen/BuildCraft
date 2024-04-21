@@ -45,13 +45,12 @@ public class ItemGoggles extends ArmorItem implements IItemBuildCraft {
     }
 
     @Override
-    public String getDescriptionId(ItemStack p_41455_) {
+    public String getDescriptionId(ItemStack stack) {
         return this.unlocalizedName;
     }
 
-    //    @Override
-//    public ArmorProperties getProperties(LivingEntity player, @Nonnull ItemStack armor, DamageSource source, double damage, int slot)
-//    {
+//    @Override
+//    public ArmorProperties getProperties(LivingEntity player, @Nonnull ItemStack armor, DamageSource source, double damage, int slot) {
 //        return HELMET_PROPERTIES;
 //    }
 

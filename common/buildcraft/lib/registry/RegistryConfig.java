@@ -127,7 +127,7 @@ public class RegistryConfig {
     // Calen
     private static Map<ModContainer, Configuration> getModObjectConfigs() {
         // just ensure Core Config loaded
-        BCCoreConfig.getConfig(false);
+        BCCoreConfig.getConfigAndEnsureCreated(false);
         // ret
         return modObjectConfigs;
     }

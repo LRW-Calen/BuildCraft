@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
 import javax.annotation.Nonnull;
@@ -392,7 +393,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //        nbt.put("tileRotation", NBTUtilBC.writeEnum(tileRotation));
 //        nbt.putString("placeBlock", Block.REGISTRY.getNameForObject(placeBlock).toString());
-        nbt.putString("placeBlock", placeBlock.getRegistryName().toString());
+        nbt.putString("placeBlock", ForgeRegistries.BLOCKS.getKey(placeBlock).toString());
         nbt.put(
                 "updateBlockOffsets",
                 NBTUtilBC.writeCompoundList(
@@ -405,7 +406,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                 NBTUtilBC.writeStringList(
                         canBeReplacedWithBlocks.stream()
 //                                .map(Block.REGISTRY::getNameForObject)
-                                .map(Block::getRegistryName)
+                                .map(ForgeRegistries.BLOCKS::getKey)
                                 .map(Object::toString)
                 )
         );

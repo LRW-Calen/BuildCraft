@@ -9,10 +9,10 @@ package buildcraft.lib.engine;
 
 import buildcraft.api.blocks.ICustomRotationHandler;
 import buildcraft.api.core.IEngineType;
-import buildcraft.api.enums.EnumEngineType;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
+import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,56 +25,43 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import javax.annotation.Nonnull;
+import java.util.Locale;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> extends BlockBCTile_Neptune<TileEngineBase_BC8> implements ICustomRotationHandler, IBlockWithTickableTE<TileEngineBase_BC8> {
     public final E engineType;
 
-    //    private final Map<E, Supplier<? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(E);
-//    public final Map<E, Block> engineBlockMap = new HashMap<>();
+    // Calen: moved to BCCoreBlocks.engineTileConstructors
+//    private final Map<E, Supplier<? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(getEngineProperty().getValueClass());
 
     // Calen
-    public BlockEngineBase_BC8(
-            String id,
-            BlockBehaviour.Properties props,
-            E type
-//            BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor
-
-    ) {
+    public BlockEngineBase_BC8(String id, BlockBehaviour.Properties props, E type) {
         super(id, props);
         this.engineType = type;
-//        registerEngine(type, constructor);
-//        registerEngine();
     }
 
     // Engine directly related methods
 
-    //    public void registerEngine(E type, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor)
-//    public void registerEngine()
-//    {
-////        if (RegistryConfig.isEnabled("engines", getRegistryName() + "/" + type.name().toLowerCase(Locale.ROOT),
-////                getUnlocalizedName(type)))
-////        {
-////            engineTileConstructors.put(type, constructor);
-////        }
-//        engineBlockMap.put(this.engineType, this);
+//    public void registerEngine(E type, Supplier<? extends TileEngineBase_BC8> constructor) {
+//        if (RegistryConfig.isEnabled("engines", getRegistryName() + "/" + type.name().toLowerCase(Locale.ROOT), getUnlocalizedName(type))) {
+//            engineTileConstructors.put(type, constructor);
+//        }
 //    }
 
     // Calen: never used
-//    public boolean isRegistered(EnumEngineType type)
-//    {
-////        return engineTileConstructors.containsKey(type);
-//        return engineBlockMap.containsKey(type);
+//    public boolean isRegistered(E type) {
+//        return engineTileConstructors.containsKey(type);
 //    }
 
     @Nonnull
-    public ItemStack getStack(EnumEngineType type) {
+//    public ItemStack getStack(E type)
+    public ItemStack getStack() {
 //        return new ItemStack(this, 1, type.ordinal());
         return new ItemStack(this, 1);
     }
@@ -87,24 +74,22 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 
     // BlockState
 
-    @Override
-//    protected BlockStateContainer createBlockState()
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
-        // Calen: 不super! engine没有facing属性
-//        super.createBlockStateDefinition(builder);
-//        builder.add(getEngineProperty());
-    }
+//    @Override
+////    protected BlockStateContainer createBlockState()
+//    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
+//        // Calen: 不super! engine没有facing属性
+////        super.createBlockStateDefinition(builder);
+////        builder.add(getEngineProperty());
+//    }
 
 //    @Override
-//    public int getMetaFromState(BlockState state)
-//    {
+//    public int getMetaFromState(BlockState state) {
 //        E type = state.getValue(getEngineProperty());
 //        return type.ordinal();
 //    }
 
 //    @Override
-//    public BlockState getStateFromMeta(int meta)
-//    {
+//    public BlockState getStateFromMeta(int meta) {
 //        E engineType = getEngineType(meta);
 //        return this.defaultBlockState().setValue(getEngineProperty(), engineType);
 //    }
@@ -112,42 +97,50 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
     // Misc Block Overrides
 
 //    @Override
-//    public boolean isOpaqueCube(BlockState state)
-//    {
+//    public boolean isOpaqueCube(BlockState state) {
 //        return false;
 //    }
 
 //    @Override
-//    public boolean isFullBlock(BlockState state)
-//    {
+//    public boolean isFullBlock(BlockState state) {
 //        return false;
 //    }
 
 //    @Override
-//    public boolean isFullCube(BlockState state)
-//    {
+//    public boolean isFullCube(BlockState state) {
 //        return false;
 //    }
 
 //    @Override
-//    public BlockFaceShape getBlockFaceShape(BlockAccess world, IBlockState state, BlockPos pos, Direction side)
-////    public VoxelShape getVisualShape(BlockState state, BlockGetter world, BlockPos p_54204_, CollisionContext p_54205_)
-//    {
-//        BlockEntity tile = world.getTileEntity(pos);
-//        if (tile instanceof TileEngineBase_BC8)
-//        {
+//    public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing side) {
+//        TileEntity tile = world.getTileEntity(pos);
+//        if (tile instanceof TileEngineBase_BC8) {
 //            TileEngineBase_BC8 engine = (TileEngineBase_BC8) tile;
-//            if (side == engine.currentDirection.getOpposite())
-//            {
+//            if (side == engine.currentDirection.getOpposite()) {
 //                return BlockFaceShape.SOLID;
-//            }
-//            else
-//            {
+//            } else {
 //                return BlockFaceShape.UNDEFINED;
 //            }
 //        }
 //        return BlockFaceShape.UNDEFINED;
 //    }
+
+//    @Override
+//    public boolean isSideSolid(BlockState base_state, LevelAccessor world, BlockPos pos, Direction side) {
+//        BlockEntity tile = world.getBlockEntity(pos);
+//        if (tile instanceof TileEngineBase_BC8) {
+//            TileEngineBase_BC8 engine = (TileEngineBase_BC8) tile;
+//            return side == engine.currentDirection.getOpposite();
+//        }
+//        return false;
+//    }
+
+    @Override
+//    public EnumBlockRenderType getRenderType(BlockState state)
+    public RenderShape getRenderShape(BlockState state) {
+//        return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+        return RenderShape.ENTITYBLOCK_ANIMATED;
+    }
 
     // Calen
     private static final VoxelShape BASE_U = Block.box(0, 0, 0, 16, 4, 16);
@@ -200,39 +193,17 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
     }
 
 //    @Override
-//    public boolean isSideSolid(BlockState base_state, LevelAccessor world, BlockPos pos, Direction side)
-//    {
-//        BlockEntity tile = world.getBlockEntity(pos);
-//        if (tile instanceof TileEngineBase_BC8)
-//        {
-//            TileEngineBase_BC8 engine = (TileEngineBase_BC8) tile;
-//            return side == engine.currentDirection.getOpposite();
-//        }
-//        return false;
-//    }
-
-    @Override
-//    public EnumBlockRenderType getRenderType(BlockState state)
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.ENTITYBLOCK_ANIMATED;
-    }
-
-//    @Override
-//    public void getSubBlocks(CreativeModeTab tab, NonNullList<ItemStack> list)
-//    {
-//        for (E engine : getEngineProperty().getAllowedValues())
-//        {
-//            if (engineTileConstructors.containsKey(engine))
-//            {
+//    public void getSubBlocks(CreativeModeTab tab, NonNullList<ItemStack> list) {
+//        for (E engine : getEngineProperty().getAllowedValues()) {
+//            if (engineTileConstructors.containsKey(engine)) {
 //                list.add(new ItemStack(this, 1, engine.ordinal()));
 //            }
 //        }
 //    }
 
-    // Calen: moved to datagen LootTable
+    // Calen: use datagen LootTable
 //    @Override
-//    public int damageDropped(BlockState state)
-//    {
+//    public int damageDropped(BlockState state) {
 //        return state.getValue(getEngineProperty()).ordinal();
 //    }
 

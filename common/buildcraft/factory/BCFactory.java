@@ -22,6 +22,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
@@ -44,9 +45,6 @@ public class BCFactory {
 
     public BCFactory() {
         INSTANCE = this;
-
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.register(BCFactoryModels.class);
     }
 
     @SubscribeEvent

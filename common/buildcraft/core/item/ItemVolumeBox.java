@@ -11,9 +11,7 @@ import buildcraft.core.marker.volume.WorldSavedDataVolumeBoxes;
 import buildcraft.lib.item.ItemBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
@@ -28,15 +26,10 @@ public class ItemVolumeBox extends ItemBC_Neptune {
     @Override
 //    public EnumActionResult onItemUse(Player player, Level world, BlockPos pos, InteractionHand hand, Direction facing, float hitX, float hitY, float hitZ)
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx) {
-        Player player = ctx.getPlayer();
         Level world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
-        InteractionHand hand = ctx.getHand();
         Direction facing = ctx.getClickedFace();
         Vec3 vec3Pos = ctx.getClickLocation();
-        double hitX = vec3Pos.x;
-        double hitY = vec3Pos.y;
-        double hitZ = vec3Pos.z;
         if (world.isClientSide) {
 //            return EnumActionResult.PASS;
             return InteractionResult.PASS;

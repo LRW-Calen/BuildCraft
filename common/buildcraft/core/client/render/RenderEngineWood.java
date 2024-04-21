@@ -7,13 +7,13 @@
 package buildcraft.core.client.render;
 
 import buildcraft.core.BCCoreModels;
-import buildcraft.factory.tile.TileEngineRedstone_BC8;
+import buildcraft.core.tile.TileEngineRedstone_BC8;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.render.tile.RenderEngine_BC8;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 
 public class RenderEngineWood<T extends TileEngineRedstone_BC8> extends RenderEngine_BC8<TileEngineRedstone_BC8> {
-//    public static final RenderEngineWood<TileEngineRedstone_BC8> INSTANCE = new RenderEngineWood();
+//    public static final RenderEngineWood INSTANCE = new RenderEngineWood();
 
     public RenderEngineWood(BlockEntityRendererProvider.Context context) {
         super(context);

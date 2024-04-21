@@ -10,7 +10,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -48,11 +49,10 @@ public final class RegistrationHelper {
         BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, namespace);
         ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, namespace);
         TILE_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITIES, namespace);
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(namespace).get()).getEventBus(); // Calen: don't use FMLJavaModLoadingContext.get().getModEventBus()
         BLOCKS.register(modEventBus);
         ITEMS.register(modEventBus);
         TILE_ENTITIES.register(modEventBus);
-//        MinecraftForge.EVENT_BUS.register(this); // Calen: onRegisterBlocks onRegisterItems
 
         this.namespace = namespace;
     }
@@ -298,7 +298,6 @@ public final class RegistrationHelper {
         return added;
     }
 
-    @Deprecated // Calen
     public <T extends BlockEntity> RegistryObject<BlockEntityType<T>> registerTile(String idBC, BlockEntityType.BlockEntitySupplier<T> blockEntityConstructor, RegistryObject<? extends Block> block) {
         String regName = TagManager.getTag(idBC, EnumTagType.REGISTRY_NAME).replace(this.namespace + ":", "");
 //        String[] alternatives = TagManager.getMultiTag(id, EnumTagTypeMulti.OLD_REGISTRY_NAME);

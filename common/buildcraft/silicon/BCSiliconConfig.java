@@ -28,7 +28,7 @@ public class BCSiliconConfig {
     public static void preInit() {
 
 //        Configuration config = BCCoreConfig.config;
-        Configuration config = BCCoreConfig.getConfig(true);
+        Configuration config = BCCoreConfig.getConfigAndEnsureCreated(true);
         propRenderLaserBeams = config.get("display", "renderLaserBeams", true,
                 "When false laser beams will not be visible while transmitting power without wearing Goggles");
         // Calen

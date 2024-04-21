@@ -37,8 +37,7 @@ public enum CoreTriggerProvider implements ITriggerProvider {
     }
 
     @Override
-    public void addInternalSidedTriggers(Collection<ITriggerInternalSided> res, IStatementContainer container,
-                                         @Nonnull Direction side) {
+    public void addInternalSidedTriggers(Collection<ITriggerInternalSided> res, IStatementContainer container, @Nonnull Direction side) {
     }
 
     @Override
@@ -58,7 +57,7 @@ public enum CoreTriggerProvider implements ITriggerProvider {
         }
 
         if (!blockInventoryTriggers) {
-            IItemHandler itemHandler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElseGet(() -> null);
+            IItemHandler itemHandler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElse(null);
             if (itemHandler != null) {
                 res.add(BCCoreStatements.TRIGGER_INVENTORY_EMPTY);
                 res.add(BCCoreStatements.TRIGGER_INVENTORY_SPACE);
@@ -71,10 +70,11 @@ public enum CoreTriggerProvider implements ITriggerProvider {
         }
 
         if (!blockFluidHandlerTriggers) {
-            IFluidHandler fluidHandler = tile.getCapability(CapUtil.CAP_FLUIDS, side.getOpposite()).orElseGet(() -> null);
+            IFluidHandler fluidHandler = tile.getCapability(CapUtil.CAP_FLUIDS, side.getOpposite()).orElse(null);
             if (fluidHandler != null) {
 //                IFluidTankProperties[] liquids = fluidHandler.getTankProperties();
                 int liquids = fluidHandler.getTanks();
+//                if (liquids != null && liquids.length > 0)
                 if (liquids > 0) {
                     res.add(BCCoreStatements.TRIGGER_FLUID_EMPTY);
                     res.add(BCCoreStatements.TRIGGER_FLUID_SPACE);

@@ -26,18 +26,7 @@ public class ItemWrench_Neptune extends ItemBC_Neptune implements IToolWrench {
 
     public ItemWrench_Neptune(String idBC, Item.Properties properties) {
         super(idBC, properties);
-    }
-
-//    @Override
-//    public String toString()
-//    {
-//        String regName = this.getRegistryName() != null ? this.getRegistryName().getPath() : "unregistered";
-//        return this.getClass().getSimpleName() + "[" + regName + "]";
-//    }
-
-    @Override
-    public boolean isBookEnchantable(final ItemStack itemstack1, final ItemStack itemstack2) {
-        return false;
+//        setMaxStackSize(1);
     }
 
     @Override
@@ -48,6 +37,7 @@ public class ItemWrench_Neptune extends ItemBC_Neptune implements IToolWrench {
     @Override
     public void wrenchUsed(Player player, InteractionHand hand, ItemStack wrench, HitResult rayTrace) {
         AdvancementUtil.unlockAdvancement(player, ADVANCEMENT);
+//        player.swingArm(hand);
         player.swing(hand);
     }
 
@@ -75,12 +65,15 @@ public class ItemWrench_Neptune extends ItemBC_Neptune implements IToolWrench {
         // }
         BlockState state = world.getBlockState(pos);
         InteractionResult result = CustomRotationHelper.INSTANCE.attemptRotateBlock(world, pos, state, side);
-
-
         if (result == InteractionResult.SUCCESS) {
             wrenchUsed(player, hand, player.getItemInHand(hand), new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false));
         }
         SoundUtil.playSlideSound(world, pos, state, result);
         return result;
+    }
+
+    @Override
+    public boolean isBookEnchantable(final ItemStack stack1, final ItemStack stack2) {
+        return false;
     }
 }

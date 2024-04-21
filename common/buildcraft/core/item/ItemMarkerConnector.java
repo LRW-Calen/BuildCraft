@@ -132,7 +132,6 @@ public class ItemMarkerConnector extends ItemBC_Neptune {
             if (currentEditing == null) {
                 for (Iterator<VolumeBox> iterator = volumeBoxes.volumeBoxes.iterator(); iterator.hasNext(); ) {
                     VolumeBox volumeBox = iterator.next();
-//                    if (volumeBox.box.getAABB().clip(start, end).isPresent())
                     if (volumeBox.box.getBoundingBox().clip(start, end).isPresent()) {
                         if (volumeBox.getLockTargetsStream().noneMatch(Lock.Target.TargetResize.class::isInstance)) {
                             volumeBox.addons.values().forEach(Addon::onRemoved);

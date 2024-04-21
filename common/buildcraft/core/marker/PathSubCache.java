@@ -21,6 +21,7 @@ public class PathSubCache extends MarkerSubCache<PathConnection> {
     public PathSubCache(Level world) {
         super(world, MarkerCache.CACHES.indexOf(PathCache.INSTANCE));
         if (world instanceof ServerLevel serverLevel) {
+//            PathSavedData data = (PathSavedData) world.getPerWorldStorage().getOrLoadData(PathSavedData.class, PathSavedData.NAME);
             PathSavedData data = serverLevel.getDataStorage().get(
                     (nbt) ->
                     {

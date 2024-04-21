@@ -140,6 +140,8 @@ public class CoreItemModelProvider extends ItemModelProvider {
         withExistingParent(BCCoreBlocks.markerPath.get().getRegistryName().toString(), generated)
                 .texture("layer0", "buildcraftcore:items/marker_path")
         ;
+        // power_tester
+        withExistingParent(BCCoreBlocks.powerTester.get().getRegistryName().toString(), new ResourceLocation("buildcraftcore:block/power_tester"));
 
         // engine
 //        withExistingParent(BCCoreBlocks.ENGINE_WOOD.get().getRegistryName().toString(), new ResourceLocation("minecraft:builtin/entity"));
@@ -275,71 +277,6 @@ public class CoreItemModelProvider extends ItemModelProvider {
                 .texture("main", "buildcraftcore:lasers/marker_volume_connected")
         ;
 
-//        ResourceLocation paintbrush = BCCoreItems.paintbrush.get().getRegistryName();
-//        ResourceLocation handheld = new ResourceLocation("minecraft", "item/handheld");
-//        withExistingParent(paintbrush.getNamespace() + ":item/paintbrush", handheld)
-//                .texture("layer0", "buildcraftcore:items/paintbrush/clean")
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/white", handheld).texture("layer0", "buildcraftcore:items/paintbrush/white"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.WHITE.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/orange", handheld).texture("layer0", "buildcraftcore:items/paintbrush/orange"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.ORANGE.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/magenta", handheld).texture("layer0", "buildcraftcore:items/paintbrush/magenta"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.MAGENTA.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/lightblue", handheld).texture("layer0", "buildcraftcore:items/paintbrush/lightblue"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.LIGHT_BLUE.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/yellow", handheld).texture("layer0", "buildcraftcore:items/paintbrush/yellow"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.YELLOW.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/lime", handheld).texture("layer0", "buildcraftcore:items/paintbrush/lime"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.LIME.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/pink", handheld).texture("layer0", "buildcraftcore:items/paintbrush/pink"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.PINK.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/silver", handheld).texture("layer0", "buildcraftcore:items/paintbrush/silver"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.LIGHT_GRAY.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/cyan", handheld).texture("layer0", "buildcraftcore:items/paintbrush/cyan"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.CYAN.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/purple", handheld).texture("layer0", "buildcraftcore:items/paintbrush/purple"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.PURPLE.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/blue", handheld).texture("layer0", "buildcraftcore:items/paintbrush/blue"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.BLUE.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/brown", handheld).texture("layer0", "buildcraftcore:items/paintbrush/brown"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.BROWN.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/green", handheld).texture("layer0", "buildcraftcore:items/paintbrush/green"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.GREEN.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/red", handheld).texture("layer0", "buildcraftcore:items/paintbrush/red"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.RED.getId())
-//                .end()
-//                .override()
-//                .model(withExistingParent(paintbrush.getNamespace() + ":item/paintbrush/black", handheld).texture("layer0", "buildcraftcore:items/paintbrush/black"))
-//                .predicate(new ResourceLocation("buildcraft", "colour"), DyeColor.BLACK.getId())
-//                .end()
-//        ;
         with16Colours(BCTransportItems.wire.get());
     }
 

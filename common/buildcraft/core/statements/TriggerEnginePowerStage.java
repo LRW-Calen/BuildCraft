@@ -34,12 +34,12 @@ public class TriggerEnginePowerStage extends BCStatement implements ITriggerExte
     @Override
     public Component getDescription() {
 //        return LocaleUtil.localize("gate.trigger.engine." + stage.name());
-        return new TranslatableComponent("gate.trigger.engine." + stage.name().toLowerCase());
+        return new TranslatableComponent("gate.trigger.engine." + stage.getSerializedName());
     }
 
     @Override
     public String getDescriptionKey() {
-        return "gate.trigger.engine." + stage.name().toLowerCase();
+        return "gate.trigger.engine." + stage.getSerializedName();
     }
 
     @Override
@@ -49,8 +49,7 @@ public class TriggerEnginePowerStage extends BCStatement implements ITriggerExte
     }
 
     @Override
-    public boolean isTriggerActive(BlockEntity target, Direction side, IStatementContainer source,
-                                   IStatementParameter[] parameters) {
+    public boolean isTriggerActive(BlockEntity target, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
         if (target instanceof TileEngineBase_BC8) {
             return ((TileEngineBase_BC8) target).getPowerStage() == stage;
         }

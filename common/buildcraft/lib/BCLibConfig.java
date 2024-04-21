@@ -39,7 +39,7 @@ public class BCLibConfig {
         guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
     }
 
-    public static synchronized File getGuiConfigFile() {
+    public static synchronized File getGuiConfigFileAndEnsureCreated() {
         if (guiConfigFile == null) {
             creatLibConfigFile();
         }

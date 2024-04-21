@@ -49,10 +49,9 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
     private static final int BUTTON_COUNT = 3;
 
     private final Map<Integer, Map<ListMatchHandler.Type, NonNullList<ItemStack>>> exampleCache = new HashMap<>();
-    //    private GuiTextField textField;
+    // private GuiTextField textField;
     private EditBox textField;
 
-    //    public GuiList(Player iPlayer)
     public GuiList(ContainerList container, Inventory inventory, Component component) {
 //        super(new ContainerList(iPlayer));
         super(container, inventory, component);
@@ -63,11 +62,8 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
     }
 
     @Override
-    public void initGui()
-//    public void init()
-    {
-//        super.initGui();
-//        super.init();
+    public void initGui() {
+        super.initGui();
 
         for (int line = 0; line < container.slots.length; line++) {
             WidgetListSlot[] arr = container.slots[line];
@@ -76,7 +72,6 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
                 GuiRectangle rectangle = new GuiRectangle(8 + slot * 18, 32 + line * 34, 16, 16);
 
                 IGuiArea phantomSlotArea = rectangle.offset(mainGui.rootElement);
-//                IGuiArea phantomSlotArea = rectangle;
                 mainGui.shownElements.add(listSlot.new GuiElementPhantomSlot(mainGui, phantomSlotArea) {
                     @Override
                     protected boolean shouldDrawHighlight() {
@@ -89,9 +84,7 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
                     @Override
                     public void drawBackground(float partialTicks, PoseStack poseStack) {
                         if (!shouldDrawHighlight()) {
-//                            poseStack.pushPose();
                             ICON_HIGHLIGHT.drawAt(this, poseStack);
-//                            poseStack.popPose();
                         }
                     }
 
@@ -208,13 +201,11 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
 
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
-//    public boolean charTyped(char typedChar, int keyCode)
     public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
         boolean handled = false;
 //        if (textField.isFocused() && keyCode != Keyboard.KEY_ESCAPE)
         if (textField.isFocused() && typedChar != InputConstants.KEY_ESCAPE) {
 //            textField.textboxKeyTyped(typedChar, keyCode);
-//            textField.charTyped(typedChar, keyCode);
             handled = textField.keyPressed(typedChar, keyCode, modifiers);
 //            container.setLabel(textField.getText());
             container.setLabel(textField.getValue());
@@ -222,10 +213,8 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
             return handled;
         } else {
 //            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.keyPressed(typedChar, keyCode, modifiers);
         }
-//        return true;
     }
 
     public boolean charTyped(char typedChar, int keyCode) {
@@ -233,14 +222,12 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
 //        if (textField.isFocused() && keyCode != Keyboard.KEY_ESCAPE)
         if (textField.isFocused() && typedChar != InputConstants.KEY_ESCAPE) {
 //            textField.textboxKeyTyped(typedChar, keyCode);
-//            textField.charTyped(typedChar, keyCode);
             handled = textField.charTyped(typedChar, keyCode);
 //            container.setLabel(textField.getText());
             container.setLabel(textField.getValue());
             return handled;
         } else {
 //            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.charTyped(typedChar, keyCode);
         }
     }

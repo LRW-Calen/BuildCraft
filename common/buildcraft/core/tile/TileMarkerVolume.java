@@ -85,12 +85,6 @@ public class TileMarkerVolume extends TileMarker<VolumeConnection> implements IT
             showSignals = !showSignals;
 //            markDirty();
             this.setChanged();
-            // Calen: ACTIVE only changes, but never used
-//            BlockState state = level.getBlockState(worldPosition);
-//            if (state.getBlock() instanceof BlockBCBase_Neptune blockBC)
-//            {
-//                blockBC.checkActualStateAndUpdate(state, level, worldPosition, this);
-//            }
             sendNetworkUpdate(showSignals ? NET_SIGNALS_ON : NET_SIGNALS_OFF);
         }
     }
@@ -101,8 +95,6 @@ public class TileMarkerVolume extends TileMarker<VolumeConnection> implements IT
         if (before != isActiveForRender()) {
             redrawBlock();
         }
-//        // Calen: force call BlockMarkerBase#getActualState
-//        BlockMarkerVolume.checkSignalState(level, this.getBlockPos());
     }
 
     @Override
@@ -139,8 +131,7 @@ public class TileMarkerVolume extends TileMarker<VolumeConnection> implements IT
     // Calen: RenderMarkerVolume#getViewDistance
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public double getMaxRenderDistanceSquared()
-//    {
+//    public double getMaxRenderDistanceSquared() {
 //        return BCCoreConfig.markerMaxDistance * 4 * BCCoreConfig.markerMaxDistance;
 //    }
 
@@ -154,14 +145,6 @@ public class TileMarkerVolume extends TileMarker<VolumeConnection> implements IT
             for (BlockPos corner : PositionUtil.getCorners(c.getBox().min(), c.getBox().max())) {
                 if (!c.getMarkerPositions().contains(corner) && cache.hasLoadedOrUnloadedMarker(corner)) {
                     c.addMarker(corner);
-                    // Calen: fore call BlockMarkerBase#getActualState
-                    // Calen: ACTIVE only changes, but never used
-//                    BlockMarkerVolume.checkSignalState(level, corner);
-//                    BlockState state = level.getBlockState(corner);
-//                    if (state.getBlock() instanceof BlockBCBase_Neptune blockBC)
-//                    {
-//                        blockBC.checkActualStateAndUpdate(state, level, corner, this);
-//                    }
                 }
             }
         }

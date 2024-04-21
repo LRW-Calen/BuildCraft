@@ -22,6 +22,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -49,16 +50,13 @@ public class BCEnergy {
 
     public BCEnergy() {
         INSTANCE = this;
-        BCEnergyWorldGen.init();
-
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.register(BCEnergyModels.class);
     }
 
     @SubscribeEvent
     public static void preInit(FMLConstructModEvent event) {
         RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
         BCEnergyConfig.preInit();
+        BCEnergyWorldGen.init();
         BCEnergyEntities.preInit();
         // Calen: from BCEnergyProxy
         // Should before BCEnergyFluids.preInit() and BCEnergyBlocks.preInit() to set christmas special fluid data

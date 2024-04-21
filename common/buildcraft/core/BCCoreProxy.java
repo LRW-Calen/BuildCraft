@@ -23,7 +23,7 @@ import java.util.List;
 
 //public abstract class BCCoreProxy implements IGuiHandler
 public abstract class BCCoreProxy {
-    //    @SidedProxy(modId = BCCore.MODID)
+    // @SidedProxy(modId = BCCore.MODID)
     private static BCCoreProxy proxy = null;
 
     public static BCCoreProxy getProxy() {
@@ -41,18 +41,15 @@ public abstract class BCCoreProxy {
     }
 
 //    @Override
-//    public Object getServerGuiElement(int ID, Player player, Level world, int x, int y, int z)
-//    {
-//        if (ID == BCCoreGuis.LIST.ordinal())
-//        {
-//            return new ContainerList(null,0,player);
+//    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+//        if (ID == BCCoreGuis.LIST.ordinal()) {
+//            return new ContainerList(player);
 //        }
 //        return null;
 //    }
 
 //    @Override
-//    public Object getClientGuiElement(int ID, Player player, Level world, int x, int y, int z)
-//    {
+//    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 //        return null;
 //    }
 
@@ -70,20 +67,18 @@ public abstract class BCCoreProxy {
         return WorldSavedDataVolumeBoxes.get(world).volumeBoxes;
     }
 
-    //    @SideOnly(Side.SERVER)
+    // @SideOnly(Side.SERVER)
     public static class ServerProxy extends BCCoreProxy {
 
     }
 
-    //    @SideOnly(Side.CLIENT)
+    // @SideOnly(Side.CLIENT)
     public static class ClientProxy extends BCCoreProxy {
 //        @Override
-//        public Object getClientGuiElement(int ID, Player player, Level world, int x, int y, int z)
-//        {
-////            if (ID == BCCoreGuis.LIST.ordinal())
-////            {
-////                return new GuiList(player);
-////            }
+//        public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+//            if (ID == BCCoreGuis.LIST.ordinal()) {
+//                return new GuiList(player);
+//            }
 //            return null;
 //        }
 
@@ -91,8 +86,7 @@ public abstract class BCCoreProxy {
         public void fmlPreInit() {
             super.fmlPreInit();
             BCCoreSprites.fmlPreInit();
-            // Calen moved to Buildcraft.java
-//            BCCoreModels.fmlPreInit();
+            BCCoreModels.fmlPreInit();
             DetachedRenderer.INSTANCE.addRenderer(DetachedRenderer.RenderMatrixType.FROM_WORLD_ORIGIN, RenderVolumeBoxes.INSTANCE);
             MinecraftForge.EVENT_BUS.register(ListTooltipHandler.INSTANCE);
             MessageManager.setHandler(MessageVolumeBoxes.class, MessageVolumeBoxes.HANDLER, Dist.CLIENT);
@@ -101,7 +95,7 @@ public abstract class BCCoreProxy {
         @Override
         public void fmlInit() {
             super.fmlInit();
-            BCCoreModels.fmlInit();
+//            BCCoreModels.fmlInit(); // 1.18.2: TESR reg use forge event
             MinecraftForge.EVENT_BUS.register(RenderTickListener.class);
         }
 

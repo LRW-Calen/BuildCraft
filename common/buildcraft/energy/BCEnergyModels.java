@@ -23,6 +23,8 @@ import buildcraft.lib.expression.node.value.NodeVariableDouble;
 import buildcraft.lib.expression.node.value.NodeVariableObject;
 import buildcraft.lib.misc.ExpressionCompat;
 import buildcraft.lib.misc.data.ModelVariableData;
+import buildcraft.silicon.BCSilicon;
+import buildcraft.silicon.BCSiliconModels;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
@@ -31,13 +33,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
-//@Mod.EventBusSubscriber(modid = BCEnergy.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BCEnergyModels {
     private static final NodeVariableDouble ENGINE_PROGRESS;
     private static final NodeVariableObject<EnumPowerStage> ENGINE_STAGE;
@@ -66,18 +71,16 @@ public class BCEnergyModels {
         EnumEngineType.IRON.setModel(ENGINE_IRON); // Calen
     }
 
-//        // Calen: moved to @Mod.EventBusSubscriber for only exist in Client
-//    public static void fmlPreInit()
-//    {
-//        // Calen: Mod bus in 1.18.2!
-////        MinecraftForge.EVENT_BUS.register(BCEnergyModels.class);
-//        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        modEventBus.register(BCEnergyModels.class);
-//    }
+    public static void fmlPreInit() {
+        // 1.18.2: following events are IModBusEvent
+//        MinecraftForge.EVENT_BUS.register(BCEnergyModels.class);
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(BCEnergy.MODID).get()).getEventBus();
+        modEventBus.register(BCEnergyModels.class);
+    }
 
 
     @SubscribeEvent
-    public static void onBlockEntityModelBind(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCEnergyBlocks.engineStoneTile.get(), RenderEngineStone::new);
         BlockEntityRenderers.register(BCEnergyBlocks.engineIronTile.get(), RenderEngineIron::new);
     }

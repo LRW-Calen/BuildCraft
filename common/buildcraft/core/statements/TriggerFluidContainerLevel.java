@@ -86,9 +86,8 @@ public class TriggerFluidContainerLevel extends BCStatement implements ITriggerE
             }
 
             if (searchedFluid == null || searchedFluid.isFluidEqual(fluid)) {
-//                float percentage = fluid.getAmount() / (float) tankProperties.getCapacity();
-                int capacity = handler.getTankCapacity(i);
-                float percentage = fluid.getAmount() / (float) capacity;
+//                float percentage = fluid.amount / (float) tankProperties.getCapacity();
+                float percentage = fluid.getAmount() / (float) handler.getTankCapacity(i);
                 return percentage < type.level;
             }
         }

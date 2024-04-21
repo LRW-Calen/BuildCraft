@@ -136,8 +136,8 @@ public abstract class BCTransportProxy {
         @Override
         public void fmlPreInit() {
             super.fmlPreInit();
-//            BCTransportSprites.fmlPreInit();
-//            BCTransportModels.fmlPreInit();
+            BCTransportSprites.fmlPreInit();
+            BCTransportModels.fmlPreInit();
             PipeApiClient.registry = PipeRegistryClient.INSTANCE;
             PipeWireRenderer.init();
 

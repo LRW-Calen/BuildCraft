@@ -18,7 +18,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.LazyOptional;
 
 public class TriggerPower extends BCStatement implements ITriggerInternal, ITriggerExternal {
     private final boolean high;
@@ -67,13 +66,12 @@ public class TriggerPower extends BCStatement implements ITriggerInternal, ITrig
     }
 
     public static boolean isTriggeringTile(BlockEntity tile, Direction face) {
-        LazyOptional<IMjReadable> result = tile.getCapability(MjAPI.CAP_READABLE, face);
-//        return result != null;
-        return result.isPresent();
+//        return tile.getCapability(MjAPI.CAP_READABLE, face) != null;
+        return tile.getCapability(MjAPI.CAP_READABLE, face).isPresent();
     }
 
     protected boolean isActive(ICapabilityProvider tile, EnumPipePart side) {
-        return isTriggeredMjConnector(tile.getCapability(MjAPI.CAP_READABLE, side.face).orElseGet(() -> null));
+        return isTriggeredMjConnector(tile.getCapability(MjAPI.CAP_READABLE, side.face).orElse(null));
     }
 
     @Override

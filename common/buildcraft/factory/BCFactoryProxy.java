@@ -90,8 +90,7 @@ public abstract class BCFactoryProxy {
             super.fmlPreInit();
             RenderPump.init();
             RenderMiningWell.init();
-            // Calen: moved to @Mod.EventBusSubscriber
-//            BCFactoryModels.fmlPreInit();
+            BCFactoryModels.fmlPreInit();
         }
 
         @Override

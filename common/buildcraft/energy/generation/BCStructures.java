@@ -56,7 +56,6 @@ public final class BCStructures {
 
     public static void register(RegistryEvent.Register<StructureFeature<?>> event) {
         BCStructures.init(event.getRegistry());
-
     }
 
     public static Holder<ConfiguredStructureFeature<?, ?>> CONFIGURED_INSTANCE_OIL_STRUCTURE;

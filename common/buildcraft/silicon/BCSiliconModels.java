@@ -4,6 +4,7 @@ import buildcraft.api.BCModules;
 import buildcraft.api.transport.pipe.PipeApiClient;
 import buildcraft.api.transport.pipe.PipeApiClient.IClientRegistry;
 import buildcraft.api.transport.pluggable.IPluggableStaticBaker;
+import buildcraft.core.BCCoreModels;
 import buildcraft.lib.client.model.ModelHolderStatic;
 import buildcraft.lib.client.model.ModelHolderVariable;
 import buildcraft.lib.client.model.ModelPluggableItem;
@@ -32,11 +33,16 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
-//@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_SILICON, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@OnlyIn(Dist.CLIENT)
 public class BCSiliconModels {
     public static final ModelHolderStatic LIGHT_SENSOR;
 
@@ -87,10 +93,10 @@ public class BCSiliconModels {
     }
 
     public static void fmlPreInit() {
-        // Calen: ModBusEvent in 1.18.2
+        // 1.18.2: following events are IModBusEvent
 //        MinecraftForge.EVENT_BUS.register(BCSiliconModels.class);
-//        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        modEventBus.register(BCSiliconModels.class);
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(BCSilicon.MODID).get()).getEventBus();
+        modEventBus.register(BCSiliconModels.class);
     }
 
     public static void fmlInit() {
@@ -100,7 +106,7 @@ public class BCSiliconModels {
 //        );
 
 
-        // Calen: moved to -> public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event)
+        // Calen: moved to -> #onTesrReg(EntityRenderersEvent.RegisterRenderers event)
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileLaser.class, new RenderLaser());
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileProgrammingTable_Neptune.class, new RenderProgrammingTable());
 
@@ -122,7 +128,7 @@ public class BCSiliconModels {
     }
 
     @SubscribeEvent
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCSiliconBlocks.laserTile.get(), RenderLaser::new);
         BlockEntityRenderers.register(BCSiliconBlocks.programmingTableTile.get(), RenderProgrammingTable::new);
     }

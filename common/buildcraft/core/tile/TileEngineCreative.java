@@ -2,7 +2,7 @@
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0. If a copy of the MPL was not
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
-package buildcraft.factory.tile;
+package buildcraft.core.tile;
 
 import buildcraft.api.enums.EnumPowerStage;
 import buildcraft.api.mj.IMjConnector;
@@ -30,7 +30,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 
 public class TileEngineCreative extends TileEngineBase_BC8 {
-    public static final long[] outputs = {1, 2, 4, 8, 16, 32, 64, 128, 256};
+    public static final long[] outputs = { 1, 2, 4, 8, 16, 32, 64, 128, 256 };
     public int currentOutputIndex = 0;
 
     public TileEngineCreative(BlockPos pos, BlockState blockState) {

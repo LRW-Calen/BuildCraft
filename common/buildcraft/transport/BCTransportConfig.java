@@ -51,7 +51,7 @@ public class BCTransportConfig {
 
     public static void preInit() {
 //        Configuration config = BCCoreConfig.config;
-        Configuration config = BCCoreConfig.getConfig(true);
+        Configuration config = BCCoreConfig.getConfigAndEnsureCreated(true);
         propMjPerMillibucket = config.get("general", "pipes.mjPerMillibucket", (int) mjPerMillibucket)
                 .setMinValue((int) MJ_REQ_MILLIBUCKET_MIN);
         EnumRestartRequirement.WORLD.setTo(propMjPerMillibucket);

@@ -69,9 +69,8 @@ public class ItemFragileFluidContainer extends ItemBC_Neptune implements IItemFl
                 // Add the heatable bit to the end of the name
 //                localized = bcFluid.getBareLocalizedName(fluid);
                 localized = bcFluid.getAttributes().getDisplayName(fluid);
-//                String whole = LocaleUtil.localize(getDescriptionId(stack), localized);
-////                return new TextComponent(whole + LocaleUtil.localize("buildcraft.fluid.heat_" + bcFluid.getHeatValue()));
-//                return new TextComponent(whole);
+//                String whole = LocaleUtil.localize(getUnlocalizedName() + ".name", localized);
+//                return whole + LocaleUtil.localize("buildcraft.fluid.heat_" + bcFluid.getHeatValue());
                 return new TranslatableComponent(getDescriptionId(stack), localized);
             } else {
 //                localized = fluid.getDisplayName().getString();
@@ -94,7 +93,8 @@ public class ItemFragileFluidContainer extends ItemBC_Neptune implements IItemFl
         if (fluidTag != null) {
             FluidStack fluid = FluidStack.loadFluidStackFromNBT(fluidTag);
             if (fluid != null && fluid.getAmount() > 0) {
-                tooltip.add(new TextComponent(LocaleUtil.localizeFluidStaticAmount(fluid.getAmount(), MAX_FLUID_HELD)));
+//                tooltip.add(LocaleUtil.localizeFluidStaticAmount(fluid.amount, MAX_FLUID_HELD));
+                tooltip.add(LocaleUtil.localizeFluidStaticAmountComponent(fluid.getAmount(), MAX_FLUID_HELD));
             }
         }
     }
@@ -148,10 +148,10 @@ public class ItemFragileFluidContainer extends ItemBC_Neptune implements IItemFl
             this.container = container;
         }
 
-        //        @Override
-        public boolean hasCapability(Capability<?> capability, Direction facing) {
-            return getCapability(capability, facing).isPresent();
-        }
+//        @Override
+//        public boolean hasCapability(Capability<?> capability, Direction facing) {
+//            return getCapability(capability, facing).isPresent();
+//        }
 
         @Override
 //        public <T> T getCapability(Capability<T> capability, Direction facing)
@@ -164,17 +164,33 @@ public class ItemFragileFluidContainer extends ItemBC_Neptune implements IItemFl
             return LazyOptional.empty();
         }
 
+        // 1.18.2: divided into 3 methods
+//        @Override
+//        public IFluidTankProperties[] getTankProperties() {
+//            return new IFluidTankProperties[] {
+//                    new FluidTankProperties(getFluid(container), MAX_FLUID_HELD, false, true) };
+//        }
+
         @Override
-//        public IFluidTankProperties[] getTankProperties()
         public int getTanks() {
-//            return new IFluidTankProperties[]{
-//                    new FluidTankProperties(getFluid(container), MAX_FLUID_HELD, false, true)};
             return 1;
         }
 
         @Override
         public int getTankCapacity(int tank) {
             return MAX_FLUID_HELD;
+        }
+
+        @NotNull
+        @Override
+        public FluidStack getFluidInTank(int tank) {
+            FluidStack fluid = ItemFragileFluidContainer.getFluid(container);
+            return fluid != null ? fluid : StackUtil.EMPTY_FLUID;
+        }
+
+        @Override
+        public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
+            return false;
         }
 
         @Override
@@ -219,18 +235,6 @@ public class ItemFragileFluidContainer extends ItemBC_Neptune implements IItemFl
         @Override
         public ItemStack getContainer() {
             return container;
-        }
-
-        @NotNull
-        @Override
-        public FluidStack getFluidInTank(int tank) {
-            FluidStack fluid = ItemFragileFluidContainer.getFluid(container);
-            return fluid != null ? fluid : StackUtil.EMPTY_FLUID;
-        }
-
-        @Override
-        public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-            return false;
         }
     }
 }

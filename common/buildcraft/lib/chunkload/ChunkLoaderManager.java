@@ -54,7 +54,11 @@ public class ChunkLoaderManager {
         }
 //        ForgeChunkManager.releaseTicket(TICKETS.remove(new WorldPos(tile)));
         Pair<LongSet, LongSet> removed = TICKETS.remove(new WorldPos(tile));
-        removed.getSecond().forEach(cp -> unforceChunk((ServerLevel) tile.getLevel(), tile.getBlockPos(), new ChunkPos(cp)));
+        // Calen: [Server thread/ERROR]: Failed to save chunk [-27, -1]
+        // NullPointerException: Cannot invoke "com.mojang.datafixers.util.Pair.getSecond()" because "removed" is null
+        if (removed != null) {
+            removed.getSecond().forEach(cp -> unforceChunk((ServerLevel) tile.getLevel(), tile.getBlockPos(), new ChunkPos(cp)));
+        }
     }
 
     private static <T extends BlockEntity & IChunkLoadingTile> void updateChunksFor(T tile) {

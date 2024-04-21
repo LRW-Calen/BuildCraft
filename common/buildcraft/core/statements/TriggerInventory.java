@@ -62,7 +62,7 @@ public class TriggerInventory extends BCStatement implements ITriggerExternal {
             searchedStack = parameters[0].getItemStack();
         }
 
-        IItemHandler handler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElseGet(() -> null);
+        IItemHandler handler = tile.getCapability(CapUtil.CAP_ITEMS, side.getOpposite()).orElse(null);
 
         if (handler != null) {
             boolean hasSlots = false;

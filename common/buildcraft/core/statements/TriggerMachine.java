@@ -63,6 +63,6 @@ public class TriggerMachine extends BCStatement implements ITriggerExternal {
 
     @Override
     public IStatement[] getPossible() {
-        return new IStatement[]{BCCoreStatements.TRIGGER_MACHINE_ACTIVE, BCCoreStatements.TRIGGER_MACHINE_INACTIVE};
+        return new IStatement[] { BCCoreStatements.TRIGGER_MACHINE_ACTIVE, BCCoreStatements.TRIGGER_MACHINE_INACTIVE };
     }
 }

@@ -207,8 +207,9 @@ public class PathConnection extends MarkerConnection<PathConnection> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderInWorld(PoseStack poseStack) {
-        // Calen
+        // 1.18.2 add
         VertexConsumer buffer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.solid());
+        // 1.12.2
         BlockPos last = null;
         for (BlockPos p : positions) {
             if (last == null) {

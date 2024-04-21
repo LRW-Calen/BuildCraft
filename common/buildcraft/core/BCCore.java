@@ -26,11 +26,20 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 
 import java.util.function.Consumer;
 
+//@formatter:off
+//@Mod(
+//        modid = BCCore.MODID,
+//        name = "BuildCraft Core",
+//        version = BCLib.VERSION,
+//        updateJSON = "https://mod-buildcraft.com/version/versions.json",
+//        dependencies = "required-after:buildcraftlib@[" + BCLib.VERSION + "]",
+//        guiFactory = "buildcraft.core.client.ConfigGuiFactoryBC"
+//)
+//@formatter:on
 @Mod(BCCore.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BCCore {
     public static final String MODID = "buildcraftcore";
-    public static final String MOD_NAME = "Build Craft";
     public static final String MOD_VERSION = ModList.get().getModContainerById(MODID).get().getModInfo().getVersion().toString();
 
     public static BCCore INSTANCE = null;
@@ -53,7 +62,7 @@ public class BCCore {
     public static void preInit(FMLConstructModEvent event) {
         BCCoreConfig.preInit();
 
-//        CreativeTabManager.CreativeTabBC tab = CreativeTabManager.createTab("buildcraft.main");
+//        CreativeTabBC tab = CreativeTabManager.createTab("buildcraft.main");
         mainTab = CreativeTabManager.createTab("buildcraft.main");
 
         BCCoreBlocks.preInit();

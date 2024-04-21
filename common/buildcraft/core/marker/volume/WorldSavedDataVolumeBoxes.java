@@ -28,7 +28,7 @@ public class WorldSavedDataVolumeBoxes extends SavedData {
     private static final String DATA_NAME = "buildcraft_volume_boxes";
     /**
      * Used to assign {@link WorldSavedDataVolumeBoxes#world} to pass it to {@link VolumeBox},
-     * as we can't pass it other way ({@link MapStorage} can call only constructor with one {@link String} argument
+     * as we can't pass it other way ({@link DimensionDataStorage} can call only constructor with one {@link String} argument
      * and then it calls NBT deserialization method,
      * giving us no chance to set the {@link WorldSavedDataVolumeBoxes#world} field).
      */
@@ -101,7 +101,9 @@ public class WorldSavedDataVolumeBoxes extends SavedData {
     }
 
     @Override
+//    public void markDirty()
     public void setDirty() {
+//        super.markDirty();
         super.setDirty();
 //        MessageManager.sendToDimension(new MessageVolumeBoxes(volumeBoxes), world.provider.getDimension());
         MessageManager.sendToDimension(new MessageVolumeBoxes(volumeBoxes), world.dimension());
@@ -109,13 +111,14 @@ public class WorldSavedDataVolumeBoxes extends SavedData {
 
     @SuppressWarnings("NullableProblems")
     @Override
+//    public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     public CompoundTag save(CompoundTag nbt) {
         nbt.put("volumeBoxes", NBTUtilBC.writeCompoundList(volumeBoxes.stream().map(VolumeBox::writeToNBT)));
         return nbt;
     }
 
     @SuppressWarnings("NullableProblems")
-    // Calen: not override, load by ourselves -> #get:ret.load(nbt)
+    // Calen: not override, load by ourselves -> #get: ret.load(nbt)
 //    @Override
     public void load(CompoundTag nbt) {
         volumeBoxes.clear();
@@ -139,6 +142,7 @@ public class WorldSavedDataVolumeBoxes extends SavedData {
                 }, DATA_NAME);
         if (instance == null) {
             instance = new WorldSavedDataVolumeBoxes();
+//            storage.setData(DATA_NAME, instance);
             storage.set(DATA_NAME, instance);
         }
         currentWorld = null;

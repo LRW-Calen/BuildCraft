@@ -65,9 +65,6 @@ public class BCTransport {
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         PipeRegistry.PIPE_ITEMS.register(modEventBus);
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            modEventBus.register(BCTransportModels.class);
-        }
     }
 
     // Calen

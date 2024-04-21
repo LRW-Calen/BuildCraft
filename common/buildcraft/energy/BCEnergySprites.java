@@ -15,16 +15,20 @@ import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT, modid = BCEnergy.MODID)
 public class BCEnergySprites {
-    // Calen: ModBusEvent in 1.18.2!
-//    public static void fmlPreInit()
-//    {
+    public static void fmlPreInit() {
+        // 1.18.2: following events are IModBusEvent
 //        MinecraftForge.EVENT_BUS.register(BCEnergySprites.class);
-//    }
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(BCEnergy.MODID).get()).getEventBus();
+        modEventBus.register(BCEnergySprites.class);
+    }
 
 //    public static final ITextureAtlasSpriteLoader OIL_SPRITE_LOADER = (
 //            atlas,

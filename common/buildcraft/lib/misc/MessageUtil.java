@@ -26,6 +26,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -389,8 +391,7 @@ public class MessageUtil {
                 r.run();
             }
             return true;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             BCLog.logger.warn("[lib.gui] Failed to handle MessageUpdateTile of Tile[" + tile + "] at " + tile.getBlockPos(), e);
             return false;
         }
@@ -411,6 +412,17 @@ public class MessageUtil {
                             msg.toBytes(buf);
                         }
                 );
+            } else {
+                player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
+            }
+        }
+    }
+
+    // Calen
+    public static void serverOpenItemGui(Player player, Item item) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            if (item instanceof MenuProvider provider) {
+                NetworkHooks.openGui(serverPlayer, provider, serverPlayer.blockPosition());
             } else {
                 player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
             }

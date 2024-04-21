@@ -19,10 +19,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockMarkerPath extends BlockMarkerBase {
     public BlockMarkerPath(String idBC, BlockBehaviour.Properties properties) {
-        super(
-                idBC,
-                properties
-        );
+        super(idBC, properties);
     }
 
     @Override

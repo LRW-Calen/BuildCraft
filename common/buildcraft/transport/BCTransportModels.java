@@ -24,25 +24,26 @@ import buildcraft.transport.client.model.ModelPipe;
 import buildcraft.transport.client.model.ModelPipeItem;
 import buildcraft.transport.client.model.key.KeyPlugBlocker;
 import buildcraft.transport.client.model.key.KeyPlugPowerAdaptor;
-import buildcraft.transport.client.render.PipeBehaviourRendererStripes;
-import buildcraft.transport.client.render.PipeFlowRendererFluids;
-import buildcraft.transport.client.render.PipeFlowRendererItems;
-import buildcraft.transport.client.render.PipeFlowRendererPower;
+import buildcraft.transport.client.render.*;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
 import buildcraft.transport.pipe.flow.PipeFlowFluids;
 import buildcraft.transport.pipe.flow.PipeFlowItems;
 import buildcraft.transport.pipe.flow.PipeFlowPower;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
-//@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_TRANSPORT, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BCTransportModels {
     public static final ModelHolderStatic BLOCKER;
     public static final ModelHolderStatic POWER_ADAPTER;
@@ -78,14 +79,15 @@ public class BCTransportModels {
         return new ModelHolderVariable("buildcrafttransport:models/" + str + ".json", fnCtx);
     }
 
-    // Calen: moved to @Mod.EventBusSubscriber
-//    public static void fmlPreInit()
-//    {
+    public static void fmlPreInit() {
+        // 1.18.2: following events are IModBusEvent
 //        MinecraftForge.EVENT_BUS.register(BCTransportModels.class);
-//    }
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(BCTransport.MODID).get()).getEventBus();
+        modEventBus.register(BCTransportModels.class);
+    }
 
     public static void fmlInit() {
-        // Moved to onRenderRegister
+        // Moved to #onTesrReg
 //        ClientRegistry.bindTileEntitySpecialRenderer(TilePipeHolder.class, new RenderPipeHolder());
 
         PipeApiClient.registry.registerBaker(KeyPlugBlocker.class, BAKER_PLUG_BLOCKER);
@@ -100,6 +102,11 @@ public class BCTransportModels {
 
     public static void fmlPostInit() {
         RenderUtil.registerBlockColour(BCTransportBlocks.pipeHolder.get(), PipeBlockColours.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
+        BlockEntityRenderers.register(BCTransportBlocks.pipeHolderTile.get(), RenderPipeHolder::new);
     }
 
     @SubscribeEvent

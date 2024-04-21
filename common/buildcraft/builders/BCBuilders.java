@@ -95,7 +95,7 @@ public class BCBuilders {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCBuildersBlocks.architectTile.get(), RenderArchitectTable::new);
         BlockEntityRenderers.register(BCBuildersBlocks.builderTile.get(), RenderBuilder::new);
         BlockEntityRenderers.register(BCBuildersBlocks.fillerTile.get(), RenderFiller::new);

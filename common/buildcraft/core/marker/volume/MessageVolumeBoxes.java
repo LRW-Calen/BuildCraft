@@ -69,8 +69,7 @@ public class MessageVolumeBoxes implements IMessage {
                     VolumeBox volumeBox;
                     try {
                         volumeBox = new VolumeBox(BCLibProxy.getProxy().getClientWorld(), buffer);
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
                     PacketBufferBC buf = new PacketBufferBC(Unpooled.buffer());
@@ -86,8 +85,7 @@ public class MessageVolumeBoxes implements IMessage {
                 if (clientVolumeBox.equals(entry.getValue())) {
                     try {
                         clientVolumeBox.fromBytes(entry.getKey());
-                    }
-                    catch (IOException io) {
+                    } catch (IOException io) {
                         throw new RuntimeException(io);
                     }
                     wasContained = true;

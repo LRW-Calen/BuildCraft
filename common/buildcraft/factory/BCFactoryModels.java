@@ -6,6 +6,8 @@
 
 package buildcraft.factory;
 
+import buildcraft.energy.BCEnergy;
+import buildcraft.energy.BCEnergySprites;
 import buildcraft.factory.client.model.ModelHeatExchange;
 import buildcraft.factory.client.render.*;
 import buildcraft.factory.tile.TileDistiller_BC8;
@@ -19,13 +21,15 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-//@Mod.EventBusSubscriber
-//@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_FACTORY, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BCFactoryModels {
     public static final ModelHolderVariable DISTILLER;
     public static final ModelHolderVariable HEAT_EXCHANGE_STATIC;
@@ -44,12 +48,12 @@ public class BCFactoryModels {
         );
     }
 
-//    public static void fmlPreInit()
-//    {
-////        MinecraftForge.EVENT_BUS.register(BCFactoryModels.class);
-//        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-//        modEventBus.register(BCFactoryModels.class);
-//    }
+    public static void fmlPreInit() {
+        // 1.18.2: following events are IModBusEvent
+//        MinecraftForge.EVENT_BUS.register(BCFactoryModels.class);
+        IEventBus modEventBus = ((FMLModContainer) ModList.get().getModContainerById(BCFactory.MODID).get()).getEventBus();
+        modEventBus.register(BCFactoryModels.class);
+    }
 
 //    @SubscribeEvent
 //    @OnlyIn(Dist.CLIENT)

@@ -5,15 +5,11 @@
 package buildcraft.core.item;
 
 import buildcraft.api.items.IList;
-import buildcraft.core.BCCoreGuis;
 import buildcraft.core.BCCoreMenuTypes;
 import buildcraft.core.list.ContainerList;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.list.ListHandler;
-import buildcraft.lib.misc.AdvancementUtil;
-import buildcraft.lib.misc.NBTUtilBC;
-import buildcraft.lib.misc.StackUtil;
-import buildcraft.lib.misc.StringUtilBC;
+import buildcraft.lib.misc.*;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
@@ -53,28 +49,26 @@ public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider 
         AdvancementUtil.unlockAdvancement(player, ADVANCEMENT);
         ItemStack handItemStack = player.getItemInHand(hand);
 //        BCCoreGuis.LIST.openGUI(player);
-        BCCoreGuis.LIST.openGUI(player, handItemStack);
+        MessageUtil.serverOpenItemGui(player, handItemStack.getItem());
 //        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, handItemStack);
     }
 
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
 //        addVariant(variants, 0, "clean");
 //        addVariant(variants, 1, "used");
 //    }
 
 //    @Override
-//    public int getMetadata(ItemStack stack)
-//    {
+//    public int getMetadata(ItemStack stack) {
 //        return ListHandler.hasItems(StackUtil.asNonNull(stack)) ? 1 : 0;
 //    }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-//    public void addInformation(ItemStack stack, Level world, List<String> tooltip, ITooltipFlag flag)
+//    public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag flag)
     public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
         String name = getName_INamedItem(StackUtil.asNonNull(stack));
 //        if (StringUtils.isNullOrEmpty(name)) return;
@@ -110,7 +104,8 @@ public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider 
         return ListHandler.hasItems(StackUtil.asNonNull(stack));
     }
 
-    // Calen: GUI
+    // MenuProvider
+
     @Override
     public Component getDisplayName() {
         return new TextComponent("list");

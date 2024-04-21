@@ -32,7 +32,7 @@ public class TileMarkerPath extends TileMarker<PathConnection> implements IPathP
     public void removeFromWorld() {
         for (BlockPos pos : getPath()) {
 //            world.destroyBlock(pos, true);
-            level.destroyBlock(pos, true);
+            level.destroyBlock(pos, /*pDropBlock*/ true);
         }
     }
 

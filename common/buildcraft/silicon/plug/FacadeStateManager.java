@@ -215,7 +215,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
 ////            state.getDrops()
 //            throw new RuntimeException("[silicon.facade] Clone ItemStack of " + state + " is Empty!");
 //        }
-////        return new ItemStack(item, 1, block.damageDropped(state));
+////        return new ItemStack(item, 1, block.damageDropped(state)); // 1.18.2 no meta
 ////        return new ItemStack(block, 1);
         return item;
     }

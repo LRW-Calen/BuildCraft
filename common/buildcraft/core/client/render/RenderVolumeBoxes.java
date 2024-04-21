@@ -26,12 +26,10 @@ public enum RenderVolumeBoxes implements DetachedRenderer.IDetachedRenderer {
     @SuppressWarnings("unchecked")
     @Override
     public void render(Player player, float partialTicks, PoseStack poseStack) {
-////        GlStateManager.enableBlend();
-//        RenderSystem.enableBlend();
+//        GlStateManager.enableBlend();
 
-////        BufferBuilder bb = Tessellator.getInstance().getBuffer();
-//        BufferBuilder bb = Tesselator.getInstance().getBuilder();
-////        bb.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
+//        BufferBuilder bb = Tessellator.getInstance().getBuffer();
+//        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Sheets.solidBlockSheet());
 
         ClientVolumeBoxes.INSTANCE.volumeBoxes.forEach(volumeBox ->
@@ -55,10 +53,8 @@ public enum RenderVolumeBoxes implements DetachedRenderer.IDetachedRenderer {
             );
         });
 
-////        Tessellator.getInstance().draw();
-//        Tesselator.getInstance().end();
+//        Tessellator.getInstance().draw();
 
-////        GlStateManager.disableBlend();
-//        RenderSystem.disableBlend();
+//        GlStateManager.disableBlend();
     }
 }

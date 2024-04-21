@@ -16,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.ForgeModelBakery;
+import net.minecraftforge.client.model.ForgeModelBakery.White;
 import net.minecraftforge.common.util.LazyOptional;
 
 @OnlyIn(Dist.CLIENT)
@@ -26,7 +26,7 @@ public class AddonDefaultRenderer<T extends Addon> implements IFastAddonRenderer
 
     public AddonDefaultRenderer() {
 //        s = ModelLoader.White.INSTANCE;
-        s = LazyOptional.of(() -> ForgeModelBakery.White.instance());
+        s = LazyOptional.of(White::instance);
     }
 
     public AddonDefaultRenderer(TextureAtlasSprite s) {

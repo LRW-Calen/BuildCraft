@@ -26,24 +26,18 @@ import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-/**
- * Provides various utils for interacting with {@link ItemStack}, and multiples.
- */
+/** Provides various utils for interacting with {@link ItemStack}, and multiples. */
 public class StackUtil {
 
-    /**
-     * A non-null version of {@link ItemStack#EMPTY}. When the original field adds an @Nonnull annotation this should
-     * be inlined.
-     */
+    /** A non-null version of {@link ItemStack#EMPTY}. When the original field adds an @Nonnull annotation this should
+     * be inlined. */
     // Actually the entire MC
     @Nonnull
     public static final ItemStack EMPTY;
     @Nonnull
     public static final FluidStack EMPTY_FLUID;
 
-    /**
-     * Registry of additional rules for {@link #isMatchingItem}.
-     */
+    /** Registry of additional rules for {@link #isMatchingItem}. */
     private static final Map<Item, List<StackMatchingPredicate>> matchingPredicates = new HashMap<>();
 
     static {
@@ -54,11 +48,9 @@ public class StackUtil {
         EMPTY_FLUID = stackF;
     }
 
-    /**
-     * Checks to see if the two input stacks are equal in all but stack size. Note that this doesn't check anything
+    /** Checks to see if the two input stacks are equal in all but stack size. Note that this doesn't check anything
      * todo with stack size, so if you pass in two stacks of 64 cobblestone this will return true. If you pass in null
-     * (at all) then this will only return true if both are null.
-     */
+     * (at all) then this will only return true if both are null. */
     public static boolean canMerge(@Nonnull ItemStack a, @Nonnull ItemStack b) {
         // Checks item, damage
         if (!ItemStack.isSame(a, b)) {
@@ -68,10 +60,8 @@ public class StackUtil {
         return ItemStack.isSameItemSameTags(a, b);
     }
 
-    /**
-     * Attempts to get an item stack that might place down the given blockstate. Obviously this isn't perfect, and so
-     * cannot be relied on for anything more than simple blocks.
-     */
+    /** Attempts to get an item stack that might place down the given blockstate. Obviously this isn't perfect, and so
+     * cannot be relied on for anything more than simple blocks. */
     @Nonnull
     public static ItemStack getItemStackForState(BlockState state) {
         return state.getBlock().getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state);
@@ -88,9 +78,7 @@ public class StackUtil {
 //        return stack;
     }
 
-    /**
-     * Checks to see if the given required stack is contained fully in the given container stack.
-     */
+    /** Checks to see if the given required stack is contained fully in the given container stack. */
     public static boolean contains(@Nonnull ItemStack required, @Nonnull ItemStack container) {
         if (canMerge(required, container)) {
             return container.getCount() >= required.getCount();
@@ -98,9 +86,7 @@ public class StackUtil {
         return false;
     }
 
-    /**
-     * Checks to see if the given required stack is contained fully in a single stack in a list.
-     */
+    /** Checks to see if the given required stack is contained fully in a single stack in a list. */
     public static boolean contains(@Nonnull ItemStack required, Collection<ItemStack> containers) {
         for (ItemStack possible : containers) {
             if (possible == null) {
@@ -114,39 +100,29 @@ public class StackUtil {
         return false;
     }
 
-    /**
-     * Checks that passed stack meets stack definition requirements
-     */
+    /** Checks that passed stack meets stack definition requirements */
     public static boolean contains(@Nonnull StackDefinition stackDefinition, @Nonnull ItemStack stack) {
         return !stack.isEmpty() && stackDefinition.filter.matches(stack) && stack.getCount() >= stackDefinition.count;
     }
 
-    /**
-     * Checks that passed stack definition acceptable for stack collection
-     */
+    /** Checks that passed stack definition acceptable for stack collection */
     public static boolean contains(@Nonnull StackDefinition stackDefinition, @Nonnull NonNullList<ItemStack> stacks) {
         return stacks.stream().anyMatch((stack) -> contains(stackDefinition, stack));
     }
 
-    /**
-     * Checks that passed stack meets stack definition requirements
-     */
+    /** Checks that passed stack meets stack definition requirements */
     public static boolean contains(@Nonnull IngredientStack ingredientStack, @Nonnull ItemStack stack) {
 //        return !stack.isEmpty() && ingredientStack.ingredient.apply(stack) && stack.getCount() >= ingredientStack.count;
         return !stack.isEmpty() && ingredientStack.ingredient.test(stack) && stack.getCount() >= ingredientStack.count;
     }
 
-    /**
-     * Checks that passed stack definition acceptable for stack collection
-     */
+    /** Checks that passed stack definition acceptable for stack collection */
     public static boolean contains(@Nonnull IngredientStack ingredientStack, @Nonnull NonNullList<ItemStack> stacks) {
         return stacks.stream().anyMatch((stack) -> contains(ingredientStack, stack));
     }
 
-    /**
-     * Checks to see if the given required stacks are all contained within the collection of containers. Note that this
-     * assumes that all of the required stacks are different.
-     */
+    /** Checks to see if the given required stacks are all contained within the collection of containers. Note that this
+     * assumes that all of the required stacks are different. */
     public static boolean containsAll(Collection<ItemStack> required, Collection<ItemStack> containers) {
         for (ItemStack req : required) {
             if (req == null) {
@@ -199,13 +175,11 @@ public class StackUtil {
         return isItemEqual(stack1, stack2) && ItemStack.tagMatches(stack1, stack2);
     }
 
-    /**
-     * This doesn't take into account stack sizes.
+    /** This doesn't take into account stack sizes.
      *
      * @param filterOrList The exact itemstack to test, or an item that implements {@link IList} to test against.
      * @param test         The stack to test for equality
-     * @return True if they matched according to the above definitions, or false if theydidn't, or either was empty.
-     */
+     * @return True if they matched according to the above definitions, or false if theydidn't, or either was empty. */
     public static boolean matchesStackOrList(@Nonnull ItemStack filterOrList, @Nonnull ItemStack test) {
         if (filterOrList.isEmpty() || test.isEmpty()) {
             return false;
@@ -217,14 +191,12 @@ public class StackUtil {
         return canMerge(filterOrList, test);
     }
 
-    /**
-     * Merges mergeSource into mergeTarget
+    /** Merges mergeSource into mergeTarget
      *
      * @param mergeSource - The stack to merge into mergeTarget, this stack is not modified
      * @param mergeTarget - The target merge, this stack is modified if doMerge is set
      * @param doMerge     - To actually do the merge
-     * @return The number of items that was successfully merged.
-     */
+     * @return The number of items that was successfully merged. */
     public static int mergeStacks(@Nonnull ItemStack mergeSource, @Nonnull ItemStack mergeTarget, boolean doMerge) {
         if (!canMerge(mergeSource, mergeTarget)) {
             return 0;
@@ -241,14 +213,12 @@ public class StackUtil {
 
     /* ITEM COMPARISONS */
 
-    /**
-     * Determines whether the given ItemStack should be considered equivalent for crafting purposes.
+    /** Determines whether the given ItemStack should be considered equivalent for crafting purposes.
      *
      * @param base          The stack to compare to.
      * @param comparison    The stack to compare.
      * @param oreDictionary true to take the Forge OreDictionary into account.
-     * @return true if comparison should be considered a crafting equivalent for base.
-     */
+     * @return true if comparison should be considered a crafting equivalent for base. */
     public static boolean isCraftingEquivalent(@Nonnull ItemStack base, @Nonnull ItemStack comparison,
                                                boolean oreDictionary) {
         if (isMatchingItem(base, comparison, true, false)) {
@@ -319,21 +289,17 @@ public class StackUtil {
         return isMatchingItem(base, comparison, true, false);
     }
 
-    /**
-     * Compares item id, damage and NBT. Accepts wildcard damage. Ignores damage entirely if the item doesn't have
+    /** Compares item id, damage and NBT. Accepts wildcard damage. Ignores damage entirely if the item doesn't have
      * subtypes.
      *
      * @param base       The stack to compare to.
      * @param comparison The stack to compare.
-     * @return true if id, damage and NBT match.
-     */
+     * @return true if id, damage and NBT match. */
     public static boolean isMatchingItem(final @Nonnull ItemStack base, final @Nonnull ItemStack comparison) {
         return isMatchingItem(base, comparison, true, true);
     }
 
-    /**
-     * This variant also checks damage for damaged items.
-     */
+    /** This variant also checks damage for damaged items. */
     public static boolean isEqualItem(final @Nonnull ItemStack base, final @Nonnull ItemStack comparison) {
         if (isMatchingItem(base, comparison, false, true)) {
             return isWildcard(base) || isWildcard(comparison) || base.getDamageValue() == comparison.getDamageValue();
@@ -342,16 +308,14 @@ public class StackUtil {
         }
     }
 
-    /**
-     * Compares item id, and optionally damage and NBT. Accepts wildcard damage. Ignores damage entirely if the item
+    /** Compares item id, and optionally damage and NBT. Accepts wildcard damage. Ignores damage entirely if the item
      * doesn't have subtypes.
      *
      * @param base        ItemStack
      * @param comparison  ItemStack
      * @param matchDamage
      * @param matchNBT
-     * @return true if matches
-     */
+     * @return true if matches */
     public static boolean isMatchingItem(@Nonnull final ItemStack base, @Nonnull final ItemStack comparison, final boolean matchDamage, final boolean matchNBT) {
         if (base.isEmpty() || comparison.isEmpty()) {
             return false;
@@ -386,57 +350,47 @@ public class StackUtil {
         return true;
     }
 
-    /**
-     * Registers a predicate, that will be used in {@link #isMatchingItem} as an additional comparison rule.
+    /** Registers a predicate, that will be used in {@link #isMatchingItem} as an additional comparison rule.
      * If any of registered predicates will return false, then the function will also return false.
      * It can be helpful, if item stacks are clearly not the same, but have common {@link Item} instance.
      *
      * @param forItem   {@link Item} instance for which to register the rule.
-     * @param predicate predicate to register.
-     */
+     * @param predicate predicate to register. */
     public static void registerMatchingPredicate(@Nonnull Item forItem, @Nonnull StackMatchingPredicate predicate) {
         List<StackMatchingPredicate> predicates = matchingPredicates.computeIfAbsent(forItem, (item) -> new ArrayList<>());
         predicates.add(predicate);
     }
 
-    /**
-     * Checks to see if the given {@link ItemStack} is considered to be a wildcard stack - that is any damage value on
+    /** Checks to see if the given {@link ItemStack} is considered to be a wildcard stack - that is any damage value on
      * the stack will be considered the same as this for recipe purposes.
      *
      * @param stack The stack to check
-     * @return True if the stack is a wildcard, false if not.
-     */
+     * @return True if the stack is a wildcard, false if not. */
     public static boolean isWildcard(@Nonnull ItemStack stack) {
         return isWildcard(stack.getDamageValue());
     }
 
-    /**
-     * Checks to see if the given {@link ItemStack} is considered to be a wildcard stack - that is any damage value on
+    /** Checks to see if the given {@link ItemStack} is considered to be a wildcard stack - that is any damage value on
      * the stack will be considered the same as this for recipe purposes.
      *
      * @param damage The damage to check
-     * @return True if the damage does specify a wildcard, false if not.
-     */
+     * @return True if the damage does specify a wildcard, false if not. */
     public static boolean isWildcard(int damage) {
 //        return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
         return damage == -1 || damage == Short.MAX_VALUE;
 //        return damage == -1;
     }
 
-    /**
-     * @return An empty, nonnull list that cannot be modified (as it cannot be expanded and it has a size of 0)
-     */
+    /** @return An empty, nonnull list that cannot be modified (as it cannot be expanded and it has a size of 0) */
     public static NonNullList<ItemStack> listOf() {
         return NonNullList.withSize(0, EMPTY);
     }
 
-    /**
-     * Creates a {@link NonNullList} of {@link ItemStack}'s with the elements given in the order that they are given.
+    /** Creates a {@link NonNullList} of {@link ItemStack}'s with the elements given in the order that they are given.
      *
      * @param stacks The stacks to put into a list
      * @return A {@link NonNullList} of all the given items. Note that the returned list of of a specified size, and
-     * cannot be expanded.
-     */
+     * cannot be expanded. */
     public static NonNullList<ItemStack> listOf(ItemStack... stacks) {
         switch (stacks.length) {
             case 0:
@@ -452,16 +406,14 @@ public class StackUtil {
         return list;
     }
 
-    /**
-     * Takes a {@link Nullable} {@link Object} and checks to make sure that it is really {@link Nonnull}, like it is
+    /** Takes a {@link Nullable} {@link Object} and checks to make sure that it is really {@link Nonnull}, like it is
      * everywhere else in the codebase. This is only required if some classes do not use the {@link Nonnull} annotation
      * on return values.
      *
      * @param obj The (potentially) null object.
      * @return A {@link Nonnull} object, which will be the input object
      * @throws NullPointerException if the input object was actually null (Although this should never happen, this is
-     *                              more to catch bugs in dev.)
-     */
+     *             more to catch bugs in dev.) */
     @Nonnull
     public static <T> T asNonNull(@Nullable T obj) {
         if (obj == null) {
@@ -484,17 +436,13 @@ public class StackUtil {
         return asNonNullSoft(stack, EMPTY);
     }
 
-    /**
-     * @return A {@link Collector} that will collect the input elements into a {@link NonNullList}
-     */
+    /** @return A {@link Collector} that will collect the input elements into a {@link NonNullList} */
     public static <E> Collector<E, ?, NonNullList<E>> nonNullListCollector() {
         return Collectors.toCollection(NonNullList::create);
     }
 
-    /**
-     * Computes a hash code for the given {@link ItemStack}. This is based off of {@link ItemStack#serializeNBT()},
-     * except if {@link ItemStack#isEmpty()} returns true, in which case the hash will be 0.
-     */
+    /** Computes a hash code for the given {@link ItemStack}. This is based off of {@link ItemStack#serializeNBT()},
+     * except if {@link ItemStack#isEmpty()} returns true, in which case the hash will be 0. */
     public static int hash(@Nonnull ItemStack stack) {
         if (stack.isEmpty()) {
             return 0;

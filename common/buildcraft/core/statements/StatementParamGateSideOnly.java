@@ -29,8 +29,8 @@ public enum StatementParamGateSideOnly implements IStatementParameter {
 
     public final boolean isSpecific;
 
-    private static final StatementParamGateSideOnly[] POSSIBLE_ANY = {ANY, SPECIFIC};
-    private static final StatementParamGateSideOnly[] POSSIBLE_SPECIFIC = {SPECIFIC, ANY};
+    private static final StatementParamGateSideOnly[] POSSIBLE_ANY = { ANY, SPECIFIC };
+    private static final StatementParamGateSideOnly[] POSSIBLE_SPECIFIC = { SPECIFIC, ANY };
 
     StatementParamGateSideOnly(boolean isSpecific) {
         this.isSpecific = isSpecific;

@@ -64,7 +64,8 @@ public enum EnumAddonSlot {
         for (VolumeBox volumeBox : volumeBoxes) {
             for (EnumAddonSlot slot : values()) {
                 Optional<Vec3> ray = slot.getBoundingBox(volumeBox).clip(start, end);
-                if (!ray.isEmpty()) {
+//                if (ray != null)
+                if (ray.isPresent()) {
 //                    double dist = ray.hitVec.distanceTo(start);
                     double dist = ray.get().distanceTo(start);
                     if (bestDist > dist) {

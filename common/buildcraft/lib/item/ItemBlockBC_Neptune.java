@@ -42,7 +42,7 @@ public class ItemBlockBC_Neptune extends BlockItem implements IItemBuildCraft {
     }
 
     @Override
-    public String getDescriptionId(ItemStack p_41455_) {
+    public String getDescriptionId(ItemStack stack) {
         return this.unlocalizedName;
     }
 

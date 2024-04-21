@@ -74,7 +74,7 @@ public class BCRobotics {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
         BlockEntityRenderers.register(BCRoboticsBlocks.zonePlannerTile.get(), RenderZonePlanner::new);
     }
 

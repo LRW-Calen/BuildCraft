@@ -6,12 +6,22 @@
 
 package buildcraft.builders.item;
 
+import buildcraft.builders.BCBuildersMenuTypes;
 import buildcraft.builders.addon.AddonFillerPlanner;
+import buildcraft.core.BCCoreMenuTypes;
+import buildcraft.core.list.ContainerList;
 import buildcraft.core.marker.volume.Addon;
 import buildcraft.core.marker.volume.ItemAddon;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.Nullable;
 
-public class ItemFillerPlanner extends ItemAddon {
+//public class ItemFillerPlanner extends ItemAddon
+public class ItemFillerPlanner extends ItemAddon implements MenuProvider {
     public ItemFillerPlanner(String idBC, Item.Properties properties) {
         super(idBC, properties);
     }
@@ -19,5 +29,18 @@ public class ItemFillerPlanner extends ItemAddon {
     @Override
     public Addon createAddon() {
         return new AddonFillerPlanner();
+    }
+
+    // MenuProvider
+
+    @Override
+    public Component getDisplayName() {
+        return new TextComponent("filler_planner");
+    }
+
+    @Nullable
+    @Override
+    public ContainerList createMenu(int id, Inventory inv, Player player) {
+        return new ContainerList(BCBuildersMenuTypes.FILLER, id, player);
     }
 }

@@ -75,6 +75,7 @@ public class ContainerList extends ContainerBC_Neptune<ItemList_BC8> {
     }
 
     @Override
+//    public boolean canInteractWith(EntityPlayer player)
     public boolean stillValid(Player player) {
         return !getListItemStack().isEmpty();
     }
@@ -129,6 +130,7 @@ public class ContainerList extends ContainerBC_Neptune<ItemList_BC8> {
     }
 
     @Override
+//    public void readMessage(int id, PacketBufferBC buffer, Side side, MessageContext ctx) throws IOException
     public void readMessage(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readMessage(id, buffer, side, ctx);
         if (side == NetworkDirection.PLAY_TO_SERVER) {

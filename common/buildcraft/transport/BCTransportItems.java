@@ -2,13 +2,17 @@ package buildcraft.transport;
 
 import buildcraft.api.transport.pipe.IItemPipe;
 import buildcraft.api.transport.pipe.PipeDefinition;
+
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.item.ItemPluggableSimple;
 import buildcraft.lib.item.ItemPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
+
 import buildcraft.transport.item.ItemWire;
 import buildcraft.transport.pipe.PipeRegistry;
+
 import net.minecraft.world.item.DyeColor;
+
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;

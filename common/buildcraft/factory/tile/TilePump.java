@@ -240,7 +240,7 @@ public class TilePump extends TileMiner {
             List<BlockPos> springPositions = new ArrayList<>();
             BlockPos center = VecUtil.replaceValue(getBlockPos(), Direction.Axis.Y, 0);
             for (BlockPos spring : BlockPos.betweenClosed(center.offset(-10, 0, -10), center.offset(10, 0, 10))) {
-                if (level.getBlockState(spring).getBlock() instanceof BlockSpring<?>) {
+                if (level.getBlockState(spring).getBlock() instanceof BlockSpring) {
                     BlockEntity tile = level.getBlockEntity(spring);
                     if (tile instanceof ITileOilSpring) {
 //                        springPositions.add(spring);
