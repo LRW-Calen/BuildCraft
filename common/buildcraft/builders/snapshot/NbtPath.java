@@ -73,8 +73,7 @@ public class NbtPath {
             int key;
             try {
                 key = Integer.parseInt(elements.get(0));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return NBTUtilBC.NBT_NULL;
             }
             if (key >= 0 && key < tag.getAsByteArray().length) {
@@ -102,8 +101,7 @@ public class NbtPath {
             int key;
             try {
                 key = Integer.parseInt(elements.get(0));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return NBTUtilBC.NBT_NULL;
             }
             if (key >= 0 && key < tag.size()) {
@@ -136,8 +134,7 @@ public class NbtPath {
             int key;
             try {
                 key = Integer.parseInt(elements.get(0));
-            }
-            catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 return NBTUtilBC.NBT_NULL;
             }
             if (key >= 0 && key < tag.getAsIntArray().length) {

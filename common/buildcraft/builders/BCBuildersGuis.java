@@ -12,6 +12,8 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkHooks;
 
+// Calen: no modGuiId in 1.18.2, so open FILLER_PLANNER gui at another place...
+@Deprecated(forRemoval = true)
 public enum BCBuildersGuis {
     ARCHITECT,
     BUILDER,

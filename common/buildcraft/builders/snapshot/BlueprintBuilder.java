@@ -108,7 +108,7 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder> 
                                 ) &&
                                 FluidUtilBC.mergeSameFluids(requiredFluids).stream()
                                         .allMatch(stack ->
-//                                                FluidUtilBC.areFluidStackEqual(stack, tile.getTankManager().drain(stack, false))
+//                                                        FluidUtilBC.areFluidStackEqual(stack, tile.getTankManager().drain(stack, false))
                                                         FluidUtilBC.areFluidStackEqual(stack, tile.getTankManager().drain(stack, FluidAction.SIMULATE))
                                         )
                 )
@@ -242,9 +242,9 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder> 
         List<ISchematicEntity> toSpawn = getBuildingInfo().entities.stream()
                 .filter(schematicEntity ->
                                 entitiesWithinBox.stream()
-//                                .map(Entity::getPositionVector)
+//                                        .map(Entity::getPositionVector)
                                         .map(Entity::position)
-//                                .map(schematicEntity.getPos().add(new Vec3(getBuildingInfo().offsetPos))::distanceTo)
+//                                        .map(schematicEntity.getPos().add(new Vec3(getBuildingInfo().offsetPos))::distanceTo)
                                         .map(schematicEntity.getPos().add(Vec3.atLowerCornerOf(getBuildingInfo().offsetPos))::distanceTo)
                                         .noneMatch(distance -> distance < MAX_ENTITY_DISTANCE)
                 )
@@ -273,14 +273,14 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder> 
                                 entity != null &&
                                         getBuildingInfo().entities.stream()
                                                 .map(ISchematicEntity::getPos)
-//                                        .map(new Vec3(getBuildingInfo().offsetPos)::add)
+//                                                .map(new Vec3(getBuildingInfo().offsetPos)::add)
                                                 .map(Vec3.atLowerCornerOf(getBuildingInfo().offsetPos)::add)
-//                                        .map(entity.getPositionVector()::distanceTo)
+//                                                .map(entity.getPositionVector()::distanceTo)
                                                 .map(entity.position()::distanceTo)
                                                 .noneMatch(distance -> distance < MAX_ENTITY_DISTANCE) &&
                                         SchematicEntityManager.getSchematicEntity(new SchematicEntityContext(
                                                 tile.getWorldBC(),
-//                                        BlockPos.ORIGIN,
+//                                                BlockPos.ORIGIN,
                                                 BlockPos.ZERO,
                                                 entity
                                         )) != null
@@ -378,12 +378,9 @@ public class BlueprintBuilder extends SnapshotBuilder<ITileForBlueprintBuilder> 
         {
             ItemStack stack;
             // Calen: no Exception
-//            try
-//            {
+//            try {
 //                stack = buffer.readItemStack();
-//            }
-//            catch (IOException e)
-//            {
+//            } catch (IOException e) {
 //                throw new RuntimeException(e);
 //            }
             stack = buffer.readItem();

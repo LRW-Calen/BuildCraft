@@ -4,6 +4,8 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.builders;
 
+// 1.18.2: use datagen
+@Deprecated(forRemoval = true)
 public class BCBuildersRecipes {
     public static void init() {
 

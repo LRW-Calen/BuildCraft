@@ -29,13 +29,13 @@ public class FluidStackRef {
     public FluidStack get(Tag nbt) {
         return new FluidStack(
                 Objects.requireNonNull(
+//                        FluidRegistry.getFluid(
                         ForgeRegistries.FLUIDS.getValue(
                                 new ResourceLocation(
-//                        FluidRegistry.getFluid(
                                         fluid
                                                 .get(nbt)
                                                 .orElseThrow(NullPointerException::new)
-//                                        .getString()
+//                                                .getString()
                                                 .getAsString()
                                 )
                         )

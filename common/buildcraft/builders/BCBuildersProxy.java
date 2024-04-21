@@ -18,7 +18,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCBuildersProxy implements IGuiHandler
 public abstract class BCBuildersProxy {
-    //    @SidedProxy
+    // @SidedProxy
     private static BCBuildersProxy proxy;
 
     public static BCBuildersProxy getProxy() {
@@ -190,13 +190,12 @@ public abstract class BCBuildersProxy {
         @Override
         public void fmlInit() {
             super.fmlInit();
-            // Calen: moved to bcbuilders
+            // Calen: moved to BCBuilders
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileArchitectTable.class, new RenderArchitectTable());
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileBuilder.class, new RenderBuilder());
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileFiller.class, new RenderFiller());
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileQuarry.class, new RenderQuarry());
-            DetachedRenderer.INSTANCE.addRenderer(DetachedRenderer.RenderMatrixType.FROM_WORLD_ORIGIN,
-                    RenderArchitectTables.INSTANCE);
+            DetachedRenderer.INSTANCE.addRenderer(DetachedRenderer.RenderMatrixType.FROM_WORLD_ORIGIN, RenderArchitectTables.INSTANCE);
         }
     }
 }

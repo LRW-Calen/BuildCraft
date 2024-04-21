@@ -3,6 +3,7 @@ package buildcraft.silicon;
 import buildcraft.api.enums.EnumRedstoneChipset;
 import buildcraft.api.facades.FacadeAPI;
 import buildcraft.lib.item.ItemPluggableSimple;
+import buildcraft.lib.item.ItemPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import buildcraft.lib.registry.TagManager;
 import buildcraft.silicon.gate.EnumGateLogic;
@@ -20,46 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BCSiliconItems {
-    public static Item.Properties BC_SILICON_ITEM_DEFAULT_PROP =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_MAIN_TAB)
-                    .rarity(Rarity.COMMON) // 稀有度 影响tooltip的颜色
-//                    .durability(99) // 耐久
-//                    .food(E115) // 可以作为食物 E115是个FoodProperties 见TF:TFItems.java
-//                    .fireResistant() // 抗燃
-                    .stacksTo(64) // 堆叠
-            ;
-    public static Item.Properties BC_SILICON_PLUG_PROP =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_PLUGS_TAB)
-                    .rarity(Rarity.COMMON) // 稀有度 影响tooltip的颜色
-                    .stacksTo(64);
-    public static Item.Properties BC_SILICON_ITEM_PROP_NO_STACK =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_MAIN_TAB)
-                    .rarity(Rarity.COMMON) // 稀有度 影响tooltip的颜色
-//                    .durability(99) // 耐久
-//                    .food(E115) // 可以作为食物 E115是个FoodProperties 见TF:TFItems.java
-//                    .fireResistant() // 抗燃
-                    .stacksTo(1) // 堆叠
-            ;
-    public static Item.Properties BC_SILICON_FACADE =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_FACADES_TAB)
-                    .rarity(Rarity.COMMON) // 稀有度 影响tooltip的颜色
-//                    .durability(99) // 耐久
-//                    .food(E115) // 可以作为食物 E115是个FoodProperties 见TF:TFItems.java
-//                    .fireResistant() // 抗燃
-                    .durability(0) // maxDamage 里面设置了stackSize=1 这一步要放在stacksTo前面
-                    .stacksTo(64) // 堆叠
-            ;
-    public static Item.Properties BC_SILICON_LENS =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_PLUGS_TAB)
-                    .rarity(Rarity.COMMON) // 稀有度 影响tooltip的颜色
-                    .durability(0) // maxDamage 里面设置了stackSize=1 这一步要放在stacksTo前面
-                    .stacksTo(64) // 堆叠
-            ;
 
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCSilicon.MODID);
 
@@ -70,7 +31,8 @@ public class BCSiliconItems {
     public static RegistryObject<Item> chipsetDiamond;
 
     public static RegistryObject<ItemGateCopier> gateCopier;
-    //    public static RegistryObject<ItemPluggableGate> plugGate;
+
+    // public static RegistryObject<ItemPluggableGate> plugGate;
     public static final Map<GateVariant, RegistryObject<ItemPluggableGate>> variantGateMap = new HashMap<>();
     public static RegistryObject<ItemPluggableLens> plugLens;
     public static RegistryObject<Item> plugPulsar;
@@ -79,20 +41,19 @@ public class BCSiliconItems {
 
 
     public static void preInit() {
-//        redstoneChipset = HELPER.addItem(new ItemRedstoneChipset("item.redstone_chipset"));
-        chipsetRedstone = HELPER.addItem("item.chipset.redstone", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.RED));
-        chipsetIron = HELPER.addItem("item.chipset.iron", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.IRON));
-        chipsetGold = HELPER.addItem("item.chipset.gold", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.GOLD));
-        chipsetQuartz = HELPER.addItem("item.chipset.quartz", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.QUARTZ));
-        chipsetDiamond = HELPER.addItem("item.chipset.diamond", BC_SILICON_ITEM_DEFAULT_PROP, (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.DIAMOND));
+        chipsetRedstone = HELPER.addItem("item.chipset.redstone", ItemPropertiesCreator.common64(), (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.RED));
+        chipsetIron = HELPER.addItem("item.chipset.iron", ItemPropertiesCreator.common64(), (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.IRON));
+        chipsetGold = HELPER.addItem("item.chipset.gold", ItemPropertiesCreator.common64(), (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.GOLD));
+        chipsetQuartz = HELPER.addItem("item.chipset.quartz", ItemPropertiesCreator.common64(), (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.QUARTZ));
+        chipsetDiamond = HELPER.addItem("item.chipset.diamond", ItemPropertiesCreator.common64(), (idBC, properties) -> new ItemRedstoneChipset(idBC, properties, EnumRedstoneChipset.DIAMOND));
 
-        gateCopier = HELPER.addItem("item.gate_copier", BC_SILICON_ITEM_PROP_NO_STACK, ItemGateCopier::new);
+        gateCopier = HELPER.addItem("item.gate_copier", ItemPropertiesCreator.common1(), ItemGateCopier::new);
 
-//        plugGate = HELPER.addItem("item.plug.gate", BC_SILICON_PLUG_PROP, ItemPluggableGate::new);
-
+        // Gates
+//        plugGate = HELPER.addItem("item.plug.gate", ItemPropertiesCreator.common64(), ItemPluggableGate::new);
         GateVariant gateVariant = new GateVariant(new CompoundTag());
         String registryId = TagManager.getTag("item.plug.gate", TagManager.EnumTagType.REGISTRY_NAME).replace(BCSilicon.MODID + ":", "");
-        RegistryObject<ItemPluggableGate> plug = HELPER.addItem("item.plug.gate", registryId, BC_SILICON_PLUG_PROP, (idBC, prop) -> new ItemPluggableGate(idBC, prop, gateVariant));
+        RegistryObject<ItemPluggableGate> plug = HELPER.addItem("item.plug.gate", registryId, ItemPropertiesCreator.common64(), (idBC, prop) -> new ItemPluggableGate(idBC, prop, gateVariant));
         variantGateMap.put(gateVariant, plug);
         for (EnumGateMaterial material : EnumGateMaterial.VALUES) {
             if (!material.canBeModified) {
@@ -102,17 +63,17 @@ public class BCSiliconItems {
                 for (EnumGateModifier modifier : EnumGateModifier.VALUES) {
                     GateVariant gateVariant_i = new GateVariant(logic, material, modifier);
                     String registryId_i = TagManager.getTag("item.plug.gate", TagManager.EnumTagType.REGISTRY_NAME).replace(BCSilicon.MODID + ":", "") + "_" + gateVariant_i.getVariantName();
-                    RegistryObject<ItemPluggableGate> plug_i = HELPER.addItem("item.plug.gate", registryId_i, BC_SILICON_PLUG_PROP, (idBC, prop) -> new ItemPluggableGate(idBC, prop, gateVariant_i));
+                    RegistryObject<ItemPluggableGate> plug_i = HELPER.addItem("item.plug.gate", registryId_i, ItemPropertiesCreator.common64(), (idBC, prop) -> new ItemPluggableGate(idBC, prop, gateVariant_i));
                     variantGateMap.put(gateVariant_i, plug_i);
                 }
             }
         }
 
-        plugLens = HELPER.addItem("item.plug.lens", BC_SILICON_LENS, ItemPluggableLens::new);
-        plugPulsar = HELPER.addItem("item.plug.pulsar", BC_SILICON_PLUG_PROP, (id, p) -> new ItemPluggableSimple(id, p, BCSiliconPlugs.pulsar,
+        plugLens = HELPER.addItem("item.plug.lens", ItemPropertiesCreator.common64(), ItemPluggableLens::new);
+        plugPulsar = HELPER.addItem("item.plug.pulsar", ItemPropertiesCreator.common64(), (id, p) -> new ItemPluggableSimple(id, p, BCSiliconPlugs.pulsar,
                 PluggablePulsar::new, ItemPluggableSimple.PIPE_BEHAVIOUR_ACCEPTS_RS_POWER));
-        plugLightSensor = HELPER.addItem("item.plug.light_sensor", BC_SILICON_PLUG_PROP, (id, p) -> new ItemPluggableSimple(id, p, BCSiliconPlugs.lightSensor));
-        plugFacade = HELPER.addItem("item.plug.facade", BC_SILICON_FACADE, ItemPluggableFacade::new);
+        plugLightSensor = HELPER.addItem("item.plug.light_sensor", ItemPropertiesCreator.common64(), (id, p) -> new ItemPluggableSimple(id, p, BCSiliconPlugs.lightSensor));
+        plugFacade = HELPER.addItem("item.plug.facade", ItemPropertiesCreator.common64(), ItemPluggableFacade::new);
         FacadeAPI.facadeItem = plugFacade;
     }
 }

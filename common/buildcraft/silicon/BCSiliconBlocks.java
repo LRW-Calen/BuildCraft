@@ -2,7 +2,7 @@ package buildcraft.silicon;
 
 import buildcraft.api.enums.EnumLaserTableType;
 import buildcraft.lib.BCLib;
-import buildcraft.lib.block.BlockPropertiesCreater;
+import buildcraft.lib.block.BlockPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import buildcraft.silicon.block.BlockLaser;
 import buildcraft.silicon.block.BlockLaserTable;
@@ -29,7 +29,7 @@ public class BCSiliconBlocks {
     public static RegistryObject<BlockEntityType<TileProgrammingTable_Neptune>> programmingTableTile;
 
     public static void preInit() {
-        laser = HELPER.addBlockAndItem("block.laser", BlockPropertiesCreater.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), BlockLaser::new);
+        laser = HELPER.addBlockAndItem("block.laser", BlockPropertiesCreator.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), BlockLaser::new);
         assemblyTable = createLaserTable(EnumLaserTableType.ASSEMBLY_TABLE, "block.assembly_table");
         advancedCraftingTable = createLaserTable(EnumLaserTableType.ADVANCED_CRAFTING_TABLE, "block.advanced_crafting_table");
         integrationTable = createLaserTable(EnumLaserTableType.INTEGRATION_TABLE, "block.integration_table");
@@ -49,6 +49,6 @@ public class BCSiliconBlocks {
     }
 
     private static RegistryObject<BlockLaserTable> createLaserTable(EnumLaserTableType type, String id) {
-        return HELPER.addBlockAndItem(id, BlockPropertiesCreater.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), (idBC, properties) -> new BlockLaserTable(idBC, properties, type));
+        return HELPER.addBlockAndItem(id, BlockPropertiesCreator.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), (idBC, properties) -> new BlockLaserTable(idBC, properties, type));
     }
 }

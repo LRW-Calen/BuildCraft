@@ -47,7 +47,7 @@ public class SchematicBlockFluid implements ISchematicBlock {
     public Set<BlockPos> getRequiredBlockOffsets() {
 //        return Stream.concat(Arrays.stream(Direction.HORIZONTALS), Stream.of(Direction.DOWN))
         return Stream.concat(Arrays.stream(Direction.BY_2D_DATA), Stream.of(Direction.DOWN))
-//            .map(Direction::getDirectionVec)
+//                .map(Direction::getDirectionVec)
                 .map(Direction::getNormal)
                 .map(BlockPos::new)
                 .collect(Collectors.toSet());
@@ -57,7 +57,7 @@ public class SchematicBlockFluid implements ISchematicBlock {
     @Override
     public List<FluidStack> computeRequiredFluids() {
         return Optional.ofNullable(BlockUtil.getFluidWithoutFlowing(blockState))
-//            .map(fluid -> new FluidStack(fluid, Fluid.BUCKET_VOLUME))
+//                .map(fluid -> new FluidStack(fluid, Fluid.BUCKET_VOLUME))
                 .map(fluid -> new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME))
                 .map(Collections::singletonList)
                 .orElseGet(Collections::emptyList);

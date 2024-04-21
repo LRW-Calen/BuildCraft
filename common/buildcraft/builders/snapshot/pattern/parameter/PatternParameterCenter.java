@@ -87,8 +87,7 @@ public enum PatternParameterCenter implements IStatementParameter {
     }
 
     @Override
-    public PatternParameterCenter onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-                                          StatementMouseClick mouse) {
+    public PatternParameterCenter onClick(IStatementContainer source, IStatement stmt, ItemStack stack, StatementMouseClick mouse) {
         return null;
     }
 

@@ -44,7 +44,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
     protected final List<Property<?>> ignoredProperties = new ArrayList<>();
     @SuppressWarnings("WeakerAccess")
     protected CompoundTag tileNbt;
-    // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+    // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //    @SuppressWarnings("WeakerAccess")
 //    protected Rotation tileRotation = Rotation.NONE;
     @SuppressWarnings("WeakerAccess")
@@ -228,7 +228,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         schematicBlock.blockState = blockState.rotate(rotation);
         schematicBlock.ignoredProperties.addAll(ignoredProperties);
         schematicBlock.tileNbt = tileNbt;
-        // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+        // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 ////        schematicBlock.tileRotation = tileRotation.add(rotation);
 //        schematicBlock.tileRotation = tileRotation.getRotated(rotation);
         schematicBlock.placeBlock = placeBlock;
@@ -313,7 +313,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                     // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
 //                    tileEntity.setLevel(world);
                     world.setBlockEntity(tileEntity);
-                    // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+                    // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //                    if (tileRotation != Rotation.NONE)
 //                    {
 ////                        tileEntity.rotate(tileRotation);
@@ -346,7 +346,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                     // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
 //                    tileEntity.setLevel(world);
                     world.setBlockEntity(tileEntity);
-                    // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+                    // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //                    if (tileRotation != Rotation.NONE)
 ////                    if (tileRotation != Rotation.NONE && tileEntity instanceof SkullBlockEntity skull)
 //                    {
@@ -389,7 +389,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         if (tileNbt != null) {
             nbt.put("tileNbt", tileNbt);
         }
-        // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+        // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //        nbt.put("tileRotation", NBTUtilBC.writeEnum(tileRotation));
 //        nbt.putString("placeBlock", Block.REGISTRY.getNameForObject(placeBlock).toString());
         nbt.putString("placeBlock", placeBlock.getRegistryName().toString());
@@ -405,7 +405,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                 NBTUtilBC.writeStringList(
                         canBeReplacedWithBlocks.stream()
 //                                .map(Block.REGISTRY::getNameForObject)
-                                .map(b -> b.getRegistryName().toString())
+                                .map(Block::getRegistryName)
                                 .map(Object::toString)
                 )
         );
@@ -429,7 +429,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         if (nbt.contains("tileNbt")) {
             tileNbt = nbt.getCompound("tileNbt");
         }
-        // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+        // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //        tileRotation = NBTUtilBC.readEnum(nbt.get("tileRotation"), Rotation.class);
 //        placeBlock = Block.REGISTRY.getObject(new ResourceLocation(nbt.getString("placeBlock")));
         placeBlock = BlockUtil.getBlockFromName(nbt.getString("placeBlock"));
@@ -458,7 +458,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                 blockState.equals(that.blockState) &&
                 ignoredProperties.equals(that.ignoredProperties) &&
                 (tileNbt != null ? tileNbt.equals(that.tileNbt) : that.tileNbt == null) &&
-                // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+                // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //                tileRotation == that.tileRotation &&
                 placeBlock.equals(that.placeBlock) &&
                 updateBlockOffsets.equals(that.updateBlockOffsets) &&
@@ -471,7 +471,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         result = 31 * result + blockState.hashCode();
         result = 31 * result + ignoredProperties.hashCode();
         result = 31 * result + (tileNbt != null ? tileNbt.hashCode() : 0);
-        // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
+        // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //        result = 31 * result + tileRotation.hashCode();
         result = 31 * result + placeBlock.hashCode();
         result = 31 * result + updateBlockOffsets.hashCode();

@@ -80,8 +80,7 @@ public class GlobalSavedDataSnapshots {
                         if (Objects.equals(snapshot.key, key)) {
                             return Pair.of(snapshot, snapshotFile);
                         }
-                    }
-                    catch (IOException e) {
+                    } catch (IOException e) {
                         new IOException("Failed to read the snapshot " + snapshotFile, e).printStackTrace();
                     }
                 }
@@ -101,8 +100,7 @@ public class GlobalSavedDataSnapshots {
                         if (snapshotFile.getName().startsWith(snapshot.key.toString())) {
                             listBuilder.add(snapshot.key);
                         }
-                    }
-                    catch (IOException io) {
+                    } catch (IOException io) {
                         new IOException("Failed to read the snapshot " + snapshotFile, io).printStackTrace();
                     }
                 }
@@ -119,8 +117,7 @@ public class GlobalSavedDataSnapshots {
         if (!snapshotFile.exists()) {
             try (FileOutputStream fileOutputStream = new FileOutputStream(snapshotFile)) {
                 NbtSquisher.squishVanilla(Snapshot.writeToNBT(snapshot), fileOutputStream);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 new IOException("Failed to write the snapshot file: " + snapshotFile, e).printStackTrace();
             }
         }

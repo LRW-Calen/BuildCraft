@@ -95,9 +95,6 @@ public class ItemSchematicSingle extends ItemBC_Neptune {
         InteractionHand hand = ctx.getHand();
         Direction side = ctx.getClickedFace();
         Vec3 vec3Pos = ctx.getClickLocation();
-        double hitX = vec3Pos.x;
-        double hitY = vec3Pos.y;
-        double hitZ = vec3Pos.z;
         if (world.isClientSide) {
             return InteractionResult.PASS;
         }
@@ -209,17 +206,17 @@ public class ItemSchematicSingle extends ItemBC_Neptune {
                         }
                     }
                 }
-            }
-            catch (InvalidInputDataException e) {
+            } catch (InvalidInputDataException e) {
 //                player.sendStatusMessage(
 //                        new TextComponentString("Invalid schematic: " + e.getMessage()),
 //                        true
 //                );
                 player.sendMessage(
-                        new TranslatableComponent("Invalid schematic: ").append(e.getMessage()),
+                        new TranslatableComponent("chat.buildcraft.schematic_single.invalid").append(e.getMessage()),
                         Util.NIL_UUID
                 );
                 e.printStackTrace();
+                BCLog.logger.warn("[builders.schematic_single] Invalid schematic ", e);
             }
             return InteractionResult.FAIL;
         }
@@ -233,16 +230,16 @@ public class ItemSchematicSingle extends ItemBC_Neptune {
     }
 
     public static ISchematicBlock getSchematicSafe(@Nonnull ItemStack stack) {
-        // Calen FIX: when mouse hovers on unused schematic, will cause InvalidInputDataException
+        // Calen FIX: when mouse hovers on unused schematic, #getSchematic will cause InvalidInputDataException
         if ((!stack.hasTag()) || !(stack.getTag().contains("name"))) {
             return null;
         }
         // BC 1.12.2
         try {
             return getSchematic(stack);
-        }
-        catch (InvalidInputDataException e) {
-            BCLog.logger.warn("Invalid schematic " + e.getMessage());
+        } catch (InvalidInputDataException e) {
+//            BCLog.logger.warn("Invalid schematic " + e.getMessage());
+            BCLog.logger.warn("[builders.schematic_single] Invalid schematic " + e.getMessage());
             return null;
         }
     }

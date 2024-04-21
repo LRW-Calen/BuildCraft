@@ -46,19 +46,15 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
     private static final long MAX_POWER_PER_TICK = 256 * MjAPI.MJ;
 
     protected final T tile;
-    //    private final IWorldEventListener worldEventListener = new WorldEventListenerAdapter()
-//    {
+    // private final IWorldEventListener worldEventListener = new WorldEventListenerAdapter() {
 //        @Override
 //        public void notifyBlockUpdate(@Nonnull Level world,
 //                                      @Nonnull BlockPos pos,
 //                                      @Nonnull BlockState oldState,
 //                                      @Nonnull BlockState newState,
-//                                      int flags)
-//        {
-//            if (tile.getBuilder() == SnapshotBuilder.this && getBuildingInfo() != null && getBuildingInfo().box.contains(pos))
-//            {
-//                if (check(pos))
-//                {
+//                                      int flags) {
+//            if (tile.getBuilder() == SnapshotBuilder.this && getBuildingInfo() != null && getBuildingInfo().box.contains(pos)) {
+//                if (check(pos)) {
 //                    afterChecks();
 //                }
 //            }
@@ -137,14 +133,10 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
 
     protected abstract List<ItemStack> getToPlaceItems(BlockPos blockPos);
 
-    /**
-     * @return true if task done successfully, false otherwise
-     */
+    /** @return true if task done successfully, false otherwise */
     protected abstract boolean doPlaceTask(PlaceTask placeTask);
 
-    /**
-     * Executed if break task failed
-     */
+    /** Executed if break task failed */
     private void cancelBreakTask(BreakTask breakTask) {
         tile.getBattery().addPower(
                 Math.min(breakTask.power, tile.getBattery().getCapacity() - tile.getBattery().getStored()),
@@ -152,9 +144,7 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
         );
     }
 
-    /**
-     * Executed if {@link #doPlaceTask} failed
-     */
+    /** Executed if {@link #doPlaceTask} failed */
     protected void cancelPlaceTask(PlaceTask placeTask) {
         tile.getBattery().addPower(
                 Math.min(placeTask.power, tile.getBattery().getCapacity() - tile.getBattery().getStored()),
@@ -162,14 +152,10 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
         );
     }
 
-    /**
-     * @return true if block in wold is correct (is not to break) according to snapshot, false otherwise
-     */
+    /** @return true if block in wold is correct (is not to break) according to snapshot, false otherwise */
     protected abstract boolean isBlockCorrect(BlockPos blockPos);
 
-    /**
-     * @return Pos where flying item should be rendered
-     */
+    /** @return Pos where flying item should be rendered */
     public Vec3 getPlaceTaskItemPos(PlaceTask placeTask) {
 //        Vec3 height = new Vec3(placeTask.pos.subtract(tile.getBuilderPos()));
         Vec3 height = Vec3.atLowerCornerOf(placeTask.pos.subtract(tile.getBuilderPos()));
@@ -247,9 +233,7 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
         leftToPlace = 0;
     }
 
-    /**
-     * @return true is building is finished, false otherwise
-     */
+    /** @return true is building is finished, false otherwise */
     public boolean tick() {
         if (tile.getWorldBC().isClientSide) {
             prevClientBreakTasks.clear();
@@ -496,9 +480,7 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
         return getBuildingInfo().toWorld(getBuildingInfo().getSnapshot().indexToPos(i));
     }
 
-    /**
-     * @return true if changed, false otherwise
-     */
+    /** @return true if changed, false otherwise */
     protected boolean check(BlockPos blockPos) {
         int i = posToIndex(blockPos);
         byte prev = checkResults[i];
@@ -623,12 +605,9 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
             pos = MessageUtil.readBlockPos(buffer);
             items = IntStream.range(0, buffer.readInt()).mapToObj(j ->
             {
-//                try
-//                {
+//                try {
 //                    return buffer.readItemStack();
-//                }
-//                catch (IOException e)
-//                {
+//                } catch (IOException e) {
 //                    throw new RuntimeException(e);
 //                }
                 return buffer.readItem();

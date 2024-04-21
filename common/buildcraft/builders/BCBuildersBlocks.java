@@ -6,7 +6,7 @@ package buildcraft.builders;
 
 import buildcraft.builders.block.*;
 import buildcraft.builders.tile.*;
-import buildcraft.lib.block.BlockPropertiesCreater;
+import buildcraft.lib.block.BlockPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Material;
@@ -31,14 +31,14 @@ public class BCBuildersBlocks {
     public static RegistryObject<BlockEntityType<TileQuarry>> quarryTile;
 
     public static void fmlPreInit() {
-        filler = HELPER.addBlockAndItem("block.filler", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFiller::new);
-        builder = HELPER.addBlockAndItem("block.builder", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockBuilder::new);
-        architect = HELPER.addBlockAndItem("block.architect", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockArchitectTable::new);
-        library = HELPER.addBlockAndItem("block.library", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockElectronicLibrary::new);
-        replacer = HELPER.addBlockAndItem("block.replacer", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockReplacer::new);
+        filler = HELPER.addBlockAndItem("block.filler", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockFiller::new);
+        builder = HELPER.addBlockAndItem("block.builder", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockBuilder::new);
+        architect = HELPER.addBlockAndItem("block.architect", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockArchitectTable::new);
+        library = HELPER.addBlockAndItem("block.library", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockElectronicLibrary::new);
+        replacer = HELPER.addBlockAndItem("block.replacer", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockReplacer::new);
 
-        frame = HELPER.addBlockAndItem("block.frame", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFrame::new);
-        quarry = HELPER.addBlockAndItem("block.quarry", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockQuarry::new);
+        frame = HELPER.addBlockAndItem("block.frame", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockFrame::new);
+        quarry = HELPER.addBlockAndItem("block.quarry", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockQuarry::new);
 
         fillerTile = HELPER.registerTile("tile.filler", TileFiller::new, filler);
         builderTile = HELPER.registerTile("tile.builder", TileBuilder::new, builder);

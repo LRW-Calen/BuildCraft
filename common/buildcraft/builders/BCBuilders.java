@@ -44,14 +44,13 @@ import java.util.function.Consumer;
 public class BCBuilders {
     public static final String MODID = "buildcraftbuilders";
 
-    //    @Mod.Instance(MODID)
+    // @Mod.Instance(MODID)
     public static BCBuilders INSTANCE = null;
 
     public BCBuilders() {
         INSTANCE = this;
     }
 
-    //    @Mod.EventHandler
     @SubscribeEvent
 //    public static void preInit(FMLPreInitializationEvent evt)
     public static void preInit(FMLConstructModEvent evt) {
@@ -71,17 +70,15 @@ public class BCBuilders {
         MinecraftForge.EVENT_BUS.register(BCBuildersEventDist.INSTANCE);
     }
 
-    //    @Mod.EventHandler
     @SubscribeEvent
 //    public static void init(FMLInitializationEvent evt)
     public static void init(FMLCommonSetupEvent evt) {
         BCBuildersProxy.getProxy().fmlInit();
         BCBuildersRegistries.init();
-        BCBuildersRecipes.init();
+//        BCBuildersRecipes.init(); //
 //        BCBuildersBlocks.fmlInit(); // 1.18.2: tiles reg with blocks together
     }
 
-    //    @Mod.EventHandler
     @SubscribeEvent
 //    public static void postInit(FMLPostInitializationEvent evt)
     public static void postInit(FMLLoadCompleteEvent evt) {
@@ -89,7 +86,6 @@ public class BCBuilders {
         RulesLoader.loadAll();
     }
 
-    //    @Mod.EventHandler
     @SubscribeEvent
     @OnlyIn(Dist.DEDICATED_SERVER)
 //    public static void onServerStarting(FMLServerStartingEvent event)

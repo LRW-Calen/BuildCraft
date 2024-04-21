@@ -114,7 +114,6 @@ public class TileElectronicLibrary extends TileBC_Neptune implements ITickable, 
     }
 
     @Override
-//    public void update()
     public void update() {
         ITickable.super.update();
         deltaManager.tick();
@@ -180,7 +179,7 @@ public class TileElectronicLibrary extends TileBC_Neptune implements ITickable, 
                 }
             }
             if (id == NET_DOWN) {
-//                Snapshot.Header header = BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getHeader(invDownIn.getStackInSlot(0));
+//                Snapshot.Header header = BCBuildersItems.snapshot.getHeader(invDownIn.getStackInSlot(0));
                 Snapshot.Header header = BCBuildersItems.snapshotBLUEPRINT.get().getHeader(invDownIn.getStackInSlot(0));
                 if (header != null) {
                     Snapshot snapshot = GlobalSavedDataSnapshots.get(level).getSnapshot(header.key);
@@ -300,17 +299,18 @@ public class TileElectronicLibrary extends TileBC_Neptune implements ITickable, 
                         snapshot.key = new Snapshot.Key(snapshot.key, (Snapshot.Header) null);
                         snapshot.computeKey();
                         GlobalSavedDataSnapshots.get(level).addSnapshot(snapshot);
-//                        invUpOut.setStackInSlot(0, BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getUsed(snapshot.getType(), header));
+//                        invUpOut.setStackInSlot(0, BCBuildersItems.snapshot.getUsed(snapshot.getType(), header));
                         invUpOut.setStackInSlot(0, BCBuildersItems.snapshotBLUEPRINT.get().getUsed(snapshot.getType(), header));
                         invUpIn.setStackInSlot(0, StackUtil.EMPTY);
-                    }
-                    finally {
+                    } finally {
                         upSnapshotsParts.remove(pair);
                     }
                 }
             }
         }
     }
+
+    // MenuProvider
 
     @Override
     public Component getDisplayName() {
@@ -319,7 +319,7 @@ public class TileElectronicLibrary extends TileBC_Neptune implements ITickable, 
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int id, Inventory p_39955_, Player player) {
+    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerElectronicLibrary(BCBuildersMenuTypes.ELECTRONIC_LIBRARY, id, player, this);
     }
 }

@@ -50,8 +50,7 @@ public class MessageSnapshotResponse implements IMessage {
 //            snapshot = Snapshot.readFromNBT(CompressedStreamTools.read(new ByteBufInputStream(buf), NBTSizeTracker.INFINITE));
 //            snapshot = Snapshot.readFromNBT(CompressedStreamTools.readCompressed(new ByteBufInputStream(buf)));
             snapshot = Snapshot.readFromNBT(buf.readNbt());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

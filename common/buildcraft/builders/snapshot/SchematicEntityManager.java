@@ -64,8 +64,7 @@ public class SchematicEntityManager {
         try {
             schematicEntity.deserializeNBT(data);
             return schematicEntity;
-        }
-        catch (InvalidInputDataException e) {
+        } catch (InvalidInputDataException e) {
             throw new InvalidInputDataException("Failed to load the schematic from " + data, e);
         }
     }

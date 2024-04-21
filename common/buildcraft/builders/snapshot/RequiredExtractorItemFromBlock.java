@@ -21,7 +21,7 @@ public class RequiredExtractorItemFromBlock extends RequiredExtractor {
     public List<ItemStack> extractItemsFromBlock(@Nonnull BlockState blockState, @Nullable CompoundTag tileNbt) {
         return Collections.singletonList(
                 new ItemStack(
-//                Item.getItemFromBlock(blockState.getBlock()),
+//                        Item.getItemFromBlock(blockState.getBlock()),
                         blockState.getBlock().asItem(),
                         1
 //                        blockState.getBlock().damageDropped(blockState)

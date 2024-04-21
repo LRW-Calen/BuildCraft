@@ -255,7 +255,7 @@ public class TileArchitectTable extends TileBC_Neptune implements ITickable, IDe
 //                level.getBlockState(worldScanPos).getBlock()
 //        ));
         // Calen: for bed
-        // if the other half o is out of the box, ignore this bed
+        // if the other half is out of the box, ignore this bed
         BlockState state = level.getBlockState(worldScanPos);
         Block block = state.getBlock();
         if (block instanceof BedBlock bed) {
@@ -317,7 +317,7 @@ public class TileArchitectTable extends TileBC_Neptune implements ITickable, IDe
         invSnapshotIn.setStackInSlot(0, stackIn);
         invSnapshotOut.setStackInSlot(
                 0,
-//                BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getUsed(
+//                BCBuildersItems.snapshot.getUsed(
                 BCBuildersItems.snapshotBLUEPRINT.get().getUsed(
                         snapshotType,
                         new Header(

@@ -41,11 +41,8 @@ public class GuiBuilder extends GuiBC8<ContainerBuilder> {
     }
 
     @Override
-    public void initGui()
-//    public void init()
-    {
-//        super.initGui();
-//        super.init();
+    public void initGui() {
+        super.initGui();
 
         for (int i = 0; i < container.widgetTanks.size(); i++) {
             mainGui.shownElements.add(

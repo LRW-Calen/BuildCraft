@@ -9,6 +9,8 @@ import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
@@ -101,6 +103,14 @@ public class BuildersRecipeGenerator extends RecipeProvider {
                 .define('b', Ingredient.of(BCBuildersItems.snapshotBLUEPRINT.get()))
                 .define('r', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
                 .unlockedBy("has_item", has(Items.BOOKSHELF))
+                .group(MOD_ID)
+                .save(consumer);
+        // schematicSingle
+        ShapelessRecipeBuilder.shapeless(BCBuildersItems.schematicSingle.get(),4)
+                .requires(Items.PAPER)
+                .requires(Items.PAPER)
+                .requires(Tags.Items.GEMS_LAPIS)
+                .unlockedBy("has_item", has(Items.PAPER))
                 .group(MOD_ID)
                 .save(consumer);
 

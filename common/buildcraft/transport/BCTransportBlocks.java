@@ -6,7 +6,7 @@
 
 package buildcraft.transport;
 
-import buildcraft.lib.block.BlockPropertiesCreater;
+import buildcraft.lib.block.BlockPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import buildcraft.transport.block.BlockFilteredBuffer;
 import buildcraft.transport.block.BlockPipeHolder;
@@ -25,9 +25,9 @@ public class BCTransportBlocks {
     public static RegistryObject<BlockEntityType<TilePipeHolder>> pipeHolderTile;
 
     public static void preInit() {
-        filteredBuffer = HELPER.addBlockAndItem("block.filtered_buffer", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFilteredBuffer::new);
+        filteredBuffer = HELPER.addBlockAndItem("block.filtered_buffer", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockFilteredBuffer::new);
         // TODO Calen isViewBlocking necessary?
-        pipeHolder = HELPER.addBlock("block.pipe_holder", BlockPropertiesCreater.createDefaultProperties(Material.METAL).strength(0.25F, 3.0F).noOcclusion().isViewBlocking((state, world, pos) -> false).dynamicShape(), BlockPipeHolder::new);
+        pipeHolder = HELPER.addBlock("block.pipe_holder", BlockPropertiesCreator.createDefaultProperties(Material.METAL).strength(0.25F, 3.0F).noOcclusion().isViewBlocking((state, world, pos) -> false).dynamicShape(), BlockPipeHolder::new);
 
         filteredBufferTile = HELPER.registerTile("tile.filtered_buffer", TileFilteredBuffer::new, filteredBuffer);
         pipeHolderTile = HELPER.registerTile("tile.pipe_holder", TilePipeHolder::new, pipeHolder);

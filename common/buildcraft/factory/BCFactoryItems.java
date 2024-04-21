@@ -7,41 +7,24 @@ package buildcraft.factory;
 import buildcraft.factory.item.ItemWaterGel;
 import buildcraft.lib.BCLib;
 import buildcraft.lib.item.ItemBC_Neptune;
+import buildcraft.lib.item.ItemPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BCFactoryItems {
 
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCFactory.MODID);
 
-    public static final RegistryObject<ItemBC_Neptune> plasticSheet;
-    public static final RegistryObject<ItemWaterGel> waterGel;
-    public static final RegistryObject<ItemBC_Neptune> gelledWater;
-
-    public static final Item.Properties PROP_DEFAULT =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_MAIN_TAB)
-                    .stacksTo(64)
-                    .rarity(Rarity.COMMON);
+    public static RegistryObject<ItemBC_Neptune> plasticSheet;
+    public static RegistryObject<ItemWaterGel> waterGel;
+    public static RegistryObject<ItemBC_Neptune> gelledWater;
 
     static {
         if (BCLib.DEV) {
-            plasticSheet = HELPER.addItem("item.plastic.sheet", PROP_DEFAULT, ItemBC_Neptune::new);
-        } else {
-            plasticSheet = null;
+            plasticSheet = HELPER.addItem("item.plastic.sheet", ItemPropertiesCreator.common64(), ItemBC_Neptune::new);
         }
-        waterGel = HELPER.addItem(
-                "item.water_gel_spawn",
-                new Item.Properties()
-//                        .tab(BCCreativeTab.BC_MAIN_TAB)
-                        .stacksTo(16)
-                        .rarity(Rarity.COMMON)
-                ,
-                ItemWaterGel::new
-        );
-        gelledWater = HELPER.addItem("item.gel", PROP_DEFAULT, ItemBC_Neptune::new);
+        waterGel = HELPER.addItem("item.water_gel_spawn", ItemPropertiesCreator.common16(), ItemWaterGel::new);
+        gelledWater = HELPER.addItem("item.gel", ItemPropertiesCreator.common64(), ItemBC_Neptune::new);
     }
 
 

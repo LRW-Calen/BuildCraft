@@ -69,7 +69,6 @@ public abstract class TileLaserTableBase extends TileBC_Neptune implements ILase
     }
 
     @Override
-//    public void update()
     public void update() {
         ITickable.super.update();
         avgPower.tick();

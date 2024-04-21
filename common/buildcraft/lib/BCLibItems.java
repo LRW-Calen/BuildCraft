@@ -3,6 +3,7 @@ package buildcraft.lib;
 import buildcraft.lib.item.ItemDebugger;
 import buildcraft.lib.item.ItemGuide;
 import buildcraft.lib.item.ItemGuideNote;
+import buildcraft.lib.item.ItemPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -10,11 +11,10 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class BCLibItems {
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCLib.MODID);
-    public static Item.Properties BC_LIB_ITEM_DEFAULT_PROP =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_MAIN_TAB)
-                    .stacksTo(64)
-                    .rarity(Rarity.COMMON);
+
+    public static RegistryObject<Item> guide;
+    public static RegistryObject<Item> guideNote;
+    public static RegistryObject<Item> debugger;
 
     private static boolean enableGuide, enableDebugger;
 
@@ -34,21 +34,15 @@ public class BCLibItems {
         return enableDebugger;
     }
 
-    // 书
-    public static RegistryObject<Item> guide;
-    public static RegistryObject<Item> guideNote;
-    public static RegistryObject<Item> debugger;
 
-
-    // Calen: 不能statc 因为要在主类static里enable 触发这里的static
+    // Calen: should not static because guide/debugger enabling in <cinit> in Lib main class will call <cinit> here
     public static void fmlPreInit() {
         if (isGuideEnabled()) {
-            guide = HELPER.addForcedItem("item.guide", BC_LIB_ITEM_DEFAULT_PROP, ItemGuide::new);
-            guideNote = HELPER.addForcedItem("item.guide.note", BC_LIB_ITEM_DEFAULT_PROP, ItemGuideNote::new);
+            guide = HELPER.addForcedItem("item.guide", ItemPropertiesCreator.common64(), ItemGuide::new);
+            guideNote = HELPER.addForcedItem("item.guide.note", ItemPropertiesCreator.common64(), ItemGuideNote::new);
         }
         if (isDebuggerEnabled()) {
-            debugger = HELPER.addForcedItem("item.debugger", BC_LIB_ITEM_DEFAULT_PROP, ItemDebugger::new);
+            debugger = HELPER.addForcedItem("item.debugger", ItemPropertiesCreator.common1(), ItemDebugger::new);
         }
     }
-
 }

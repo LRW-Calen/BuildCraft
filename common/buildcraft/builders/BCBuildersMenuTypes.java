@@ -73,11 +73,6 @@ public class BCBuildersMenuTypes {
         );
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-//        MenuScreens.register(BUILDER, BCBuildersScreenConstructors.BUILDER);
-//        MenuScreens.register(ARCHITECT_TABLE, BCBuildersScreenConstructors.ARCHITECT_TABLE);
-//        MenuScreens.register(ELECTRONIC_LIBRARY, BCBuildersScreenConstructors.ELECTRONIC_LIBRARY);
-//        MenuScreens.register(REPLACER, BCBuildersScreenConstructors.REPLACER);
-//        MenuScreens.register(FILLER, BCBuildersScreenConstructors.FILLER);
             MenuScreens.register(BUILDER, GuiBuilder::new);
             MenuScreens.register(ARCHITECT_TABLE, GuiArchitectTable::new);
             MenuScreens.register(ELECTRONIC_LIBRARY, GuiElectronicLibrary::new);

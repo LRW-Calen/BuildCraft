@@ -44,10 +44,10 @@ public class SchematicEntityDefault implements ISchematicEntity {
 //        ResourceLocation registryName = EntityList.getKey(context.entity);
         ResourceLocation registryName = context.entity.getType().getRegistryName();
         return registryName != null &&
-//            RulesLoader.READ_DOMAINS.contains(registryName.getResourceDomain()) &&
+//                RulesLoader.READ_DOMAINS.contains(registryName.getResourceDomain()) &&
                 RulesLoader.READ_DOMAINS.contains(registryName.getNamespace()) &&
                 RulesLoader.getRules(
-//                EntityList.getKey(context.entity),
+//                                EntityList.getKey(context.entity),
                                 context.entity.getType().getRegistryName(),
                                 context.entity.serializeNBT()
                         )
@@ -60,8 +60,9 @@ public class SchematicEntityDefault implements ISchematicEntity {
         entityNbt = context.entity.serializeNBT();
 //        pos = context.entity.getPositionVector().subtract(new Vec3(context.basePos));
         pos = context.entity.position().subtract(Vec3.atLowerCornerOf(context.basePos));
-        if (context.entity instanceof HangingEntity entityHanging) {
+        if (context.entity instanceof HangingEntity) {
 //            EntityHanging entityHanging = (EntityHanging) context.entity;
+            HangingEntity entityHanging = (HangingEntity) context.entity;
 //            hangingPos = entityHanging.getHangingPosition().subtract(context.basePos);
             hangingPos = entityHanging.getPos().subtract(context.basePos);
 //            hangingFacing = entityHanging.getHorizontalFacing();
@@ -155,13 +156,12 @@ public class SchematicEntityDefault implements ISchematicEntity {
             rotate = true;
         }
 //        Entity entity = EntityList.createEntityFromNBT(
-        Optional<Entity> entityOptional = EntityType.create(
+        Entity entity = EntityType.create(
                 replaceNbt != null
                         ? (CompoundTag) NBTUtilBC.merge(newEntityNbt, replaceNbt)
                         : newEntityNbt,
                 world
-        );
-        Entity entity = entityOptional.orElse(null);
+        ).orElse(null);
         if (entity != null) {
             if (rotate) {
 //                entity.setLocationAndAngles(

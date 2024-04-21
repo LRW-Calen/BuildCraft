@@ -6,12 +6,11 @@
 
 package buildcraft.robotics;
 
-import buildcraft.energy.BCEnergy;
 import buildcraft.lib.registry.RegistrationHelper;
 
 public class BCRoboticsItems {
 
-    private static final RegistrationHelper HELPER = new RegistrationHelper(BCEnergy.MODID);
+    private static final RegistrationHelper HELPER = new RegistrationHelper(BCRobotics.MODID);
 
 //    @SubscribeEvent
 //    public static void registerItems(RegistryEvent.Register<Item> event)

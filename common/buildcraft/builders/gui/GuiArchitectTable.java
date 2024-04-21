@@ -23,7 +23,7 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable> {
     private static final GuiIcon ICON_PROGRESS = new GuiIcon(TEXTURE_BASE, 0, 166, 24, 17);
     private static final GuiRectangle RECT_PROGRESS = new GuiRectangle(159, 34, 24, 17);
 
-    //    private GuiTextField nameField;
+    // private GuiTextField nameField;
     private EditBox nameField;
 
     public GuiArchitectTable(ContainerArchitectTable container, Inventory inventory, Component component) {
@@ -70,7 +70,7 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable> {
     @Override
 //    public void updateScreen()
     public void tick() {
-        // Calen FIXED: in 1.12.2 without super.tick(), the info icons will not spread
+        // Calen FIXED: in 1.12.2 without super.tick(), the ledgers will not spread
         super.tick();
 //        nameField.updateCursorCounter();
         nameField.tick();
@@ -83,14 +83,12 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable> {
         boolean typed = false;
         if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
-//            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.keyPressed(typedChar, keyCode, modifiers);
 //            container.sendNameToServer(nameField.getText().trim());
             container.sendNameToServer(nameField.getValue().trim());
         }
         if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.keyPressed(typedChar, keyCode, modifiers);
         } else {
             return true;
@@ -102,14 +100,12 @@ public class GuiArchitectTable extends GuiBC8<ContainerArchitectTable> {
         boolean typed = false;
         if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
-//            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.charTyped(typedChar, keyCode);
 //            container.sendNameToServer(nameField.getText().trim());
             container.sendNameToServer(nameField.getValue().trim());
         }
         if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.charTyped(typedChar, keyCode);
         } else {
             return true;

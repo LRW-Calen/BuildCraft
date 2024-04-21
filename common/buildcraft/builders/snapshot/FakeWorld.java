@@ -25,7 +25,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -50,7 +49,7 @@ import java.util.OptionalLong;
 @SuppressWarnings("NullableProblems")
 @OnlyIn(Dist.CLIENT)
 public class FakeWorld extends Level {
-    private static final ResourceKey<Biome> BIOME = Biomes.PLAINS;
+    //    private static final ResourceKey<Biome> BIOME = Biomes.PLAINS;
     @SuppressWarnings("WeakerAccess")
     public static final BlockPos BLUEPRINT_OFFSET = new BlockPos(0, 127, 0);
     private static final Holder<DimensionType> DIMENSION_TYPE = Holder.direct(DimensionType.create(OptionalLong.empty(), true, false, false, true, 1.0D, false, false, true, false, true, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD, DimensionType.OVERWORLD_EFFECTS, 0.0F));
@@ -68,25 +67,20 @@ public class FakeWorld extends Level {
     public FakeWorld() {
 //        super(
 //                new SaveHandlerMP(),
-////                new WorldInfo(
-//                new WritableLevelData(
+//                new WorldInfo(
 //                        new WorldSettings(
 //                                0,
 //                                GameType.CREATIVE,
 //                                true,
 //                                false,
-////                                WorldType.DEFAULT
-//                                RealmsServer.WorldType.NORMAL
+//                                WorldType.DEFAULT
 //                        ),
 //                        "fake"
 //                ),
-//                new WorldProvider()
-//                {
+//                new WorldProvider() {
 //                    @Override
-//                    public ResourceKey<DimensionType> getDimensionType()
-//                    {
-////                        return DimensionType.OVERWORLD;
-//                        return DimensionType.OVERWORLD_LOCATION;
+//                    public DimensionType getDimensionType() {
+//                        return DimensionType.OVERWORLD;
 //                    }
 //                },
 //                new Profiler(),
@@ -99,9 +93,8 @@ public class FakeWorld extends Level {
                         new ResourceLocation(BCBuilders.MODID, "fake")
                 ),
                 DIMENSION_TYPE,
-//                Profiler::new,
                 Minecraft.getInstance()::getProfiler,
-                /*pIsClientSide*/true,
+                /*pIsClientSide*/ true,
                 false,
                 0
         );
@@ -148,7 +141,7 @@ public class FakeWorld extends Level {
         }
     }
 
-    @org.jetbrains.annotations.Nullable
+    @Nullable
     @Override
     public BlockEntity getBlockEntity(BlockPos p_46716_) {
         return this.getChunkAt(p_46716_).getBlockEntity(p_46716_, LevelChunk.EntityCreationType.IMMEDIATE);
@@ -219,12 +212,12 @@ public class FakeWorld extends Level {
     }
 
     @Override
-    public void playSound(@org.jetbrains.annotations.Nullable Player p_46543_, double p_46544_, double p_46545_, double p_46546_, SoundEvent p_46547_, SoundSource p_46548_, float p_46549_, float p_46550_) {
+    public void playSound(@Nullable Player p_46543_, double p_46544_, double p_46545_, double p_46546_, SoundEvent p_46547_, SoundSource p_46548_, float p_46549_, float p_46550_) {
 
     }
 
     @Override
-    public void playSound(@org.jetbrains.annotations.Nullable Player p_46551_, Entity p_46552_, SoundEvent p_46553_, SoundSource p_46554_, float p_46555_, float p_46556_) {
+    public void playSound(@Nullable Player p_46551_, Entity p_46552_, SoundEvent p_46553_, SoundSource p_46554_, float p_46555_, float p_46556_) {
 
     }
 

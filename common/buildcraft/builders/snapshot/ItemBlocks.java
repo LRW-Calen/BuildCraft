@@ -9,7 +9,6 @@ package buildcraft.builders.snapshot;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -28,19 +27,20 @@ public class ItemBlocks {
 //                .filter(item -> item instanceof BlockItem || item instanceof BlockItemSpecial)
                 .filter(item -> item instanceof BlockItem)
                 .forEach(ItemBlocks::add);
-        add(
-//                Items.BED,
-                Items.OAK_DOOR,
-                Items.SPRUCE_DOOR,
-                Items.BIRCH_DOOR,
-                Items.JUNGLE_DOOR,
-                Items.ACACIA_DOOR,
-                Items.DARK_OAK_DOOR,
-                Items.IRON_DOOR
-//                Items.SKULL
-//                Items.SIGN
-        );
+//        add(
+////                Items.BED,
+////                Items.OAK_DOOR,
+////                Items.SPRUCE_DOOR,
+////                Items.BIRCH_DOOR,
+////                Items.JUNGLE_DOOR,
+////                Items.ACACIA_DOOR,
+////                Items.DARK_OAK_DOOR,
+////                Items.IRON_DOOR
+////                Items.SKULL
+////                Items.SIGN
+//        );
         ForgeRegistries.ITEMS.tags().getTag(ItemTags.BEDS).forEach(ItemBlocks::add);
+        ForgeRegistries.ITEMS.tags().getTag(ItemTags.DOORS).forEach(ItemBlocks::add);
         ForgeRegistries.ITEMS.tags().getTag(Tags.Items.HEADS).forEach(ItemBlocks::add);
         ForgeRegistries.ITEMS.tags().getTag(ItemTags.SIGNS).forEach(ItemBlocks::add);
     }

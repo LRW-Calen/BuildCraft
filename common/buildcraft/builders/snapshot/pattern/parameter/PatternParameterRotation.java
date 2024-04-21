@@ -76,8 +76,7 @@ public enum PatternParameterRotation implements IStatementParameter {
     }
 
     @Override
-    public PatternParameterRotation onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-                                            StatementMouseClick mouse) {
+    public PatternParameterRotation onClick(IStatementContainer source, IStatement stmt, ItemStack stack, StatementMouseClick mouse) {
         return null;
     }
 

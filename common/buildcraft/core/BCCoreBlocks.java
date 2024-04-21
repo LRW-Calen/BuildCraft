@@ -12,7 +12,7 @@ import buildcraft.core.tile.TileMarkerVolume;
 import buildcraft.factory.tile.TileEngineCreative;
 import buildcraft.factory.tile.TileEngineRedstone_BC8;
 import buildcraft.lib.BCLib;
-import buildcraft.lib.block.BlockPropertiesCreater;
+import buildcraft.lib.block.BlockPropertiesCreator;
 import buildcraft.lib.engine.BlockEngineBase_BC8;
 import buildcraft.lib.engine.TileEngineBase_BC8;
 import buildcraft.lib.registry.RegistrationHelper;
@@ -82,7 +82,7 @@ public class BCCoreBlocks {
             RegistryObject<BlockDecoration> reg = HELPER.addBlockAndItem(
                     "block.decorated",
                     registryIdDecorated + "_" + decoratedBlock.getSerializedName(),
-                    BlockPropertiesCreater.createDefaultProperties(Material.METAL),
+                    BlockPropertiesCreator.createDefaultProperties(Material.METAL),
                     (idBC, prop) -> new BlockDecoration(idBC, prop, decoratedBlock),
                     (idBC, prop) -> new ItemBlockDecorated(idBC, prop, decoratedBlock)
             );
@@ -94,8 +94,8 @@ public class BCCoreBlocks {
 //        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.LASER_BACK), ItemBlockDecorated::new);
 //        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.PAPER), ItemBlockDecorated::new);
 //        decorated = HELPER.addBlockAndItem("block.decorated", BlockPropertiesCreater.createDefaultProperties(Material.METAL), (idBC, prop)->new BlockDecoration(idBC,prop, EnumDecoratedBlock.TEMPLATE), ItemBlockDecorated::new);
-        markerVolume = HELPER.addBlockAndItem("block.marker.volume", BlockPropertiesCreater.createDefaultProperties(Material.DECORATION).strength(0.25F), BlockMarkerVolume::new);
-        markerPath = HELPER.addBlockAndItem("block.marker.path", BlockPropertiesCreater.createDefaultProperties(Material.DECORATION), BlockMarkerPath::new);
+        markerVolume = HELPER.addBlockAndItem("block.marker.volume", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION).strength(0.25F), BlockMarkerVolume::new);
+        markerPath = HELPER.addBlockAndItem("block.marker.path", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION), BlockMarkerPath::new);
         if (BCLib.DEV) {
 //            powerTester = HELPER.addBlockAndItem(new BlockPowerConsumerTester(Material.IRON,"block.power_tester"));
         }

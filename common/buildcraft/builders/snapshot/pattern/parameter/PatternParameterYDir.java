@@ -69,8 +69,7 @@ public enum PatternParameterYDir implements IStatementParameter {
     }
 
     @Override
-    public PatternParameterYDir onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-                                        StatementMouseClick mouse) {
+    public PatternParameterYDir onClick(IStatementContainer source, IStatement stmt, ItemStack stack, StatementMouseClick mouse) {
         return null;
     }
 

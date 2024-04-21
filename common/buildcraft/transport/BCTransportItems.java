@@ -4,12 +4,11 @@ import buildcraft.api.transport.pipe.IItemPipe;
 import buildcraft.api.transport.pipe.PipeDefinition;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.item.ItemPluggableSimple;
+import buildcraft.lib.item.ItemPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import buildcraft.transport.item.ItemWire;
 import buildcraft.transport.pipe.PipeRegistry;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.Map;
@@ -17,32 +16,7 @@ import java.util.Map;
 public class BCTransportItems {
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCTransport.MODID);
 
-
-    public static Item.Properties BC_TRANSPORT_ITEM_PROP_DEFAULT =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_MAIN_TAB)
-                    .stacksTo(64)
-                    .rarity(Rarity.COMMON);
-    public static Item.Properties BC_TRANSPORT_PLUG_PROP =
-            new Item.Properties()
-//                    .tab(BCCreativeTab.BC_PLUGS_TAB)
-                    .stacksTo(64)
-                    .rarity(Rarity.COMMON);
-
-//    // Calen Moved here
-//    public static final Item PLUG_BLOCKER = null;
-//    public static final Item PLUG_POWER_ADAPTOR = null;
-//
-//    public static final Item PIPE_STRUCTURE = null;
-//    public static final Item PIPE_WOOD_ITEM = null;
-//    public static final Item PIPE_EMZULI_ITEM = null;
-//    public static final Item PIPE_DIAMOND_WOOD_ITEM = null;
-//    public static final Item PIPE_WOOD_FLUID = null;
-//    public static final Item PIPE_DIAMOND_WOOD_FLUID = null;
-
     public static RegistryObject<ItemBC_Neptune> waterproof;
-
-    public static Map<PipeDefinition, Map<DyeColor, RegistryObject<? extends IItemPipe>>> allPipes;
 
     public static Map<DyeColor, RegistryObject<? extends IItemPipe>> pipeStructure;
 
@@ -101,7 +75,7 @@ public class BCTransportItems {
     public static RegistryObject<ItemWire> wire;
 
     public static void preInit() {
-        waterproof = HELPER.addItem("item.waterproof", BC_TRANSPORT_ITEM_PROP_DEFAULT, ItemBC_Neptune::new);
+        waterproof = HELPER.addItem("item.waterproof", ItemPropertiesCreator.common64(), ItemBC_Neptune::new);
 
         pipeStructure = makePipeItem(BCTransportPipes.structure);
 
@@ -144,21 +118,16 @@ public class BCTransportItems {
         // pipePowerIron = makePipeItem(BCTransportPipes.ironPower);
         pipePowerSandstone = makePipeItem(BCTransportPipes.sandstonePower);
 
-        plugBlocker = HELPER.addItem(
-                "item.plug.blocker",
-                BC_TRANSPORT_PLUG_PROP,
+        plugBlocker = HELPER.addItem("item.plug.blocker", ItemPropertiesCreator.common64(),
                 (idBC, properties) -> new ItemPluggableSimple(idBC, properties, BCTransportPlugs.blocker)
         );
-        plugPowerAdaptor = HELPER.addItem(
-                "item.plug.power_adaptor",
-                BC_TRANSPORT_PLUG_PROP,
+        plugPowerAdaptor = HELPER.addItem("item.plug.power_adaptor", ItemPropertiesCreator.common64(),
                 (idBC, properties) -> new ItemPluggableSimple(idBC, properties, BCTransportPlugs.powerAdaptor, ItemPluggableSimple.PIPE_BEHAVIOUR_ACCEPTS_RS_POWER)
         );
 
-        wire = HELPER.addItem("item.wire", BC_TRANSPORT_PLUG_PROP, ItemWire::new);
+        wire = HELPER.addItem("item.wire", ItemPropertiesCreator.common64(), ItemWire::new);
     }
 
-    //    public static RegistryObject<ItemPipeHolder> makePipeItem(PipeDefinition def)
     public static Map<DyeColor, RegistryObject<? extends IItemPipe>> makePipeItem(PipeDefinition def) {
         return PipeRegistry.INSTANCE.createItemForPipe(def);
     }

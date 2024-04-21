@@ -23,7 +23,7 @@ public class BCBuildersSchematics {
         registerSchematicFactory("air", 0, SchematicBlockAir::predicate, SchematicBlockAir::new);
         // Calen debug
         if (!SchematicBlockFactoryRegistry.getFactoriesSynchronized().stream().anyMatch(f -> f.name.getPath().equals("air"))) {
-            throw new RuntimeException("[builders.schematics.debug] Added Schematic Factory [air], but not found, something wrong...");
+            throw new RuntimeException("[builders.schematics.debug] Added Schematic Factory [air], but not found. Something wrong...");
         }
         registerSchematicFactory("default", 100, SchematicBlockDefault::predicate, SchematicBlockDefault::new);
         registerSchematicFactory("fluid", 200, SchematicBlockFluid::predicate, SchematicBlockFluid::new);
@@ -36,8 +36,7 @@ public class BCBuildersSchematics {
                 SchematicEntityDefault::new);
     }
 
-    private static <S extends ISchematicBlock> void registerSchematicFactory(String name, int priority,
-                                                                             Predicate<SchematicBlockContext> predicate, Supplier<S> supplier) {
+    private static synchronized <S extends ISchematicBlock> void registerSchematicFactory(String name, int priority, Predicate<SchematicBlockContext> predicate, Supplier<S> supplier) {
         SchematicBlockFactoryRegistry.registerFactory(name, priority, predicate, supplier);
     }
 

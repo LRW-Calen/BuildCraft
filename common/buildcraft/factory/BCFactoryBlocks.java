@@ -2,7 +2,7 @@ package buildcraft.factory;
 
 import buildcraft.factory.block.*;
 import buildcraft.factory.tile.*;
-import buildcraft.lib.block.BlockPropertiesCreater;
+import buildcraft.lib.block.BlockPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -37,10 +37,10 @@ public class BCFactoryBlocks {
     public static RegistryObject<BlockEntityType<TileHeatExchange>> heatExchangeTile;
 
     static {
-        autoWorkbenchItems = HELPER.addBlockAndItem("block.autoworkbench.item", BlockPropertiesCreater.createDefaultProperties(Material.STONE), BlockAutoWorkbenchItems::new);
+        autoWorkbenchItems = HELPER.addBlockAndItem("block.autoworkbench.item", BlockPropertiesCreator.createDefaultProperties(Material.STONE), BlockAutoWorkbenchItems::new);
 //        autoWorkbenchFluids = HELPER.addBlockAndItem("block.autoworkbench.fluid", BlockPropertiesCreater.createDefaultProperties(Material.STONE), BlockAutoWorkbenchFluids::new);
-        miningWell = HELPER.addBlockAndItem("block.mining_well", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockMiningWell::new);
-        pump = HELPER.addBlockAndItem("block.pump", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockPump::new);
+        miningWell = HELPER.addBlockAndItem("block.mining_well", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockMiningWell::new);
+        pump = HELPER.addBlockAndItem("block.pump", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockPump::new);
         tube = HELPER.addBlock(
                 "block.tube",
                 BlockBehaviour.Properties.of(Material.METAL)
@@ -50,10 +50,10 @@ public class BCFactoryBlocks {
                 ,
                 BlockTube::new
         );
-        floodGate = HELPER.addBlockAndItem("block.flood_gate", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockFloodGate::new);
+        floodGate = HELPER.addBlockAndItem("block.flood_gate", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockFloodGate::new);
         tank = HELPER.addBlockAndItem(
                 "block.tank",
-                BlockPropertiesCreater.createDefaultProperties(Material.METAL)
+                BlockPropertiesCreator.createDefaultProperties(Material.METAL)
                         .sound(SoundType.GLASS)
                         .lightLevel((state) -> 0)
                         .noOcclusion()
@@ -61,14 +61,14 @@ public class BCFactoryBlocks {
                 BlockTank::new
         );
         chute = HELPER.addBlockAndItem("block.chute",
-                BlockPropertiesCreater.createDefaultProperties(Material.METAL)
+                BlockPropertiesCreator.createDefaultProperties(Material.METAL)
                         .lightLevel((state) -> 0)
                         .noOcclusion()
                 ,
                 BlockChute::new);
         distiller = HELPER.addBlockAndItem(
                 "block.distiller",
-                BlockPropertiesCreater.createDefaultProperties(Material.METAL)
+                BlockPropertiesCreator.createDefaultProperties(Material.METAL)
                         .sound(SoundType.GLASS)
                         .lightLevel((state) -> 0)
                         .noOcclusion()
@@ -77,7 +77,7 @@ public class BCFactoryBlocks {
         );
         heatExchange = HELPER.addBlockAndItem(
                 "block.heat_exchange",
-                BlockPropertiesCreater.createDefaultProperties(Material.METAL)
+                BlockPropertiesCreator.createDefaultProperties(Material.METAL)
                         .sound(SoundType.GLASS)
                         .noOcclusion()
                         .isViewBlocking((p0, p1, p2) -> false)
@@ -87,7 +87,7 @@ public class BCFactoryBlocks {
         );
         waterGel = HELPER.addBlock(
                 "block.water_gel",
-                BlockPropertiesCreater.createDefaultProperties(Material.CLAY)
+                BlockPropertiesCreator.createDefaultProperties(Material.CLAY)
                         .sound(SoundType.SLIME_BLOCK)
                         .randomTicks()
                 ,

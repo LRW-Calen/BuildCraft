@@ -118,7 +118,6 @@ public enum BCBuildersEventDist {
         if (snapshot != null) {
             int pX = event.getX();
 //            int pY = event.getY() + event.getHeight() + 10;
-//            int pY = event.getY() + event.getFont().lineHeight * event.getComponents().size() + 10;
             int pY = event.getY() + 10;
             for (ClientTooltipComponent line : event.getComponents()) {
                 pY += line.getHeight();
@@ -168,7 +167,6 @@ public enum BCBuildersEventDist {
             RenderSystem.disableBlend();
             RenderSystem.enableTexture();
 
-            // Calen debug
             poseStack.pushPose();
             ClientSnapshots.INSTANCE.renderSnapshot(snapshot, pX, pY, sX, sY, poseStack);
             poseStack.popPose();

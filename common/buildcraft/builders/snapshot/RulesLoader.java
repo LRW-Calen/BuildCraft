@@ -148,7 +148,7 @@ public class RulesLoader {
                                                                                             )
                                                                                             .map(nameValue -> nameValue.split("="))
                                                                                             .allMatch(nameValue ->
-//                                                                                    blockState.getPropertyKeys().stream()
+//                                                                                                            blockState.getPropertyKeys().stream()
                                                                                                             blockState.getProperties().stream()
                                                                                                                     .filter(property -> property.getName().equals(nameValue[0]))
                                                                                                                     .findFirst()

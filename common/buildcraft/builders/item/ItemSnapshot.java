@@ -206,17 +206,9 @@ public class ItemSnapshot extends ItemBC_Neptune {
         }
 
         public static EnumItemSnapshotType getFromStack(ItemStack stack) {
-//            int meta = 0;
-//            if (stack.hasTag() && stack.getTag().contains("meta"))
-//            {
-//                meta = stack.getTag().getInt("meta");
-//            }
-////            return values()[Math.abs(stack.getMetadata()) % values().length];
-//            return values()[Math.abs(meta) % values().length];
+//            return values()[Math.abs(stack.getMetadata()) % values().length];
 
-            // Calen
             if (stack.getItem() instanceof ItemSnapshot snapshot) {
-//                boolean hasHeaderTag = stack.hasTag() && stack.getTag().contains("header");
                 boolean hasHeaderTag = stack.hasTag() && stack.getTag().contains(TAG_KEY);
                 return switch (snapshot.TYPE) {
                     case TEMPLATE -> hasHeaderTag ? TEMPLATE_USED : TEMPLATE_CLEAN;

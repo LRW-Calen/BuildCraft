@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// TODO Calen
 public enum ClientSnapshots {
     INSTANCE;
 
@@ -216,14 +217,14 @@ public enum ClientSnapshots {
         int snapshotSize = Math.max(Math.max(snapshot.size.getX(), snapshot.size.getY()), snapshot.size.getY());
 //        GlStateManager.translate(0, 0, -snapshotSize * 2F - 3);
         poseStack.translate(0, 0, -snapshotSize * 2F - 3);
-        // TODO Calen from 1.12.2 是这样嘛?
+        // TODO Calen from 1.12.2 correct?
         // TODO Calen debug
 //        GlStateManager.rotate(20, 1, 0, 0);
 //        GL11.glRotatef(20, 1, 0, 0);
 //        RenderSystem.getInverseViewRotationMatrix().set(1, 0, 20);
         poseStack.mulPose(Vector3f.XP.rotation(20));
 //        poseStack.mulPose(Vector3f.ZP.rotation(20));
-        // TODO Calen from 1.12.2 是这样嘛?
+        // TODO Calen from 1.12.2 correct?
         // TODO Calen debug
 //        GlStateManager.rotate((System.currentTimeMillis() % 3600) / 10F, 0, 1, 0);
 //        GL11.glRotatef((System.currentTimeMillis() % 3600) / 10F, 0, 1, 0);
@@ -274,7 +275,7 @@ public enum ClientSnapshots {
 //                            0
 //                        );
                         poseStack.pushPose();
-                        // TODO Calen translate 要不要带pos.get_()???
+                        // TODO Calen translate should pos.get_()???
                         poseStack.translate(
                                 pos.getX() - FakeWorld.BLUEPRINT_OFFSET.getX(),
                                 pos.getY() - FakeWorld.BLUEPRINT_OFFSET.getY(),
@@ -327,7 +328,7 @@ public enum ClientSnapshots {
 //                    0,
 //                    true
 //            );
-            // TODO Calen translate 要不要带pos.get_()???
+            // TODO Calen translate should pos.get_()???
             poseStack.pushPose();
             poseStack.translate(pos.x, pos.y, pos.z);
             Minecraft.getInstance().getEntityRenderDispatcher().render(

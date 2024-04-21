@@ -64,8 +64,7 @@ public class SchematicBlockManager {
         try {
             schematicBlock.deserializeNBT(data);
             return schematicBlock;
-        }
-        catch (InvalidInputDataException e) {
+        } catch (InvalidInputDataException e) {
             throw new InvalidInputDataException("Failed to load the schematic from " + data, e);
         }
     }

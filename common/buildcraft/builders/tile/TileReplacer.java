@@ -78,7 +78,6 @@ public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvi
                 !invSchematicTo.getStackInSlot(0).isEmpty())
         {
 //            Header header = BCBuildersItems.snapshot.getHeader(invSnapshot.getStackInSlot(0));
-//            Header header = BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getHeader(invSnapshot.getStackInSlot(0));
             Header header = BCBuildersItems.snapshotBLUEPRINT.get().getHeader(invSnapshot.getStackInSlot(0));
             if (header != null) {
                 Snapshot snapshot = GlobalSavedDataSnapshots.get(level).getSnapshot(header.key);
@@ -100,7 +99,6 @@ public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvi
                         invSnapshot.setStackInSlot(
                                 0,
 //                                BCBuildersItems.snapshot.getUsed(
-//                                BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getUsed(
                                 BCBuildersItems.snapshotBLUEPRINT.get().getUsed(
                                         EnumSnapshotType.BLUEPRINT,
                                         new Header(
@@ -113,8 +111,7 @@ public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvi
                         );
                         invSchematicFrom.setStackInSlot(0, ItemStack.EMPTY);
                         invSchematicTo.setStackInSlot(0, ItemStack.EMPTY);
-                    }
-                    catch (InvalidInputDataException e) {
+                    } catch (InvalidInputDataException e) {
                         e.printStackTrace();
                     }
                 }

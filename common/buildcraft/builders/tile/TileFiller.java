@@ -202,7 +202,6 @@ public class TileFiller extends TileBC_Neptune
     }
 
     @Override
-//    public void update()
     public void update() {
         ITickable.super.update();
         if (level.isClientSide) {
@@ -541,6 +540,8 @@ public class TileFiller extends TileBC_Neptune
         }
         this.mode = mode;
     }
+
+    // MenuProvider
 
     @Override
     public Component getDisplayName() {

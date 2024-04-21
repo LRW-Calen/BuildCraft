@@ -102,35 +102,27 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
     private double blockPercentSoFar;
     private double moveDistanceSoFar;
 
-    //    private List<AxisAlignedBB> collisionBoxes = ImmutableList.of();
+    // private List<AxisAlignedBB> collisionBoxes = ImmutableList.of();
     private List<VoxelShape> collisionBoxes = ImmutableList.of();
     private Vec3 collisionDrillPos;
 
-    //    private final IWorldEventListener worldEventListener = new WorldEventListenerAdapter()
-//    private final GameEventListener worldEventListener = new WorldEventListenerAdapter()
-//    {
+    // private final IWorldEventListener worldEventListener = new WorldEventListenerAdapter()
+//    private final GameEventListener worldEventListener = new WorldEventListenerAdapter() {
 //        @Override
-//        public boolean handleGameEvent(Level p_157846_, GameEvent event, @Nullable Entity p_157848_, BlockPos p_157849_)
-//        {
+//        public boolean handleGameEvent(Level p_157846_, GameEvent event, @Nullable Entity p_157848_, BlockPos p_157849_) {
 //            return event.;
 //        }
 //
 //        @Override
-//        public void notifyBlockUpdate(World w, BlockPos updatePos, IBlockState oldState, IBlockState newState, int flags)
-//        {
+//        public void notifyBlockUpdate(World w, BlockPos updatePos, IBlockState oldState, IBlockState newState, int flags) {
 //            w.profiler.startSection("bc_quarry_listener");
-//            if (frameBox.isInitialized() && miningBox.isInitialized())
-//            {
-//                if (frameBox.contains(updatePos))
-//                {
+//            if (frameBox.isInitialized() && miningBox.isInitialized()) {
+//                if (frameBox.contains(updatePos)) {
 //                    check(updatePos);
 //                }
-//                else if (miningBox.contains(updatePos) && boxIterator != null)
-//                {
-//                    if (boxIterator.hasVisited(updatePos))
-//                    {
-//                        if (!canMoveThrough(updatePos) && canMoveDownTo(updatePos))
-//                        {
+//                else if (miningBox.contains(updatePos) && boxIterator != null) {
+//                    if (boxIterator.hasVisited(updatePos)) {
+//                        if (!canMoveThrough(updatePos) && canMoveDownTo(updatePos)) {
 //                            boxIterator.moveTo(updatePos);
 //                        }
 //                    }
@@ -191,16 +183,14 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
         return new BoxIterator(miningBox, AxisOrder.getFor(axisOrder, inv), true);
     }
 
-    /**
-     * Gets the current positions where frame blocks should be placed, in order.
+    /** Gets the current positions where frame blocks should be placed, in order.
      * <p>
      * Assumes that {@link #frameBox} is correct for the current position. Does not take into account the current facing
      * of the quarry, as that is assumed to be involved in the {@link #frameBox} itself.
      *
      * @return An ordered list of the positions that the frame should be placed in. The list is in placement order.
      * @throws IllegalStateException if something went wrong during iteration, or the current {@link #frameBox} was
-     *                               incorrect compared to {@link #getBlockPos()}
-     */
+     *             incorrect compared to {@link #getBlockPos()} */
     private List<BlockPos> getFramePositions() {
         // visitedSet and framePositions are considered the same
         // - both should contain the same elements
@@ -308,8 +298,8 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
         BlockPos areaPos = worldPosition.relative(facing.getOpposite());
         BlockEntity tile = level.getBlockEntity(areaPos);
         BlockPos min = null, max = null;
-        if (tile instanceof IAreaProvider provider) {
-//            IAreaProvider provider = (IAreaProvider) tile;
+        if (tile instanceof IAreaProvider) {
+            IAreaProvider provider = (IAreaProvider) tile;
             min = provider.min();
             max = provider.max();
             int dx = max.getX() - min.getX();
@@ -547,7 +537,6 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
     }
 
     @Override
-//    public void update()
     public void update() {
         ITickable.super.update();
         if (drillPos == null) {
@@ -699,7 +688,9 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
 //                        AxisAlignedBB box = miningBox.getBoundingBox();
                         AABB box = miningBox.getBoundingBox();
 //                        if (box.maxX - box.minX == 63 && box.maxZ - box.minZ == 63)
-                        if ((box.maxX - box.minX == 63 || box.maxX - box.minX == 64) && (box.maxZ - box.minZ == 63 || box.maxZ - box.minZ == 64)) {
+                        double dx = box.maxX - box.minX;
+                        double dz = box.maxZ - box.minZ;
+                        if ((dx == 63 || dx == 64 || dx == 65) && (dz == 63 || dz == 64 || dz == 65)) {
                             AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT_COMPLETE);
                         }
                     }
@@ -712,7 +703,7 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
         }
     }
 
-    // TODO Calen CollisionBox out of block
+    // TODO Calen CollisionBox of moving parts
 //    public List<AxisAlignedBB> getCollisionBoxes()
     public List<VoxelShape> getCollisionBoxes() {
         if (drillPos != null && drillPos != collisionDrillPos && frameBox.isInitialized()) {
@@ -1034,17 +1025,13 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
             return Math.max(0, getTarget() - power);
         }
 
-        /**
-         * @param target TODO
-         * @return {@code true} if this task has been completed, or cancelled.
-         */
+        /** @param target TODO
+         * @return {@code true} if this task has been completed, or cancelled. */
         protected abstract boolean onReceivePower(long added, long target);
 
         protected abstract boolean finish(long added, long target);
 
-        /**
-         * @return {@code true} if this task has been completed, or cancelled.
-         */
+        /** @return {@code true} if this task has been completed, or cancelled. */
         final boolean addPower(long microJoules) {
             power += microJoules;
             long target = getTarget();
@@ -1060,7 +1047,7 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
     }
 
     public class TaskBreakBlock extends Task {
-        //        public BlockPos breakPos = BlockPos.ORIGIN;
+        // public BlockPos breakPos = BlockPos.ORIGIN;
         public BlockPos breakPos = BlockPos.ZERO;
 
         TaskBreakBlock() {

@@ -74,7 +74,7 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer> {
     @Override
 //    public void updateScreen()
     public void tick() {
-        // Calen FIXED: in 1.12.2 without super.tick(), theinfo icons will not spread
+        // Calen FIXED: in 1.12.2 without super.tick(), ledgers will not spread
         super.tick();
 //        nameField.updateCursorCounter();
         nameField.tick();
@@ -87,13 +87,11 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer> {
         boolean typed = false;
         if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
-//            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.keyPressed(typedChar, keyCode, modifiers);
             // container.sendNameToServer(nameField.getText().trim());
         }
         if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.keyPressed(typedChar, keyCode, modifiers);
         } else {
             return true;
@@ -104,13 +102,11 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer> {
         boolean typed = false;
         if (nameField.isFocused()) {
 //            typed = nameField.textboxKeyTyped(typedChar, keyCode);
-//            typed = nameField.charTyped(typedChar, keyCode);
             typed = nameField.charTyped(typedChar, keyCode);
             // container.sendNameToServer(nameField.getText().trim());
         }
         if (!typed) {
 //            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.charTyped(typedChar, keyCode);
         } else {
             return true;

@@ -69,9 +69,9 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
     private boolean firstCallInit = true;
 
     @Override
-    protected void init() {
+    protected final void init() {
         super.init();
-        // Calen FIX: in 1.12.2
+        // Calen FIX: in 1.12.2 widgets will be copied after window resized
         if (firstCallInit) {
             initGui();
         }

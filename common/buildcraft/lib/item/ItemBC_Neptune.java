@@ -15,9 +15,7 @@ import net.minecraftforge.common.extensions.IForgeItem;
 import java.util.Arrays;
 
 public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem {
-    /**
-     * The tag used to identify this in the {@link TagManager}
-     */
+    /** The tag used to identify this in the {@link TagManager} */
     public final String idBC;
 
     public ItemBC_Neptune(String idBC, Item.Properties properties, Runnable... runBeforeInit) {
@@ -40,13 +38,11 @@ public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem 
         }
     }
 
-    /**
-     * Identical to {@link #fillItemCategory(CreativeModeTab, NonNullList)} in every way, EXCEPT that this is only called if
+    /** Identical to {@link #fillItemCategory(CreativeModeTab, NonNullList)} in every way, EXCEPT that this is only called if
      * this is actually in the given creative tab.
      *
      * @param tab The {@link CreativeModeTab} to display the items in. This is provided just in case an item has multiple
-     *            subtypes, split across different tabs
-     */
+     *            subtypes, split across different tabs */
     protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> items) {
         items.add(new ItemStack(this));
     }

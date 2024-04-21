@@ -37,8 +37,8 @@ public class ItemStackRef {
     public ItemStack get(Tag nbt) {
         ItemStack itemStack = new ItemStack(
                 Objects.requireNonNull(
+//                        Item.getByNameOrId(
                         ForgeRegistries.ITEMS.getValue(new ResourceLocation(
-//                Item.getByNameOrId(
                                 item
                                         .get(nbt)
                                         .orElseThrow(NullPointerException::new)

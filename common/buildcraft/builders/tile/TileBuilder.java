@@ -92,13 +92,9 @@ public class TileBuilder extends TileBC_Neptune
     private final MjBattery battery = new MjBattery(16000 * MjAPI.MJ);
     private boolean canExcavate = true;
 
-    /**
-     * Stores the real path - just a few block positions.
-     */
+    /** Stores the real path - just a few block positions. */
     public List<BlockPos> path = null;
-    /**
-     * Stores the real path plus all possible block positions inbetween.
-     */
+    /** Stores the real path plus all possible block positions inbetween. */
     private List<BlockPos> basePoses = new ArrayList<>();
     private int currentBasePosIndex = 0;
     private Snapshot snapshot = null;
@@ -141,7 +137,7 @@ public class TileBuilder extends TileBC_Neptune
                 currentBasePosIndex = 0;
                 snapshot = null;
                 if (after.getItem() instanceof ItemSnapshot) {
-//                    Snapshot.Header header = BCBuildersItems.snapshotBLUEPRINT_CLEAN.get().getHeader(after);
+//                    Snapshot.Header header = BCBuildersItems.snapshot.getHeader(after);
                     Snapshot.Header header = BCBuildersItems.snapshotBLUEPRINT.get().getHeader(after);
                     if (header != null) {
                         Snapshot newSnapshot = GlobalSavedDataSnapshots.get(level).getSnapshot(header.key);
@@ -167,20 +163,9 @@ public class TileBuilder extends TileBC_Neptune
         super.clearRemoved();
         templateBuilder.validate();
         blueprintBuilder.validate();
-
-//        // Calen: update snapshot type
-//        itemManager.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->
-//        {
-//            ItemStack stack = h.getStackInSlot(0);
-//            if (stack.getItem() instanceof ItemSnapshot itemSnapshot)
-//            {
-////                Snapshot.Header header = itemSnapshot.getHeader(stack);
-////                snapshot = GlobalSavedDataSnapshots.get(world).getSnapshot(header.key);
-//                onSlotChange(invSnapshot, 0, StackUtil.EMPTY, stack);
-//            }
-//        });
     }
 
+    // Calen when this called, #saveAdditional has already been called
     @Override
 //    public void invalidate()
     public void setRemoved() {
@@ -188,20 +173,6 @@ public class TileBuilder extends TileBC_Neptune
         super.setRemoved();
         templateBuilder.invalidate();
         blueprintBuilder.invalidate();
-
-
-        // Calen: should not call here, the items has already been stored to nbt, this call is useless
-//        // Calen: save snapshot items to real slots
-//        itemManager.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->
-//        {
-//            ItemStack stack = h.getStackInSlot(0);
-//            if (stack.getItem() instanceof ItemSnapshot itemSnapshot)
-//            {
-////                Snapshot.Header header = itemSnapshot.getHeader(stack);
-////                snapshot = GlobalSavedDataSnapshots.get(world).getSnapshot(header.key);
-//                onSlotChange(invSnapshot, 0, stack, StackUtil.EMPTY);
-//            }
-//        });
     }
 
     private void updateSnapshot(boolean canGetFacing) {
@@ -272,53 +243,9 @@ public class TileBuilder extends TileBC_Neptune
         updateBasePoses();
     }
 
-    // Calen: avoid getBlockState on WorldGenLevel, or that will cause Exception
-    private boolean needDelayedPosUpdate = false;
-
     @Override
-//    public void update()
     public void update() {
         ITickable.super.update();
-        if (needDelayedPosUpdate) {
-            needDelayedPosUpdate = false;
-////            updateBasePoses(); // Calen: moved to ITickable tasks
-//            // Calen FIX: the items prepared to build will not disappear after tileentity reloaded in 1.18.2
-//            if (snapshot == null)
-//            {
-//                // Calen: load snapshot, this should before builder#deserializeNBT
-//                itemManager.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->
-//                {
-//                    ItemStack stack = h.getStackInSlot(0);
-//                    if (stack.getItem() instanceof ItemSnapshot itemSnapshot)
-//                    {
-//                        Snapshot.Header header = itemSnapshot.getHeader(stack);
-//                        snapshot = GlobalSavedDataSnapshots.get(level).getSnapshot(header.key);
-//                    }
-//                });
-//            }
-//            if (builderDelayLoadTag != null)
-//            {
-//                updateSnapshot(false);
-//                Optional.ofNullable(getBuilder())
-//                        .ifPresent(builder -> builder.deserializeNBT(builderDelayLoadTag));
-//                builderDelayLoadTag = null;
-//                // Calen: make the required items able to be seen, this should after builder#deserializeNBT
-//                itemManager.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(h ->
-//                {
-//                    ItemStack stack = h.getStackInSlot(0);
-//                    if (stack.getItem() instanceof ItemSnapshot itemSnapshot)
-//                    {
-//                        onSlotChange(invSnapshot, 0, StackUtil.EMPTY, stack);
-//                    }
-//                });
-//            }
-//            // Calen: check snapshot type and update blockstate
-//            BlockState state = level.getBlockState(worldPosition);
-//            if (state.getBlock() instanceof BlockBuilder builder)
-//            {
-//                builder.checkActualStateAndUpdate(state, level, worldPosition, this);
-//            }
-        }
         ProfilerFiller profiler = level.getProfiler();
         profiler.push("main");
         profiler.push("power");
@@ -399,8 +326,6 @@ public class TileBuilder extends TileBC_Neptune
                     path = null;
                 }
                 // Calen: calling level.getBlockState when loading world will get Air Block
-//                updateBasePoses();
-//                needDelayedPosUpdate = true;
                 runWhenWorldNotNull(this::updateBasePoses, true);
                 if (buffer.readBoolean()) {
                     snapshotType = buffer.readEnum(EnumSnapshotType.class);
@@ -470,6 +395,7 @@ public class TileBuilder extends TileBC_Neptune
         canExcavate = nbt.getBoolean("canExcavate");
         rotation = NBTUtilBC.readEnum(nbt.get("rotation"), Rotation.class);
         // Calen: don't save/load currentBox/currentBasePosIndex/snapshotType/snapshot withNBT, or this will make the builder destroy the placed block and place again
+        // Calen FIX: the items prepared to build will not disappear after tileentity reloaded in 1.18.2
         runWhenWorldNotNull(() ->
                 {
                     // Calen FIX: the items prepared to build will not disappear after tileentity reloaded in 1.18.2
@@ -505,24 +431,7 @@ public class TileBuilder extends TileBC_Neptune
                 },
                 false
         );
-//        if (level == null)
-//        {
-//            needDelayedPosUpdate = true;
-//            if (nbt.contains("builder"))
-//            {
-//                builderDelayLoadTag = nbt.getCompound("builder");
-//            }
-//            return;
-//        }
-//        if (nbt.contains("builder"))
-//        {
-//            updateSnapshot(false);
-//            Optional.ofNullable(getBuilder())
-//                    .ifPresent(builder -> builder.deserializeNBT(nbt.getCompound("builder")));
-//        }
     }
-
-//    private CompoundTag builderDelayLoadTag;
 
     // Rendering
 

@@ -111,8 +111,7 @@ public enum PatternParameterXZDir implements IStatementParameter {
     }
 
     @Override
-    public PatternParameterXZDir onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-                                         StatementMouseClick mouse) {
+    public PatternParameterXZDir onClick(IStatementContainer source, IStatement stmt, ItemStack stack, StatementMouseClick mouse) {
         return null;
     }
 

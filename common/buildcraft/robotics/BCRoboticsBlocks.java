@@ -6,7 +6,7 @@
 
 package buildcraft.robotics;
 
-import buildcraft.lib.block.BlockPropertiesCreater;
+import buildcraft.lib.block.BlockPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import buildcraft.robotics.block.BlockZonePlanner;
 import buildcraft.robotics.tile.TileZonePlanner;
@@ -22,7 +22,7 @@ public class BCRoboticsBlocks {
     public static RegistryObject<BlockEntityType<TileZonePlanner>> zonePlannerTile;
 
     public static void preInit() {
-        zonePlanner = HELPER.addBlockAndItem("block.zone_planner", BlockPropertiesCreater.createDefaultProperties(Material.METAL), BlockZonePlanner::new);
+        zonePlanner = HELPER.addBlockAndItem("block.zone_planner", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockZonePlanner::new);
 
         zonePlannerTile = HELPER.registerTile("tile.zone_planner", TileZonePlanner::new, zonePlanner);
     }
