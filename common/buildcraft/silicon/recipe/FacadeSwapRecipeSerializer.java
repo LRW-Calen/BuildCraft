@@ -1,6 +1,5 @@
 package buildcraft.silicon.recipe;
 
-import buildcraft.datagen.silicon.FacadeSwapRecipeBuilder;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.SimpleRecipeSerializer;

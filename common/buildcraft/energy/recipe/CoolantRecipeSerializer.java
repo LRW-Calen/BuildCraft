@@ -4,7 +4,6 @@ import buildcraft.api.fuels.EnumCoolantType;
 import buildcraft.api.fuels.ICoolant;
 import buildcraft.api.fuels.IFluidCoolant;
 import buildcraft.api.fuels.ISolidCoolant;
-import buildcraft.datagen.energy.CoolantRecipeBuilder;
 import buildcraft.lib.fluid.CoolantRegistry.FluidCoolant;
 import buildcraft.lib.fluid.CoolantRegistry.SolidCoolant;
 import buildcraft.lib.misc.JsonUtil;

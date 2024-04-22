@@ -429,14 +429,14 @@ public class ColourUtil {
     }
 
     // Calen
-    public static ItemStack addColorTagToStack(ItemStack stack, DyeColor colour) {
+    public static ItemStack addColourTagToStack(ItemStack stack, DyeColor colour) {
         CompoundTag tag = new CompoundTag();
         tag.putString("colour", colour.getName());
         stack.setTag(tag);
         return stack;
     }
 
-    public static ItemStack addColorTagToStack(ItemStack stack, int colour) {
+    public static ItemStack addColourTagToStack(ItemStack stack, int colour) {
         if (colour >= 0 && colour < 16) {
             CompoundTag tag = new CompoundTag();
             tag.putString("colour", DyeColor.byId(colour).getName());

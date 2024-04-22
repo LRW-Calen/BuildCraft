@@ -15,7 +15,7 @@ public class EnergyBlockLoot extends BlockLoot {
         dropSelf(BCEnergyBlocks.engineIron.get());
     }
 
-    // without these: IllegalStateException: Missing loottable 'minecraft:blocks/stone' for 'minecraft:stone'
+    // Calen: without these: IllegalStateException: Missing loottable 'minecraft:blocks/stone' for 'minecraft:stone'
     private final Set<Block> knownBlocks = new HashSet<>();
 
     @Override

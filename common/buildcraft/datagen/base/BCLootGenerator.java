@@ -22,7 +22,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-// Calen Completed
 public class BCLootGenerator extends LootTableProvider {
     public BCLootGenerator(DataGenerator generator) {
         super(generator);
@@ -48,6 +47,6 @@ public class BCLootGenerator extends LootTableProvider {
 
     @Override
     public String getName() {
-        return "BuildCraft Loot Tables";
+        return "BuildCraft Loot Tables Generator";
     }
 }

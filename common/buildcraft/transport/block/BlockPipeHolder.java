@@ -509,11 +509,11 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 
             if (part != null && tile.wireManager.getColorOfPart(part) != null) {
                 ItemStack stack = new ItemStack(BCTransportItems.wire.get(), 1);
-                ColourUtil.addColorTagToStack(stack, tile.wireManager.getColorOfPart(part).getId());
+                ColourUtil.addColourTagToStack(stack, tile.wireManager.getColorOfPart(part).getId());
                 return stack;
             } else if (between != null && tile.wireManager.getColorOfPart(between.parts[0]) != null) {
                 ItemStack stack = new ItemStack(BCTransportItems.wire.get(), 1);
-                ColourUtil.addColorTagToStack(stack, tile.wireManager.getColorOfPart(between.parts[0]).getId());
+                ColourUtil.addColourTagToStack(stack, tile.wireManager.getColorOfPart(between.parts[0]).getId());
                 return stack;
             }
         }
@@ -686,7 +686,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
             return false;
         } else if (part != null) {
             ItemStack stack = new ItemStack(BCTransportItems.wire.get(), 1);
-            ColourUtil.addColorTagToStack(stack, tile.wireManager.getColorOfPart(part).getId());
+            ColourUtil.addColourTagToStack(stack, tile.wireManager.getColorOfPart(part).getId());
             toDrop.add(stack);
             tile.wireManager.removePart(part);
             if (!player.isCreative()) {
@@ -696,7 +696,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
             return false;
         } else if (between != null) {
             ItemStack stack = new ItemStack(BCTransportItems.wire.get(), between.to == null ? 2 : 1);
-            ColourUtil.addColorTagToStack(stack, tile.wireManager.getColorOfPart(between.parts[0]).getId());
+            ColourUtil.addColourTagToStack(stack, tile.wireManager.getColorOfPart(between.parts[0]).getId());
             toDrop.add(stack);
             if (between.to == null) {
                 tile.wireManager.removeParts(Arrays.asList(between.parts));
@@ -750,7 +750,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
         }
         for (DyeColor color : tile.wireManager.parts.values()) {
             ItemStack stack = new ItemStack(BCTransportItems.wire.get(), 1);
-            ColourUtil.addColorTagToStack(stack, color.getId());
+            ColourUtil.addColourTagToStack(stack, color.getId());
             toDrop.add(stack);
         }
         Pipe pipe = tile.getPipe();

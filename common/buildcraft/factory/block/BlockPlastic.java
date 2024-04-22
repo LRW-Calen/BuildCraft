@@ -54,7 +54,7 @@ public class BlockPlastic extends BlockBCBase_Neptune {
         for (DyeColor dye : DyeColor.values()) {
 //            list.add(new ItemStack(this, 1, dye.getMetadata()));
             ItemStack stack = new ItemStack(this, 1);
-            ColourUtil.addColorTagToStack(stack, dye);
+            ColourUtil.addColourTagToStack(stack, dye);
             list.add(stack);
         }
     }

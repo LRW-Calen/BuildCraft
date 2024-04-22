@@ -6,8 +6,6 @@
 
 package buildcraft.factory;
 
-import buildcraft.energy.BCEnergy;
-import buildcraft.energy.BCEnergySprites;
 import buildcraft.factory.client.model.ModelHeatExchange;
 import buildcraft.factory.client.render.*;
 import buildcraft.factory.tile.TileDistiller_BC8;
@@ -19,9 +17,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
@@ -71,7 +68,7 @@ public class BCFactoryModels {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onRenderRegister(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(RegisterRenderers event) {
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileMiningWell.class, new RenderMiningWell());
         BlockEntityRenderers.register(BCFactoryBlocks.miningWellTile.get(), RenderMiningWell::new);
 //        ClientRegistry.bindTileEntitySpecialRenderer(TilePump.class, new RenderPump());

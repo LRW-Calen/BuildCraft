@@ -1,6 +1,5 @@
 package buildcraft.factory.recipe;
 
-import buildcraft.datagen.factory.HeatExchangeRecipeBuilder;
 import buildcraft.factory.BCFactory;
 import buildcraft.lib.misc.JsonUtil;
 import buildcraft.lib.recipe.RefineryRecipeRegistry.CoolableRecipe;

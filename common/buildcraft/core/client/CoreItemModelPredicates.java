@@ -12,7 +12,7 @@ public class CoreItemModelPredicates {
     public static final ResourceLocation PREDICATE_USED = new ResourceLocation("buildcraft", "used");
     public static final ResourceLocation PREDICATE_MAP_TYPE = new ResourceLocation("buildcraft", "map_type");
 
-    public static void clientInit(FMLClientSetupEvent event) {
+    public static void register(FMLClientSetupEvent event) {
         event.enqueueWork(
                 () ->
                 {

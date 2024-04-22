@@ -17,6 +17,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -74,7 +75,7 @@ public class BCRobotics {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(RegisterRenderers event) {
         BlockEntityRenderers.register(BCRoboticsBlocks.zonePlannerTile.get(), RenderZonePlanner::new);
     }
 

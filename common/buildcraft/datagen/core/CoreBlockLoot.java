@@ -18,11 +18,9 @@ public class CoreBlockLoot extends BlockLoot {
         dropSelf(BCCoreBlocks.engineCreative.get());
         dropSelf(BCCoreBlocks.markerVolume.get());
         dropSelf(BCCoreBlocks.markerPath.get());
-//        add(BCCoreBlocks.SPRING_OIL.get(), LootTable.lootTable());
-//        add(BCCoreBlocks.SPRING_WATER.get(), LootTable.lootTable());
     }
 
-    // without these: IllegalStateException: Missing loottable 'minecraft:blocks/stone' for 'minecraft:stone'
+    // Calen: without these: IllegalStateException: Missing loottable 'minecraft:blocks/stone' for 'minecraft:stone'
     private final Set<Block> knownBlocks = new HashSet<>();
 
     @Override

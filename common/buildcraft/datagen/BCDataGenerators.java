@@ -3,29 +3,26 @@ package buildcraft.datagen;
 import buildcraft.builders.BCBuilders;
 import buildcraft.core.BCCore;
 import buildcraft.datagen.base.*;
-import buildcraft.datagen.builders.BuildersBlockStateProvider;
-import buildcraft.datagen.builders.BuildersItemModelProvider;
-import buildcraft.datagen.builders.BuildersRecipeGenerator;
-import buildcraft.datagen.core.CoreBlockStateProvider;
-import buildcraft.datagen.core.CoreItemModelProvider;
-import buildcraft.datagen.core.CoreRecipeGenerator;
+import buildcraft.datagen.builders.BuildersAdvancementGenerator;
+import buildcraft.datagen.builders.BuildersBlockStateGenerator;
+import buildcraft.datagen.builders.BuildersCraftingRecipeGenerator;
+import buildcraft.datagen.builders.BuildersItemModelGenerator;
+import buildcraft.datagen.core.CoreAdvancementGenerator;
+import buildcraft.datagen.core.CoreBlockStateGenerator;
+import buildcraft.datagen.core.CoreCraftingRecipeGenerator;
+import buildcraft.datagen.core.CoreItemModelGenerator;
 import buildcraft.datagen.energy.*;
-import buildcraft.datagen.factory.FactoryBlockStateProvider;
-import buildcraft.datagen.factory.FactoryItemModelProvider;
-import buildcraft.datagen.factory.FactoryRecipeGenerator;
+import buildcraft.datagen.factory.FactoryAdvancementGenerator;
+import buildcraft.datagen.factory.FactoryBlockStateGenerator;
+import buildcraft.datagen.factory.FactoryCraftingRecipeGenerator;
+import buildcraft.datagen.factory.FactoryItemModelGenerator;
+import buildcraft.datagen.lib.LibCraftingRecipeGenerator;
 import buildcraft.datagen.lib.LibItemModelProvider;
-import buildcraft.datagen.lib.LibRecipeGenerator;
-import buildcraft.datagen.robotics.RoboticsBlockStateProvider;
-import buildcraft.datagen.robotics.RoboticsItemModelProvider;
-import buildcraft.datagen.robotics.RoboticsRecipeGenerator;
-import buildcraft.datagen.silicon.SiliconAssemblyRecipeGenerator;
-import buildcraft.datagen.silicon.SiliconBlockStateProvider;
-import buildcraft.datagen.silicon.SiliconItemModelProvider;
-import buildcraft.datagen.silicon.SiliconRecipeGenerator;
-import buildcraft.datagen.transport.TransportAssemblyRecipeGenerator;
-import buildcraft.datagen.transport.TransportBlockStateProvider;
-import buildcraft.datagen.transport.TransportItemModelProvider;
-import buildcraft.datagen.transport.TransportRecipeGenerator;
+import buildcraft.datagen.robotics.RoboticsBlockStateGenerator;
+import buildcraft.datagen.robotics.RoboticsCraftingRecipeGenerator;
+import buildcraft.datagen.robotics.RoboticsItemModelGenerator;
+import buildcraft.datagen.silicon.*;
+import buildcraft.datagen.transport.*;
 import buildcraft.energy.BCEnergy;
 import buildcraft.factory.BCFactory;
 import buildcraft.robotics.BCRobotics;
@@ -38,7 +35,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
 
-// Calen add
 @Mod.EventBusSubscriber(modid = BCCore.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BCDataGenerators {
     @SubscribeEvent
@@ -47,58 +43,63 @@ public class BCDataGenerators {
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         // Oil Texture
-        generator.addProvider(new EnergyOilTextureProvider(generator, existingFileHelper));
+        generator.addProvider(new EnergyOilTextureGenerator(generator, existingFileHelper));
 
 //        // frozen fluid texture
 //        generator.addProvider(new FrozenFluidTextureProvider(generator, existingFileHelper));
 
         // Tags
-        BlockTagsProvider blockTagsProvider = new BCBlockTagsProvider(generator, existingFileHelper);
+        BlockTagsProvider blockTagsProvider = new BCBlockTagsGenerator(generator, existingFileHelper);
         generator.addProvider(blockTagsProvider);
-        generator.addProvider(new BCItemTagsProvider(generator, existingFileHelper, blockTagsProvider));
-        generator.addProvider(new BCFluidTagsProvider(generator, existingFileHelper));
-        generator.addProvider(new EnergyBiomeTagsProvider(generator, existingFileHelper));
+        generator.addProvider(new BCItemTagsGenerator(generator, existingFileHelper, blockTagsProvider));
+        generator.addProvider(new BCFluidTagsGenerator(generator, existingFileHelper));
+        generator.addProvider(new BCBiomeTagsGenerator(generator, existingFileHelper));
 
-        // Recipes
-        generator.addProvider(new BuildersRecipeGenerator(generator));
-        generator.addProvider(new CoreRecipeGenerator(generator));
-        generator.addProvider(new EnergyRecipeGenerator(generator));
-        generator.addProvider(new FactoryRecipeGenerator(generator));
-        generator.addProvider(new LibRecipeGenerator(generator));
-        generator.addProvider(new SiliconRecipeGenerator(generator));
-        generator.addProvider(new TransportRecipeGenerator(generator));
-        generator.addProvider(new RoboticsRecipeGenerator(generator));
+        // Crafting Recipes
+        generator.addProvider(new BuildersCraftingRecipeGenerator(generator));
+        generator.addProvider(new CoreCraftingRecipeGenerator(generator));
+        generator.addProvider(new EnergyCraftingRecipeGenerator(generator));
+        generator.addProvider(new FactoryCraftingRecipeGenerator(generator));
+        generator.addProvider(new LibCraftingRecipeGenerator(generator));
+        generator.addProvider(new SiliconCraftingRecipeGenerator(generator));
+        generator.addProvider(new TransportCraftingRecipeGenerator(generator));
+        generator.addProvider(new RoboticsCraftingRecipeGenerator(generator));
         // Mod Recipes
-        generator.addProvider(new EnergyCustomRecipeGenerator(generator, existingFileHelper));
+        generator.addProvider(new SiliconFacadeSwapRecipeGenerator(generator));
+        generator.addProvider(new EnergyOilRecipeGenerator(generator, existingFileHelper));
         generator.addProvider(new SiliconAssemblyRecipeGenerator(generator, existingFileHelper));
         generator.addProvider(new TransportAssemblyRecipeGenerator(generator, existingFileHelper));
 
         // Advancement
-        generator.addProvider(new BCAdvancementProvider(generator, existingFileHelper));
+        generator.addProvider(new CoreAdvancementGenerator(generator, existingFileHelper));
+        generator.addProvider(new EnergyAdvancementGenerator(generator, existingFileHelper));
+        generator.addProvider(new FactoryAdvancementGenerator(generator, existingFileHelper));
+        generator.addProvider(new SiliconAdvancementGenerator(generator, existingFileHelper));
+        generator.addProvider(new TransportAdvancementGenerator(generator, existingFileHelper));
+        generator.addProvider(new BuildersAdvancementGenerator(generator, existingFileHelper));
 
         // Loot Table
         generator.addProvider(new BCLootGenerator(generator));
 
-        // BlockState Model
-        generator.addProvider(new CoreBlockStateProvider(generator, BCCore.MODID, existingFileHelper));
-        generator.addProvider(new BuildersBlockStateProvider(generator, BCBuilders.MODID, existingFileHelper));
-        generator.addProvider(new EnergyBlockStateProvider(generator, BCEnergy.MODID, existingFileHelper));
-        generator.addProvider(new FactoryBlockStateProvider(generator, BCFactory.MODID, existingFileHelper));
-        generator.addProvider(new SiliconBlockStateProvider(generator, BCSilicon.MODID, existingFileHelper));
-        generator.addProvider(new TransportBlockStateProvider(generator, BCTransport.MODID, existingFileHelper));
-        generator.addProvider(new RoboticsBlockStateProvider(generator, BCRobotics.MODID, existingFileHelper));
+        // BlockState and Block Model
+        generator.addProvider(new CoreBlockStateGenerator(generator, BCCore.MODID, existingFileHelper));
+        generator.addProvider(new BuildersBlockStateGenerator(generator, BCBuilders.MODID, existingFileHelper));
+        generator.addProvider(new EnergyBlockStateGenerator(generator, BCEnergy.MODID, existingFileHelper));
+        generator.addProvider(new FactoryBlockStateGenerator(generator, BCFactory.MODID, existingFileHelper));
+        generator.addProvider(new SiliconBlockStateGenerator(generator, BCSilicon.MODID, existingFileHelper));
+        generator.addProvider(new TransportBlockStateGenerator(generator, BCTransport.MODID, existingFileHelper));
+        generator.addProvider(new RoboticsBlockStateGenerator(generator, BCRobotics.MODID, existingFileHelper));
 
         // Item Model
-        generator.addProvider(new EnergyOilBucketModelProvider(generator, BCEnergy.MODID, existingFileHelper));
+        generator.addProvider(new EnergyOilBucketModelGenerator(generator, BCEnergy.MODID, existingFileHelper));
 
-        generator.addProvider(new CoreItemModelProvider(generator, BCCore.MODID, existingFileHelper));
-        generator.addProvider(new EnergyItemModelProvider(generator, BCEnergy.MODID, existingFileHelper));
-        generator.addProvider(new FactoryItemModelProvider(generator, BCFactory.MODID, existingFileHelper));
-        generator.addProvider(new BuildersItemModelProvider(generator, BCBuilders.MODID, existingFileHelper));
-        generator.addProvider(new SiliconItemModelProvider(generator, BCSilicon.MODID, existingFileHelper));
-        generator.addProvider(new TransportItemModelProvider(generator, BCTransport.MODID, existingFileHelper));
+        generator.addProvider(new CoreItemModelGenerator(generator, BCCore.MODID, existingFileHelper));
+        generator.addProvider(new EnergyItemModelGenerator(generator, BCEnergy.MODID, existingFileHelper));
+        generator.addProvider(new FactoryItemModelGenerator(generator, BCFactory.MODID, existingFileHelper));
+        generator.addProvider(new BuildersItemModelGenerator(generator, BCBuilders.MODID, existingFileHelper));
+        generator.addProvider(new SiliconItemModelGenerator(generator, BCSilicon.MODID, existingFileHelper));
+        generator.addProvider(new TransportItemModelGenerator(generator, BCTransport.MODID, existingFileHelper));
         generator.addProvider(new LibItemModelProvider(generator, BCTransport.MODID, existingFileHelper));
-        generator.addProvider(new RoboticsItemModelProvider(generator, BCRobotics.MODID, existingFileHelper));
+        generator.addProvider(new RoboticsItemModelGenerator(generator, BCRobotics.MODID, existingFileHelper));
     }
-
 }

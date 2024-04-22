@@ -1,7 +1,6 @@
 package buildcraft.energy.recipe;
 
 import buildcraft.api.fuels.IFuel;
-import buildcraft.datagen.energy.FuelRecipeBuilder;
 import buildcraft.lib.fluid.FuelRegistry;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.gson.JsonObject;

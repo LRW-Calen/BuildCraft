@@ -33,8 +33,6 @@ public enum BCLibEventDistModBus {
         ModelVariableData.onModelBake();
     }
 
-    // Mod Bus
-//    @SubscribeEvent
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void textureStitchPre(TextureStitchEvent.Pre event) {

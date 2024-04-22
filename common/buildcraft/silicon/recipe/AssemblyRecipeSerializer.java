@@ -4,7 +4,6 @@ import buildcraft.api.recipes.AssemblyRecipe;
 import buildcraft.api.recipes.AssemblyRecipeBasic;
 import buildcraft.api.recipes.AssemblyRecipeType;
 import buildcraft.api.recipes.IngredientStack;
-import buildcraft.datagen.silicon.AssemblyRecipeBuilder;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;

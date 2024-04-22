@@ -49,7 +49,7 @@ import java.util.OptionalLong;
 @SuppressWarnings("NullableProblems")
 @OnlyIn(Dist.CLIENT)
 public class FakeWorld extends Level {
-    //    private static final ResourceKey<Biome> BIOME = Biomes.PLAINS;
+    // private static final ResourceKey<Biome> BIOME = Biomes.PLAINS;
     @SuppressWarnings("WeakerAccess")
     public static final BlockPos BLUEPRINT_OFFSET = new BlockPos(0, 127, 0);
     private static final Holder<DimensionType> DIMENSION_TYPE = Holder.direct(DimensionType.create(OptionalLong.empty(), true, false, false, true, 1.0D, false, false, true, false, true, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD, DimensionType.OVERWORLD_EFFECTS, 0.0F));
@@ -150,8 +150,7 @@ public class FakeWorld extends Level {
     // Calen: only in ServerLevel
 //    @Override
 //    public BlockPos getSpawnPoint()
-//    public BlockPos getSharedSpawnPos()
-//    {
+//    public BlockPos getSharedSpawnPos() {
 //        return BLUEPRINT_OFFSET;
 //    }
 
@@ -189,8 +188,7 @@ public class FakeWorld extends Level {
     }
 
 //    @Override
-//    public Holder<Biome> getBiome(BlockPos pos)
-//    {
+//    public Holder<Biome> getBiome(BlockPos pos) {
 //        return ForgeRegistries.BIOMES.getValue(BIOME.location());
 //    }
 
@@ -200,8 +198,7 @@ public class FakeWorld extends Level {
     }
 
 //    @Override
-//    public Biome getBiomeForCoordsBody(BlockPos pos)
-//    {
+//    public Biome getBiomeForCoordsBody(BlockPos pos) {
 //        return BIOME;
 //    }
 

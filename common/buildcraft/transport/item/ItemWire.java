@@ -33,7 +33,7 @@ public class ItemWire extends ItemBC_Neptune {
         for (int i = 0; i < 16; i++) {
             // Calen: meta -> tag
             ItemStack stack = new ItemStack(this, 1);
-            subItems.add(ColourUtil.addColorTagToStack(stack, i));
+            subItems.add(ColourUtil.addColourTagToStack(stack, i));
         }
     }
 

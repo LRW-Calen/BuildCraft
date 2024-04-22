@@ -11,6 +11,7 @@ import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.registry.TagManager;
 import buildcraft.lib.registry.TagManager.EnumTagType;
 import buildcraft.lib.registry.TagManager.TagEntry;
+import buildcraft.silicon.client.SiliconItemModelPredicates;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.plug.FacadeBlockStateInfo;
 import buildcraft.silicon.plug.FacadeInstance;
@@ -25,13 +26,10 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
@@ -144,6 +142,8 @@ public class BCSilicon {
         // Calen: 1.12.2 not impl……
         ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.chargingTable.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(BCSiliconBlocks.programmingTable.get(), RenderType.cutout());
+
+        SiliconItemModelPredicates.register(event);
     }
 
     private static final TagManager tagManager = new TagManager();

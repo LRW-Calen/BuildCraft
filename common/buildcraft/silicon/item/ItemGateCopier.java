@@ -32,8 +32,7 @@ public class ItemGateCopier extends ItemBC_Neptune {
 
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
 //        addVariant(variants, 0, "empty");
 //        addVariant(variants, 1, "full");
 //    }
@@ -73,8 +72,8 @@ public class ItemGateCopier extends ItemBC_Neptune {
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
     }
 
-    //    @Override
-//    public int getMetadata(ItemStack stack)
+    // @Override
+    // public int getMetadata(ItemStack stack)
     public static int getMetadata(ItemStack stack) {
         return getCopiedGateData(stack) != null ? 1 : 0;
     }

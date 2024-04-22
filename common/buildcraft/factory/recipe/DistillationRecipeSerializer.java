@@ -1,6 +1,5 @@
 package buildcraft.factory.recipe;
 
-import buildcraft.datagen.factory.DistillationRecipeBuilder;
 import buildcraft.lib.misc.JsonUtil;
 import buildcraft.lib.recipe.RefineryRecipeRegistry;
 import com.google.gson.JsonObject;

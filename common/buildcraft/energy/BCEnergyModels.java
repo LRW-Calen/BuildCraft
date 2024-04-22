@@ -31,6 +31,7 @@ import net.minecraft.core.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -80,7 +81,7 @@ public class BCEnergyModels {
 
 
     @SubscribeEvent
-    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(RegisterRenderers event) {
         BlockEntityRenderers.register(BCEnergyBlocks.engineStoneTile.get(), RenderEngineStone::new);
         BlockEntityRenderers.register(BCEnergyBlocks.engineIronTile.get(), RenderEngineIron::new);
     }

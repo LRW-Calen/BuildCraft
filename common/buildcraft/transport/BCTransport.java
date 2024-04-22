@@ -20,6 +20,7 @@ import buildcraft.lib.registry.TagManager;
 import buildcraft.lib.registry.TagManager.EnumTagType;
 import buildcraft.lib.registry.TagManager.TagEntry;
 import buildcraft.silicon.plug.FacadeStateManager;
+import buildcraft.transport.client.TransportItemModelPredicates;
 import buildcraft.transport.client.render.PipeTabButton;
 import buildcraft.transport.pipe.PipeRegistry;
 import buildcraft.transport.pipe.SchematicBlockPipe;
@@ -54,7 +55,7 @@ import java.util.function.Consumer;
 public class BCTransport {
     public static final String MODID = "buildcrafttransport";
 
-    //    @Mod.Instance(MOD_ID)
+    // @Mod.Instance(MOD_ID)
     public static BCTransport INSTANCE = null;
 
     private static CreativeTabBC tabPipes;
@@ -72,6 +73,8 @@ public class BCTransport {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(BCTransportBlocks.pipeHolder.get(), RenderType.translucent());
+
+        TransportItemModelPredicates.register(event);
     }
 
     @SubscribeEvent
@@ -147,8 +150,7 @@ public class BCTransport {
                             totalTantrumTime += time;
                             try {
                                 Thread.sleep(time);
-                            }
-                            catch (InterruptedException ignored) {
+                            } catch (InterruptedException ignored) {
                                 // We don't really care about this error
                             }
                         }

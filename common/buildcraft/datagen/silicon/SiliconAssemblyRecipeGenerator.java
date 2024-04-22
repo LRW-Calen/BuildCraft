@@ -1,6 +1,5 @@
 package buildcraft.datagen.silicon;
 
-import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumRedstoneChipset;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.api.recipes.IngredientStack;
@@ -14,6 +13,7 @@ import buildcraft.silicon.gate.EnumGateMaterial;
 import buildcraft.silicon.gate.EnumGateModifier;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.item.ItemPluggableGate;
+import buildcraft.silicon.recipe.AssemblyRecipeBuilder;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;
@@ -57,19 +57,16 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
         }
 
         Set<IngredientStack> input = new HashSet<>();
-//            input.add(new IngredientStack(Ingredient.fromStacks(redstoneEngine)));
+//        input.add(new IngredientStack(Ingredient.fromStacks(redstoneEngine)));
         input.add(new IngredientStack(Ingredient.of(redstoneEngine)));
-//            input.add(new IngredientStack(CraftingHelper.getIngredient("ingotIron"), 2));
-//            input.add(new IngredientStack(Ingredient.of(CraftingHelper.getItem("ingotIron",true)), 2));
-//            input.add(new IngredientStack(Ingredient.of(CraftingHelper.getItem("iron_ingot", true)), 2));
+//        input.add(new IngredientStack(CraftingHelper.getIngredient("ingotIron"), 2));
         input.add(new IngredientStack(Ingredient.of(Tags.Items.INGOTS_IRON), 2));
-//            AssemblyRecipe recipe = new AssemblyRecipeBasic("plug_pulsar", 1000 * MjAPI.MJ, input, output);
-//            AssemblyRecipeRegistry.register(recipe);
+//        AssemblyRecipe recipe = new AssemblyRecipeBasic("plug_pulsar", 1000 * MjAPI.MJ, input, output);
+//        AssemblyRecipeRegistry.register(recipe);
         AssemblyRecipeBuilder.basic(1000 * MjAPI.MJ, input, output).save(consumer, "plug_pulsar");
 
 
-//            IngredientStack lapis = IngredientStack.of("gemLapis");
-//            IngredientStack lapis = IngredientStack.of(Items.LAPIS_LAZULI);
+//        IngredientStack lapis = IngredientStack.of("gemLapis");
         IngredientStack lapis = IngredientStack.of(Tags.Items.GEMS_LAPIS);
         makeGateAssembly(20_000, EnumGateMaterial.IRON, EnumGateModifier.NO_MODIFIER, EnumRedstoneChipset.IRON);
         makeGateAssembly(40_000, EnumGateMaterial.NETHER_BRICK, EnumGateModifier.NO_MODIFIER,
@@ -106,61 +103,61 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
 
         for (DyeColor colour : ColourUtil.COLOURS) {
             String name = String.format("lens_regular_%s", colour.getName());
-//                IngredientStack stainedGlass = IngredientStack.of("blockGlass" + ColourUtil.getName(colour));
+//            IngredientStack stainedGlass = IngredientStack.of("blockGlass" + ColourUtil.getName(colour));
             IngredientStack stainedGlass = IngredientStack.of(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge:glass/" + colour.getName())));
             ImmutableSet<IngredientStack> input1 = ImmutableSet.of(stainedGlass);
             ItemStack output1 = BCSiliconItems.plugLens.get().getStack(colour, false);
-//                AssemblyRecipeRegistry.register(new AssemblyRecipeBasic(name, 500 * MjAPI.MJ, input, output));
+//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic(name, 500 * MjAPI.MJ, input, output));
             AssemblyRecipeBuilder.basic(500 * MjAPI.MJ, input1, output1).save(consumer, name);
 
             name = String.format("lens_filter_%s", colour.getName());
             output1 = BCSiliconItems.plugLens.get().getStack(colour, true);
             input1 = ImmutableSet.of(stainedGlass, IngredientStack.of(new ItemStack(Blocks.IRON_BARS)));
-//                AssemblyRecipeRegistry.register(new AssemblyRecipeBasic(name, 500 * MjAPI.MJ, input, output));
+//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic(name, 500 * MjAPI.MJ, input, output));
             AssemblyRecipeBuilder.basic(500 * MjAPI.MJ, input1, output1).save(consumer, name);
         }
 
-//            IngredientStack glass = IngredientStack.of("blockGlass");
+//        IngredientStack glass = IngredientStack.of("blockGlass");
         IngredientStack glass = IngredientStack.of(Tags.Items.GLASS_COLORLESS);
         ImmutableSet<IngredientStack> input2 = ImmutableSet.of(glass);
         ItemStack output2 = BCSiliconItems.plugLens.get().getStack(null, false);
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("lens-regular", 500 * MjAPI.MJ, input, output));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("lens-regular", 500 * MjAPI.MJ, input, output));
         AssemblyRecipeBuilder.basic(500 * MjAPI.MJ, input2, output2).save(consumer, "lens_regular");
 
         output2 = BCSiliconItems.plugLens.get().getStack(null, true);
         input2 = ImmutableSet.of(glass, IngredientStack.of(new ItemStack(Blocks.IRON_BARS)));
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("lens-filter", 500 * MjAPI.MJ, input, output));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("lens-filter", 500 * MjAPI.MJ, input, output));
         AssemblyRecipeBuilder.basic(500 * MjAPI.MJ, input2, output2).save(consumer, "lens_filter");
 
 
-//            ImmutableSet<IngredientStack> input = ImmutableSet.of(IngredientStack.of("dustRedstone"));
+//        ImmutableSet<IngredientStack> input = ImmutableSet.of(IngredientStack.of("dustRedstone"));
         ImmutableSet<IngredientStack> input3 = ImmutableSet.of(IngredientStack.of(Tags.Items.DUSTS_REDSTONE));
         ItemStack output3 = EnumRedstoneChipset.RED.getStack(1);
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("redstone_chipset", 10000 * MjAPI.MJ, input, output));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("redstone_chipset", 10000 * MjAPI.MJ, input, output));
         AssemblyRecipeBuilder.basic(10000 * MjAPI.MJ, input3, output3).save(consumer, "redstone_chipset");
 
-//            input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("ingotIron"));
+//        input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("ingotIron"));
         input3 = ImmutableSet.of(IngredientStack.of(Tags.Items.DUSTS_REDSTONE), IngredientStack.of(Tags.Items.INGOTS_IRON));
         output3 = EnumRedstoneChipset.IRON.getStack(1);
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("iron_chipset", 20000 * MjAPI.MJ, input, output));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("iron_chipset", 20000 * MjAPI.MJ, input, output));
         AssemblyRecipeBuilder.basic(40000 * MjAPI.MJ, input3, output3).save(consumer, "iron_chipset");
 
-//            input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("ingotGold"));
+//        input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("ingotGold"));
         input3 = ImmutableSet.of(IngredientStack.of(Tags.Items.DUSTS_REDSTONE), IngredientStack.of(Tags.Items.INGOTS_GOLD));
         output3 = EnumRedstoneChipset.GOLD.getStack(1);
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("gold_chipset", 40000 * MjAPI.MJ, input, output));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("gold_chipset", 40000 * MjAPI.MJ, input, output));
         AssemblyRecipeBuilder.basic(20000 * MjAPI.MJ, input3, output3).save(consumer, "gold_chipset");
 
-//            input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("gemQuartz"));
+//        input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("gemQuartz"));
         input3 = ImmutableSet.of(IngredientStack.of(Tags.Items.DUSTS_REDSTONE), IngredientStack.of(Tags.Items.GEMS_QUARTZ));
         output3 = EnumRedstoneChipset.QUARTZ.getStack(1);
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("quartz_chipset", 60000 * MjAPI.MJ, input, output));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("quartz_chipset", 60000 * MjAPI.MJ, input, output));
         AssemblyRecipeBuilder.basic(60000 * MjAPI.MJ, input3, output3).save(consumer, "quartz_chipset");
 
-//            input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("gemDiamond"));
+//        input = ImmutableSet.of(IngredientStack.of("dustRedstone"), IngredientStack.of("gemDiamond"));
         input3 = ImmutableSet.of(IngredientStack.of(Tags.Items.DUSTS_REDSTONE), IngredientStack.of(Tags.Items.GEMS_DIAMOND));
         output3 = EnumRedstoneChipset.DIAMOND.getStack(1);
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("diamond_chipset", 80000 * MjAPI.MJ, input, output));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("diamond_chipset", 80000 * MjAPI.MJ, input, output));
         AssemblyRecipeBuilder.basic(80000 * MjAPI.MJ, input3, output3).save(consumer, "diamond_chipset");
 
 
@@ -175,22 +172,19 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
         if (BCSiliconItems.chipsetRedstone != null) {
             input4.add(IngredientStack.of(EnumRedstoneChipset.IRON.getStack(1)));
         } else {
-//                input.add(IngredientStack.of("dustRedstone"));
+//            input.add(IngredientStack.of("dustRedstone"));
             input4.add(IngredientStack.of(Tags.Items.DUSTS_REDSTONE));
-//                input.add(IngredientStack.of("dustRedstone"));
+//            input.add(IngredientStack.of("dustRedstone"));
             input4.add(IngredientStack.of(Tags.Items.DUSTS_REDSTONE));
-//                input.add(IngredientStack.of("ingotGold"));
+//            input.add(IngredientStack.of("ingotGold"));
             input4.add(IngredientStack.of(Tags.Items.INGOTS_GOLD));
         }
 
-//            AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("gate_copier", 500 * MjAPI.MJ, input.build(), new ItemStack(BCSiliconItems.gateCopier.get())));
+//        AssemblyRecipeRegistry.register(new AssemblyRecipeBasic("gate_copier", 500 * MjAPI.MJ, input.build(), new ItemStack(BCSiliconItems.gateCopier.get())));
         AssemblyRecipeBuilder.basic(500 * MjAPI.MJ, input4.build(), new ItemStack(BCSiliconItems.gateCopier.get())).save(consumer, "gate_copier");
-
-
     }
 
-    private void makeGateModifierAssembly(int multiplier, EnumGateMaterial material, EnumGateModifier modifier,
-                                          IngredientStack... mods) {
+    private void makeGateModifierAssembly(int multiplier, EnumGateMaterial material, EnumGateModifier modifier, IngredientStack... mods) {
         for (EnumGateLogic logic : EnumGateLogic.VALUES) {
 //            String name = String.format("gate-modifier-%s-%s-%s", logic, material, modifier);
             String name = String.format("gate_modifier_%s_%s_%s", logic, material, modifier);
@@ -204,7 +198,6 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
             inputBuilder.add(mods);
             ImmutableSet<IngredientStack> input = inputBuilder.build();
 //            AssemblyRecipeRegistry.register((new AssemblyRecipeBasic(name, MjAPI.MJ * multiplier, input, output)));
-
             AssemblyRecipeBuilder.basic(MjAPI.MJ * multiplier, input, output).save(consumer, name);
         }
     }
@@ -228,5 +221,10 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
         output = ItemPluggableGate.getStack(new GateVariant(EnumGateLogic.OR, material, modifier));
 //        AssemblyRecipeRegistry.register((new AssemblyRecipeBasic(name, MjAPI.MJ * multiplier, input, output)));
         AssemblyRecipeBuilder.basic(MjAPI.MJ * multiplier, input, output).save(consumer, name);
+    }
+
+    @Override
+    public String getName() {
+        return "BuildCraft Silicon Assembly Recipe Generator";
     }
 }

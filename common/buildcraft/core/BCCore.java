@@ -111,7 +111,7 @@ public class BCCore {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(BCCoreBlocks.markerVolume.get(), RenderType.cutout());
-        CoreItemModelPredicates.clientInit(event);
+        CoreItemModelPredicates.register(event);
     }
 
     @SubscribeEvent

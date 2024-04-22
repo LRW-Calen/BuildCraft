@@ -22,7 +22,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -95,7 +95,7 @@ public class BCBuilders {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(RegisterRenderers event) {
         BlockEntityRenderers.register(BCBuildersBlocks.architectTile.get(), RenderArchitectTable::new);
         BlockEntityRenderers.register(BCBuildersBlocks.builderTile.get(), RenderBuilder::new);
         BlockEntityRenderers.register(BCBuildersBlocks.fillerTile.get(), RenderFiller::new);
@@ -106,7 +106,7 @@ public class BCBuilders {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         ItemBlockRenderTypes.setRenderLayer(BCBuildersBlocks.frame.get(), RenderType.cutout());
-        BuildersItemModelPredicates.clientInit(event);
+        BuildersItemModelPredicates.register(event);
     }
 
     @SubscribeEvent

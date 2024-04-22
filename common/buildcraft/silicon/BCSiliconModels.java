@@ -36,6 +36,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -106,7 +107,7 @@ public class BCSiliconModels {
 //        );
 
 
-        // Calen: moved to -> #onTesrReg(EntityRenderersEvent.RegisterRenderers event)
+        // Calen: moved to -> #onTesrReg(RegisterRenderers event)
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileLaser.class, new RenderLaser());
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileProgrammingTable_Neptune.class, new RenderProgrammingTable());
 
@@ -128,7 +129,7 @@ public class BCSiliconModels {
     }
 
     @SubscribeEvent
-    public static void onTesrReg(EntityRenderersEvent.RegisterRenderers event) {
+    public static void onTesrReg(RegisterRenderers event) {
         BlockEntityRenderers.register(BCSiliconBlocks.laserTile.get(), RenderLaser::new);
         BlockEntityRenderers.register(BCSiliconBlocks.programmingTableTile.get(), RenderProgrammingTable::new);
     }
