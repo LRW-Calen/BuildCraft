@@ -49,8 +49,7 @@ public interface IMessage {
             IMessage message = clazz.newInstance();
             message.fromBytes(buf);
             return message;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

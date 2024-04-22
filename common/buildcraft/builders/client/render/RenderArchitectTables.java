@@ -32,7 +32,6 @@ import java.util.Comparator;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-@OnlyIn(Dist.CLIENT)
 public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer {
     INSTANCE;
 

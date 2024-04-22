@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -83,7 +84,7 @@ public class SchematicBlockFluid implements ISchematicBlock {
         if (isFlowing) {
             return true;
         }
-        if (world.setBlock(blockPos, blockState, 11)) {
+        if (world.setBlock(blockPos, blockState, Block.UPDATE_ALL_IMMEDIATE)) {
             Stream.concat(
                             Stream.of(Direction.values())
 //                                    .map(Direction::getDirectionVec)

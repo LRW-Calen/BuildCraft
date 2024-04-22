@@ -61,7 +61,7 @@ public class CommandVersion extends BCSubCommandBase {
                     }
 
 //                    Object[] textArgs = {currentVersion, ForgeVersion.mcVersion, result.target.toString()};
-                    Object[] textArgs = {currentVersion, ForgeVersion.getVersion(), version.toString()};
+                    Object[] textArgs = { currentVersion, ForgeVersion.getVersion(), version.toString() };
 //                    sender.sendMessage(new TextComponentTranslation("command.buildcraft.version", textArgs).setStyle(style));
                     sender.sendMessage(new TranslatableComponent("command.buildcraft.version", textArgs).setStyle(style), Util.NIL_UUID);
 

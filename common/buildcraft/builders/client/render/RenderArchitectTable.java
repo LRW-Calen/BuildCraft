@@ -20,7 +20,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-//public class RenderArchitectTable extends TileEntitySpecialRenderer<TileArchitectTable>
 public class RenderArchitectTable implements BlockEntityRenderer<TileArchitectTable> {
     public RenderArchitectTable(BlockEntityRendererProvider.Context context) {
     }

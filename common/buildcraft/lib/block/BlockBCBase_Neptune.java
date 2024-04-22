@@ -142,6 +142,17 @@ public class BlockBCBase_Neptune extends Block {
         return state;
     }
 
+    @Override
+    public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
+        if (this instanceof IBlockWithFacing) {
+            if (!((IBlockWithFacing) this).canBeRotated(world, pos, world.getBlockState(pos))) {
+//                return false;
+                return state;
+            }
+        }
+        return super.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90);
+    }
+
     // Others
 
     // Calen: this is called when the block not been placed, to choose a state for place
@@ -183,17 +194,6 @@ public class BlockBCBase_Neptune extends Block {
             state = state.setValue(b.getFacingProperty(), orientation.getOpposite());
         }
         return state;
-    }
-
-    //    @Override
-    public boolean rotate(Level world, BlockPos pos, Direction axis) {
-        if (this instanceof IBlockWithFacing) {
-            if (!((IBlockWithFacing) this).canBeRotated(world, pos, world.getBlockState(pos))) {
-                return false;
-            }
-        }
-        super.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90);
-        return true;
     }
 
 //    public static boolean isExceptBlockForAttachWithPiston(Block attachBlock)

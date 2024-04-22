@@ -9,7 +9,6 @@ package buildcraft.factory.item;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.block.BlockWaterGel;
 import buildcraft.lib.item.ItemBC_Neptune;
-import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -54,14 +53,15 @@ public class ItemWaterGel extends ItemBC_Neptune {
             return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         }
 
-        Block b = world.getBlockState(new BlockPos(ray.getLocation())).getBlock();
+        Block b = world.getBlockState(ray.getBlockPos()).getBlock();
         if (b != Blocks.WATER) {
             return new InteractionResultHolder<>(InteractionResult.FAIL, stack);
         }
 
 //        if (!player.capabilities.isCreativeMode)
         if (!player.isCreative()) {
-            stack.setCount(stack.getCount() - 1);
+//            stack.setCount(stack.getCount() - 1);
+            stack.shrink(1);
         }
 
         // Same as ItemSnowball

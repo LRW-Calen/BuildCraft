@@ -129,8 +129,7 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
                     }
                 }
             }
-        }
-        finally {
+        } finally {
             // Calen
             watch.stop();
             long time = watch.elapsed(TimeUnit.MICROSECONDS);

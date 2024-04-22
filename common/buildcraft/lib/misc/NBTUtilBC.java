@@ -79,7 +79,7 @@ public final class NBTUtilBC {
         if (pos == null) {
             throw new NullPointerException("Cannot return a null NBTTag -- pos was null!");
         }
-        return new IntArrayTag(new int[]{pos.getX(), pos.getY(), pos.getZ()});
+        return new IntArrayTag(new int[] { pos.getX(), pos.getY(), pos.getZ() });
     }
 
     @SuppressWarnings("unused")
@@ -169,8 +169,7 @@ public final class NBTUtilBC {
             }
             try {
                 return Enum.valueOf(clazz, value);
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 // In case we didn't find the constant
                 BCLog.logger.warn("Tried and failed to read the value(" + value + ") from " + clazz.getSimpleName(), t);
                 return null;
@@ -255,11 +254,11 @@ public final class NBTUtilBC {
         if (constants == null) throw new IllegalArgumentException("Not an enum type " + clazz);
         byte[] bytes;
         if (tag instanceof ByteTag) {
-            bytes = new byte[]{((ByteTag) tag).getAsByte()};
+            bytes = new byte[] { ((ByteTag) tag).getAsByte() };
         } else if (tag instanceof ByteArrayTag) {
             bytes = ((ByteArrayTag) tag).getAsByteArray();
         } else {
-            bytes = new byte[]{};
+            bytes = new byte[] {};
             BCLog.logger.warn("[lib.nbt] Tried to read an enum set from " + tag);
         }
         BitSet bitset = BitSet.valueOf(bytes);

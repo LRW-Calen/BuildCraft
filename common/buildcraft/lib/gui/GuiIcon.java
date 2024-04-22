@@ -135,12 +135,12 @@ public class GuiIcon implements ISimpleDrawable {
                     double q1 = 1 / (1 - s);
                     double q2 = 1 / t;
                     double q3 = 1 / s;
-                    return new double[]{q0, q1, q2, q3};
+                    return new double[] { q0, q1, q2, q3 };
                 }
             }
         }
         // in case (for some reason) some of the input was wrong then we will fail back to default rendering
-        return new double[]{1, 1, 1, 1};
+        return new double[] { 1, 1, 1, 1 };
     }
 
 //    //    private static void vertDirect(double x, double y, double s, double t, double r, double q)

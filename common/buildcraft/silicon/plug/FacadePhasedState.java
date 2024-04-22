@@ -34,8 +34,7 @@ public class FacadePhasedState implements IFacadePhasedState {
                 if (stateInfo == null) {
                     stateInfo = FacadeStateManager.defaultState;
                 }
-            }
-            catch (Throwable t) {
+            } catch (Throwable t) {
                 throw new RuntimeException("Failed badly when reading a facade state!", t);
             }
         }
@@ -47,8 +46,7 @@ public class FacadePhasedState implements IFacadePhasedState {
         CompoundTag nbt = new CompoundTag();
         try {
             nbt.put("state", NbtUtils.writeBlockState(stateInfo.state));
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new IllegalStateException("Writing facade block state"//
                     + "\n\tState = " + stateInfo//
                     + "\n\tBlock = " + stateInfo.state.getBlock() + "\n\tBlock Class = "
@@ -73,8 +71,7 @@ public class FacadePhasedState implements IFacadePhasedState {
     public void writeToBuffer(PacketBufferBC buf) {
         try {
             MessageUtil.writeBlockState(buf, stateInfo.state);
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new IllegalStateException("Writing facade block state\n\tState = " + stateInfo.state, t);
         }
         MessageUtil.writeEnumOrNull(buf, activeColour);

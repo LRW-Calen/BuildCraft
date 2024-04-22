@@ -254,8 +254,7 @@ public class NbtSquishMap {
                 throw new IOException("Cannot handle index " + index);
             }
             return value;
-        }
-        catch (IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             throw new InvalidInputDataException(e);
         }
     }

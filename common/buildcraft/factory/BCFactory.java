@@ -14,15 +14,12 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import java.util.function.Consumer;
@@ -40,7 +37,7 @@ import java.util.function.Consumer;
 public class BCFactory {
     public static final String MODID = "buildcraftfactory";
 
-    //    @Mod.Instance(MODID)
+    // @Mod.Instance(MODID)
     public static BCFactory INSTANCE = null;
 
     public BCFactory() {
@@ -127,6 +124,7 @@ public class BCFactory {
         TagManager.TagEntry tag = registerTag("item.block.heat_exchange").reg("heat_exchange").locale("heat_exchange");
 //        tag.model("heat_exchange");
         // BC Factory Blocks
+        registerTag("block.plastic").reg("plastic_block").locale("plasticBlock");
         registerTag("block.autoworkbench.item").reg("autoworkbench_item").locale("autoWorkbenchBlock");
 //                .model("autoworkbench_item");
         registerTag("block.autoworkbench.fluid").reg("autoworkbench_fluid").locale("autoWorkbenchFluidBlock");

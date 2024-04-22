@@ -20,9 +20,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-//public class RenderFiller extends FastTESR<TileFiller>
 public class RenderFiller implements BlockEntityRenderer<TileFiller> {
-
     public RenderFiller(BlockEntityRendererProvider.Context context) {
     }
 

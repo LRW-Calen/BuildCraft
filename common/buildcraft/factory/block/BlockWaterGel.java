@@ -29,7 +29,7 @@ import javax.annotation.Nonnull;
 import java.util.*;
 
 public class BlockWaterGel extends BlockBCBase_Neptune {
-    //    public enum GelStage implements IStringSerializable
+    // public enum GelStage implements IStringSerializable
     public enum GelStage implements StringRepresentable {
         SPREAD_0(0.3f, true, 3),
         SPREAD_1(0.4f, true, 3),
@@ -48,7 +48,6 @@ public class BlockWaterGel extends BlockBCBase_Neptune {
 
         GelStage(float pitch, boolean spreading, float hardness) {
             this.soundType = new SoundType(//
-//                    SoundType.SLIME.volume, //
                     SoundType.SLIME_BLOCK.volume, //
                     pitch, //
                     SoundEvents.SLIME_BLOCK_BREAK, //
@@ -67,16 +66,16 @@ public class BlockWaterGel extends BlockBCBase_Neptune {
             return modelName;
         }
 
-        public static GelStage fromMeta(int meta) {
-            if (meta < 0) {
-                return GEL;
-            }
-            return VALUES[meta % VALUES.length];
-        }
+//        public static GelStage fromMeta(int meta) {
+//            if (meta < 0) {
+//                return GEL;
+//            }
+//            return VALUES[meta % VALUES.length];
+//        }
 
-        public int getMeta() {
-            return ordinal();
-        }
+//        public int getMeta() {
+//            return ordinal();
+//        }
 
         public GelStage next() {
             if (this == SPREAD_0) return SPREAD_1;
@@ -96,6 +95,7 @@ public class BlockWaterGel extends BlockBCBase_Neptune {
     }
 
     // BlockState
+
     @Override
 //    protected BlockStateContainer createBlockState()
     protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
@@ -104,14 +104,12 @@ public class BlockWaterGel extends BlockBCBase_Neptune {
     }
 
 //    @Override
-//    public BlockState getStateFromMeta(int meta)
-//    {
+//    public IBlockState getStateFromMeta(int meta) {
 //        return getDefaultState().withProperty(PROP_STAGE, GelStage.fromMeta(meta & 7));
 //    }
 
 //    @Override
-//    public int getMetaFromState(BlockState state)
-//    {
+//    public int getMetaFromState(IBlockState state) {
 //        return state.getValue(PROP_STAGE).getMeta();
 //    }
 
@@ -162,16 +160,16 @@ public class BlockWaterGel extends BlockBCBase_Neptune {
             final int time = next.spreading ? 200 : 400;
             if (changeable.size() == 3 || world.random.nextDouble() < 0.5) {
                 for (BlockPos p : changeable) {
-                    world.setBlock(p, nextState, 3);
+                    world.setBlock(p, nextState, Block.UPDATE_ALL);
                     world.scheduleTick(p, this, rand.nextInt(150) + time);
                 }
-                world.setBlock(pos, nextState, 3);
+                world.setBlock(pos, nextState, Block.UPDATE_ALL);
                 SoundUtil.playBlockPlace(world, pos);
             }
             world.scheduleTick(pos, this, rand.nextInt(150) + time);
         } else if (stage != next) {
             if (notTouchingWater(world, pos)) {
-                world.setBlock(pos, nextState, 3);
+                world.setBlock(pos, nextState, Block.UPDATE_ALL);
                 world.scheduleTick(pos, this, rand.nextInt(150) + 400);
             } else {
                 world.scheduleTick(pos, this, rand.nextInt(150) + 600);
@@ -204,7 +202,6 @@ public class BlockWaterGel extends BlockBCBase_Neptune {
     // Misc
 
     @Override
-//    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
     public SoundType getSoundType(BlockState state, LevelReader world, BlockPos pos, Entity entity) {
         GelStage stage = state.getValue(PROP_STAGE);
         return stage.soundType;
@@ -224,25 +221,14 @@ public class BlockWaterGel extends BlockBCBase_Neptune {
         }
     }
 
-    // Calen: moved to datagen
+    // 1.18.2: use datagen
 //    @Override
-    // Calen 2 methods merged
-//    public Item getItemDropped(BlockState state, Random rand, int fortune)
-//    public int quantityDropped(BlockState state, int fortune, Random random)
-//    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
-//    {
+//    public int quantityDropped(IBlockState state, int fortune, Random random) {
 //        GelStage stage = state.getValue(PROP_STAGE);
-//        int num;
-//        if (stage.spreading)
-//        {
-//            num = builder.create(LootContextParamSets.BLOCK).getRandom().nextInt(2) + 1;
+//        if (stage.spreading) {
+//            return random.nextInt(2) + 1;
+//        } else {
+//            return 1;
 //        }
-//        else
-//        {
-//            num = 1;
-//        }
-//        List<ItemStack> drop = new ArrayList<>();
-//        drop.add(new ItemStack(BCFactoryItems.gelledWater.get(), num));
-//        return drop;
 //    }
 }

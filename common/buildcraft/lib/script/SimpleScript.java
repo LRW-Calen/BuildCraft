@@ -206,8 +206,7 @@ public class SimpleScript {
                     try {
                         shouldCall = GenericExpressionCompiler.compileExpressionBoolean(func, CONTEXT).evaluate();
                         log("(" + func + ") = " + shouldCall);
-                    }
-                    catch (InvalidExpressionException e) {
+                    } catch (InvalidExpressionException e) {
                         log("Invalid " + e.getMessage());
                         e.printStackTrace();
                     }
@@ -274,8 +273,7 @@ public class SimpleScript {
                         if (argCountNumber < 0 || argCountNumber > 50) {
                             throw new NumberFormatException();
                         }
-                    }
-                    catch (NumberFormatException nfe) {
+                    } catch (NumberFormatException nfe) {
                         log("Expected a number between 0 and 50, but got " + argCount);
                         break;
                     }
@@ -415,8 +413,7 @@ public class SimpleScript {
                         if (count < 0 || count > 50) {
                             throw new NumberFormatException();
                         }
-                    }
-                    catch (NumberFormatException nfe) {
+                    } catch (NumberFormatException nfe) {
                         log("Expected a number between 0 and 50, but got " + countStr);
                         break;
                     }
@@ -440,8 +437,7 @@ public class SimpleScript {
                 }
 
                 return list;
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 log("" + e.getMessage());
             }
         }
@@ -521,8 +517,7 @@ public class SimpleScript {
             try {
                 logWriter.write(line);
                 logWriter.newLine();
-            }
-            catch (IOException io) {
+            } catch (IOException io) {
                 BCLog.logger.warn("[lib.script] Failed to write to the log file!", io);
                 closeLog();
             }
@@ -540,8 +535,7 @@ public class SimpleScript {
             logFile.getParentFile().mkdirs();
             logWriter = new BufferedWriter(new FileWriter(logFile));
             return SimpleScript::closeLog;
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             BCLog.logger.warn("[lib.script] Failed to open the log file! (" + logDir + ")", io);
             closeLog();
             return () ->
@@ -555,13 +549,11 @@ public class SimpleScript {
             try {
                 try {
                     logWriter.flush();
-                }
-                finally {
+                } finally {
                     logWriter.close();
                     logWriter = null;
                 }
-            }
-            catch (IOException io) {
+            } catch (IOException io) {
                 BCLog.logger.warn(
                         "[lib.script] Failed to close the log file, so it might not be complete! (" + logDir + ")", io);
             }
@@ -610,8 +602,7 @@ public class SimpleScript {
         String multiLine = nextQuotedArg();
         try {
             return GSON.fromJson(multiLine, JsonObject.class);
-        }
-        catch (JsonSyntaxException jse) {
+        } catch (JsonSyntaxException jse) {
             log("Invalid JSON: " + jse.getMessage());
             return null;
         }
@@ -623,12 +614,10 @@ public class SimpleScript {
         if (Files.exists(jsonPath)) {
             try (BufferedReader reader = Files.newBufferedReader(jsonPath)) {
                 return GSON.fromJson(reader, JsonObject.class);
-            }
-            catch (IOException io) {
+            } catch (IOException io) {
                 log("Unable to read the file! " + io.getMessage());
                 return null;
-            }
-            catch (JsonSyntaxException jse) {
+            } catch (JsonSyntaxException jse) {
                 log("Invalid JSON: " + jse.getMessage());
                 return null;
             }
@@ -671,7 +660,7 @@ public class SimpleScript {
 
         public LineToken(String singleLine, LineData data, TokenType type, boolean isValid, int startIndex,
                          int endIndex) {
-            this(new String[]{singleLine}, new LineData[]{data}, type, isValid, startIndex, endIndex);
+            this(new String[] { singleLine }, new LineData[] { data }, type, isValid, startIndex, endIndex);
         }
 
         public String joinLines(boolean separateWithNewLine) {

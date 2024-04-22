@@ -135,8 +135,7 @@ public class JsonUtil {
             HashMap<K, V> map = new Gson().fromJson(elem, token.getType());
             return ImmutableMap.copyOf(map);
 
-        }
-        catch (IllegalStateException ise) {
+        } catch (IllegalStateException ise) {
             throw new JsonSyntaxException("Something was wrong with " + obj + " when deserializing it as a " + token,
                     ise);
         }
@@ -151,8 +150,7 @@ public class JsonUtil {
             JsonElement elem = obj.get(sub);
             ArrayList<T> list = new Gson().fromJson(elem, token.getType());
             return ImmutableList.copyOf(list);
-        }
-        catch (IllegalStateException ise) {
+        } catch (IllegalStateException ise) {
             throw new JsonSyntaxException("Something was wrong with " + obj + " when deserializing it as a " + token,
                     ise);
         }
@@ -165,8 +163,7 @@ public class JsonUtil {
         JsonPrimitive prim = element.getAsJsonPrimitive();
         try {
             return prim.getAsFloat();
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             throw new JsonSyntaxException("Expected a valid float, but got " + prim, nfe);
         }
     }
@@ -180,7 +177,7 @@ public class JsonUtil {
             }
             return floats;
         } else if (elem.isJsonPrimitive()) {
-            return new float[]{getAsFloat(elem)};
+            return new float[] { getAsFloat(elem) };
         } else {
             throw new JsonSyntaxException("Needed an array of floats or a single float but got " + elem);
         }
@@ -209,7 +206,7 @@ public class JsonUtil {
             }
             return strings;
         } else if (elem.isJsonPrimitive()) {
-            return new String[]{getAsString(elem)};
+            return new String[] { getAsString(elem) };
         } else {
             throw new JsonSyntaxException("Needed an array of strings or a single string but got " + elem);
         }
@@ -288,8 +285,7 @@ public class JsonUtil {
             try {
                 INodeLong exp = GenericExpressionCompiler.compileExpressionLong(prim.getAsString());
                 return (int) exp.evaluate();
-            }
-            catch (InvalidExpressionException iee) {
+            } catch (InvalidExpressionException iee) {
                 throw new JsonSyntaxException("Expected an int or an expression, but got '" + prim + "'", iee);
             }
         }
@@ -305,7 +301,7 @@ public class JsonUtil {
             }
             return strings;
         } else if (elem.isJsonPrimitive()) {
-            return new int[]{getAsInt(elem)};
+            return new int[] { getAsInt(elem) };
         } else {
             throw new JsonSyntaxException("Needed an array of ints or a single int but got " + elem);
         }

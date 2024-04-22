@@ -27,7 +27,6 @@ public class BCFactoryItems {
         gelledWater = HELPER.addItem("item.gel", ItemPropertiesCreator.common64(), ItemBC_Neptune::new);
     }
 
-
     public static void fmlPreInit() {
 
     }

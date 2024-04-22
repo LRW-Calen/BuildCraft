@@ -62,15 +62,13 @@ public class JsonVariableObject {
                 Class<?> nodeType;
                 try {
                     nodeType = NodeTypes.parseType(type);
-                }
-                catch (InvalidExpressionException iee) {
+                } catch (InvalidExpressionException iee) {
                     throw new JsonSyntaxException("Could not parse node type for variable '" + name + "'", iee);
                 }
                 IGetterFunc getterFunc = parseGetterFunction(getter, fnCtx);
                 try {
                     stateful = new NodeStateful(name, nodeType, getterFunc);
-                }
-                catch (InvalidExpressionException iee) {
+                } catch (InvalidExpressionException iee) {
                     throw new JsonSyntaxException("Could not create a getter for the variable '" + name + "'", iee);
                 }
                 fnCtx.putVariable(name, stateful.getter);
@@ -83,8 +81,7 @@ public class JsonVariableObject {
                     try {
                         IExpressionNode nodeRounder = InternalCompiler.compileExpression(rounder, fnCtx2);
                         stateful.setRounder(nodeRounder);
-                    }
-                    catch (InvalidExpressionException iee) {
+                    } catch (InvalidExpressionException iee) {
                         throw new JsonSyntaxException("Could not compile a rounder for the variable '" + name + "'",
                                 iee);
                     }
@@ -95,8 +92,7 @@ public class JsonVariableObject {
             IExpressionNode node;
             try {
                 node = InternalCompiler.compileExpression(expression, fnCtxValue);
-            }
-            catch (InvalidExpressionException e) {
+            } catch (InvalidExpressionException e) {
                 throw new JsonSyntaxException("Failed to compile variable " + name, e);
             }
             if (node instanceof IConstantNode) {

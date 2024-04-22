@@ -52,8 +52,7 @@ public class SpecialColourFontRenderer extends Font {
             try {
                 int ord = Integer.parseInt(Character.toString(c), 16);
                 thisColour = ColourUtil.getLightHex(DyeColor.byId(ord));
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 BCLog.logger
                         .warn("[lib.font] Invalid colour string for SpecialColourFontRenderer! " + nfe.getMessage());
             }

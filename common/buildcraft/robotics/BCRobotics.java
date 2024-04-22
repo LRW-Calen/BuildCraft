@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -40,7 +39,7 @@ import java.util.function.Consumer;
 public class BCRobotics {
     public static final String MODID = "buildcraftrobotics";
 
-    //    @Mod.Instance(MODID)
+    // @Mod.Instance(MODID)
     public static BCRobotics INSTANCE = null;
 
     public BCRobotics() {

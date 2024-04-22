@@ -70,7 +70,7 @@ public final class ChangingItemStack extends ChangingObject<ItemStackKey> {
 
     private static ItemStackKey[] makeStackArray(ItemStack stack) {
         if (stack.isEmpty()) {
-            return new ItemStackKey[]{ItemStackKey.EMPTY};
+            return new ItemStackKey[] { ItemStackKey.EMPTY };
         }
 //        if (stack.getItemDamage() == OreDictionary.WILDCARD_VALUE)
         if (stack.getDamageValue() == Short.MAX_VALUE) {
@@ -78,7 +78,7 @@ public final class ChangingItemStack extends ChangingObject<ItemStackKey> {
             stack.getItem().fillItemCategory(CreativeModeTab.TAB_SEARCH, subs);
             return makeListArray(subs);
         } else {
-            return new ItemStackKey[]{new ItemStackKey(stack)};
+            return new ItemStackKey[] { new ItemStackKey(stack) };
         }
     }
 
@@ -89,7 +89,7 @@ public final class ChangingItemStack extends ChangingObject<ItemStackKey> {
 
     private static ItemStackKey[] makeStackArray(ItemStack[] stacks) {
         if (stacks.length == 0) {
-            return new ItemStackKey[]{ItemStackKey.EMPTY};
+            return new ItemStackKey[] { ItemStackKey.EMPTY };
         } else {
             ItemStackKey[] arr = new ItemStackKey[stacks.length];
             for (int i = 0; i < stacks.length; i++) {

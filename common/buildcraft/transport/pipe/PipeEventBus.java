@@ -66,8 +66,7 @@ public class PipeEventBus {
                 MethodHandle mh;
                 try {
                     mh = MethodHandles.publicLookup().unreflect(m);
-                }
-                catch (IllegalAccessException e) {
+                } catch (IllegalAccessException e) {
                     throw new IllegalStateException("Cannot annotate " + m + " with @PipeEventHandler as there was a problem with it!", e);
                 }
                 boolean isStatic = Modifier.isStatic(m.getModifiers());
@@ -174,8 +173,7 @@ public class PipeEventBus {
                 try {
                     handle.invoke(event);
                     return true;
-                }
-                catch (Throwable e) {
+                } catch (Throwable e) {
                     throw new IllegalStateException(e);
                 }
             }

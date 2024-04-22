@@ -81,13 +81,11 @@ public class ModelHolderStatic extends ModelHolder {
         failReason = null;
         try {
             rawModel = JsonModel.deserialize(modelLocation);
-        }
-        catch (JsonParseException jse) {
+        } catch (JsonParseException jse) {
             rawModel = null;
             failReason = "The model had errors: " + jse.getMessage();
             BCLog.logger.warn("[lib.model.holder] Failed to load the model " + modelLocation + " because " + jse.getMessage());
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             rawModel = null;
             failReason = "The model did not exist in any resource pack: " + io.getMessage();
             BCLog.logger.warn("[lib.model.holder] Failed to load the model " + modelLocation + " because " + io.getMessage());
@@ -132,7 +130,7 @@ public class ModelHolderStatic extends ModelHolder {
         } else {
             MutableQuad[] cut = bakePart(rawModel.cutoutElements);
             MutableQuad[] trans = bakePart(rawModel.translucentElements);
-            quads = new MutableQuad[][]{cut, trans};
+            quads = new MutableQuad[][] { cut, trans };
             rawModel = null;
         }
     }
@@ -181,7 +179,7 @@ public class ModelHolderStatic extends ModelHolder {
                     BCLog.logger.warn(warnText);
                 }
             }
-            return new MutableQuad[][]{MutableQuad.EMPTY_ARRAY, MutableQuad.EMPTY_ARRAY};
+            return new MutableQuad[][] { MutableQuad.EMPTY_ARRAY, MutableQuad.EMPTY_ARRAY };
         }
         return quads;
     }

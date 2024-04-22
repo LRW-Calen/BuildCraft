@@ -87,11 +87,9 @@ public class BuildCraftJsonGui extends BuildCraftGui {
                     }
                 }
             }
-        }
-        catch (InvalidExpressionException iee) {
+        } catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException("Failed to resolve the size of " + jsonGuiDefinition, iee);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new Error(e);
         }
         loadHistory.finishLoading();

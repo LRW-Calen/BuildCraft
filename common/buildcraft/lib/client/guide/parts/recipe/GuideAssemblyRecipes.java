@@ -64,6 +64,6 @@ public enum GuideAssemblyRecipes implements IStackRecipes {
             items.forEach(stack -> stack.setCount(definition.count));
             return items;
         }).map(ChangingItemStack::new).toArray(ChangingItemStack[]::new);
-        return new GuideAssemblyFactory(stacks, new ChangingItemStack(output), new ChangingObject<>(new Long[]{recipe.getRequiredMicroJoulesFor(output)}));
+        return new GuideAssemblyFactory(stacks, new ChangingItemStack(output), new ChangingObject<>(new Long[] { recipe.getRequiredMicroJoulesFor(output) }));
     }
 }

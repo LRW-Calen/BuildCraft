@@ -77,7 +77,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                         .noneMatch(rule -> rule.ignore);
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setRequiredBlockOffsets(SchematicBlockContext context, Set<JsonRule> rules) {
         requiredBlockOffsets.clear();
         rules.stream()
@@ -90,12 +90,12 @@ public class SchematicBlockDefault implements ISchematicBlock {
         }
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setBlockState(SchematicBlockContext context, Set<JsonRule> rules) {
         blockState = context.blockState;
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setIgnoredProperties(SchematicBlockContext context, Set<JsonRule> rules) {
         ignoredProperties.clear();
         rules.stream()
@@ -109,7 +109,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                 .forEach(ignoredProperties::add);
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setTileNbt(SchematicBlockContext context, Set<JsonRule> rules) {
         tileNbt = null;
         if (context.blockState.hasBlockEntity()) {
@@ -120,7 +120,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         }
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setPlaceBlock(SchematicBlockContext context, Set<JsonRule> rules) {
         placeBlock = rules.stream()
                 .map(rule -> rule.placeBlock)
@@ -131,7 +131,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                 .orElse(context.block);
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setUpdateBlockOffsets(SchematicBlockContext context, Set<JsonRule> rules) {
         updateBlockOffsets.clear();
         if (rules.stream().map(rule -> rule.updateBlockOffsets).anyMatch(Objects::nonNull)) {
@@ -150,7 +150,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         }
     }
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setCanBeReplacedWithBlocks(SchematicBlockContext context, Set<JsonRule> rules) {
         canBeReplacedWithBlocks.clear();
         rules.stream()
@@ -274,7 +274,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
         }
         world.getProfiler().pop();
         world.getProfiler().push("place block");
-        boolean b = world.setBlock(blockPos, newBlockState, 11);
+        boolean b = world.setBlock(blockPos, newBlockState, Block.UPDATE_ALL_IMMEDIATE);
         world.getProfiler().pop();
         if (b) {
             world.getProfiler().push("notify");

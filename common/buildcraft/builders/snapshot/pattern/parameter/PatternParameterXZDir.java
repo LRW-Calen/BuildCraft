@@ -33,7 +33,7 @@ public enum PatternParameterXZDir implements IStatementParameter {
     SOUTH(Direction.SOUTH);
 
     private static final PatternParameterXZDir[] POSSIBLE_ORDER =
-            {null, null, NORTH, null, EAST, null, SOUTH, null, WEST};
+            { null, null, NORTH, null, EAST, null, SOUTH, null, WEST };
 
     private static final Map<Direction, PatternParameterXZDir> map;
 

@@ -23,12 +23,4 @@ public class BlockPump<T extends TilePump> extends BlockBCTile_Neptune<TilePump>
     public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return BCFactoryBlocks.pumpTile.get().create(pos, state);
     }
-
-//    @Override
-//    @Nullable
-//    public BlockEntityTicker<T> getTicker(BlockState pState, BlockEntityType pBlockEntityType)
-//    {
-////        return pBlockEntityType==BCFactoryBlockEntities.PUMP.get()?(BlockEntityTicker<T>)TilePump::tick:null;
-//        return BCCoreBlockEntities.createTickerHelper(pBlockEntityType, BCFactoryBlocks.pumpTile.get(), TilePump::tick);
-//    }
 }

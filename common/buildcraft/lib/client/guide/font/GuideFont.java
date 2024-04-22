@@ -144,7 +144,7 @@ public class GuideFont implements IFontRenderer {
 
             Font f2 = font.font.deriveFont(font.font.getSize2D() * scale * (float) scaleFactor);
 
-            for (int i : new int[]{0, Font.BOLD, Font.ITALIC, Font.BOLD | Font.ITALIC}) {
+            for (int i : new int[] { 0, Font.BOLD, Font.ITALIC, Font.BOLD | Font.ITALIC }) {
                 metrics[i] = font.g2d.getFontMetrics(f2.deriveFont(i));
             }
         }

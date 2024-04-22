@@ -41,37 +41,37 @@ public abstract class Snapshot {
         throw new UnsupportedOperationException();
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static int posToIndex(int sizeX, int sizeY, int sizeZ, int x, int y, int z) {
         return ((z * sizeY) + y) * sizeX + x;
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static int posToIndex(BlockPos size, int x, int y, int z) {
         return posToIndex(size.getX(), size.getY(), size.getZ(), x, y, z);
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static int posToIndex(int sizeX, int sizeY, int sizeZ, BlockPos pos) {
         return posToIndex(sizeX, sizeY, sizeZ, pos.getX(), pos.getY(), pos.getZ());
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static int posToIndex(BlockPos size, BlockPos pos) {
         return posToIndex(size.getX(), size.getY(), size.getZ(), pos.getX(), pos.getY(), pos.getZ());
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public int posToIndex(int x, int y, int z) {
         return posToIndex(size, x, y, z);
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public int posToIndex(BlockPos pos) {
         return posToIndex(size, pos);
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static BlockPos indexToPos(int sizeX, int sizeY, int sizeZ, int i) {
         return new BlockPos(
                 i % sizeX,
@@ -80,27 +80,27 @@ public abstract class Snapshot {
         );
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static BlockPos indexToPos(BlockPos size, int i) {
         return indexToPos(size.getX(), size.getY(), size.getZ(), i);
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public BlockPos indexToPos(int i) {
         return indexToPos(size, i);
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static int getDataSize(int x, int y, int z) {
         return x * y * z;
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public static int getDataSize(BlockPos size) {
         return getDataSize(size.getX(), size.getY(), size.getZ());
     }
 
-    @SuppressWarnings({"WeakerAccess", "unused"})
+    @SuppressWarnings({ "WeakerAccess", "unused" })
     public int getDataSize() {
         return getDataSize(size);
     }

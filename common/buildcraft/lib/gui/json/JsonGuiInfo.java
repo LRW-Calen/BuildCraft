@@ -53,11 +53,9 @@ public class JsonGuiInfo extends JsonVariableObject {
                 types.putAll(info.types);
                 elements.addAll(info.elements);
                 variables.putAll(info.variables);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 throw new JsonSyntaxException("Failed to load parent " + parent, e);
-            }
-            finally {
+            } finally {
                 loadHistory.finishLoading();
             }
         }

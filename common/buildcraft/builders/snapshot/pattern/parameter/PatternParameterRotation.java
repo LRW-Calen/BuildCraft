@@ -29,7 +29,7 @@ public enum PatternParameterRotation implements IStatementParameter {
     THREE_QUARTERS;
 
     private static final PatternParameterRotation[] POSSIBLE_ORDER =
-            {null, null, NONE, null, QUARTER, null, HALF, null, THREE_QUARTERS};
+            { null, null, NONE, null, QUARTER, null, HALF, null, THREE_QUARTERS };
 
     public final int rotationCount;
 

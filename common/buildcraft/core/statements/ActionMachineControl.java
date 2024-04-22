@@ -49,7 +49,7 @@ public class ActionMachineControl extends BCStatement implements IActionExternal
 
     @Override
     public void actionActivate(BlockEntity target, Direction side, IStatementContainer source, IStatementParameter[] parameters) {
-        IControllable controllable = target.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElseGet(() -> null);
+        IControllable controllable = target.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElse(null);
         if (controllable != null && controllable.acceptsControlMode(mode)) {
             controllable.setControlMode(mode);
         }

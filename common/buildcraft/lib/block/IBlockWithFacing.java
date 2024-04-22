@@ -12,6 +12,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
@@ -26,7 +27,7 @@ public interface IBlockWithFacing extends ICustomRotationHandler {
         return canFaceVertically() ? BlockBCBase_Neptune.BLOCK_FACING_6 : BlockBCBase_Neptune.PROP_FACING;
     }
 
-    default boolean canBeRotated(Level world, BlockPos pos, BlockState state) {
+    default boolean canBeRotated(LevelAccessor world, BlockPos pos, BlockState state) {
         return true;
     }
 

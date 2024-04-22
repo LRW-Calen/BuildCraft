@@ -56,8 +56,7 @@ public abstract class StreamConfigManager {
             try (Reader reader = new InputStreamReader(streamIn, StandardCharsets.UTF_8)) {
                 properties.load(reader);
                 reader.close();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 BCLog.logger.warn("Caught an IOException while reading the detailed config file: " + e.getMessage());
             }
         }
@@ -70,8 +69,7 @@ public abstract class StreamConfigManager {
         try (Writer writer = new OutputStreamWriter(streamOut, StandardCharsets.UTF_8)) {
             properties.store(writer, comment());
             writer.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             BCLog.logger.warn("Caught an IOException while writing the detailed config file: " + e.getMessage());
         }
     }

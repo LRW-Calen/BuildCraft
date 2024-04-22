@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GuideChapter extends GuidePart {
-    public static final int[] COLOURS = {0x9dd5c0, 0xfac174, 0x27a4dd};
+    public static final int[] COLOURS = { 0x9dd5c0, 0xfac174, 0x27a4dd };
 
     public static final int MAX_HOWEVER_PROGRESS = 5;
     public static final int MAX_HOVER_DISTANCE = 20;

@@ -22,31 +22,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
 
     @Override
     public RefineryRecipeRegistry.DistillationRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-//        InscriberProcessType mode = getMode(json);
-//
-//        ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-//
-//        // Deserialize the three parts of the input
-//        JsonObject ingredients = GsonHelper.getAsJsonObject(json, "ingredients");
-//        Ingredient middle = Ingredient.fromJson(ingredients.get("middle"));
-//        Ingredient top = Ingredient.EMPTY;
-//        if (ingredients.has("top"))
-//        {
-//            top = Ingredient.fromJson(ingredients.get("top"));
-//        }
-//        Ingredient bottom = Ingredient.EMPTY;
-//        if (ingredients.has("bottom"))
-//        {
-//            bottom = Ingredient.fromJson(ingredients.get("bottom"));
-//        }
-//
-//        return new InscriberRecipe(recipeId, middle, result, top, bottom, mode);
-
         String type = GsonHelper.getAsString(json, "type");
-//        if (!type.equals(NameSpaces.BUILDCRAFT_FACTORY + "distillation"))
-//        {
-//            throw new RuntimeException("Invalid HeatExchange Recipe Type!");
-//        }
         long powerRequired = json.get("powerRequired").getAsLong();
         FluidStack in = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("in"));
         FluidStack outGas = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("outGas"));
@@ -65,15 +41,6 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
     @Nullable
     @Override
     public RefineryRecipeRegistry.DistillationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-//        Ingredient middle = Ingredient.fromNetwork(buffer);
-//        ItemStack result = buffer.readItem();
-//        Ingredient top = Ingredient.fromNetwork(buffer);
-//        Ingredient bottom = Ingredient.fromNetwork(buffer);
-//        InscriberProcessType mode = buffer.readEnum(InscriberProcessType.class);
-//
-//        return new InscriberRecipe(recipeId, middle, result, top, bottom, mode);
-
-
         long powerRequired = buffer.readLong();
         FluidStack in = buffer.readFluidStack();
         FluidStack outGas = buffer.readFluidStack();
@@ -83,12 +50,6 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
 
     @Override
     public void toNetwork(FriendlyByteBuf buffer, RefineryRecipeRegistry.DistillationRecipe recipe) {
-//        recipe.getMiddleInput().toNetwork(buffer);
-//        buffer.writeItem(recipe.getResultItem());
-//        recipe.getTopOptional().toNetwork(buffer);
-//        recipe.getBottomOptional().toNetwork(buffer);
-//        buffer.writeEnum(recipe.getProcessType());
-
         buffer.writeLong(recipe.powerRequired());
         buffer.writeFluidStack(recipe.in());
         buffer.writeFluidStack(recipe.outGas());

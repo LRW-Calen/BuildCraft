@@ -49,8 +49,7 @@ public class JsonVariableModel extends JsonVariableObject {
             throws JsonParseException, IOException {
         try (InputStreamReader isr = ctx.startLoading(from)) {
             return new JsonVariableModel(JsonUtil.inlineCustom(new Gson().fromJson(isr, JsonObject.class)), fnCtx, ctx);
-        }
-        finally {
+        } finally {
             ctx.finishLoading();
         }
     }
@@ -99,8 +98,7 @@ public class JsonVariableModel extends JsonVariableObject {
             JsonVariableModel parent;
             try {
                 parent = deserialize(from, fnCtx, ctx);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 throw new JsonParseException("Didn't find the parent '" + parentName + "'!", e);
             }
             ambf = parent.ambientOcclusion;

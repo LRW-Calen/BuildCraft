@@ -35,7 +35,7 @@ public enum FacadeSwapRecipe implements CraftingRecipe, IRecipeViewable.IViewabl
 
     private static final int TIME_GAP = 500;
 
-    private static final ChangingItemStack[] INPUTS = {null};
+    private static final ChangingItemStack[] INPUTS = { null };
     private static ChangingItemStack OUTPUTS;
 
     public static void genRecipes() {

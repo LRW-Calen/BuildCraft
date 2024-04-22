@@ -46,7 +46,7 @@ public class GuideAssembly extends GuidePartItem {
         this.input = input;
         this.output = output;
         this.mjCost = mjCost;
-        this.hash = Arrays.deepHashCode(new Object[]{input, output, mjCost});
+        this.hash = Arrays.deepHashCode(new Object[] { input, output, mjCost });
     }
 
     @Override

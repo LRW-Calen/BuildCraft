@@ -14,7 +14,7 @@ public class BCFactoryBlocks {
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCFactory.MODID);
 
     public static RegistryObject<BlockAutoWorkbenchItems> autoWorkbenchItems;
-    //    public static RegistryObject<BlockAutoWorkbenchFluids> autoWorkbenchFluids;
+    // public static RegistryObject<BlockAutoWorkbenchFluids> autoWorkbenchFluids;
     public static RegistryObject<BlockMiningWell> miningWell;
     public static RegistryObject<BlockPump> pump;
     public static RegistryObject<BlockTube> tube;
@@ -25,6 +25,7 @@ public class BCFactoryBlocks {
     public static RegistryObject<BlockHeatExchange> heatExchange;
 
     public static RegistryObject<BlockWaterGel> waterGel;
+//    public static RegistryObject<BlockPlastic> plastic;
 
     public static RegistryObject<BlockEntityType<TileAutoWorkbenchItems>> autoWorkbenchItemsTile;
     public static RegistryObject<BlockEntityType<TileAutoWorkbenchFluids>> autoWorkbenchFluidsTile;
@@ -80,8 +81,8 @@ public class BCFactoryBlocks {
                 BlockPropertiesCreator.createDefaultProperties(Material.METAL)
                         .sound(SoundType.GLASS)
                         .noOcclusion()
-                        .isViewBlocking((p0, p1, p2) -> false)
-                        .isSuffocating((p0, p1, p2) -> false) // 窒息
+                        .isViewBlocking((state, world, pos) -> false)
+                        .isSuffocating((state, world, pos) -> false)
                 ,
                 BlockHeatExchange::new
         );
@@ -93,6 +94,7 @@ public class BCFactoryBlocks {
                 ,
                 BlockWaterGel::new
         );
+//        plastic = HELPER.addBlockAndItem("block.plastic", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockPlastic::new, ItemPlastic::new);
 
         autoWorkbenchItemsTile = HELPER.registerTile("tile.autoworkbench.item", TileAutoWorkbenchItems::new, autoWorkbenchItems);
 //        autoWorkbenchFluidsTile = HELPER.registerTile("tile.autoworkbench.fluid", TileAutoWorkbenchFluids::new, autoWorkbenchFluids);

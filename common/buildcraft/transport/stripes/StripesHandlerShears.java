@@ -48,7 +48,7 @@ public enum StripesHandlerShears implements IStripesHandlerItem {
                 if (stack.hurt(1, player.getRandom(), player instanceof ServerPlayer ? (ServerPlayer) player : null)) {
                     stack.shrink(1);
                 }
-                world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11); // Might become obsolete in 1.12+
+                world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE); // Might become obsolete in 1.12+
                 for (ItemStack dropStack : drops) {
                     activator.sendItem(dropStack, direction);
                 }

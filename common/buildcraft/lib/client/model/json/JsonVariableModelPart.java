@@ -64,8 +64,7 @@ public abstract class JsonVariableModelPart {
     public static INodeDouble convertStringToDoubleNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionDouble(expression, context);
-        }
-        catch (InvalidExpressionException e) {
+        } catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -73,8 +72,7 @@ public abstract class JsonVariableModelPart {
     public static INodeObject<String> convertStringToStringNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionString(expression, context);
-        }
-        catch (InvalidExpressionException e) {
+        } catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -82,8 +80,7 @@ public abstract class JsonVariableModelPart {
     public static INodeBoolean convertStringToBooleanNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionBoolean(expression, context);
-        }
-        catch (InvalidExpressionException e) {
+        } catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -91,8 +88,7 @@ public abstract class JsonVariableModelPart {
     public static INodeLong convertStringToLongNode(String expression, FunctionContext context) {
         try {
             return GenericExpressionCompiler.compileExpressionLong(expression, context);
-        }
-        catch (InvalidExpressionException e) {
+        } catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -100,8 +96,7 @@ public abstract class JsonVariableModelPart {
     public static <T> INodeObject<T> convertStringToObjectNode(String expression, FunctionContext context, Class<T> clazz) {
         try {
             return GenericExpressionCompiler.compileExpressionObject(clazz, expression, context);
-        }
-        catch (InvalidExpressionException e) {
+        } catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Invalid expression " + expression, e);
         }
     }
@@ -163,6 +158,6 @@ public abstract class JsonVariableModelPart {
         float x = (float) in[0].evaluate() / 16f;
         float y = (float) in[1].evaluate() / 16f;
         float z = (float) in[2].evaluate() / 16f;
-        return new float[]{x, y, z};
+        return new float[] { x, y, z };
     }
 }

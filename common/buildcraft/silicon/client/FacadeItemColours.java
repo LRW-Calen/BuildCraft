@@ -27,8 +27,7 @@ public enum FacadeItemColours implements ItemColor {
         try {
 //            colour = Minecraft.getMinecraft().getBlockColors().getColor(state.stateInfo.state, null, null);
             colour = Minecraft.getInstance().getBlockColors().getColor(state.stateInfo.state, null, null);
-        }
-        catch (NullPointerException ex) {
+        } catch (NullPointerException ex) {
             // the block didn't like the null world or player
         }
         return colour;

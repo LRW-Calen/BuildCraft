@@ -97,8 +97,7 @@ public class SpriteHolderRegistry {
 
             try {
                 ImageIO.write(bufferedimage, "png", new File("bc_spritemap_" + l + ".png"));
-            }
-            catch (IOException io) {
+            } catch (IOException io) {
                 BCLog.logger.warn(io);
             }
         }

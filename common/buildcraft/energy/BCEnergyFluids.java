@@ -136,14 +136,14 @@ public class BCEnergyFluids {
             fuelMixedLight = defineFluids(data[index++], "fuel_mixed_light");
             fuelGaseous = defineFluids(data[index++], "fuel_gaseous");
         } else {
-            crudeOil = new RegistryObject[]{defineFluid(data[0], 0, "oil")};
+            crudeOil = new RegistryObject[] { defineFluid(data[0], 0, "oil") };
             oilResidue = new RegistryObject[0];
             oilHeavy = new RegistryObject[0];
             oilDense = new RegistryObject[0];
             oilDistilled = new RegistryObject[0];
             fuelDense = new RegistryObject[0];
             fuelMixedHeavy = new RegistryObject[0];
-            fuelLight = new RegistryObject[]{defineFluid(data[7], 0, "fuel_light")};
+            fuelLight = new RegistryObject[] { defineFluid(data[7], 0, "fuel_light") };
             fuelMixedLight = new RegistryObject[0];
             fuelGaseous = new RegistryObject[0];
         }

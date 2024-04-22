@@ -68,11 +68,9 @@ public class MessageContainer implements IMessage {
                 MessageUtil.ensureEmpty(message.payload, ctx.getDirection() == NetworkDirection.PLAY_TO_CLIENT, extra);
             }
             return null;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new Error(e);
-        }
-        finally {
+        } finally {
             message.payload.release();
         }
     };

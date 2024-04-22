@@ -82,8 +82,7 @@ public class JsonGuiElement extends JsonVariableObject {
                 }
             }
             finaliseVariables();
-        }
-        catch (JsonSyntaxException jse) {
+        } catch (JsonSyntaxException jse) {
             throw new JsonSyntaxException("Failed to read element " + name, jse);
         }
     }

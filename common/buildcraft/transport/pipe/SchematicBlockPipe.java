@@ -21,6 +21,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -74,8 +75,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
                 builder.add(stack);
             }
             return builder.build();
-        }
-        catch (InvalidInputDataException e) {
+        } catch (InvalidInputDataException e) {
             throw new RuntimeException(e);
         }
     }
@@ -100,7 +100,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
     @Override
     public boolean build(Level world, BlockPos blockPos) {
         BlockState state = BCTransportBlocks.pipeHolder.get().defaultBlockState();
-        boolean setBlockResult = world.setBlock(blockPos, state, 11);
+        boolean setBlockResult = world.setBlock(blockPos, state, Block.UPDATE_ALL_IMMEDIATE);
         if (setBlockResult) {
 //            BlockEntity tileEntity = BlockEntity.loadStatic(world, tileNbt);
             BlockEntity tileEntity = BlockEntity.loadStatic(blockPos, state, tileNbt);

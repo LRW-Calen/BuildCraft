@@ -18,7 +18,6 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-//public class BlockAutoWorkbenchItems extends BlockBCTile_Neptune<TileAutoWorkbenchItems>
 public class BlockAutoWorkbenchItems extends BlockBCTile_Neptune<TileAutoWorkbenchItems> implements IBlockWithTickableTE<TileAutoWorkbenchItems> {
 
     public BlockAutoWorkbenchItems(String idBC, BlockBehaviour.Properties props) {
@@ -36,7 +35,6 @@ public class BlockAutoWorkbenchItems extends BlockBCTile_Neptune<TileAutoWorkben
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!world.isClientSide) {
 //            BCFactoryGuis.AUTO_WORKBENCH_ITEMS.openGUI(player, pos);
-            // Calen
             if (world.getBlockEntity(pos) instanceof TileAutoWorkbenchItems tile) {
                 MessageUtil.serverOpenTileGUI(player, tile);
             }

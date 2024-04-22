@@ -13,13 +13,10 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 public class BCEnergySprites {
@@ -136,8 +133,7 @@ public class BCEnergySprites {
         map.texturesByName.put(location, textureatlassprite);
         try {
             textureatlassprite.uploadFirstFrame();
-        }
-        catch (Throwable throwable) {
+        } catch (Throwable throwable) {
             CrashReport crashreport = CrashReport.forThrowable(throwable, "[BuildCraft Energy] Stitching texture atlas");
             CrashReportCategory crashreportcategory = crashreport.addCategory("[BuildCraft Energy] Texture being stitched together");
             crashreportcategory.setDetail("[BuildCraft Energy] Atlas path", map.location());

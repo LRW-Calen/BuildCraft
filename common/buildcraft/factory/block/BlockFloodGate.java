@@ -59,23 +59,6 @@ public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate> {
         return new TileFloodGate(pos, state);
     }
 
-    // Calen: for custom call getActualState
-    @Override
-    public BlockState updateShape(BlockState thisState, Direction facing, BlockState otherState, LevelAccessor world, BlockPos thisPos, BlockPos otherPos) {
-        BlockEntity tile = world.getBlockEntity(thisPos);
-        thisState = super.updateShape(thisState, facing, otherState, world, thisPos, otherPos);
-        return getActualState(thisState, world, thisPos, tile);
-    }
-
-    // Calen: for custom call getActualState
-    @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-        BlockState state = super.getStateForPlacement(context);
-        Level world = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        return getActualState(state, world, pos, world.getBlockEntity(pos));
-    }
-
     @Override
     public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
         if (tile instanceof TileFloodGate floodGate) {
@@ -87,8 +70,22 @@ public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate> {
     }
 
     @Override
-//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand,
-//                                    Direction side, float hitX, float hitY, float hitZ)
+    public BlockState updateShape(BlockState thisState, Direction facing, BlockState otherState, LevelAccessor world, BlockPos thisPos, BlockPos otherPos) {
+        BlockEntity tile = world.getBlockEntity(thisPos);
+        thisState = super.updateShape(thisState, facing, otherState, world, thisPos, otherPos);
+        return getActualState(thisState, world, thisPos, tile);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        BlockState state = super.getStateForPlacement(context);
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        return getActualState(state, world, pos, world.getBlockEntity(pos));
+    }
+
+    @Override
+//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ)
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         Direction side = hitResult.getDirection();
 

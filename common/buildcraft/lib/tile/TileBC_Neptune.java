@@ -642,8 +642,7 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
             // Make sure that we actually read the entire message rather than just discarding it
             MessageUtil.ensureEmpty(buffer, level.isClientSide, getClass() + ", id = " + getIdAllocator().getNameFor(id));
             spawnReceiveParticles(id);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new RuntimeException("Received an update tag that failed to read correctly!", e);
         }
     }

@@ -6,7 +6,6 @@
 
 package buildcraft.factory.block;
 
-import buildcraft.api.enums.EnumExchangePart;
 import buildcraft.api.transport.pipe.ICustomPipeConnection;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.tile.TileHeatExchange;
@@ -15,11 +14,13 @@ import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.block.IBlockWithTickableTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -33,9 +34,22 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.Locale;
 
 public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> implements ICustomPipeConnection, IBlockWithFacing, IBlockWithTickableTE<TileHeatExchange> {
 
+    public enum EnumExchangePart implements StringRepresentable {
+        START,
+        MIDDLE,
+        END;
+
+        private final String lowerCaseName = name().toLowerCase(Locale.ROOT);
+
+        @Override
+        public String getSerializedName() {
+            return lowerCaseName;
+        }
+    }
 
     public static final EnumProperty<EnumExchangePart> PROP_PART = EnumProperty.create("part", EnumExchangePart.class);
     public static final Property<Boolean> PROP_CONNECTED_Y = BooleanProperty.create("connected_y");
@@ -56,7 +70,6 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     @Override
 //    protected void addProperties(List<IProperty<?>> properties)
     protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
-        // Calen 一定要super!!!
         super.createBlockStateDefinition(builder);
         builder.add(PROP_PART);
         builder.add(PROP_CONNECTED_Y);
@@ -64,28 +77,10 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
         builder.add(PROP_CONNECTED_RIGHT);
     }
 
-    // Calen: getActualState in 1.12.2 is called at many places but 1.18.2 not
-    // Calen: TileEntity has not been created when #getStateForPlacement is called
-//    @Override
-////    public BlockState getActualState(BlockState state, IBlockAccess world, BlockPos pos)
-////    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos)
-//    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context)
-//    {
-//        // Calen: Here TE not created
-//////        // Calen
-////        Level world = context.getLevel();
-////        BlockPos pos = context.getClickedPos();
-//////        BlockState state = defaultBlockState();
-//////        return updateShape(state, world, pos);
-////        BlockEntity tile = world.getBlockEntity(pos);
-//        BlockState state = super.getStateForPlacement(context);
-//        return state;
-////        return updateShape(state, world, pos);
-//    }
-
     @Override
     public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
-        if (tile instanceof TileHeatExchange exchange) {
+        if (tile instanceof TileHeatExchange) {
+            TileHeatExchange exchange = (TileHeatExchange) tile;
             Direction thisFacing = state.getValue(PROP_FACING);
 //            boolean connectLeft = doesNeighbourConnect(world, pos, thisFacing, thisFacing.rotateY());
             boolean connectLeft = doesNeighbourConnect(world, pos, thisFacing, thisFacing.getClockWise());
@@ -116,9 +111,11 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
         return getActualState(state, world, pos, tile);
     }
 
-    // Calen: Middle
+    // Middle
     private static final VoxelShape MIDDLE_X = Block.box(2, 2, 0, 14, 14, 16);
     private static final VoxelShape MIDDLE_Z = Block.box(0, 2, 2, 16, 14, 14);
+
+    // START/END
     private static final VoxelShape INNER_TUBE_X = Block.box(4, 4, 0, 12, 12, 16);
     private static final VoxelShape INNER_TUBE_Z = Block.box(0, 4, 4, 16, 12, 12);
 
@@ -126,10 +123,11 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     private static final VoxelShape START_E_END_W = Block.box(2, 2, 0, 14, 14, 14);
     private static final VoxelShape START_S_END_N = Block.box(2, 2, 2, 16, 14, 14);
     private static final VoxelShape START_N_END_S = Block.box(0, 2, 2, 14, 14, 14);
+
     private static final VoxelShape START_DOWN = Block.box(2, 0, 2, 14, 2, 14);
     private static final VoxelShape END_UP = Block.box(2, 14, 2, 14, 16, 14);
 
-    // if ret full box, the inner quads will be dark
+    // Calen: if ret full box, the inner quads will be dark
     @NotNull
     @Override
     public VoxelShape getShape(BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext context) {
@@ -159,15 +157,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
         };
     }
 
-    //    @Override
-//    public void updateIndirectNeighbourShapes(BlockState p_60520_, LevelAccessor p_60521_, BlockPos p_60522_, int p_60523_, int p_60524_)
-//    {
-//        super.updateIndirectNeighbourShapes(p_60520_, p_60521_, p_60522_, p_60523_, p_60524_);
-//    }
-
-
-    private static boolean doesNeighbourConnect(LevelAccessor world, BlockPos pos, Direction thisFacing,
-                                                Direction dir) {
+    private static boolean doesNeighbourConnect(LevelAccessor world, BlockPos pos, Direction thisFacing, Direction dir) {
         BlockState neighbour = world.getBlockState(pos.relative(dir));
         if (neighbour.getBlock() == BCFactoryBlocks.heatExchange.get()) {
             return neighbour.getValue(PROP_FACING) == thisFacing;
@@ -176,13 +166,15 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     }
 
     @Override
-    public boolean rotate(Level world, BlockPos pos, Direction axis) {
+    public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
         BlockEntity tile = world.getBlockEntity(pos);
         if (tile instanceof TileHeatExchange) {
             TileHeatExchange exchange = (TileHeatExchange) tile;
-            return exchange.rotate();
+//            return exchange.rotate();
+            exchange.rotate();
         }
-        return false;
+//        return false;
+        return state;
     }
 
     @Override
@@ -201,91 +193,25 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
         return new TileHeatExchange(pos, state);
     }
 
-    //    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
-        return true;
-    }
-
-    //    @Override
-    public boolean isFullCube(BlockState state) {
-        return false;
-    }
-
 //    @Override
-//    public boolean isCollisionShapeFullBlock(BlockState state, BlockGetter world, BlockPos pos)
-//    {
+//    public boolean isOpaqueCube(IBlockState state) {
 //        return false;
 //    }
 
 //    @Override
-//    public VoxelShape getVisualShape(BlockState p_60479_, BlockGetter p_60480_, BlockPos p_60481_, CollisionContext p_60482_)
-//    {
-//        return Shapes.empty();
+//    public boolean isFullCube(IBlockState state) {
+//        return false;
 //    }
 
-    // Calen
-    @Override
-    public VoxelShape getOcclusionShape(BlockState p_60578_, BlockGetter p_60579_, BlockPos p_60580_) {
-        return Shapes.empty();
-    }
-
+    // 1.18.2: moved to BCFactory#clientSetup
 //    @Override
-//    public VoxelShape getCollisionShape(BlockState p_60572_, BlockGetter p_60573_, BlockPos p_60574_, CollisionContext p_60575_)
-//    {
-////        return Shapes.block();
-//        return Shapes.empty();
-//    }
-
-//    @Override
-//    public VoxelShape getBlockSupportShape(BlockState p_60581_, BlockGetter p_60582_, BlockPos p_60583_)
-//    {
-//        return Shapes.block();
-//    }
-
-//    @Override
-//    public VoxelShape getShape(BlockState p_60555_, BlockGetter p_60556_, BlockPos p_60557_, CollisionContext p_60558_)
-//    {
-//        return Shapes.empty();
-//    }
-
-//    // Calen add
-//    // for no shade
-//    // 阴影亮度
-//    @Override
-//    public float getShadeBrightness(BlockState p_48731_, BlockGetter p_48732_, BlockPos p_48733_)
-//    {
-//        return 1.0F;
-//    }
-
-//    @Override
-//    public VoxelShape getCollisionShape(BlockState p_60572_, BlockGetter p_60573_, BlockPos p_60574_, CollisionContext p_60575_)
-//    {
-//        return super.getCollisionShape(p_60572_, p_60573_, p_60574_, p_60575_);
-//    }
-
-    /**
-     * -> BuildCraftFactory.clientSetup(FMLClientSetupEvent)
-     */
-//    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public BlockRenderLayer getBlockLayer()
-//    {
+//    @SideOnly(Side.CLIENT)
+//    public BlockRenderLayer getBlockLayer() {
 //        return BlockRenderLayer.CUTOUT;
 //    }
+
     @Override
     public float getExtension(Level world, BlockPos pos, Direction face, BlockState state) {
         return 0;
     }
-
-//    @Override
-//    @Nullable
-//    public BlockEntityTicker<TileHeatExchange> getTicker(BlockState pState, BlockEntityType pBlockEntityType)
-//    {
-//        return BCCoreBlockEntities.createTickerHelper(pBlockEntityType, BCFactoryBlocks.heatExchangeTile.get(), TileHeatExchange::tick);
-//    }
 }

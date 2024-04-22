@@ -31,6 +31,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -170,7 +171,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
             // - Create block and tile
             FakePlayer player = BuildCraftAPI.fakePlayerProvider.getFakePlayer((ServerLevel) w, owner, p);
             player.getInventory().clearContent();
-            w.setBlock(p, stripesStateOld, 3);
+            w.setBlock(p, stripesStateOld, Block.UPDATE_ALL);
 //            BlockEvent.PlaceEvent placeEvent = ForgeEventFactory.onPlayerBlockPlace(player, blockSnapshot2, r.dir, InteractionHand.MAIN_HAND);
             boolean onBlockPlaceCanceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
 //            if (canceled = placeEvent.isCanceled())
@@ -314,7 +315,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
             player.getInventory().clearContent();
 //            BlockSnapshot blockSnapshot2 = BlockSnapshot.getBlockSnapshot(w, p);
             BlockSnapshot blockSnapshot2 = BlockSnapshot.create(w.dimension(), w, p);
-            w.setBlock(p, stripesStateOld, 3);
+            w.setBlock(p, stripesStateOld, Block.UPDATE_ALL);
 //            BlockEvent.PlaceEvent placeEvent = ForgeEventFactory.onPlayerBlockPlace(player, blockSnapshot2, r.dir.getOpposite(), InteractionHand.MAIN_HAND);
             boolean onBlockPlaceCanceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
             if (onBlockPlaceCanceled) {

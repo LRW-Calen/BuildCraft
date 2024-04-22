@@ -46,7 +46,7 @@ public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeView
 
     private static final int TIME_GAP = 500;
     private static final long MJ_COST = 64 * MjAPI.MJ;
-    private static final ChangingObject<Long> MJ_COSTS = new ChangingObject<>(new Long[]{MJ_COST});
+    private static final ChangingObject<Long> MJ_COSTS = new ChangingObject<>(new Long[] { MJ_COST });
 
     public static ItemStack createFacadeStack(FacadeBlockStateInfo info, boolean isHollow) {
         ItemStack stack = BCSiliconItems.plugFacade.get().createItemStack(FacadeInstance.createSingle(info, isHollow));

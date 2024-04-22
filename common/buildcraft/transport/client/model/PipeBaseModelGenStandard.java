@@ -126,12 +126,12 @@ public enum PipeBaseModelGenStandard implements IPipeBaseModelGen {
         }
 
         int[][] uvsRot = { //
-                {2, 0, 3, 3}, //
-                {0, 2, 1, 1}, //
-                {2, 0, 0, 2}, //
-                {0, 2, 2, 0}, //
-                {3, 3, 0, 2}, //
-                {1, 1, 2, 0} //
+                { 2, 0, 3, 3 }, //
+                { 0, 2, 1, 1 }, //
+                { 2, 0, 0, 2 }, //
+                { 0, 2, 2, 0 }, //
+                { 3, 3, 0, 2 }, //
+                { 1, 1, 2, 0 } //
         };
 
         UvFaceData[] types = { //

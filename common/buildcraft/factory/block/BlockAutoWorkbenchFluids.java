@@ -8,6 +8,7 @@ package buildcraft.factory.block;
 
 import buildcraft.factory.tile.TileAutoWorkbenchFluids;
 import buildcraft.lib.block.BlockBCTile_Neptune;
+import buildcraft.lib.block.IBlockWithTickableTE;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
-public class BlockAutoWorkbenchFluids extends BlockBCTile_Neptune {
+public class BlockAutoWorkbenchFluids extends BlockBCTile_Neptune<TileAutoWorkbenchFluids> implements IBlockWithTickableTE<TileAutoWorkbenchFluids> {
 
     public BlockAutoWorkbenchFluids(String idBC, BlockBehaviour.Properties props) {
         super(idBC, props);
@@ -37,7 +38,6 @@ public class BlockAutoWorkbenchFluids extends BlockBCTile_Neptune {
         if (!world.isClientSide) {
             // TODO Calen tile impl MenuProvider
 //            BCFactoryGuis.AUTO_WORKBENCH_FLUIDS.openGUI(player, pos);
-            // Calen
             if (world.getBlockEntity(pos) instanceof TileAutoWorkbenchFluids tile) {
                 MessageUtil.serverOpenTileGUI(player, tile);
             }

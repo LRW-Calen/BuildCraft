@@ -44,7 +44,7 @@ public class VariablePartTextureExpand extends JsonVariableModelPart {
         if (visible.evaluate()) {
             float[] f = bakePosition(from);
             float[] t = bakePosition(to);
-            float[] size = {t[0] - f[0], t[1] - f[1], t[2], f[2]};
+            float[] size = { t[0] - f[0], t[1] - f[1], t[2], f[2] };
             boolean s = shade.evaluate();
             int l = (int) (light.evaluate() & 15);
             int rgba = RenderUtil.swapARGBforABGR((int) colour.evaluate());

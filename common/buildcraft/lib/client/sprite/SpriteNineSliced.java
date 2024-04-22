@@ -76,11 +76,11 @@ public class SpriteNineSliced {
 
         double sx = xScale;
         double sy = yScale;
-        double[] xa = {0, xMin * sx, width + (xMax - 1) * sx, width};
-        double[] ya = {0, yMin * sy, height + (yMax - 1) * sy, height};
+        double[] xa = { 0, xMin * sx, width + (xMax - 1) * sx, width };
+        double[] ya = { 0, yMin * sy, height + (yMax - 1) * sy, height };
 
-        double[] ua = {0, xMin, xMax, 1};
-        double[] va = {0, yMin, yMax, 1};
+        double[] ua = { 0, xMin, xMax, 1 };
+        double[] va = { 0, yMin, yMax, 1 };
 
         quad(vb, poseStack, xa, ya, ua, va, 0, 0);
         // Calen test

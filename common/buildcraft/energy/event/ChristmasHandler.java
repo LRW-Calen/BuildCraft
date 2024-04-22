@@ -30,16 +30,16 @@ public class ChristmasHandler {
 
     public static final int[][] colours =
             {
-                    {0xC0_75_34, 0x5A_1D_0c},
-                    {0xD4_82_39, 0xD8_7D_33},
-                    {0xD4_82_39, 0x5A_1D_0C},
-                    {0xD4_82_39, 0x30_0E_05},
-                    {0xC0_75_34, 0x8a_3D_1C},
-                    {0x4F_33_2F, 0x30_0E_05},
-                    {0x88_44_2D, 0x5A_1d_0C},
-                    {0x9B_61_39, 0x94_59_31},
-                    {0xC0_75_34, 0xB3_68_2C},
-                    {0xD6_C9_90, 0xCF_BF_8E},
+                    { 0xC0_75_34, 0x5A_1D_0c },
+                    { 0xD4_82_39, 0xD8_7D_33 },
+                    { 0xD4_82_39, 0x5A_1D_0C },
+                    { 0xD4_82_39, 0x30_0E_05 },
+                    { 0xC0_75_34, 0x8a_3D_1C },
+                    { 0x4F_33_2F, 0x30_0E_05 },
+                    { 0x88_44_2D, 0x5A_1d_0C },
+                    { 0x9B_61_39, 0x94_59_31 },
+                    { 0xC0_75_34, 0xB3_68_2C },
+                    { 0xD6_C9_90, 0xCF_BF_8E },
             };
 
     private static void fmlPreInit() {

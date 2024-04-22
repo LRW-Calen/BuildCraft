@@ -38,7 +38,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
-//public class RenderQuarry extends TileEntitySpecialRenderer<TileQuarry>
 public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
     public static final LaserData_BC8.LaserType FRAME;
     public static final LaserData_BC8.LaserType FRAME_BOTTOM;
@@ -50,7 +49,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
             SpriteHolderRegistry.SpriteHolder sprite = SpriteHolderRegistry.getHolder("buildcraftbuilders:blocks/frame/default");
             LaserData_BC8.LaserRow capStart = new LaserData_BC8.LaserRow(sprite, 0, 0, 0, 0);
             LaserData_BC8.LaserRow start = null;
-            LaserData_BC8.LaserRow[] middle = {new LaserData_BC8.LaserRow(sprite, 0, 4, 16, 12)};
+            LaserData_BC8.LaserRow[] middle = { new LaserData_BC8.LaserRow(sprite, 0, 4, 16, 12) };
             LaserData_BC8.LaserRow end = new LaserData_BC8.LaserRow(sprite, 0, 4, 16, 12);
             LaserData_BC8.LaserRow capEnd = new LaserData_BC8.LaserRow(sprite, 0, 0, 0, 0);
             FRAME = new LaserData_BC8.LaserType(capStart, start, middle, end, capEnd);
@@ -59,7 +58,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
             SpriteHolderRegistry.SpriteHolder sprite = SpriteHolderRegistry.getHolder("buildcraftbuilders:blocks/frame/default");
             LaserData_BC8.LaserRow capStart = new LaserData_BC8.LaserRow(sprite, 0, 0, 0, 0);
             LaserData_BC8.LaserRow start = null;
-            LaserData_BC8.LaserRow[] middle = {new LaserData_BC8.LaserRow(sprite, 0, 4, 16, 12)};
+            LaserData_BC8.LaserRow[] middle = { new LaserData_BC8.LaserRow(sprite, 0, 4, 16, 12) };
             LaserData_BC8.LaserRow end = new LaserData_BC8.LaserRow(sprite, 0, 4, 16, 12);
             LaserData_BC8.LaserRow capEnd = new LaserData_BC8.LaserRow(sprite, 4, 4, 12, 12);
             FRAME_BOTTOM = new LaserData_BC8.LaserType(capStart, start, middle, end, capEnd);
@@ -68,7 +67,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
             SpriteHolderRegistry.SpriteHolder sprite = SpriteHolderRegistry.getHolder("buildcraftbuilders:blocks/quarry/drill");
             LaserData_BC8.LaserRow capStart = new LaserData_BC8.LaserRow(sprite, 6, 0, 10, 4);
             LaserData_BC8.LaserRow start = null;
-            LaserData_BC8.LaserRow[] middle = {new LaserData_BC8.LaserRow(sprite, 0, 0, 16, 4)};
+            LaserData_BC8.LaserRow[] middle = { new LaserData_BC8.LaserRow(sprite, 0, 0, 16, 4) };
             LaserData_BC8.LaserRow end = null;
             LaserData_BC8.LaserRow capEnd = new LaserData_BC8.LaserRow(sprite, 6, 0, 10, 4);
             DRILL = new LaserData_BC8.LaserType(capStart, start, middle, end, capEnd);

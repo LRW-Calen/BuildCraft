@@ -1,8 +1,8 @@
 package buildcraft.factory.client.model;
 
-import buildcraft.api.enums.EnumExchangePart;
 import buildcraft.factory.BCFactoryModels;
 import buildcraft.factory.block.BlockHeatExchange;
+import buildcraft.factory.block.BlockHeatExchange.EnumExchangePart;
 import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.client.model.ModelItemSimple;
 import buildcraft.lib.client.model.MutableQuad;
@@ -66,7 +66,6 @@ public class ModelHeatExchange extends ModelItemSimple {
 
         if (BCFactoryModels.HEAT_EXCHANGE_STATIC.getCutoutQuads().length == 0) {
 //            particle = Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
-//            particle = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_PARTICLES).apply(new ResourceLocation("missingno"));
             particle = SpriteUtil.missingSprite();
         } else {
             particle = BCFactoryModels.HEAT_EXCHANGE_STATIC.getCutoutQuads()[0].toBakedItem().getSprite();
@@ -100,7 +99,7 @@ public class ModelHeatExchange extends ModelItemSimple {
 
     @Override
 //    public List<BakedQuad> getQuads(BlockState state, Direction side, long rand)
-    public List<BakedQuad> getQuads(BlockState state, Direction side, Random random) {
+    public List<BakedQuad> getQuads(BlockState state, Direction side, Random rand) {
         // Calen: state == null
         // NullPointerException: Cannot invoke "net.minecraft.world.level.block.state.BlockState.m_61143_(net.minecraft.world.level.block.state.properties.Property)" because "state" is null
         // at buildcraft.factory.client.model.ModelHeatExchange.getIndexOf(ModelHeatExchange.java:124)

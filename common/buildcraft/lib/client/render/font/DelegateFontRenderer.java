@@ -43,8 +43,7 @@ public class DelegateFontRenderer extends Font {
                         mcFontManager_fontSets.put(p_95014_, fontset);
 //                new FontSet(Minecraft.getInstance().textureManager,new ResourceLocation("textures/font/ascii.png"))
                         return fontset;
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                         return null;
                     }

@@ -15,43 +15,33 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockTube extends BlockBCBase_Neptune {
-    //    private static final AABB BOUNDING_BOX = new AABB(4 / 16D, 0 / 16D, 4 / 16D, 12 / 16D, 16 / 16D, 12 / 16D);
+    //    private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(4 / 16D, 0 / 16D, 4 / 16D, 12 / 16D, 16 / 16D, 12 / 16D);
     private static final VoxelShape BOUNDING_BOX = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
 
-    public BlockTube(String id, Properties props) {
-        super(id, props);
+    public BlockTube(String idBC, Properties props) {
+        super(idBC, props);
     }
 
-    @Override
-//    public boolean isOpaqueCube(BlockState state)
-    public boolean useShapeForLightOcclusion(BlockState state) {
-        return false;
-    }
-//
 //    @Override
-//    public boolean isFullCube(BlockState state)
-//    {
+//    public boolean isOpaqueCube(IBlockState state) {
 //        return false;
 //    }
 
-    // Calen: This will cause fake block without update to client. Moved to BCFactoryForgeBusEventDist.class
 //    @Override
-////    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
-//    public boolean onDestroyedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
-//    {
+//    public boolean isFullCube(IBlockState state) {
+//        return false;
+//    }
+
+    // Calen: This will cause fake block without update to client. Moved to BCFactoryEventDist
+//    @Override
+//    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 //        BlockPos currentPos = pos;
 //        // noinspection StatementWithEmptyBody
-//        while (world.getBlockState(currentPos = currentPos.above()).getBlock() == this)
-//        {
+//        while (world.getBlockState(currentPos = currentPos.up()).getBlock() == this) {
 //        }
-//        if (!(world.getBlockEntity(currentPos) instanceof TileMiner))
-//        {
-//            return super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
-//        }
-//        else
-//        {
-////            world.setBlock(pos, state, world.isClientSide ? 11 : 3); // Calen added 参考原版此方法
-//            world.setBlockAndUpdate(pos, state); // Calen added 这样也没用……
+//        if (!(world.getTileEntity(currentPos) instanceof TileMiner)) {
+//            return super.removedByPlayer(state, world, pos, player, willHarvest);
+//        } else {
 //            return false;
 //        }
 //    }

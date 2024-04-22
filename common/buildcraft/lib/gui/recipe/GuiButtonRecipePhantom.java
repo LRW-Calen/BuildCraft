@@ -11,8 +11,7 @@ public class GuiButtonRecipePhantom extends RecipeButton {
     public void init(RecipeCollection list, RecipeBookPage page) {
         try {
             list = new RecipeListPhantom(list);
-        }
-        catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException e) {
             throw new IllegalStateException(e);
         }
 //        super.init(list, page, book);

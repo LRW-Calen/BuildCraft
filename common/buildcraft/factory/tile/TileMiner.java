@@ -27,6 +27,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -40,9 +41,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
-public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDebuggable
-//public abstract class TileMiner extends TileBC_Neptune implements TickingBlockEntity, IDebuggable
-{
+public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDebuggable {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("miner");
     public static final int NET_LED_STATUS = IDS.allocId("LED_STATUS");
     public static final int NET_WANTED_Y = IDS.allocId("WANTED_Y");
@@ -107,7 +106,7 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
         for (int y = worldPosition.getY() - 1; y > worldPosition.getY() - BCCoreConfig.miningMaxDepth; y--) {
             BlockPos blockPos = new BlockPos(worldPosition.getX(), y, worldPosition.getZ());
             if (level.getBlockState(blockPos).getBlock() == BCFactoryBlocks.tube.get()) {
-                level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 3);
+                level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
             } else {
                 break;
             }
@@ -121,14 +120,14 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
             for (int y = worldPosition.getY() - 1; y > worldPosition.getY() - BCCoreConfig.miningMaxDepth; y--) {
                 BlockPos blockPos = new BlockPos(worldPosition.getX(), y, worldPosition.getZ());
                 if (level.getBlockState(blockPos).getBlock() == BCFactoryBlocks.tube.get()) {
-                    level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), 3);
+                    level.setBlock(blockPos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
                 } else {
                     break;
                 }
             }
             for (int y = worldPosition.getY() - 1; y > newY; y--) {
                 BlockPos blockPos = new BlockPos(worldPosition.getX(), y, worldPosition.getZ());
-                level.setBlock(blockPos, BCFactoryBlocks.tube.get().defaultBlockState(), 3);
+                level.setBlock(blockPos, BCFactoryBlocks.tube.get().defaultBlockState(), Block.UPDATE_ALL);
             }
             currentLength = wantedLength = newLength;
             sendNetworkUpdate(NET_WANTED_Y);
@@ -164,7 +163,6 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
         }
     }
 
-    // Calen
     @Override
 //    public CompoundTag writeToNBT(CompoundTag nbt) {
     public void saveAdditional(CompoundTag nbt) {
@@ -185,10 +183,6 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
         }
         wantedLength = nbt.getInt("wantedLength");
         progress = nbt.getInt("progress");
-        // TODO: remove in next version
-        if (nbt.contains("mj_battery")) {
-            nbt.put("battery", nbt.get("mj_battery"));
-        }
         battery.deserializeNBT(nbt.getCompound("battery"));
     }
 
@@ -252,10 +246,10 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
         return INFINITE_EXTENT_AABB;
     }
 
+    // 1.18.2: moved to TESR
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public double getMaxRenderDistanceSquared()
-//    {
+//    public double getMaxRenderDistanceSquared() {
 //        return Double.MAX_VALUE;
 //    }
 //
@@ -263,8 +257,7 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
 //
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public boolean hasFastRenderer()
-//    {
+//    public boolean hasFastRenderer() {
 //        return true;
 //    }
 

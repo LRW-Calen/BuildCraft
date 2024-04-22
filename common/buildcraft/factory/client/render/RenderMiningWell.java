@@ -24,8 +24,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-//public class RenderMiningWell extends FastTESR<TileMiningWell>
+@OnlyIn(Dist.CLIENT)
 public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell> {
     private static final int[] COLOUR_POWER = new int[16];
     private static final int COLOUR_STATUS_ON = 0xFF_77_DD_77; // a light green
@@ -55,14 +57,14 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell> {
         LaserRow cap = new LaserRow(spriteTubeMiddle, 0, 8, 8, 16);
         LaserRow middle = new LaserRow(spriteTubeMiddle, 0, 0, 16, 8);
 
-        LaserRow[] middles = {middle};
+        LaserRow[] middles = { middle };
 
         TUBE_LASER = new LaserType(cap, middle, middles, null, cap);
     }
 
     private static boolean whiteTextureFlag = false;
 
-    //    public static void textureStitchPost()
+    // public static void textureStitchPost()
     public static void initWhiteTex() {
         whiteTextureFlag = true;
         LED_POWER.setWhiteTex();
@@ -82,11 +84,12 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell> {
             initWhiteTex();
         }
 
+        VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
+
         Minecraft.getInstance().getProfiler().push("bc");
         Minecraft.getInstance().getProfiler().push("miner");
 
 //        buffer.setTranslation(x, y, z);
-        poseStack.pushPose();
         Direction facing = Direction.NORTH;
         BlockState state = tile.getLevel().getBlockState(tile.getBlockPos());
         if (state.getBlock() == BCFactoryBlocks.miningWell.get()) {
@@ -124,8 +127,6 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell> {
         LED_POWER.center.colouri(COLOUR_POWER[colourIndex]);
         LED_POWER.center.lightf(percentFilled > 0.01 ? 1 : 0, 0);
 
-        VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-//        LED_POWER.render(buffer);
         LED_POWER.render(poseStack, buffer);
 
         LED_STATUS.center.positiond(ledX + dX * STATUS, Y, ledZ + dZ * STATUS);
@@ -137,7 +138,6 @@ public class RenderMiningWell implements BlockEntityRenderer<TileMiningWell> {
 
 //        tubeRenderer.renderTileEntityFast(tile, x, y, z, partialTicks, destroyStage, partial, buffer);
         tubeRenderer.render(tile, partialTicks, poseStack, bufferSource, combinedLight, combinedOverlay);
-        poseStack.popPose();
 
         Minecraft.getInstance().getProfiler().pop();
         Minecraft.getInstance().getProfiler().pop();

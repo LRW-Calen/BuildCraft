@@ -201,7 +201,7 @@ public class WireManager implements IWireManager {
     public CompoundTag writeToNbt() {
         CompoundTag nbt = new CompoundTag();
         int[] wiresArray = new int[parts.size() * 2];
-        int[] i = {0};
+        int[] i = { 0 };
         parts.forEach((part, color) ->
         {
             wiresArray[i[0]] = part.ordinal();

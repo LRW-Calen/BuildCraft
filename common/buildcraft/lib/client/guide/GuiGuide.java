@@ -145,7 +145,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
     public static final GuiIcon SEARCH_TAB_CLOSED = new GuiIcon(ICONS_2, 58, 196, 14, 6);
     public static final GuiIcon SEARCH_TAB_OPEN = new GuiIcon(ICONS_2, 40, 209, 106, 14);
 
-    public static final GuiIcon[] ORDERS = {ORDER_TYPE, ORDER_MOD_TYPE, ORDER_ALPHABETICAL};
+    public static final GuiIcon[] ORDERS = { ORDER_TYPE, ORDER_MOD_TYPE, ORDER_ALPHABETICAL };
 
     public static final GuiRectangle BACK_POSITION = new GuiRectangle(
             PAGE_LEFT.width - BACK.width / 2, PAGE_LEFT.height - BACK.height - 2, BACK.width, BACK.height
@@ -309,8 +309,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
             } else {
                 drawCover(poseStack);
             }
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             // Temporary fix for crash report classes crashing so we can see the ACTUAL error
             t.printStackTrace();
             throw new RuntimeException(t);

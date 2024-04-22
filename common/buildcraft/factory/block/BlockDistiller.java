@@ -24,10 +24,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockDistiller extends BlockBCTile_Neptune<TileDistiller_BC8> implements IBlockWithFacing, IBlockWithTickableTE<TileDistiller_BC8> {
-    //    public BlockDistiller(Material material, String id)
-//    {
-//        super(material, id);
-//    }
     public BlockDistiller(String idBC, BlockBehaviour.Properties props) {
         super(idBC, props);
     }
@@ -38,19 +34,19 @@ public class BlockDistiller extends BlockBCTile_Neptune<TileDistiller_BC8> imple
         return BCFactoryBlocks.distillerTile.get().create(pos, state);
     }
 
-    //    @Override
-    public boolean isOpaqueCube(BlockState state) {
-        return false;
-    }
+//    @Override
+//    public boolean isOpaqueCube(IBlockState state) {
+//        return false;
+//    }
+
+//    @Override
+//    public boolean isFullCube(IBlockState state) {
+//        return false;
+//    }
 
     @Override
     public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
         return true;
-    }
-
-    //    @Override
-    public boolean isFullCube(BlockState state) {
-        return false;
     }
 
     @Override
@@ -67,18 +63,10 @@ public class BlockDistiller extends BlockBCTile_Neptune<TileDistiller_BC8> imple
         return InteractionResult.PASS;
     }
 
+    // 1.18.2: moved to BCFactory#registerRecipeSerializers
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public BlockRenderLayer getBlockLayer()
-//    {
+//    @SideOnly(Side.CLIENT)
+//    public BlockRenderLayer getBlockLayer() {
 //        return BlockRenderLayer.CUTOUT;
-//    }
-
-//    @Override
-//    @Nullable
-//    public BlockEntityTicker<TileDistiller_BC8> getTicker(BlockState pState, BlockEntityType pBlockEntityType)
-//    {
-////        return pBlockEntityType==BCFactoryBlockEntities.PUMP.get()?(BlockEntityTicker<T>)TilePump::tick:null;
-//        return BCCoreBlockEntities.createTickerHelper(pBlockEntityType, BCFactoryBlocks.distillerTile.get(), TileDistiller_BC8::tick);
 //    }
 }

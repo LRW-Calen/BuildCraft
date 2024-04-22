@@ -24,7 +24,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class RenderLaser implements BlockEntityRenderer<TileLaser> {
     private static final int MAX_POWER = BuildCraftLaserManager.POWERS.length - 1;
 

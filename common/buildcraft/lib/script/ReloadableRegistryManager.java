@@ -35,8 +35,7 @@ public enum ReloadableRegistryManager implements IReloadableRegistryManager {
                 RESOURCE_PACKS.reloadAll();
             }
 
-        }
-        finally {
+        } finally {
             isLoadingAll = false;
         }
     }
@@ -94,8 +93,7 @@ public enum ReloadableRegistryManager implements IReloadableRegistryManager {
             }
 
             MinecraftForge.EVENT_BUS.post(new EventBuildCraftReload.PostLoad(this, set));
-        }
-        finally {
+        } finally {
             reloadCount++;
             isReloading = false;
         }

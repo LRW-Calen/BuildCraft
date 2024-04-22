@@ -54,7 +54,7 @@ public class BCLib {
 
     public static final boolean DEV = VERSION.startsWith("$") || Boolean.getBoolean("buildcraft.dev");
 
-    //    @Instance(MODID)
+    // @Instance(MODID)
     public static BCLib INSTANCE;
 
     public static ModContainer MOD_CONTAINER;
@@ -90,8 +90,7 @@ public class BCLib {
 
         try {
             BCLog.logger.info("");
-        }
-        catch (NoSuchFieldError e) {
+        } catch (NoSuchFieldError e) {
             throw throwBadClass(e, BCLog.class);
         }
         BCLog.logger.info("Starting BuildCraft " + BCLib.VERSION);

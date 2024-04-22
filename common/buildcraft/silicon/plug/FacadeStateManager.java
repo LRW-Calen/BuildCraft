@@ -62,7 +62,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
      * Note: Mods should ONLY be added to this list AFTER it has been reported to them, and taken off the list once a
      * version has been released with the fix.
      */
-    private static final List<String> KNOWN_INVALID_REPORTED_MODS = Arrays.asList(new String[]{ //
+    private static final List<String> KNOWN_INVALID_REPORTED_MODS = Arrays.asList(new String[] { //
     });
 
     static {
@@ -303,8 +303,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
                 final ItemStack requiredStack;
                 try {
                     requiredStack = getRequiredStack(state);
-                }
-                catch (RuntimeException e) {
+                } catch (RuntimeException e) {
                     BCLog.logger.warn(
                             "[silicon.facade] Disallowed state " + state
                                     + " after getRequiredStack(state) threw an exception!", e
@@ -389,8 +388,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
                     if (DEBUG) {
                         BCLog.logger.info("[silicon.facade]   Added " + info);
                     }
-                }
-                catch (Throwable t) {
+                } catch (Throwable t) {
                     String msg = "Scanning facade states";
                     msg += "\n\tState = " + state;
                     msg += "\n\tBlock = " + safeToString(() -> state.getBlock().getRegistryName());
@@ -403,8 +401,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
                     throw new IllegalStateException(msg.replace("\t", "    "), t);
                 }
             }
-        }
-        catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             if (e instanceof IllegalStateException) {
                 // This one needs to exit properly
                 throw e;
@@ -416,8 +413,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
     private static <V extends Comparable<V>> boolean doesPropertyConform(Property<V> property) {
         try {
             property.getValue("");
-        }
-        catch (AbstractMethodError error) {
+        } catch (AbstractMethodError error) {
             String message = "Invalid Property object detected!";
             message += "\n  Class = " + property.getClass();
             message += "\n  Method not overriden: Property.parseValue(String)";
@@ -472,8 +468,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
     private static String safeToString(Callable<Object> callable) {
         try {
             return Objects.toString(callable.call());
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             return "~~ERROR~~" + t.getMessage();
         }
     }

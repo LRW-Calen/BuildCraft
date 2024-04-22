@@ -32,7 +32,8 @@ public class BCFactoryModels {
     public static final ModelHolderVariable HEAT_EXCHANGE_STATIC;
 
     static {
-        // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); runned, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
+        // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP) runned
+        // or this will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
         ExpressionCompat.setup();
 
         DISTILLER = new ModelHolderVariable(
@@ -53,21 +54,25 @@ public class BCFactoryModels {
     }
 
 //    @SubscribeEvent
-//    @OnlyIn(Dist.CLIENT)
-//    public static void onModelRegistry(ModelRegistryEvent event)
-//    {
-////        if (BCFactoryBlocks.heatExchange != null)
-////        {
-////            ResourceLocation heatExchange = BCFactoryBlocks.heatExchange.getId();
-//////            ModelLoader.setCustomStateMapper(
-//        // Calen: don't call ForgeModelBakery.addSpecialModel, that will cause exception
-////            ForgeModelBakery.addSpecialModel(new ResourceLocation(heatExchange.getNamespace(), "block/" + heatExchange.getPath()));
-////
-////        }
+//    @SideOnly(Side.CLIENT)
+//    public static void onModelRegistry(ModelRegistryEvent event) {
+//        if (BCFactoryBlocks.heatExchange != null) {
+//            ModelLoader.setCustomStateMapper(
+//                    BCFactoryBlocks.heatExchange,
+//                    new StateMapperBase() {
+//                        @Nonnull
+//                        @Override
+//                        protected ModelResourceLocation getModelResourceLocation(@Nonnull IBlockState state) {
+//                            return new ModelResourceLocation("buildcraftfactory:heat_exchange#normal");
+//                        }
+//                    }
+//            );
+//        }
 //    }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
+//    public static void fmlInit()
     public static void onTesrReg(RegisterRenderers event) {
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileMiningWell.class, new RenderMiningWell());
         BlockEntityRenderers.register(BCFactoryBlocks.miningWellTile.get(), RenderMiningWell::new);
@@ -84,9 +89,14 @@ public class BCFactoryModels {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onModelBake(ModelBakeEvent event) {
-        // Calen: to set model for each blockState, the model path contains blockstate props
+        // Calen: to set model for each blockState
+        // the model path contains blockstate props
         ModelHeatExchange modelHeatExchange = new ModelHeatExchange();
-        event.getModelRegistry().replaceAll((rl, m) -> (rl.getPath().contains("heat_exchange") && !rl.getPath().contains("inventory")) ? modelHeatExchange : m);
+        event.getModelRegistry().replaceAll((rl, m) -> (
+                rl.getNamespace().equals(BCFactory.MODID)
+                        && rl.getPath().contains("heat_exchange")
+                        && !rl.getPath().contains("inventory")
+        ) ? modelHeatExchange : m);
         event.getModelRegistry().replace(
                 new ModelResourceLocation(BCFactoryBlocks.heatExchange.getId(), "inventory"),
                 new ModelItemSimple(

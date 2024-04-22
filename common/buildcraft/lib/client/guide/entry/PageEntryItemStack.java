@@ -107,8 +107,7 @@ public class PageEntryItemStack extends PageValueType<ItemStackValueFilter> {
 
                 try {
                     consumer.addChild(TAGS, PageLinkItemStack.create(false, stack, prof));
-                }
-                catch (RuntimeException e) {
+                } catch (RuntimeException e) {
                     throw new Error(
                             "Failed to create a page link for " + item.getRegistryName() + " " + item.getClass() + " ("
                                     + stack.serializeNBT() + ")", e

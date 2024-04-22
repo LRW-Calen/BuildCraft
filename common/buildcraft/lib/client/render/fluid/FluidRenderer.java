@@ -48,7 +48,7 @@ public class FluidRenderer {
     private static final EnumMap<FluidSpriteType, Map<String, TextureAtlasSprite>> fluidSprites =
             new EnumMap<>(FluidSpriteType.class);
     public static final MutableVertex vertex = new MutableVertex();
-    private static final boolean[] DEFAULT_FACES = {true, true, true, true, true, true};
+    private static final boolean[] DEFAULT_FACES = { true, true, true, true, true, true };
 
     // Cached fields that prevent lots of arguments on most methods
 //    private static BufferBuilder bb;

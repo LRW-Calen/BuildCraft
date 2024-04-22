@@ -19,7 +19,7 @@ public class ContainerIntegrationTable extends ContainerBCTile<TileIntegrationTa
         super(menuType, id, player, tile);
         addFullPlayerInventory(109);
 
-        int[] indexes = {0, 1, 2, 3, 0, 4, 5, 6, 7};
+        int[] indexes = { 0, 1, 2, 3, 0, 4, 5, 6, 7 };
 
         for (int y = 0; y < 3; y++) {
             for (int x = 0; x < 3; x++) {

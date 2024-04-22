@@ -32,10 +32,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.concurrent.TimeUnit;
 
-//public class RenderZonePlanner extends TileEntitySpecialRenderer<TileZonePlanner>
+@OnlyIn(Dist.CLIENT)
 public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner> {
     private static final Cache<WorldPos, DynamicTextureBC> TEXTURES = CacheBuilder.newBuilder()
             .expireAfterWrite(5, TimeUnit.MINUTES).removalListener(RenderZonePlanner::onRemove).build();

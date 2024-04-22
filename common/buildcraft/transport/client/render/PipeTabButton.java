@@ -55,16 +55,14 @@ public class PipeTabButton {
             m_removeWidget.setAccessible(true);
             m_addRenderableWidget = Screen.class.getDeclaredMethod("m_142416_", GuiEventListener.class);
             m_addRenderableWidget.setAccessible(true);
-        }
-        catch (NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             try {
                 // official
                 m_removeWidget = Screen.class.getDeclaredMethod("removeWidget", GuiEventListener.class);
                 m_removeWidget.setAccessible(true);
                 m_addRenderableWidget = Screen.class.getDeclaredMethod("addRenderableWidget", GuiEventListener.class);
                 m_addRenderableWidget.setAccessible(true);
-            }
-            catch (NoSuchMethodException ex) {
+            } catch (NoSuchMethodException ex) {
                 BCLog.logger.error(e);
             }
         }
@@ -116,8 +114,7 @@ public class PipeTabButton {
                     PipeTabButton.screen = null;
                 }
             }
-        }
-        catch (ReflectiveOperationException e) {
+        } catch (ReflectiveOperationException e) {
             BCLog.logger.error(e);
         }
     }

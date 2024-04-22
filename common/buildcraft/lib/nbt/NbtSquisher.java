@@ -47,8 +47,7 @@ public class NbtSquisher {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             squish(nbt, type, baos);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Failed to write to a perfectly good ByteArrayOutputStream", e);
         }
         return baos.toByteArray();
@@ -57,8 +56,7 @@ public class NbtSquisher {
     public static void squish(CompoundTag nbt, int type, ByteBuf buf) {
         try (ByteBufOutputStream bbos = new ByteBufOutputStream(buf)) {
             squish(nbt, type, bbos);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new IllegalStateException("Failed to write to a perfectly good ByteBufOutputStream", e);
         }
     }

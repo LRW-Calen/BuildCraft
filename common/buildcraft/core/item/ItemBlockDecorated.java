@@ -19,14 +19,14 @@ public class ItemBlockDecorated extends ItemBlockBCMulti {
         this.TYPE = type;
     }
 
-//    private static String[] createNameArray() {
-//        String[] names = new String[EnumDecoratedBlock.VALUES.length];
-//        for (int i = 0; i < names.length; i++) {
-////            names[i] = EnumDecoratedBlock.VALUES[i].getName();
-//            names[i] = EnumDecoratedBlock.VALUES[i].getSerializedName();
-//        }
-//        return names;
-//    }
+    private static String[] createNameArray() {
+        String[] names = new String[EnumDecoratedBlock.VALUES.length];
+        for (int i = 0; i < names.length; i++) {
+//            names[i] = EnumDecoratedBlock.VALUES[i].getName();
+            names[i] = EnumDecoratedBlock.VALUES[i].getSerializedName();
+        }
+        return names;
+    }
 
     @Override
     public String getDescriptionId(ItemStack stack) {

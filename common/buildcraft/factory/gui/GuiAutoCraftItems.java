@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 // TODO Calen RecipeBook???
-//public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implements IRecipeShownListener
 public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implements RecipeShownListener
 //public class GuiAutoCraftItems extends GuiWithRecipeBookBC8<ContainerAutoCraftItems> implements RecipeShownListener
 {
@@ -51,11 +50,9 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     private static final GuiRectangle RECT_PROGRESS = new GuiRectangle(90, 47, 23, 10);
 
 //    private final GuiRecipeBookPhantom recipeBook;
-    /**
-     * If true then the recipe book will be drawn on top of this GUI, rather than beside it
-     */
-    private boolean widthTooNarrow;
-    //    private GuiButtonImage recipeButton;
+//    /** If true then the recipe book will be drawn on top of this GUI, rather than beside it */
+//    private boolean widthTooNarrow;
+//    private GuiButtonImage recipeButton;
 //    private ImageButton recipeButton;
 
     public GuiAutoCraftItems(ContainerAutoCraftItems container, Inventory inventory, Component component) {
@@ -66,13 +63,11 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
         imageHeight = SIZE_Y;
 //        GuiRecipeBookPhantom book;
 //        widthTooNarrow = this.width < SIZE_X + 176; // Calen: moved from initGui
-//        try
-//        {
+//        try {
 //            book = new GuiRecipeBookPhantom(this::sendRecipe);
 ////            book = new GuiRecipeBookPhantom(this::sendRecipe, width, height, minecraft, widthTooNarrow, container);
 //        }
-//        catch (ReflectiveOperationException e)
-//        {
+//        catch (ReflectiveOperationException e) {
 //            BCLog.logger.warn("[factory.gui] An exception was thrown while creating the recipe book gui!", e);
 //            book = null;
 //        }
@@ -80,7 +75,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
         mainGui.shownElements.add(new LedgerHelp(mainGui, true));
     }
 
-    //    private void sendRecipe(Recipe recipe)
+    // private void sendRecipe(Recipe recipe)
     private void sendRecipe(CraftingRecipe recipe) {
         List<ItemStack> stacks = new ArrayList<>(9);
 
@@ -127,8 +122,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     public void initGui() {
         super.initGui();
 //        widthTooNarrow = this.width < SIZE_X + 176; // Calen: moved to <init>
-//        if (recipeBook != null)
-//        {
+//        if (recipeBook != null) {
 ////            InventoryCrafting invCraft = container.tile.getWorkbenchCrafting();
 //            CraftingContainer invCraft = container.tile.getWorkbenchCrafting();
 //
@@ -149,8 +143,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 //                    VANILLA_CRAFTING_TABLE,
 //                    (button) ->
 //                    {
-//                        if (button == recipeButton && recipeBook != null)
-//                        {
+//                        if (button == recipeButton && recipeBook != null) {
 //                            recipeBook.initVisuals(widthTooNarrow, container.tile.getWorkbenchCrafting());
 //                            recipeBook.toggleVisibility();
 
@@ -171,8 +164,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     public void tick() {
 //        super.updateScreen();
         super.tick();
-//        if (recipeBook != null)
-//        {
+//        if (recipeBook != null) {
 //            recipeBook.tick();
 //        }
     }
@@ -180,14 +172,15 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     @Override
 //    public void drawScreen(int mouseX, int mouseY, float partialTicks)
     public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-//        if (recipeBook == null)
-//        {
+        // Calen
+        super.render(poseStack, mouseX, mouseY, partialTicks);
+
+//        if (recipeBook == null) {
 ////            super.drawScreen(mouseX, mouseY, partialTicks);
 //            super.render(poseStack, mouseX, mouseY, partialTicks);
 //            return;
 //        }
-//        if (recipeBook.isVisible() && this.widthTooNarrow)
-//        {
+//        if (recipeBook.isVisible() && this.widthTooNarrow) {
 ////            drawDefaultBackground();
 //            renderBackground(poseStack);
 ////            this.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
@@ -195,9 +188,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 //            recipeBook.render(poseStack, mouseX, mouseY, partialTicks);
 ////            renderHoveredToolTip(mouseX, mouseY);
 //            renderTooltip(poseStack, mouseX, mouseY);
-//        }
-//        else
-//        {
+//        } else {
 ////            super.drawScreen(mouseX, mouseY, partialTicks);
 //            super.render(poseStack, mouseX, mouseY, partialTicks);
 //            recipeBook.render(poseStack, mouseX, mouseY, partialTicks);
@@ -208,8 +199,6 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 ////        recipeBook.renderTooltip(this.guiLeft, this.guiTop, mouseX, mouseY);
 //        recipeBook.renderTooltip(poseStack, this.leftPos, this.topPos, mouseX, mouseY);
 
-        // Calen
-        super.render(poseStack, mouseX, mouseY, partialTicks);
 //        recipeBook.render(poseStack, mouseX, mouseY, partialTicks);
 //        recipeBook.renderGhostRecipe(poseStack, this.leftPos, this.topPos, true, partialTicks);
 //        recipeBook.renderTooltip(poseStack, this.leftPos, this.topPos, mouseX, mouseY);
@@ -294,10 +283,8 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     // Calen: moved to ImageButton#<init> p_169018_
 //    @Override
-//    protected void actionPerformed(GuiButton button) throws IOException
-//    {
-//        if (button == recipeButton && recipeBook != null)
-//        {
+//    protected void actionPerformed(GuiButton button) throws IOException {
+//        if (button == recipeButton && recipeBook != null) {
 //            recipeBook.initVisuals(widthTooNarrow, container.tile.getWorkbenchCrafting());
 //            recipeBook.toggleVisibility();
 ////            guiLeft = recipeBook.updateScreenPosition(widthTooNarrow, width, xSize);
@@ -309,16 +296,11 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     @Override
 //    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-//        if (recipeBook == null)
-//        {
+//        if (recipeBook == null) {
 //            return super.mouseClicked(mouseX, mouseY, mouseButton);
-////            return;
 //        }
-//        if (!recipeBook.mouseClicked(mouseX, mouseY, mouseButton))
-//        {
-//            if (!widthTooNarrow || !recipeBook.isVisible())
-//            {
-////                super.mouseClicked(mouseX, mouseY, mouseButton);
+//        if (!recipeBook.mouseClicked(mouseX, mouseY, mouseButton)) {
+//            if (!widthTooNarrow || !recipeBook.isVisible()) {
 //                return super.mouseClicked(mouseX, mouseY, mouseButton);
 //            }
 //        }
@@ -329,24 +311,17 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
-//    public boolean charTyped(char typedChar, int keyCode)
     public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
-//        if (recipeBook == null)
-//        {
+//        if (recipeBook == null) {
 ////            super.keyTyped(typedChar, keyCode);
-////            super.charTyped(typedChar, keyCode);
 //            return super.keyPressed(typedChar, keyCode, modifiers);
-////            // Calen: void->boolean
 ////            return true;
 //        }
-////        if (!recipeBook.keyPressed(typedChar, keyCode, 0)) //Calen: (int keyCode, int scanCode, int modifiers)
-//        if (!recipeBook.keyPressed(typedChar, keyCode, modifiers)) //Calen: (int keyCode, int scanCode, int modifiers)
-//        {
+////        if (!recipeBook.keyPressed(typedChar, keyCode, 0))
+//        if (!recipeBook.keyPressed(typedChar, keyCode, modifiers)) {
 ////            super.keyTyped(typedChar, keyCode);
-////            super.charTyped(typedChar, keyCode);
 //            return super.keyPressed(typedChar, keyCode, modifiers);
 //        }
-//        // Calen: void->boolean
 //        return true;
 
         return super.keyPressed(typedChar, keyCode, modifiers);
@@ -354,21 +329,14 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 
     @Override
     public boolean charTyped(char typedChar, int keyCode) {
-//        if (recipeBook == null)
-//        {
+//        if (recipeBook == null) {
 ////            super.keyTyped(typedChar, keyCode);
-////            super.charTyped(typedChar, keyCode);
-//            return super.charTyped(typedChar, keyCode);
-////            // Calen: void->boolean
-////            return true;
-//        }
-//        if (!recipeBook.charTyped(typedChar, keyCode)) //Calen: (int keyCode, int scanCode, int modifiers)
-//        {
-////            super.keyTyped(typedChar, keyCode);
-////            super.charTyped(typedChar, keyCode);
 //            return super.charTyped(typedChar, keyCode);
 //        }
-//        // Calen: void->boolean
+//        if (!recipeBook.charTyped(typedChar, keyCode)) {
+////            super.keyTyped(typedChar, keyCode);
+//            return super.charTyped(typedChar, keyCode);
+//        }
 //        return true;
 
         return super.charTyped(typedChar, keyCode);
@@ -379,8 +347,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     protected void slotClicked(Slot slot, int slotId, int mouseButton, ClickType type) {
 //        super.handleMouseClick(slot, slotId, mouseButton, type);
         super.slotClicked(slot, slotId, mouseButton, type);
-//        if (recipeBook != null)
-//        {
+//        if (recipeBook != null) {
 //            recipeBook.slotClicked(slot);
 //        }
     }
@@ -388,8 +355,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     @Override
 //    protected boolean isPointInRegion(int rectX, int rectY, int rectWidth, int rectHeight, int pointX, int pointY)
     protected boolean isHovering(int rectX, int rectY, int rectWidth, int rectHeight, double pointX, double pointY) {
-//        if (recipeBook == null)
-//        {
+//        if (recipeBook == null) {
 ////            return super.isPointInRegion(rectX, rectY, rectWidth, rectHeight, pointX, pointY);
 //            return super.isHovering(rectX, rectY, rectWidth, rectHeight, pointX, pointY);
 //        }
@@ -404,8 +370,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     @Override
 //    protected boolean hasClickedOutside(int mouseX, int mouseY, int _guiLeft, int _guiTop)
     protected boolean hasClickedOutside(double mouseX, double mouseY, int _guiLeft, int _guiTop, int p_97761_) {
-//        if (recipeBook == null)
-//        {
+//        if (recipeBook == null) {
 ////            return super.hasClickedOutside(mouseX, mouseY, _guiLeft, _guiTop);
 //            return super.hasClickedOutside(mouseX, mouseY, _guiLeft, _guiTop, p_97761_);
 //        }
@@ -415,15 +380,13 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 ////        return recipeBook.hasClickedOutside(mouseX, mouseY, guiLeft, guiTop, xSize, ySize) && flag;
 //        return recipeBook.hasClickedOutside(mouseX, mouseY, leftPos, topPos, imageWidth, imageHeight, p_97761_) && flag;
 
-
         return super.hasClickedOutside(mouseX, mouseY, _guiLeft, _guiTop, p_97761_);
     }
 
     @Override
 //    public void onGuiClosed()
     public void onClose() {
-//        if (recipeBook != null)
-//        {
+//        if (recipeBook != null) {
 //            recipeBook.removed();
 //        }
 //        super.onGuiClosed();
@@ -433,10 +396,8 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
     // IRecipeShownListener
 
 //    @Override
-//    public void recipesUpdated()
-//    {
-//        if (recipeBook != null)
-//        {
+//    public void recipesUpdated() {
+//        if (recipeBook != null) {
 //            recipeBook.recipesUpdated();
 //        }
 //    }

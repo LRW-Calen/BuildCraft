@@ -58,8 +58,7 @@ public enum MarkdownPageLoader implements IPageLoaderText {
         int stackSize = 1;
         try {
             stackSize = Integer.parseInt(args[1].trim());
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             return new OptionallyDisabled<>(args[1] + " was not a valid number: " + nfe.getLocalizedMessage());
         }
         stack.setCount(stackSize);

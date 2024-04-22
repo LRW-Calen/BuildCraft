@@ -118,7 +118,7 @@ public class ModelUtil {
 
     public static MutableQuad[] createDoubleFace(Direction face, Tuple3f center, Tuple3f radius, UvFaceData uvs) {
         MutableQuad norm = createFace(face, center, radius, uvs);
-        return new MutableQuad[]{norm, norm.copyAndInvertNormal()};
+        return new MutableQuad[] { norm, norm.copyAndInvertNormal() };
     }
 
     public static void mapBoxToUvs(AABB box, Direction side, UvFaceData uvs) {
@@ -188,9 +188,9 @@ public class ModelUtil {
     }
 
     public static Point3f[] getPoints(Point3f centerFace, Tuple3f faceRadius) {
-        Point3f[] array = {new Point3f(centerFace), new Point3f(centerFace), new Point3f(centerFace), new Point3f(
+        Point3f[] array = { new Point3f(centerFace), new Point3f(centerFace), new Point3f(centerFace), new Point3f(
                 centerFace
-        )};
+        ) };
         array[0].add(addOrNegate(faceRadius, false, false));
         array[1].add(addOrNegate(faceRadius, false, true));
         array[2].add(addOrNegate(faceRadius, true, true));

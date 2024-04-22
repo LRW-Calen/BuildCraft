@@ -33,7 +33,7 @@ public class FacadeInstance implements IFacade {
     }
 
     public static FacadeInstance createSingle(FacadeBlockStateInfo info, boolean isHollow) {
-        return new FacadeInstance(new FacadePhasedState[]{new FacadePhasedState(info, null)}, isHollow);
+        return new FacadeInstance(new FacadePhasedState[] { new FacadePhasedState(info, null) }, isHollow);
     }
 
     public static FacadeInstance readFromNbt(CompoundTag nbt) {

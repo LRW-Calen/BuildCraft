@@ -91,8 +91,7 @@ public class SpriteUtil {
                 return mc.getSkinManager().registerTexture(tex, Type.SKIN);
             }
             return LOCATION_SKIN_LOADING;
-        }
-        catch (NullPointerException | ClassCastException e) {
+        } catch (NullPointerException | ClassCastException e) {
             // Fix for https://github.com/BuildCraft/BuildCraft/issues/4419
             // I'm not quite sure why this throws an NPE but this should at
             // least stop it from crashing

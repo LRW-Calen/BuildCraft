@@ -23,9 +23,12 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Set;
 
+@OnlyIn(Dist.CLIENT)
 public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume> {
     private static final double SCALE = 1 / 16.2; // smaller than normal lasers
 

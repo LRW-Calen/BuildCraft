@@ -88,7 +88,7 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
     }
 
     private int[] redstoneValues = new int[6];
-    private int[] oldRedstoneValues = new int[]{-1, -1, -1, -1, -1, -1};
+    private int[] oldRedstoneValues = new int[] { -1, -1, -1, -1, -1, -1 };
 
     static {
         for (PipeMessageReceiver rec : PipeMessageReceiver.VALUES) {
@@ -159,8 +159,7 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
                 if (pipe.flow instanceof IFlowItems && BCModules.SILICON.isLoaded()) {
                     eventBus.registerHandler(FilterEventHandler.class);
                 }
-            }
-            catch (InvalidInputDataException e) {
+            } catch (InvalidInputDataException e) {
                 // Unfortunately we can't throw an exception because then this tile won't persist :/
                 e.printStackTrace();
                 unknownData = nbt.copy();

@@ -8,7 +8,6 @@ package buildcraft.builders.item;
 
 import buildcraft.builders.BCBuildersMenuTypes;
 import buildcraft.builders.addon.AddonFillerPlanner;
-import buildcraft.core.BCCoreMenuTypes;
 import buildcraft.core.list.ContainerList;
 import buildcraft.core.marker.volume.Addon;
 import buildcraft.core.marker.volume.ItemAddon;

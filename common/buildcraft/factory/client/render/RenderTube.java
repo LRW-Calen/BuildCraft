@@ -19,11 +19,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
-//public class RenderTube extends FastTESR<TileMiner>
 public class RenderTube implements BlockEntityRenderer<TileMiner> {
     private final LaserType laserType;
 
-    //    public RenderTube(LaserType laserType)
+    // public RenderTube(LaserType laserType)
     public RenderTube(BlockEntityRendererProvider.Context context, LaserType laserType) {
         this.laserType = laserType;
     }
@@ -34,20 +33,14 @@ public class RenderTube implements BlockEntityRenderer<TileMiner> {
         if (tile.isComplete()) {
             return;
         }
-//        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS); // Calen: not necrssary
-//        RenderSystem.disableBlend();
+
+        VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
 
 //        double tubeY = tile.getPos().getY() - tile.getLength(partialTicks);
         double tubeY = tile.getBlockPos().getY() - tile.getLength(partialTicks);
 
 //        BlockPos from = tile.getPos();
         BlockPos from = tile.getBlockPos();
-//        VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
-//        ((MultiBufferSource.BufferSource)bufferSource).endLastBatch();
-//        BufferBuilder buffer = Tesselator.getInstance().getBuilder();
-//        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP);
-//        VertexConsumer buffer = bufferSource.getBuffer(ForgeRenderTypes.getText(TextureAtlas.LOCATION_BLOCKS));
 //        buffer.setTranslation(x - from.getX(), y - from.getY(), z - from.getZ());
         poseStack.pushPose();
         poseStack.translate(-from.getX(), -from.getY(), -from.getZ());
@@ -60,9 +53,6 @@ public class RenderTube implements BlockEntityRenderer<TileMiner> {
         LaserRenderer_BC8.renderLaserDynamic(data, poseStack.last(), buffer);
 
 //        buffer.setTranslation(0, 0, 0);
-//        buffer.end();
-//        ((BufferBuilder) buffer).end();
-//        BufferUploader.end((BufferBuilder) buffer);
         poseStack.popPose();
     }
 }

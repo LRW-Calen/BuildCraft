@@ -221,7 +221,7 @@ public class ProfilerUtil {
         }
     }
 
-    //    public static ProfilerEntry createEntry(Profiler p1, Profiler p2)
+    // public static ProfilerEntry createEntry(Profiler p1, Profiler p2)
     public static ProfilerEntry createEntry(ProfilerFiller p1, ProfilerFiller p2) {
 //        if (p1.profilingEnabled)
         if (p1 instanceof ActiveProfiler) {
@@ -276,10 +276,10 @@ public class ProfilerUtil {
     }
 
     static final class ProfilerEntry2 implements ProfilerEntry {
-        //        final Profiler p1, p2;
+        // final Profiler p1, p2;
         final ProfilerFiller p1, p2;
 
-        //        ProfilerEntry2(Profiler p1, Profiler p2)
+        // ProfilerEntry2(Profiler p1, Profiler p2)
         ProfilerEntry2(ProfilerFiller p1, ProfilerFiller p2) {
             this.p1 = p1;
             this.p2 = p2;

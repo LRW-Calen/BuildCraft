@@ -104,7 +104,7 @@ public class BlockQuarry extends BlockBCTile_Neptune<TileQuarry> implements IBlo
     }
 
     @Override
-    public boolean canBeRotated(Level world, BlockPos pos, BlockState state) {
+    public boolean canBeRotated(LevelAccessor world, BlockPos pos, BlockState state) {
         return false;
     }
 

@@ -40,7 +40,7 @@ public final class PositionAbsolute implements IGuiPosition {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new double[]{x, y});
+        return Arrays.hashCode(new double[] { x, y });
     }
 
     @Override

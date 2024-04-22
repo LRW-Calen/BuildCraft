@@ -43,8 +43,6 @@ public class BCFactoryMenuTypes {
         );
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-//        MenuScreens.register(CHUTE, BCFactoryScreenConstructors.CHUTE);
-//        MenuScreens.register(AUTO_WORKBENCH_ITEMS, BCFactoryScreenConstructors.AUTO_WORKBENCH_ITEMS);
             MenuScreens.register(CHUTE, GuiChute::new);
             MenuScreens.register(AUTO_WORKBENCH_ITEMS, GuiAutoCraftItems::new);
         }

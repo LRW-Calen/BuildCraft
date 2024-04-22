@@ -127,8 +127,7 @@ public enum GuideManager implements ResourceManagerReloadListener {
         try {
             isInReload = true;
             reload0(resourceManager);
-        }
-        finally {
+        } finally {
             isInReload = false;
         }
     }
@@ -248,11 +247,9 @@ public enum GuideManager implements ResourceManagerReloadListener {
                         BCLog.logger.info("[lib.guide.loader] Loaded page '" + entryKey + "'.");
                     }
                     continue main_iteration;
-                }
-                catch (FileNotFoundException f) {
+                } catch (FileNotFoundException f) {
                     // Ignore it, we'll log this later
-                }
-                catch (IOException io) {
+                } catch (IOException io) {
                     io.printStackTrace();
                 }
             }

@@ -100,8 +100,7 @@ public class LocaleUtil {
         try {
 //            return String.format(localized, args);
             return I18n.get(key, args);
-        }
-        catch (IllegalFormatException ife) {
+        } catch (IllegalFormatException ife) {
             return "Bad Format: " + ife.getMessage();
         }
     }

@@ -11,8 +11,6 @@ import buildcraft.lib.client.render.fluid.FluidRenderer;
 import buildcraft.lib.client.render.fluid.FluidSpriteType;
 import buildcraft.lib.fluid.FluidSmoother.FluidStackInterp;
 import buildcraft.lib.misc.RenderUtil;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -20,7 +18,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -52,26 +49,18 @@ public class RenderTank implements BlockEntityRenderer<TileTank> {
 //        // gl state setup
 //        RenderHelper.disableStandardItemLighting();
 //        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 //        GlStateManager.enableBlend();
-        RenderSystem.enableBlend();
 //        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        FluidStack fluid = forRender.fluid;
-
-        // Calen: should use Sheets.translucentCullBlockSheet()
-        // rather than ItemBlockRenderTypes.getRenderLayer(fluid.getFluid().defaultFluidState())
-        // or the tank before a sea will looks wrong at some angles
-//        VertexConsumer buffer = bufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(fluid.getFluid().defaultFluidState())); // 这样好像可以获取一些默认的数据
-        VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        // buffer setup
-//        BufferBuilder bb = tess.tessellator.getBuffer();
-//        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-        poseStack.pushPose();
+//        // buffer setup
+//        try (AutoTessellator tess = RenderUtil.getThreadLocalUnusedTessellator()) {
+//            BufferBuilder bb = tess.tessellator.getBuffer();
+//            bb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+//            bb.setTranslation(x, y, z);
+        VertexConsumer bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
 //        poseStack.translate(x, y, z);
 
-        boolean[] sideRender = {true, true, true, true, true, true};
+        boolean[] sideRender = { true, true, true, true, true, true };
         boolean connectedUp = isFullyConnected(tile, Direction.UP, partialTicks);
         boolean connectedDown = isFullyConnected(tile, Direction.DOWN, partialTicks);
         sideRender[Direction.DOWN.ordinal()] = !connectedDown;
@@ -79,7 +68,7 @@ public class RenderTank implements BlockEntityRenderer<TileTank> {
 
         Vec3 min = connectedDown ? MIN_CONNECTED : MIN;
         Vec3 max = connectedUp ? MAX_CONNECTED : MAX;
-        // Calen 1.18.2调用参数直接提供?
+        FluidStack fluid = forRender.fluid;
         int blocklight = fluid.getRawFluid().getAttributes().getLuminosity(fluid);
 //        int combinedLight = tile.getWorld().getCombinedLight(tile.getPos(), blocklight);
         combinedLight = RenderUtil.combineWithFluidLight(combinedLight, (byte) blocklight);
@@ -95,14 +84,14 @@ public class RenderTank implements BlockEntityRenderer<TileTank> {
                 min,
                 max,
                 poseStack.last(),
-                buffer,
+                bb,
                 sideRender
         );
 
-        // buffer finish
+//        // buffer finish
 //        bb.setTranslation(0, 0, 0);
-        poseStack.popPose();
 //        tess.tessellator.draw();
+//    }
 
 //        // gl state finish
 //        RenderHelper.enableStandardItemLighting();

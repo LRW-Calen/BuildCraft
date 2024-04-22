@@ -61,7 +61,7 @@ public class MessageMarker implements IMessage {
 
     @Override
     public String toString() {
-        boolean[] flags = {add, multiple, connection};
+        boolean[] flags = { add, multiple, connection };
         return "Message Marker [" + Arrays.toString(flags) + ", cacheId " + cacheId + ", count = " + count
                 + ", positions = " + positions + "]";
     }

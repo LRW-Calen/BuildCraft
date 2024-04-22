@@ -20,6 +20,7 @@ import buildcraft.energy.BCEnergyFluids;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.lib.fluid.Tank;
 import buildcraft.lib.misc.*;
+import buildcraft.lib.misc.ProfilerUtil.ProfilerEntry;
 import buildcraft.lib.mj.MjRedstoneBatteryReceiver;
 import buildcraft.lib.net.PacketBufferBC;
 import com.google.common.base.Stopwatch;
@@ -51,12 +52,12 @@ import java.util.concurrent.TimeUnit;
 public class TilePump extends TileMiner {
     public static final boolean DEBUG_PUMP = BCDebugging.shouldDebugComplex("factory.pump");
 
-    private static final Direction[] SEARCH_NORMAL = new Direction[]{ //
+    private static final Direction[] SEARCH_NORMAL = new Direction[] { //
             Direction.UP, Direction.NORTH, Direction.SOUTH, //
             Direction.WEST, Direction.EAST //
     };
 
-    private static final Direction[] SEARCH_GASEOUS = new Direction[]{ //
+    private static final Direction[] SEARCH_GASEOUS = new Direction[] { //
             Direction.DOWN, Direction.NORTH, Direction.SOUTH, //
             Direction.WEST, Direction.EAST //
     };
@@ -91,9 +92,7 @@ public class TilePump extends TileMiner {
     private boolean isInfiniteWaterSource;
     private final SafeTimeTracker rebuildDelay = new SafeTimeTracker(30);
 
-    /**
-     * The position just below the bottom of the pump tube.
-     */
+    /** The position just below the bottom of the pump tube. */
     private BlockPos targetPos;
 
     @Nullable
@@ -102,7 +101,6 @@ public class TilePump extends TileMiner {
     public TilePump(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.pumpTile.get(), pos, blockState);
         tank.setCanFill(false);
-//        tank.setValidator();
         tankManager.add(tank);
         caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tank, EnumPipePart.VALUES);
     }
@@ -160,7 +158,7 @@ public class TilePump extends TileMiner {
     }
 
     private void buildQueue0(
-            ProfilerUtil.ProfilerEntry prof, Fluid queueFluid, List<BlockPos> nextPosesToCheck, Set<BlockPos> checked
+            ProfilerEntry prof, Fluid queueFluid, List<BlockPos> nextPosesToCheck, Set<BlockPos> checked
     ) {
         prof.startSection("build");
         Direction[] directions = queueFluid.getAttributes().isGaseous() ? SEARCH_GASEOUS : SEARCH_NORMAL;
@@ -265,9 +263,8 @@ public class TilePump extends TileMiner {
 
     private static boolean isOil(Fluid queueFluid) {
         if (BCModules.ENERGY.isLoaded()) {
-//            return FluidUtilBC.areFluidsEqual(queueFluid, BCEnergyFluids.crudeOil[0].get().getSource());
+//            return FluidUtilBC.areFluidsEqual(queueFluid, BCEnergyFluids.crudeOil[0]);
             return FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(queueFluid, BCEnergyFluids.crudeOil[0].get().getSource());
-//            return FluidUtilBC.areFluidsEqual(queueFluid, BCEnergyFluids.OIL);
         }
         return false;
     }
@@ -366,8 +363,7 @@ public class TilePump extends TileMiner {
                     isInfiniteWaterSource = FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(drain.getRawFluid(), Fluids.WATER);
                 }
                 AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT_DRAIN_ANY);
-                if (!isInfiniteWaterSource) // if 不是无限水
-                {
+                if (!isInfiniteWaterSource) {
                     BlockUtil.drainBlock(level, currentPos, FluidAction.EXECUTE);
                     if (isOil(drain.getRawFluid())) {
                         AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT_DRAIN_OIL);
@@ -428,7 +424,6 @@ public class TilePump extends TileMiner {
         oilSpringPos = NBTUtilBC.readBlockPos(nbt.get("oilSpringPos"));
     }
 
-    // Calen
     @Override
 //    public CompoundTag writeToNBT(CompoundTag nbt) {
     public void saveAdditional(CompoundTag nbt) {
@@ -436,13 +431,6 @@ public class TilePump extends TileMiner {
         if (oilSpringPos != null) {
             nbt.put("oilSpringPos", NBTUtilBC.writeBlockPos(oilSpringPos));
         }
-    }
-
-    // For old code
-    @Deprecated
-    public CompoundTag writeToNBT(CompoundTag nbt) {
-        saveAdditional(nbt);
-        return nbt;
     }
 
     // Networking

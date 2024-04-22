@@ -197,7 +197,7 @@ public class BCTransportPipes {
 
         public DefinitionBuilder texSuffixes(String... suffixes) {
             if (suffixes.length == 0) {
-                builder.textureSuffixes = new String[]{""};
+                builder.textureSuffixes = new String[] { "" };
             } else {
                 builder.textureSuffixes = suffixes;
             }

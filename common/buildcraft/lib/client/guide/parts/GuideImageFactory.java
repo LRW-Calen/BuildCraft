@@ -71,8 +71,7 @@ public class GuideImageFactory implements GuidePartFactory {
                 sw = png.width;
 //                sh = size.pndgHeight;
                 sh = png.height;
-            }
-            catch (IOException io) {
+            } catch (IOException io) {
                 BCLog.logger.warn("[lib.guide.loader.image] Couldn't load image '" + resLoc + "' because " + io.getMessage());
 //                stitched = textureMap.getMissingSprite();
                 stitched = textureMap.apply(MissingTextureAtlasSprite.getLocation());

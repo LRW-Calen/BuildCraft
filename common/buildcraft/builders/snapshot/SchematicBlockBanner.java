@@ -14,7 +14,7 @@ import java.util.Set;
 public class SchematicBlockBanner extends SchematicBlockDefault {
     private ItemStack requiredItem;
 
-    @SuppressWarnings({"unused", "WeakerAccess"})
+    @SuppressWarnings({ "unused", "WeakerAccess" })
     protected void setTileNbt(SchematicBlockContext context, Set<JsonRule> rules) {
         tileNbt = null;
         if (context.blockState.hasBlockEntity()) {

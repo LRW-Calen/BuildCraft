@@ -188,8 +188,7 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
                 pair.trigger.readFromBuffer(buffer);
                 pair.action.readFromBuffer(buffer);
             }
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             throw new Error(io);
         }
         boolean on = false;

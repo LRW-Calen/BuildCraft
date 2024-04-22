@@ -119,8 +119,7 @@ public abstract class ElementType {
                 try {
                     IExpressionNode node = InternalCompiler.compileExpression(value, ctx);
                     ctx.putVariable(argName, NodeTypes.createConstantNode(node));
-                }
-                catch (InvalidExpressionException e) {
+                } catch (InvalidExpressionException e) {
                     // Ignore the error
                     BCLog.logger.info("Failed to compile expression for " + key + " because " + e.getMessage());
                 }
@@ -135,8 +134,7 @@ public abstract class ElementType {
             try {
                 IExpressionNode node = InternalCompiler.compileExpression(value, ctx);
                 ctx.putVariable(key, NodeTypes.createConstantNode(node));
-            }
-            catch (InvalidExpressionException e) {
+            } catch (InvalidExpressionException e) {
                 // Ignore the error
                 // BCLog.logger.info("Failed to compile expression for " + key + " because " + e.getMessage());
             }
@@ -157,8 +155,7 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionString(eqn, ctx).evaluate();
-        }
-        catch (InvalidExpressionException iee) {
+        } catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
@@ -174,8 +171,7 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionLong(eqn, ctx);
-        }
-        catch (InvalidExpressionException iee) {
+        } catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
@@ -191,8 +187,7 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionDouble(eqn, ctx);
-        }
-        catch (InvalidExpressionException iee) {
+        } catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
@@ -210,8 +205,7 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionBoolean(eqn, ctx);
-        }
-        catch (InvalidExpressionException iee) {
+        } catch (InvalidExpressionException iee) {
             throw new JsonSyntaxException(iee);
         }
     }
@@ -226,8 +220,7 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionObject(IGuiPosition.class, eqn, ctx).evaluate();
-        }
-        catch (InvalidExpressionException e) {
+        } catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Failed to resolve a position for " + json.fullName, e);
         }
     }
@@ -243,8 +236,7 @@ public abstract class ElementType {
         }
         try {
             return GenericExpressionCompiler.compileExpressionObject(IGuiArea.class, eqn, ctx).evaluate();
-        }
-        catch (InvalidExpressionException e) {
+        } catch (InvalidExpressionException e) {
             throw new JsonSyntaxException("Failed to resolve an area for " + json.fullName, e);
         }
     }

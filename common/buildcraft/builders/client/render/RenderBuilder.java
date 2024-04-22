@@ -28,7 +28,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
-//public class RenderBuilder extends FastTESR<TileBuilder>
 public class RenderBuilder implements BlockEntityRenderer<TileBuilder> {
     private static final double OFFSET = 0.1;
 

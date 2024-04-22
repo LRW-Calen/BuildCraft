@@ -115,8 +115,7 @@ public final class Pipe implements IPipe, IDebuggable {
         this.holder = holder;
         try {
             this.definition = PipeRegistry.INSTANCE.loadDefinition(buffer.readUtf(256));
-        }
-        catch (InvalidInputDataException e) {
+        } catch (InvalidInputDataException e) {
             throw new IOException(e);
         }
         this.behaviour = definition.logicConstructor.createBehaviour(this);

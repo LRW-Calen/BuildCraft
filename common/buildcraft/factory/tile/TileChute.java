@@ -72,7 +72,7 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
         caps.addProvider(new MjCapabilityHelper(new MjBatteryReceiver(battery)));
     }
 
-    //    public static boolean hasInventoryAtPosition(IBlockAccess world, BlockPos pos, Direction side)
+    // public static boolean hasInventoryAtPosition(IBlockAccess world, BlockPos pos, Direction side)
     public static boolean hasInventoryAtPosition(LevelAccessor world, BlockPos pos, Direction side) {
         BlockEntity tile = world.getBlockEntity(pos);
         return ItemTransactorHelper.getTransactor(tile, side.getOpposite()) != NoSpaceTransactor.INSTANCE;
@@ -92,7 +92,7 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
     }
 
     private void putInNearInventories(Direction currentSide) {
-        boolean[] didWork = {false};
+        boolean[] didWork = { false };
         List<Direction> sides = new ArrayList<>(Arrays.asList(Direction.values()));
         Collections.shuffle(sides, new Random());
         sides.removeIf(Predicate.isEqual(currentSide));
@@ -179,6 +179,8 @@ public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable,
         left.add(new TextComponent("battery = " + battery.getDebugString()));
         left.add(new TextComponent("progress = " + progress));
     }
+
+    // MenuProvider
 
     @Override
     public Component getDisplayName() {

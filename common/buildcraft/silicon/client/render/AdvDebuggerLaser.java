@@ -25,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer {
     private static final int COLOUR_VISIBLE = 0xFF_99_FF_99;
     private static final int COLOUR_NOT_VISIBLE = 0xFF_11_11_99;

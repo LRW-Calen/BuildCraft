@@ -68,8 +68,7 @@ public class GuiConfigManager {
                         bw.flush();
                         bw.close();
                     }
-                }
-                catch (IOException io) {
+                } catch (IOException io) {
                     BCLog.logger.warn("[lib.gui.cfg] Failed to write the config file! " + io.getMessage());
                 }
                 isDirty = false;
@@ -86,8 +85,7 @@ public class GuiConfigManager {
             try {
 //                lines = Files.readAllLines(BCLibConfig.guiConfigFile.toPath());
                 lines = Files.readAllLines(BCLibConfig.getGuiConfigFileAndEnsureCreated().toPath());
-            }
-            catch (IOException io) {
+            } catch (IOException io) {
                 BCLog.logger.warn("[lib.gui.cfg] Failed to read the config file! " + io.getMessage());
                 return;
             }
@@ -99,12 +97,10 @@ public class GuiConfigManager {
             try {
                 readFromJson(gson.fromJson(allLines.toString(), JsonObject.class));
                 return;
-            }
-            catch (JsonSyntaxException jse) {
+            } catch (JsonSyntaxException jse) {
                 BCLog.logger.warn("[lib.gui.cfg] There's a problem with the config file: try fixing it manually, "
                         + "or deleting it to let buildcraft overwrite it on save." + jse.getMessage());
-            }
-            catch (ClassCastException cce) {
+            } catch (ClassCastException cce) {
                 // This happens occasionally, and its a bit wierd
                 BCLog.logger.warn("[lib.gui.cfg] There's a major problem with the config file: try fixing it manually, "
                         + "or deleting it to let buildcraft overwrite it on save." + cce.getMessage());

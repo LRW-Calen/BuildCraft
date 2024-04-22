@@ -36,13 +36,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
-//public class BlockChute extends BlockBCTile_Neptune implements IBlockWithFacing
 public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlockWithFacing, IBlockWithTickableTE<TileChute> {
     public static final Map<Direction, Property<Boolean>> CONNECTED_MAP = BuildCraftProperties.CONNECTED_MAP;
 
     public BlockChute(String idBC, BlockBehaviour.Properties props) {
         super(idBC, props);
-        // Calen
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(BuildCraftProperties.CONNECTED_DOWN, false)
                 .setValue(BuildCraftProperties.CONNECTED_UP, false)
@@ -60,12 +58,10 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     }
 
     @Override
-//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand,
-//                                    Direction side, float hitX, float hitY, float hitZ)
+//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ)
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!world.isClientSide) {
 //            BCFactoryGuis.CHUTE.openGUI(player, pos);
-            // Calen
             if (world.getBlockEntity(pos) instanceof TileChute tile) {
                 MessageUtil.serverOpenTileGUI(player, tile);
             }
@@ -75,14 +71,12 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     }
 
 //    @Override
-//    public boolean isOpaqueCube(IBlockState state)
-//    {
+//    public boolean isOpaqueCube(IBlockState state) {
 //        return false;
 //    }
 
 //    @Override
-//    public boolean isFullCube(IBlockState state)
-//    {
+//    public boolean isFullCube(IBlockState state) {
 //        return false;
 //    }
 
@@ -95,24 +89,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
         CONNECTED_MAP.values().forEach(builder::add);
     }
 
-    // Calen: for custom call getActualState
-    @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
-        state = super.updateShape(state, facing, facingState, world, pos, facingPos);
-        return getActualState(state, world, pos, null);
-    }
-
-    // Calen add for updating connection when choosing a state for placement
-    // 1.18.2 not found a similar method like getActualState to update
-    // Calen: for custom call getActualState
-    @Override
-    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-        BlockState state = super.getStateForPlacement(context);
-        Level world = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        return getActualState(state, world, pos, null);
-    }
-
+    // Calen: not found a similar method like getActualState of 1.12.2
     @Override
     public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
         for (Direction side : Direction.values()) {
@@ -122,7 +99,21 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
         return state;
     }
 
-    // Calen
+    @Override
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor world, BlockPos pos, BlockPos facingPos) {
+        state = super.updateShape(state, facing, facingState, world, pos, facingPos);
+        return getActualState(state, world, pos, null);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        BlockState state = super.getStateForPlacement(context);
+        Level world = context.getLevel();
+        BlockPos pos = context.getClickedPos();
+        return getActualState(state, world, pos, null);
+    }
+
+    // UP
     private static final VoxelShape topBoxU = Block.box(0, 9, 0, 16, 16, 16);
     private static final VoxelShape middleBox0U = Block.box(1, 8, 1, 15, 9, 15);
     private static final VoxelShape middleBox1U = Block.box(2, 7, 2, 14, 8, 14);
@@ -131,6 +122,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     private static final VoxelShape middleBox4U = Block.box(5, 4, 5, 11, 5, 11);
     private static final VoxelShape middleBox5U = Block.box(6, 3, 6, 10, 4, 10);
     private static final VoxelShape U = Shapes.or(topBoxU, middleBox0U, middleBox1U, middleBox2U, middleBox3U, middleBox4U, middleBox5U);
+    // DOWN
     private static final VoxelShape topBoxD = Block.box(0, 0, 0, 16, 7, 16);
     private static final VoxelShape middleBox0D = Block.box(1, 7, 1, 15, 8, 15);
     private static final VoxelShape middleBox1D = Block.box(2, 8, 2, 14, 9, 14);
@@ -139,6 +131,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     private static final VoxelShape middleBox4D = Block.box(5, 11, 5, 11, 12, 11);
     private static final VoxelShape middleBox5D = Block.box(6, 12, 6, 10, 13, 10);
     private static final VoxelShape D = Shapes.or(topBoxD, middleBox0D, middleBox1D, middleBox2D, middleBox3D, middleBox4D, middleBox5D);
+    // EAST
     private static final VoxelShape topBoxE = Block.box(9, 0, 0, 16, 16, 16);
     private static final VoxelShape middleBox0E = Block.box(8, 1, 1, 9, 15, 15);
     private static final VoxelShape middleBox1E = Block.box(7, 2, 2, 8, 14, 14);
@@ -147,6 +140,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     private static final VoxelShape middleBox4E = Block.box(4, 5, 5, 6, 11, 11);
     private static final VoxelShape middleBox5E = Block.box(3, 6, 6, 4, 10, 10);
     private static final VoxelShape E = Shapes.or(topBoxE, middleBox0E, middleBox1E, middleBox2E, middleBox3E, middleBox4E, middleBox5E);
+    // WEST
     private static final VoxelShape topBoxW = Block.box(0, 0, 0, 7, 16, 16);
     private static final VoxelShape middleBox0W = Block.box(7, 1, 1, 8, 15, 15);
     private static final VoxelShape middleBox1W = Block.box(8, 2, 2, 9, 14, 14);
@@ -155,6 +149,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     private static final VoxelShape middleBox4W = Block.box(11, 5, 5, 12, 11, 11);
     private static final VoxelShape middleBox5W = Block.box(12, 6, 6, 13, 10, 10);
     private static final VoxelShape W = Shapes.or(topBoxW, middleBox0W, middleBox1W, middleBox2W, middleBox3W, middleBox4W, middleBox5W);
+    // NORTH
     private static final VoxelShape topBoxN = Block.box(0, 0, 0, 16, 16, 7);
     private static final VoxelShape middleBox0N = Block.box(1, 1, 7, 15, 15, 8);
     private static final VoxelShape middleBox1N = Block.box(2, 2, 8, 14, 14, 9);
@@ -163,6 +158,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     private static final VoxelShape middleBox4N = Block.box(5, 5, 11, 11, 11, 12);
     private static final VoxelShape middleBox5N = Block.box(6, 6, 12, 10, 10, 13);
     private static final VoxelShape N = Shapes.or(topBoxN, middleBox0N, middleBox1N, middleBox2N, middleBox3N, middleBox4N, middleBox5N);
+    // SOUTH
     private static final VoxelShape topBoxS = Block.box(0, 0, 9, 16, 16, 16);
     private static final VoxelShape middleBox0S = Block.box(1, 1, 8, 15, 15, 9);
     private static final VoxelShape middleBox1S = Block.box(2, 2, 7, 14, 14, 8);
@@ -180,7 +176,6 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
     private static final VoxelShape CONNECT_S = Block.box(5, 5, 13, 11, 11, 16);
     private static final VoxelShape CONNECT_N = Block.box(5, 5, 0, 11, 11, 3);
 
-    //
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         VoxelShape shape = switch (state.getValue(getFacingProperty())) {

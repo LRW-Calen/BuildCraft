@@ -26,7 +26,7 @@ public enum PatternParameterYDir implements IStatementParameter {
     UP(true),
     DOWN(false);
 
-    private static final PatternParameterYDir[] POSSIBLE_ORDER = {null, null, UP, null, null, null, DOWN};
+    private static final PatternParameterYDir[] POSSIBLE_ORDER = { null, null, UP, null, null, null, DOWN };
 
     public final boolean up;
 

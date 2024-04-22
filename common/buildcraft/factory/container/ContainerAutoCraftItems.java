@@ -14,7 +14,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
 public class ContainerAutoCraftItems extends ContainerBCTile<TileAutoWorkbenchItems>
-//public class ContainerAutoCraftItems extends ContainerWithRecipeBookBCTile<TileAutoWorkbenchItems>
+// public class ContainerAutoCraftItems extends ContainerWithRecipeBookBCTile<TileAutoWorkbenchItems>
 {
     public final SlotBase[] materialSlots;
 

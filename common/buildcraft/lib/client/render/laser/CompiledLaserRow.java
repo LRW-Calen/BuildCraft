@@ -18,7 +18,7 @@ public class CompiledLaserRow {
     private int currentRowIndex;
 
     public CompiledLaserRow(LaserRow row) {
-        this(new LaserRow[]{row});
+        this(new LaserRow[] { row });
     }
 
     public CompiledLaserRow(LaserRow[] rows) {

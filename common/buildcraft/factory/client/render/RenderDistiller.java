@@ -16,10 +16,7 @@ import buildcraft.lib.client.render.fluid.FluidRenderer.TankSize;
 import buildcraft.lib.client.render.fluid.FluidSpriteType;
 import buildcraft.lib.fluid.FluidSmoother;
 import buildcraft.lib.fluid.FluidSmoother.FluidStackInterp;
-import buildcraft.lib.misc.RenderUtil;
 import buildcraft.lib.misc.VecUtil;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -27,7 +24,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Direction;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.level.block.state.BlockState;
@@ -67,30 +63,26 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8> {
             return;
         }
 
-        poseStack.pushPose();
         ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("bc");
         profiler.push("distiller");
 
+        // 1.18.2: provided
 //        int combinedLight = tile.getWorld().getCombinedLight(tile.getBlockPos(), 0);
-        combinedLight = RenderUtil.combineWithFluidLight(combinedLight, (byte) 0);
         Direction face = state.getValue(BlockBCBase_Neptune.PROP_FACING);
         TankRenderSizes sizes = TANK_SIZES.get(face);
 
 //        // gl state setup
 //        RenderHelper.disableStandardItemLighting();
 //        Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 //        GlStateManager.enableBlend();
-        RenderSystem.enableBlend();
 //        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         // buffer setup
-//        try (AutoTessellator tess = RenderUtil.getThreadLocalUnusedTessellator())
-//        BufferBuilder bb = tess.tessellator.getBuffer();
-//        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-//        bb.setTranslation(x, y, z);
+//        try (AutoTessellator tess = RenderUtil.getThreadLocalUnusedTessellator()) {
+//            BufferBuilder bb = tess.tessellator.getBuffer();
+//            bb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+//            bb.setTranslation(x, y, z);
 
         profiler.push("model");
         profiler.push("compute");
@@ -106,8 +98,6 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8> {
         int lightc = combinedLight;
 //        int light_block = (lightc >> 4) & 15;
 //        int light_sky = (lightc >> 20) & 15;
-//        short light_block = (short) (lightc);
-//        short light_sky = (short) (lightc >> 16);
         byte light_block = (byte) ((lightc >> 4) & 15);
         byte light_sky = (byte) ((lightc >> 20) & 15);
         VertexConsumer bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
@@ -122,15 +112,14 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8> {
         profiler.pop();
         profiler.popPush("fluid");
 
-        renderTank(poseStack.last(), sizes.tankIn, tile.smoothedTankIn, combinedLight, combinedOverlay, partialTicks, bufferSource);
-        renderTank(poseStack.last(), sizes.tankOutGas, tile.smoothedTankGasOut, combinedLight, combinedOverlay, partialTicks, bufferSource);
-        renderTank(poseStack.last(), sizes.tankOutLiquid, tile.smoothedTankLiquidOut, combinedLight, combinedOverlay, partialTicks, bufferSource);
+        renderTank(poseStack.last(), sizes.tankIn, tile.smoothedTankIn, combinedLight, combinedOverlay, partialTicks, bb);
+        renderTank(poseStack.last(), sizes.tankOutGas, tile.smoothedTankGasOut, combinedLight, combinedOverlay, partialTicks, bb);
+        renderTank(poseStack.last(), sizes.tankOutLiquid, tile.smoothedTankLiquidOut, combinedLight, combinedOverlay, partialTicks, bb);
 
         // buffer finish
 //        bb.setTranslation(0, 0, 0);
         profiler.popPush("draw");
-//            tess.tessellator.draw();
-        poseStack.popPose();
+//        tess.tessellator.draw();
 
 //        // gl state finish
 //        RenderHelper.enableStandardItemLighting();
@@ -147,7 +136,7 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8> {
             int combinedLight,
             int combinedOverlay,
             float partialTicks,
-            MultiBufferSource bufferSource
+            VertexConsumer bb
     ) {
         FluidStackInterp fluid = tank.getFluidForRender(partialTicks);
         if (fluid == null || fluid.amount <= 0) {
@@ -155,8 +144,6 @@ public class RenderDistiller implements BlockEntityRenderer<TileDistiller_BC8> {
         }
         int blockLight = fluid.fluid.getRawFluid().getAttributes().getLuminosity(fluid.fluid) & 0xF;
         combinedLight |= blockLight << 4;
-//        VertexConsumer bb = bufferSource.getBuffer(ItemBlockRenderTypes.getRenderLayer(fluid.fluid.getRawFluid().defaultFluidState()));
-        VertexConsumer bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
         FluidRenderer.vertex.lighti(combinedLight);
         FluidRenderer.vertex.overlay(combinedOverlay);
         FluidRenderer.renderFluid(

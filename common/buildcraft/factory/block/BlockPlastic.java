@@ -14,14 +14,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.material.Material;
 
 import javax.annotation.Nonnull;
 
 public class BlockPlastic extends BlockBCBase_Neptune {
-    // Calen: not reg in 1.12.2
+    // TODO Calen: BlockPlastic not reg in 1.12.2
     public BlockPlastic(String idBC, Properties props) {
-        super(idBC, Properties.of(Material.METAL));
+        super(idBC, props);
 //        setDefaultState(getStateFromMeta(0));
         this.registerDefaultState(this.getStateDefinition().any()
                 .setValue(BuildCraftProperties.BLOCK_COLOR, DyeColor.byId(0))
@@ -36,16 +35,14 @@ public class BlockPlastic extends BlockBCBase_Neptune {
     }
 
 //    @Override
-//    public int getMetaFromState(IBlockState state)
-//    {
-//        DyeColor colour = state.getValue(BuildCraftProperties.BLOCK_COLOR);
+//    public int getMetaFromState(IBlockState state) {
+//        EnumDyeColor colour = state.getValue(BuildCraftProperties.BLOCK_COLOR);
 //        return colour.getMetadata();
 //    }
 
 //    @Override
-//    public IBlockState getStateFromMeta(int meta)
-//    {
-//        return getDefaultState().withProperty(BuildCraftProperties.BLOCK_COLOR, DyeColor.byMetadata(meta));
+//    public IBlockState getStateFromMeta(int meta) {
+//        return getDefaultState().withProperty(BuildCraftProperties.BLOCK_COLOR, EnumDyeColor.byMetadata(meta));
 //    }
 
     @Override

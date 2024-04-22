@@ -515,7 +515,7 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     @Deprecated
     public IMjReceiver getReceiverToPower(BlockEntity tile, Direction side) {
         if (tile == null) return null;
-        IMjReceiver rec = tile.getCapability(MjAPI.CAP_RECEIVER, side.getOpposite()).orElseGet(null);
+        IMjReceiver rec = tile.getCapability(MjAPI.CAP_RECEIVER, side.getOpposite()).orElse(null);
         if (rec != null && rec.canConnect(mjConnector) && mjConnector.canConnect(rec)) {
             return rec;
         } else {

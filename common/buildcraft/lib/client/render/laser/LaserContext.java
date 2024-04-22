@@ -109,15 +109,15 @@ public class LaserContext {
     }
 
     private int index = 0;
-    private final double[] x = {0, 0, 0, 0};
-    private final double[] y = {0, 0, 0, 0};
-    private final double[] z = {0, 0, 0, 0};
-    private final double[] u = {0, 0, 0, 0};
-    private final double[] v = {0, 0, 0, 0};
-    private final int[] l = {0, 0, 0, 0};
+    private final double[] x = { 0, 0, 0, 0 };
+    private final double[] y = { 0, 0, 0, 0 };
+    private final double[] z = { 0, 0, 0, 0 };
+    private final double[] u = { 0, 0, 0, 0 };
+    private final double[] v = { 0, 0, 0, 0 };
+    private final int[] l = { 0, 0, 0, 0 };
     // Calen BeaconRenderer.class
     private final int overlay = OverlayTexture.NO_OVERLAY;
-    private final float[] n = {0, 1, 0};
+    private final float[] n = { 0, 1, 0 };
     private float diffuse;
 
     @OnlyIn(Dist.CLIENT)

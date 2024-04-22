@@ -9,7 +9,10 @@ package buildcraft.lib.client.render;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public abstract class HudRenderer {
     //    protected abstract void renderImpl(Minecraft mc, EntityPlayerSP player);
     protected abstract void renderImpl(Minecraft mc, LocalPlayer player);

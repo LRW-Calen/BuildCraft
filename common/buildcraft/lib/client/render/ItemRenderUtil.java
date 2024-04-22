@@ -149,8 +149,7 @@ public class ItemRenderUtil {
         try {
 //            renderItemStackInternal(x, y, z, stack, stackCount, lightc, dir, bb);
             renderItemStackInternal(stack, stackCount, lightc, dir, poseStack, bb);
-        }
-        catch (Throwable exception) {
+        } catch (Throwable exception) {
 //            CrashReport report = CrashReport.makeCrashReport(exception, "Rendering Item Stack");
             CrashReport report = CrashReport.forThrowable(exception, "Rendering Item Stack");
 //            CrashReportCategory category = report.makeCategory("Item being rendered");

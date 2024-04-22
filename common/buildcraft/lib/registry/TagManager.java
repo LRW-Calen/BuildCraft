@@ -192,8 +192,7 @@ public class TagManager {
             if (tag == null) {
                 try {
                     throw new RuntimeException("666666666666666666666666666");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println("666666666666666666666666666666666666666666666");
                     System.out.println("666666666666666666666666666666666666666666666");
                     System.out.println("666666666666666666666666666666666666666666666");

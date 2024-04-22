@@ -178,7 +178,7 @@ public final class BlockUtil {
         if (!world.isEmptyBlock(pos) && !world.isClientSide && world.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
             drops.addAll(getItemStackFromBlock(world, pos, owner));
         }
-        world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 
         return true;
     }
@@ -429,7 +429,7 @@ public final class BlockUtil {
             handler = new BucketPickupHandlerWrapper(bucketPickup, world, pos);
         } else {
             // Calen: 1.18.2 this can only get FluidHandler of TileEntity
-            handler = FluidUtil.getFluidHandler(world, pos, null).orElseGet(() -> null);
+            handler = FluidUtil.getFluidHandler(world, pos, null).orElse(null);
         }
         if (handler != null) {
             return handler.drain(FluidAttributes.BUCKET_VOLUME, doDrain);
@@ -686,7 +686,7 @@ public final class BlockUtil {
      * @param color The color to change to
      * @return If the recoloring was successful
      */
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     public static boolean recolorBlock(Level world, BlockPos pos, Direction side, DyeColor color) {
         BlockState state = world.getBlockState(pos);
         for (Property prop : state.getProperties()) {

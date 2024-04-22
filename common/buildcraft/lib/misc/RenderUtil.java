@@ -62,8 +62,7 @@ public class RenderUtil {
             Field fld = validFields.get(0);
             fld.setAccessible(true);
             return MethodHandles.publicLookup().unreflectGetter(fld);
-        }
-        catch (ReflectiveOperationException roe) {
+        } catch (ReflectiveOperationException roe) {
             throw new Error("Failed to obtain forge's batch buffer!", roe);
         }
     }
@@ -173,8 +172,7 @@ public class RenderUtil {
         try {
 //            return (Tessellator) HANDLE_FORGE_TESSELLATOR.invokeExact(Minecraft.getInstance().getBlockEntityRenderDispatcher());
             return (Tesselator) HANDLE_FORGE_TESSELLATOR.invokeExact(Minecraft.getInstance().getBlockEntityRenderDispatcher());
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new Error(t);
         }
     }
@@ -186,8 +184,7 @@ public class RenderUtil {
     public static boolean isDrawing(BufferBuilder bb) {
         try {
             return (boolean) HANDLE_IS_BUFFER_DRAWING.invokeExact(bb);
-        }
-        catch (Throwable t) {
+        } catch (Throwable t) {
             throw new Error(t);
         }
     }

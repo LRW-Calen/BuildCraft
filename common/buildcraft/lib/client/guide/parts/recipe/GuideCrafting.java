@@ -49,14 +49,14 @@ public class GuideCrafting extends GuidePartItem {
             }
         }
         this.output = new ChangingItemStack(output);
-        this.hash = Arrays.deepHashCode(new Object[]{input, output});
+        this.hash = Arrays.deepHashCode(new Object[] { input, output });
     }
 
     GuideCrafting(GuiGuide gui, ChangingItemStack[][] input, ChangingItemStack output) {
         super(gui);
         this.input = input;
         this.output = output;
-        this.hash = Arrays.deepHashCode(new Object[]{input, output});
+        this.hash = Arrays.deepHashCode(new Object[] { input, output });
     }
 
     @Override

@@ -54,13 +54,11 @@ public class ModelHolderVariable extends ModelHolder {
 
         try {
             rawModel = JsonVariableModel.deserialize(modelLocation, context);
-        }
-        catch (JsonParseException jse) {
+        } catch (JsonParseException jse) {
             rawModel = null;
             failReason = "The model had errors: " + jse.getMessage();
             BCLog.logger.warn("[lib.model.holder] Failed to load the model " + modelLocation + " because ", jse);
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             rawModel = null;
             failReason = "The model did not exist in any resource pack: " + io.getMessage();
             BCLog.logger.warn("[lib.model.holder] Failed to load the model " + modelLocation + " because ", io);

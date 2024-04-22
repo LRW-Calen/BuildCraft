@@ -33,7 +33,7 @@ public enum CoreActionProvider implements IActionProvider {
 
     @Override
     public void addExternalActions(Collection<IActionExternal> res, @Nonnull Direction side, BlockEntity tile) {
-        IControllable controllable = tile.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElseGet(() -> null);
+        IControllable controllable = tile.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite()).orElse(null);
         if (controllable != null) {
             for (ActionMachineControl action : BCCoreStatements.ACTION_MACHINE_CONTROL) {
                 if (controllable.acceptsControlMode(action.mode)) {

@@ -6,7 +6,6 @@ import buildcraft.lib.item.ItemGuideNote;
 import buildcraft.lib.item.ItemPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BCLibItems {

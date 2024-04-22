@@ -130,7 +130,7 @@ public abstract class BlockBCTile_Neptune<T extends BlockEntity> extends BlockBC
 
     // Calen
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> pBlockEntityType) {
+    public final <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level world, BlockState state, BlockEntityType<T> pBlockEntityType) {
         if (this instanceof IBlockWithTickableTE) {
 //            return t.getTicker(pState, pBlockEntityType);
             return (w, p, s, te) -> ((ITickable) te).update();

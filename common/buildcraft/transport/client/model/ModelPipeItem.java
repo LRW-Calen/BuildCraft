@@ -215,7 +215,7 @@ public enum ModelPipeItem implements BakedModel {
             PipeFaceTex center = PipeFaceTex.NO_SPRITE;
             PipeFaceTex top = center;
             PipeFaceTex bottom = center;
-            TextureAtlasSprite[] sprites = {SpriteUtil.missingSprite()};
+            TextureAtlasSprite[] sprites = { SpriteUtil.missingSprite() };
             DyeColor colour = null;
 
             EnumPipeColourType type;

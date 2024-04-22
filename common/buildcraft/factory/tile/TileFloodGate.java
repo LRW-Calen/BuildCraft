@@ -35,7 +35,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 
@@ -44,11 +44,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class TileFloodGate extends TileBC_Neptune implements ITickable, IDebuggable {
-    private static final Direction[] SEARCH_NORMAL = new Direction[]{ //
+    private static final Direction[] SEARCH_NORMAL = new Direction[] { //
             Direction.DOWN, Direction.NORTH, Direction.SOUTH, //
             Direction.WEST, Direction.EAST //
     };
-    private static final Direction[] SEARCH_GASEOUS = new Direction[]{ //
+    private static final Direction[] SEARCH_GASEOUS = new Direction[] { //
             Direction.UP, Direction.NORTH, Direction.SOUTH, //
             Direction.WEST, Direction.EAST //
     };
@@ -57,9 +57,9 @@ public class TileFloodGate extends TileBC_Neptune implements ITickable, IDebugga
             "buildcraftfactory:flooding_the_world"
     );
 
-    private static final int[] REBUILD_DELAYS = {16, 32, 64, 128, 256};
+    private static final int[] REBUILD_DELAYS = { 16, 32, 64, 128, 256 };
 
-    //    private final Tank tank = new Tank("tank", 2 * Fluid.BUCKET_VOLUME, this);
+    // private final Tank tank = new Tank("tank", 2 * Fluid.BUCKET_VOLUME, this);
     private final Tank tank = new Tank("tank", 2 * FluidAttributes.BUCKET_VOLUME, this);
     public final Set<Direction> openSides = EnumSet.copyOf(BlockFloodGate.CONNECTED_MAP.keySet());
     public final Deque<BlockPos> queue = new ArrayDeque<>();
@@ -179,7 +179,7 @@ public class TileFloodGate extends TileBC_Neptune implements ITickable, IDebugga
         if (tick % 16 == 0) {
             if (!tank.isEmpty() && !queue.isEmpty()) {
 //                FluidStack fluid = tank.drain(Fluid.BUCKET_VOLUME, false);
-                FluidStack fluid = tank.drain(FluidAttributes.BUCKET_VOLUME, IFluidHandler.FluidAction.SIMULATE);
+                FluidStack fluid = tank.drain(FluidAttributes.BUCKET_VOLUME, FluidAction.SIMULATE);
 //                if (fluid != null && fluid.getAmount() >= Fluid.BUCKET_VOLUME)
                 if (!fluid.isEmpty() && fluid.getAmount() >= FluidAttributes.BUCKET_VOLUME) {
                     BlockPos currentPos = queue.removeLast();

@@ -10,7 +10,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCFactoryProxy implements IGuiHandler
 public abstract class BCFactoryProxy {
-    //    @SidedProxy(modId = BCFactory.MODID)
+    // @SidedProxy(modId = BCFactory.MODID)
     private static BCFactoryProxy proxy;
 
     public static BCFactoryProxy getProxy() {
@@ -96,7 +96,7 @@ public abstract class BCFactoryProxy {
         @Override
         public void fmlInit() {
             super.fmlInit();
-            // Calen: moved to @Mod.EventBusSubscriber
+            // Calen: moved to BCFactoryModels#onTesrReg
 //            BCFactoryModels.fmlInit();
         }
     }

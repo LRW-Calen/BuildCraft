@@ -49,7 +49,7 @@ import java.util.function.Consumer;
 public class BCSilicon {
     public static final String MODID = "buildcraftsilicon";
 
-    //    @Mod.Instance(MODID)
+    // @Mod.Instance(MODID)
     public static BCSilicon INSTANCE = null;
 
     private static CreativeTabBC tabPlugs;

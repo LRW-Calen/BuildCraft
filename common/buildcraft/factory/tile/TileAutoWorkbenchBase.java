@@ -42,15 +42,11 @@ import java.util.Arrays;
 
 public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements ITickable, IHasWork, IMjRedstoneReceiver, IAutoCraft {
 
-    /**
-     * A redstone engine generates <code> 1 * {@link MjAPI#MJ}</code> per tick. This makes it a lot slower without one
-     * powering it.
-     */
+    /** A redstone engine generates <code> 1 * {@link MjAPI#MJ}</code> per tick. This makes it a lot slower without one
+     * powering it. */
     private static final long POWER_GEN_PASSIVE = MjAPI.MJ / 5;
 
-    /**
-     * It takes 10 seconds to craft an item.
-     */
+    /** It takes 10 seconds to craft an item. */
     private static final long POWER_REQUIRED = POWER_GEN_PASSIVE * 20 * 10;
 
     private static final long POWER_LOST = POWER_GEN_PASSIVE * 10;
@@ -65,10 +61,8 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
     public final ItemHandlerSimple invResult;
     private final WorkbenchCrafting crafting;
 
-    /**
-     * The amount of power that is stored until crafting can begin. When this reaches the minimum power required it
-     * will craft the current recipe.
-     */
+    /** The amount of power that is stored until crafting can begin. When this reaches the minimum power required it
+     * will craft the current recipe. */
     private long powerStored;
     private long powerStoredLast;
 
@@ -89,8 +83,7 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
     }
 
     @Override
-    protected void onSlotChange(IItemHandlerModifiable handler, int slot, @Nonnull ItemStack before,
-                                @Nonnull ItemStack after) {
+    protected void onSlotChange(IItemHandlerModifiable handler, int slot, @Nonnull ItemStack before, @Nonnull ItemStack after) {
         super.onSlotChange(handler, slot, before, after);
 //        if (!ItemStack.areItemStacksEqual(before, after))
         if (!ItemStack.matches(before, after)) {
@@ -166,7 +159,7 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune implements IT
         return MathUtil.interp(partialTicks, powerStoredLast, powerStored) / POWER_REQUIRED;
     }
 
-    //    public InventoryCrafting getWorkbenchCrafting()
+    // public InventoryCrafting getWorkbenchCrafting()
     public CraftingContainer getWorkbenchCrafting() {
         return crafting;
     }

@@ -30,7 +30,7 @@ public class ZonePlannerMapChunkKey {
         this.dimensionalId = dimensionalId;
         this.level = level;
 //        hash = Arrays.hashCode(new int[]{chunkPos.x, chunkPos.z, dimensionalId, level});
-        hash = Arrays.hashCode(new Object[]{chunkPos.x, chunkPos.z, dimensionalId, level});
+        hash = Arrays.hashCode(new Object[] { chunkPos.x, chunkPos.z, dimensionalId, level });
     }
 
     //    public ZonePlannerMapChunkKey(ByteBuf buf)
@@ -39,7 +39,7 @@ public class ZonePlannerMapChunkKey {
         dimensionalId = ResourceKey.create(Registry.DIMENSION_REGISTRY, new ResourceLocation(buf.readUtf()));
         level = buf.readInt();
 //        hash = Arrays.hashCode(new int[]{chunkPos.x, chunkPos.z, dimensionalId, level});
-        hash = Arrays.hashCode(new Object[]{chunkPos.x, chunkPos.z, dimensionalId, level});
+        hash = Arrays.hashCode(new Object[] { chunkPos.x, chunkPos.z, dimensionalId, level });
     }
 
     //    public void toBytes(ByteBuf buf)

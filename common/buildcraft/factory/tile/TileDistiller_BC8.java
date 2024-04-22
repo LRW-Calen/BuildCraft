@@ -12,6 +12,7 @@ import buildcraft.api.mj.MjBattery;
 import buildcraft.api.mj.MjCapabilityHelper;
 import buildcraft.api.recipes.BuildcraftRecipeRegistry;
 import buildcraft.api.recipes.IRefineryRecipeManager;
+import buildcraft.api.recipes.IRefineryRecipeManager.IDistillationRecipe;
 import buildcraft.api.tiles.IDebuggable;
 import buildcraft.api.tiles.TilesAPI;
 import buildcraft.core.BCCoreConfig;
@@ -86,9 +87,7 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements IDebuggable, IT
     public final FluidSmoother smoothedTankGasOut;
     public final FluidSmoother smoothedTankLiquidOut;
 
-    /**
-     * The model variables, used to keep track of the various state-based variables.
-     */
+    /** The model variables, used to keep track of the various state-based variables. */
     public final ModelVariableData clientModelData = new ModelVariableData();
 
     private IRefineryRecipeManager.IDistillationRecipe currentRecipe;
@@ -99,7 +98,6 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements IDebuggable, IT
     private boolean changedSinceNetUpdate = true;
 
     private long powerAvgClient;
-
 
     public TileDistiller_BC8(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.distillerTile.get(), pos, blockState);
@@ -129,10 +127,9 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements IDebuggable, IT
     private boolean isDistillableFluid(FluidStack fluid) {
         IRefineryRecipeManager manager = BuildcraftRecipeRegistry.refineryRecipes;
 //        IRefineryRecipeManager.IDistillationRecipe recipe = manager.getDistillationRegistry().getRecipeForInput(fluid);
-        IRefineryRecipeManager.IDistillationRecipe recipe = manager.getDistillationRegistry().getRecipeForInput(this.level, fluid);
+        IDistillationRecipe recipe = manager.getDistillationRegistry().getRecipeForInput(this.level, fluid);
         return recipe != null;
     }
-    // Calen
 
     @Override
 //    public CompoundTag writeToNBT(CompoundTag nbt)
@@ -146,20 +143,8 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements IDebuggable, IT
 
     @Override
     public void load(CompoundTag nbt) {
-        // TODO: remove in next version
-        CompoundTag tanksTag = nbt.getCompound("tanks");
-        if (tanksTag.contains("out_gas")) {
-            tanksTag.put("gasOut", tanksTag.get("out_gas"));
-        }
-        if (tanksTag.contains("out_liquid")) {
-            tanksTag.put("liquidOut", tanksTag.get("out_liquid"));
-        }
         super.load(nbt);
         tankManager.deserializeNBT(nbt.getCompound("tanks"));
-        // TODO: remove in next version
-        if (nbt.contains("mjBattery")) {
-            nbt.put("battery", nbt.get("mjBattery"));
-        }
         mjBattery.deserializeNBT(nbt.getCompound("battery"));
         distillPower = nbt.getLong("distillPower");
         powerAvg.readFromNbt(nbt, "powerAvg");
@@ -331,20 +316,18 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements IDebuggable, IT
         clientModelData.addDebugInfo(left);
     }
 
-    // Calen
+    // Calen: for other mods to show tanks contents
 
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> capability, Direction facing) {
         LazyOptional<T> ret = super.getCapability(capability, facing);
         if ((!ret.isPresent()) && facing == null && capability == CapUtil.CAP_FLUIDS) {
-            // Calen: For Jade
-            ret = LazyOptional.of(() -> fluidDisplayGetterForJade).cast();
+            ret = LazyOptional.of(() -> fakeFluidHandlerOfAllTanks).cast();
         }
         return ret;
     }
 
-    // Calen add
-    private IFluidHandler fluidDisplayGetterForJade = new IFluidHandler() {
+    private IFluidHandler fakeFluidHandlerOfAllTanks = new IFluidHandler() {
         @Override
         public int getTanks() {
             return tankManager.getTanks();

@@ -31,12 +31,12 @@ public class GuideAssemblyFactory implements GuidePartFactory {
     public GuideAssemblyFactory(ItemStack[] input, ItemStack output, long mjCost) {
         this.input = ArrayUtil.map(input, ChangingItemStack::new, ChangingItemStack[]::new);
         this.output = new ChangingItemStack(output);
-        this.mjCost = new ChangingObject<>(new Long[]{mjCost});
+        this.mjCost = new ChangingObject<>(new Long[] { mjCost });
         this.hash = computeHash();
     }
 
     private int computeHash() {
-        return Arrays.deepHashCode(new Object[]{input, output, mjCost});
+        return Arrays.deepHashCode(new Object[] { input, output, mjCost });
     }
 
     // public static GuideAssemblyFactory create(@Nonnull ItemStack stack) {

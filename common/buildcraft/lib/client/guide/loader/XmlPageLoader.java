@@ -498,8 +498,7 @@ public enum XmlPageLoader implements IPageLoaderText {
         try {
             int intLevel = Integer.parseInt(level);
             return chapter(name, intLevel);
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             String str = "§4" + tag.originalString + "§r";
             str = str.replace(level, "§c" + level + "§4");
             return new GuideTextFactory(str);
@@ -571,8 +570,7 @@ public enum XmlPageLoader implements IPageLoaderText {
         }
         try {
             return Integer.parseInt(value);
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             BCLog.logger.warn(
                     "[lib.guide.loader.xml] Found an invalid number for image tag (" + name + ") " + tag + nfe.getMessage()
             );
@@ -634,8 +632,7 @@ public enum XmlPageLoader implements IPageLoaderText {
         if (chapterLevelStr != null) {
             try {
                 chapterLevel = Integer.parseInt(chapterLevelStr);
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 String str = "§4" + tag.originalString + "§r";
                 str = str.replace(chapterLevelStr, "§c" + chapterLevelStr + "§4");
                 return Collections.singletonList(new GuideTextFactory(str));
@@ -770,8 +767,7 @@ public enum XmlPageLoader implements IPageLoaderText {
             int stackSize = 1;
             try {
                 stackSize = Integer.parseInt(count.trim());
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 BCLog.logger.warn("[lib.guide.loader.xml] " + count + " was not a valid number: " + nfe.getMessage());
             }
             stack.setCount(stackSize);

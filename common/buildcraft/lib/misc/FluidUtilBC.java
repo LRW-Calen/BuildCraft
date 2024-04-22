@@ -51,7 +51,7 @@ public class FluidUtilBC {
             LazyOptional<IFluidHandler> l = target.getCapability(CapUtil.CAP_FLUIDS, side.getOpposite());
 //            if(l!=null)
             if (l.isPresent()) {
-                IFluidHandler handler = l.orElseGet(() -> null);
+                IFluidHandler handler = l.orElse(null);
                 if (handler != null) {
                     int used = handler.fill(potential.copy(), FluidAction.EXECUTE);
 

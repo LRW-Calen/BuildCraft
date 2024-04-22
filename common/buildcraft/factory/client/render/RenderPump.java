@@ -12,7 +12,6 @@ import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import buildcraft.lib.client.render.tile.RenderPartCube;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry.SpriteHolder;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -21,13 +20,13 @@ import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-//public class RenderPump extends FastTESR<TilePump>
+@OnlyIn(Dist.CLIENT)
 public class RenderPump implements BlockEntityRenderer<TilePump> {
     private static final int[] COLOUR_POWER = new int[16];
     private static final int COLOUR_STATUS_ON = 0xFF_77_DD_77; // a light green
@@ -44,13 +43,6 @@ public class RenderPump implements BlockEntityRenderer<TilePump> {
     private static final RenderPartCube[] LED_STATUS;
 
     private static final LaserType TUBE_LASER;
-
-    private static final Vec3[] normals = new Vec3[]{
-            new Vec3(1, 0, 0),
-            new Vec3(0, 0, 1),
-            new Vec3(-1, 0, 0),
-            new Vec3(0, 0, -1),
-    };
 
     static {
         for (int i = 0; i < COLOUR_POWER.length; i++) {
@@ -107,14 +99,14 @@ public class RenderPump implements BlockEntityRenderer<TilePump> {
         LaserRow cap = new LaserRow(spriteTubeMiddle, 0, 8, 8, 16);
         LaserRow middle = new LaserRow(spriteTubeMiddle, 0, 0, 16, 8);
 
-        LaserRow[] middles = {middle};
+        LaserRow[] middles = { middle };
 
         TUBE_LASER = new LaserType(cap, middle, middles, null, cap);
     }
 
     private static boolean whiteTextureFlag = false;
 
-    //    public static void textureStitchPost()
+    // public static void textureStitchPost()
     public static void initWhiteTex() {
         whiteTextureFlag = true;
         for (int i = 0; i < 4; i++) {
@@ -135,6 +127,9 @@ public class RenderPump implements BlockEntityRenderer<TilePump> {
         if (!whiteTextureFlag) {
             initWhiteTex();
         }
+
+        VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
+
 //        Minecraft.getMinecraft().mcProfiler.startSection("bc");
         Minecraft.getInstance().getProfiler().push("bc");
 //        Minecraft.getMinecraft().mcProfiler.startSection("pump");
@@ -148,11 +143,6 @@ public class RenderPump implements BlockEntityRenderer<TilePump> {
         boolean complete = tile.isComplete();
         int statusColour = complete ? COLOUR_STATUS_OFF : COLOUR_STATUS_ON;
         int statusLight = complete ? BLOCK_LIGHT_STATUS_OFF : BLOCK_LIGHT_STATUS_ON;
-
-        // Calen
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS); // Calen: not necrssary
-//        VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-        VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
         for (int i = 0; i < 4; i++) {
             // Get the light level of a direction
 //            Direction dir = Direction.getHorizontal(i);
@@ -163,7 +153,6 @@ public class RenderPump implements BlockEntityRenderer<TilePump> {
             byte block = (byte) tile.getLevel().getLightEmission(pos);
 //            int sky = tile.getWorld().getLightFor(EnumSkyBlock.SKY, pos);
             byte sky = (byte) tile.getLevel().getLightEngine().getRawBrightness(pos, 0);
-
 
             LED_POWER[i].center.colouri(powerColour);
             LED_STATUS[i].center.colouri(statusColour);
@@ -184,7 +173,6 @@ public class RenderPump implements BlockEntityRenderer<TilePump> {
 //        Minecraft.getMinecraft().mcProfiler.endSection();
         Minecraft.getInstance().getProfiler().pop();
     }
-
 
     @Override
 //    public boolean isGlobalRenderer(TilePump tile)

@@ -136,7 +136,7 @@ public class FormatString {
                     for (int j = 1; j < left; j++) {
                         next[j] = segments[segmentIndex + j];
                     }
-                    return new FormatString[]{ //
+                    return new FormatString[] { //
                             new FormatString(thisLine.toArray(new FormatSegment[0])), //
                             new FormatString(next)//
                     };
@@ -146,13 +146,13 @@ public class FormatString {
                     for (int j = 0; j < left; j++) {
                         next[j] = segments[j + 1];
                     }
-                    return new FormatString[]{ //
+                    return new FormatString[] { //
                             new FormatString(thisLine.toArray(new FormatSegment[0])), //
                             new FormatString(next)//
                     };
                 }
             }
         }
-        return new FormatString[]{this};
+        return new FormatString[] { this };
     }
 }

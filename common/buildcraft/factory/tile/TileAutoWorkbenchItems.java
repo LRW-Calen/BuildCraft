@@ -15,11 +15,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-//public class TileAutoWorkbenchItems extends TileAutoWorkbenchBase
 public class TileAutoWorkbenchItems extends TileAutoWorkbenchBase implements MenuProvider {
     public TileAutoWorkbenchItems(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.autoWorkbenchItemsTile.get(), 3, 3, pos, blockState);
     }
+
+    // MenuProvider
 
     @Override
     public Component getDisplayName() {

@@ -14,7 +14,6 @@ import buildcraft.silicon.item.*;
 import buildcraft.silicon.plug.PluggablePulsar;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;

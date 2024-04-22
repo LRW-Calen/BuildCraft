@@ -137,14 +137,14 @@ public class BCEnergyConfig {
                 "Biome registry names (e.g. 'minecraft:ocean','minecraft:hills')"
                         + " of biomes that should have slightly increased oil generation rates.");
 
-        String[] _excluded = {"minecraft:hell", "minecraft:sky",};
+        String[] _excluded = { "minecraft:hell", "minecraft:sky", };
         propExcludedBiomes = BCCoreConfig.getConfigAndEnsureCreated(true).get("worldgen.oil", "excludedBiomes", _excluded,
                 "Biome registry names (e.g. 'minecraft:hell','minecraft:jungle') of biomes that should never generate oil.");
 
         propExcludedBiomesIsBlacklist = BCCoreConfig.getConfigAndEnsureCreated(true).get("worldgen.oil", "excludedBiomesIsBlacklist", true,
                 "If true then the excluded biomes list will be treated as a blacklist, otherwise it will be treated as a whitelist.");
 
-        int[] _dims = {-1, 1};
+        int[] _dims = { -1, 1 };
         propExcludedDimensions = BCCoreConfig.getConfigAndEnsureCreated(true).get("worldgen.oil", "excludedDimensions", _dims,
                 "Dimension ID's (e.g. '-1' for the nether,'1' for the end) of dimensions that should never generate oil.");
 

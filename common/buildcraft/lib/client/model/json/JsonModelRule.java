@@ -95,7 +95,7 @@ public abstract class JsonModelRule {
     public static class RuleRotateFacing extends JsonModelRule {
 
         private static final NodeConstantDouble CONST_ORIGIN = new NodeConstantDouble(8);
-        public static final INodeDouble[] DEFAULT_ORIGIN = {CONST_ORIGIN, CONST_ORIGIN, CONST_ORIGIN};
+        public static final INodeDouble[] DEFAULT_ORIGIN = { CONST_ORIGIN, CONST_ORIGIN, CONST_ORIGIN };
 
         public final INodeObject<Direction> from, to;
         public final INodeDouble[] origin;
@@ -127,7 +127,7 @@ public abstract class JsonModelRule {
 
     public static class RuleRotate extends JsonModelRule {
         private static final NodeConstantDouble CONST_ORIGIN = new NodeConstantDouble(0.5);
-        public static final INodeDouble[] DEFAULT_ORIGIN = {CONST_ORIGIN, CONST_ORIGIN, CONST_ORIGIN};
+        public static final INodeDouble[] DEFAULT_ORIGIN = { CONST_ORIGIN, CONST_ORIGIN, CONST_ORIGIN };
 
         public final INodeDouble[] origin, angle;
 
@@ -177,7 +177,7 @@ public abstract class JsonModelRule {
 
     public static class RuleScale extends JsonModelRule {
         private static final NodeConstantDouble CONST_ORIGIN = new NodeConstantDouble(0.5);
-        public static final INodeDouble[] DEFAULT_ORIGIN = {CONST_ORIGIN, CONST_ORIGIN, CONST_ORIGIN};
+        public static final INodeDouble[] DEFAULT_ORIGIN = { CONST_ORIGIN, CONST_ORIGIN, CONST_ORIGIN };
 
         public final INodeDouble[] origin, scale;
 

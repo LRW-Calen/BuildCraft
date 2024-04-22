@@ -92,7 +92,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     private static final VoxelShape BOX_SOUTH = Shapes.box(0.25, 0.25, 0.75, 0.75, 0.75, 1);
     private static final VoxelShape BOX_WEST = Shapes.box(0, 0.25, 0.25, 0.25, 0.75, 0.75);
     private static final VoxelShape BOX_EAST = Shapes.box(0.75, 0.25, 0.25, 1, 0.75, 0.75);
-    private static final VoxelShape[] BOX_FACES = {BOX_DOWN, BOX_UP, BOX_NORTH, BOX_SOUTH, BOX_WEST, BOX_EAST};
+    private static final VoxelShape[] BOX_FACES = { BOX_DOWN, BOX_UP, BOX_NORTH, BOX_SOUTH, BOX_WEST, BOX_EAST };
 
     private static final ResourceLocation ADVANCEMENT_LOGIC_TRANSPORTATION = new ResourceLocation(
             "buildcrafttransport:logic_transportation"

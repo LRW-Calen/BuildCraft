@@ -22,7 +22,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
-//public class RenderProgrammingTable extends FastTESR<TileProgrammingTable_Neptune>
 public class RenderProgrammingTable implements BlockEntityRenderer<TileProgrammingTable_Neptune> {
     // Calen
     private final LazyLoadedValue<TextureAtlasSprite> glass_white = new LazyLoadedValue<>(() ->

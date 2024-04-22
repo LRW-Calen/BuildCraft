@@ -65,8 +65,7 @@ public class MessageObjectCacheResponse implements IMessage {
                 cache.readObjectClient(id, new PacketBufferBC(Unpooled.copiedBuffer(payload)));
             }
             return null;
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             throw new Error(io);
         }
     };

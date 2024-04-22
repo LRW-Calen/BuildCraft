@@ -75,8 +75,7 @@ public class ScriptableRegistry<E> extends SimpleReloadableRegistry<E> implement
 
             long end = System.currentTimeMillis();
             SimpleScript.logForAll("Finished at: " + TimeUtil.formatNow() + ", took " + (end - start) + "ms");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -177,8 +176,7 @@ public class ScriptableRegistry<E> extends SimpleReloadableRegistry<E> implement
             }
             openFileSystems.add(fileSystem);
             return root;
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             BCLog.logger.error("Unable to load " + file + " as a separate file system!", e);
             return null;
         }
@@ -225,8 +223,7 @@ public class ScriptableRegistry<E> extends SimpleReloadableRegistry<E> implement
                     }
                 }
             }
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             BCLog.logger.warn("Unable to load from ...", io);
         }
     }
@@ -315,8 +312,7 @@ public class ScriptableRegistry<E> extends SimpleReloadableRegistry<E> implement
                 }
                 try {
                     loadReloadable(name, gson, json);
-                }
-                catch (JsonSyntaxException jse) {
+                } catch (JsonSyntaxException jse) {
                     SimpleScript.logForAll("Unable to load " + name + " from " + json + " because " + jse.getMessage());
                 }
             } else {

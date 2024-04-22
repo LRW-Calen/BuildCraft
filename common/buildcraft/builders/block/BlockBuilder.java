@@ -86,7 +86,7 @@ public class BlockBuilder extends BlockBCTile_Neptune<TileBuilder> implements IB
     }
 
     @Override
-    public boolean canBeRotated(Level world, BlockPos pos, BlockState state) {
+    public boolean canBeRotated(LevelAccessor world, BlockPos pos, BlockState state) {
         BlockEntity tile = world.getBlockEntity(pos);
         return !(tile instanceof TileBuilder) || ((TileBuilder) tile).getBuilder() == null;
     }

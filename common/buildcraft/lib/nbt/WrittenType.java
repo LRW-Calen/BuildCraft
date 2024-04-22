@@ -18,7 +18,7 @@ public enum WrittenType {
     MEDIUM(3, (1 << 24) - 1),
     INT(4, Integer.MAX_VALUE);
 
-    public static final WrittenType[] ORDERED_VALUES = {BYTE, SHORT, MEDIUM, INT};
+    public static final WrittenType[] ORDERED_VALUES = { BYTE, SHORT, MEDIUM, INT };
 
     public final int numBytes;
     private final int maxStorableValue;

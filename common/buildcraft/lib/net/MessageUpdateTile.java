@@ -67,11 +67,9 @@ public class MessageUpdateTile implements IMessage {
                         + " (found " + tile + ")");
             }
             return null;
-        }
-        catch (IOException io) {
+        } catch (IOException io) {
             throw new RuntimeException(io);
-        }
-        finally {
+        } finally {
             message.payload.release();
         }
     };

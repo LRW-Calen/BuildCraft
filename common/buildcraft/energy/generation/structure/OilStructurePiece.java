@@ -338,7 +338,7 @@ public abstract class OilStructurePiece {
         int toReplace = valForAxis;
 //        Predicate<BlockPos> tester = p -> VecUtil.replaceValue(p, axis, toReplace).distSqr(center) <= radiusSq;
 //        return new GenByPredicate(new Box(min, max), ReplaceType.ALWAYS, tester);
-        return new GenByPredicate(new Box(min, max), ReplaceType.ALWAYS, new Object[]{axis, toReplace, center, radiusSq});
+        return new GenByPredicate(new Box(min, max), ReplaceType.ALWAYS, new Object[] { axis, toReplace, center, radiusSq });
     }
 
     public static OilStructurePiece createSpout(BlockPos start, int height, int radius) {
@@ -355,7 +355,7 @@ public abstract class OilStructurePiece {
         double radiusSq = radius * radius + 0.01;
 //        Predicate<BlockPos> tester = p -> p.distSqr(center) <= radiusSq;
 //        return new OilStructurePiece.GenByPredicate(box, OilStructurePiece.ReplaceType.ALWAYS, tester);
-        return new OilStructurePiece.GenByPredicate(box, OilStructurePiece.ReplaceType.ALWAYS, new Object[]{center, radiusSq});
+        return new OilStructurePiece.GenByPredicate(box, OilStructurePiece.ReplaceType.ALWAYS, new Object[] { center, radiusSq });
     }
 
     public static OilStructurePiece createTendril(BlockPos center, int lakeRadius, int radius, Random rand) {

@@ -64,8 +64,7 @@ public class ElementTypeToolTip extends ElementType {
                 for (String s : text) {
                     nodes.add(GenericExpressionCompiler.compileExpressionString(s, ctx));
                 }
-            }
-            catch (InvalidExpressionException e) {
+            } catch (InvalidExpressionException e) {
                 throw new JsonSyntaxException(e);
             }
             source = (list) ->

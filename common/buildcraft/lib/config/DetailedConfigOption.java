@@ -83,8 +83,7 @@ public class DetailedConfigOption {
         if (refresh()) {
             try {
                 cacheLong = Long.parseLong(cache);
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 BCLog.logger.warn("Invalid option for " + id + ":" + cache + ", wanted an integer! " + nfe.getMessage());
                 cacheLong = 0;
             }
@@ -96,8 +95,7 @@ public class DetailedConfigOption {
         if (refresh()) {
             try {
                 cacheDouble = Double.parseDouble(cache);
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 BCLog.logger.warn("Invalid option for " + id + ":" + cache + ", wanted a floating-point! " + nfe.getMessage());
                 cacheDouble = 0;
             }
@@ -110,8 +108,7 @@ public class DetailedConfigOption {
             try {
                 String string = getAsString();
                 cacheExpression = InternalCompiler.compileExpression(string, DefaultContexts.createWithAll());
-            }
-            catch (InvalidExpressionException iee) {
+            } catch (InvalidExpressionException iee) {
                 BCLog.logger.warn("Invalid expression for " + id + ":" + cache + ", wanted a valid expression!");
                 BCLog.logger.warn("Error: " + iee.getMessage());
                 cacheLong = 0;

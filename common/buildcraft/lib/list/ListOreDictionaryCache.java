@@ -14,7 +14,7 @@ import java.util.Set;
 
 public final class ListOreDictionaryCache {
     public static final ListOreDictionaryCache INSTANCE = new ListOreDictionaryCache();
-    private static final String[] TYPE_KEYWORDS = {"Tiny", "Dense", "Small"};
+    private static final String[] TYPE_KEYWORDS = { "Tiny", "Dense", "Small" };
     // Calen not still useful in 1.18
 //    private final Map<String, Set<Integer>> namingCache = new HashMap<>();
 //    private final Set<String> registeredNames = new HashSet<>();

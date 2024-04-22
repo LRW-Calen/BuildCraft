@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockMiningWell extends BlockBCTile_Neptune implements IBlockWithFacing {
-    public BlockMiningWell(String id, BlockBehaviour.Properties props) {
-        super(id, props);
+    public BlockMiningWell(String idBC, BlockBehaviour.Properties props) {
+        super(idBC, props);
     }
 
     @Nullable

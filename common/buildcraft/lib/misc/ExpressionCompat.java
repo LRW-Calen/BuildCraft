@@ -71,8 +71,7 @@ public class ExpressionCompat {
 
         try {
             IControllable.Mode.ON.name();
-        }
-        catch (NoSuchFieldError e) {
+        } catch (NoSuchFieldError e) {
             throw BCLib.throwBadClass(e, IControllable.Mode.class);
         }
         ENUM_CONTROL_MODE = new NodeType<>("Controllable Mode", IControllable.Mode.class, IControllable.Mode.ON);
@@ -107,7 +106,7 @@ public class ExpressionCompat {
         RENDERING.put_s_l("convertColourToArgb", ExpressionCompat::convertColourToArgb);
     }
 
-    //    public static void setup()
+    // public static void setup()
     public static synchronized void setup() {
         // Just to call the above static initializer
     }

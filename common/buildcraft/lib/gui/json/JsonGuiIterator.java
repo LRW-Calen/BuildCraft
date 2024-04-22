@@ -64,8 +64,7 @@ public class JsonGuiIterator {
                 } else {
                     throw new JsonSyntaxException("Don't iterate statically from a value to itself!");
                 }
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 throw new JsonSyntaxException(nfe);
             }
             childIterator = null;
@@ -94,8 +93,7 @@ public class JsonGuiIterator {
                 valStep = GenericExpressionCompiler.compileExpressionLong(step, ctx);
                 ctx.putVariable("step", valStep);
                 valShouldContinue = GenericExpressionCompiler.compileExpressionBoolean(shouldContinue, ctx);
-            }
-            catch (InvalidExpressionException iee) {
+            } catch (InvalidExpressionException iee) {
                 throw new JsonSyntaxException("Invalid iterator!", iee);
             }
             if (childIterator == null) {

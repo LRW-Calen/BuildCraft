@@ -467,7 +467,7 @@ public class MutableVertex {
     }
 
     public int[] lighti() {
-        return new int[]{light_block, light_sky};
+        return new int[] { light_block, light_sky };
     }
 
     public MutableVertex transform(Matrix4f matrix) {

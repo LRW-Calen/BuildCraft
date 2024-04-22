@@ -234,7 +234,8 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
         return 0;
     }
 
-    //    @Override
+    @Nonnull
+    @Override
     public FluidStack drain(IFluidFilter drainFilter, int maxDrain, FluidAction doDrain) {
         if (drainFilter == null) {
 //            return null;

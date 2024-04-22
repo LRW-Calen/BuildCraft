@@ -12,7 +12,7 @@ import net.minecraft.world.item.Item;
 import java.util.Locale;
 
 public class ItemPlastic extends ItemBlockBCMulti {
-    public ItemPlastic(Item.Properties properties, BlockPlastic block) {
+    public ItemPlastic(BlockPlastic block, Item.Properties properties) {
 //        super(block, createNameArray());
         super(block, properties);
 //        this.setMaxDamage(0);
@@ -28,15 +28,11 @@ public class ItemPlastic extends ItemBlockBCMulti {
         return switched;
     }
 
-    // Calen: not still useful in 1.18.2
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
-//        for (DyeColor colour : DyeColor.values())
-//        {
-////            addVariant(variants, colour.getMetadata(), colour.getName());
-//            addVariant(variants, colour.getId(), colour.getName());
+//    @SideOnly(Side.CLIENT)
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
+//        for (EnumDyeColor colour : EnumDyeColor.values()) {
+//            addVariant(variants, colour.getMetadata(), colour.getName());
 //        }
 //    }
 }

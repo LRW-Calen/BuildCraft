@@ -113,7 +113,7 @@ public class SimpleSuffixArray<T> implements ISuffixArray<T> {
         List<T> entries = new ArrayList<>();
 
         boolean first = true;
-        String[] array = SPLIT_WORDS ? substring.split(" ") : new String[]{substring};
+        String[] array = SPLIT_WORDS ? substring.split(" ") : new String[] { substring };
         for (String s : array) {
             Collection<T> real = first ? entries : new HashSet<>();
             for (List<T> values : suffixArray.subMap(s, s + (char) -1).values()) {
