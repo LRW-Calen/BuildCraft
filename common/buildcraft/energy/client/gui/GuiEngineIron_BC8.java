@@ -34,12 +34,7 @@ public class GuiEngineIron_BC8 extends GuiBC8<ContainerEngineIron_BC8> {
     }
 
     @Override
-    public void initGui()
-//    public void init()
-    {
-//        super.initGui();
-//        super.init();
-
+    public void initGui() {
         mainGui.shownElements.add(container.widgetTankFuel.createGuiElement(mainGui, new GuiRectangle(26, 18, 16, 60).offset(mainGui.rootElement), ICON_TANK_OVERLAY));
         mainGui.shownElements.add(container.widgetTankCoolant.createGuiElement(mainGui, new GuiRectangle(80, 18, 16, 60).offset(mainGui.rootElement), ICON_TANK_OVERLAY));
         mainGui.shownElements.add(container.widgetTankResidue.createGuiElement(mainGui, new GuiRectangle(134, 18, 16, 60).offset(mainGui.rootElement), ICON_TANK_OVERLAY));

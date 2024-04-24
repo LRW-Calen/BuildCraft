@@ -2,8 +2,8 @@ package buildcraft.energy.item;
 
 import buildcraft.energy.generation.structure.OilPlacer;
 import buildcraft.energy.generation.structure.OilStructure;
-import buildcraft.energy.generation.structure.OilStructureGenerator;
-import buildcraft.energy.generation.structure.OilStructureGenerator.GenType;
+import buildcraft.energy.generation.structure.OilGenerator;
+import buildcraft.energy.generation.structure.OilGenerator.GenType;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.misc.TimeUtil;
 import buildcraft.lib.misc.data.Box;
@@ -29,7 +29,6 @@ public class ItemOilPlacer extends ItemBC_Neptune {
 
     private static final String TAG_TYPE = "type";
 
-    // Calen: 对方块用和对虚空用都会触发这个
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (level.isClientSide()) {
@@ -67,11 +66,11 @@ public class ItemOilPlacer extends ItemBC_Neptune {
             tag.putByte(TAG_TYPE, (byte) GenType.LARGE.ordinal());
         }
 
-        GenType craterType = GenType.values()[tag.getByte(TAG_TYPE)];
+        GenType genType = GenType.values()[tag.getByte(TAG_TYPE)];
 
         player.sendMessage(new TextComponent(
-                ChatFormatting.GOLD + "Spawned Type = " +
-                        ChatFormatting.YELLOW + craterType
+                ChatFormatting.GOLD + "GenType = " +
+                        ChatFormatting.YELLOW + genType
         ), Util.NIL_UUID);
         player.sendMessage(new TextComponent(
                 ChatFormatting.GOLD + "BiomeCategory = " +
@@ -85,8 +84,8 @@ public class ItemOilPlacer extends ItemBC_Neptune {
         // localize some const values
         int minBuildHeight = level.getMinBuildHeight();
         int maxBuildHeight = level.getMaxBuildHeight();
-        int radius = 16 * OilStructureGenerator.MAX_CHUNK_RADIUS;
-        // StructurePiece 要求的 Box
+        int radius = 16 * OilGenerator.MAX_CHUNK_RADIUS;
+        // the Box required by StructurePiece
         BlockPos min = new BlockPos(pos.getX() - radius, minBuildHeight, pos.getZ() - radius);
         Box box = new Box(min, min.offset(2 * radius, maxBuildHeight - minBuildHeight, 2 * radius));
         player.sendMessage(new TextComponent(
@@ -95,7 +94,7 @@ public class ItemOilPlacer extends ItemBC_Neptune {
                         ChatFormatting.GOLD + TimeUtil.formatNow()
         ), Util.NIL_UUID);
         // Structure
-        OilStructure structure = OilStructureGenerator.createTotalStructure(craterType, level.random, player.getBlockX(), player.getBlockZ(), minBuildHeight, maxBuildHeight, box);
+        OilStructure structure = OilGenerator.createStructureByType(genType, level.random, player.getBlockX(), player.getBlockZ(), minBuildHeight, maxBuildHeight, box);
         // Placer
         if (structure != null) {
             player.sendMessage(new TextComponent(

@@ -31,8 +31,10 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.FurnaceBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.Nullable;
 
@@ -159,10 +161,13 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
         }
     }
 
+    /**
+     * {@link FurnaceBlockEntity#getFuel()#getItemBurnTime(ItemStack)} will return null if not found, which cannot be cast to int.
+     * {@link ForgeHooks#getBurnTime(ItemStack, RecipeType)} is recommended by forge
+     */
     private static int getItemBurnTime(ItemStack itemstack) {
 //        return TileEntityFurnace.getItemBurnTime(itemstack);
-        Integer ret = FurnaceBlockEntity.getFuel().get(itemstack.getItem());
-        return ret == null ? -1 : ret;
+        return ForgeHooks.getBurnTime(itemstack, RecipeType.SMELTING);
     }
 
     @Override

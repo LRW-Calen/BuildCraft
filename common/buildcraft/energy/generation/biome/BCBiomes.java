@@ -1,6 +1,7 @@
 package buildcraft.energy.generation.biome;
 
-import buildcraft.energy.generation.structure.EnergyStructureFeatureRegistry;
+import buildcraft.energy.BCEnergy;
+import buildcraft.energy.generation.structure.OilStructureRegistry;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.AquaticPlacements;
 import net.minecraft.sounds.Music;
@@ -9,13 +10,44 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 
 // Calen: OverworldBiomes.class https://forums.minecraftforge.net/topic/104296-solved1165-custom-biome-not-generating-in-overworld-dimension/
+@Mod.EventBusSubscriber(modid = BCEnergy.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class BCBiomes {
     @Nullable
     private static final Music NORMAL_MUSIC = null;
+
+//    // Calen test
+//    public static final DeferredRegister<Biome> reg = DeferredRegister.create(ForgeRegistries.BIOMES, BCEnergy.MODID);
+//    //    public static final RegistryObject<Biome> OIL_DESERT = reg.register(BCBiomeRegistry.BIOME_OIL_DESERT, BCBiomes::makeOilDesertBiome);
+////    public static final RegistryObject<Biome> OIL_OCEAN = reg.register(BCBiomeRegistry.BIOME_OIL_OCEAN, BCBiomes::makeOilOceanBiome);
+//    public static RegistryObject<Biome> OIL_DESERT;
+//    public static RegistryObject<Biome> OIL_OCEAN;
+//
+//    public static void init() {
+//        OIL_DESERT = reg.register(BCBiomeRegistry.BIOME_OIL_DESERT, BCBiomes::makeOilDesertBiome);
+//        OIL_OCEAN = reg.register(BCBiomeRegistry.BIOME_OIL_OCEAN, BCBiomes::makeOilOceanBiome);
+//        reg.register(FMLJavaModLoadingContext.get().getModEventBus());
+//    }
+
+    @SubscribeEvent
+    public static void initBiome(RegistryEvent.Register<Biome> event) {
+        Biome oil_desert = makeOilDesertBiome().setRegistryName(BCEnergy.MODID, BCBiomeRegistry.BIOME_OIL_DESERT);
+        Biome oil_ocean = makeOilOceanBiome().setRegistryName(BCEnergy.MODID, BCBiomeRegistry.BIOME_OIL_OCEAN);
+////        event.getRegistry().register();
+////        event.getRegistry().register();
+////        BiomeManager.addAdditionalOverworldBiomes(BCBiomeRegistry.RESOURCE_KEY_BIOME_OIL_DESERT);
+////        BiomeManager.addAdditionalOverworldBiomes(BCBiomeRegistry.RESOURCE_KEY_BIOME_OIL_OCEAN);
+//
+        ForgeRegistries.BIOMES.register(oil_desert);
+        ForgeRegistries.BIOMES.register(oil_ocean);
+    }
 
     // Calen: the same as Desert
     public static Biome makeOilDesertBiome() {
@@ -33,7 +65,7 @@ public class BCBiomes {
         BiomeDefaultFeatures.addDesertExtraVegetation(biomegenerationsettings$builder);
         BiomeDefaultFeatures.addDesertExtraDecoration(biomegenerationsettings$builder);
         // oil
-        biomegenerationsettings$builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, EnergyStructureFeatureRegistry.PLACED_OIL_STRUCTURE);
+        biomegenerationsettings$builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OilStructureRegistry.PLACED_FEATURE_HOLDER);
         return biome(
                 Biome.Precipitation.NONE,
                 Biome.BiomeCategory.DESERT,
@@ -66,7 +98,7 @@ public class BCBiomes {
         BiomeDefaultFeatures.addDefaultSeagrass(biomegenerationsettings$builder);
         BiomeDefaultFeatures.addColdOceanExtraVegetation(biomegenerationsettings$builder);
         // oil
-        biomegenerationsettings$builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, EnergyStructureFeatureRegistry.PLACED_OIL_STRUCTURE);
+        biomegenerationsettings$builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OilStructureRegistry.PLACED_FEATURE_HOLDER);
         return biome(
                 Biome.Precipitation.RAIN,
                 Biome.BiomeCategory.OCEAN,
@@ -125,5 +157,4 @@ public class BCBiomes {
         $$1 = Mth.clamp($$1, -1.0F, 1.0F);
         return Mth.hsvToRgb(0.62222224F - $$1 * 0.05F, 0.5F + $$1 * 0.1F, 1.0F);
     }
-
 }

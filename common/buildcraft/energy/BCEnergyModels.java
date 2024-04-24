@@ -21,6 +21,7 @@ import buildcraft.lib.expression.DefaultContexts;
 import buildcraft.lib.expression.FunctionContext;
 import buildcraft.lib.expression.node.value.NodeVariableDouble;
 import buildcraft.lib.expression.node.value.NodeVariableObject;
+import buildcraft.lib.fluid.BCFluid;
 import buildcraft.lib.misc.ExpressionCompat;
 import buildcraft.lib.misc.data.ModelVariableData;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -37,6 +38,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)
@@ -85,15 +87,10 @@ public class BCEnergyModels {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onModelRegistry(ModelRegistryEvent event) {
-        ChristmasHandler.regBucketNoFlipModel(event);
-//        for (RegistryObject<BCFluidBase.Source> fluid : BCEnergyFluids.allStill)
-//        {
-//
-////            BCFluid fluid = (BCFluid) fluidReg.getFluid();
-////            ForgeModelBakery.addSpecialModel(new ResourceLocation(NameSpaces.BUILDCRAFT_ENERGY, fluid.get().getBlockName()));
-//            ForgeModelBakery.addSpecialModel(fluid.get().getReg().getBlock().getRegistryName());
-////            ModelLoader.setCustomStateMapper(fluid.getBlock(), b -> Collections.emptyMap());
+//        for (BCFluid fluid : BCEnergyFluids.allFluids) {
+//            ModelLoader.setCustomStateMapper(fluid.getBlock(), b -> Collections.emptyMap());
 //        }
+        ChristmasHandler.regBucketNoFlipModel(event);
     }
 
     @SubscribeEvent
@@ -131,7 +128,6 @@ public class BCEnergyModels {
                 )
         );
 
-        // Calen
         ChristmasHandler.replaceBucketNoFlipModel(event);
     }
 

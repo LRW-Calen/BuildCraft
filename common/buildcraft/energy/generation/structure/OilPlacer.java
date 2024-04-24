@@ -27,10 +27,10 @@ import java.util.List;
 
 public final class OilPlacer {
     private final LevelAccessor level;
-    private final List<OilStructurePiece> structurePieces;
+    private final List<OilGenStructurePart> structurePieces;
     private final Box box;
 
-    public OilPlacer(WorldGenLevel level, List<OilStructurePiece> structurePieces, BoundingBox bounds) {
+    public OilPlacer(WorldGenLevel level, List<OilGenStructurePart> structurePieces, BoundingBox bounds) {
         this.level = level;
         this.structurePieces = structurePieces;
         this.box = new Box(bounds);
@@ -38,20 +38,19 @@ public final class OilPlacer {
 
     public void place() {
         LevelAccessor world = this.level;
-        OilStructurePiece.Spring spring = null;
-        for (OilStructurePiece struct : structurePieces) {
+        OilGenStructurePart.Spring spring = null;
+        for (OilGenStructurePart struct : structurePieces) {
             struct.generate(world, box);
-            if (struct instanceof OilStructurePiece.Spring) {
-                spring = (OilStructurePiece.Spring) struct;
+            if (struct instanceof OilGenStructurePart.Spring) {
+                spring = (OilGenStructurePart.Spring) struct;
             }
         }
         if (spring != null && box.contains(spring.pos)) {
             int count = 0;
-            for (OilStructurePiece struct : structurePieces) {
+            for (OilGenStructurePart struct : structurePieces) {
                 count += struct.countOilBlocks();
             }
             spring.generate(world, count);
         }
     }
-
 }

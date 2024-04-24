@@ -32,7 +32,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
 
     @Override
 //    public ItemStack transferStackInSlot(Player player, int index)
-    public ItemStack quickMoveStack(Player playerIn, int index) {
+    public ItemStack quickMoveStack(Player player, int index) {
         // The only slots are player slots -- try to interact with all of the tanks
 
         if (!player.level.isClientSide) {

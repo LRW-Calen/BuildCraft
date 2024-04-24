@@ -2,6 +2,7 @@ package buildcraft.energy;
 
 import buildcraft.api.enums.EnumSpring;
 import buildcraft.core.BCCore;
+import buildcraft.energy.generation.biome.BCBiomes;
 import buildcraft.energy.recipe.CoolantRecipeSerializer;
 import buildcraft.energy.recipe.FuelRecipeSerializer;
 import buildcraft.lib.fluid.BCFluid;
@@ -53,15 +54,16 @@ public class BCEnergy {
     public static void preInit(FMLConstructModEvent event) {
         RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
         BCEnergyConfig.preInit();
-        BCEnergyWorldGen.init();
         BCEnergyEntities.preInit();
-        // Calen: from BCEnergyProxy
-        // Should before BCEnergyFluids.preInit() and BCEnergyBlocks.preInit() to set christmas special fluid data
+        BCEnergyWorldGen.preInit();
+        // Calen: BCEnergyProxy.getProxy().fmlPreInit() Should before BCEnergyFluids.preInit() and BCEnergyBlocks.preInit() to set christmas special fluid data
         BCEnergyProxy.getProxy().fmlPreInit();
 
         BCEnergyFluids.preInit();
         BCEnergyBlocks.preInit();
         BCEnergyItems.preInit();
+
+//        NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, BCEnergyProxy.getProxy());
     }
 
     @SubscribeEvent
@@ -69,6 +71,7 @@ public class BCEnergy {
     public static void init(FMLCommonSetupEvent event) {
         BCEnergyFluids.registerBucketDispenserBehavior();
 //        BCEnergyRecipes.init(); // 1.18.2: use datagen
+//        BCEnergyWorldGen.init(); // 1.18.2: moved to #preInit
         BCEnergyProxy.getProxy().fmlInit();
     }
 

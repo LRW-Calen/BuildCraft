@@ -27,29 +27,6 @@ public class BCEnergySprites {
         modEventBus.register(BCEnergySprites.class);
     }
 
-//    public static final ITextureAtlasSpriteLoader OIL_SPRITE_LOADER = (
-//            atlas,
-//            resourceManager, textureInfo,
-//            resource,
-//            atlasWidth, atlasHeight,
-//            spriteX, spriteY, mipmapLevel,
-//            nativeImage
-//    ) ->
-//    {
-//        return new AtlasSpriteFluid(atlas, textureInfo, atlasWidth, atlasHeight, spriteX, spriteY, mipmapLevel, nativeImage);
-//    };
-//
-//    // Calen
-//    @SubscribeEvent
-//    public static void onTextureAtlasSpriteLoaderRegister(FMLClientSetupEvent event)
-//    {
-//        if (BCLibConfig.useSwappableSprites)
-//        {
-//            MinecraftForgeClient.registerTextureAtlasSpriteLoader(new ResourceLocation(NameSpaces.BUILDCRAFT_ENERGY, "oil_sprite_loader"), OIL_SPRITE_LOADER);
-//        }
-//
-//    }
-
     @SubscribeEvent
     public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         // TODO Calen frozen

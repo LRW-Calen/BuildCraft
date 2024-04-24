@@ -12,11 +12,10 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.time.Month;
 import java.time.MonthDay;
+import java.util.Map;
 
-/**
- * Used for automatically changing lang entries, fluid colours, and a few other things around christmas time. This is
- * in energy rather than lib because no other module does anything at christmas.
- */
+/**  Used for automatically changing lang entries, fluid colours, and a few other things around christmas time. This is
+ * in energy rather than lib because no other module does anything at christmas. */
 public class ChristmasHandler {
 
     private static Boolean enabled;
@@ -45,14 +44,6 @@ public class ChristmasHandler {
     private static void fmlPreInit() {
         enabled = BCEnergyConfig.christmasEventStatus.isEnabled(MonthDay.of(Month.DECEMBER, 25));
         if (isEnabled()) {
-            // Calen
-            BCEnergyFluids.STILL_SUFFIX = BCEnergyFluids.STILL_SUFFIX + "_christmas";
-            BCEnergyFluids.FLOW_SUFFIX = BCEnergyFluids.FLOW_SUFFIX + "_christmas";
-            BCEnergyFluids.FLUID_TRANSLATION_PREFIX = "buildcraft.christmas." + BCEnergyFluids.FLUID_TRANSLATION_PREFIX;
-            BCEnergyFluids.HEAT_TRANSLATION_PREFIX = "buildcraft.christmas." + BCEnergyFluids.HEAT_TRANSLATION_PREFIX;
-
-            TagManager.getTag("block.engine.bc.iron").locale("buildcraft.christmas." + TagManager.getTag("block.engine.bc.iron").getSingleTag(TagManager.EnumTagType.UNLOCALIZED_NAME));
-
 //            setColours(0xC0_75_34, 0x5A_1D_0c, BCEnergyFluids.crudeOil);
 //            setColours(0xD4_82_39, 0xD8_7D_33, BCEnergyFluids.oilResidue);
 //            setColours(0xD4_82_39, 0x5A_1D_0C, BCEnergyFluids.oilHeavy);
@@ -64,6 +55,17 @@ public class ChristmasHandler {
 //            setColours(0xC0_75_34, 0xB3_68_2C, BCEnergyFluids.fuelMixedLight);
 //            setColours(0xD6_C9_90, 0xCF_BF_8E, BCEnergyFluids.fuelGaseous);
 
+            BCEnergyFluids.STILL_SUFFIX = BCEnergyFluids.STILL_SUFFIX + "_christmas";
+            BCEnergyFluids.FLOW_SUFFIX = BCEnergyFluids.FLOW_SUFFIX + "_christmas";
+            BCEnergyFluids.FLUID_TRANSLATION_PREFIX = "buildcraft.christmas." + BCEnergyFluids.FLUID_TRANSLATION_PREFIX;
+            BCEnergyFluids.HEAT_TRANSLATION_PREFIX = "buildcraft.christmas." + BCEnergyFluids.HEAT_TRANSLATION_PREFIX;
+
+            TagManager.getTag("block.engine.bc.iron")
+                    .locale(
+                            "buildcraft.christmas." +
+                                    TagManager.getTag("block.engine.bc.iron").getSingleTag(TagManager.EnumTagType.UNLOCALIZED_NAME)
+                    );
+
             // boilPoint -> no gas
             BCEnergyFluids.allowGas = false;
             for (int index = 0; index < BCEnergyFluids.data.length; index++) {
@@ -74,34 +76,28 @@ public class ChristmasHandler {
 
     public static void fmlPreInitDedicatedServer() {
         fmlPreInit();
-//        if (isEnabled())
-//        {
+//        if (isEnabled()) {
 //            replaceLangEntries();
 //        }
     }
 
     public static void fmlPreInitClient() {
         fmlPreInit();
-//        if (isEnabled())
-//        {
+//        if (isEnabled()) {
 //            ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager())
 //                    .registerReloadListener(m -> replaceLangEntries());
 //        }
     }
 
-    //    private static void setColours(int lightColour, int darkColour, BCFluid[] fluids)
+    // private static void setColours(int lightColour, int darkColour, BCFluid[] fluids)
     private static void changeData(int fluidIndex) {
-//        if (fluids != null)
-//        {
-//            for (BCFluid fluid : fluids)
-//            {
+//        if (fluids != null) {
+//            for (BCFluid fluid : fluids) {
 //                fluid.setColour(lightColour, darkColour);
-//                if (fluid.isGaseous())
-//                {
+//                if (fluid.isGaseous()) {
 //                    fluid.setGaseous(false);
 //                }
-//                if (fluid.getDensity() < 0)
-//                {
+//                if (fluid.getDensity() < 0) {
 //                    fluid.setDensity(-fluid.getDensity());
 //                }
 //            }
@@ -110,7 +106,6 @@ public class ChristmasHandler {
         BCEnergyFluids.data[fluidIndex][0] = -BCEnergyFluids.data[fluidIndex][0];
     }
 
-    // Calen
     public static void regBucketNoFlipModel(ModelRegistryEvent event) {
         if (isEnabled()) {
             for (RegistryObject<BCFluid.Source> fluid : BCEnergyFluids.allStill) {
@@ -138,20 +133,15 @@ public class ChristmasHandler {
         }
     }
 
-//    private static void replaceLangEntries()
-//    {
-//        try
-//        {
+//    private static void replaceLangEntries() {
+//        try {
 //            replaceLangEntries0();
-//        }
-//        catch (ReflectiveOperationException e)
-//        {
+//        } catch (ReflectiveOperationException e) {
 //            BCLog.logger.warn("[energy.christmas] Unable to replace language entries! Did something change?", e);
 //        }
 //    }
 
-//    private static void replaceLangEntries0() throws ReflectiveOperationException
-//    {
+//    private static void replaceLangEntries0() throws ReflectiveOperationException {
 //////        Class<?> cls = LanguageMap.class;
 ////        Class<?> cls = LanguageHook.class;
 ////        Field fldInstance = null, fldLangMap = null;
@@ -193,14 +183,11 @@ public class ChristmasHandler {
 ////        fldLangMap.setAccessible(false);
 //    }
 
-//    private static <K, V> void checkAndReplaceEntries(Map<K, V> map)
-//    {
-//        for (Map.Entry<K, V> entry : map.entrySet())
-//        {
+//    private static <K, V> void checkAndReplaceEntries(Map<K, V> map) {
+//        for (Map.Entry<K, V> entry : map.entrySet()) {
 //            K key = entry.getKey();
 //            V altValue = map.get("buildcraft.christmas." + key);
-//            if (altValue != null)
-//            {
+//            if (altValue != null) {
 //                entry.setValue(altValue);
 //            }
 //        }

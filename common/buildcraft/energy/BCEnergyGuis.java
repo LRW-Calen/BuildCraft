@@ -15,6 +15,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkHooks;
 
+@Deprecated(forRemoval = true)
 public enum BCEnergyGuis {
     ENGINE_STONE,
     ENGINE_IRON;
@@ -26,14 +27,11 @@ public enum BCEnergyGuis {
         return VALUES[id];
     }
 
-    // Calen: no usage
-//    public void openGUI(Player player, BlockState blockState)
-//    {
-////        player.openGui(BCEnergy.INSTANCE, ordinal(), player.getEntityWorld(), 0, 0, 0);
-//        player.openMenu(blockState.getMenuProvider(player.level, new BlockPos(0, 0, 0)));
+//    public void openGUI(EntityPlayer player) {
+//        player.openGui(BCEnergy.INSTANCE, ordinal(), player.getEntityWorld(), 0, 0, 0);
 //    }
 
-    //    public void openGUI(Player player, BlockPos pos, BlockState blockState)
+    // public void openGUI(Player player, BlockPos pos, BlockState blockState)
     public void openGUI(Player player, TileBC_Neptune tile) {
 //        player.openGui(BCEnergy.INSTANCE, ordinal(), player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
 //        player.openMenu(blockState.getMenuProvider(player.level, pos));

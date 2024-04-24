@@ -81,9 +81,9 @@ public class BCEnergyConfig {
                 "Should Oil Desert biomes generate at all?");
 
         propEnableOilGeneration = BCCoreConfig.getConfigAndEnsureCreated(true).get("worldgen.oil", "enable", true,
-                "Should any oil sprouts or lakes be generated at all?");
+                "Should any oil spouts or lakes be generated at all?");
         propEnableOilBurn = BCCoreConfig.getConfigAndEnsureCreated(true).get("worldgen.oil", "can_burn", true, "Can oil blocks burn?");
-        // TODO Calen default true??? but oil is sticky in 1.12.2...
+        // TODO Calen default false??? but oil is sticky in 1.12.2...
 //        propOilIsSticky = BCCoreConfig.getConfig().get("general","oilIsDense", false, "Should oil be dense and drag entities down?");
         propOilIsSticky = BCCoreConfig.getConfigAndEnsureCreated(true).get("general", "oilIsDense", true, "Should oil be dense and drag entities down?");
 

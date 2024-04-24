@@ -4,9 +4,13 @@ import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.energy.BCEnergyConfig;
+import buildcraft.energy.generation.structure.OilGenStructurePart.GenByPredicate;
+import buildcraft.energy.generation.structure.OilGenStructurePart.ReplaceType;
+import buildcraft.lib.misc.VecUtil;
 import buildcraft.lib.misc.data.Box;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
@@ -21,12 +25,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
-public class OilStructureGenerator {
-    /**
-     * The distance that oil generation will be checked to see if their structures overlap with the currently
+public class OilGenerator {
+    /** Random number, used to differentiate generators */
+    public static final long MAGIC_GEN_NUMBER = 0xD0_46_B4_E4_0C_7D_07_CFL;
+
+    /** The distance that oil generation will be checked to see if their structures overlap with the currently
      * generating chunk. This should be large enough that all oil generation can fit inside this radius. If this number
-     * is too big then oil generation will be slightly slower
-     */
+     * is too big then oil generation will be slightly slower */
     public static final int MAX_CHUNK_RADIUS = 5;
 
     public static final boolean DEBUG_OILGEN_BASIC = BCDebugging.shouldDebugLog("energy.oilgen");
@@ -41,7 +46,6 @@ public class OilStructureGenerator {
 
     public static void generatePieces(
             StructurePiecesBuilder piecesBuilder,
-//            PieceGenerator.Context<NoneFeatureConfiguration> context
             PieceGenerator.Context<OilFeatureConfiguration> context
     ) {
         int minHeight = context.heightAccessor().getMinBuildHeight();
@@ -57,7 +61,6 @@ public class OilStructureGenerator {
 //        int cx = chunkX;
 //        int cz = chunkZ;
 //
-//        // Chunk Rand in 1.18.2
 //        WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(MAGIC_GEN_NUMBER));
 //        rand.setLargeFeatureSeed(context.seed(), cx, cz);
 //        // shift to world coordinates
@@ -78,22 +81,19 @@ public class OilStructureGenerator {
         WorldgenRandom rand = info.oilRand;
         int xForGen = info.xForGen;
         int zForGen = info.zForGen;
-        // StructurePiece 要求的 Box
+        // 1.18.2: the Box required by StructurePiece
         BlockPos min = new BlockPos(x - 16 * MAX_CHUNK_RADIUS, minHeight, z - 16 * MAX_CHUNK_RADIUS);
         Box box = new Box(min, min.offset(2 * 16 * MAX_CHUNK_RADIUS, maxHeight - minHeight, 2 * 16 * MAX_CHUNK_RADIUS));
 
-        OilStructure structure = createTotalStructure(type, rand, xForGen, zForGen, minHeight, maxHeight, box);
+        OilStructure structure = createStructureByType(type, rand, xForGen, zForGen, minHeight, maxHeight, box);
         // type == NONE -> null
         if (structure != null) {
             piecesBuilder.addPiece(structure);
         }
     }
 
-    /**
-     * Random number, used to differentiate generators
-     */
-    public static final long MAGIC_GEN_NUMBER = 0xD0_46_B4_E4_0C_7D_07_CFL;
-
+    /** To find out which type to gen
+     * {@link GenType#NONE} means skipped and nothing for gen */
     @Nonnull
     public static GenType getPieceTypeByRand(Random rand, Biome biome, int cx, int cz, int x, int z, boolean log) {
         // Do not generate oil in excluded biomes
@@ -156,9 +156,8 @@ public class OilStructureGenerator {
         return type;
     }
 
-    // 确定type 创建结构
-    public static OilStructure createTotalStructure(final GenType type, Random rand, int x, int z, int worldBottomHeight, int worldTopHeight, Box box) {
-        List<OilStructurePiece> structures = new ArrayList<>();
+    public static OilStructure createStructureByType(final GenType type, Random rand, int x, int z, int worldBottomHeight, int worldTopHeight, Box box) {
+        List<OilGenStructurePart> structures = new ArrayList<>();
         final int lakeRadius;
         final int tendrilRadius;
         switch (type) {
@@ -177,8 +176,7 @@ public class OilStructureGenerator {
             default:
                 return null;
         }
-        structures.add(OilStructurePiece.createTendril(new BlockPos(x, 62, z), lakeRadius, tendrilRadius, rand));
-//        structures.add(OilStructurePiece.createTendril(new BlockPos(x, 63, z), lakeRadius, tendrilRadius, rand));
+        structures.add(createTendril(new BlockPos(x, 62, z), lakeRadius, tendrilRadius, rand));
 
         int maxHeight, minHeight;
 
@@ -193,7 +191,7 @@ public class OilStructureGenerator {
                 radius = 4 + rand.nextInt(4);
             }
 
-            structures.add(OilStructurePiece.createSphere(new BlockPos(x, wellY, z), radius));
+            structures.add(createSphere(new BlockPos(x, wellY, z), radius));
 
             // Generate a spout
             if (BCEnergyConfig.enableOilSpouts) {
@@ -217,20 +215,99 @@ public class OilStructureGenerator {
                     }
                     height = minHeight + rand.nextInt(maxHeight - minHeight);
                 }
-                structures.add(OilStructurePiece.createSpout(new BlockPos(x, wellY, z), height, radius));
+                structures.add(createSpout(new BlockPos(x, wellY, z), height, radius));
             }
 
             // Generate a spring at the very bottom
             if (type == GenType.LARGE) {
-                structures.add(OilStructurePiece.createTube(new BlockPos(x, worldBottomHeight + 2, z), wellY - worldBottomHeight + 1, radius, Direction.Axis.Y));
+                structures.add(createTube(new BlockPos(x, worldBottomHeight + 2, z), wellY - worldBottomHeight + 1, radius, Direction.Axis.Y));
 //                if (BCCoreBlocks.spring != null)
                 if (BCCoreBlocks.springOil != null) {
-                    structures.add(OilStructurePiece.createSpring(new BlockPos(x, worldBottomHeight + 1, z)));
+                    structures.add(createSpring(new BlockPos(x, worldBottomHeight + 1, z)));
                 }
             }
         }
         return new OilStructure(box, structures);
     }
+    public static OilGenStructurePart createSpout(BlockPos start, int height, int radius) {
+        return new OilGenStructurePart.Spout(start, OilGenStructurePart.ReplaceType.ALWAYS, radius, height);
+    }
 
+    public static OilGenStructurePart createTubeY(BlockPos base, int height, int radius) {
+        return createTube(base, height, radius, Axis.Y);
+    }
 
+    public static OilGenStructurePart createSpring(BlockPos at) {
+        return new OilGenStructurePart.Spring(at);
+    }
+
+    public static OilGenStructurePart createTube(BlockPos center, int length, int radius, Axis axis) {
+        int valForAxis = VecUtil.getValue(center, axis);
+        BlockPos min = VecUtil.replaceValue(center.offset(-radius, -radius, -radius), axis, valForAxis);
+        BlockPos max = VecUtil.replaceValue(center.offset(radius, radius, radius), axis, valForAxis + length);
+        double radiusSq = radius * radius;
+        int toReplace = valForAxis;
+//        Predicate<BlockPos> tester = p -> VecUtil.replaceValue(p, axis, toReplace).distSqr(center) <= radiusSq;
+//        return new GenByPredicate(new Box(min, max), ReplaceType.ALWAYS, tester);
+        return new GenByPredicate(new Box(min, max), ReplaceType.ALWAYS, new Object[] { axis, toReplace, center, radiusSq });
+    }
+
+    public static OilGenStructurePart createSphere(BlockPos center, int radius) {
+        Box box = new Box(center.offset(-radius, -radius, -radius), center.offset(radius, radius, radius));
+        double radiusSq = radius * radius + 0.01;
+//        Predicate<BlockPos> tester = p -> p.distSqr(center) <= radiusSq;
+//        return new OilStructurePiece.GenByPredicate(box, OilStructurePiece.ReplaceType.ALWAYS, tester);
+        return new OilGenStructurePart.GenByPredicate(box, OilGenStructurePart.ReplaceType.ALWAYS, new Object[] { center, radiusSq });
+    }
+
+    public static OilGenStructurePart createTendril(BlockPos center, int lakeRadius, int radius, Random rand) {
+        BlockPos start = center.offset(-radius, 0, -radius);
+        int diameter = radius * 2 + 1;
+        boolean[][] pattern = new boolean[diameter][diameter];
+
+        int x = radius;
+        int z = radius;
+        for (int dx = -lakeRadius; dx <= lakeRadius; dx++) {
+            for (int dz = -lakeRadius; dz <= lakeRadius; dz++) {
+                pattern[x + dx][z + dz] = dx * dx + dz * dz <= lakeRadius * lakeRadius;
+            }
+        }
+
+        for (int w = 1; w < radius; w++) {
+            float proba = (float) (radius - w + 4) / (float) (radius + 4);
+
+            fillPatternIfProba(rand, proba, x, z + w, pattern);
+            fillPatternIfProba(rand, proba, x, z - w, pattern);
+            fillPatternIfProba(rand, proba, x + w, z, pattern);
+            fillPatternIfProba(rand, proba, x - w, z, pattern);
+
+            for (int i = 1; i <= w; i++) {
+                fillPatternIfProba(rand, proba, x + i, z + w, pattern);
+                fillPatternIfProba(rand, proba, x + i, z - w, pattern);
+                fillPatternIfProba(rand, proba, x + w, z + i, pattern);
+                fillPatternIfProba(rand, proba, x - w, z + i, pattern);
+
+                fillPatternIfProba(rand, proba, x - i, z + w, pattern);
+                fillPatternIfProba(rand, proba, x - i, z - w, pattern);
+                fillPatternIfProba(rand, proba, x + w, z - i, pattern);
+                fillPatternIfProba(rand, proba, x - w, z - i, pattern);
+            }
+        }
+
+        int depth = rand.nextDouble() < 0.5 ? 1 : 2;
+        return OilGenStructurePart.PatternTerrainHeight.create(start, OilGenStructurePart.ReplaceType.IS_FOR_LAKE, pattern, depth);
+    }
+
+    private static void fillPatternIfProba(Random rand, float proba, int x, int z, boolean[][] pattern) {
+        if (rand.nextFloat() <= proba) {
+            pattern[x][z] = isSet(pattern, x, z - 1) | isSet(pattern, x, z + 1) //
+                    | isSet(pattern, x - 1, z) | isSet(pattern, x + 1, z);
+        }
+    }
+
+    private static boolean isSet(boolean[][] pattern, int x, int z) {
+        if (x < 0 || x >= pattern.length) return false;
+        if (z < 0 || z >= pattern[x].length) return false;
+        return pattern[x][z];
+    }
 }

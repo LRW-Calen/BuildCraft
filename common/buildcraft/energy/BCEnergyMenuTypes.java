@@ -42,8 +42,6 @@ public class BCEnergyMenuTypes {
                 ENGINE_STONE.setRegistryName("engine_stone")
         );
 
-//        MenuScreens.register(ENGINE_IRON, BCEnergyScreenConstructors.ENGINE_IRON);
-//        MenuScreens.register(ENGINE_STONE, BCEnergyScreenConstructors.ENGINE_STONE);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             MenuScreens.register(ENGINE_IRON, GuiEngineIron_BC8::new);
             MenuScreens.register(ENGINE_STONE, GuiEngineStone_BC8::new);

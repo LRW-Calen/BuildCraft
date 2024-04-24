@@ -59,7 +59,7 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 implements MenuProvid
     public static final double COOLDOWN_RATE = 0.05;
     public static final int MAX_COOLANT_PER_TICK = 40;
 
-    // Calen: rename to match I18n
+    // Calen FIXED: renamed tanks to match I18n
     // public final Tank tankFuel = new Tank("fuel", MAX_FLUID, this, this::isValidFuel);
     public final Tank tankFuel = new Tank("tankFuel", MAX_FLUID, this, this::isValidFuel);
     // public final Tank tankCoolant = new Tank("coolant", MAX_FLUID, this, this::isValidCoolant)
@@ -384,6 +384,8 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 implements MenuProvid
         return false;
     }
 
+    // MenuProvider
+
     @Override
     public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();
@@ -396,17 +398,16 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 implements MenuProvid
     }
 
     private class InternalFluidHandler implements IFluidHandlerAdv {
-        //        private final IFluidTankProperties[] properties = { //
+        // private final IFluidTankProperties[] properties = { //
         private final TankProperties[] properties = { //
                 new TankProperties(tankFuel, true, false), //
                 new TankProperties(tankCoolant, true, false), //
                 new TankProperties(tankResidue, false, true),//
         };
 
-        // Calen: divided into 3 methods
+        // 1.18.2: divided into 3 methods
 //        @Override
-//        public IFluidTankProperties[] getTankProperties()
-//        {
+//        public IFluidTankProperties[] getTankProperties() {
 //            return properties;
 //        }
 
@@ -454,7 +455,7 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 implements MenuProvid
             return tankResidue.drain(filter, maxDrain, doDrain);
         }
 
-        // Calen: forced
+        // 1.18.2
         @Override
         public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
             return properties[tank].canFillFluidType(stack);

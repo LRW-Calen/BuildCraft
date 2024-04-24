@@ -106,7 +106,7 @@ public class Configuration
         this.file = file;
         this.definedConfigVersion = configVersion;
 //        String basePath = ((File)(FMLInjectionData.data()[6])).getAbsolutePath().replace(File.separatorChar, '/').replace("/.", "");
-        String basePath = ((File)(FMLLoader.getGamePath().toFile())).getAbsolutePath().replace(File.separatorChar, '/').replace("/.", "");
+        String basePath = FMLLoader.getGamePath().toFile().getAbsolutePath().replace(File.separatorChar, '/').replace("/.", "");
         String path = file.getAbsolutePath().replace(File.separatorChar, '/').replace("/./", "/").replace(basePath, "");
         if (PARENT != null)
         {

@@ -42,7 +42,7 @@ public class CoolantRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer
                 ItemStack solid = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "solid"));
                 return new SolidCoolant(recipeId, solid, fluid, degreesCoolingPerMb);
         }
-        throw new RuntimeException("[energy.recipe] Unexpected Coolant Type!");
+        throw new IllegalArgumentException("[energy.recipe] Unexpected Coolant Type!");
     }
 
     public static void toJson(CoolantRecipeBuilder builder, JsonObject json) {
@@ -70,7 +70,7 @@ public class CoolantRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer
                 ItemStack solid = buffer.readItem();
                 return new SolidCoolant(recipeId, solid, fluid, floatValue);
         }
-        throw new RuntimeException("[energy.recipe] Unexpected Coolant Type!");
+        throw new IllegalArgumentException("[energy.recipe] Unexpected Coolant Type!");
     }
 
     @Override

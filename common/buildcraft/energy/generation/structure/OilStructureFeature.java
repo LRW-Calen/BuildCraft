@@ -28,38 +28,35 @@ import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.structure.pieces.PieceGeneratorSupplier;
 
-//public class OilGenStructureFeature extends StructureFeature<NoneFeatureConfiguration>
-public class OilGenStructureFeature extends StructureFeature<OilFeatureConfiguration> {
-    //    public OilGenStructureFeature(Codec<NoneFeatureConfiguration> configCodec)
-    public OilGenStructureFeature(Codec<OilFeatureConfiguration> configCodec) {
+public class OilStructureFeature extends StructureFeature<OilFeatureConfiguration> {
+    public OilStructureFeature(Codec<OilFeatureConfiguration> configCodec) {
         super(configCodec,
                 PieceGeneratorSupplier.simple(
-                        OilGenStructureFeature::checkLocation,
-                        OilStructureGenerator::generatePieces
+                        OilStructureFeature::checkLocation,
+                        OilGenerator::generatePieces
                 )
         );
     }
 
-    //    public static boolean checkLocation(PieceGeneratorSupplier.Context<NoneFeatureConfiguration> context)
     public static boolean checkLocation(PieceGeneratorSupplier.Context<OilFeatureConfiguration> context) {
         if (!context.validBiomeOnTop(Heightmap.Types.WORLD_SURFACE_WG)) {
             return false;
         }
-        int minHeight = context.heightAccessor().getMinBuildHeight();
-        int maxHeight = context.heightAccessor().getMaxBuildHeight();
+//        int minHeight = context.heightAccessor().getMinBuildHeight();
+//        int maxHeight = context.heightAccessor().getMaxBuildHeight();
         ChunkPos chunkPos = context.chunkPos();
         int chunkX = chunkPos.x;
         int chunkZ = chunkPos.z;
 
-        int x = chunkX * 16 + 8;
-        int z = chunkZ * 16 + 8;
+//        int x = chunkX * 16 + 8;
+//        int z = chunkZ * 16 + 8;
 
 //        for (int cdx = -MAX_CHUNK_RADIUS; cdx <= MAX_CHUNK_RADIUS; cdx++)
         int cx = chunkX;
         int cz = chunkZ;
 
         // Chunk Rand in 1.18.2
-        WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(OilStructureGenerator.MAGIC_GEN_NUMBER));
+        WorldgenRandom rand = new WorldgenRandom(new LegacyRandomSource(OilGenerator.MAGIC_GEN_NUMBER));
         rand.setLargeFeatureSeed(context.seed(), cx, cz);
         // shift to world coordinates
         int xForGen = cx * 16 + 8 + rand.nextInt(16);
@@ -69,8 +66,8 @@ public class OilGenStructureFeature extends StructureFeature<OilFeatureConfigura
                 QuartPos.fromBlock(63), // Calen: 63?
                 QuartPos.fromBlock(zForGen)
         ).value();
-        OilStructureGenerator.GenType type = OilStructureGenerator.getPieceTypeByRand(rand, biome, cx, cz, xForGen, zForGen, true);
-        if (type == OilStructureGenerator.GenType.NONE) {
+        OilGenerator.GenType type = OilGenerator.getPieceTypeByRand(rand, biome, cx, cz, xForGen, zForGen, true);
+        if (type == OilGenerator.GenType.NONE) {
             return false;
         }
         context.config().add(context.chunkPos(), new OilFeatureConfiguration.Info(type, rand, xForGen, zForGen));

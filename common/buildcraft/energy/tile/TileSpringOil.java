@@ -30,12 +30,10 @@ public class TileSpringOil extends BlockEntity implements IDebuggable, ITileOilS
 
     private final Map<GameProfile, PlayerPumpInfo> pumpProgress = new ConcurrentHashMap<>();
 
-    /**
-     * An approximation of the total number of oil source blocks in the oil spring. The actual number will be less than
+    /** An approximation of the total number of oil source blocks in the oil spring. The actual number will be less than
      * this, so this is taken as an approximation.
      * <p>
-     * Note that this SHOULD NEVER be set! (Except by the generator, and readFromNbt)
-     */
+     * Note that this SHOULD NEVER be set! (Except by the generator, and readFromNbt) */
     public int totalSources;
 
     public TileSpringOil(BlockPos pos, BlockState blockState) {
@@ -54,9 +52,7 @@ public class TileSpringOil extends BlockEntity implements IDebuggable, ITileOilS
 
         // BCLog.logger.info("Pumped " + info.sourcesPumped + " / " + totalSources + " at " + oilPos + " (for " +
         // System.identityHashCode(this) + ", "+getPos()+")");
-        if (info.sourcesPumped >= totalSources * 7 / 8)
-//        if (info.sourcesPumped >= this.getBlockState().getValue(BuildCraftProperties.SPRING_TOTAL_SOURCE) * 7 / 8)
-        {
+        if (info.sourcesPumped >= totalSources * 7 / 8) {
             // BCLog.logger.info("Pumped nearly all oil blocks!");
             if (oilPos.equals(getBlockPos().above())) {
                 AdvancementUtil.unlockAdvancement(profile.getId(), ADVANCEMENT_PUMP_LARGE_OIL_WELL);
@@ -74,12 +70,10 @@ public class TileSpringOil extends BlockEntity implements IDebuggable, ITileOilS
         }
     }
 
-    // Calen
     @Override
 //    public CompoundTag writeToNBT(CompoundTag nbt) {
     public void saveAdditional(CompoundTag nbt) {
         super.saveAdditional(nbt);
-        // Calen: Moved to BlockState BuildCraftProperties.SPRING_TOTAL_SOURCE
         nbt.putInt("totalSources", totalSources);
         ListTag list = new ListTag();
         for (PlayerPumpInfo info : pumpProgress.values()) {
@@ -91,7 +85,6 @@ public class TileSpringOil extends BlockEntity implements IDebuggable, ITileOilS
     @Override
 //    public void getDebugInfo(List<String> left, List<String> right, Direction side)
     public void getDebugInfo(List<Component> left, List<Component> right, Direction side) {
-        // Calen: Moved to BlockState BuildCraftProperties.SPRING_TOTAL_SOURCE
 //        left.add("totalSources = " + totalSources);
         left.add(new TextComponent("totalSources = " + totalSources));
         boolean added = false;

@@ -6,6 +6,7 @@
 
 package buildcraft.energy.client.gui;
 
+import buildcraft.energy.BCEnergyBlocks;
 import buildcraft.energy.container.ContainerEngineStone_BC8;
 import buildcraft.lib.gui.GuiBC8;
 import buildcraft.lib.gui.GuiIcon;
@@ -42,11 +43,7 @@ public class GuiEngineStone_BC8 extends GuiBC8<ContainerEngineStone_BC8> {
     }
 
     @Override
-    public void initGui()
-//    public void init()
-    {
-//        super.initGui();
-//        super.init();
+    public void initGui() {
         mainGui.shownElements.add(new DummyHelpElement(flameRect.expand(2), helpFlame));
         mainGui.shownElements.add(new DummyHelpElement(fuelSlotRect, helpFuel));
     }
@@ -79,7 +76,8 @@ public class GuiEngineStone_BC8 extends GuiBC8<ContainerEngineStone_BC8> {
     @Override
 //    protected void drawForegroundLayer()
     protected void drawForegroundLayer(PoseStack poseStack) {
-        String str = LocaleUtil.localize("tile.engineStone.name");
+//        String str = LocaleUtil.localize("tile.engineStone.name");
+        String str = LocaleUtil.localize(BCEnergyBlocks.engineStone.get().getDescriptionId());
 //        int strWidth = fontRenderer.getStringWidth(str);
         int strWidth = font.width(str);
         double titleX = mainGui.rootElement.getCenterX() - strWidth / 2;
