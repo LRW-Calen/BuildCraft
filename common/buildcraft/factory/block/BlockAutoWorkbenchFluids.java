@@ -39,7 +39,7 @@ public class BlockAutoWorkbenchFluids extends BlockBCTile_Neptune<TileAutoWorkbe
             // TODO Calen tile impl MenuProvider
 //            BCFactoryGuis.AUTO_WORKBENCH_FLUIDS.openGUI(player, pos);
             if (world.getBlockEntity(pos) instanceof TileAutoWorkbenchFluids tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
 //        return true;

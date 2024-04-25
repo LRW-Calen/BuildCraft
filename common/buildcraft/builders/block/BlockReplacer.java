@@ -42,7 +42,7 @@ public class BlockReplacer extends BlockBCTile_Neptune implements IBlockWithFaci
 //            BCBuildersGuis.REPLACER.openGUI(player, pos);
             // Calen
             if (world.getBlockEntity(pos) instanceof TileReplacer tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
 //        return true;

@@ -63,7 +63,7 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
         if (!world.isClientSide) {
 //            BCFactoryGuis.CHUTE.openGUI(player, pos);
             if (world.getBlockEntity(pos) instanceof TileChute tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
 //        return true;

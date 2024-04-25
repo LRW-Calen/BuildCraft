@@ -12,12 +12,14 @@ import buildcraft.api.transport.pipe.IPipe;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
+import buildcraft.lib.client.render.font.SpecialColourFontRenderer;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.misc.SoundUtil;
 import buildcraft.silicon.BCSiliconPlugs;
 import buildcraft.silicon.plug.PluggableLens;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -73,28 +75,19 @@ public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable 
     @Override
 //    public String getItemStackDisplayName(ItemStack stack)
     public Component getName(ItemStack stack) {
-        // Calen: to test whether the lang file loaded
-        if (LocaleUtil.modLangResourceNotLoaded()) {
-            // Calen: if use TranslatableComponent to localize colours, the colour will not ne seen, unknown why...
-            LensData data = getData(stack);
-            MutableComponent colour = data.colour == null ? new TranslatableComponent("color.clear") : ColourUtil.getTextFullTooltipSpecialComponent(data.colour);
-            MutableComponent first = new TranslatableComponent(data.isFilter ? "item.Filter.name" : "item.Lens.name");
-            return colour.append(new TextComponent(" ")).append(first);
-        } else {
-            // Calen: if use this way, the guidebook will show unlocalized name...
-            LensData data = getData(stack);
-            String colour = data.colour == null ? LocaleUtil.localize("color.clear")
-                    : ColourUtil.getTextFullTooltipSpecial(data.colour);
-            String first = LocaleUtil.localize(data.isFilter ? "item.Filter.name" : "item.Lens.name");
-            return new TextComponent(colour + " " + first);
-        }
+        // Calen: if using TranslatableComponent to localize colours, the colour will not be seen, unknown why...
+        LensData data = getData(stack);
+        String colour = data.colour == null ? LocaleUtil.localize("color.clear")
+                : ColourUtil.getTextFullTooltipSpecial(data.colour);
+        String first = LocaleUtil.localize(data.isFilter ? "item.Filter.name" : "item.Lens.name");
+//        return colour + " " + first;
+        return new TextComponent(colour + " " + first);
     }
 
     // TODO Calen getFontRenderer???
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public Font getFontRenderer(ItemStack stack)
-//    {
+//    @SideOnly(Side.CLIENT)
+//    public FontRenderer getFontRenderer(ItemStack stack) {
 //        return SpecialColourFontRenderer.INSTANCE;
 //    }
 
@@ -108,13 +101,10 @@ public class ItemPluggableLens extends ItemBC_Neptune implements IItemPluggable 
         }
     }
 
-    // Calen: not still useful in 1.18.2
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
-//        for (int i = 0; i < 34; i++)
-//        {
+//    @SideOnly(Side.CLIENT)
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
+//        for (int i = 0; i < 34; i++) {
 //            variants.put(i, new ModelResourceLocation("buildcraftsilicon:lens_item#inventory"));
 //        }
 //    }

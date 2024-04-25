@@ -46,7 +46,6 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.util.*;
 
-//public class TileAssemblyTable extends TileLaserTableBase
 public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCraft {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("assembly_table");
     public static final int NET_RECIPE_STATE = IDS.allocId("RECIPE_STATE");
@@ -229,7 +228,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
             CompoundTag entryTag = recipesStatesTag.getCompound(i).copy();
             String name = entryTag.getString("recipe");
             if (entryTag.contains("output")) {
-                // Calen: here this.level is null, if lookup recipes, will cause exception
+                // Calen: Here this.level is null. lookup recipes -> NPE
 //                AssemblyInstruction instruction = lookupRecipe(name, ItemStack.of(entryTag.getCompound("output")));
 //                if (instruction != null)
 //                    recipesStates.put(instruction, EnumAssemblyRecipeState.values()[entryTag.getInt("state")]);
@@ -328,18 +327,19 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
         public boolean equals(Object obj) {
             if (!(obj instanceof AssemblyInstruction)) return false;
             AssemblyInstruction instruction = (AssemblyInstruction) obj;
-            return recipe.getRegistryName().equals(instruction.recipe.getRegistryName()) && ItemStack.isSameItemSameTags(output, instruction.output);
+            return recipe.getRegistryName().equals(instruction.recipe.getRegistryName()) && ItemStack.matches(output, instruction.output);
         }
     }
 
-    // Calen added from MenuProvider
+    // MenuProvider
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         return new ContainerAssemblyTable(BCSiliconMenuTypes.ASSEMBLY_TABLE, id, player, this);
     }
 
-    // Calen for jade disp recipe
+    // Calen: to show current recipe
     @Override
     public ItemStack getAssemblyResult() {
         AssemblyInstruction recipe = this.getActiveRecipe();

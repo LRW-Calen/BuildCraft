@@ -183,7 +183,8 @@ public class TileIntegrationTable extends TileLaserTableBase {
         return IntegrationRecipeRegistry.INSTANCE.getRecipe(new ResourceLocation(name));
     }
 
-    // Calen added from MenuProvider
+    // MenuProvider
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {

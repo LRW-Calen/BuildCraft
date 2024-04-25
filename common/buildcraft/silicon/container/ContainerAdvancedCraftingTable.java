@@ -15,9 +15,8 @@ import buildcraft.silicon.tile.TileAdvancedCraftingTable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
-public class ContainerAdvancedCraftingTable extends ContainerBCTile<TileAdvancedCraftingTable>
 //public class ContainerAdvancedCraftingTable extends ContainerWithRecipeBookBCTile<TileAdvancedCraftingTable>
-{
+public class ContainerAdvancedCraftingTable extends ContainerBCTile<TileAdvancedCraftingTable> {
     public ContainerAdvancedCraftingTable(MenuType menuType, int id, Player player, TileAdvancedCraftingTable tile) {
         super(menuType, id, player, tile);
         addFullPlayerInventory(153);

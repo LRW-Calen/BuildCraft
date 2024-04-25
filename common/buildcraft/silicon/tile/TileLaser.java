@@ -143,7 +143,6 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
 
     private void updateLaser() {
         if (targetPos != null) {
-
             laserPos = Vec3.atLowerCornerOf(targetPos)
                     .add(
                             (5 + level.random.nextInt(6) + 0.5) / 16D,
@@ -230,10 +229,6 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
     @Override
     public void load(CompoundTag nbt) {
         super.load(nbt);
-        // TODO: remove in next version
-        if (nbt.contains("mj_battery")) {
-            nbt.put("battery", nbt.get("mj_battery"));
-        }
         battery.deserializeNBT(nbt.getCompound("battery"));
         targetPos = NBTUtilBC.readBlockPos(nbt.get("target_pos"));
         laserPos = NBTUtilBC.readVec3d(nbt.get("laser_pos"));
@@ -291,7 +286,6 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
         super.clearRemoved();
         if (!level.isClientSide) {
             LocalBlockUpdateNotifier.instance(level).registerSubscriberForUpdateNotifications(this);
-//            LocalBlockUpdateNotifier.instance(level, worldPosition).registerSubscriberForUpdateNotifications(this);
         }
     }
 
@@ -302,7 +296,6 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
         super.setRemoved();
         if (!level.isClientSide) {
             LocalBlockUpdateNotifier.instance(level).removeSubscriberFromUpdateNotifications(this);
-//            LocalBlockUpdateNotifier.instance(level, worldPosition).removeSubscriberFromUpdateNotifications(this);
         }
     }
 

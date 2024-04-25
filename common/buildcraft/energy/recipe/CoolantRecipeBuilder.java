@@ -1,6 +1,7 @@
 package buildcraft.energy.recipe;
 
 import buildcraft.api.fuels.EnumCoolantType;
+import buildcraft.api.fuels.ICoolant;
 import buildcraft.energy.BCEnergy;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -57,7 +58,7 @@ public class CoolantRecipeBuilder {
         }
 
         @Override
-        public RecipeSerializer<?> getType() {
+        public RecipeSerializer<ICoolant> getType() {
             return CoolantRecipeSerializer.INSTANCE;
         }
 

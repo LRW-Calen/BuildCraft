@@ -18,8 +18,8 @@ import java.util.List;
 
 public class AssemblyRecipeRegistry {
     @Deprecated
-    //    public static final Map<ResourceLocation, AssemblyRecipe> REGISTRY = new HashMap<>();
-    public static final List<AssemblyRecipe> REGISTRY = new LinkedList<>();
+    // public static final Map<ResourceLocation, AssemblyRecipe> REGISTRY = new HashMap<>();
+    private static final List<AssemblyRecipe> REGISTRY = new LinkedList<>();
 
     // Calen
     public static List<AssemblyRecipe> getAll(Level world) {

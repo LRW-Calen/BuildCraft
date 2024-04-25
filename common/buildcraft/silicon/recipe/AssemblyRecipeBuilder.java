@@ -1,5 +1,6 @@
 package buildcraft.silicon.recipe;
 
+import buildcraft.api.recipes.AssemblyRecipe;
 import buildcraft.api.recipes.AssemblyRecipeType;
 import buildcraft.api.recipes.IngredientStack;
 import buildcraft.silicon.BCSilicon;
@@ -71,7 +72,7 @@ public class AssemblyRecipeBuilder {
         }
 
         @Override
-        public RecipeSerializer<?> getType() {
+        public RecipeSerializer<AssemblyRecipe> getType() {
             return AssemblyRecipeSerializer.INSTANCE;
         }
 

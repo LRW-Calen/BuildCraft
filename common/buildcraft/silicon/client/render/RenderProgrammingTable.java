@@ -23,7 +23,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderProgrammingTable implements BlockEntityRenderer<TileProgrammingTable_Neptune> {
-    // Calen
     private final LazyLoadedValue<TextureAtlasSprite> glass_white = new LazyLoadedValue<>(() ->
             Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation("block/white_stained_glass"))
     );
@@ -49,29 +48,17 @@ public class RenderProgrammingTable implements BlockEntityRenderer<TileProgrammi
 //        buffer.pos(x + 12 / 16D, y + 9 / 16D, z + 12 / 16D).color(255, 255, 255, 255).tex(sprite.getInterpolatedU(12), sprite.getInterpolatedV(12)).lightmap(light1, light2).endVertex();
 //        buffer.pos(x + 4 / 16D, y + 9 / 16D, z + 12 / 16D).color(255, 255, 255, 255).tex(sprite.getInterpolatedU(4), sprite.getInterpolatedV(12)).lightmap(light1, light2).endVertex();
 
-        PoseStack.Pose pose;
-        VertexConsumer buffer = bufferSource.getBuffer(Sheets.cutoutBlockSheet());
-//        poseStack.pushPose();
-//        poseStack.translate(4 / 16D, 9 / 16D, 12 / 16D);
-        pose = poseStack.last();
+        VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
+
+        PoseStack.Pose pose = poseStack.last();
+
         buffer.vertex(pose.pose(), (float) (4 / 16D), (float) (9 / 16D), (float) (12 / 16D)).color(255, 255, 255, 255).uv(sprite.getU(4), sprite.getV(12)).overlayCoords(combinedOverlay).uv2(light1, light2).normal(pose.normal(), 1, 1, 1).endVertex();
-//        poseStack.popPose();
-//        poseStack.pushPose();
-//        poseStack.translate(12 / 16D, 9 / 16D, 12 / 16D);
-//        pose = poseStack.last();
         buffer.vertex(pose.pose(), (float) (12 / 16D), (float) (9 / 16D), (float) (12 / 16D)).color(255, 255, 255, 255).uv(sprite.getU(12), sprite.getV(12)).overlayCoords(combinedOverlay).uv2(light1, light2).normal(pose.normal(), 1, 1, 1).endVertex();
-//        poseStack.popPose();
-//        poseStack.pushPose();
-//        poseStack.translate(12 / 16D, 9 / 16D, 4 / 16D);
-//        pose = poseStack.last();
         buffer.vertex(pose.pose(), (float) (12 / 16D), (float) (9 / 16D), (float) (4 / 16D)).color(255, 255, 255, 255).uv(sprite.getU(12), sprite.getV(4)).overlayCoords(combinedOverlay).uv2(light1, light2).normal(pose.normal(), 1, 1, 1).endVertex();
-//        poseStack.popPose();
-//        poseStack.pushPose();
-//        poseStack.translate(4 / 16D, 9 / 16D, 4 / 16D);
-//        pose = poseStack.last();
         buffer.vertex(pose.pose(), (float) (4 / 16D), (float) (9 / 16D), (float) (4 / 16D)).color(255, 255, 255, 255).uv(sprite.getU(4), sprite.getV(4)).overlayCoords(combinedOverlay).uv2(light1, light2).normal(pose.normal(), 1, 1, 1).endVertex();
-//        poseStack.popPose();
+
         poseStack.popPose();
+
         Minecraft.getInstance().getProfiler().pop();
         Minecraft.getInstance().getProfiler().pop();
         Minecraft.getInstance().getProfiler().pop();

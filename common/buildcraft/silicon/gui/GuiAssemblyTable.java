@@ -22,10 +22,8 @@ import net.minecraft.world.entity.player.Inventory;
 import java.util.ArrayList;
 
 public class GuiAssemblyTable extends GuiBC8<ContainerAssemblyTable> {
-    //    private static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftsilicon:textures/gui/assembly_table.png");
-    public static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftsilicon:textures/gui/assembly_table.png");
-    //    private static final int SIZE_X = 176, SIZE_Y = 220;
-    public static final int SIZE_X = 176, SIZE_Y = 220;
+    private static final ResourceLocation TEXTURE_BASE = new ResourceLocation("buildcraftsilicon:textures/gui/assembly_table.png");
+    private static final int SIZE_X = 176, SIZE_Y = 220;
     private static final GuiIcon ICON_GUI = new GuiIcon(TEXTURE_BASE, 0, 0, SIZE_X, SIZE_Y);
     private static final GuiIcon ICON_SAVED = new GuiIcon(TEXTURE_BASE, SIZE_X, 0, 16, 16);
     private static final GuiIcon ICON_SAVED_ENOUGH = new GuiIcon(TEXTURE_BASE, SIZE_X, 16, 16, 16);
@@ -89,7 +87,7 @@ public class GuiAssemblyTable extends GuiBC8<ContainerAssemblyTable> {
     protected void drawForegroundLayer(PoseStack poseStack) {
         String title = I18n.get("tile.assemblyTableBlock.name");
 //        fontRenderer.drawString(title, guiLeft + (xSize - fontRenderer.getStringWidth(title)) / 2, guiTop + 15, 0x404040);
-        font.draw(poseStack, title, leftPos + (imageWidth - font.width(title)) / 2, topPos + 15, 0x404040);
+        font.draw(poseStack, title, leftPos + (float) (imageWidth - font.width(title)) / 2, topPos + 15, 0x404040);
     }
 
     @Override

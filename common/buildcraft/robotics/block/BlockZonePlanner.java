@@ -38,7 +38,7 @@ public class BlockZonePlanner extends BlockBCTile_Neptune<TileZonePlanner> imple
 //        if (!world.isClientSide)
         if (!world.isClientSide && world.getBlockEntity(pos) instanceof TileZonePlanner zonePlanner) {
 //            RoboticsGuis.ZONE_PLANTER.openGUI(player, pos);
-            MessageUtil.serverOpenTileGUI(player, zonePlanner);
+            MessageUtil.serverOpenTileGui(player, zonePlanner);
         }
 //        return true;
         return InteractionResult.SUCCESS;

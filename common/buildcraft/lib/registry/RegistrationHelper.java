@@ -241,25 +241,25 @@ public final class RegistrationHelper {
 
     @Nullable
 //    public <B extends BlockBCBase_Neptune> RegistryObject<B> addBlockAndItem(B block)
-    public <B extends BlockBCBase_Neptune> RegistryObject<B> addBlockAndItem(String id, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block) {
-        return addBlockAndItem(id, properties, block, false, ItemBlockBC_Neptune::new);
+    public <B extends BlockBCBase_Neptune> RegistryObject<B> addBlockAndItem(String idBCBlock, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block) {
+        return addBlockAndItem(idBCBlock, properties, block, false, ItemBlockBC_Neptune::new);
     }
 
     @Nullable
 //    public <B extends BlockBCBase_Neptune> RegistryObject<B> addBlockAndItem(B block, boolean force)
-    public <B extends BlockBCBase_Neptune> RegistryObject<B> addBlockAndItem(String id, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block, boolean force) {
-        return addBlockAndItem(id, properties, block, force, ItemBlockBC_Neptune::new);
+    public <B extends BlockBCBase_Neptune> RegistryObject<B> addBlockAndItem(String idBCBlock, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block, boolean force) {
+        return addBlockAndItem(idBCBlock, properties, block, force, ItemBlockBC_Neptune::new);
     }
 
     @Nullable
 //    public <B extends BlockBCBase_Neptune, I extends Item & IItemBuildCraft> RegistryObject<B> addBlockAndItem(B block, Function<B, I> itemBlockConstructor)
-    public <B extends BlockBCBase_Neptune, I extends Item & IItemBuildCraft> RegistryObject<B> addBlockAndItem(String id, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block, BiFunction<B, Item.Properties, I> itemBlockConstructor) {
-        return addBlockAndItem(id, properties, block, false, itemBlockConstructor);
+    public <B extends BlockBCBase_Neptune, I extends Item & IItemBuildCraft> RegistryObject<B> addBlockAndItem(String idBCBlock, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block, BiFunction<B, Item.Properties, I> itemBlockConstructor) {
+        return addBlockAndItem(idBCBlock, properties, block, false, itemBlockConstructor);
     }
 
     // Calen
-    public <B extends BlockBCBase_Neptune, I extends Item & IItemBuildCraft> RegistryObject<B> addBlockAndItem(String id, String regId, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block, BiFunction<B, Item.Properties, I> itemBlockConstructor) {
-        return addBlockAndItem(id, regId, properties, block, false, itemBlockConstructor);
+    public <B extends BlockBCBase_Neptune, I extends Item & IItemBuildCraft> RegistryObject<B> addBlockAndItem(String idBCBlock, String regId, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block, BiFunction<B, Item.Properties, I> itemBlockConstructor) {
+        return addBlockAndItem(idBCBlock, regId, properties, block, false, itemBlockConstructor);
     }
 
     public static Item.Properties BLOCKITEM_DEFAULT_PROP =

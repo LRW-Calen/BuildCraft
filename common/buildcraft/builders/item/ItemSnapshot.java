@@ -110,12 +110,12 @@ public class ItemSnapshot extends ItemBC_Neptune {
         return EnumItemSnapshotType.getFromStack(stack).used ? 1 : 16;
     }
 
-    @Override
-    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
+    // 1.18.2: different item obj
+//    @Override
+//    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
 //        subItems.add(getClean(EnumSnapshotType.BLUEPRINT));
 //        subItems.add(getClean(EnumSnapshotType.TEMPLATE));
-        subItems.add(new ItemStack(this, 1));
-    }
+//    }
 
     // Calen: not still useful in 1.18.2
 //    @Override
@@ -147,24 +147,14 @@ public class ItemSnapshot extends ItemBC_Neptune {
     @Override
 //    public void addInformation(ItemStack stack, Level world, List<String> tooltip, ITooltipFlag flag)
     public void appendHoverText(ItemStack stack, net.minecraft.world.level.Level world, List<Component> tooltip, TooltipFlag flag) {
-        // Calen
-        boolean langFileNotLoaded = LocaleUtil.modLangResourceNotLoaded();
         Header header = getHeader(stack);
         if (header == null) {
-            if (langFileNotLoaded) {
-                tooltip.add(new TranslatableComponent("item.blueprint.blank"));
-            } else {
-                tooltip.add(new TextComponent(LocaleUtil.localize("item.blueprint.blank")));
-            }
+            tooltip.add(new TranslatableComponent("item.blueprint.blank"));
         } else {
             tooltip.add(new TextComponent(header.name));
             Player owner = header.getOwnerPlayer(world);
             if (owner != null) {
-                if (langFileNotLoaded) {
-                    tooltip.add(new TranslatableComponent("item.blueprint.author").append(" ").append(owner.getName()));
-                } else {
-                    tooltip.add(new TextComponent(LocaleUtil.localize("item.blueprint.author") + " " + owner.getName().getString()));
-                }
+                tooltip.add(new TranslatableComponent("item.blueprint.author").append(" ").append(owner.getName()));
             }
             if (flag.isAdvanced()) {
                 tooltip.add(new TextComponent("Hash: " + HashUtil.convertHashToString(header.key.hash)));
@@ -174,7 +164,7 @@ public class ItemSnapshot extends ItemBC_Neptune {
         }
     }
 
-    //    public enum EnumItemSnapshotType implements IStringSerializable
+    // public enum EnumItemSnapshotType implements IStringSerializable
     public enum EnumItemSnapshotType implements StringRepresentable {
         TEMPLATE_CLEAN(EnumSnapshotType.TEMPLATE, false),
         TEMPLATE_USED(EnumSnapshotType.TEMPLATE, true),

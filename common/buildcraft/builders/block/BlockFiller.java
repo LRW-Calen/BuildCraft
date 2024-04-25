@@ -69,7 +69,7 @@ public class BlockFiller extends BlockBCTile_Neptune<TileFiller> implements IBlo
             }
             if (!world.isClientSide) {
 //            BCBuildersGuis.FILLER.openGUI(player, pos);
-                MessageUtil.serverOpenTileGUI(player, filler);
+                MessageUtil.serverOpenTileGui(player, filler);
             }
         }
 //        return true;

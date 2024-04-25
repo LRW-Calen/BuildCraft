@@ -267,7 +267,6 @@ public class LocaleUtil {
     }
 
     public static String localizeHeat(double heat) {
-        // 原本就是注释
         // if (BCLibConfig.useLongLocalizedName) {
         // return localize("buildcraft.heat.long", heat);
         // } else {

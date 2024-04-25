@@ -1,5 +1,6 @@
 package buildcraft.factory.recipe;
 
+import buildcraft.api.recipes.IRefineryRecipeManager.IHeatExchangerRecipe;
 import buildcraft.factory.BCFactory;
 import buildcraft.lib.misc.JsonUtil;
 import buildcraft.lib.recipe.RefineryRecipeRegistry.CoolableRecipe;
@@ -15,7 +16,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<HeatExchangeRecipe> {
+public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<IHeatExchangerRecipe> {
     public static final HeatExchangeRecipeSerializer HEATABLE;
     public static final HeatExchangeRecipeSerializer COOLABLE;
 
@@ -33,7 +34,7 @@ public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
     }
 
     @Override
-    public HeatExchangeRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+    public IHeatExchangerRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
         String typeStr = GsonHelper.getAsString(json, "type").replace("heat_exchange/", "");
         FluidStack in = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("in"));
         FluidStack out = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("out"));
@@ -55,7 +56,7 @@ public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
 
     @Nullable
     @Override
-    public HeatExchangeRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public IHeatExchangerRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         FluidStack in = buffer.readFluidStack();
         FluidStack out = buffer.readFluidStack();
         int heatFrom = buffer.readInt();
@@ -67,7 +68,7 @@ public class HeatExchangeRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, HeatExchangeRecipe recipe) {
+    public void toNetwork(FriendlyByteBuf buffer, IHeatExchangerRecipe recipe) {
         buffer.writeFluidStack(recipe.in());
         buffer.writeFluidStack(recipe.out());
         buffer.writeInt(recipe.heatFrom());

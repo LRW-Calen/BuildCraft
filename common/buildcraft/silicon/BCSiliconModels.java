@@ -61,7 +61,7 @@ public class BCSiliconModels {
     public static final IPluggableStaticBaker<KeyPlugLightSensor> BAKER_PLUG_LIGHT_SENSOR;
 
     static {
-        // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); runned, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
+        // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); run, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
         ExpressionCompat.setup();
 
         LIGHT_SENSOR = getStaticModel("plugs/light_sensor");
@@ -99,13 +99,9 @@ public class BCSiliconModels {
     }
 
     public static void fmlInit() {
-////        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(BCSiliconItems.plugGate, GateMeshDefinition.INSTANCE);
-//        BCSiliconItems.variantGateMap.values().forEach(r ->
-//                Minecraft.getInstance().getItemRenderer().getItemModelShaper().register(r.get(), GateMeshDefinition.INSTANCE)
-//        );
+//        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(BCSiliconItems.plugGate, GateMeshDefinition.INSTANCE);
 
-
-        // Calen: moved to -> #onTesrReg(RegisterRenderers event)
+        // Calen: moved to #onTesrReg
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileLaser.class, new RenderLaser());
 //        ClientRegistry.bindTileEntitySpecialRenderer(TileProgrammingTable_Neptune.class, new RenderProgrammingTable());
 
@@ -135,7 +131,6 @@ public class BCSiliconModels {
     @SubscribeEvent
     public static void onModelBake(ModelBakeEvent event) {
 //        putModel(event, "gate_item#inventory", ModelGateItem.INSTANCE);
-//        putModel(event, "plug_gate#inventory", ModelGateItem.INSTANCE);
         event.getModelRegistry().replaceAll((rl, model) ->
                 {
                     if (rl instanceof ModelResourceLocation m && m.getPath().startsWith("plug_gate")) {

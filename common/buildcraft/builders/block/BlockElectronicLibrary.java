@@ -39,7 +39,7 @@ public class BlockElectronicLibrary extends BlockBCTile_Neptune<TileElectronicLi
 //            BCBuildersGuis.LIBRARY.openGUI(player, pos);
             // Calen
             if (world.getBlockEntity(pos) instanceof TileElectronicLibrary tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
 //        return true;

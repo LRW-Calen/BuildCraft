@@ -51,10 +51,9 @@ public class TileAdvancedCraftingTable extends TileLaserTableBase implements IAu
     }
 
     @Override
-    protected void onSlotChange(IItemHandlerModifiable handler, int slot, @Nonnull ItemStack before,
-                                @Nonnull ItemStack after) {
+    protected void onSlotChange(IItemHandlerModifiable handler, int slot, @Nonnull ItemStack before, @Nonnull ItemStack after) {
         super.onSlotChange(handler, slot, before, after);
-        if (!ItemStack.isSameItemSameTags(before, after)) {
+        if (!ItemStack.matches(before, after)) {
             crafting.onInventoryChange(handler);
         }
     }
@@ -104,7 +103,6 @@ public class TileAdvancedCraftingTable extends TileLaserTableBase implements IAu
                 buffer.writeItemStack(crafting.getAssumedResult(), false);
             }
         }
-
     }
 
     public CraftingContainer getWorkbenchCrafting() {

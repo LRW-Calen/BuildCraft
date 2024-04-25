@@ -26,7 +26,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-//@ILaserTargetAnnotation // Calen
 public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> implements ILaserTargetBlock, IBlockWithTickableTE<TileLaserTableBase> {
     private final EnumLaserTableType type;
 
@@ -90,39 +89,29 @@ public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> imp
     @Override
 //    public boolean onBlockActivated(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ)
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-//        if (world.getBlockEntity(pos) instanceof TileLaserTableBase laserTable)
-//        {
-//            switch (type)
-//            {
-//                case ASSEMBLY_TABLE:
-//                    if (!world.isClientSide)
-//                    {
-////                    BCSiliconGuis.ASSEMBLY_TABLE.openGUI(player, pos, state);
-//                        BCSiliconGuis.ASSEMBLY_TABLE.openGUI(player, laserTable, pos);=
-//                    }
-//                    return InteractionResult.SUCCESS;
-//                case ADVANCED_CRAFTING_TABLE:
-//                    if (!world.isClientSide)
-//                    {
-////                    BCSiliconGuis.ADVANCED_CRAFTING_TABLE.openGUI(player, pos, state);
-//                        BCSiliconGuis.ADVANCED_CRAFTING_TABLE.openGUI(player, laserTable, pos);
-//                    }
-//                    return InteractionResult.SUCCESS;
-//                case INTEGRATION_TABLE:
-//                    if (!world.isClientSide)
-//                    {
-////                    BCSiliconGuis.INTEGRATION_TABLE.openGUI(player, pos, state);
-//                        BCSiliconGuis.INTEGRATION_TABLE.openGUI(player, laserTable, pos);
-//                    }
-//                    return InteractionResult.SUCCESS;
-//                case CHARGING_TABLE:
-//                case PROGRAMMING_TABLE:
-//            }
+//        switch(type) {
+//            case ASSEMBLY_TABLE:
+//                if (!world.isRemote) {
+//                    BCSiliconGuis.ASSEMBLY_TABLE.openGUI(player, pos);
+//                }
+//                return true;
+//            case ADVANCED_CRAFTING_TABLE:
+//                if (!world.isRemote) {
+//                    BCSiliconGuis.ADVANCED_CRAFTING_TABLE.openGUI(player, pos);
+//                }
+//                return true;
+//            case INTEGRATION_TABLE:
+//                if (!world.isRemote) {
+//                    BCSiliconGuis.INTEGRATION_TABLE.openGUI(player, pos);
+//                }
+//                return true;
+//            case CHARGING_TABLE:
+//            case PROGRAMMING_TABLE:
 //        }
         if (!world.isClientSide) {
             if (world.getBlockEntity(pos) instanceof TileBC_Neptune tile) {
-//                    BCSiliconGuis.ADVANCED_CRAFTING_TABLE.openGUI(player, pos, state);
-                MessageUtil.serverOpenTileGUI(player, tile);
+//                BCSiliconGuis.ADVANCED_CRAFTING_TABLE.openGUI(player, pos, state);
+                MessageUtil.serverOpenTileGui(player, tile);
                 return InteractionResult.SUCCESS;
             }
         }

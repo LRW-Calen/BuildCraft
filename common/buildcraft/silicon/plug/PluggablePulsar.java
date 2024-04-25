@@ -64,21 +64,15 @@ public class PluggablePulsar extends PipePluggable {
     public final ModelVariableData clientModelData = new ModelVariableData();
 
     private boolean manuallyEnabled = false;
-    /**
-     * Increments from 0 to {@link #PULSE_STAGE} to decide when it should pulse some power into the pipe behaviour
-     */
+    /** Increments from 0 to {@link #PULSE_STAGE} to decide when it should pulse some power into the pipe behaviour */
     private int pulseStage = 0;
     private int gateEnabledTicks;
     private int gateSinglePulses;
     private boolean lastPulsing = false;
 
-    /**
-     * Used on the client to determine if this should render pulsing
-     */
+    /** Used on the client to determine if this should render pulsing */
     private boolean isPulsing = false;
-    /**
-     * Used on the client to determine if this is being activated by a gate
-     */
+    /** Used on the client to determine if this is being activated by a gate */
     private boolean autoEnabled = false;
 
     static {
@@ -154,7 +148,7 @@ public class PluggablePulsar extends PipePluggable {
     }
 
     @Override
-//    public void readPayload(FriendlyByteBuf buffer, Dist side, MessageContext ctx) throws IOException
+//    public void readPayload(PacketBuffer buffer, Dist side, MessageContext ctx) throws IOException
     public void readPayload(FriendlyByteBuf buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(buffer, side, ctx);
         if (side == NetworkDirection.PLAY_TO_CLIENT) {

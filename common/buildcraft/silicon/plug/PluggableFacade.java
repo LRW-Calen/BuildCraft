@@ -67,7 +67,6 @@ public class PluggableFacade extends PipePluggable implements IFacade {
     public final boolean isSideSolid;
     // Calen: seems not still useful in 1.18.2
 //    public final BlockFaceShape blockFaceShape;
-//    public final SupportType blockFaceShape;
     public int activeState;
 
     public PluggableFacade(PluggableDefinition definition, IPipeHolder holder, Direction side, FacadeInstance states) {
@@ -159,9 +158,7 @@ public class PluggableFacade extends PipePluggable implements IFacade {
 
     // Calen: seems not still useful in 1.18.2
 //    @Override
-////    public BlockFaceShape getBlockFaceShape()
-//    public SupportType getBlockFaceShape()
-//    {
+//    public BlockFaceShape getBlockFaceShape() {
 //        return blockFaceShape;
 //    }
 
@@ -177,7 +174,7 @@ public class PluggableFacade extends PipePluggable implements IFacade {
             FacadePhasedState facadeState = states.phasedStates[activeState];
             BlockState blockState = facadeState.stateInfo.state;
 //            RenderType targetLayer = blockState.getBlock().getBlockLayer();
-            // Calen 最后这个boolean好像是 t=Block f=Item
+            // Calen true -> Block  false -> Item
             RenderType targetLayer = ItemBlockRenderTypes.getRenderType(blockState, true);
             if (targetLayer == RenderType.translucent()) {
                 if (layer != targetLayer) {

@@ -397,8 +397,7 @@ public class MessageUtil {
     }
 
     // Calen
-//    public static void serverOpenTileGUI(Player player, TileBC_Neptune tile)
-    public static void serverOpenTileGUI(Player player, TileBC_Neptune tile) {
+    public static void serverOpenTileGui(Player player, TileBC_Neptune tile) {
         if (player instanceof ServerPlayer serverPlayer) {
 //            player.openMenu(state.getMenuProvider(player.level, pos));
             if (tile instanceof MenuProvider menuProvider) {
@@ -414,6 +413,20 @@ public class MessageUtil {
             } else {
                 player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
             }
+        }
+    }
+    public static void serverOpenGUIWithMsg(Player player, MenuProvider provider, BlockPos pos, int data, IMessage msg) {
+        int fullId = data << 8;
+        if (player instanceof ServerPlayer serverPlayer) {
+            NetworkHooks.openGui(
+                    serverPlayer, provider, buf ->
+                    {
+                        buf.writeBlockPos(pos);
+                        buf.writeInt(fullId);
+
+                        msg.toBytes(buf);
+                    }
+            );
         }
     }
 

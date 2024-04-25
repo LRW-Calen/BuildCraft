@@ -36,7 +36,7 @@ public class BlockAutoWorkbenchItems extends BlockBCTile_Neptune<TileAutoWorkben
         if (!world.isClientSide) {
 //            BCFactoryGuis.AUTO_WORKBENCH_ITEMS.openGUI(player, pos);
             if (world.getBlockEntity(pos) instanceof TileAutoWorkbenchItems tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
 //        return true;

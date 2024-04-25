@@ -51,21 +51,11 @@ public class ItemWire extends ItemBC_Neptune {
     @Override
 //    public String getItemStackDisplayName(ItemStack stack)
     public Component getName(ItemStack stack) {
-////        return ColourUtil.getTextFullTooltipSpecial(EnumDyeColor.byMetadata(stack.getMetadata())) + " " + super.getItemStackDisplayName(stack);
-//        return new TextComponent(ColourUtil.getTextFullTooltipSpecial(ColourUtil.getStackColourFromTag(stack)) + " ").append(super.getName(stack));
+//        return ColourUtil.getTextFullTooltipSpecial(EnumDyeColor.byMetadata(stack.getMetadata())) + " " + super.getItemStackDisplayName(stack);
 
         DyeColor colour = ColourUtil.getStackColourFromTag(stack);
-        if (LocaleUtil.modLangResourceNotLoaded()) {
-            if (colour != null) {
-                MutableComponent colourComponent = ColourUtil.getTextFullTooltipSpecialComponent(colour);
-                return colourComponent.append(new TextComponent(" ")).append(super.getName(stack));
-            } else {
-                return super.getName(stack);
-            }
-        } else {
-            String prefix = colour == null ? "" : (ColourUtil.getTextFullTooltipSpecial(ColourUtil.getStackColourFromTag(stack)) + " ");
-            return new TextComponent(prefix).append(super.getName(stack));
-        }
+        String prefix = colour == null ? "" : (ColourUtil.getTextFullTooltipSpecial(ColourUtil.getStackColourFromTag(stack)) + " ");
+        return new TextComponent(prefix).append(super.getName(stack));
     }
 
     // TODO Calen getFontRenderer???

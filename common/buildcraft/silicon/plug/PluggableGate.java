@@ -27,7 +27,6 @@ import buildcraft.lib.misc.data.ModelVariableData;
 import buildcraft.lib.net.IPayloadWriter;
 import buildcraft.lib.net.MessageUpdateTile;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.silicon.BCSiliconGuis;
 import buildcraft.silicon.BCSiliconMenuTypes;
 import buildcraft.silicon.client.model.key.KeyPlugGate;
 import buildcraft.silicon.container.ContainerGate;
@@ -202,7 +201,7 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
     }
 
     @Override
-//    public void readPayload(FriendlyByteBuf b, Dist side, MessageContext ctx) throws IOException
+//    public void readPayload(PacketBuffer b, Dist side, MessageContext ctx) throws IOException
     public void readPayload(FriendlyByteBuf b, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         logic.readPayload(PacketBufferBC.asPacketBufferBc(b), side, ctx);
     }
@@ -258,12 +257,11 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
             BlockPos pos = holder.getPipePos();
 
             // Calen 1.18.2: moved from ContainerGate#<init>
-            // recreate plug object before gui packed received
+            // to recreate plug object before gui packed received
             // Client call in BCSiliconMenuTypes#GATE
-//            PacketBufferBC buffer = new PacketBufferBC(Unpooled.buffer());
             MessageUpdateTile msg = this.logic.getPipeHolder().onServerPlayerOpenNoSend(player);
 //            BCSiliconGuis.GATE.openGui(player, pos, side.ordinal());
-            BCSiliconGuis.GATE.openGui(player, this, pos, side.ordinal(), msg);
+            MessageUtil.serverOpenGUIWithMsg(player, this, pos, side.ordinal(), msg);
         }
         return true;
     }
@@ -337,28 +335,24 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
         MODEL_IS_ON.value = logic.isOn;
     }
 
+    // MenuProvider
+
     @NotNull
     @Override
     public Component getDisplayName() {
         return this.logic.variant.getLocalizedName();
     }
 
-    // Calen：for Server
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
         // Calen: from BCSiliconProxy implements IGuiHandler
-//                    ContainerGate container = new ContainerGate(player, ((PluggableGate) plug).logic);
         ContainerGate container = new ContainerGate(BCSiliconMenuTypes.GATE, id, player, this.logic);
-        // Calen: to enable statements
+        // to enable statements
         MessageUtil.doDelayedServer(() ->
         {
             container.sendMessage(ContainerGate.ID_VALID_STATEMENTS);
         });
-        // Calen test new Gate object created after Container created
-        // to recreate PluggableGate before Container created
-//        container.sendMessage(-1);
-//        container.sendMessage(ContainerGate.ID_VALID_STATEMENTS);
         return container;
     }
 }

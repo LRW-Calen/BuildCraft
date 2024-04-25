@@ -6,11 +6,26 @@
 
 package buildcraft.silicon;
 
+import buildcraft.api.transport.pipe.IPipeHolder;
+import buildcraft.api.transport.pluggable.PipePluggable;
+import buildcraft.lib.misc.MessageUtil;
+import buildcraft.silicon.container.ContainerAdvancedCraftingTable;
+import buildcraft.silicon.container.ContainerAssemblyTable;
+import buildcraft.silicon.container.ContainerGate;
+import buildcraft.silicon.container.ContainerIntegrationTable;
+import buildcraft.silicon.gui.GuiAdvancedCraftingTable;
+import buildcraft.silicon.gui.GuiAssemblyTable;
+import buildcraft.silicon.gui.GuiGate;
+import buildcraft.silicon.gui.GuiIntegrationTable;
+import buildcraft.silicon.plug.PluggableGate;
+import buildcraft.silicon.tile.TileAdvancedCraftingTable;
+import buildcraft.silicon.tile.TileAssemblyTable;
+import buildcraft.silicon.tile.TileIntegrationTable;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCSiliconProxy implements IGuiHandler
 public abstract class BCSiliconProxy {
-    //    @SidedProxy(modId = BCSilicon.MODID)
+    // @SidedProxy(modId = BCSilicon.MODID)
     private static BCSiliconProxy proxy;
 
     public static BCSiliconProxy getProxy() {
@@ -28,48 +43,36 @@ public abstract class BCSiliconProxy {
     }
 
 //    @Override
-//    public Object getServerGuiElement(int id, Player player, Level world, int x, int y, int z)
-//    {
-//        BlockEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
+//    public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+//        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 //        int data = id >>> 8;
 //        id = id & 0xFF;
-//        if (id == BCSiliconGuis.ASSEMBLY_TABLE.ordinal())
-//        {
-//            if (tile instanceof TileAssemblyTable)
-//            {
+//        if (id == BCSiliconGuis.ASSEMBLY_TABLE.ordinal()) {
+//            if (tile instanceof TileAssemblyTable) {
 //                TileAssemblyTable assemblyTable = (TileAssemblyTable) tile;
 //                return new ContainerAssemblyTable(player, assemblyTable);
-//                return BCSiliconMenuTypes.ASSEMBLY_TABLE.get().
 //            }
 //        }
-//        if (id == BCSiliconGuis.ADVANCED_CRAFTING_TABLE.ordinal())
-//        {
-//            if (tile instanceof TileAdvancedCraftingTable)
-//            {
+//        if (id == BCSiliconGuis.ADVANCED_CRAFTING_TABLE.ordinal()) {
+//            if (tile instanceof TileAdvancedCraftingTable) {
 //                TileAdvancedCraftingTable advancedCraftingTable = (TileAdvancedCraftingTable) tile;
 //                return new ContainerAdvancedCraftingTable(player, advancedCraftingTable);
 //            }
 //        }
-//        if (id == BCSiliconGuis.INTEGRATION_TABLE.ordinal())
-//        {
-//            if (tile instanceof TileIntegrationTable)
-//            {
+//        if (id == BCSiliconGuis.INTEGRATION_TABLE.ordinal()) {
+//            if (tile instanceof TileIntegrationTable) {
 //                TileIntegrationTable integrationTable = (TileIntegrationTable) tile;
 //                return new ContainerIntegrationTable(player, integrationTable);
 //            }
 //        }
-//        if (id == BCSiliconGuis.GATE.ordinal())
-//        {
-//            Direction gateSide = Direction.from3DDataValue(data);
-//            if (tile instanceof IPipeHolder)
-//            {
+//        if (id == BCSiliconGuis.GATE.ordinal()) {
+//            EnumFacing gateSide = EnumFacing.getFront(data);
+//            if (tile instanceof IPipeHolder) {
 //                IPipeHolder holder = (IPipeHolder) tile;
 //                PipePluggable plug = holder.getPluggable(gateSide);
-//                if (plug instanceof PluggableGate)
-//                {
+//                if (plug instanceof PluggableGate) {
 //                    ContainerGate container = new ContainerGate(player, ((PluggableGate) plug).logic);
-//                    MessageUtil.doDelayedServer(() ->
-//                    {
+//                    MessageUtil.doDelayedServer(() -> {
 //                        container.sendMessage(ContainerGate.ID_VALID_STATEMENTS);
 //                    });
 //                    return container;
@@ -80,8 +83,7 @@ public abstract class BCSiliconProxy {
 //    }
 
 //    @Override
-//    public Object getClientGuiElement(int ID, Player player, Level world, int x, int y, int z)
-//    {
+//    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 //        return null;
 //    }
 
@@ -123,45 +125,35 @@ public abstract class BCSiliconProxy {
         }
 
 //        @Override
-//        public Object getClientGuiElement(int id, Player player, Level world, int x, int y, int z)
-//        {
-//            BlockEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
+//        public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+//            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 //            int data = id >>> 8;
 //            id = id & 0xFF;
-//            if (id == BCSiliconGuis.ASSEMBLY_TABLE.ordinal())
-//            {
-//                if (tile instanceof TileAssemblyTable)
-//                {
+//            if (id == BCSiliconGuis.ASSEMBLY_TABLE.ordinal()) {
+//                if (tile instanceof TileAssemblyTable) {
 //                    TileAssemblyTable assemblyTable = (TileAssemblyTable) tile;
 //                    return new GuiAssemblyTable(new ContainerAssemblyTable(player, assemblyTable));
 //                }
 //            }
-//            if (id == BCSiliconGuis.ADVANCED_CRAFTING_TABLE.ordinal())
-//            {
-//                if (tile instanceof TileAdvancedCraftingTable)
-//                {
+//            if (id == BCSiliconGuis.ADVANCED_CRAFTING_TABLE.ordinal()) {
+//                if (tile instanceof TileAdvancedCraftingTable) {
 //                    TileAdvancedCraftingTable advancedCraftingTable = (TileAdvancedCraftingTable) tile;
 //                    return new GuiAdvancedCraftingTable(
 //                            new ContainerAdvancedCraftingTable(player, advancedCraftingTable));
 //                }
 //            }
-//            if (id == BCSiliconGuis.INTEGRATION_TABLE.ordinal())
-//            {
-//                if (tile instanceof TileIntegrationTable)
-//                {
+//            if (id == BCSiliconGuis.INTEGRATION_TABLE.ordinal()) {
+//                if (tile instanceof TileIntegrationTable) {
 //                    TileIntegrationTable integrationTable = (TileIntegrationTable) tile;
 //                    return new GuiIntegrationTable(new ContainerIntegrationTable(player, integrationTable));
 //                }
 //            }
-//            if (id == BCSiliconGuis.GATE.ordinal())
-//            {
-//                Direction gateSide = Direction.from3DDataValue(data);
-//                if (tile instanceof IPipeHolder)
-//                {
+//            if (id == BCSiliconGuis.GATE.ordinal()) {
+//                EnumFacing gateSide = EnumFacing.getFront(data);
+//                if (tile instanceof IPipeHolder) {
 //                    IPipeHolder holder = (IPipeHolder) tile;
 //                    PipePluggable plug = holder.getPluggable(gateSide);
-//                    if (plug instanceof PluggableGate)
-//                    {
+//                    if (plug instanceof PluggableGate) {
 //                        return new GuiGate(new ContainerGate(player, ((PluggableGate) plug).logic));
 //                    }
 //                }

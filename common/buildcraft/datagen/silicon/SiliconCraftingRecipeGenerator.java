@@ -127,7 +127,7 @@ public class SiliconCraftingRecipeGenerator extends RecipeProvider {
                 .define('m', m)
                 .unlockedBy("has_item", has(Tags.Items.DUSTS_REDSTONE))
                 .group(MOD_ID)
-                .save(consumer, "buildcraftsilicon:plug_gate_create_" + material + "_" + modifier + "_cobblestone");
+                .save(consumer, "buildcraftsilicon:plug_gate_create_" + material.tag + "_" + modifier.tag + "_cobblestone");
         ShapedRecipeBuilder.shaped(BCSiliconItems.variantGateMap.get(variant).get())
                 .pattern(" m ")
                 .pattern("mrm")
@@ -137,7 +137,7 @@ public class SiliconCraftingRecipeGenerator extends RecipeProvider {
                 .define('m', m)
                 .unlockedBy("has_item", has(Tags.Items.DUSTS_REDSTONE))
                 .group(MOD_ID)
-                .save(consumer, "buildcraftsilicon:plug_gate_create_" + material + "_" + modifier + "_blocker");
+                .save(consumer, "buildcraftsilicon:plug_gate_create_" + material.tag + "_" + modifier.tag + "_blocker");
     }
 
     private static void makeGateRecipe2(TagKey<Item> m, EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier, Consumer<FinishedRecipe> consumer) {
@@ -152,7 +152,7 @@ public class SiliconCraftingRecipeGenerator extends RecipeProvider {
                 .define('m', m)
                 .unlockedBy("has_item", has(Tags.Items.DUSTS_REDSTONE))
                 .group(MOD_ID)
-                .save(consumer, "buildcraftsilicon:plug_gate_create_" + material + "_" + modifier);
+                .save(consumer, "buildcraftsilicon:plug_gate_create_" + material.tag + "_" + modifier.tag);
     }
 
     @Override

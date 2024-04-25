@@ -112,7 +112,7 @@ public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeView
     }
 
     private static ItemStack baseRequirementStack() {
-//        if (BCTransportItems.PIPE_STRUCTURE == null)
+//        if (BCItems.Transport.PIPE_STRUCTURE == null)
         if (BCTransportItems.pipeStructure == null) {
             return new ItemStack(Blocks.COBBLESTONE_WALL);
         }
@@ -140,8 +140,6 @@ public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeView
         return MJ_COST;
     }
 
-
-    // Calen: just for basic assembly recipes
     @Override
     public long getRequiredMicroJoulesForSerialize() {
         return MJ_COST;

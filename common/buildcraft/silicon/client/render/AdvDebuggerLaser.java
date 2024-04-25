@@ -24,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer {
@@ -48,20 +49,8 @@ public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer {
             return;
         }
 //        BufferBuilder bb = Tessellator.getInstance().getBuffer();
-//        BufferBuilder bb = Tesselator.getInstance().getBuilder();
-//        RenderSystem.setShader(GameRenderer::getBlockShader);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
-//        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-//        bb.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
-//        RenderSystem.enableBlend();
-//        RenderSystem.defaultBlendFunc();
-//        RenderSystem.disableBlend();
-//        RenderSystem.setShaderColor(1,1,1,1);
-//        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_PARTICLES);
-//        VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Sheets.translucentCullBlockSheet());
+//        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
         VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Sheets.translucentCullBlockSheet());
-//        VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.lightning());
-//        VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.leash());
         VolumeUtil.iterateCone(player.level, pos, face, 6, true, (world, start, p, visible) ->
         {
             int colour = visible ? COLOUR_VISIBLE : COLOUR_NOT_VISIBLE;
@@ -69,6 +58,5 @@ public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer {
             DebugRenderHelper.renderSmallCuboid(poseStack, bb, p, colour);
         });
 //        Tessellator.getInstance().draw();
-//        Tesselator.getInstance().end();
     }
 }

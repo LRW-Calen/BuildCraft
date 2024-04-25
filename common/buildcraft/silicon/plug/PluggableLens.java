@@ -116,19 +116,18 @@ public class PluggableLens extends PipePluggable {
     @Override
     @OnlyIn(Dist.CLIENT)
     public PluggableModelKey getModelRenderKey(RenderType layer) {
-        if (layer == RenderType.cutout() || layer == RenderType.translucent()) {
-            return new KeyPlugLens(layer, side, colour, isFilter);
-        } else {
-            return null;
-        }
-//        switch (layer)
-//        {
+//        switch (layer) {
 //            case CUTOUT:
 //            case TRANSLUCENT:
 //                return new KeyPlugLens(layer, side, colour, isFilter);
 //            default:
 //                return null;
 //        }
+        if (layer == RenderType.cutout() || layer == RenderType.translucent()) {
+            return new KeyPlugLens(layer, side, colour, isFilter);
+        } else {
+            return null;
+        }
     }
 
     @PipeEventHandler
@@ -154,9 +153,7 @@ public class PluggableLens extends PipePluggable {
         }
     }
 
-    /**
-     * Called from either *this* pipe, or the neighbouring pipe as given in compareSide.
-     */
+    /** Called from either *this* pipe, or the neighbouring pipe as given in compareSide. */
     void sideCheckAnyPos(PipeEventItem.SideCheck event, Direction compareSide) {
         // Note that this should *never* use "this.side" as it may be wrong!
         if (isFilter) {

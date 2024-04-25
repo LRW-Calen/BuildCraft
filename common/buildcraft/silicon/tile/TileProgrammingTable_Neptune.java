@@ -27,7 +27,8 @@ public class TileProgrammingTable_Neptune extends TileLaserTableBase {
         return 0;
     }
 
-    // Calen added from MenuProvider
+    // MenuProvider
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
@@ -35,8 +36,7 @@ public class TileProgrammingTable_Neptune extends TileLaserTableBase {
     }
 
 //    @Override
-//    public boolean hasFastRenderer()
-//    {
+//    public boolean hasFastRenderer() {
 //        return true;
 //    }
 }

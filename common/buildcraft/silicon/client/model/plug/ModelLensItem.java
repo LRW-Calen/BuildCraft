@@ -118,7 +118,6 @@ public enum ModelLensItem implements BakedModel {
         }
     }
 
-    // Calen forced override
     @Override
     public boolean usesBlockLight() {
         return false;

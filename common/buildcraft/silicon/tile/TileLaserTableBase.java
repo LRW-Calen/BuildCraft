@@ -65,7 +65,7 @@ public abstract class TileLaserTableBase extends TileBC_Neptune implements ILase
     @Override
     public boolean isInvalidTarget() {
 //        return isInvalid();
-        return !isRemoved();
+        return isRemoved();
     }
 
     @Override
@@ -131,8 +131,7 @@ public abstract class TileLaserTableBase extends TileBC_Neptune implements ILase
         left.add(new TextComponent("target - ").append(LocaleUtil.localizeMjComponent(getTarget())));
     }
 
-    protected boolean extract(ItemHandlerSimple inv, Collection<IngredientStack> items, boolean simulate,
-                              boolean precise) {
+    protected boolean extract(ItemHandlerSimple inv, Collection<IngredientStack> items, boolean simulate, boolean precise) {
         AtomicLong remainingStacks = new AtomicLong(inv.stacks.stream().filter(stack -> !stack.isEmpty()).count());
         boolean allItemsConsumed = items.stream().allMatch((definition) ->
         {
@@ -158,7 +157,8 @@ public abstract class TileLaserTableBase extends TileBC_Neptune implements ILase
         return allItemsConsumed && (!precise || remainingStacks.get() == 0);
     }
 
-    // Calen added from MenuProvider
+    // MenuProvider
+
     @Override
     public Component getDisplayName() {
         return this.getBlockState().getBlock().getName();

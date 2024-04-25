@@ -48,24 +48,16 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
 
     protected static final IdAllocator ID_ALLOC = new IdAllocator("GateLogic");
 
-    /**
-     * Sent when any of {@link #triggerOn}, {@link #actionOn}, or {@link #connections} change.
-     */
+    /** Sent when any of {@link #triggerOn}, {@link #actionOn}, or {@link #connections} change. */
     public static final int NET_ID_RESOLVE = ID_ALLOC.allocId("RESOLVE");
 
-    /**
-     * Sent when a single statement changed.
-     */
+    /** Sent when a single statement changed. */
     public static final int NET_ID_CHANGE = ID_ALLOC.allocId("STATEMENT_CHANGE");
 
-    /**
-     * Sent when {@link #isOn} is true.
-     */
+    /** Sent when {@link #isOn} is true. */
     public static final int NET_ID_GLOWING = ID_ALLOC.allocId("GLOWING");
 
-    /**
-     * Sent when {@link #isOn} is false.
-     */
+    /** Sent when {@link #isOn} is false. */
     public static final int NET_ID_DARK = ID_ALLOC.allocId("DARK");
 
     /* Ideally we wouldn't use a pluggable, but we would use a more generic way of looking at a gate -- perhaps one
@@ -77,24 +69,18 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
 
     public final List<StatementSlot> activeActions = new ArrayList<>();
 
-    /**
-     * Used to determine if gate logic should go across several trigger/action pairs.
-     */
+    /** Used to determine if gate logic should go across several trigger/action pairs. */
     public final boolean[] connections;
 
-    /**
-     * Used at the client to display if an action is activated (or would be activated if its not null), or a trigger is
-     * currently triggering.
-     */
+    /** Used at the client to display if an action is activated (or would be activated if its not null), or a trigger is
+     * currently triggering. */
     public final boolean[] triggerOn, actionOn;
 
     public int redstoneOutput, redstoneOutputSide;
 
     private final EnumSet<DyeColor> wireBroadcasts;
 
-    /**
-     * Used on the client to determine if this gate should glow or not.
-     */
+    /** Used on the client to determine if this gate should glow or not. */
     public boolean isOn;
 
     public GateLogic(PluggableGate pluggable, GateVariant variant) {
@@ -213,7 +199,7 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
         }
     }
 
-    //    public void readPayload(PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
+    // public void readPayload(PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
     public void readPayload(PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         int id = buffer.readUnsignedByte();
         if (id == NET_ID_CHANGE) {
@@ -357,10 +343,8 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
 
     // Internal Logic
 
-    /**
-     * @return True if the gate GUI should be split into 2 separate columns. Needed on the server for the values of
-     * {@link #connections}
-     */
+    /** @return True if the gate GUI should be split into 2 separate columns. Needed on the server for the values of
+     *         {@link #connections} */
     public boolean isSplitInTwo() {
         return variant.numSlots > 4;
     }

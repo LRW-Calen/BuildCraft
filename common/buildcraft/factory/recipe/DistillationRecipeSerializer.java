@@ -1,5 +1,6 @@
 package buildcraft.factory.recipe;
 
+import buildcraft.api.recipes.IRefineryRecipeManager.IDistillationRecipe;
 import buildcraft.lib.misc.JsonUtil;
 import buildcraft.lib.recipe.RefineryRecipeRegistry;
 import com.google.gson.JsonObject;
@@ -12,7 +13,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<RefineryRecipeRegistry.DistillationRecipe> {
+public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<IDistillationRecipe> {
     public static final DistillationRecipeSerializer INSTANCE;
 
     static {
@@ -21,7 +22,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
     }
 
     @Override
-    public RefineryRecipeRegistry.DistillationRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+    public IDistillationRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
         String type = GsonHelper.getAsString(json, "type");
         long powerRequired = json.get("powerRequired").getAsLong();
         FluidStack in = JsonUtil.deSerializeFluidStack(json.getAsJsonObject("in"));
@@ -31,7 +32,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
     }
 
     public static void toJson(DistillationRecipeBuilder builder, JsonObject json) {
-        json.addProperty("type", RefineryRecipeRegistry.DistillationRecipe.TYPE_ID.toString());
+        json.addProperty("type", IDistillationRecipe.TYPE_ID.toString());
         json.addProperty("powerRequired", builder.powerRequired);
         json.add("in", JsonUtil.serializeFluidStack(builder.in));
         json.add("outGas", JsonUtil.serializeFluidStack(builder.outGas));
@@ -40,7 +41,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
 
     @Nullable
     @Override
-    public RefineryRecipeRegistry.DistillationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public IDistillationRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         long powerRequired = buffer.readLong();
         FluidStack in = buffer.readFluidStack();
         FluidStack outGas = buffer.readFluidStack();
@@ -49,7 +50,7 @@ public class DistillationRecipeSerializer extends ForgeRegistryEntry<RecipeSeria
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, RefineryRecipeRegistry.DistillationRecipe recipe) {
+    public void toNetwork(FriendlyByteBuf buffer, IDistillationRecipe recipe) {
         buffer.writeLong(recipe.powerRequired());
         buffer.writeFluidStack(recipe.in());
         buffer.writeFluidStack(recipe.outGas());

@@ -247,7 +247,7 @@ public enum RefineryRecipeRegistry implements IRefineryRecipeManager {
         }
 
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<IDistillationRecipe> getSerializer() {
             return DistillationRecipeSerializer.INSTANCE;
         }
     }
@@ -289,7 +289,7 @@ public enum RefineryRecipeRegistry implements IRefineryRecipeManager {
         }
 
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<IHeatExchangerRecipe> getSerializer() {
             return HeatExchangeRecipeSerializer.HEATABLE;
         }
     }
@@ -302,7 +302,7 @@ public enum RefineryRecipeRegistry implements IRefineryRecipeManager {
         }
 
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<IHeatExchangerRecipe> getSerializer() {
             return HeatExchangeRecipeSerializer.COOLABLE;
         }
     }

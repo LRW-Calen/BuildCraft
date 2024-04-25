@@ -95,21 +95,11 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
 //            colourComponent = ColourUtil.getTextFullTooltipSpecial(brush.colour) + " ";
 //        }
 //        return colourComponent + super.getItemStackDisplayName(stack);
-        if (LocaleUtil.modLangResourceNotLoaded()) {
-            // For guide book: when this called, the lang files may not be loaded
-            if (this.colour != null) {
-                MutableComponent colourComponent = ColourUtil.getTextFullTooltipSpecialComponent(this.colour).append(new TextComponent(" "));
-                return colourComponent.append(new TranslatableComponent(this.unlocalizedName));
-            } else {
-                return new TranslatableComponent(this.unlocalizedName);
-            }
+        if (this.colour != null) {
+            String colourStr = ColourUtil.getTextFullTooltipSpecial(this.colour) + " ";
+            return new TextComponent(colourStr).append(new TranslatableComponent(this.unlocalizedName));
         } else {
-            if (this.colour != null) {
-                String colourStr = ColourUtil.getTextFullTooltipSpecial(this.colour) + " ";
-                return new TextComponent(colourStr).append(new TranslatableComponent(this.unlocalizedName));
-            } else {
-                return new TranslatableComponent(this.unlocalizedName);
-            }
+            return new TranslatableComponent(this.unlocalizedName);
         }
     }
 

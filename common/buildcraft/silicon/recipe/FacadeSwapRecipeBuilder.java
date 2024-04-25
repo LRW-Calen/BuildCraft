@@ -44,7 +44,7 @@ public class FacadeSwapRecipeBuilder {
         }
 
         @Override
-        public RecipeSerializer<?> getType() {
+        public RecipeSerializer<FacadeSwapRecipe> getType() {
             return FacadeSwapRecipeSerializer.INSTANCE;
         }
 

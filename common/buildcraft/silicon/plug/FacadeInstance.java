@@ -121,39 +121,24 @@ public class FacadeInstance implements IFacade {
         return true;
     }
 
-    // Calen: seems not still useful in 1.18.2
-//    public BlockFaceShape getBlockFaceShape(Direction side) {
-//    public SupportType getBlockFaceShape(Direction side)
-//    {
-//        if (isHollow())
-//        {
-////            return BlockFaceShape.UNDEFINED;
-//            return SupportType.FULL;
+//    public BlockFaceShape getBlockFaceShape(EnumFacing side) {
+//        if (isHollow()) {
+//            return BlockFaceShape.UNDEFINED;
 //        }
-//        switch (type)
-//        {
+//        switch (type) {
 //            case Basic:
 //                return phasedStates[0].getBlockFaceShape(side);
-//            case Phased:
-//            {
-////                BlockFaceShape shape = null;
-//                SupportType shape = null;
-//                for (FacadePhasedState state : phasedStates)
-//                {
-//                    if (shape == null)
-//                    {
+//            case Phased: {
+//                BlockFaceShape shape = null;
+//                for (FacadePhasedState state : phasedStates) {
+//                    if (shape == null) {
 //                        shape = state.getBlockFaceShape(side);
-//                    }
-//                    else if (shape != state.getBlockFaceShape(side))
-//                    {
-////                        return BlockFaceShape.UNDEFINED;
-//                        return SupportType.FULL;
+//                    } else if (shape != state.getBlockFaceShape(side)) {
+//                        return BlockFaceShape.UNDEFINED;
 //                    }
 //                }
-//                if (shape == null)
-//                {
-////                    return BlockFaceShape.UNDEFINED;
-//                    return SupportType.FULL;
+//                if (shape == null) {
+//                    return BlockFaceShape.UNDEFINED;
 //                }
 //                return shape;
 //            }

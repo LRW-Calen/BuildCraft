@@ -93,8 +93,7 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
     }
 
     @Override
-    public PipePluggable onPlace(@Nonnull ItemStack stack, IPipeHolder holder, Direction side, Player player,
-                                 InteractionHand hand) {
+    public PipePluggable onPlace(@Nonnull ItemStack stack, IPipeHolder holder, Direction side, Player player, InteractionHand hand) {
         FacadeInstance fullState = getStates(stack);
         SoundUtil.playBlockPlace(holder.getPipeWorld(), holder.getPipePos(), fullState.phasedStates[0].stateInfo.state);
         return new PluggableFacade(BCSiliconPlugs.facade, holder, side, fullState);
@@ -102,7 +101,6 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
 
     @Override
     public void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-        // Calen
         Stopwatch watch = Stopwatch.createStarted();
         try {
             // Add a single phased facade as a default
@@ -130,11 +128,10 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
                 }
             }
         } finally {
-            // Calen
             watch.stop();
             long time = watch.elapsed(TimeUnit.MICROSECONDS);
             if (FacadeStateManager.DEBUG) {
-                BCLog.logger.info("[silicon.facade] Created ItemStacks for CreativeModeTab. (" + time / 1000 + "ms)");
+                BCLog.logger.info("[silicon.facade] Created ItemStacks for CreativeModeTab. (" + time / 1000 + " ms)");
             }
         }
     }
@@ -149,11 +146,12 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
 //            return super.getItemStackDisplayName(stack) + ": " + displayName;
             return ((MutableComponent) super.getName(stack)).append(": ").append(displayName);
         } else {
-            return new TextComponent(LocaleUtil.localize("item.FacadePhased.name"));
+//            return LocaleUtil.localize("item.FacadePhased.name");
+            return new TranslatableComponent("item.FacadePhased.name");
         }
     }
 
-    //    public static String getFacadeStateDisplayName(FacadePhasedState state)
+    // public static String getFacadeStateDisplayName(FacadePhasedState state)
     public static Component getFacadeStateDisplayName(FacadePhasedState state) {
         ItemStack assumedStack = state.stateInfo.requiredStack;
         return assumedStack.getDisplayName();

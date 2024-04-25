@@ -37,7 +37,7 @@ public class BlockFilteredBuffer extends BlockBCTile_Neptune<TileFilteredBuffer>
         if (!world.isClientSide) {
 //            BCTransportGuis.FILTERED_BUFFER.openGui(player, pos);
             if (world.getBlockEntity(pos) instanceof TileFilteredBuffer tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
         return InteractionResult.SUCCESS;

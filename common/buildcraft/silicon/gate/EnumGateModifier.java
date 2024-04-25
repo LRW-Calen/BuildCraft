@@ -32,10 +32,4 @@ public enum EnumGateModifier {
         }
         return VALUES[ord];
     }
-
-    // Calen for create ResourceLocation
-    @Override
-    public String toString() {
-        return super.toString().toLowerCase();
-    }
 }

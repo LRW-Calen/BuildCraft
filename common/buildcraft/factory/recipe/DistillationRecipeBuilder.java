@@ -1,5 +1,6 @@
 package buildcraft.factory.recipe;
 
+import buildcraft.api.recipes.IRefineryRecipeManager.IDistillationRecipe;
 import buildcraft.energy.BCEnergy;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -49,7 +50,7 @@ public class DistillationRecipeBuilder {
         }
 
         @Override
-        public RecipeSerializer<?> getType() {
+        public RecipeSerializer<IDistillationRecipe> getType() {
             return DistillationRecipeSerializer.INSTANCE;
         }
 

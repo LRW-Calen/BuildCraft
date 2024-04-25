@@ -103,7 +103,7 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvi
     public InteractionResult onActivated(Player player, InteractionHand hand, Direction side, float hitX, float hitY, float hitZ) {
         if (!level.isClientSide) {
 //            BCEnergyGuis.ENGINE_STONE.openGUI(player, getPos());
-            MessageUtil.serverOpenTileGUI(player, this);
+            MessageUtil.serverOpenTileGui(player, this);
         }
         return InteractionResult.SUCCESS;
     }

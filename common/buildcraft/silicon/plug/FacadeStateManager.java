@@ -21,7 +21,6 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableSet;
 import io.netty.buffer.Unpooled;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.resources.ResourceLocation;
@@ -56,12 +55,10 @@ public enum FacadeStateManager implements IFacadeRegistry {
     private static final Map<Block, String> disabledBlocks = new HashMap<>();
     private static final Map<BlockState, ItemStack> customBlocks = new HashMap<>();
 
-    /**
-     * An array containing all mods that fail the {@link #doesPropertyConform(Property)} check, and any others.
+    /** An array containing all mods that fail the {@link #doesPropertyConform(Property)} check, and any others.
      * <p>
      * Note: Mods should ONLY be added to this list AFTER it has been reported to them, and taken off the list once a
-     * version has been released with the fix.
-     */
+     * version has been released with the fix. */
     private static final List<String> KNOWN_INVALID_REPORTED_MODS = Arrays.asList(new String[] { //
     });
 
@@ -78,23 +75,23 @@ public enum FacadeStateManager implements IFacadeRegistry {
         return validFacadeStates.get(state);
     }
 
-    //    public static void receiveInterModComms(IMCMessage message)
+    // public static void receiveInterModComms(IMCMessage message)
     public static void receiveInterModComms(IMCMessage messageOuter, BcImcMessage messageInner) {
         String id = messageInner.key;
         if (FacadeAPI.IMC_FACADE_DISABLE.equals(id)) {
-//            if (!message.isResourceLocationMessage())
-//            {
+//            if (!message.isResourceLocationMessage()) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
 //                        + id + " should have a resourcelocation value, not a " + message);
 //                return;
 //            }
             ResourceLocation loc = messageInner.getResourceLocationValue();
 //            Block block = Block.REGISTRY.getObject(loc);
-            Block block = Registry.BLOCK.get(loc);
-            if (block == Blocks.AIR) {
+            Block block = ForgeRegistries.BLOCKS.getValue(loc);
+            if (block == Blocks.AIR || block == null) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
                 BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + messageOuter.senderModId() + " - "
-                        + id + " should have a valid block target, not " + block + " (" + messageInner + ")");
+//                        + id + " should have a valid block target, not " + block + " (" + message + ")");
+                        + id + " should have a valid block target [" + loc + "], not " + block + " (" + messageInner + ")");
                 return;
             }
 //            disabledBlocks.put(block, message.getSender());
@@ -127,12 +124,12 @@ public enum FacadeStateManager implements IFacadeRegistry {
                 return;
             }
 //            Block block = Block.REGISTRY.getObject(new ResourceLocation(regName));
-            Block block = Registry.BLOCK.get(new ResourceLocation(regName));
-            if (block == Blocks.AIR) {
+            Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(regName));
+            if (block == Blocks.AIR || block == null) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "
                 BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + messageOuter.senderModId() + " - "
 //                        + id + " should have a valid block target, not " + block + " (" + message + ")");
-                        + id + " should have a valid block target, not " + block + " (" + messageInner + ")");
+                        + id + " should have a valid block target [" + regName + "], not " + block + " (" + messageInner + ")");
                 return;
             }
 //            BlockState state = block.getStateFromMeta(meta);
@@ -140,15 +137,14 @@ public enum FacadeStateManager implements IFacadeRegistry {
         }
     }
 
-    /**
-     * @return One of:
-     * <ul>
-     * <li>{@link InteractionResult#SUCCESS} if every state of the block is valid for a facade.
-     * <li>{@link InteractionResult#PASS} if every metadata needs to be checked by
-     * {@link #isValidFacadeState(BlockState)}</li>
-     * <li>{@link InteractionResult#FAIL} with string describing the problem with this block (if it is not valid
-     * for a facade)</li>
-     * </ul>
+    /** @return One of:
+     *         <ul>
+     *         <li>{@link InteractionResult#SUCCESS} if every state of the block is valid for a facade.
+     *         <li>{@link InteractionResult#PASS} if every metadata needs to be checked by
+     *         {@link #isValidFacadeState(BlockState)}</li>
+     *         <li>{@link InteractionResult#FAIL} with string describing the problem with this block (if it is not valid
+     *         for a facade)</li>
+     *         </ul>
      */
     private static InteractionResultHolder<String> isValidFacadeBlock(Block block) {
         String disablingMod = disabledBlocks.get(block);
@@ -171,13 +167,12 @@ public enum FacadeStateManager implements IFacadeRegistry {
         return new InteractionResultHolder<>(InteractionResult.PASS, "");
     }
 
-    /**
-     * @return Any of:
-     * <ul>
-     * <li>{@link InteractionResult#SUCCESS} if this state is valid for a facade.
-     * <li>{@link InteractionResult#FAIL} with string describing the problem with this state (if it is not valid
-     * for a facade)</li>
-     * </ul>
+    /** @return Any of:
+     *         <ul>
+     *         <li>{@link InteractionResult#SUCCESS} if this state is valid for a facade.
+     *         <li>{@link InteractionResult#FAIL} with string describing the problem with this state (if it is not valid
+     *         for a facade)</li>
+     *         </ul>
      */
     private static InteractionResultHolder<String> isValidFacadeState(BlockState state) {
 //        if (state.getBlock().hasTileEntity(state))
@@ -189,7 +184,6 @@ public enum FacadeStateManager implements IFacadeRegistry {
             return new InteractionResultHolder<>(InteractionResult.FAIL, "it doesn't have a normal model");
         }
 //        if (!state.isFullCube())
-//        if (!state.getShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, CollisionContext.empty()))
         VoxelShape shape = state.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO);
 //        if (shape.isEmpty() || !shape.bounds().equals(Shapes.block().bounds()))
         if (shape.isEmpty() || shape != Shapes.block()) {
@@ -207,16 +201,9 @@ public enum FacadeStateManager implements IFacadeRegistry {
         Block block = state.getBlock();
 //        Item item = Item.getItemFromBlock(block);
         ItemStack item = block.getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state);
-////        if (item == Items.AIR)
-//        if (item.isEmpty())
-//        {
-//////            item = block.getItemDropped(state, new Random(0), 0);
-////            item = block.getDrops(state, new LootContext(new LootContext.Builder().withRandom(new Random(0)));
-////            state.getDrops()
-//            throw new RuntimeException("[silicon.facade] Clone ItemStack of " + state + " is Empty!");
+//        if (item == Items.AIR) {
+//            item = block.getItemDropped(state, new Random(0), 0);
 //        }
-////        return new ItemStack(item, 1, block.damageDropped(state)); // 1.18.2 no meta
-////        return new ItemStack(block, 1);
         return item;
     }
 
@@ -227,14 +214,12 @@ public enum FacadeStateManager implements IFacadeRegistry {
             return;
         }
 
-        // Calen
         Stopwatch watch = Stopwatch.createStarted();
 
         for (Block block : ForgeRegistries.BLOCKS) {
             scanBlock(block);
         }
 
-        // Calen
         watch.stop();
         long time = watch.elapsed(TimeUnit.MICROSECONDS);
         if (DEBUG) {
@@ -328,7 +313,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
                 } else {
 //                    for (Entry<Property<?>, Comparable<?>> entry : state.getProperties().entrySet())
                     for (Property<?> prop : state.getProperties()) {
-//                        Property<?> prop = entry.getKey();
+//                        IProperty<?> prop = entry.getKey();
 //                        Comparable<?> value = entry.getValue();
                         Comparable<?> value = state.getValue(prop);
                         if (vars.get(prop) != value) {
@@ -337,7 +322,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
                     }
                 }
 
-                // Calen:
+                // Calen
                 if (block == Blocks.NOTE_BLOCK) {
                     if (!BCSiliconConfig.differStatesOfNoteBlockForFacade) {
                         break;
@@ -431,7 +416,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
         for (V value : property.getPossibleValues()) {
             String name = property.getName(value);
             Optional<V> optional = property.getValue(name);
-            V parsed = optional == null ? null : optional.orElseGet(() -> null);
+            V parsed = optional == null ? null : optional.orElse(null);
             if (!Objects.equals(value, parsed)) {
                 allFine = false;
                 // A property is *wrong*
@@ -447,7 +432,8 @@ public enum FacadeStateManager implements IFacadeRegistry {
                 message += "\n  Value class (parsed) = " + (parsed == null ? null : parsed.getClass());
                 if (optional == null) {
                     // Massive issue
-                    message += "\n  Property.parseValue() -> Null com.google.common.base.Optional!!";
+//                    message += "\n  Property.parseValue() -> Null com.google.common.base.Optional!!";
+                    message += "\n  Property.parseValue() -> Null java.util.Optional!!";
                 }
                 message += "\n";
                 // This check *intentionally* crashes on a new MC version

@@ -125,14 +125,9 @@ public class BCSilicon {
     public static void registerRecipeSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
         IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
         registry.register(AssemblyRecipeSerializer.INSTANCE);
-        // Calen: use datagen, we can delete the json to disable facade recipes
-//        AssemblyRecipeRegistry.register(FacadeAssemblyRecipes.INSTANCE);
-
-//        ForgeRegistries.RECIPES.register(FacadeSwapRecipe.INSTANCE);
         registry.register(FacadeSwapRecipeSerializer.INSTANCE);
     }
 
-    // Calen
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {

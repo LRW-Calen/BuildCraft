@@ -136,19 +136,14 @@ public class ItemPipeHolder extends BlockItem implements IItemBuildCraft, IItemP
 //    public String getItemStackDisplayName(ItemStack stack)
     public Component getName(ItemStack stack) {
 //        String colourComponent = "";
-//        int meta = ColourUtil.getStackColourIdFromTag(stack);
-//        if (meta >= 0 && meta < 16)
-//        {
-//            DyeColor colour = DyeColor.byId(meta);
+//        int meta = stack.getMetadata();
+//        if (meta > 0 && meta <= 16) {
+//            EnumDyeColor colour = EnumDyeColor.byMetadata(meta - 1);
 //            colourComponent = ColourUtil.getTextFullTooltipSpecial(colour) + " ";
 //        }
-        if (LocaleUtil.modLangResourceNotLoaded()) {
-            MutableComponent colour = this.colour == null ? new TextComponent("") : ColourUtil.getTextFullTooltipSpecialComponent(this.colour).append(new TextComponent(" "));
-            return colour.append(new TranslatableComponent(this.getDescriptionId(stack)));
-        } else {
-            String colourStr = this.colour == null ? "" : (ColourUtil.getTextFullTooltipSpecial(this.colour) + " ");
-            return new TextComponent(colourStr).append(new TranslatableComponent(this.getDescriptionId(stack)));
-        }
+//        return colourComponent + super.getItemStackDisplayName(stack);
+        String colourStr = this.colour == null ? "" : (ColourUtil.getTextFullTooltipSpecial(this.colour) + " ");
+        return new TextComponent(colourStr).append(new TranslatableComponent(this.getDescriptionId(stack)));
     }
 
     // TODO Calen getFontRenderer???

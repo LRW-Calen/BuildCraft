@@ -31,7 +31,6 @@ public enum PlugPulsarRenderer implements IPlugDynamicRenderer<PluggablePulsar> 
 //    public void render(PluggablePulsar pulsar, double x, double y, double z, float partialTicks, BufferBuilder bb)
     public void render(PluggablePulsar pulsar, float partialTicks, PoseStack poseStack, VertexConsumer bb, int combinedLight, int combinedOverlay) {
 //        bb.setTranslation(x, y, z);
-        poseStack.pushPose();
         if (pulsar.clientModelData.hasNoNodes()) {
             pulsar.clientModelData.setNodes(BCSiliconModels.PULSAR_DYNAMIC.createTickableNodes());
         }
@@ -42,6 +41,5 @@ public enum PlugPulsarRenderer implements IPlugDynamicRenderer<PluggablePulsar> 
             q.render(poseStack.last(), bb);
         }
 //        bb.setTranslation(0, 0, 0);
-        poseStack.popPose();
     }
 }

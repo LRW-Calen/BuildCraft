@@ -187,7 +187,7 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
     private void makeGateModifierAssembly(int multiplier, EnumGateMaterial material, EnumGateModifier modifier, IngredientStack... mods) {
         for (EnumGateLogic logic : EnumGateLogic.VALUES) {
 //            String name = String.format("gate-modifier-%s-%s-%s", logic, material, modifier);
-            String name = String.format("gate_modifier_%s_%s_%s", logic, material, modifier);
+            String name = String.format("gate_modifier_%s_%s_%s", logic.tag, material.tag, modifier.tag);
             GateVariant variantFrom = new GateVariant(logic, material, EnumGateModifier.NO_MODIFIER);
 //            ItemStack toUpgrade = BCSiliconItems.plugGate.get().getStack(variantFrom);
             ItemStack toUpgrade = ItemPluggableGate.getStack(variantFrom);
@@ -209,14 +209,14 @@ public class SiliconAssemblyRecipeGenerator extends RecipeProvider {
         ImmutableSet<IngredientStack> input = temp.build();
 
 //        String name = String.format("gate-and-%s-%s", material, modifier);
-        String name = String.format("gate_and_%s_%s", material, modifier);
+        String name = String.format("gate_and_%s_%s", material.tag, modifier.tag);
 //        ItemStack output = BCSiliconItems.variantGateMap.get(new GateVariant(EnumGateLogic.AND, material, modifier));
         ItemStack output = ItemPluggableGate.getStack(new GateVariant(EnumGateLogic.AND, material, modifier));
 //        AssemblyRecipeRegistry.register((new AssemblyRecipeBasic(name, MjAPI.MJ * multiplier, input, output)));
         AssemblyRecipeBuilder.basic(MjAPI.MJ * multiplier, input, output).save(consumer, name);
 
 //        name = String.format("gate-or-%s-%s", material, modifier);
-        name = String.format("gate_or_%s_%s", material, modifier);
+        name = String.format("gate_or_%s_%s", material.tag, modifier.tag);
 //        output = BCSiliconItems.variantGateMap.get(new GateVariant(EnumGateLogic.OR, material, modifier)).get().;
         output = ItemPluggableGate.getStack(new GateVariant(EnumGateLogic.OR, material, modifier));
 //        AssemblyRecipeRegistry.register((new AssemblyRecipeBasic(name, MjAPI.MJ * multiplier, input, output)));

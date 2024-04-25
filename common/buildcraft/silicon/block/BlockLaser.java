@@ -23,8 +23,8 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlockWithFacing, IBlockWithTickableTE<TileLaser> {
-    public BlockLaser(String id, BlockBehaviour.Properties props) {
-        super(id, props);
+    public BlockLaser(String idBC, BlockBehaviour.Properties props) {
+        super(idBC, props);
     }
 
     @Override
@@ -38,15 +38,13 @@ public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlock
         return true;
     }
 
-    //    @Override
-//    public boolean isFullCube(BlockState state)
-//    {
+//    @Override
+//    public boolean isFullCube(IBlockState state) {
 //        return false;
 //    }
-//
+
 //    @Override
-//    public boolean isOpaqueCube(BlockState state)
-//    {
+//    public boolean isOpaqueCube(IBlockState state) {
 //        return false;
 //    }
 
@@ -60,15 +58,6 @@ public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlock
         return 1.0F;
     }
 
-//    @Override
-//    @Nullable
-//    public BlockEntityTicker<TileLaser> getTicker(BlockState pState, BlockEntityType pBlockEntityType)
-//    {
-////        return pBlockEntityType==BCFactoryBlockEntities.PUMP.get()?(BlockEntityTicker<T>)TilePump::tick:null;
-//        return BCCoreBlockEntities.createTickerHelper(pBlockEntityType, BCSiliconBlocks.laserTile.get(), TileLaser::tick);
-//    }
-
-    // Calen: Collision box
     // UP
     private static final VoxelShape UP_BOTTOM = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 4.0D, 16.0D);
     private static final VoxelShape UP_CENTER = Block.box(5.0D, 4.0D, 5.0D, 11.0D, 13.0D, 11.0D);
@@ -95,7 +84,6 @@ public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlock
     private static final VoxelShape SOUTH = Shapes.or(SOUTH_BOTTOM, SOUTH_CENTER);
 
     @Override
-//    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(BlockBCBase_Neptune.BLOCK_FACING_6)) {
             case UP -> UP;
@@ -105,13 +93,5 @@ public class BlockLaser extends BlockBCTile_Neptune<TileLaser> implements IBlock
             case EAST -> EAST;
             case WEST -> WEST;
         };
-//        return AABB.getFaceShape(state.getValue(BlockBCBase_Neptune.BLOCK_FACING_6));
     }
-
-//        // Calen: 原版末地烛的空白区域也会卡兔子 不是laser的问题……
-//    @Override
-//    public boolean isPathfindable(BlockState state, BlockGetter world, BlockPos pos, PathComputationType type)
-//    {
-//        return false;
-//    }
 }

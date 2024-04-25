@@ -25,6 +25,7 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.common.ForgeHooks;
 import org.jetbrains.annotations.NotNull;
 
 
@@ -72,7 +73,7 @@ public enum FacadeSwapRecipe implements CraftingRecipe, IRecipeViewable.IViewabl
 
     @NotNull
     @Override
-//    public ItemStack getCraftingResult(CraftingContainer inv)
+//    public ItemStack getCraftingResult(InventoryCrafting inv)
     public ItemStack assemble(CraftingContainer inv) {
         ItemStack stackIn = StackUtil.EMPTY;
         for (int s = 0; s < inv.getContainerSize(); s++) {
@@ -102,9 +103,8 @@ public enum FacadeSwapRecipe implements CraftingRecipe, IRecipeViewable.IViewabl
 
     // Calen use default getRemainingItems in Recipe.class
 //    @Override
-//    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv)
-//    {
-////        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
+//    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+//        return ForgeHooks.defaultRecipeGetRemainingItems(inv);
 //    }
 
     @Override
@@ -139,8 +139,7 @@ public enum FacadeSwapRecipe implements CraftingRecipe, IRecipeViewable.IViewabl
     }
 
 //    @Override
-//    public Recipe setRegistryName(ResourceLocation name)
-//    {
+//    public IRecipe setRegistryName(ResourceLocation name) {
 //        return this;
 //    }
 
@@ -153,7 +152,7 @@ public enum FacadeSwapRecipe implements CraftingRecipe, IRecipeViewable.IViewabl
 
     @NotNull
     @Override
-    public RecipeSerializer<?> getSerializer() {
+    public RecipeSerializer<FacadeSwapRecipe> getSerializer() {
         return FacadeSwapRecipeSerializer.INSTANCE;
     }
 

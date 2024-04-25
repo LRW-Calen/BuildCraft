@@ -124,7 +124,6 @@ public enum ModelFacadeItem implements BakedModel {
         }
     }
 
-    // Calen: forced
     @Override
     public boolean usesBlockLight() {
         return false;

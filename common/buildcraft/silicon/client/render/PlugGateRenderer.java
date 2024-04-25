@@ -6,7 +6,6 @@
 
 package buildcraft.silicon.client.render;
 
-
 import buildcraft.api.transport.pluggable.IPlugDynamicRenderer;
 import buildcraft.lib.client.model.AdvModelCache;
 import buildcraft.lib.client.model.MutableQuad;
@@ -31,7 +30,6 @@ public enum PlugGateRenderer implements IPlugDynamicRenderer<PluggableGate> {
 //    public void render(PluggableGate gate, double x, double y, double z, float partialTicks, BufferBuilder vb)
     public void render(PluggableGate gate, float partialTicks, PoseStack poseStack, VertexConsumer vb, int combinedLight, int combinedOverlay) {
 //        vb.setTranslation(x, y, z);
-        poseStack.pushPose();
         gate.setClientModelVariables();
         if (gate.clientModelData.hasNoNodes()) {
             gate.clientModelData.setNodes(BCSiliconModels.GATE_DYNAMIC.createTickableNodes());
@@ -41,13 +39,12 @@ public enum PlugGateRenderer implements IPlugDynamicRenderer<PluggableGate> {
         for (MutableQuad q : cache.getCutoutQuads()) {
             copy.copyFrom(q);
             copy.multShade();
-            // Calen add
+
             copy.lighti(combinedLight);
             copy.overlay(combinedOverlay);
 
             copy.render(poseStack.last(), vb);
         }
 //        vb.setTranslation(0, 0, 0);
-        poseStack.popPose();
     }
 }

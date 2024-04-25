@@ -11,12 +11,17 @@ import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
 import buildcraft.lib.item.ItemBC_Neptune;
+import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.misc.SoundUtil;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.BCSiliconPlugs;
+import buildcraft.silicon.gate.EnumGateLogic;
+import buildcraft.silicon.gate.EnumGateMaterial;
+import buildcraft.silicon.gate.EnumGateModifier;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.plug.PluggableGate;
+import gnu.trove.map.hash.TIntObjectHashMap;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
@@ -35,9 +40,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ItemPluggableGate extends ItemBC_Neptune implements IItemPluggable {
-    public final GateVariant VARIANT;
+    private final GateVariant VARIANT;
 
-    //    public ItemPluggableGate(String idBC, Item.Properties properties)
+    // public ItemPluggableGate(String idBC, Item.Properties properties)
     public ItemPluggableGate(String idBC, Item.Properties properties, GateVariant variant) {
         super(idBC, properties);
         this.VARIANT = variant;
@@ -85,50 +90,45 @@ public class ItemPluggableGate extends ItemBC_Neptune implements IItemPluggable 
 //        GateVariant variant = getVariant(StackUtil.asNonNull(stack));
         GateVariant variant = this.VARIANT;
 
-//        tooltip.add(new TextComponent(LocaleUtil.localize("gate.slots", variant.numSlots)));
+//        tooltip.add(LocaleUtil.localize("gate.slots", variant.numSlots));
         tooltip.add(new TranslatableComponent("gate.slots", variant.numSlots));
 
         if (variant.numTriggerArgs == variant.numActionArgs) {
             if (variant.numTriggerArgs > 0) {
-//                tooltip.add(new TextComponent(LocaleUtil.localize("gate.params", variant.numTriggerArgs)));
+//                tooltip.add(LocaleUtil.localize("gate.params", variant.numTriggerArgs));
                 tooltip.add(new TranslatableComponent("gate.params", variant.numTriggerArgs));
             }
         } else {
             if (variant.numTriggerArgs > 0) {
-//                tooltip.add(new TextComponent(LocaleUtil.localize("gate.params.trigger", variant.numTriggerArgs)));
+//                tooltip.add(LocaleUtil.localize("gate.params.trigger", variant.numTriggerArgs));
                 tooltip.add(new TranslatableComponent("gate.params.trigger", variant.numTriggerArgs));
             }
             if (variant.numActionArgs > 0) {
-//                tooltip.add(new TextComponent(LocaleUtil.localize("gate.params.action", variant.numTriggerArgs)));
+//                tooltip.add(LocaleUtil.localize("gate.params.action", variant.numTriggerArgs));
                 tooltip.add(new TranslatableComponent("gate.params.action", variant.numTriggerArgs));
             }
         }
     }
 
-    @Override
-    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
-        subItems.add(new ItemStack(this));
-//        for (EnumGateMaterial material : EnumGateMaterial.VALUES)
-//        {
-//            if (!material.canBeModified)
-//            {
+    // 1.18.2: different item obj
+//    @Override
+//    protected void addSubItems(CreativeModeTab tab, NonNullList<ItemStack> subItems) {
+//        subItems.add(new ItemStack(this));
+//        for (EnumGateMaterial material : EnumGateMaterial.VALUES) {
+//            if (!material.canBeModified) {
 //                continue;
 //            }
-//            for (EnumGateLogic logic : EnumGateLogic.VALUES)
-//            {
-//                for (EnumGateModifier modifier : EnumGateModifier.VALUES)
-//                {
+//            for (EnumGateLogic logic : EnumGateLogic.VALUES) {
+//                for (EnumGateModifier modifier : EnumGateModifier.VALUES) {
 //                    subItems.add(getStack(new GateVariant(logic, material, modifier)));
 //                }
 //            }
 //        }
-    }
+//    }
 
-    // Calen: not still useful in 1.18.2
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
+//    @SideOnly(Side.CLIENT)
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
 //        variants.put(0, new ModelResourceLocation("buildcraftsilicon:gate_item#inventory"));
 //    }
 }

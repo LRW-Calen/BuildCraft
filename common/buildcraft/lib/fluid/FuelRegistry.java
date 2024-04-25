@@ -110,7 +110,7 @@ public enum FuelRegistry implements IFuelManager {
         }
 
         @Override
-        public RecipeSerializer<?> getSerializer() {
+        public RecipeSerializer<IFuel> getSerializer() {
             return FuelRecipeSerializer.INSTANCE;
         }
     }

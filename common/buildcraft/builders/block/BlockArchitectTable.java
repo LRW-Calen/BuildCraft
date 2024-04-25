@@ -75,7 +75,7 @@ public class BlockArchitectTable extends BlockBCTile_Neptune<TileArchitectTable>
 //            BCBuildersGuis.ARCHITECT.openGUI(player, pos);
             // Calen
             if (world.getBlockEntity(pos) instanceof TileArchitectTable tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
 //        return true;

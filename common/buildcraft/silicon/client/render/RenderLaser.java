@@ -41,8 +41,8 @@ public class RenderLaser implements BlockEntityRenderer<TileLaser> {
             Minecraft.getInstance().getProfiler().push("bc");
             Minecraft.getInstance().getProfiler().push("laser");
 
-            poseStack.pushPose();
 //            buffer.setTranslation(x - tile.getBlockPos().getX(), y - tile.getBlockPos().getY(), z - tile.getBlockPos().getZ());
+            poseStack.pushPose();
             poseStack.translate(-tile.getBlockPos().getX(), -tile.getBlockPos().getY(), -tile.getBlockPos().getZ());
 
             if (tile.laserPos != null) {

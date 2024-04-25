@@ -46,7 +46,7 @@ public class ContainerGate extends ContainerPipe {
     public ContainerGate(MenuType menuType, int id, Player player, GateLogic logic) {
         super(menuType, id, player, logic.getPipeHolder());
         this.gate = logic;
-//        gate.getPipeHolder().onPlayerOpen(player);
+//        gate.getPipeHolder().onPlayerOpen(player); // Calen: moved to BCSiliconMenuTypes to ensure message handled before gui opened
 
         boolean split = gate.isSplitInTwo();
         int s = gate.variant.numSlots;

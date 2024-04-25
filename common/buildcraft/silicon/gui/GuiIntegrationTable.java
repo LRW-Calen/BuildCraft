@@ -52,6 +52,6 @@ public class GuiIntegrationTable extends GuiBC8<ContainerIntegrationTable> {
     protected void drawForegroundLayer(PoseStack poseStack) {
         String title = I18n.get("tile.integrationTableBlock.name");
 //        font.draw(title, guiLeft + (xSize - fontRenderer.getStringWidth(title)) / 2, guiTop + 10, 0x404040);
-        font.draw(poseStack, title, leftPos + (imageWidth - font.width(title)) / 2, topPos + 10, 0x404040);
+        font.draw(poseStack, title, leftPos + (float) (imageWidth - font.width(title)) / 2, topPos + 10, 0x404040);
     }
 }

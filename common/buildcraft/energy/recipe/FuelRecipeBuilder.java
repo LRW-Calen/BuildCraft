@@ -1,6 +1,8 @@
 package buildcraft.energy.recipe;
 
+import buildcraft.api.fuels.IFuel;
 import buildcraft.energy.BCEnergy;
+import buildcraft.lib.fluid.FuelRegistry;
 import buildcraft.lib.misc.StackUtil;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -56,7 +58,7 @@ public class FuelRecipeBuilder {
         }
 
         @Override
-        public RecipeSerializer<?> getType() {
+        public RecipeSerializer<IFuel> getType() {
             return FuelRecipeSerializer.INSTANCE;
         }
 

@@ -25,11 +25,12 @@ public class TileChargingTable extends TileLaserTableBase {
         return 0;
     }
 
-    // Calen added from MenuProvider
+    // MenuProvider
+
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
-//        return new ContainerAssemblyTable(BCSiliconMenuTypes.CHARGING_TABLE,id,player, this);
+//        return new ContainerChargingTable(BCSiliconMenuTypes.CHARGING_TABLE, id, player, this);
         return null;
     }
 }

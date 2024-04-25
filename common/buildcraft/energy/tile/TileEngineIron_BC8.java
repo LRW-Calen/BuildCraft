@@ -164,7 +164,7 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 implements MenuProvid
         }
         if (!level.isClientSide) {
 //            BCEnergyGuis.ENGINE_IRON.openGUI(player, getPos());
-            MessageUtil.serverOpenTileGUI(player, this);
+            MessageUtil.serverOpenTileGui(player, this);
         }
 //        return true;
         return InteractionResult.SUCCESS;

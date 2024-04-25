@@ -13,7 +13,7 @@ import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import javax.annotation.Nullable;
 
-public class FuelRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<FuelRegistry.Fuel> {
+public class FuelRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<IFuel> {
     public static final FuelRecipeSerializer INSTANCE;
 
     static {
@@ -37,7 +37,7 @@ public class FuelRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>
     }
 
     public static void toJson(FuelRecipeBuilder builder, JsonObject json) {
-        json.addProperty("type", FuelRegistry.Fuel.TYPE_ID.toString());
+        json.addProperty("type", IFuel.TYPE_ID.toString());
         json.add("fluid", JsonUtil.serializeFluidStack(builder.fluid));
         json.addProperty("powerPerCycle", builder.powerPerCycle);
         json.addProperty("totalBurningTime", builder.totalBurningTime);
@@ -49,7 +49,7 @@ public class FuelRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>
 
     @Nullable
     @Override
-    public FuelRegistry.Fuel fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
+    public IFuel fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         FluidStack fluid = buffer.readFluidStack();
         long powerPerCycle = buffer.readLong();
         int totalBurningTime = buffer.readInt();
@@ -63,7 +63,7 @@ public class FuelRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer<?>
     }
 
     @Override
-    public void toNetwork(FriendlyByteBuf buffer, FuelRegistry.Fuel recipe) {
+    public void toNetwork(FriendlyByteBuf buffer, IFuel recipe) {
         buffer.writeFluidStack(recipe.getFluid());
         buffer.writeLong(recipe.getPowerPerCycle());
         buffer.writeInt(recipe.getTotalBurningTime());

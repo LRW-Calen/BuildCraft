@@ -207,14 +207,14 @@ public class FluidUtilBC {
         boolean single = held.getCount() == 1;
         IFluidHandlerItem flItem = null;
         if (replace && single) {
-            flItem = FluidUtil.getFluidHandler(held).resolve().orElseGet(() -> null);
+            flItem = FluidUtil.getFluidHandler(held).resolve().orElse(null);
         } else {
             // replace and not single - need a copy and count set to 1
             // not replace and single - need a copy, does not need change of count but it should be ok
             // not replace and not single - need a copy count set to 1
             ItemStack copy = held.copy();
             copy.setCount(1);
-            flItem = FluidUtil.getFluidHandler(copy).resolve().orElseGet(() -> null);
+            flItem = FluidUtil.getFluidHandler(copy).resolve().orElse(null);
         }
         if (flItem == null) {
             return InteractionResult.PASS;

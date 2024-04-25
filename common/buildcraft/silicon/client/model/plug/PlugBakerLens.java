@@ -35,13 +35,6 @@ public enum PlugBakerLens implements IPluggableStaticBaker<KeyPlugLens> {
     }
 
     private static IQuadGetter getGetter(KeyPlugLens key) {
-        if (key.layer == RenderType.cutout()) {
-            return key.isFilter ? filterCutout : lensCutout;
-        } else if (key.layer == RenderType.translucent()) {
-            return key.isFilter ? filterTranslucent : lensTranslucent;
-        } else {
-            throw new IllegalArgumentException("Unknown layer " + key.layer);
-        }
 //        switch (key.layer) {
 //            case CUTOUT: {
 //                return key.isFilter ? filterCutout : lensCutout;
@@ -53,6 +46,13 @@ public enum PlugBakerLens implements IPluggableStaticBaker<KeyPlugLens> {
 //                throw new IllegalArgumentException("Unknown layer " + key.layer);
 //            }
 //        }
+        if (key.layer == RenderType.cutout()) {
+            return key.isFilter ? filterCutout : lensCutout;
+        } else if (key.layer == RenderType.translucent()) {
+            return key.isFilter ? filterTranslucent : lensTranslucent;
+        } else {
+            throw new IllegalArgumentException("Unknown layer " + key.layer);
+        }
     }
 
     @Override

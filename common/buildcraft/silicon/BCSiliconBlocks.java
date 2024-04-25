@@ -48,7 +48,7 @@ public class BCSiliconBlocks {
         }
     }
 
-    private static RegistryObject<BlockLaserTable> createLaserTable(EnumLaserTableType type, String id) {
-        return HELPER.addBlockAndItem(id, BlockPropertiesCreator.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), (idBC, properties) -> new BlockLaserTable(idBC, properties, type));
+    private static RegistryObject<BlockLaserTable> createLaserTable(EnumLaserTableType type, String tagId) {
+        return HELPER.addBlockAndItem(tagId, BlockPropertiesCreator.createDefaultProperties(Material.METAL).lightLevel((state) -> 0).noOcclusion(), (idBC, properties) -> new BlockLaserTable(idBC, properties, type));
     }
 }

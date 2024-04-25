@@ -78,7 +78,7 @@ public class BlockBuilder extends BlockBCTile_Neptune<TileBuilder> implements IB
 //            BCBuildersGuis.BUILDER.openGUI(player, pos);
             // Calen
             if (world.getBlockEntity(pos) instanceof TileBuilder tile) {
-                MessageUtil.serverOpenTileGUI(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile);
             }
         }
 //        return true;

@@ -21,11 +21,9 @@ public class FacadeBlockStateInfo implements IFacadeState {
     public final boolean isTransparent;
     public final boolean isVisible;
     public final boolean[] isSideSolid = new boolean[6];
-    //    public final BlockFaceShape[] blockFaceShape = new BlockFaceShape[6];
-    public final SupportType[] blockFaceShape = new SupportType[6];
+//    public final BlockFaceShape[] blockFaceShape = new BlockFaceShape[6];
 
-    public FacadeBlockStateInfo(BlockState state, ItemStack requiredStack,
-                                ImmutableSet<Property<?>> varyingProperties) {
+    public FacadeBlockStateInfo(BlockState state, ItemStack requiredStack, ImmutableSet<Property<?>> varyingProperties) {
         this.state = Objects.requireNonNull(state, "state must not be null!");
         Objects.requireNonNull(state.getBlock(), "state.getBlock must not be null!");
         Objects.requireNonNull(state.getBlock().getRegistryName(),
@@ -42,7 +40,6 @@ public class FacadeBlockStateInfo implements IFacadeState {
             isSideSolid[side.ordinal()] = state.isFaceSturdy(access, BlockPos.ZERO, side);
             // Calen: use VoxelShape, no blockFaceShape
 //            blockFaceShape[side.ordinal()] = state.getBlockFaceShape(access, BlockPos.ZERO, side);
-//            blockFaceShape[side.ordinal()] = state.getBlock().getBlockSupportShape(state,access, BlockPos.ZERO).getFaceShape(side);
         }
     }
 
