@@ -17,9 +17,7 @@ public abstract class ZonePlannerMapData {
             .expireAfterWrite(2, TimeUnit.MINUTES)
             .build();
 
-    /**
-     * Use {@link #getChunk(Level, ZonePlannerMapChunkKey)} for a cached version
-     */
+    /** Use {@link #getChunk(Level, ZonePlannerMapChunkKey)} for a cached version */
     protected abstract ZonePlannerMapChunk loadChunk(Level world, ZonePlannerMapChunkKey key);
 
     public final ZonePlannerMapChunk getChunk(Level world, ZonePlannerMapChunkKey key) {

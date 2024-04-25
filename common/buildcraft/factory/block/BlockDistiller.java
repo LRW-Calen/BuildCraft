@@ -39,15 +39,20 @@ public class BlockDistiller extends BlockBCTile_Neptune<TileDistiller_BC8> imple
 //        return false;
 //    }
 
-//    @Override
-//    public boolean isFullCube(IBlockState state) {
-//        return false;
-//    }
-
     @Override
     public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
         return true;
     }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
+        return 1.0F;
+    }
+
+//    @Override
+//    public boolean isFullCube(IBlockState state) {
+//        return false;
+//    }
 
     @Override
 //    public InteractionResult onBlockActivated(Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand, Direction facing, float hitX, float hitY, float hitZ)

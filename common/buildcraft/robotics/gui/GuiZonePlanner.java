@@ -29,6 +29,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -92,11 +93,9 @@ public class GuiZonePlanner extends GuiBC8<ContainerZonePlanner> {
     }
 
 //    @Override
-//    public void handleMouseInput() throws IOException
-//    {
+//    public void handleMouseInput() throws IOException {
 //        int wheel = Mouse.getEventDWheel();
-//        if (wheel != 0)
-//        {
+//        if (wheel != 0) {
 //            scaleSpeed -= wheel / 30F;
 //        }
 //        super.handleMouseInput();

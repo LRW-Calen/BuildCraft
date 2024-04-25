@@ -90,8 +90,8 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner> {
 //            GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 //        RenderSystem.activeTexture(33985);
         // TODO Calen
-//            GlStateManager.disableTexture2D();
-//            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+//        GlStateManager.disableTexture2D();
+//        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 //        RenderSystem.activeTexture(33984);
 //            GlStateManager.disableBlend();
         RenderUtil.disableBlend();

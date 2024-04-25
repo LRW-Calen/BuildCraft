@@ -6,19 +6,20 @@
 
 package buildcraft.lib.expression;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import buildcraft.lib.expression.api.IExpressionNode;
-import buildcraft.lib.expression.api.IExpressionNode.*;
+import buildcraft.lib.expression.api.IExpressionNode.INodeBoolean;
+import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
+import buildcraft.lib.expression.api.IExpressionNode.INodeLong;
+import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
 import buildcraft.lib.expression.api.INodeFunc;
 import buildcraft.lib.expression.api.INodeStack;
 import buildcraft.lib.expression.api.InvalidExpressionException;
 import buildcraft.lib.expression.node.cast.NodeCasting;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class NodeStack implements INodeStack
-{
+public class NodeStack implements INodeStack {
     private final List<IExpressionNode> stack = new ArrayList<>();
 
     private INodeFunc currentlyPopping;
@@ -39,8 +40,7 @@ public class NodeStack implements INodeStack
         return node;
     }
 
-    public IExpressionNode pop() throws InvalidExpressionException
-    {
+    public IExpressionNode pop() throws InvalidExpressionException {
         if (stack.isEmpty()) {
             throw new InvalidExpressionException("No more nodes to pop!");
         } else {

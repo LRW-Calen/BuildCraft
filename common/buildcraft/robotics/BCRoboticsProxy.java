@@ -8,6 +8,9 @@ package buildcraft.robotics;
 
 import buildcraft.api.BCModules;
 import buildcraft.lib.net.MessageManager;
+import buildcraft.robotics.container.ContainerZonePlanner;
+import buildcraft.robotics.gui.GuiZonePlanner;
+import buildcraft.robotics.tile.TileZonePlanner;
 import buildcraft.robotics.zone.MessageZoneMapRequest;
 import buildcraft.robotics.zone.MessageZoneMapResponse;
 import net.minecraftforge.api.distmarker.Dist;
@@ -15,7 +18,7 @@ import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCRoboticsProxy implements IGuiHandler
 public abstract class BCRoboticsProxy {
-    //    @SidedProxy(modId = BCRobotics.MODID)
+    // @SidedProxy(modId = BCRobotics.MODID)
     private static BCRoboticsProxy proxy;
 
     public static BCRoboticsProxy getProxy() {
@@ -33,13 +36,10 @@ public abstract class BCRoboticsProxy {
     }
 
 //    @Override
-//    public Object getServerGuiElement(int ID, Player player, World world, int x, int y, int z)
-//    {
+//    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 //        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-//        if (ID == RoboticsGuis.ZONE_PLANTER.ordinal())
-//        {
-//            if (tile instanceof TileZonePlanner)
-//            {
+//        if (ID == RoboticsGuis.ZONE_PLANTER.ordinal()) {
+//            if (tile instanceof TileZonePlanner) {
 //                TileZonePlanner zonePlanner = (TileZonePlanner) tile;
 //                return new ContainerZonePlanner(player, zonePlanner);
 //            }
@@ -48,8 +48,7 @@ public abstract class BCRoboticsProxy {
 //    }
 
 //    @Override
-//    public Object getClientGuiElement(int ID, Player player, World world, int x, int y, int z)
-//    {
+//    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 //        return null;
 //    }
 
@@ -73,13 +72,10 @@ public abstract class BCRoboticsProxy {
 //    @OnlyIn(Dist.CLIENT)
     public static class ClientProxy extends BCRoboticsProxy {
 //        @Override
-//        public Object getClientGuiElement(int ID, Player player, World world, int x, int y, int z)
-//        {
+//        public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 //            TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-//            if (ID == RoboticsGuis.ZONE_PLANTER.ordinal())
-//            {
-//                if (tile instanceof TileZonePlanner)
-//                {
+//            if (ID == RoboticsGuis.ZONE_PLANTER.ordinal()) {
+//                if (tile instanceof TileZonePlanner) {
 //                    TileZonePlanner zonePlanner = (TileZonePlanner) tile;
 //                    return new GuiZonePlanner(new ContainerZonePlanner(player, zonePlanner));
 //                }
@@ -96,7 +92,7 @@ public abstract class BCRoboticsProxy {
         @Override
         public void fmlInit() {
             super.fmlInit();
-            // Calen: moved to BCRobotics#onRenderRegister
+            // 1.18.2: moved to BCRobotics#onTesrReg
 //            ClientRegistry.bindTileEntitySpecialRenderer(TileZonePlanner.class, new RenderZonePlanner());
         }
     }

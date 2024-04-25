@@ -6,12 +6,10 @@
 
 package buildcraft.lib.expression.node.value;
 
-
 import buildcraft.lib.expression.api.IConstantNode;
 import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
 
-public final class NodeConstantDouble implements INodeDouble, IConstantNode
-{
+public final class NodeConstantDouble implements INodeDouble, IConstantNode {
     public static final NodeConstantDouble ZERO = new NodeConstantDouble(0);
     public static final NodeConstantDouble ONE = new NodeConstantDouble(1);
 

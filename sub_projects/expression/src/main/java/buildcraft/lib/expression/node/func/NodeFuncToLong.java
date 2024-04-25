@@ -6,14 +6,12 @@
 
 package buildcraft.lib.expression.node.func;
 
-
-import buildcraft.lib.expression.api.IExpressionNode;
-import buildcraft.lib.expression.api.INodeFunc;
+import buildcraft.lib.expression.api.IExpressionNode.INodeLong;
+import buildcraft.lib.expression.api.INodeFunc.INodeFuncLong;
 import buildcraft.lib.expression.api.INodeStack;
 import buildcraft.lib.expression.api.InvalidExpressionException;
 
-public class NodeFuncToLong implements INodeFunc.INodeFuncLong, IExpressionNode.INodeLong
-{
+public class NodeFuncToLong implements INodeFuncLong, INodeLong {
 
     private final String name;
     private final IFuncToLong func;
@@ -34,8 +32,7 @@ public class NodeFuncToLong implements INodeFunc.INodeFuncLong, IExpressionNode.
     }
 
     @Override
-    public INodeLong getNode(INodeStack stack) throws InvalidExpressionException
-    {
+    public INodeLong getNode(INodeStack stack) throws InvalidExpressionException {
         return this;
     }
 

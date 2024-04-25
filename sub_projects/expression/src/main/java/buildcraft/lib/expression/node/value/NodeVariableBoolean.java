@@ -6,14 +6,12 @@
 
 package buildcraft.lib.expression.node.value;
 
-
 import buildcraft.lib.expression.api.IDependancyVisitor;
 import buildcraft.lib.expression.api.IDependantNode;
 import buildcraft.lib.expression.api.IExpressionNode;
 import buildcraft.lib.expression.api.IVariableNode.IVariableNodeBoolean;
 
-public class NodeVariableBoolean extends NodeVariable implements IVariableNodeBoolean, IDependantNode
-{
+public class NodeVariableBoolean extends NodeVariable implements IVariableNodeBoolean, IDependantNode {
     public boolean value;
     private INodeBoolean src = null;
 

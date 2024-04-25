@@ -31,21 +31,20 @@ public enum ZonePlannerMapRenderer {
     private final MutableVertex vertex = new MutableVertex();
 
     private static void onRemove(RemovalNotification<ZonePlannerMapChunkKey, Integer> notification) {
-        Integer glList = notification.getValue();
-        if (glList != null) {
-            GL11.glDeleteLists(glList, 1);
-        }
+//        Integer glList = notification.getValue();
+//        if (glList != null) {
+//            GL11.glDeleteLists(glList, 1);
+//        }
     }
 
-    //    private void vertex(BufferBuilder builder, double x, double y, double z)
+    // private void vertex(BufferBuilder builder, double x, double y, double z)
     private void vertex(BufferBuilder builder, PoseStack poseStack, double x, double y, double z) {
         vertex.positiond(x, y, z);
 //        vertex.render(builder);
-//        vertex.render(poseStack.last(), builder);
         vertex.renderPositionColour(poseStack.last(), builder);
     }
 
-    //    public void drawBlockCuboid(BufferBuilder builder, double x, double y, double z, double height, double radius)
+    // public void drawBlockCuboid(BufferBuilder builder, double x, double y, double z, double height, double radius)
     public void drawBlockCuboid(BufferBuilder builder, PoseStack poseStack, double x, double y, double z, double height, double radius) {
         @SuppressWarnings("UnnecessaryLocalVariable")
         double rX = radius;
@@ -118,26 +117,26 @@ public enum ZonePlannerMapRenderer {
         poseStack.popPose();
     }
 
-    //    public void drawBlockCuboid(BufferBuilder builder, double x, double y, double z, double height)
+    // public void drawBlockCuboid(BufferBuilder builder, double x, double y, double z, double height)
     public void drawBlockCuboid(BufferBuilder builder, PoseStack poseStack, double x, double y, double z, double height) {
 //        drawBlockCuboid(builder, x, y, z, height, 0.5);
         drawBlockCuboid(builder, poseStack, x, y, z, height, 0.5);
     }
 
-    //    public void drawBlockCuboid(BufferBuilder builder, double x, double y, double z)
+    // public void drawBlockCuboid(BufferBuilder builder, double x, double y, double z)
     public void drawBlockCuboid(BufferBuilder builder, PoseStack poseStack, double x, double y, double z) {
 //        drawBlockCuboid(builder, x, y, z, 1);
         drawBlockCuboid(builder, poseStack, x, y, z, 1);
     }
 
-    //    public OptionalInt getChunkGlList(ZonePlannerMapChunkKey key)
+    // public OptionalInt getChunkGlList(ZonePlannerMapChunkKey key)
     public OptionalInt getChunkGlList(ZonePlannerMapChunkKey key, PoseStack poseStack) {
-        Integer glList = CHUNK_GL_CACHE.getIfPresent(key);
-        if (glList == null) {
+//        Integer glList = CHUNK_GL_CACHE.getIfPresent(key);
+//        if (glList == null) {
 //            genChunk(key);
-            genChunk(key, poseStack);
 //            glList = CHUNK_GL_CACHE.getIfPresent(key);
-        }
+//        }
+        genChunk(key, poseStack);
 //        return glList != null
 //                ? OptionalInt.of(glList)
 //                : OptionalInt.empty();
@@ -148,7 +147,7 @@ public enum ZonePlannerMapRenderer {
         vertex.colouri(color >> 16, color >> 8, color, color >> 24);
     }
 
-    //    private void genChunk(ZonePlannerMapChunkKey key)
+    // private void genChunk(ZonePlannerMapChunkKey key)
     private void genChunk(ZonePlannerMapChunkKey key, PoseStack poseStack) {
 //        ZonePlannerMapChunk zonePlannerMapChunk = ZonePlannerMapDataClient.INSTANCE.getChunk(Minecraft.getMinecraft().world, key);
         ZonePlannerMapChunk zonePlannerMapChunk = ZonePlannerMapDataClient.INSTANCE.getChunk(Minecraft.getInstance().level, key);

@@ -6,10 +6,10 @@
 
 package buildcraft.lib.expression.node.value;
 
+import java.util.Objects;
+
 import buildcraft.lib.expression.api.IConstantNode;
 import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
-
-import java.util.Objects;
 
 public final class NodeConstantObject<T> implements INodeObject<T>, IConstantNode {
     public static final NodeConstantObject<String> EMPTY_STRING = new NodeConstantObject<>(String.class, "");

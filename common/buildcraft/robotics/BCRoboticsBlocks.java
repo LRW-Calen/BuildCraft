@@ -15,7 +15,6 @@ import net.minecraft.world.level.material.Material;
 import net.minecraftforge.registries.RegistryObject;
 
 public class BCRoboticsBlocks {
-    //    private static final RegistrationHelper HELPER = new RegistrationHelper();
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCRobotics.MODID);
 
     public static RegistryObject<BlockZonePlanner> zonePlanner;

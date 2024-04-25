@@ -75,6 +75,16 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
 //        return false;
 //    }
 
+    @Override
+    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
+        return true;
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
+        return 1.0F;
+    }
+
 //    @Override
 //    public boolean isFullCube(IBlockState state) {
 //        return false;

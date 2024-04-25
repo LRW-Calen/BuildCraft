@@ -98,6 +98,16 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 //        return false;
 //    }
 
+    @Override
+    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
+        return true;
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
+        return 1.0F;
+    }
+
 //    @Override
 //    public boolean isFullBlock(BlockState state) {
 //        return false;

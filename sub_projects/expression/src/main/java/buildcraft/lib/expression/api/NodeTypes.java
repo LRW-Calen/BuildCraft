@@ -1,5 +1,11 @@
 package buildcraft.lib.expression.api;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+
 import buildcraft.lib.expression.FunctionContext;
 import buildcraft.lib.expression.VecDouble;
 import buildcraft.lib.expression.VecLong;
@@ -12,10 +18,24 @@ import buildcraft.lib.expression.api.INodeFunc.INodeFuncDouble;
 import buildcraft.lib.expression.api.INodeFunc.INodeFuncLong;
 import buildcraft.lib.expression.api.INodeFunc.INodeFuncObject;
 import buildcraft.lib.expression.node.cast.NodeCasting;
-import buildcraft.lib.expression.node.func.*;
-import buildcraft.lib.expression.node.value.*;
-
-import java.util.*;
+import buildcraft.lib.expression.node.func.NodeFuncDoubleDoubleToBoolean;
+import buildcraft.lib.expression.node.func.NodeFuncDoubleDoubleToDouble;
+import buildcraft.lib.expression.node.func.NodeFuncDoubleToDouble;
+import buildcraft.lib.expression.node.func.NodeFuncDoubleToObject;
+import buildcraft.lib.expression.node.func.NodeFuncLongLongToBoolean;
+import buildcraft.lib.expression.node.func.NodeFuncLongLongToLong;
+import buildcraft.lib.expression.node.func.NodeFuncLongToDouble;
+import buildcraft.lib.expression.node.func.NodeFuncLongToLong;
+import buildcraft.lib.expression.node.func.NodeFuncLongToObject;
+import buildcraft.lib.expression.node.value.NodeConstantBoolean;
+import buildcraft.lib.expression.node.value.NodeConstantDouble;
+import buildcraft.lib.expression.node.value.NodeConstantLong;
+import buildcraft.lib.expression.node.value.NodeConstantObject;
+import buildcraft.lib.expression.node.value.NodeVariable;
+import buildcraft.lib.expression.node.value.NodeVariableBoolean;
+import buildcraft.lib.expression.node.value.NodeVariableDouble;
+import buildcraft.lib.expression.node.value.NodeVariableLong;
+import buildcraft.lib.expression.node.value.NodeVariableObject;
 
 public class NodeTypes {
 

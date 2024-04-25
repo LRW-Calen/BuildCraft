@@ -6,7 +6,6 @@
 
 package buildcraft.robotics.zone;
 
-
 import net.minecraft.world.level.Level;
 
 public class ZonePlannerMapDataServer extends ZonePlannerMapData {

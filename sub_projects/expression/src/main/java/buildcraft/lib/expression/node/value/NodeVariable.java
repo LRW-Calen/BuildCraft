@@ -1,13 +1,11 @@
 package buildcraft.lib.expression.node.value;
 
+import java.util.Locale;
 
 import buildcraft.lib.expression.api.IExpressionNode;
 import buildcraft.lib.expression.api.IVariableNode;
 
-import java.util.Locale;
-
-public abstract class NodeVariable implements IVariableNode
-{
+public abstract class NodeVariable implements IVariableNode {
 
     public final String name;
     protected boolean isConst = false;

@@ -104,14 +104,24 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
 //    public RenderType getBlockLayer() { return RenderType.cutout(); }
 
 //    @Override
-//    public boolean isFullCube(BlockState state)
-//    {
+//    public boolean isFullCube(BlockState state) {
 //        return false;
 //    }
 
-    // Calen: 1.18.2 moved to Properties
 //    @Override
-//    public boolean isOpaqueCube(BlockState state) { return false; }
+//    public boolean isOpaqueCube(BlockState state) {
+//         return false;
+//    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
+        return true;
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
+        return 1.0F;
+    }
 
     @Override
 //    public AABB getCollisionShape(BlockState state, BlockAccess world, BlockPos pos)

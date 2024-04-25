@@ -12,9 +12,8 @@ public class BCRoboticsItems {
 
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCRobotics.MODID);
 
-//    @SubscribeEvent
-//    public static void registerItems(RegistryEvent.Register<Item> event)
-//    {
-//
-//    }
+
+    public static void preInit(){
+
+    }
 }

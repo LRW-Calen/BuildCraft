@@ -6,12 +6,10 @@
 
 package buildcraft.lib.expression.node.value;
 
-
 import buildcraft.lib.expression.api.IConstantNode;
-import buildcraft.lib.expression.api.IExpressionNode;
+import buildcraft.lib.expression.api.IExpressionNode.INodeBoolean;
 
-public enum NodeConstantBoolean implements IExpressionNode.INodeBoolean, IConstantNode
-{
+public enum NodeConstantBoolean implements INodeBoolean, IConstantNode {
     TRUE(true),
     FALSE(false);
 
@@ -24,7 +22,6 @@ public enum NodeConstantBoolean implements IExpressionNode.INodeBoolean, IConsta
     /**
      * @deprecated Use {@link #of(boolean)} instead
      */
-    @Deprecated
     public static NodeConstantBoolean get(boolean value) {
         return of(value);
     }

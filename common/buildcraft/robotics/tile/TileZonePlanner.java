@@ -47,7 +47,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-//public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebuggable
 public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider {
     protected static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("zone_planner");
     public static final int NET_PLAN_CHANGE = IDS.allocId("PLAN_CHANGE");
@@ -115,9 +114,7 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
 //    public int getLevel()
     public int getLevelBC() {
         BlockPos blockPos = Minecraft.getInstance().player.getOnPos();
-//        while (!Minecraft.getInstance().level.getBlockState(blockPos).isSideSolid(Minecraft.getMinecraft().world, blockPos, Direction.DOWN) && blockPos.getY() < 255)
-//        while (!Minecraft.getInstance().level.getBlockState(blockPos).getBlockSupportShape(Minecraft.getInstance().level, blockPos).getFaceShape(Direction.DOWN). && blockPos.getY() < 255)
-//        while (!Block.isFaceFull(Minecraft.getInstance().level.getBlockState(blockPos).getBlockSupportShape(Minecraft.getInstance().level, blockPos), Direction.DOWN) && blockPos.getY() < 255)
+//        while (!Minecraft.getMinecraft().world.getBlockState(blockPos).isSideSolid(Minecraft.getMinecraft().world, blockPos, EnumFacing.DOWN) && blockPos.getY() < 255)
         while (!Minecraft.getInstance().level.getBlockState(blockPos).isFaceSturdy(Minecraft.getInstance().level, blockPos, Direction.DOWN) && blockPos.getY() < 255) {
             blockPos = new BlockPos(blockPos.getX(), blockPos.getY() + 1, blockPos.getZ());
         }
@@ -256,7 +253,7 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
                     return;
                 }
 
-//                ItemMapLocation.setZone(invOutputMapLocation.getStackInSlot(0), layers[BCCoreItems.paintbrushClean.get().getBrushFromStack(invOutputPaintbrush.getStackInSlot(0)).colour.getMetadata()]
+//                ItemMapLocation.setZone(invOutputMapLocation.getStackInSlot(0), layers[BCCoreItems.paintbrush.getBrushFromStack(invOutputPaintbrush.getStackInSlot(0)).colour.getMetadata()]
                 ItemMapLocation.setZone(invOutputMapLocation.getStackInSlot(0), layers[BCCoreItems.paintbrushClean.get().getBrushFromStack(invOutputPaintbrush.getStackInSlot(0)).colour.getId()]
 //                        .getWithOffset(pos.getX(), pos.getZ()));
                         .getWithOffset(worldPosition.getX(), worldPosition.getZ()));
@@ -270,8 +267,7 @@ public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebug
         }
     }
 
-
-    // Calen added from MenuProvider
+    // MenuProvider
 
     @Override
     public Component getDisplayName() {

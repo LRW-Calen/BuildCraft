@@ -16,5 +16,4 @@ public class GuiProgrammingTable_Neptune extends GuiBC8<ContainerProgrammingTabl
     public GuiProgrammingTable_Neptune(ContainerProgrammingTable_Neptune container, Inventory inventory, Component component) {
         super(container, inventory, component);
     }
-
 }

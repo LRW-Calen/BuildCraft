@@ -1,12 +1,12 @@
 package buildcraft.lib.expression.info;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import buildcraft.lib.expression.api.IConstantNode;
 import buildcraft.lib.expression.api.IDependancyVisitor;
 import buildcraft.lib.expression.api.IDependantNode;
 import buildcraft.lib.expression.api.IExpressionNode;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /** An {@link IDependancyVisitor} that will check the properties of an {@link IDependantNode}. Specifically: */
 public class DependencyVisitorCollector extends DependencyVisitorRouting {

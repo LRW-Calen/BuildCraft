@@ -6,8 +6,12 @@
 
 package buildcraft.lib.expression.node.value;
 
-import buildcraft.lib.expression.api.*;
+import buildcraft.lib.expression.api.IDependancyVisitor;
+import buildcraft.lib.expression.api.IDependantNode;
+import buildcraft.lib.expression.api.IExpressionNode;
 import buildcraft.lib.expression.api.IVariableNode.IVariableNodeObject;
+import buildcraft.lib.expression.api.NodeType;
+import buildcraft.lib.expression.api.NodeTypes;
 
 public class NodeVariableObject<T> extends NodeVariable implements IVariableNodeObject<T>, IDependantNode {
     public final Class<T> type;

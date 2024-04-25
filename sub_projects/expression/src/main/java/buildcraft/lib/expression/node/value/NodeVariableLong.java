@@ -6,14 +6,12 @@
 
 package buildcraft.lib.expression.node.value;
 
-
 import buildcraft.lib.expression.api.IDependancyVisitor;
 import buildcraft.lib.expression.api.IDependantNode;
 import buildcraft.lib.expression.api.IExpressionNode;
-import buildcraft.lib.expression.api.IVariableNode;
+import buildcraft.lib.expression.api.IVariableNode.IVariableNodeLong;
 
-public class NodeVariableLong extends NodeVariable implements IVariableNode.IVariableNodeLong, IDependantNode
-{
+public class NodeVariableLong extends NodeVariable implements IVariableNodeLong, IDependantNode {
     public long value;
     private INodeLong src;
 

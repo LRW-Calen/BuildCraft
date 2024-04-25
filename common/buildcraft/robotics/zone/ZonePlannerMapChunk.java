@@ -34,7 +34,7 @@ public class ZonePlannerMapChunk {
         }
     }
 
-    //    public ZonePlannerMapChunk(PacketBuffer buffer)
+    // public ZonePlannerMapChunk(PacketBuffer buffer)
     public ZonePlannerMapChunk(FriendlyByteBuf buffer) {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
@@ -47,7 +47,7 @@ public class ZonePlannerMapChunk {
         }
     }
 
-    //    public void write(PacketBuffer buffer)
+    // public void write(PacketBuffer buffer)
     public void write(FriendlyByteBuf buffer) {
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {

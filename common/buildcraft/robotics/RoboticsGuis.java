@@ -4,20 +4,18 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.robotics;
 
+@Deprecated(forRemoval = true)
 public enum RoboticsGuis {
     ZONE_PLANTER;
 
-//    public void openGUI(Player player)
-//    {
+//    public void openGUI(EntityPlayer player) {
 //        player.openGui(BCRobotics.INSTANCE, ordinal(), player.getEntityWorld(), 0, 0, 0);
 //    }
 
-    //    public void openGUI(Player player, BlockPos pos)
-//    public void openGUI(Player player, BlockPos pos, TileZonePlanner zonePlanner)
-//    {
+//    public void openGUI(Player player, BlockPos pos)
+//    public void openGUI(Player player, BlockPos pos, TileZonePlanner zonePlanner) {
 ////        player.openGui(BCRobotics.INSTANCE, ordinal(), player.getEntityWorld(), pos.getX(), pos.getY(), pos.getZ());
-//        if (player instanceof ServerPlayer serverPlayer)
-//        {
+//        if (player instanceof ServerPlayer serverPlayer) {
 //            NetworkHooks.openGui(serverPlayer, zonePlanner, pos);
 //        }
 //    }

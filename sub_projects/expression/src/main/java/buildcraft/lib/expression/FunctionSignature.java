@@ -1,12 +1,13 @@
 package buildcraft.lib.expression;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import buildcraft.lib.expression.Tokenizer.Token;
 import buildcraft.lib.expression.api.InvalidExpressionException;
 import buildcraft.lib.expression.api.NodeTypes;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public final class FunctionSignature {
     private static final Tokenizer FUNCTION_TOKENIZER = new Tokenizer(

@@ -52,6 +52,7 @@ public class BCRobotics {
         RegistryConfig.useOtherModConfigFor(MODID, BCCore.MODID);
 
         BCRoboticsBlocks.preInit();
+        BCRoboticsItems.preInit();
 
         BCRoboticsProxy.getProxy().fmlPreInit();
 

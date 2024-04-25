@@ -48,6 +48,7 @@ public class BCFactoryBlocks {
                         .strength(-1.0F, 3600000.0F) // setBlockUnbreakable()
                         .noOcclusion()
                         .noDrops()
+                        .isSuffocating((state, world, pos) -> false)
                 ,
                 BlockTube::new
         );
@@ -58,6 +59,7 @@ public class BCFactoryBlocks {
                         .sound(SoundType.GLASS)
                         .lightLevel((state) -> 0)
                         .noOcclusion()
+                        .isSuffocating((state, world, pos) -> false)
                 ,
                 BlockTank::new
         );
@@ -65,6 +67,7 @@ public class BCFactoryBlocks {
                 BlockPropertiesCreator.createDefaultProperties(Material.METAL)
                         .lightLevel((state) -> 0)
                         .noOcclusion()
+                        .isSuffocating((state, world, pos) -> false)
                 ,
                 BlockChute::new);
         distiller = HELPER.addBlockAndItem(
@@ -73,6 +76,7 @@ public class BCFactoryBlocks {
                         .sound(SoundType.GLASS)
                         .lightLevel((state) -> 0)
                         .noOcclusion()
+                        .isSuffocating((state, world, pos) -> false)
                 ,
                 BlockDistiller::new
         );

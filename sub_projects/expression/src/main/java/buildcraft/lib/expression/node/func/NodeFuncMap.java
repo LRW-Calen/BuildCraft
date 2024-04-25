@@ -1,14 +1,19 @@
 package buildcraft.lib.expression.node.func;
 
-import buildcraft.lib.expression.NodeInliningHelper;
-import buildcraft.lib.expression.api.*;
-import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
-import buildcraft.lib.expression.api.INodeFunc.INodeFuncObject;
-import buildcraft.lib.expression.api.IVariableNode.IVariableNodeObject;
-import buildcraft.lib.expression.node.value.NodeVariableObject;
-
 import java.util.EnumMap;
 import java.util.Map;
+
+import buildcraft.lib.expression.NodeInliningHelper;
+import buildcraft.lib.expression.api.IConstantNode;
+import buildcraft.lib.expression.api.IDependancyVisitor;
+import buildcraft.lib.expression.api.IDependantNode;
+import buildcraft.lib.expression.api.IExpressionNode;
+import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
+import buildcraft.lib.expression.api.INodeFunc.INodeFuncObject;
+import buildcraft.lib.expression.api.INodeStack;
+import buildcraft.lib.expression.api.IVariableNode.IVariableNodeObject;
+import buildcraft.lib.expression.api.InvalidExpressionException;
+import buildcraft.lib.expression.node.value.NodeVariableObject;
 
 public class NodeFuncMap<K extends Enum<K>, V> implements INodeFuncObject<V> {
     private final Class<K> keyClass;

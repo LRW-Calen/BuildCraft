@@ -92,14 +92,19 @@ public class BlockFrame extends BlockBCBase_Neptune {
         return false;
     }
 
-    //    @Override
-//    public boolean isOpaqueCube(IBlockState state)
-//    {
+//    @Override
+//    public boolean isOpaqueCube(IBlockState state) {
 //        return false;
 //    }
+
     @Override
     public boolean propagatesSkylightDown(BlockState state, BlockGetter world, BlockPos pos) {
         return true;
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
+        return 1.0F;
     }
 
     @OnlyIn(Dist.CLIENT)

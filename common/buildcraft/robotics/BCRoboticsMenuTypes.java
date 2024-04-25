@@ -42,8 +42,6 @@ public class BCRoboticsMenuTypes {
                 PROGRAMMING_TABLE.setRegistryName("programming_table")
         );
 
-//        MenuScreens.register(ENGINE_IRON, BCEnergyScreenConstructors.ENGINE_IRON);
-//        MenuScreens.register(ENGINE_STONE, BCEnergyScreenConstructors.ENGINE_STONE);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             MenuScreens.register(ZONE_PLANNER, GuiZonePlanner::new);
             MenuScreens.register(PROGRAMMING_TABLE, GuiProgrammingTable_Neptune::new);

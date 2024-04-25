@@ -6,7 +6,7 @@
 
 package buildcraft.robotics;
 
-// 1.18.2: datagen! RoboticsRecipeGenerator
+// 1.18.2: use datagen
 @Deprecated(forRemoval = true)
 public class BCRoboticsRecipes {
     public static void init() {

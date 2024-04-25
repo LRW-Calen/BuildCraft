@@ -6,25 +6,51 @@
 
 package buildcraft.lib.expression;
 
-
-import buildcraft.lib.expression.api.*;
-import buildcraft.lib.expression.node.func.*;
-import buildcraft.lib.expression.node.value.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
+
 import buildcraft.lib.expression.api.IExpressionNode;
-import buildcraft.lib.expression.api.IExpressionNode.*;
-import buildcraft.lib.expression.api.INodeFunc.*;
-import buildcraft.lib.expression.node.func.NodeFuncToLong.*;
-import buildcraft.lib.expression.node.func.NodeFuncToDouble.*;
-import buildcraft.lib.expression.node.func.NodeFuncToBoolean.*;
-import buildcraft.lib.expression.node.func.NodeFuncObjectToLong.*;
-import buildcraft.lib.expression.node.func.NodeFuncObjectToBoolean.*;
-import buildcraft.lib.expression.node.func.NodeFuncObjectToObject.*;
-import buildcraft.lib.expression.node.func.NodeFuncObjectLongToLong.*;
-import buildcraft.lib.expression.node.func.NodeFuncObjectLongLongToLong.*;
-import buildcraft.lib.expression.node.func.NodeFuncObjectObjectToObject.*;
+import buildcraft.lib.expression.api.IExpressionNode.INodeBoolean;
+import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
+import buildcraft.lib.expression.api.IExpressionNode.INodeLong;
+import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
+import buildcraft.lib.expression.api.INodeFunc;
+import buildcraft.lib.expression.api.INodeFunc.INodeFuncBoolean;
+import buildcraft.lib.expression.api.INodeFunc.INodeFuncDouble;
+import buildcraft.lib.expression.api.INodeFunc.INodeFuncLong;
+import buildcraft.lib.expression.api.INodeFunc.INodeFuncObject;
+import buildcraft.lib.expression.api.IVariableNode;
+import buildcraft.lib.expression.api.InvalidExpressionException;
+import buildcraft.lib.expression.api.NodeTypes;
+import buildcraft.lib.expression.node.func.NodeFuncDoubleToObject.IFuncDoubleToObject;
+import buildcraft.lib.expression.node.func.NodeFuncLongToObject.IFuncLongToObject;
+import buildcraft.lib.expression.node.func.NodeFuncObjectLongLongToLong.IFuncObjectLongLongToLong;
+import buildcraft.lib.expression.node.func.NodeFuncObjectLongToLong.IFuncObjectLongToLong;
+import buildcraft.lib.expression.node.func.NodeFuncObjectObjectToObject.IFuncObjectObjectToObject;
+import buildcraft.lib.expression.node.func.NodeFuncObjectToBoolean.IFuncObjectToBoolean;
+import buildcraft.lib.expression.node.func.NodeFuncObjectToLong.IFuncObjectToLong;
+import buildcraft.lib.expression.node.func.NodeFuncObjectToObject.IFuncObjectToObject;
+import buildcraft.lib.expression.node.func.NodeFuncToBoolean;
+import buildcraft.lib.expression.node.func.NodeFuncToBoolean.IFuncToBoolean;
+import buildcraft.lib.expression.node.func.NodeFuncToDouble;
+import buildcraft.lib.expression.node.func.NodeFuncToDouble.IFuncToDouble;
+import buildcraft.lib.expression.node.func.NodeFuncToLong;
+import buildcraft.lib.expression.node.func.NodeFuncToLong.IFuncToLong;
+import buildcraft.lib.expression.node.func.NodeFuncToObject;
+import buildcraft.lib.expression.node.value.NodeConstantBoolean;
+import buildcraft.lib.expression.node.value.NodeConstantDouble;
+import buildcraft.lib.expression.node.value.NodeConstantLong;
+import buildcraft.lib.expression.node.value.NodeConstantObject;
+import buildcraft.lib.expression.node.value.NodeVariableBoolean;
+import buildcraft.lib.expression.node.value.NodeVariableDouble;
+import buildcraft.lib.expression.node.value.NodeVariableLong;
+import buildcraft.lib.expression.node.value.NodeVariableObject;
 
 public class FunctionContext extends FunctionContextBase {
     public static final String FUNCTION_ARG_SEPARATOR = "@";
@@ -321,11 +347,11 @@ public class FunctionContext extends FunctionContextBase {
         return putFunction(name, new NodeFuncToObject<>(name, type, func));
     }
 
-    public INodeFuncObject<String> put_l_s(String name, NodeFuncLongToObject.IFuncLongToObject<String> func) {
+    public INodeFuncObject<String> put_l_s(String name, IFuncLongToObject<String> func) {
         return put_l_o(name, String.class, func);
     }
 
-    public INodeFuncObject<String> put_d_s(String name, NodeFuncDoubleToObject.IFuncDoubleToObject<String> func) {
+    public INodeFuncObject<String> put_d_s(String name, IFuncDoubleToObject<String> func) {
         return put_d_o(name, String.class, func);
     }
 

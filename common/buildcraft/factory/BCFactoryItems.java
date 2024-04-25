@@ -19,15 +19,11 @@ public class BCFactoryItems {
     public static RegistryObject<ItemWaterGel> waterGel;
     public static RegistryObject<ItemBC_Neptune> gelledWater;
 
-    static {
+    public static void fmlPreInit() {
         if (BCLib.DEV) {
             plasticSheet = HELPER.addItem("item.plastic.sheet", ItemPropertiesCreator.common64(), ItemBC_Neptune::new);
         }
         waterGel = HELPER.addItem("item.water_gel_spawn", ItemPropertiesCreator.common16(), ItemWaterGel::new);
         gelledWater = HELPER.addItem("item.gel", ItemPropertiesCreator.common64(), ItemBC_Neptune::new);
-    }
-
-    public static void fmlPreInit() {
-
     }
 }

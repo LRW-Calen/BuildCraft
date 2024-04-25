@@ -124,25 +124,31 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 
 //    @Override
 //    // Calen 好像不是isShapeFullBlock...
-//    public boolean isFullCube(BlockState state)
-//    {
+//    public boolean isFullCube(BlockState state) {
 //        return false;
 //    }
 //
 //    @Override
-//    public boolean isFullBlock(BlockState state)
-//    {
+//    public boolean isFullBlock(BlockState state) {
 //        return false;
 //    }
 //
 //    @Override
-//    public boolean isOpaqueCube(BlockState state)
-//    {
+//    public boolean isOpaqueCube(BlockState state) {
 //        return false;
 //    }
+
+    @Override
+    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
+        return true;
+    }
+
+    @Override
+    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
+        return 1.0F;
+    }
 
     // Collisions
-
 
     // Calen from 1.12.2
     protected static void addCollisionBoxToList(BlockPos pos, VoxelShape entityBox, List<VoxelShape> collidingBoxes, @Nullable VoxelShape blockBox) {
@@ -329,8 +335,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
         return best;
     }
 
-    private RayTraceResultBC computeTrace(RayTraceResultBC lastBest, BlockPos pos, Vec3 start, Vec3 end,
-                                          VoxelShape aabb, int part) {
+    private RayTraceResultBC computeTrace(RayTraceResultBC lastBest, BlockPos pos, Vec3 start, Vec3 end, VoxelShape aabb, int part) {
 //        HitResultBC next = HitResultBC.rayTrace(pos, start, end, aabb.bounds());aabb.bounds().clip()
         RayTraceResultBC next = RayTraceResultBC.fromMcHitResult(AABB.clip(aabb.toAabbs(), start, end, pos));
 //        HitResultBC next = lastBest;
@@ -412,7 +417,8 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
             // Perhaps we aren't the object the mouse is over
 //            return FULL_BLOCK_AABB;
 //            return Shapes.block();
-            return Shapes.empty(); // Calen: if empty, then can Collide naxt block
+//            return Shapes.empty(); // Calen: if empty, then can Collide next block
+            return getInteractionShape(state, world, pos);
         }
         int part = trace.subHit;
 //        AABB aabb = FULL_BLOCK_AABB;

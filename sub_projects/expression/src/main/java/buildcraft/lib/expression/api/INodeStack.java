@@ -6,15 +6,19 @@
 
 package buildcraft.lib.expression.api;
 
+import buildcraft.lib.expression.api.IExpressionNode.INodeBoolean;
+import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
+import buildcraft.lib.expression.api.IExpressionNode.INodeLong;
+import buildcraft.lib.expression.api.IExpressionNode.INodeObject;
 
 public interface INodeStack {
-    IExpressionNode.INodeLong popLong() throws InvalidExpressionException;
+    INodeLong popLong() throws InvalidExpressionException;
 
-    IExpressionNode.INodeDouble popDouble() throws InvalidExpressionException;
+    INodeDouble popDouble() throws InvalidExpressionException;
 
-    IExpressionNode.INodeBoolean popBoolean() throws InvalidExpressionException;
+    INodeBoolean popBoolean() throws InvalidExpressionException;
 
-    <T> IExpressionNode.INodeObject<T> popObject(Class<T> clazz) throws InvalidExpressionException;
+    <T> INodeObject<T> popObject(Class<T> clazz) throws InvalidExpressionException;
 
     default IExpressionNode pop(Class<?> type) throws InvalidExpressionException {
         if (type == long.class) return popLong();

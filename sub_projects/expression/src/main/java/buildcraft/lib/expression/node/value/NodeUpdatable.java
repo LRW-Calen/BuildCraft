@@ -6,10 +6,10 @@
 
 package buildcraft.lib.expression.node.value;
 
+import javax.annotation.Nullable;
+
 import buildcraft.lib.expression.api.IExpressionNode;
 import buildcraft.lib.expression.api.NodeTypes;
-
-import javax.annotation.Nullable;
 
 public class NodeUpdatable implements ITickableNode, ITickableNode.Source {
     public final String name;

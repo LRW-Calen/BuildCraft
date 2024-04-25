@@ -6,9 +6,11 @@
 
 package buildcraft.lib.expression.api;
 
-import net.minecraft.network.chat.TranslatableComponent;
-
-import java.util.function.*;
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+import java.util.function.IntSupplier;
+import java.util.function.LongSupplier;
+import java.util.function.Supplier;
 
 public interface IExpressionNode {
     default IExpressionNode inline() {
@@ -34,7 +36,6 @@ public interface IExpressionNode {
         }
 
         /** @deprecated As {@link #evaluate()} gives a better description as to the cost. */
-        @Deprecated
         @Override
         default double getAsDouble() {
             return evaluate();
@@ -56,14 +57,12 @@ public interface IExpressionNode {
         }
 
         /** @deprecated As {@link #evaluate()} gives a better description as to the cost. */
-        @Deprecated
         @Override
         default long getAsLong() {
             return evaluate();
         }
 
         /** @deprecated As {@link #evaluate()} gives a better description as to the cost. */
-        @Deprecated
         @Override
         default int getAsInt() {
             return (int) evaluate();
@@ -85,7 +84,6 @@ public interface IExpressionNode {
         }
 
         /** @deprecated As {@link #evaluate()} gives a better description as to the cost. */
-        @Deprecated
         @Override
         default boolean getAsBoolean() {
             return evaluate();
@@ -105,20 +103,10 @@ public interface IExpressionNode {
 
         @Override
         default String evaluateAsString() {
-//            return evaluate().toString();
-            T t = evaluate();
-            if(t instanceof TranslatableComponent translatableComponent)
-            {
-                return translatableComponent.getString();
-            }
-            else
-            {
-                return t.toString();
-            }
+            return evaluate().toString();
         }
 
         /** @deprecated As {@link #evaluate()} gives a better description as to the cost. */
-        @Deprecated
         @Override
         default T get() {
             return evaluate();
