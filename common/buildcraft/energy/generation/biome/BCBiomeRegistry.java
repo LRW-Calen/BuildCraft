@@ -1,15 +1,10 @@
 package buildcraft.energy.generation.biome;
 
-import buildcraft.api.core.BCLog;
-import buildcraft.core.BCCoreConfig;
 import buildcraft.energy.BCEnergy;
-import buildcraft.energy.BCEnergyConfig;
-import buildcraft.energy.generation.structure.OilGenerator;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 

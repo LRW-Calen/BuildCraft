@@ -23,7 +23,7 @@ import java.util.Collection;
 /** Various methods operating on (and creating) {@link AABB} */
 public class BoundingBoxUtil {
 
-    /** Creates an {@link AABB} from a core pos and a box. Note that additional must NOT be null, but the box
+    /** Creates an {@link AABB} from a block pos and a box. Note that additional must NOT be null, but the box
      * can be. */
     public static AABB makeFrom(BlockPos additional, @Nullable IBox box) {
         if (box == null) {
@@ -43,7 +43,7 @@ public class BoundingBoxUtil {
         return box.getBoundingBox();
     }
 
-    /** Creates an {@link AABB} from a core pos and 2 boxes Note that additional must NOT be null, but (either
+    /** Creates an {@link AABB} from a block     pos and 2 boxes Note that additional must NOT be null, but (either
      * of) the boxes can be. */
     public static AABB makeFrom(BlockPos additional, @Nullable IBox box1, @Nullable IBox box2) {
         if (box1 == null) {
@@ -89,7 +89,7 @@ public class BoundingBoxUtil {
         return new AABB(min, max.offset(VecUtil.POS_ONE));
     }
 
-    /** Creates a box that extrudes from the specified face of the given core position. */
+    /** Creates a box that extrudes from the specified face of the given block position. */
     public static AABB extrudeFace(BlockPos pos, Direction face, double depth) {
         Vec3 from = new Vec3(pos.getX(), pos.getY(), pos.getZ());
         Vec3 to = new Vec3(pos.getX(), pos.getY(), pos.getZ()).add(1, 1, 1);

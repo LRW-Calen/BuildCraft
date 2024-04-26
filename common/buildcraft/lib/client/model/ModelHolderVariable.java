@@ -27,7 +27,7 @@ import java.util.Set;
 
 /** Holds a model that can be changed by variables. Models are defined in this way by firstly creating a
  * {@link FunctionContext}, and then defining all of the variables with FunctionContext.getOrAddX(). It is recommended
- * that you define all models inside of static initializer core. For a complete usage example look in
+ * that you define all models inside of static initializer block. For a complete usage example look in
  * {@link BCTransportModels}. <br>
  * The json model definition of a variable model matches the vanilla format, except that any of the static numbers may
  * be replaced with an expression, that may use any of the variables you have defined. */

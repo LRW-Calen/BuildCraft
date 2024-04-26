@@ -11,8 +11,6 @@ import buildcraft.builders.BCBuildersItems;
 import buildcraft.builders.snapshot.Snapshot.Header;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.misc.HashUtil;
-import buildcraft.lib.misc.LocaleUtil;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
@@ -20,7 +18,6 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -31,13 +28,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class ItemSnapshot extends ItemBC_Neptune {
-    //    public final EnumItemSnapshotType TYPE;
+    // public final EnumItemSnapshotType TYPE;
     public final EnumSnapshotType TYPE;
 
     // Calen
     public static final String TAG_KEY = "header";
 
-    //    public ItemSnapshot(String idBC, Item.Properties properties, EnumItemSnapshotType type)
+    // public ItemSnapshot(String idBC, Item.Properties properties, EnumItemSnapshotType type)
     public ItemSnapshot(String idBC, Item.Properties properties, EnumSnapshotType type) {
         super(idBC, properties);
 //        setHasSubtypes(true);

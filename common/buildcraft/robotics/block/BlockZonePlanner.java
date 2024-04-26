@@ -22,8 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class BlockZonePlanner extends BlockBCTile_Neptune<TileZonePlanner> implements IBlockWithFacing, IBlockWithTickableTE<TileZonePlanner> {
-    public BlockZonePlanner(String id, BlockBehaviour.Properties props) {
-        super(id, props);
+    public BlockZonePlanner(String idBC, BlockBehaviour.Properties props) {
+        super(idBC, props);
     }
 
     @Override

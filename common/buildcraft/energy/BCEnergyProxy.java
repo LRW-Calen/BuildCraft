@@ -6,14 +6,7 @@
 
 package buildcraft.energy;
 
-
-import buildcraft.energy.client.gui.GuiEngineIron_BC8;
-import buildcraft.energy.client.gui.GuiEngineStone_BC8;
-import buildcraft.energy.container.ContainerEngineIron_BC8;
-import buildcraft.energy.container.ContainerEngineStone_BC8;
 import buildcraft.energy.event.ChristmasHandler;
-import buildcraft.energy.tile.TileEngineIron_BC8;
-import buildcraft.energy.tile.TileEngineStone_BC8;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCEnergyProxy implements IGuiHandler

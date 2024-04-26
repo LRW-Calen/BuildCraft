@@ -44,7 +44,7 @@ public class BCCoreBlocks {
     public static RegistryObject<BlockMarkerPath> markerPath;
     public static RegistryObject<BlockPowerConsumerTester> powerTester;
 
-    public static final Map<EnumEngineType, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap(EnumEngineType.class);
+    public static final Map<EnumEngineType, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(EnumEngineType.class);
     public static RegistryObject<BlockEntityType<TileEngineRedstone_BC8>> engineWoodTile;
     public static RegistryObject<BlockEntityType<TileEngineCreative>> engineCreativeTile;
     public static RegistryObject<BlockEntityType<TileMarkerVolume>> markerVolumeTile;

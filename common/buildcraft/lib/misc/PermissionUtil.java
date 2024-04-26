@@ -24,7 +24,7 @@ public class PermissionUtil {
     private static final int MAX_INTERACT_DISTANCE_SQ = MAX_INTERACT_DISTANCE * MAX_INTERACT_DISTANCE;
 
     public static boolean hasPermission(Object type, PermissionBlock attempting, PermissionBlock target) {
-        // TODO: fire a forge core-break event if its a break event
+        // TODO: fire a forge block-break event if its a break event
         if (type == PERM_DESTROY || type == PERM_EDIT) {
             // TODO check "area" -- the player must be an OP if its within spawn radius
         }
@@ -32,7 +32,7 @@ public class PermissionUtil {
     }
 
     public static boolean hasPermission(Object type, GameProfile attempting, PermissionBlock target) {
-        // TODO: fire a forge core-break event if its a break event
+        // TODO: fire a forge block-break event if its a break event
         if (type == PERM_DESTROY || type == PERM_EDIT) {
             // TODO check "area" -- the player must be an OP if its within spawn radius
         }
@@ -40,7 +40,7 @@ public class PermissionUtil {
     }
 
     public static boolean hasPermission(Object type, Player attempting, PermissionBlock target) {
-        // TODO: fire a forge core-break event if its a break event
+        // TODO: fire a forge block-break event if its a break event
         if (attempting.distanceToSqr(target.pos.getX(), target.pos.getY(), target.pos.getZ()) > MAX_INTERACT_DISTANCE_SQ) {
             return false;
         }

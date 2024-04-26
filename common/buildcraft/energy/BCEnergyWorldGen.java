@@ -6,7 +6,6 @@ import buildcraft.energy.generation.biome.BiomeInitializer;
 import buildcraft.energy.generation.structure.OilStructureRegistry;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 

@@ -117,7 +117,7 @@ public class BoxIterator implements Iterator<BlockPos> {
                 + (invert ? " inverting" : "") + (repeat ? " repeating" : "") + " }";
     }
 
-    /** Moves on to the next core. Unlike {@link #next()} this returns the one AFTER that one, so you cannot use
+    /** Moves on to the next block. Unlike {@link #next()} this returns the one AFTER that one, so you cannot use
      * {@link #hasNext()}! */
     public BlockPos advance() {
         if (current == null) {
@@ -168,7 +168,7 @@ public class BoxIterator implements Iterator<BlockPos> {
         return lstReturned < to;
     }
 
-    /** Checks to see if {@link #advance()} has ever, or could ever, return the given core position. */
+    /** Checks to see if {@link #advance()} has ever, or could ever, return the given block position. */
     public boolean contains(BlockPos pos) {
         if (pos.getX() < min.getX() || pos.getX() > max.getX()) {
             return false;
@@ -182,7 +182,7 @@ public class BoxIterator implements Iterator<BlockPos> {
         return true;
     }
 
-    /** Checks to see if {@link #advance()} will return the given core position before this repeats. */
+    /** Checks to see if {@link #advance()} will return the given block position before this repeats. */
     public boolean willVisit(BlockPos pos) {
         if (!contains(pos)) {
             return false;
@@ -193,7 +193,7 @@ public class BoxIterator implements Iterator<BlockPos> {
         return compare(pos) < 0;
     }
 
-    /** Checks to see if {@link #advance()} has already returned the given core position before the last repeat. */
+    /** Checks to see if {@link #advance()} has already returned the given block position before the last repeat. */
     public boolean hasVisited(BlockPos pos) {
         if (!contains(pos)) {
             return false;
@@ -223,7 +223,7 @@ public class BoxIterator implements Iterator<BlockPos> {
         return (currentVal - argVal) * direction.getAxisDirection().getStep();
     }
 
-    /** Moves this iterator so that {@link #advance()} will return the given core position next.
+    /** Moves this iterator so that {@link #advance()} will return the given block position next.
      *
      * @throws IllegalArgumentException if {@link #contains(BlockPos)} doesn't return true. */
     public void moveTo(BlockPos pos) {

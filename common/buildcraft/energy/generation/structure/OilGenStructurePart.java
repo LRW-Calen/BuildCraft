@@ -60,12 +60,14 @@ public abstract class OilGenStructurePart {
     private static final BlockState OIL_BLOCK_STATE = BCEnergyFluids.crudeOil[0].get().getSource().defaultFluidState().createLegacyBlock();
     private static final Fluid OIL_FLUID = BCEnergyFluids.crudeOil[0].get().getSource().defaultFluidState().getType();
 
-    /** Set the block to cruel oil.
+    /**
+     * Set the block to cruel oil.
      * We should call {@link LevelAccessor#scheduleTick(BlockPos, Fluid, int)} to make oil flow in {@link WorldGenRegion}.
      * Just like {@link SpringFeature#place(FeaturePlaceContext)}
      *
      * @param world This will be {@link ServerLevel} when a player makes an oil well, while {@link WorldGenRegion} when an oil well generates naturally
-     * @param pos The block pos we set to oil block */
+     * @param pos The block pos we set to oil block
+     */
     public static void setOil(LevelAccessor world, BlockPos pos) {
         world.setBlock(pos, OIL_BLOCK_STATE, Block.UPDATE_CLIENTS);
         world.scheduleTick(pos, OIL_FLUID, 0);
@@ -89,8 +91,10 @@ public abstract class OilGenStructurePart {
         public abstract boolean canReplace(LevelAccessor world, BlockPos pos);
     }
 
-    /** In 1.18.2, we should save the structure pieces as NBT data, and the NBT will be deserialized for each chunk around the center for generation
-     * So, we should serialize the predicate... */
+    /**
+     * In 1.18.2, we should save the structure pieces as NBT data, and the NBT will be deserialized for each chunk around the center for generation
+     * So, we should serialize the predicate...
+     */
     public static class GenByPredicate extends OilGenStructurePart {
         public final Predicate<BlockPos> predicate;
         // 1.18.2: Only for NBT Serialize

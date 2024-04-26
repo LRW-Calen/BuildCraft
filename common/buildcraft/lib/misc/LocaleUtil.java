@@ -26,9 +26,7 @@ import java.util.HashSet;
 import java.util.IllegalFormatException;
 import java.util.Set;
 
-/**
- * The central class for localizing objects.
- */
+/** The central class for localizing objects. */
 public class LocaleUtil {
 
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.locale");
@@ -45,10 +43,8 @@ public class LocaleUtil {
         onConfigChanged();
     }
 
-    /**
-     * Should be called whenever any of the {@link BCLibConfig} options are changed that affect any of the methods in
-     * this class.
-     */
+    /** Should be called whenever any of the {@link BCLibConfig} options are changed that affect any of the methods in
+     * this class. */
     public static void onConfigChanged() {
         boolean bucketStatic = BCLibConfig.useBucketsStatic;
         boolean bucketFlow = BCLibConfig.useBucketsFlow;
@@ -63,12 +59,10 @@ public class LocaleUtil {
         localeKeyMjFlow = "buildcraft.mj.flow." + timeGap + longName;
     }
 
-    /**
-     * Localizes the give key to the current locale.
+    /** Localizes the give key to the current locale.
      *
      * @param key The key to localize
-     * @return The localized key, or the input key if no localization was found.
-     */
+     * @return The localized key, or the input key if no localization was found. */
     public static String localize(String key) {
         String localized = I18n.get(key);
         if (localized == key) {
@@ -80,14 +74,12 @@ public class LocaleUtil {
         return localized;
     }
 
-    /**
-     * Localizes the given key, and performs {@link String#format(String, Object...)} with the localized value and the
+    /** Localizes the given key, and performs {@link String#format(String, Object...)} with the localized value and the
      * arguments given.
      *
-     * @param key  The key to localize
+     * @param key The key to localize
      * @param args The arguments to put into the localized key
-     * @return The localized string.
-     */
+     * @return The localized string. */
     public static String localize(String key, Object... args) {
 //        String localized = I18n.get(key);
         String localized = new TranslatableComponent(key, args).getString();
@@ -105,20 +97,16 @@ public class LocaleUtil {
         }
     }
 
-    /**
-     * Checks to see if the given key can be localized.
+    /** Checks to see if the given key can be localized.
      *
      * @param key The key to check
-     * @return True if the key could be localized, false if not.
-     */
+     * @return True if the key could be localized, false if not. */
     public static boolean canLocalize(String key) {
         return I18n.exists(key);
     }
 
-    /**
-     * @param colour The {@link DyeColor} to localize.
-     * @return a localised name for the given colour.
-     */
+    /** @param colour The {@link DyeColor} to localize.
+     * @return a localised name for the given colour. */
     public static String localizeColour(DyeColor colour) {
 //        return localize("item.fireworksCharge." + colour.getName());
         return localize("item.minecraft.firework_star." + colour.getName());
@@ -132,10 +120,8 @@ public class LocaleUtil {
         return "item.minecraft.firework_star." + (colour == null ? "colorless" : colour.getName());
     }
 
-    /**
-     * @param face The {@link Direction} to localize.
-     * @return a localised name for the given face.
-     */
+    /** @param face The {@link Direction} to localize.
+     * @return a localised name for the given face. */
     public static String localizeFacing(@Nullable Direction face) {
         return localize("direction." + (face == null ? "center" : face.getName()));
     }
@@ -161,9 +147,7 @@ public class LocaleUtil {
         return localizeFluidStaticAmountComponent(fluidAmount, -1);
     }
 
-    /**
-     * Localizes the given fluid amount, out of a given capacity
-     */
+    /** Localizes the given fluid amount, out of a given capacity */
     public static String localizeFluidStaticAmount(int fluidAmount, int capacity) {
         if (fluidAmount <= 0) {
             if (capacity > 0) {

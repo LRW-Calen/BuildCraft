@@ -252,7 +252,7 @@ public class MessageManager {
      * CLIENT side.
      *
      * @param message The message to send
-     * @param player  The player to send it to */
+     * @param player The player to send it to */
     public static void sendTo(IMessage message, ServerPlayer player) {
 //        getSimpleNetworkWrapper(message).sendTo(message, player);
         getSimpleNetworkWrapper(message).send(PacketDistributor.PLAYER.with(() -> player), message);
@@ -262,8 +262,10 @@ public class MessageManager {
      * type should be on the CLIENT side.
      *
      * @param message The message to send
-     * @param point   The {@link net.minecraftforge.network.PacketDistributor.TargetPoint} around which to
-     *                send */
+     * @param point The {@link net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint} around which to
+     *            send */
+     */
+
     public static void sendToAllAround(IMessage message, PacketDistributor.TargetPoint point) {
 //        getSimpleNetworkWrapper(message).sendToAllAround(message, point);
         getSimpleNetworkWrapper(message).send(PacketDistributor.NEAR.with(() -> point), message);
@@ -272,7 +274,7 @@ public class MessageManager {
     /** Send this message to everyone within the supplied dimension. The {@link IMessageHandler} for this message type
      * should be on the CLIENT side.
      *
-     * @param message     The message to send
+     * @param message The message to send
      * @param dimensionId The dimension id to target */
 //    public static void sendToDimension(IMessage message, int dimensionId)
     public static void sendToDimension(IMessage message, ResourceKey<Level> dimensionId) {

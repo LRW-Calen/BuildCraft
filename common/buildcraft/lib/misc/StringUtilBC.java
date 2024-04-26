@@ -46,10 +46,6 @@ public final class StringUtilBC {
     public static String formatStringForWhite(String string) {
         return formatStringImpl(string, ColourUtil.getTextFormatForWhite);
     }
-//    // Calen
-//    public static String formatStringForWhite(Component string) {
-//        return formatStringImpl(string, ColourUtil.getTextFormatForWhite);
-//    }
 
     /** Formats a string to be displayed on a black background (for example an item tooltip), replacing any
      * close-to-white colours with darker variants. Replaces instances of {@link ChatFormatting} values. */
@@ -141,9 +137,7 @@ public final class StringUtilBC {
 
     // Calen from 1.12.2 StringUtils.class
 
-    /**
-     * Returns a value indicating whether the given string is null or empty.
-     */
+    /** Returns a value indicating whether the given string is null or empty. */
     public static boolean isNullOrEmpty(@Nullable String string) {
         return org.apache.commons.lang3.StringUtils.isEmpty(string);
     }

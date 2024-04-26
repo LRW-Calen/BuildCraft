@@ -9,7 +9,9 @@ package buildcraft.builders;
 import buildcraft.core.BCCoreConfig;
 import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.misc.MathUtil;
-import net.minecraftforge_1_12_2.common.config.Property;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class BCBuildersConfig {
     /** Blueprints that save larger than this are stored externally, smaller ones are stored directly in the item. */
@@ -30,90 +32,100 @@ public class BCBuildersConfig {
     /** Client-side config to enable stencils-based drawing for the architect table. */
     public static boolean enableStencil = true;
 
-    private static Property propBptStoreExternalThreshold;
-    private static Property propQuarryFrameMinHeight;
-    private static Property propQuarryFrameMoveBoth;
-    private static Property propQuarryMaxTasksPerTick;
-    private static Property propQuarryPowerDivisor;
-    private static Property propQuarryMaxFrameSpeed;
-    private static Property propQuarryMaxBlockMineRate;
-    private static Property propEnableStencil;
+    private static IntValue propBptStoreExternalThreshold;
+    private static IntValue propQuarryFrameMinHeight;
+    private static BooleanValue propQuarryFrameMoveBoth;
+    private static IntValue propQuarryMaxTasksPerTick;
+    private static IntValue propQuarryPowerDivisor;
+    private static DoubleValue propQuarryMaxFrameSpeed;
+    private static DoubleValue propQuarryMaxBlockMineRate;
+    private static BooleanValue propEnableStencil;
 
-    static Property internalStencilCrashTest;
+    static BooleanValue internalStencilCrashTest;
 
     public static void preInit() {
         EnumRestartRequirement none = EnumRestartRequirement.NONE;
-        EnumRestartRequirement game = EnumRestartRequirement.GAME;
+//        EnumRestartRequirement game = EnumRestartRequirement.GAME;
 
-//        propBptStoreExternalThreshold = BCCoreConfig.config.get("general", "bptStoreExternalThreshold", 20_000);
-        propBptStoreExternalThreshold = BCCoreConfig.getConfigAndEnsureCreated(true).get("general", "bptStoreExternalThreshold", 20_000);
-        none.setTo(propBptStoreExternalThreshold);
+        String general = "general";
+        String display = "display";
+        String internal = "internal";
 
-//        propQuarryFrameMinHeight = BCCoreConfig.config.get("general", "quarryFrameMinHeight", 4);
-        propQuarryFrameMinHeight = BCCoreConfig.getConfigAndEnsureCreated(true).get("general", "quarryFrameMinHeight", 4);
-        propQuarryFrameMinHeight.setComment("The minimum height that all quarry frames must be. A value of 1 will look strange when it drills the uppermost layer.");
-        propQuarryFrameMinHeight.setMinValue(1);
-        none.setTo(propQuarryFrameMinHeight);
+        propBptStoreExternalThreshold = BCCoreConfig.config
+                .defineInRange(general,
+                        "",
+                        none,
+                        "bptStoreExternalThreshold", 20_000);
 
-//        propQuarryFrameMoveBoth = BCCoreConfig.config.get("display", "quarryFrameMoveBoth", false);
-        propQuarryFrameMoveBoth = BCCoreConfig.getConfigAndEnsureCreated(true).get("display", "quarryFrameMoveBoth", false);
-        propQuarryFrameMoveBoth.setComment("If true then the quarry frame will move with both of its axis rather than just one.");
-        none.setTo(propQuarryFrameMoveBoth);
+        propQuarryFrameMinHeight = BCCoreConfig.config
+                .defineInRange(general,
+                        "The minimum height that all quarry frames must be. A value of 1 will look strange when it drills the uppermost layer.",
+                        none,
+                        "quarryFrameMinHeight", 4, 1);
 
-//        propQuarryMaxTasksPerTick = BCCoreConfig.config.get("general", "quarryMaxTasksPerTick", 4);
-        propQuarryMaxTasksPerTick = BCCoreConfig.getConfigAndEnsureCreated(true).get("general", "quarryMaxTasksPerTick", 4);
-        propQuarryMaxTasksPerTick.setComment("The maximum number of tasks that the quarry will do per tick."
-                + "\n(Where a task is either breaking a block, or moving the frame)");
-        propQuarryMaxTasksPerTick.setMinValue(1).setMaxValue(20);
-        none.setTo(propQuarryMaxTasksPerTick);
+        propQuarryMaxTasksPerTick = BCCoreConfig.config
+                .defineInRange(general,
+                        "The maximum number of tasks that the quarry will do per tick."
+                                + "\n(Where a task is either breaking a block, or moving the frame)",
+                        none,
+                        "quarryMaxTasksPerTick", 4, 1, 20);
 
-//        propQuarryPowerDivisor = BCCoreConfig.config.get("general", "quarryPowerDivisor", 2);
-        propQuarryPowerDivisor = BCCoreConfig.getConfigAndEnsureCreated(true).get("general", "quarryPowerDivisor", 2);
-        propQuarryPowerDivisor.setComment("1 divided by this value is added to the power cost for each additional task done per tick."
-                + "\nA value of 0 disables this behaviour.");
-        propQuarryPowerDivisor.setMinValue(0).setMaxValue(100);
-        none.setTo(propQuarryPowerDivisor);
+        propQuarryPowerDivisor = BCCoreConfig.config
+                .defineInRange(general,
+                        "1 divided by this value is added to the power cost for each additional task done per tick."
+                                + "\nA value of 0 disables this behaviour.",
+                        none,
+                        "quarryPowerDivisor", 2, 0, 100);
 
-//        propQuarryMaxFrameSpeed = BCCoreConfig.config.get("general", "quarryMaxFrameSpeed", 0.0);
-        propQuarryMaxFrameSpeed = BCCoreConfig.getConfigAndEnsureCreated(true).get("general", "quarryMaxFrameSpeed", 0.0);
-        propQuarryMaxFrameSpeed.setComment("The maximum number of blocks that a quarry is allowed to move, per second."
-                + "\nA value of 0 means no limit.");
-        propQuarryMaxFrameSpeed.setMinValue(0.0).setMaxValue(5120.0);
-        none.setTo(propQuarryMaxFrameSpeed);
+        propQuarryMaxFrameSpeed = BCCoreConfig.config
+                .defineInRange(general,
+                        "The maximum number of blocks that a quarry is allowed to move, per second."
+                                + "\nA value of 0 means no limit.",
+                        none,
+                        "quarryMaxFrameSpeed", 0.0, 0.0, 5120.0);
 
-//        propQuarryMaxBlockMineRate = BCCoreConfig.config.get("general", "quarryMaxBlockMineRate", 0.0);
-        propQuarryMaxBlockMineRate = BCCoreConfig.getConfigAndEnsureCreated(true).get("general", "quarryMaxBlockMineRate", 0.0);
-        propQuarryMaxBlockMineRate.setComment("The maximum number of blocks that the quarry is allowed to mine each second."
-                + "\nA value of 0 means no limit, and a value of 0.5 will mine up to half a block per second.");
-        propQuarryMaxBlockMineRate.setMinValue(0.0).setMaxValue(1000.0);
-        none.setTo(propQuarryMaxBlockMineRate);
+        propQuarryMaxBlockMineRate = BCCoreConfig.config
+                .defineInRange(general,
+                        "The maximum number of blocks that the quarry is allowed to mine each second."
+                                + "\nA value of 0 means no limit, and a value of 0.5 will mine up to half a block per second.",
+                        none,
+                        "quarryMaxFrameSpeed", 0.0, 0.0, 1000.0);
 
-//        propEnableStencil = BCCoreConfig.config.get("display", "enableStencil", true);
-        propEnableStencil = BCCoreConfig.getConfigAndEnsureCreated(true).get("display", "enableStencil", true);
-        propEnableStencil.setComment("If true then the architect table will correctly hide it's translucent parts behind surrounding terrain. (This looks better)");
-        none.setTo(propEnableStencil);
+        propQuarryFrameMoveBoth = BCCoreConfig.config
+                .define(display,
+                        "If true then the quarry frame will move with both of its axis rather than just one.",
+                        none,
+                        "quarryFrameMoveBoth", false);
 
-//        internalStencilCrashTest = BCCoreConfig.config.get("internal", "force_disable_stencil", false);
-        internalStencilCrashTest = BCCoreConfig.getConfigAndEnsureCreated(true).get("internal", "force_disable_stencil", false);
-        internalStencilCrashTest.setComment("Use display.enableStencil instead of this!");
-        none.setTo(internalStencilCrashTest);
-//        BCCoreConfig.config.getCategory("internal").setShowInGui(false);
-//        BCCoreConfig.getConfig(true).getCategory("internal").setShowInGui(false);
-        BCCoreConfig.getConfigAndEnsureCreated(true).getCategory("internal");
-        BCCoreConfig.saveConfigs();
+        propEnableStencil = BCCoreConfig.config
+                .define(display,
+                        "If true then the architect table will correctly hide it's translucent parts behind surrounding terrain. (This looks better)",
+                        none,
+                        "enableStencil", true);
 
-        reloadConfig(EnumRestartRequirement.GAME);
+        internalStencilCrashTest = BCCoreConfig.config
+                .define(internal,
+                        "Use display.enableStencil instead of this!",
+                        none,
+                        "force_disable_stencil", false);
+
+        BCCoreConfig.config.build();
+
+//        BCCoreConfig.saveConfigs();
+
+//        reloadConfig(EnumRestartRequirement.GAME);
+        reloadConfig(EnumRestartRequirement.WORLD);
         BCCoreConfig.addReloadListener(BCBuildersConfig::reloadConfig);
     }
 
     public static void reloadConfig(EnumRestartRequirement restarted) {
-        bptStoreExternalThreshold = propBptStoreExternalThreshold.getInt();
-        quarryFrameMinHeight = propQuarryFrameMinHeight.getInt();
-        quarryFrameMoveBoth = propQuarryFrameMoveBoth.getBoolean();
-        enableStencil = propEnableStencil.getBoolean();
-        quarryMaxTasksPerTick = MathUtil.clamp(propQuarryMaxTasksPerTick.getInt(), 0, 20);
-        quarryTaskPowerDivisor = MathUtil.clamp(propQuarryPowerDivisor.getDouble(), 0, 100);
-        quarryMaxFrameMoveSpeed = MathUtil.clamp(propQuarryMaxFrameSpeed.getDouble(), 0, 5120.0);
-        quarryMaxBlockMineRate = MathUtil.clamp(propQuarryMaxBlockMineRate.getDouble(), 0, 1000.0);
+        bptStoreExternalThreshold = propBptStoreExternalThreshold.get();
+        quarryFrameMinHeight = propQuarryFrameMinHeight.get();
+        quarryFrameMoveBoth = propQuarryFrameMoveBoth.get();
+        enableStencil = propEnableStencil.get();
+        quarryMaxTasksPerTick = MathUtil.clamp(propQuarryMaxTasksPerTick.get(), 0, 20);
+        quarryTaskPowerDivisor = MathUtil.clamp(propQuarryPowerDivisor.get(), 0, 100);
+        quarryMaxFrameMoveSpeed = MathUtil.clamp(propQuarryMaxFrameSpeed.get(), 0, 5120.0);
+        quarryMaxBlockMineRate = MathUtil.clamp(propQuarryMaxBlockMineRate.get(), 0, 1000.0);
     }
 }

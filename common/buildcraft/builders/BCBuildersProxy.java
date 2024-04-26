@@ -10,7 +10,6 @@ import buildcraft.builders.client.render.RenderArchitectTables;
 import buildcraft.builders.client.render.RenderQuarry;
 import buildcraft.builders.snapshot.MessageSnapshotRequest;
 import buildcraft.builders.snapshot.MessageSnapshotResponse;
-import buildcraft.core.BCCoreConfig;
 import buildcraft.lib.client.render.DetachedRenderer;
 import buildcraft.lib.net.MessageManager;
 import net.minecraftforge.api.distmarker.Dist;
@@ -166,19 +165,18 @@ public abstract class BCBuildersProxy {
         public void fmlPreInit() {
             super.fmlPreInit();
             if (BCBuildersConfig.enableStencil) {
-                if (BCBuildersConfig.internalStencilCrashTest.getBoolean()) {
+                if (BCBuildersConfig.internalStencilCrashTest.get()) {
                     BCLog.logger.warn("[builders.architect] Not enabling stencils because they have been force-disabled!");
                 } else {
                     BCBuildersConfig.internalStencilCrashTest.set(true);
-                    BCCoreConfig.saveConfigs();
+//                    BCCoreConfig.saveConfigs();
                     // TODO Calen Framebuffer???
 //                    Framebuffer framebuffer = Minecraft.getMinecraft().getFramebuffer();
-//                    if (!framebuffer.isStencilEnabled())
-//                    {
+//                    if (!framebuffer.isStencilEnabled()) {
 //                        framebuffer.enableStencil();
 //                    }
                     BCBuildersConfig.internalStencilCrashTest.set(false);
-                    BCCoreConfig.saveConfigs();
+//                    BCCoreConfig.saveConfigs();
                 }
             }
             BCBuildersSprites.fmlPreInit();

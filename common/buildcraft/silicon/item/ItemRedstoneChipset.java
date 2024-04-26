@@ -2,9 +2,6 @@ package buildcraft.silicon.item;
 
 import buildcraft.api.enums.EnumRedstoneChipset;
 import buildcraft.lib.item.ItemBC_Neptune;
-import gnu.trove.map.hash.TIntObjectHashMap;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 

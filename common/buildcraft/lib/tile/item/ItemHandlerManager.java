@@ -31,7 +31,7 @@ public class ItemHandlerManager implements ICapabilityProvider, INBTSerializable
          */
         NONE,
         /**
-         * Same as {@link #NONE}, but the contents of this inventory won't be dropped when the core is removed.
+         * Same as {@link #NONE}, but the contents of this inventory won't be dropped when the block is removed.
          * Additionally the items will be considered "free", and so items can be duplicated into these slots
          */
         PHANTOM,

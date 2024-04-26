@@ -25,7 +25,7 @@ import java.util.Random;
 
 /**
  * Provides a simple way of rendering an item model with just a list of quads. This provides some transforms to use
- * that make it simple to render as a core, item or tool (todo)
+ * that make it simple to render as a block, item or tool (todo)
  */
 @SuppressWarnings("deprecation")
 public class ModelItemSimple implements BakedModel {

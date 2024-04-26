@@ -587,12 +587,10 @@ public class MutableVertex {
         position_y = x * -sin + y * cos;
     }
 
-    /**
-     * Rotates this vertex around the X axis 90 degrees.
+    /** Rotates this vertex around the X axis 90 degrees.
      *
      * @param scale The multiplier for scaling. Positive values will rotate clockwise, negative values rotate
-     *              anti-clockwise.
-     */
+     *            anti-clockwise. */
     public MutableVertex rotateX_90(float scale) {
         float ym = scale;
         float zm = -ym;
@@ -607,12 +605,10 @@ public class MutableVertex {
         return this;
     }
 
-    /**
-     * Rotates this vertex around the Y axis 90 degrees.
+    /** Rotates this vertex around the Y axis 90 degrees.
      *
      * @param scale The multiplier for scaling. Positive values will rotate clockwise, negative values rotate
-     *              anti-clockwise.
-     */
+     *            anti-clockwise. */
     public MutableVertex rotateY_90(float scale) {
         float xm = scale;
         float zm = -xm;
@@ -627,12 +623,10 @@ public class MutableVertex {
         return this;
     }
 
-    /**
-     * Rotates this vertex around the Z axis 90 degrees.
+    /** Rotates this vertex around the Z axis 90 degrees.
      *
      * @param scale The multiplier for scaling. Positive values will rotate clockwise, negative values rotate
-     *              anti-clockwise.
-     */
+     *            anti-clockwise. */
     public MutableVertex rotateZ_90(float scale) {
         float xm = scale;
         float ym = -xm;
@@ -647,9 +641,7 @@ public class MutableVertex {
         return this;
     }
 
-    /**
-     * Rotates this vertex around the X axis by 180 degrees.
-     */
+    /** Rotates this vertex around the X axis by 180 degrees. */
     public MutableVertex rotateX_180() {
         position_y = -position_y;
         position_z = -position_z;
@@ -658,9 +650,7 @@ public class MutableVertex {
         return this;
     }
 
-    /**
-     * Rotates this vertex around the Y axis by 180 degrees.
-     */
+    /** Rotates this vertex around the Y axis by 180 degrees. */
     public MutableVertex rotateY_180() {
         position_x = -position_x;
         position_z = -position_z;
@@ -669,9 +659,7 @@ public class MutableVertex {
         return this;
     }
 
-    /**
-     * Rotates this vertex around the Z axis by 180 degrees.
-     */
+    /** Rotates this vertex around the Z axis by 180 degrees. */
     public MutableVertex rotateZ_180() {
         position_x = -position_x;
         position_y = -position_y;

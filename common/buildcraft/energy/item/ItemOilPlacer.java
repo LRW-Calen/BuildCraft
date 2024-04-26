@@ -1,9 +1,9 @@
 package buildcraft.energy.item;
 
-import buildcraft.energy.generation.structure.OilPlacer;
-import buildcraft.energy.generation.structure.OilStructure;
 import buildcraft.energy.generation.structure.OilGenerator;
 import buildcraft.energy.generation.structure.OilGenerator.GenType;
+import buildcraft.energy.generation.structure.OilPlacer;
+import buildcraft.energy.generation.structure.OilStructure;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.misc.TimeUtil;
 import buildcraft.lib.misc.data.Box;

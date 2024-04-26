@@ -98,7 +98,7 @@ public class NeighbourTileCache implements ITileCache {
         BlockState state = chunk.getBlockState(offsetPos);
         if (!state.hasBlockEntity()) {
             // Optimisation: world.getTileEntity can be slow (as it potentially iterates through a long list)
-            // so just check to make sure the target core might actually have a tile entity
+            // so just check to make sure the target block might actually have a tile entity
             return new TileCacheRet(null);
         }
 

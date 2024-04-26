@@ -182,7 +182,7 @@ public class BuildCraftGui {
         return tooltips;
     }
 
-    //    private int drawTooltip(ToolTip tooltip, Matrix4f mat, double x, double y)
+    // private int drawTooltip(ToolTip tooltip, Matrix4f mat, double x, double y)
     private int drawTooltip(ToolTip tooltip, PoseStack mat, double x, double y) {
         int _x = (int) Math.round(x);
         int _y = (int) Math.round(y);
@@ -256,11 +256,9 @@ public class BuildCraftGui {
         poseStack.popPose();
     }
 
-    /**
-     * @param menuBackgroundRenderer Will be called to draw the background if the current menu returns true from
-     *                               {@link IMenuElement#shouldFullyOverride()}. This will draw above all of the normal elements.
-     *                               {@link GL11#GL_DEPTH_TEST} will have been disabled for this.
-     */
+    /** @param menuBackgroundRenderer Will be called to draw the background if the current menu returns true from
+     *            {@link IMenuElement#shouldFullyOverride()}. This will draw above all of the normal elements.
+     *            {@link GL11#GL_DEPTH_TEST} will have been disabled for this. */
     public void drawElementForegrounds(Runnable menuBackgroundRenderer, PoseStack poseStack) {
         // Calen test
 //        RenderSystem.enableDepthTest();

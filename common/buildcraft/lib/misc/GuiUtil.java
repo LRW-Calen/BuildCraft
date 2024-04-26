@@ -50,18 +50,14 @@ public class GuiUtil {
         AREA_WHOLE_SCREEN = IGuiArea.create(() -> 0, () -> 0, GuiUtil::getScreenWidth, GuiUtil::getScreenHeight);
     }
 
-    /**
-     * @return The relative screen width. (Relative - changes with both the window size and the game setting "gui
-     * scale".)
-     */
+    /** @return The relative screen width. (Relative - changes with both the window size and the game setting "gui
+     *         scale".) */
     public static int getScreenWidth() {
         return Minecraft.getInstance().screen.width;
     }
 
-    /**
-     * @return The relative screen height. (Relative - changes with both the window size and the game setting "gui
-     * scale".)
-     */
+    /** @return The relative screen height. (Relative - changes with both the window size and the game setting "gui
+     *         scale".) */
     public static int getScreenHeight() {
 //        return Minecraft.getInstance().currentScreen.height;
         return Minecraft.getInstance().screen.height;
@@ -102,9 +98,7 @@ public class GuiUtil {
         };
     }
 
-    /**
-     * Draws multiple elements, one after each other.
-     */
+    /** Draws multiple elements, one after each other. */
     public static <D> void drawVerticallyAppending(IGuiPosition element, Iterable<? extends D> iterable,
                                                    IVerticalAppendingDrawer<D> drawer, PoseStack matrix) {
         double x = element.getX();
@@ -134,22 +128,20 @@ public class GuiUtil {
         double draw(D drawable, PoseStack mat, double x, double y);
     }
 
-    /**
-     * Straight copy of {@link GuiUtils#drawHoveringText(List, int, int, int, int, int, Font)}, except that we
+    /** Straight copy of 1.12.2 {@link GuiUtils#drawHoveringText(List, int, int, int, int, int, Font)}, except that we
      * return the height of the box that was drawn. Draws a tooltip box on the screen with text in it. Automatically
      * positions the box relative to the mouse to match Mojang's implementation. Automatically wraps text when there is
      * not enough space on the screen to display the text without wrapping. Can have a maximum width set to avoid
      * creating very wide tooltips.
      *
-     * @param textLines    the lines of text to be drawn in a hovering tooltip box.
-     * @param mouseX       the mouse X position
-     * @param mouseY       the mouse Y position
-     * @param screenWidth  the available screen width for the tooltip to drawn in
+     * @param textLines the lines of text to be drawn in a hovering tooltip box.
+     * @param mouseX the mouse X position
+     * @param mouseY the mouse Y position
+     * @param screenWidth the available screen width for the tooltip to drawn in
      * @param screenHeight the available screen height for the tooltip to drawn in
      * @param maxTextWidth the maximum width of the text in the tooltip box. Set to a negative number to have no max
-     *                     width.
-     * @param font         the font for drawing the text in the tooltip box
-     */
+     *            width.
+     * @param font the font for drawing the text in the tooltip box */
 //    public static int drawHoveringText(Matrix4f mat, List<Component> textLines, final int mouseX, final int mouseY,
     public static int drawHoveringText(PoseStack poseStack, List<Component> textLines, final int mouseX, final int mouseY,
                                        final int screenWidth, final int screenHeight, final int maxTextWidth, Font font) {
@@ -471,9 +463,7 @@ public class GuiUtil {
         return new SpriteNineSliced(sprite, uMin, vMin, uMax, vMax, scale);
     }
 
-    /**
-     * A type of {@link AutoCloseable} that will pop off the current {@link GL11#glScissor(int, int, int, int)}.
-     */
+    /** A type of {@link AutoCloseable} that will pop off the current {@link GL11#glScissor(int, int, int, int)}. */
     public interface AutoGlScissor extends AutoCloseable {
         @Override
         void close();

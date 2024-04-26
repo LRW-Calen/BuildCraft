@@ -68,7 +68,6 @@ public class BCTransport {
         PipeRegistry.PIPE_ITEMS.register(modEventBus);
     }
 
-    // Calen
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
@@ -93,7 +92,8 @@ public class BCTransport {
         BCTransportStatements.preInit();
 
         // Reload after all of the pipe defs have been created.
-        BCTransportConfig.reloadConfig(EnumRestartRequirement.GAME);
+//        BCTransportConfig.reloadConfig(EnumRestartRequirement.GAME);
+        BCTransportConfig.reloadConfig(EnumRestartRequirement.WORLD);
 
         tabPipes.setItemPipe(BCTransportItems.pipeItemDiamond.get(null));
         tabPlugs.setItem(BCTransportItems.plugBlocker);
@@ -198,8 +198,9 @@ public class BCTransport {
 //                .model("wire/")
                 .tab("buildcraft.plugs")
         ;
+
         // Pipes
-        startBatch();// Pipes
+        startBatch();
         registerTag("item.pipe.buildcrafttransport.structure_cobblestone").reg("pipe_structure_cobblestone").locale("PipeStructureCobblestone");
         registerTag("item.pipe.buildcrafttransport.items_wood").reg("pipe_items_wood").locale("PipeItemsWood");
         registerTag("item.pipe.buildcrafttransport.fluids_wood").reg("pipe_fluids_wood").locale("PipeFluidsWood");
@@ -242,6 +243,7 @@ public class BCTransport {
         registerTag("item.pipe.buildcrafttransport.power_wood_2").reg("pipe_power_wood_2").locale("PipePowerWood2");
         registerTag("item.pipe.buildcrafttransport.power_quartz_").reg("pipe_power_quartz_2").locale("PipePowerQuartz2");
         endBatch(TagManager.setTab("buildcraft.pipes"));
+
         // Item Blocks
 //        registerTag("item.block.filtered_buffer").reg("filtered_buffer").locale("filteredBufferBlock").model("filtered_buffer");
         registerTag("item.block.filtered_buffer").reg("filtered_buffer").locale("filteredBufferBlock");

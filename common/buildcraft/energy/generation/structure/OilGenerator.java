@@ -229,6 +229,7 @@ public class OilGenerator {
         }
         return new OilStructure(box, structures);
     }
+
     public static OilGenStructurePart createSpout(BlockPos start, int height, int radius) {
         return new OilGenStructurePart.Spout(start, OilGenStructurePart.ReplaceType.ALWAYS, radius, height);
     }

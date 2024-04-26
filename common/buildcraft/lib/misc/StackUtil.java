@@ -178,7 +178,7 @@ public class StackUtil {
     /** This doesn't take into account stack sizes.
      *
      * @param filterOrList The exact itemstack to test, or an item that implements {@link IList} to test against.
-     * @param test         The stack to test for equality
+     * @param test The stack to test for equality
      * @return True if they matched according to the above definitions, or false if theydidn't, or either was empty. */
     public static boolean matchesStackOrList(@Nonnull ItemStack filterOrList, @Nonnull ItemStack test) {
         if (filterOrList.isEmpty() || test.isEmpty()) {
@@ -195,7 +195,7 @@ public class StackUtil {
      *
      * @param mergeSource - The stack to merge into mergeTarget, this stack is not modified
      * @param mergeTarget - The target merge, this stack is modified if doMerge is set
-     * @param doMerge     - To actually do the merge
+     * @param doMerge - To actually do the merge
      * @return The number of items that was successfully merged. */
     public static int mergeStacks(@Nonnull ItemStack mergeSource, @Nonnull ItemStack mergeTarget, boolean doMerge) {
         if (!canMerge(mergeSource, mergeTarget)) {
@@ -215,8 +215,8 @@ public class StackUtil {
 
     /** Determines whether the given ItemStack should be considered equivalent for crafting purposes.
      *
-     * @param base          The stack to compare to.
-     * @param comparison    The stack to compare.
+     * @param base The stack to compare to.
+     * @param comparison The stack to compare.
      * @param oreDictionary true to take the Forge OreDictionary into account.
      * @return true if comparison should be considered a crafting equivalent for base. */
     public static boolean isCraftingEquivalent(@Nonnull ItemStack base, @Nonnull ItemStack comparison,
@@ -250,7 +250,7 @@ public class StackUtil {
         return false;
     }
 
-    //    public static boolean isCraftingEquivalent(int[] oreIDs, ItemStack comparison)
+    // public static boolean isCraftingEquivalent(int[] oreIDs, ItemStack comparison)
     public static boolean isCraftingEquivalent(TagKey<Item>[] oreIDs, ItemStack comparison) {
 //        if (oreIDs.length > 0)
 //        {
@@ -292,7 +292,7 @@ public class StackUtil {
     /** Compares item id, damage and NBT. Accepts wildcard damage. Ignores damage entirely if the item doesn't have
      * subtypes.
      *
-     * @param base       The stack to compare to.
+     * @param base The stack to compare to.
      * @param comparison The stack to compare.
      * @return true if id, damage and NBT match. */
     public static boolean isMatchingItem(final @Nonnull ItemStack base, final @Nonnull ItemStack comparison) {
@@ -311,8 +311,8 @@ public class StackUtil {
     /** Compares item id, and optionally damage and NBT. Accepts wildcard damage. Ignores damage entirely if the item
      * doesn't have subtypes.
      *
-     * @param base        ItemStack
-     * @param comparison  ItemStack
+     * @param base ItemStack
+     * @param comparison ItemStack
      * @param matchDamage
      * @param matchNBT
      * @return true if matches */
@@ -350,12 +350,13 @@ public class StackUtil {
         return true;
     }
 
-    /** Registers a predicate, that will be used in {@link #isMatchingItem} as an additional comparison rule.
+    /**
+     * Registers a predicate, that will be used in {@link #isMatchingItem} as an additional comparison rule.
      * If any of registered predicates will return false, then the function will also return false.
      * It can be helpful, if item stacks are clearly not the same, but have common {@link Item} instance.
-     *
-     * @param forItem   {@link Item} instance for which to register the rule.
-     * @param predicate predicate to register. */
+     * @param forItem {@link Item} instance for which to register the rule.
+     * @param predicate predicate to register.
+     */
     public static void registerMatchingPredicate(@Nonnull Item forItem, @Nonnull StackMatchingPredicate predicate) {
         List<StackMatchingPredicate> predicates = matchingPredicates.computeIfAbsent(forItem, (item) -> new ArrayList<>());
         predicates.add(predicate);
@@ -390,7 +391,7 @@ public class StackUtil {
      *
      * @param stacks The stacks to put into a list
      * @return A {@link NonNullList} of all the given items. Note that the returned list of of a specified size, and
-     * cannot be expanded. */
+     *         cannot be expanded. */
     public static NonNullList<ItemStack> listOf(ItemStack... stacks) {
         switch (stacks.length) {
             case 0:

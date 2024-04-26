@@ -123,12 +123,12 @@ public final class NBTUtilBC {
                 } else if (nbt.contains("pos")) {
                     return readBlockPos(nbt.get("pos"));
                 } else {
-                    BCLog.logger.warn("Attempted to read a core positions from a compound tag without the correct sub-tags! (" + base + ")", new Throwable());
+                    BCLog.logger.warn("Attempted to read a block positions from a compound tag without the correct sub-tags! (" + base + ")", new Throwable());
                 }
                 return pos;
             }
         }
-        BCLog.logger.warn("Attempted to read a core position from an invalid tag! (" + base + ")", new Throwable());
+        BCLog.logger.warn("Attempted to read a block position from an invalid tag! (" + base + ")", new Throwable());
         return null;
     }
 
@@ -225,13 +225,11 @@ public final class NBTUtilBC {
         return arr;
     }
 
-    /**
-     * Writes an {@link EnumSet} to an {@link Tag}. The returned type will either be {@link ByteTag} or
+    /** Writes an {@link EnumSet} to an {@link Tag}. The returned type will either be {@link ByteTag} or
      * {@link ByteArrayTag}.
      *
      * @param clazz The class that the {@link EnumSet} is of. This is required as we have no way of getting the class
-     *              from the set.
-     */
+     *            from the set. */
     public static <E extends Enum<E>> Tag writeEnumSet(EnumSet<E> set, Class<E> clazz) {
         E[] constants = clazz.getEnumConstants();
         if (constants == null) throw new IllegalArgumentException("Not an enum type " + clazz);

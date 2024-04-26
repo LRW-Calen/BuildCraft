@@ -80,9 +80,7 @@ public class WorkbenchCrafting extends CraftingContainer {
         }
     }
 
-    /**
-     * @return True if anything changed, false otherwise
-     */
+    /** @return True if anything changed, false otherwise */
     public boolean tick() {
         if (tile.getLevel().isClientSide) {
             throw new IllegalStateException("Never call this on the client side!");
@@ -107,10 +105,8 @@ public class WorkbenchCrafting extends CraftingContainer {
         return false;
     }
 
-    /**
-     * @return True if {@link #craft()} might return true, or false if {@link #craft()} will definitely return
-     * false.
-     */
+    /** @return True if {@link #craft()} might return true, or false if {@link #craft()} will definitely return
+     *         false. */
     public boolean canCraft() {
         if (currentRecipe == null || isBlueprintDirty) {
             return false;
@@ -136,14 +132,12 @@ public class WorkbenchCrafting extends CraftingContainer {
         return cachedHasRequirements;
     }
 
-    /**
-     * Attempts to craft a single item. Assumes that {@link #canCraft()} has been called in the same tick, without any
+    /** Attempts to craft a single item. Assumes that {@link #canCraft()} has been called in the same tick, without any
      * modifications happening to the
      *
      * @return True if the crafting happened, false otherwise. *
      * @throws IllegalStateException if {@link #canCraft()} hasn't been called before, or something changed in the
-     *                               meantime.
-     */
+     *             meantime. */
     public boolean craft() throws IllegalStateException {
         if (isBlueprintDirty) {
             return false;
@@ -183,9 +177,7 @@ public class WorkbenchCrafting extends CraftingContainer {
         });
     }
 
-    /**
-     * Implementation of {@link #craft()}, assuming nothing about the current recipe.
-     */
+    /** Implementation of {@link #craft()}, assuming nothing about the current recipe. */
     private boolean craftExact() {
         // 4 steps:
         // - Move everything out of this inventory (Just to check: state correction operation)
@@ -266,9 +258,7 @@ public class WorkbenchCrafting extends CraftingContainer {
         return true;
     }
 
-    /**
-     * @return True if this inventory is now clear, false otherwise.
-     */
+    /** @return True if this inventory is now clear, false otherwise. */
     private boolean clearInventory() {
         for (int s = 0; s < getContainerSize(); s++) {
             ItemStack inSlot = super.getItem(s);

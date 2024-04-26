@@ -24,7 +24,7 @@ import java.util.function.Supplier;
 
 /**
  * Registration helper for static blocks and items: those which will always be registered. This is intended to simplify
- * item/core registry usage, as it looks like forge will start to support dynamically registered ones. (Perhaps we
+ * item/block registry usage, as it looks like forge will start to support dynamically registered ones. (Perhaps we
  * could allow this to work dynamically by looking items up in the config on reload? Either way we need to see what
  * forge does in the future.)
  */
@@ -276,7 +276,7 @@ public final class RegistrationHelper {
 //            addForcedItem(itemBlockConstructor.apply(added));
             addForcedBlockItem(idBCItem, () -> itemBlockConstructor.apply(added.get(), BLOCKITEM_DEFAULT_PROP));
         } else {
-            // FIXME: This won't work if the item has a different reg name to the core!
+            // FIXME: This won't work if the item has a different reg name to the block!
 //            RegistryConfig.setDisabled("items", block.getRegistryName().getResourcePath());
             RegistryConfig.setDisabled("items", idBCBlock);
         }
@@ -291,7 +291,7 @@ public final class RegistrationHelper {
 //            addForcedItem(itemBlockConstructor.apply(added));
             addForcedBlockItem(idBCItem, regId, () -> itemBlockConstructor.apply(added.get(), BLOCKITEM_DEFAULT_PROP));
         } else {
-            // FIXME: This won't work if the item has a different reg name to the core!
+            // FIXME: This won't work if the item has a different reg name to the block!
 //            RegistryConfig.setDisabled("items", block.getRegistryName().getResourcePath());
             RegistryConfig.setDisabled("items", idBCBlock);
         }

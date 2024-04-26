@@ -8,6 +8,7 @@ package buildcraft.core.client;
 
 import buildcraft.core.BCCoreConfig;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 // TODO Calen ConfigGui?
 //public class ConfigGuiFactoryBC implements ModGuiFactory
@@ -19,22 +20,24 @@ public class ConfigGuiFactoryBC {
 //            super(parentScreen, new ArrayList<>(), "buildcraftcore", "config", false, false, new TranslatableComponent("config.buildcraftcore").getContents());
 
 //            for (String s : BCCoreConfig.config.getCategoryNames())
-            for (String s : BCCoreConfig.getConfigAndEnsureCreated(true).getCategoryNames()) {
-                if (!s.contains(".")) {
+            for (ConfigValue<?> s : BCCoreConfig.config.getAll()) {
+                if (s.getPath().size() == 1) {
 //                    configElements.add(new BCConfigElement(BCCoreConfig.config.getCategory(s)));
                 }
             }
 
 //            for (String s : BCCoreConfig.objConfig.getCategoryNames())
-            for (String s : BCCoreConfig.getConfigAndEnsureCreated(false).getCategoryNames()) {
-                if (!s.contains(".")) {
+            for (ConfigValue<?> s : BCCoreConfig.objConfig.getAll()) {
+                if (s.getPath().size() == 1) {
 //                    configElements.add(new BCConfigElement(BCCoreConfig.objConfig.getCategory(s)));
                 }
             }
         }
     }
 
-    /** Needed for forge IModGuiFactory */
+    /**
+     * Needed for forge IModGuiFactory
+     */
     public ConfigGuiFactoryBC() {
     }
 

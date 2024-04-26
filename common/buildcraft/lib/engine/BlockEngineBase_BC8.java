@@ -37,9 +37,8 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
     // Calen: moved to BCCoreBlocks.engineTileConstructors
 //    private final Map<E, Supplier<? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(getEngineProperty().getValueClass());
 
-    // Calen
-    public BlockEngineBase_BC8(String id, BlockBehaviour.Properties props, E type) {
-        super(id, props);
+    public BlockEngineBase_BC8(String idBC, BlockBehaviour.Properties props, E type) {
+        super(idBC, props);
         this.engineType = type;
     }
 

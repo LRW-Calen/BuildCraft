@@ -31,13 +31,15 @@ public abstract class GenLayerBiomeReplacer {
         Random rand = new Random(worldSeed);
         xOffset = rand.nextInt(OFFSET_RANGE) - (OFFSET_RANGE / 2);
         zOffset = rand.nextInt(OFFSET_RANGE) - (OFFSET_RANGE / 2);
-        if (newBiomeId ==null) {
+        if (newBiomeId == null) {
             throw new IllegalArgumentException("This biome isn't registered!");
         }
     }
 
     protected abstract boolean canReplaceBiome(Holder<Biome> biomeId);
+
     protected abstract Holder<Biome> getHolder();
+
     protected abstract ParameterPoint getParameterPoint();
 
     public boolean doReplace(final Holder<Biome> currentBiomeId, final int x, final int y, final int z) {

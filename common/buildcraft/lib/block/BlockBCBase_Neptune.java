@@ -28,17 +28,13 @@ public class BlockBCBase_Neptune extends Block {
     public static final Property<Direction> PROP_FACING = BuildCraftProperties.BLOCK_FACING;
     public static final Property<Direction> BLOCK_FACING_6 = BuildCraftProperties.BLOCK_FACING_6;
 
-    /**
-     * The tag used to identify this in the {@link TagManager}. Note that this may be empty if this core doesn't use
-     * the tag system.
-     */
+    /** The tag used to identify this in the {@link TagManager}. Note that this may be empty if this block doesn't use
+     * the tag system. */
     public final String id;
 //    public final String namespace;
 
-    /**
-     * @param id The ID that will be looked up in the {@link TagManager} when registering blocks. Pass null or the
-     *           empty string to bypass the {@link TagManager} entirely.
-     */
+    /** @param id The ID that will be looked up in the {@link TagManager} when registering blocks. Pass null or the
+     *            empty string to bypass the {@link TagManager} entirely. */
     public BlockBCBase_Neptune(String id, Properties props) {
         super(props);
 //        if (id == null)
@@ -48,7 +44,7 @@ public class BlockBCBase_Neptune extends Block {
         this.id = id;
 //        this.namespace = namespace;
 
-//        // Sensible default core properties
+//        // Sensible default block properties
 //        setHardness(5.0F);
 //        setResistance(10.0F);
 //        setSoundType(SoundType.METAL);

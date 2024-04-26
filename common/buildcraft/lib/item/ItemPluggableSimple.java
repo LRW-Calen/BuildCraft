@@ -46,9 +46,8 @@ public class ItemPluggableSimple extends ItemBC_Neptune implements IItemPluggabl
     private final IPlacementPredicate canPlace;
     private final IPluggableCreator creator;
 
-    public ItemPluggableSimple(String id, Item.Properties properties, PluggableDefinition definition, IPluggableCreator creator,
-                               @Nullable IPlacementPredicate canPlace) {
-        super(id, properties);
+    public ItemPluggableSimple(String idBC, Item.Properties properties, PluggableDefinition definition, IPluggableCreator creator, @Nullable IPlacementPredicate canPlace) {
+        super(idBC, properties);
         this.definition = definition;
         this.creator = creator;
         if (creator == null) {

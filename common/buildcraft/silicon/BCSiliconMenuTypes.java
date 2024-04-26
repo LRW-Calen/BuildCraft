@@ -31,9 +31,7 @@ import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 
-/**
- * The static fields are used to create GUI on client thread.
- */
+/** The static fields are used to create GUI on client thread. */
 public class BCSiliconMenuTypes {
     public static final MenuType<ContainerAssemblyTable> ASSEMBLY_TABLE = IForgeMenuType.create((windowId, inv, data) ->
             {
@@ -65,14 +63,16 @@ public class BCSiliconMenuTypes {
                 }
             }
     );
-    /** {@link IPipeHolder#onPlayerOpen(Player)} is moved from {@link ContainerGate#ContainerGate(MenuType, int, Player, GateLogic)} in 1.12.2
+    /**
+     * {@link IPipeHolder#onPlayerOpen(Player)} is moved from {@link ContainerGate#ContainerGate(MenuType, int, Player, GateLogic)} in 1.12.2
      * to ensure the new gate obj created before GUI opened.
-     *
+     * <p>
      * {@link IPipeHolder#getPluggable(Direction)} is used to receive the new gate obj.
-     *
+     * <p>
      * {@link MessageUtil#clientHandleUpdateTileMsgBeforeOpen(TileBC_Neptune, FriendlyByteBuf, Runnable...)}
      * handles the message created in {@link MessageUtil#serverOpenGUIWithMsg(Player, MenuProvider, BlockPos, int, IMessage)}
-     * in {@link PluggableGate#onPluggableActivate(Player, HitResult, float, float, float)} */
+     * in {@link PluggableGate#onPluggableActivate(Player, HitResult, float, float, float)}
+     */
     public static final MenuType<ContainerGate> GATE = IForgeMenuType.create((windowId, inv, data) ->
             {
                 BlockPos pos = data.readBlockPos();

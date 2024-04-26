@@ -12,9 +12,8 @@ import net.minecraftforge.registries.RegistryObject;
 
 import java.time.Month;
 import java.time.MonthDay;
-import java.util.Map;
 
-/**  Used for automatically changing lang entries, fluid colours, and a few other things around christmas time. This is
+/** Used for automatically changing lang entries, fluid colours, and a few other things around christmas time. This is
  * in energy rather than lib because no other module does anything at christmas. */
 public class ChristmasHandler {
 

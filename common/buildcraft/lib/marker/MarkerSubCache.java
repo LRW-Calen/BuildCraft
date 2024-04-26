@@ -30,7 +30,7 @@ public abstract class MarkerSubCache<C extends MarkerConnection<C>> {
     public static final boolean DEBUG_FULL = BCDebugging.shouldDebugComplex("lib.marker.full");
 
     public final int cacheId;
-    //    public final String dimensionId;
+    // public final String dimensionId;
     public final ResourceKey<Level> dimensionId;
     public final boolean isServer;
     private final Map<BlockPos, C> posToConnection = new ConcurrentHashMap<>();
@@ -206,7 +206,7 @@ public abstract class MarkerSubCache<C extends MarkerConnection<C>> {
             }
             for (BlockPos p : positions) {
                 if (visitedPos.contains(p)) {
-                    BCLog.logger.warn(logStart + " Duplicate core positions!" + p + " - " + con);
+                    BCLog.logger.warn(logStart + " Duplicate block positions!" + p + " - " + con);
                 }
                 visitedPos.add(p);
             }

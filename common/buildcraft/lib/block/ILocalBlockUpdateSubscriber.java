@@ -10,7 +10,7 @@ public interface ILocalBlockUpdateSubscriber {
      * should be notified about an update. This method should be kept lightweight as it can be called multiple times per
      * tick.
      *
-     * @return the @{BlockPos} used to determine if a core update event is in range
+     * @return the @{BlockPos} used to determine if a block update event is in range
      */
     BlockPos getSubscriberPos();
 
@@ -18,7 +18,7 @@ public interface ILocalBlockUpdateSubscriber {
      * The distance from the @{BlockPos} that subscribers should be notified about updates. This method should be kept
      * lightweight as it can be called multiple times per tick.
      *
-     * @return the range from the @{BlockPos} returned by @{getSubscriberPos} where core update events will trigger a
+     * @return the range from the @{BlockPos} returned by @{getSubscriberPos} where block update events will trigger a
      * notification
      */
     int getUpdateRange();
@@ -27,8 +27,8 @@ public interface ILocalBlockUpdateSubscriber {
      * Called to indicate an update happened within the listener's update range returned by the @{getUpdateRange} call.
      * This method should be kept lightweight as it can be called multiple times per tick.
      *
-     * @param world    from the core update event
-     * @param eventPos from the core update event
+     * @param world    from the block update event
+     * @param eventPos from the block update event
      */
 //    void setWorldUpdated(Level world, BlockPos eventPos, BlockState oldState, BlockState newState, int flags);
     void setWorldUpdated(Level world, BlockPos eventPos);

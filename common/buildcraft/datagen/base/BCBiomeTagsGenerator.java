@@ -2,7 +2,6 @@ package buildcraft.datagen.base;
 
 import buildcraft.api.BCModules;
 import buildcraft.energy.generation.biome.BCBiomeRegistry;
-import buildcraft.energy.generation.biome.BCBiomes;
 import buildcraft.lib.oredicttag.OreDictTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BiomeTagsProvider;

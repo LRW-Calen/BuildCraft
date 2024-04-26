@@ -44,10 +44,8 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
     public static final boolean DEBUG = BCDebugging.shouldDebugLog("lib.container");
 
     protected static final IdAllocator IDS = new IdAllocator("container");
-    /**
-     * Generic "data" id. Used by all containers which only have 1 id to write out (no point in making EVERY container
-     * have an {@link IdAllocator} if they only allocate one.
-     */
+    /** Generic "data" id. Used by all containers which only have 1 id to write out (no point in making EVERY container
+     * have an {@link IdAllocator} if they only allocate one. */
     public static final int NET_DATA = IDS.allocId("DATA");
     public static final int NET_WIDGET = IDS.allocId("WIDGET");
     public static final int NET_SET_PHANTOM = IDS.allocId("SET_PHANTOM");
@@ -61,11 +59,9 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
         this.player = player;
     }
 
-    /**
-     * @return The {@link IdAllocator} that allocates all ID's for this class, and its parent classes. All subclasses
-     * should override this if they allocate their own ids after calling
-     * {@link IdAllocator#makeChild(String)}
-     */
+    /** @return The {@link IdAllocator} that allocates all ID's for this class, and its parent classes. All subclasses
+     *         should override this if they allocate their own ids after calling
+     *         {@link IdAllocator#makeChild(String)} */
     public IdAllocator getIdAllocator() {
         return IDS;
     }
@@ -287,20 +283,16 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
         BCLog.logger.warn(s2);
     }
 
-    /**
-     * @throws IllegalArgumentException if a {@link SlotPhantom} couldn't be found with that handler and index
-     */
+    /** @throws IllegalArgumentException if a {@link SlotPhantom} couldn't be found with that handler and index */
     public void sendSetPhantomSlot(IItemHandler handler, int index, ItemStack to) {
         sendSetPhantomSlot(findPhantomSlot(handler, index), to);
     }
 
-    /**
-     * @param stacks The list of stacks to send. NOTE: this list CAN include nulls -- that indicates that the item
-     *               should not be changed.
+    /** @param stacks The list of stacks to send. NOTE: this list CAN include nulls -- that indicates that the item
+     *            should not be changed.
      * @throws IllegalArgumentException if {@link List#size() stacks.size()} differs from {@link IItemHandler#getSlots()
-     *                                  handler.getSlots()}, or if a {@link SlotPhantom} couldn't be found for that handler and any of the
-     *                                  indexes associated with it.
-     */
+     *             handler.getSlots()}, or if a {@link SlotPhantom} couldn't be found for that handler and any of the
+     *             indexes associated with it. */
     public void sendSetPhantomSlots(IItemHandler handler, List<ItemStack> stacks) {
         if (handler.getSlots() < stacks.size()) {
             throw new IllegalStateException("Too many ItemStacks's in the list to change, compared to the "
@@ -322,9 +314,7 @@ public abstract class ContainerBC_Neptune<MENU_PROVIDER extends MenuProvider> ex
         sendSetPhantomSlots(indexes, destinationStacks);
     }
 
-    /**
-     * @throws IllegalArgumentException if a phantom slot cannot be found
-     */
+    /** @throws IllegalArgumentException if a phantom slot cannot be found */
     private int findPhantomSlot(IItemHandler handler, int index) {
         int i = 0;
         for (Slot slot : slots) {

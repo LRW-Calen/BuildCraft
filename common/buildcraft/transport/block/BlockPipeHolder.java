@@ -82,7 +82,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> implements ICustomPaintHandler, IBlockWithTickableTE<TilePipeHolder> {
-    //    public static final IUnlistedProperty<WeakReference<TilePipeHolder>> PROP_TILE = new UnlistedNonNullProperty<>("tile");
+    // public static final IUnlistedProperty<WeakReference<TilePipeHolder>> PROP_TILE = new UnlistedNonNullProperty<>("tile");
     public static final ModelProperty<TilePipeHolder> PROP_TILE = new ModelProperty<>();
 
     private static final VoxelShape BOX_CENTER = Shapes.box(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);

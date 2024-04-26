@@ -96,18 +96,18 @@ public class LocalBlockUpdateNotifier {
     }
 
     /**
-     * Register an @{ILocalBlockUpdateSubscriber} to receive notifications about core updates
+     * Register an @{ILocalBlockUpdateSubscriber} to receive notifications about block updates
      *
-     * @param subscriber the subscriber to receive notifications about local core updates
+     * @param subscriber the subscriber to receive notifications about local block updates
      */
     public void registerSubscriberForUpdateNotifications(ILocalBlockUpdateSubscriber subscriber) {
         subscriberSet.add(subscriber);
     }
 
     /**
-     * Stop an @{ILocalBlockUpdateSubscriber} from receiving notifications about core updates
+     * Stop an @{ILocalBlockUpdateSubscriber} from receiving notifications about block updates
      *
-     * @param subscriber the subscriber to no longer receive notifications about local core update
+     * @param subscriber the subscriber to no longer receive notifications about local block update
      */
     public void removeSubscriberFromUpdateNotifications(ILocalBlockUpdateSubscriber subscriber) {
         subscriberSet.remove(subscriber);
@@ -120,9 +120,6 @@ public class LocalBlockUpdateNotifier {
      *
      * @param world    from the Block Update
      * @param eventPos from the Block Update
-     * @param oldState from the Block Update
-     * @param newState from the Block Update
-     * @param flags    from the Block Update
      */
 //    private void notifySubscribersInRange(Level world, BlockPos eventPos, BlockState oldState, BlockState newState, int flags)
     private void notifySubscribersInRange(Level world, BlockPos eventPos) {

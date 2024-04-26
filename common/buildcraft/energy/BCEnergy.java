@@ -2,7 +2,6 @@ package buildcraft.energy;
 
 import buildcraft.api.enums.EnumSpring;
 import buildcraft.core.BCCore;
-import buildcraft.energy.generation.biome.BCBiomes;
 import buildcraft.energy.recipe.CoolantRecipeSerializer;
 import buildcraft.energy.recipe.FuelRecipeSerializer;
 import buildcraft.lib.fluid.BCFluid;

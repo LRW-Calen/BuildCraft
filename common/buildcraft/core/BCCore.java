@@ -60,7 +60,7 @@ public class BCCore {
     @SubscribeEvent
 //    public static void preInit(FMLPreInitializationEvent event)
     public static void preInit(FMLConstructModEvent event) {
-        BCCoreConfig.preInit();
+        BCCoreConfig.cinit();
 
 //        CreativeTabBC tab = CreativeTabManager.createTab("buildcraft.main");
         mainTab = CreativeTabManager.createTab("buildcraft.main");
@@ -84,12 +84,12 @@ public class BCCore {
 
 //        OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE); // 1.18.2: use datagen
         MinecraftForge.EVENT_BUS.register(BCCoreEventDist.INSTANCE);
-        BCCoreConfig.saveConfigs();
+//        BCCoreConfig.saveConfigs();
     }
 
     @SubscribeEvent
     public static void init(FMLCommonSetupEvent event) {
-        BCCoreConfig.saveConfigs();
+//        BCCoreConfig.saveConfigs();
         // Calen: moved to BCLib#<cinit>
 //        BCLibItems.guide.setCreativeTab(CreativeTabManager.getTab("buildcraft.main"));
 
@@ -102,9 +102,9 @@ public class BCCore {
     @SubscribeEvent
 //    public static void postInit(FMLPostInitializationEvent event)
     public static void postInit(FMLLoadCompleteEvent event) {
-        BCCoreConfig.saveConfigs();
+//        BCCoreConfig.saveConfigs();
         BCCoreProxy.getProxy().fmlPostInit();
-        BCCoreConfig.postInit();
+//        BCCoreConfig.postInit();
     }
 
     @OnlyIn(Dist.CLIENT)

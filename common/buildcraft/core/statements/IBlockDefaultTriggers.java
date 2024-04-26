@@ -4,7 +4,6 @@
  * should be located as "LICENSE.API" in the BuildCraft source code distribution. */
 package buildcraft.core.statements;
 
-
 import net.minecraft.core.Direction;
 
 /** A tile entity implementing this interface will be able to prevent BuildCraft from adding default triggers.

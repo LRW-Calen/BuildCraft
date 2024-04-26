@@ -8,9 +8,6 @@ package buildcraft.robotics;
 
 import buildcraft.api.BCModules;
 import buildcraft.lib.net.MessageManager;
-import buildcraft.robotics.container.ContainerZonePlanner;
-import buildcraft.robotics.gui.GuiZonePlanner;
-import buildcraft.robotics.tile.TileZonePlanner;
 import buildcraft.robotics.zone.MessageZoneMapRequest;
 import buildcraft.robotics.zone.MessageZoneMapResponse;
 import net.minecraftforge.api.distmarker.Dist;

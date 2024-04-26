@@ -6,7 +6,6 @@
 
 package buildcraft.silicon.gate;
 
-import buildcraft.lib.misc.LocaleUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.MutableComponent;

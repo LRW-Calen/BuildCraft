@@ -41,11 +41,11 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -72,22 +72,16 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
 
     protected static final IdAllocator IDS = new IdAllocator("tile");
 
-    /**
-     * Used for sending all data used for rendering the tile on a client. This does not include items, power, stages,
-     * etc (Unless some are shown in the world)
-     */
+    /** Used for sending all data used for rendering the tile on a client. This does not include items, power, stages,
+     * etc (Unless some are shown in the world) */
     public static final int NET_RENDER_DATA = IDS.allocId("RENDER_DATA");
-    /**
-     * Used for sending all data in the GUI. Basically what has been omitted from {@link #NET_RENDER_DATA} that is
-     * shown in the GUI.
-     */
+    /** Used for sending all data in the GUI. Basically what has been omitted from {@link #NET_RENDER_DATA} that is
+     * shown in the GUI. */
     public static final int NET_GUI_DATA = IDS.allocId("GUI_DATA");
-    /**
-     * Used for sending the data that would normally be sent with {@link Container#detectAndSendChanges()}. Note that
+    /** Used for sending the data that would normally be sent with {@link AbstractContainerMenu#broadcastChanges()}. Note that
      * if no bytes are written then the update message won't be sent. You should detect if any changes have been made to
      * the gui since the last tick, so you don't resend duplicate information if nothing has changed by the next
-     * tick.
-     */
+     * tick. */
     public static final int NET_GUI_TICK = IDS.allocId("GUI_TICK");
 
     public static final int NET_REN_DELTA_SINGLE = IDS.allocId("REN_DELTA_SINGLE");
@@ -95,28 +89,21 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
     public static final int NET_GUI_DELTA_SINGLE = IDS.allocId("GUI_DELTA_SINGLE");
     public static final int NET_GUI_DELTA_CLEAR = IDS.allocId("GUI_DELTA_CLEAR");
 
-    /**
-     * Used for detailed debugging for inspecting every part of the current tile. For example, tanks use this to
-     * display which other tanks makeup the whole structure.
-     */
+    /** Used for detailed debugging for inspecting every part of the current tile. For example, tanks use this to
+     * display which other tanks makeup the whole structure. */
     public static final int NET_ADV_DEBUG = IDS.allocId("DEBUG_DATA");
     public static final int NET_ADV_DEBUG_DISABLE = IDS.allocId("DEBUG_DISABLE");
 
-    /**
-     * Used to tell the client to redraw the core.
-     */
+    /** Used to tell the client to redraw the block. */
     public static final int NET_REDRAW = IDS.allocId("REDRAW");
 
     protected final CapabilityHelper caps = new CapabilityHelper();
     protected final ItemHandlerManager itemManager = new ItemHandlerManager(this::onSlotChange);
     protected final TankManager tankManager = new TankManager();
 
-    /**
-     * Handles all of the players that are currently using this tile (have a GUI open)
-     */
-//    private final Set<Player> usingPlayers = Sets.newIdentityHashSet();
-    protected final Set<Player> usingPlayers = Sets.newIdentityHashSet();
-    //    private GameProfile owner;
+    /** Handles all of the players that are currently using this tile (have a GUI open) */
+    private final Set<Player> usingPlayers = Sets.newIdentityHashSet();
+    // private GameProfile owner;
     protected GameProfile owner;
 
     private final IChunkCache chunkCache = new CachedChunk(this);
@@ -168,25 +155,21 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
     }
 
     public final BlockState getNeighbourState(Direction offset) {
-        // In the future it is plausible that we might cache core states here.
+        // In the future it is plausible that we might cache block states here.
         // However, until that is implemented, just call the world directly.
         return getOffsetState(offset.getNormal());
     }
 
-    /**
-     * @param offset The position of the {@link BlockState}, <i>relative</i> to this {@link BlockEntity#getBlockPos()}.
-     */
+    /** @param offset The position of the {@link BlockState}, <i>relative</i> to this {@link BlockEntity#getBlockPos()} . */
     public final BlockState getOffsetState(Vec3i offset) {
         return getLocalState(worldPosition.offset(offset));
     }
 
-    /**
-     * @param pos The <i>absolute</i> position of the {@link BlockState} .
-     */
+    /** @param pos The <i>absolute</i> position of the {@link BlockState} . */
     public final BlockState getLocalState(BlockPos pos) {
         if (DEBUG && !level.isLoaded(pos)) {
             BCLog.logger.warn(
-                    "[lib.tile] Ghost-loading core at " + StringUtilBC.blockPosToString(pos) + " (from " + StringUtilBC
+                    "[lib.tile] Ghost-loading block at " + StringUtilBC.blockPosToString(pos) + " (from " + StringUtilBC
                             .blockPosToString(getBlockPos()) + ")"
             );
         }
@@ -207,17 +190,13 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         return BlockUtil.getTileEntity(getLevel(), getBlockPos().relative(offset), true);
     }
 
-    /**
-     * @param offset The position of the {@link BlockEntity} to retrieve, <i>relative</i> to this
-     *               {@link BlockEntity#getBlockPos()} .
-     */
+    /** @param offset The position of the {@link BlockEntity} to retrieve, <i>relative</i> to this
+     *            {@link BlockEntity#getBlockPos()} . */
     public final BlockEntity getOffsetTile(Vec3i offset) {
         return getLocalTile(worldPosition.offset(offset));
     }
 
-    /**
-     * @param pos The <i>absolute</i> position of the {@link BlockEntity} .
-     */
+    /** @param pos The <i>absolute</i> position of the {@link BlockEntity} . */
     public final BlockEntity getLocalTile(BlockPos pos) {
         TileCacheRet cached = tileCache.getTile(pos);
         if (cached != null) {
@@ -250,18 +229,14 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
     //
     // ##################
 
-    /**
-     * @return The {@link IdAllocator} that allocates all ID's for this class, and its parent classes. All subclasses
-     * should override this if they allocate their own ids after calling
-     * {@link IdAllocator#makeChild(String)}
-     */
+    /** @return The {@link IdAllocator} that allocates all ID's for this class, and its parent classes. All subclasses
+     *         should override this if they allocate their own ids after calling
+     *         {@link IdAllocator#makeChild(String)} */
     public IdAllocator getIdAllocator() {
         return IDS;
     }
 
-    /**
-     * Checks to see if this tile can update. The base implementation only checks to see if it has a world.
-     */
+    /** Checks to see if this tile can update. The base implementation only checks to see if it has a world. */
     public boolean cannotUpdate() {
         return !hasLevel();
     }
@@ -272,18 +247,14 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         return oldState.getBlock() != newState.getBlock();
     }
 
-    /**
-     * Called whenever the core holding this tile is exploded. Called by
-     * {@link Block#onBlockExploded(Level, BlockPos, Explosion)}
-     */
+    /** Called whenever the block holding this tile is exploded. Called by
+     * {@link Block#onBlockExploded(Level, BlockPos, Explosion)} */
     public void onExplode(Explosion explosion) {
 
     }
 
-    /**
-     * Called whenever the core is removed. Called by {@link #onExplode(Explosion)}, and
-     * {@link Block#breakBlock(Level, BlockPos, BlockState)}
-     */
+    /** Called whenever the block is removed. Called by {@link #onExplode(Explosion)}, and
+     * {@link Block#breakBlock(Level, BlockPos, BlockState)} */
     public void onRemove() {
         NonNullList<ItemStack> toDrop = NonNullList.create();
         addDrops(toDrop, 0);
@@ -321,9 +292,7 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         tileCache.invalidate();
     }
 
-    /**
-     * Called whenever {@link #onRemove()} is called (by default).
-     */
+    /** Called whenever {@link #onRemove()} is called (by default). */
     public void addDrops(NonNullList<ItemStack> toDrop, int fortune) {
         itemManager.addDrops(toDrop);
         tankManager.addDrops(toDrop);
@@ -411,10 +380,8 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         }
     }
 
-    /**
-     * Cheaper version of {@link #markDirty()} that doesn't update nearby comparators, so all it will do is ensure that
-     * the current chunk is saved after the last tick.
-     */
+    /** Cheaper version of {@link #setChanged()} that doesn't update nearby comparators, so all it will do is ensure that
+     * the current chunk is saved after the last tick. */
     public void markChunkDirty() {
         if (level != null) {
 //            level.markChunkDirty(this.worldPosition, this);
@@ -473,9 +440,7 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
     //
     // ##################
 
-    /**
-     * Tells MC to redraw this core. Note that this sends the NET_REDRAW message.
-     */
+    /** Tells MC to redraw this block. Note that this sends the NET_REDRAW message. */
     public final void redrawBlock() {
         if (hasLevel()) {
             // Client
@@ -498,9 +463,7 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         }
     }
 
-    /**
-     * Sends a network update update of the specified ID.
-     */
+    /** Sends a network update update of the specified ID. */
     public final void sendNetworkUpdate(int id) {
         if (hasLevel()) {
             MessageUpdateTile message = createNetworkUpdate(id);
@@ -702,10 +665,8 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         }
     }
 
-    /**
-     * @param ctx The context. Will be null if this is a generic update payload
-     * @throws IOException if something went wrong
-     */
+    /** @param ctx The context. Will be null if this is a generic update payload
+     * @throws IOException if something went wrong */
     public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         // read render data with gui data
         if (id == NET_GUI_DATA) {

@@ -64,9 +64,7 @@ import java.util.*;
 
 public final class BlockUtil {
 
-    /**
-     * @return A list of itemstacks that are dropped from the core, or null if the core is air
-     */
+    /** @return A list of itemstacks that are dropped from the block, or null if the block is air */
     @Nullable
     public static NonNullList<ItemStack> getItemStackFromBlock(ServerLevel world, BlockPos pos, GameProfile owner) {
         BlockState state = world.getBlockState(pos);
@@ -201,10 +199,8 @@ public final class BlockUtil {
         return breakBlockAndGetDrops(world, pos, tool, owner, false);
     }
 
-    /**
-     * @param grabAll If true then this will pickup every item in range of the position, false to only get the items
-     *                that the dropped while breaking the core.
-     */
+    /** @param grabAll If true then this will pickup every item in range of the position, false to only get the items
+     *            that the dropped while breaking the block. */
     public static Optional<List<ItemStack>> breakBlockAndGetDrops(ServerLevel world, BlockPos pos,
                                                                   @Nonnull ItemStack tool, GameProfile owner, boolean grabAll) {
         AABB aabb = new AABB(pos).inflate(1);
@@ -292,9 +288,7 @@ public final class BlockUtil {
         return isUnbreakableBlock(world, pos, world.getBlockState(pos), owner);
     }
 
-    /**
-     * Returns true if a core cannot be harvested without a tool.
-     */
+    /** Returns true if a block cannot be harvested without a tool. */
     public static boolean isToughBlock(Level world, BlockPos pos) {
 //        return !world.getBlockState(pos).getMaterial().isToolNotRequired();
         return world.getBlockState(pos).requiresCorrectToolForDrops();
@@ -438,9 +432,7 @@ public final class BlockUtil {
         }
     }
 
-    /**
-     * Create an explosion which only affects a single core.
-     */
+    /** Create an explosion which only affects a single block. */
     public static void explodeBlock(Level world, BlockPos pos) {
 //        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
 //        {
@@ -477,9 +469,7 @@ public final class BlockUtil {
         return (long) Math.floor(16 * MjAPI.MJ * ((hardness + 1) * 2) * BCCoreConfig.miningMultiplier);
     }
 
-    /**
-     * The following functions let you avoid unnecessary chunk loads, which is nice.
-     */
+    /** The following functions let you avoid unnecessary chunk loads, which is nice. */
     public static BlockEntity getTileEntity(Level world, BlockPos pos) {
         return getTileEntity(world, pos, false);
     }
@@ -496,8 +486,7 @@ public final class BlockUtil {
         return CompatManager.getState(world, pos, force);
     }
 
-    public static boolean useItemOnBlock(Level world, Player player, ItemStack stack, BlockPos pos,
-                                         Direction direction) {
+    public static boolean useItemOnBlock(Level world, Player player, ItemStack stack, BlockPos pos, Direction direction) {
 //        boolean done = stack.getItem().onItemUseFirst(player, world, pos, direction, 0.5F, 0.5F, 0.5F, InteractionHand.MAIN_HAND) == InteractionResult.SUCCESS;
         UseOnContext ctx = new UseOnContext(
                 world,
@@ -541,7 +530,7 @@ public final class BlockUtil {
         }
     };
 
-    //    public static TileEntityChest getOtherDoubleChest(TileEntity inv)
+    // public static TileEntityChest getOtherDoubleChest(TileEntity inv)
     public static ChestBlockEntity getOtherDoubleChest(BlockEntity inv) {
         if (inv instanceof ChestBlockEntity) {
 //            ChestBlockEntity chest = (ChestBlockEntity) inv;

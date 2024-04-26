@@ -29,8 +29,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> implements ILaserTargetBlock, IBlockWithTickableTE<TileLaserTableBase> {
     private final EnumLaserTableType type;
 
-    public BlockLaserTable(String id, BlockBehaviour.Properties props, EnumLaserTableType type) {
-        super(id, props);
+    public BlockLaserTable(String idBC, BlockBehaviour.Properties props, EnumLaserTableType type) {
+        super(idBC, props);
         this.type = type;
     }
 

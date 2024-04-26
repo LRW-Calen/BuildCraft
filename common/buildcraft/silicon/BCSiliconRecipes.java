@@ -6,44 +6,6 @@
 
 package buildcraft.silicon;
 
-import buildcraft.api.core.BCLog;
-import buildcraft.api.enums.EnumEngineType;
-import buildcraft.api.enums.EnumRedstoneChipset;
-import buildcraft.api.mj.MjAPI;
-import buildcraft.api.recipes.AssemblyRecipe;
-import buildcraft.api.recipes.AssemblyRecipeBasic;
-import buildcraft.api.recipes.IngredientStack;
-import buildcraft.core.BCCoreBlocks;
-import buildcraft.core.BCCoreConfig;
-import buildcraft.core.BCCoreItems;
-import buildcraft.lib.misc.ColourUtil;
-import buildcraft.lib.recipe.AssemblyRecipeRegistry;
-import buildcraft.lib.recipe.IngredientNBTBC;
-import buildcraft.lib.recipe.RecipeBuilderShaped;
-import buildcraft.silicon.gate.EnumGateLogic;
-import buildcraft.silicon.gate.EnumGateMaterial;
-import buildcraft.silicon.gate.EnumGateModifier;
-import buildcraft.silicon.gate.GateVariant;
-import buildcraft.silicon.recipe.FacadeAssemblyRecipes;
-import buildcraft.silicon.recipe.FacadeSwapRecipe;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSet.Builder;
-import com.google.gson.*;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-
 // 1.18.2: use datagen
 @Deprecated(forRemoval = true)
 //@Mod.EventBusSubscriber(modid = BCSilicon.MODID)

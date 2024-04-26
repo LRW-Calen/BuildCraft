@@ -25,25 +25,26 @@ import java.util.List;
 
 /** Configuration file for lib. In order to keep lib as close to being just a library mod as possible, these are not set
  * by a config file, but instead by BC Core. Feel free to set them yourself, from your own configs, if you do not depend
- * on BC COre itself, and it might not be loaded in the mod environment. */
+ * on BC Core itself, and it might not be loaded in the mod environment. */
 public class BCLibConfig {
 
-    //    public static File guiConfigFile = null;
+    // public static File guiConfigFile = null;
     private static File guiConfigFile = null;
 
     // Calen
-    private static synchronized void creatLibConfigFile() {
-        File forgeConfigFolder = FMLPaths.CONFIGDIR.get().toFile();
-        File buildCraftConfigFolder = new File(forgeConfigFolder, "buildcraft");
-
-        guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
-    }
 
     public static synchronized File getGuiConfigFileAndEnsureCreated() {
         if (guiConfigFile == null) {
             creatLibConfigFile();
         }
         return guiConfigFile;
+    }
+
+    private static synchronized void creatLibConfigFile() {
+        File forgeConfigFolder = FMLPaths.CONFIGDIR.get().toFile();
+        File buildCraftConfigFolder = new File(forgeConfigFolder, "buildcraft");
+
+        guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
     }
 
     /** If true then items and blocks will display the colour of an item (one of {@link DyeColor}) with the correct

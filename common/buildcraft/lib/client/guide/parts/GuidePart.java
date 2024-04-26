@@ -17,16 +17,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.network.chat.Component;
 
-/**
- * Represents a single page, image or crafting recipe for displaying. Only exists on the client.
- */
+/** Represents a single page, image or crafting recipe for displaying. Only exists on the client. */
 public abstract class GuidePart {
     public static final int INDENT_WIDTH = 16;
     public static final int LINE_HEIGHT = 16;
 
-    /**
-     * Stores information about the current rendering position
-     */
+    /** Stores information about the current rendering position */
     public static class PagePosition {
         public final int page;
         public final int pixel;
@@ -87,25 +83,19 @@ public abstract class GuidePart {
     public void updateScreen() {
     }
 
-    /**
-     * Renders a raw line at the position, lowering it appropriately
-     */
+    /** Renders a raw line at the position, lowering it appropriately */
     protected void renderTextLine(PoseStack poseStack, String text, int x, int y, int colour) {
         fontRenderer.drawString(poseStack, text, x, y + 8 - (fontRenderer.getFontHeight(text) / 2), colour);
 //        GlStateManager.color(1, 1, 1);
         RenderUtil.color(1, 1, 1);
     }
 
-    /**
-     * @param current The current position to render from
-     * @param index   The current page index to render on
-     * @return The new position for the next part to render from
-     */
+    /** @param current The current position to render from
+     * @param index The current page index to render on
+     * @return The new position for the next part to render from */
     public abstract PagePosition renderIntoArea(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index);
 
-    /**
-     * Like {@link #renderIntoArea(PoseStack, int, int, int, int, PagePosition, int)} but for a mouse click.
-     */
+    /** Like {@link #renderIntoArea(PoseStack, int, int, int, int, PagePosition, int)} but for a mouse click. */
     public abstract PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
                                                   double mouseX, double mouseY);
 
@@ -115,16 +105,14 @@ public abstract class GuidePart {
     public void handleMouseDragFinish(int startX, int startY, int endX, int endY, int button) {
     }
 
-    /**
-     * @param current The current location of the rendering. This will be different from start if this line needed to
-     *                render over 2 (or more!) pages
-     * @param line    The line to render
-     * @param x       The x position the page rendering started from
-     * @param y       The y position the page rendering started from
-     * @param width   The width of rendering space available
-     * @param height  The height of rendering space available
-     * @return The position for the next line to render at. Will automatically be the next page or line if necessary.
-     */
+    /** @param current The current location of the rendering. This will be different from start if this line needed to
+     *            render over 2 (or more!) pages
+     * @param line The line to render
+     * @param x The x position the page rendering started from
+     * @param y The y position the page rendering started from
+     * @param width The width of rendering space available
+     * @param height The height of rendering space available
+     * @return The position for the next line to render at. Will automatically be the next page or line if necessary. */
     protected PagePosition renderLine(PoseStack poseStack, PagePosition current, PageLine line, int x, int y, int width, int height,
                                       int pageRenderIndex) {
         wasHovered = false;

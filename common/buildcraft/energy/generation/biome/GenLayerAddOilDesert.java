@@ -41,12 +41,12 @@ public class GenLayerAddOilDesert extends GenLayerBiomeReplacer {
     @Override
     protected ParameterPoint getParameterPoint() {
         return new ParameterPoint(
-                Parameter.span(0.55F,1.0F),
-                Parameter.span(-1,-0.35F),
-                Parameter.span(-0.19F,0.03F),
-                Parameter.span(-1,0.5F),
+                Parameter.span(0.55F, 1.0F),
+                Parameter.span(-1, -0.35F),
+                Parameter.span(-0.19F, 0.03F),
+                Parameter.span(-1, 0.5F),
                 Parameter.point(0),
-                Parameter.span(-1,1),
+                Parameter.span(-1, 1),
                 0L
         );
     }

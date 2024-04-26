@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank> implements ICustomPipeConnection, ITankBlockConnector, SimpleWaterloggedBlock, IBlockWithTickableTE<TileTank> {
     public static final Property<Boolean> JOINED_BELOW = BuildCraftProperties.JOINED_BELOW;
     private static final Property<Boolean> WATERLOGGED = BlockStateProperties.WATERLOGGED;
-    //    private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(2 / 16D, 0 / 16D, 2 / 16D, 14 / 16D, 16 / 16D, 14 / 16D);
+    // private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(2 / 16D, 0 / 16D, 2 / 16D, 14 / 16D, 16 / 16D, 14 / 16D);
     private static final VoxelShape BOUNDING_BOX = Block.box(2.0D, 0.0D, 2.0D, 14.0D, 16.0D, 14.0D);
 
     public BlockTank(String idBC, BlockBehaviour.Properties props) {

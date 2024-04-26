@@ -14,9 +14,8 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
-//@Mod.EventBusSubscriber(modid = NameSpaces.BUILDCRAFT_CORE, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CapUtil {
-    //    @CapabilityInject(IItemTransactor.class)
+    // @CapabilityInject(IItemTransactor.class)
     private static Capability<IItemTransactor> capTransactor = CapabilityManager.get(new CapabilityToken<>() {
     });
     @Nonnull

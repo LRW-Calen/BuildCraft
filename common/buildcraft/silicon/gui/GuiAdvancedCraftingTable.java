@@ -112,8 +112,7 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
     }
 
     @Override
-    public void initGui()
-    {
+    public void initGui() {
 //        super.initGui();
 //        widthTooNarrow = this.width < SIZE_X + 176; // Calen: moved to <init>
 //        if (recipeBook != null) {

@@ -12,19 +12,16 @@ import buildcraft.lib.debug.DebugRenderHelper;
 import buildcraft.lib.misc.VolumeUtil;
 import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.silicon.tile.TileLaser;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class AdvDebuggerLaser implements DetachedRenderer.IDetachedRenderer {

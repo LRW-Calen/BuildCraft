@@ -71,6 +71,7 @@ public class OilStructureRegistry {
                 BiomeFilter.biome()
         );
     }
+
     public static Holder<ConfiguredStructureFeature<?, ?>> CONFIGURED_INSTANCE_OIL_STRUCTURE;
 
     public static void register(RegistryEvent.Register<StructureFeature<?>> event) {

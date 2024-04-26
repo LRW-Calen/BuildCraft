@@ -6,21 +6,6 @@
 
 package buildcraft.silicon;
 
-import buildcraft.api.transport.pipe.IPipeHolder;
-import buildcraft.api.transport.pluggable.PipePluggable;
-import buildcraft.lib.misc.MessageUtil;
-import buildcraft.silicon.container.ContainerAdvancedCraftingTable;
-import buildcraft.silicon.container.ContainerAssemblyTable;
-import buildcraft.silicon.container.ContainerGate;
-import buildcraft.silicon.container.ContainerIntegrationTable;
-import buildcraft.silicon.gui.GuiAdvancedCraftingTable;
-import buildcraft.silicon.gui.GuiAssemblyTable;
-import buildcraft.silicon.gui.GuiGate;
-import buildcraft.silicon.gui.GuiIntegrationTable;
-import buildcraft.silicon.plug.PluggableGate;
-import buildcraft.silicon.tile.TileAdvancedCraftingTable;
-import buildcraft.silicon.tile.TileAssemblyTable;
-import buildcraft.silicon.tile.TileIntegrationTable;
 import net.minecraftforge.fml.loading.FMLLoader;
 
 //public abstract class BCSiliconProxy implements IGuiHandler

@@ -38,7 +38,7 @@ public class PositionUtil {
         return null;
     }
 
-    /** @return An integer representing the offset between the core positions, or null if
+    /** @return An integer representing the offset between the block positions, or null if
      *         {@link #getDirectFacingOffset(BlockPos, BlockPos)} returned null. The distance will be negative if
      *         returned {@link Direction} is negative. */
     @Nullable
@@ -303,7 +303,7 @@ public class PositionUtil {
         }
     }
 
-    /** Returns a list of all the core positions on the edge of the given box. */
+    /** Returns a list of all the block positions on the edge of the given box. */
     public static ImmutableList<BlockPos> getAllOnEdge(BlockPos min, BlockPos max) {
         ImmutableList.Builder<BlockPos> list = ImmutableList.builder();
         boolean addX = max.getX() != min.getX();
@@ -430,7 +430,7 @@ public class PositionUtil {
         return count;
     }
 
-    /** Returns a list of all the core positions between from and to (mostly).
+    /** Returns a list of all the block positions between from and to (mostly).
      * <p>
      * Does not return the "from" co-ordinate, but does include the "to" co-ordinate (provided that from does not equal
      * to) */
@@ -456,7 +456,7 @@ public class PositionUtil {
         final int ddy = difference.getY() > 0 ? 1 : -1;
         final int ddz = difference.getZ() > 0 ? 1 : -1;
 
-        // start from 1/2 in a core
+        // start from 1/2 in a block
         // (as we want to compare to the centre of blocks rather than the lower corner)
         int dx = count / 2;
         int dy = count / 2;

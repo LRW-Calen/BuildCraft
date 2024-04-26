@@ -13,16 +13,18 @@ import buildcraft.api.transport.pipe.PipeApi;
 import buildcraft.api.transport.pipe.PipeApi.PowerTransferInfo;
 import buildcraft.api.transport.pipe.PipeDefinition;
 import buildcraft.core.BCCoreConfig;
+import buildcraft.lib.config.Configuration;
 import buildcraft.lib.config.EnumRestartRequirement;
-import buildcraft.lib.misc.ConfigUtil;
 import buildcraft.lib.misc.MathUtil;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.minecraftforge.common.ForgeConfigSpec.LongValue;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge_1_12_2.common.config.Configuration;
-import net.minecraftforge_1_12_2.common.config.Property;
 
 public class BCTransportConfig {
     public enum PowerLossMode {
@@ -43,31 +45,50 @@ public class BCTransportConfig {
     public static boolean fluidPipeColourBorder;
     public static PowerLossMode lossMode = PowerLossMode.DEFAULT;
 
-    private static Property propMjPerMillibucket;
-    private static Property propMjPerItem;
-    private static Property propBaseFlowRate;
-    private static Property propFluidPipeColourBorder;
-    private static Property propLossMode;
+    private static LongValue propMjPerMillibucket;
+    private static LongValue propMjPerItem;
+    private static IntValue propBaseFlowRate;
+    private static BooleanValue propFluidPipeColourBorder;
+    private static EnumValue<PowerLossMode> propLossMode;
 
     public static void preInit() {
-//        Configuration config = BCCoreConfig.config;
-        Configuration config = BCCoreConfig.getConfigAndEnsureCreated(true);
-        propMjPerMillibucket = config.get("general", "pipes.mjPerMillibucket", (int) mjPerMillibucket)
-                .setMinValue((int) MJ_REQ_MILLIBUCKET_MIN);
-        EnumRestartRequirement.WORLD.setTo(propMjPerMillibucket);
+        Configuration config = BCCoreConfig.config;
 
-        propMjPerItem = config.get("general", "pipes.mjPerItem", (int) mjPerItem).setMinValue((int) MJ_REQ_ITEM_MIN);
-        EnumRestartRequirement.WORLD.setTo(propMjPerItem);
+        String general = "general";
+        String display = "display";
+        String experimental = "experimental";
 
-        propBaseFlowRate = config.get("general", "pipes.baseFluidRate", baseFlowRate).setMinValue(1).setMaxValue(40);
-        EnumRestartRequirement.WORLD.setTo(propBaseFlowRate);
+        EnumRestartRequirement world = EnumRestartRequirement.WORLD;
 
-        propFluidPipeColourBorder = config.get("display", "pipes.fluidColourIsBorder", true);
-        EnumRestartRequirement.WORLD.setTo(propFluidPipeColourBorder);
+        propMjPerMillibucket = config
+                .defineInRange(general,
+                        "",
+                        world,
+                        "pipes.mjPerMillibucket", mjPerMillibucket, MJ_REQ_MILLIBUCKET_MIN);
+        propMjPerItem = config
+                .defineInRange(general,
+                        "",
+                        world,
+                        "pipes.mjPerItem", mjPerItem, MJ_REQ_ITEM_MIN);
+        propBaseFlowRate = config
+                .defineInRange(general,
+                        "",
+                        world,
+                        "pipes.baseFluidRate", baseFlowRate, 1, 40);
 
-        propLossMode = config.get("experimental", "kinesisLossMode", "lossless");
-        ConfigUtil.setEnumProperty(propLossMode, PowerLossMode.VALUES);
-        EnumRestartRequirement.WORLD.setTo(propLossMode);
+        propFluidPipeColourBorder = config
+                .define(display,
+                        "",
+                        world,
+                        "pipes.fluidColourIsBorder", true);
+
+        propLossMode = config
+                .defineEnum(experimental,
+                        "",
+                        world,
+                        "kinesisLossMode", PowerLossMode.LOSSLESS);
+
+        config.build();
 
         MinecraftForge.EVENT_BUS.register(BCTransportConfig.class);
     }
@@ -75,24 +96,24 @@ public class BCTransportConfig {
     public static void reloadConfig(EnumRestartRequirement restarted) {
 
         if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
-            mjPerMillibucket = propMjPerMillibucket.getLong();
+            mjPerMillibucket = propMjPerMillibucket.get();
             if (mjPerMillibucket < MJ_REQ_MILLIBUCKET_MIN) {
                 mjPerMillibucket = MJ_REQ_MILLIBUCKET_MIN;
             }
 
-            mjPerItem = propMjPerItem.getLong();
+            mjPerItem = propMjPerItem.get();
             if (mjPerItem < MJ_REQ_ITEM_MIN) {
                 mjPerItem = MJ_REQ_ITEM_MIN;
             }
 
-            baseFlowRate = MathUtil.clamp(propBaseFlowRate.getInt(), 1, 40);
+            baseFlowRate = MathUtil.clamp(propBaseFlowRate.get(), 1, 40);
             int basePowerRate = 4;
 
-            fluidPipeColourBorder = propFluidPipeColourBorder.getBoolean();
+            fluidPipeColourBorder = propFluidPipeColourBorder.get();
             PipeApi.flowFluids.fallbackColourType =
                     fluidPipeColourBorder ? EnumPipeColourType.BORDER_INNER : EnumPipeColourType.TRANSLUCENT;
 
-            lossMode = ConfigUtil.parseEnumForConfig(propLossMode, PowerLossMode.DEFAULT);
+            lossMode = propLossMode.get();
 
             fluidTransfer(BCTransportPipes.cobbleFluid, baseFlowRate, 10);
             fluidTransfer(BCTransportPipes.woodFluid, baseFlowRate, 10);

@@ -98,11 +98,9 @@ public class ItemTransactorHelper {
         return new InjectableWrapper(injectable, facing);
     }
 
-    /**
-     * Provides an implementation of {@link IItemTransactor#insert(NonNullList, boolean)} that relies on
+    /** Provides an implementation of {@link IItemTransactor#insert(NonNullList, boolean)} that relies on
      * {@link IItemTransactor#insert(ItemStack, boolean, boolean)}. This is the least efficient, default
-     * implementation.
-     */
+     * implementation. */
     public static NonNullList<ItemStack> insertAllBypass(IItemTransactor transactor, NonNullList<ItemStack> stacks, boolean simulate) {
         NonNullList<ItemStack> leftOver = NonNullList.create();
         for (ItemStack stack : stacks) {
@@ -114,41 +112,33 @@ public class ItemTransactorHelper {
         return leftOver;
     }
 
-    /**
-     * Attempts to move as many items as possible from the source {@link IItemTransactor} to the destination.
+    /** Attempts to move as many items as possible from the source {@link IItemTransactor} to the destination.
      *
-     * @return The number of items moved.
-     */
+     * @return The number of items moved. */
     public static int move(IItemTransactor src, IItemTransactor dst) {
         return move(src, dst, Integer.MAX_VALUE);
     }
 
-    /**
-     * Attempts to move up to maxItems from the source {@link IItemTransactor} to the destination.
+    /** Attempts to move up to maxItems from the source {@link IItemTransactor} to the destination.
      *
      * @param maxItems The maximum number of items to move.
-     * @return The number of items moved.
-     */
+     * @return The number of items moved. */
     public static int move(IItemTransactor src, IItemTransactor dst, int maxItems) {
         return move(src, dst, null, maxItems);
     }
 
-    /**
-     * Attempts to move up to maxItems from the source {@link IItemTransactor} to the destination.
+    /** Attempts to move up to maxItems from the source {@link IItemTransactor} to the destination.
      *
-     * @return The number of items moved.
-     */
+     * @return The number of items moved. */
     public static int move(IItemTransactor src, IItemTransactor dst, IStackFilter filter) {
         return move(src, dst, filter, Integer.MAX_VALUE);
     }
 
-    /**
-     * Attempts to move up to maxItems from the source {@link IItemTransactor} to the destination.
+    /** Attempts to move up to maxItems from the source {@link IItemTransactor} to the destination.
      *
-     * @param filter   The stack filter to use - only items that match this filter will be moved.
+     * @param filter The stack filter to use - only items that match this filter will be moved.
      * @param maxItems The maximum number of items to move.
-     * @return The number of items moved.
-     */
+     * @return The number of items moved. */
     public static int move(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems) {
         int moved = 0;
         IStackFilter rFilter = dst::canPartiallyAccept;
@@ -170,10 +160,8 @@ public class ItemTransactorHelper {
         return moveSingle(src, dst, filter, Integer.MAX_VALUE, simulateSrc, simulateDst);
     }
 
-    /**
-     * Similar to {@link #move(IItemTransactor, IItemTransactor, IStackFilter, int)}, but will only attempt to extract
-     * and insert once, which means that you can simulate the move safely.
-     */
+    /** Similar to {@link #move(IItemTransactor, IItemTransactor, IStackFilter, int)}, but will only attempt to extract
+     * and insert once, which means that you can simulate the move safely. */
     public static int moveSingle(IItemTransactor src, IItemTransactor dst, IStackFilter filter, int maxItems, boolean simulateSrc, boolean simulateDst) {
         IStackFilter rFilter = dst::canPartiallyAccept;
         if (filter != null) {

@@ -283,9 +283,7 @@ public class PacketBufferBC extends FriendlyByteBuf {
         return enums[index];
     }
 
-    /**
-     * Reads string of any possible length
-     */
+    /** Reads string of any possible length */
     public String readString() {
         int length = readVarInt();
         byte[] array = new byte[length];

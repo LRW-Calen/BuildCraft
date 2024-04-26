@@ -35,11 +35,9 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Can render 3D fluid cuboid's, up to 1x1x1 in size. Note that they *must* be contained within the 1x1x1 core space -
+/** Can render 3D fluid cuboid's, up to 1x1x1 in size. Note that they *must* be contained within the 1x1x1 block space -
  * you can't use this to render off large multiblocks. Not thread safe -- this uses static variables so you should only
- * call this from the main client thread.
- */
+ * call this from the main client thread. */
 // TODO: thread safety (per thread context?)
 // Perhaps move this into IModelRenderer? And that way we get the buffer, force shaders to cope with fluids (?!), etc
 @OnlyIn(Dist.CLIENT)
@@ -146,37 +144,33 @@ public class FluidRenderer {
         }
     }
 
-    /**
-     * Renders a fluid cuboid to the given vertex buffer. The cube shouldn't cross over any {@literal 0->1} boundary
-     * (so the cube must be contained within a core).
+    /** Renders a fluid cuboid to the given vertex buffer. The cube shouldn't cross over any {@literal 0->1} boundary
+     * (so the cube must be contained within a block).
      *
-     * @param type       The type of sprite to use. See {@link FluidSpriteType} for more details.
-     * @param tank       The fluid tank that should be rendered.
-     * @param min        The minimum coordinate that the tank should be rendered from
-     * @param max        The maximum coordinate that the tank will be rendered to.
-     * @param bbIn       The {@link BufferBuilder} that the fluid will be rendered into.
+     * @param type The type of sprite to use. See {@link FluidSpriteType} for more details.
+     * @param tank The fluid tank that should be rendered.
+     * @param min The minimum coordinate that the tank should be rendered from
+     * @param max The maximum coordinate that the tank will be rendered to.
+     * @param bbIn The {@link BufferBuilder} that the fluid will be rendered into.
      * @param sideRender A size 6 boolean array that determines if the face will be rendered. If it is null then all
-     *                   faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns.
-     * @see #renderFluid(FluidSpriteType, FluidStack, double, double, Vec3, Vec3, PoseStack.Pose, VertexConsumer, boolean[])
-     */
+     * faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns.
+     * @see #renderFluid(FluidSpriteType, FluidStack, double, double, Vec3, Vec3, PoseStack.Pose, VertexConsumer, boolean[]) */
     public static void renderFluid(FluidSpriteType type, IFluidTank tank, Vec3 min, Vec3 max, PoseStack.Pose pose, VertexConsumer bbIn,
                                    boolean[] sideRender) {
         renderFluid(type, tank.getFluid(), tank.getCapacity(), min, max, pose, bbIn, sideRender);
     }
 
-    /**
-     * Render's a fluid cuboid to the given vertex buffer. The cube shouldn't cross over any {@literal 0->1} boundary
-     * (so the cube must be contained within a core).
+    /** Render's a fluid cuboid to the given vertex buffer. The cube shouldn't cross over any {@literal 0->1} boundary
+     * (so the cube must be contained within a block).
      *
-     * @param type       The type of sprite to use. See {@link FluidSpriteType} for more details.
-     * @param fluid      The stack that represents the fluid to render
-     * @param cap        The maximum amount of fluid that could be in the stack. Usually the capacity of the tank.
-     * @param min        The minimum coordinate that the tank should be rendered from
-     * @param max        The maximum coordinate that the tank will be rendered to.
-     * @param bbIn       The {@link BufferBuilder} that the fluid will be rendered into.
+     * @param type The type of sprite to use. See {@link FluidSpriteType} for more details.
+     * @param fluid The stack that represents the fluid to render
+     * @param cap The maximum amount of fluid that could be in the stack. Usually the capacity of the tank.
+     * @param min The minimum coordinate that the tank should be rendered from
+     * @param max The maximum coordinate that the tank will be rendered to.
+     * @param bbIn The {@link BufferBuilder} that the fluid will be rendered into.
      * @param sideRender A size 6 boolean array that determines if the face will be rendered. If it is null then all
-     *                   faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns.
-     */
+     * faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns. */
     public static void renderFluid(
             FluidSpriteType type,
             FluidStack fluid,
@@ -191,22 +185,20 @@ public class FluidRenderer {
         renderFluid(type, fluid, fluid == null ? 0 : fluid.getAmount(), cap, min, max, pose, bbIn, sideRender);
     }
 
-    /**
-     * Render's a fluid cuboid to the given vertex buffer. The cube shouldn't cross over any {@literal 0->1} boundary
-     * (so the cube must be contained within a core).
+    /** Render's a fluid cuboid to the given vertex buffer. The cube shouldn't cross over any {@literal 0->1} boundary
+     * (so the cube must be contained within a block).
      *
-     * @param type       The type of sprite to use. See {@link FluidSpriteType} for more details.
-     * @param fluid      The stack that represents the fluid to render. Note that the amount from the stack is NOT used.
-     * @param amount     The actual amount of fluid in the stack. Is a "double" rather than an "int" as then you can
-     *                   interpolate between frames.
-     * @param cap        The maximum amount of fluid that could be in the stack. Usually the capacity of the tank.
-     * @param min        The minimum coordinate that the tank should be rendered from
-     * @param max        The maximum coordinate that the tank will be rendered to.
-     * @param pose       The {@link PoseStack.Pose}
-     * @param bb         The {@link VertexConsumer} that the fluid will be rendered into.
+     * @param type The type of sprite to use. See {@link FluidSpriteType} for more details.
+     * @param fluid The stack that represents the fluid to render. Note that the amount from the stack is NOT used.
+     * @param amount The actual amount of fluid in the stack. Is a "double" rather than an "int" as then you can
+     * interpolate between frames.
+     * @param cap The maximum amount of fluid that could be in the stack. Usually the capacity of the tank.
+     * @param min The minimum coordinate that the tank should be rendered from
+     * @param max The maximum coordinate that the tank will be rendered to.
+     * @param pose The {@link PoseStack.Pose}
+     * @param bb The {@link VertexConsumer} that the fluid will be rendered into.
      * @param sideRender A size 6 boolean array that determines if the face will be rendered. If it is null then all
-     *                   faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns.
-     */
+     * faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns. */
     public static void renderFluid(
             FluidSpriteType type,
             FluidStack fluid,
@@ -378,10 +370,8 @@ public class FluidRenderer {
         vertex.renderAsBlock(pose, bb);
     }
 
-    /**
-     * Fills up the given region with the fluids texture, repeated. Ignores the value of {@link FluidStack#getAmount()}. Use
-     * {@link GuiUtil}'s fluid drawing methods in preference to this.
-     */
+    /** Fills up the given region with the fluids texture, repeated. Ignores the value of {@link FluidStack#getAmount()}. Use
+     * {@link GuiUtil}'s fluid drawing methods in preference to this. */
     public static void drawFluidForGui(FluidStack fluid, double startX, double startY, double endX, double endY, PoseStack poseStack) {
         PoseStack.Pose pose = poseStack.last();
         Matrix4f poseMatrix = pose.pose();
@@ -490,23 +480,17 @@ public class FluidRenderer {
         bb.endVertex();
     }
 
-    /**
-     * Used to keep track of what position maps to what texture co-ord.
+    /** Used to keep track of what position maps to what texture co-ord.
      * <p>
-     * For example XY maps X to U and Y to V, and ignores Z
-     */
+     * For example XY maps X to U and Y to V, and ignores Z */
     private enum TexMap {
         XY(true, true),
         XZ(true, false),
         ZY(false, true);
 
-        /**
-         * If true, then X maps to U. Otherwise Z maps to U.
-         */
+        /** If true, then X maps to U. Otherwise Z maps to U. */
         private final boolean ux;
-        /**
-         * If true, then Y maps to V. Otherwise Z maps to V.
-         */
+        /** If true, then Y maps to V. Otherwise Z maps to V. */
         private final boolean vy;
 
         TexMap(boolean ux, boolean vy) {
@@ -514,10 +498,8 @@ public class FluidRenderer {
             this.vy = vy;
         }
 
-        /**
-         * Changes the vertex's texture co-ord to be the same as the position, for that face. (Uses {@link #ux} and
-         * {@link #vy} to determine how they are mapped).
-         */
+        /** Changes the vertex's texture co-ord to be the same as the position, for that face. (Uses {@link #ux} and
+         * {@link #vy} to determine how they are mapped). */
         private void apply(double x, double y, double z) {
             double realu = ux ? x : z;
             double realv = vy ? y : z;

@@ -214,7 +214,7 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
      * with {@link Direction#UP} or {@link Direction#DOWN}, however addons are free to call with any of the other 4
      * non-null faces. (Although an addon calling from other faces must provide some way of transferring fluids around).
      *
-     * @param other     The other tank.
+     * @param other The other tank.
      * @param direction The direction that the other tank is, from this tank.
      * @return True if this can connect, false otherwise. */
     public boolean canConnectTo(TileTank other, Direction direction) {
@@ -227,9 +227,9 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
      * @param from
      * @param to
      * @param direction The direction from the "from" tank, to the "to" tank, such that
-     *                  {@link Objects#equals(Object, Object) Objects.equals(}{@link TileTank#getBlockPos()}
-     *                  from.getPos()}.{@link BlockPos#relative(Direction)}  offset(direction)}, {@link TileTank#getBlockPos()
-     *                  to.getPos()}) returns true.
+     *            {@link Objects#equals(Object, Object) Objects.equals(}{@link TileTank#getBlockPos()}
+     *            from.getPos()}.{@link BlockPos#relative(Direction)}  offset(direction)}, {@link TileTank#getBlockPos()
+     *            to.getPos()}) returns true.
      * @return True if both could connect, false otherwise. */
     public static boolean canTanksConnect(TileTank from, TileTank to, Direction direction) {
         return from.canConnectTo(to, direction) && to.canConnectTo(from, direction.getOpposite());

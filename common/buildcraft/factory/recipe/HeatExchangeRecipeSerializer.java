@@ -4,7 +4,6 @@ import buildcraft.api.recipes.IRefineryRecipeManager.IHeatExchangerRecipe;
 import buildcraft.factory.BCFactory;
 import buildcraft.lib.misc.JsonUtil;
 import buildcraft.lib.recipe.RefineryRecipeRegistry.CoolableRecipe;
-import buildcraft.lib.recipe.RefineryRecipeRegistry.HeatExchangeRecipe;
 import buildcraft.lib.recipe.RefineryRecipeRegistry.HeatableRecipe;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;

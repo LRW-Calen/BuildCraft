@@ -183,7 +183,7 @@ public class SimpleScript {
                 if ("endif".equals(function)) {
                     skipLevel--;
                     conditionalLevel--;
-                    log("endif -- skipped core");
+                    log("endif -- skipped block");
                 }
                 continue;
             }
@@ -220,7 +220,7 @@ public class SimpleScript {
                         log("cannot end if without starting one!");
                     }
                     conditionalLevel--;
-                    log("endif -- executed core");
+                    log("endif -- executed block");
                     break;
                 }
                 case "import": {

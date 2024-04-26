@@ -13,66 +13,52 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.text.NumberFormat;
 
-/**
- * Provides a few methods for writing the results from a vanilla {@link ProfilerFiller} to a file or something else.
- */
+/** Provides a few methods for writing the results from a vanilla {@link ProfilerFiller} to a file or something else. */
 public class ProfilerUtil {
 
-    /**
-     * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link System#out} as the
-     * {@link ILogAcceptor}.
-     */
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link System#out} as the
+     * {@link ILogAcceptor}. */
 //    public static void printProfilerResults(Profiler profiler, String rootName)
     public static void printProfilerResults(ActiveProfiler profiler, String rootName) {
         printProfilerResults(profiler, rootName, -1);
     }
 
-    /**
-     * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link System#out} as the
-     * {@link ILogAcceptor}.
-     */
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link System#out} as the
+     * {@link ILogAcceptor}. */
 //    public static void printProfilerResults(Profiler profiler, String rootName, long totalNanoseconds)
     public static void printProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds) {
         writeProfilerResults(profiler, rootName, totalNanoseconds, System.out::println);
     }
 
-    /**
-     * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link BCLog#logger
-     * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}.
-     */
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link BCLog#logger
+     * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}. */
 //    public static void logProfilerResults(Profiler profiler, String rootName)
     public static void logProfilerResults(ActiveProfiler profiler, String rootName) {
         logProfilerResults(profiler, rootName, -1);
     }
 
-    /**
-     * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link BCLog#logger
-     * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}.
-     */
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link BCLog#logger
+     * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}. */
 //    public static void logProfilerResults(Profiler profiler, String rootName, long totalNanoseconds)
     public static void logProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds) {
         writeProfilerResults(profiler, rootName, totalNanoseconds, BCLog.logger::info);
     }
 
-    /**
-     * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
      *
      * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
-     *                     be created, or cannot be opened for any other reason, or if an I/O exception occurred while writing
-     *                     the profiler results.
-     */
+     *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while writing
+     *             the profiler results. */
 //    public static void saveProfilerResults(Profiler profiler, String rootName, Path dest) throws IOException
     public static void saveProfilerResults(ActiveProfiler profiler, String rootName, Path dest) throws IOException {
         saveProfilerResults(profiler, rootName, -1, dest);
     }
 
-    /**
-     * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
      *
      * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
-     *                     be created, or cannot be opened for any other reason, or if an I/O exception occurred while wrting
-     *                     the profiler results.
-     */
+     *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while wrting
+     *             the profiler results. */
 //    public static void saveProfilerResults(Profiler profiler, String rootName, File dest) throws IOException
     public static void saveProfilerResults(ActiveProfiler profiler, String rootName, File dest) throws IOException {
         dest = dest.getAbsoluteFile();
@@ -80,15 +66,13 @@ public class ProfilerUtil {
         saveProfilerResults(profiler, rootName, -1, dest.toPath());
     }
 
-    /**
-     * Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
      *
      * @param totalNanoseconds The total amount of time that the profiler's root section took, or -1 if this isn't
-     *                         known.
+     *            known.
      * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
-     *                     be created, or cannot be opened for any other reason, or if an I/O exception occurred while writing
-     *                     the profiler results.
-     */
+     *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while writing
+     *             the profiler results. */
 //    public static void saveProfilerResults(Profiler profiler, String rootName, long totalNanoseconds, Path dest)
     public static void saveProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds, Path dest)
             throws IOException {
@@ -104,31 +88,27 @@ public class ProfilerUtil {
         }
     }
 
-    /**
-     * @param rootName The base name to use. Most of the time you just want to use "root".
-     * @param dest     The method to call with the finished lines.
-     * @throws E if {@link ILogAcceptor#write(String)} throws an exception.
-     */
+    /** @param rootName The base name to use. Most of the time you just want to use "root".
+     * @param dest The method to call with the finished lines.
+     * @throws E if {@link ILogAcceptor#write(String)} throws an exception. */
 //    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
     public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName,
                                                                   ILogAcceptor<E> dest) throws E {
         writeProfilerResults(profiler, rootName, -1, dest);
     }
 
-    /**
-     * @param rootName         The base name to use. Most of the time you just want to use "root".
+    /** @param rootName The base name to use. Most of the time you just want to use "root".
      * @param totalNanoseconds The total amount of time that the profiler's root section took, or -1 if this isn't
-     *                         known.
-     * @param dest             The method to call with the finished lines.
-     * @throws E if {@link ILogAcceptor#write(String)} throws an exception.
-     */
+     *            known.
+     * @param dest The method to call with the finished lines.
+     * @throws E if {@link ILogAcceptor#write(String)} throws an exception. */
 //    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
     public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName,
                                                                   long totalNanoseconds, ILogAcceptor<E> dest) throws E {
         writeProfilerResults_Internal(profiler, rootName, totalNanoseconds, 0, dest);
     }
 
-    //    private static <E extends Throwable> void writeProfilerResults_Internal(Profiler profiler, String sectionName,
+    // private static <E extends Throwable> void writeProfilerResults_Internal(Profiler profiler, String sectionName,
     private static <E extends Throwable> void writeProfilerResults_Internal(ActiveProfiler profiler, String sectionName,
                                                                             long totalNanoseconds, int indent, ILogAcceptor<E> dest) throws E {
 
@@ -202,10 +182,8 @@ public class ProfilerUtil {
         }
     }
 
-    /**
-     * @param <E> The base exception type that {@link #write(String)} might throw. Used to allow writing to files to
-     *            throw a (checked) exception, but {@link System#out} to never throw.
-     */
+    /** @param <E> The base exception type that {@link #write(String)} might throw. Used to allow writing to files to
+     *            throw a (checked) exception, but {@link System#out} to never throw. */
     public interface ILogAcceptor<E extends Throwable> {
         void write(String line) throws E;
     }

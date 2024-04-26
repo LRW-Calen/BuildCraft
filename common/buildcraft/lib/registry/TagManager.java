@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 
 /**
  * Stores several types of "tag" (strings) for BuildCraft. A central place for all of them to init in. Refer to the
- * "static" core for all of the tag ID's
+ * "static" block for all of the tag ID's
  * <p>
  * You are free to add your own tags (say for addons) but it is recommended that you include your addon name somewhere
  * near the start - we don't want name clashes between addons or an addon and BC itself. If you want more types of tags

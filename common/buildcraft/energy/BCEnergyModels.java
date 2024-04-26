@@ -21,7 +21,6 @@ import buildcraft.lib.expression.DefaultContexts;
 import buildcraft.lib.expression.FunctionContext;
 import buildcraft.lib.expression.node.value.NodeVariableDouble;
 import buildcraft.lib.expression.node.value.NodeVariableObject;
-import buildcraft.lib.fluid.BCFluid;
 import buildcraft.lib.misc.ExpressionCompat;
 import buildcraft.lib.misc.data.ModelVariableData;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -38,7 +37,6 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 @OnlyIn(Dist.CLIENT)

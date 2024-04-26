@@ -2,7 +2,6 @@ package buildcraft.factory.recipe;
 
 import buildcraft.api.recipes.IRefineryRecipeManager.IHeatExchangerRecipe;
 import buildcraft.energy.BCEnergy;
-import buildcraft.lib.recipe.RefineryRecipeRegistry;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;

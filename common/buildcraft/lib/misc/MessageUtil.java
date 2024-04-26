@@ -196,7 +196,7 @@ public class MessageUtil {
     // Calen writeBlockState readBlockState 互相收发 能对应上即可
 
     /**
-     * Writes a core state using the core ID and its metadata. Not suitable for full states.
+     * Writes a block state using the block ID and its metadata. Not suitable for full states.
      */
     public static void writeBlockState(FriendlyByteBuf buf, BlockState state) {
         buf.writeNbt(NbtUtils.writeBlockState(state));
@@ -415,6 +415,7 @@ public class MessageUtil {
             }
         }
     }
+
     public static void serverOpenGUIWithMsg(Player player, MenuProvider provider, BlockPos pos, int data, IMessage msg) {
         int fullId = data << 8;
         if (player instanceof ServerPlayer serverPlayer) {

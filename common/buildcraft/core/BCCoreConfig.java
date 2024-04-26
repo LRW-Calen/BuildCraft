@@ -11,36 +11,36 @@ import buildcraft.lib.BCLibConfig;
 import buildcraft.lib.BCLibConfig.ChunkLoaderLevel;
 import buildcraft.lib.BCLibConfig.RenderRotation;
 import buildcraft.lib.BCLibConfig.TimeGap;
+import buildcraft.lib.config.Configuration;
 import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.config.FileConfigManager;
-import buildcraft.lib.misc.ConfigUtil;
 import buildcraft.lib.misc.MathUtil;
 import buildcraft.lib.registry.RegistryConfig;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.ModLoadingStage;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.fml.loading.FMLPaths;
-import net.minecraftforge_1_12_2.common.config.Configuration;
-import net.minecraftforge_1_12_2.common.config.Property;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 public class BCCoreConfig {
     private static final List<Consumer<EnumRestartRequirement>> reloadListeners = new ArrayList<>();
 
-    public static File configFolder;
-
-    // public static Configuration config;
-    private static Configuration config;
-    // public static Configuration objConfig;
-    private static Configuration objConfig;
+    public static final Configuration config;
+    public static Configuration objConfig;
     public static FileConfigManager detailedConfigManager;
 
     public static boolean worldGen;
@@ -55,54 +55,50 @@ public class BCCoreConfig {
     public static double miningMultiplier = 1;
     public static int miningMaxDepth;
 
-    private static Property propColourBlindMode;
-    private static Property propWorldGen;
-    private static Property propWorldGenWaterSpring;
-    private static Property propMinePlayerProtected;
-    private static Property propUseColouredLabels;
-    private static Property propUseHighContrastColouredLabels;
-    private static Property propHidePower;
-    private static Property propHideFluid;
-    private static Property propGuideBookEnableDetail;
-    private static Property propGuideItemSearchLimit;
-    private static Property propUseBucketsStatic;
-    private static Property propUseBucketsFlow;
-    private static Property propUseLongLocalizedName;
-    private static Property propDisplayTimeGap;
-    private static Property propUseSwappableSprites;
-    private static Property propEnableAnimatedSprites;
-    private static Property propMaxGuideSearchResults;
-    private static Property propChunkLoadLevel;
-    private static Property propItemRenderRotation;
-    private static Property propItemLifespan;
-    private static Property propPumpsConsumeWater;
-    private static Property propMarkerMaxDistance;
-    private static Property propPumpMaxDistance;
-    private static Property propNetworkUpdateRate;
-    private static Property propMiningMultiplier;
-    private static Property propMiningMaxDepth;
+    private static BooleanValue propColourBlindMode;
+    private static BooleanValue propWorldGen;
+    private static BooleanValue propWorldGenWaterSpring;
+    private static BooleanValue propMinePlayerProtected;
+    private static BooleanValue propUseColouredLabels;
+    private static BooleanValue propUseHighContrastColouredLabels;
+    private static BooleanValue propHidePower;
+    private static BooleanValue propHideFluid;
+    private static BooleanValue propGuideBookEnableDetail;
+    private static IntValue propGuideItemSearchLimit;
+    private static BooleanValue propUseBucketsStatic;
+    private static BooleanValue propUseBucketsFlow;
+    private static BooleanValue propUseLongLocalizedName;
+    private static EnumValue<TimeGap> propDisplayTimeGap;
+    private static BooleanValue propUseSwappableSprites;
+    private static BooleanValue propEnableAnimatedSprites;
+    private static IntValue propMaxGuideSearchResults;
+    private static EnumValue<ChunkLoaderLevel> propChunkLoadLevel;
+    private static EnumValue<RenderRotation> propItemRenderRotation;
+    private static IntValue propItemLifespan;
+    private static BooleanValue propPumpsConsumeWater;
+    private static IntValue propMarkerMaxDistance;
+    private static IntValue propPumpMaxDistance;
+    private static IntValue propNetworkUpdateRate;
+    private static DoubleValue propMiningMultiplier;
+    private static IntValue propMiningMaxDepth;
 
-    // Calen for thread safety
-    public static synchronized Configuration getConfigAndEnsureCreated(boolean notObjConfig) {
-        if (BCCoreConfig.config == null) {
-            createConfigFile();
-        }
-        if (notObjConfig) {
-            return BCCoreConfig.config;
-        } else {
-            return BCCoreConfig.objConfig;
-        }
+    // Calen: just ensure <cinit> run and registered to RegistryConfig#modObjectConfigs
+    public static synchronized void cinit() {
     }
 
-    // Calen
-    private static void createConfigFile() {
-        // Calen changed
+    static {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        config = new Configuration(builder, "buildcraft/main.toml");
+        createProps();
+        ForgeConfigSpec spec = config.build();
+        ModContainer container = ModList.get().getModContainerById(BCCore.MODID).get();
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, "buildcraft/main.toml"));
+
         File forgeConfigFolder = FMLPaths.CONFIGDIR.get().toFile();
         File buildCraftConfigFolder = new File(forgeConfigFolder, "buildcraft");
 
-        configFolder = buildCraftConfigFolder;
-        config = new Configuration(new File(buildCraftConfigFolder, "main.cfg"));
-        objConfig = RegistryConfig.setRegistryConfig(BCCore.MODID, new File(buildCraftConfigFolder, "objects.cfg"));
+//        config = new Configuration(new File(buildCraftConfigFolder, "main.cfg"));
+        objConfig = RegistryConfig.setRegistryConfig(BCCore.MODID, "buildcraft/objects.toml");
         // Calen: thread safety
 //        BCLibConfig.guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
         BCLibConfig.getGuiConfigFileAndEnsureCreated();
@@ -114,164 +110,181 @@ public class BCCoreConfig {
         detailedConfigManager.setConfigFile(new File(buildCraftConfigFolder, "detailed.properties"));
     }
 
-    public static void preInit() {
-//        File forgeConfigFolder = FMLPaths.CONFIGDIR.get().toFile();
-//        File buildCraftConfigFolder = new File(forgeConfigFolder, "buildcraft");
-//
-//        configFolder = buildCraftConfigFolder;
-//        config = new Configuration(new File(buildCraftConfigFolder, "main.cfg"));
-////        getOrSetConfig(false, new Configuration(new File(buildCraftConfigFolder, "main.cfg")));
-////        objConfig = RegistryConfig.setRegistryConfig(NameSpaces.BUILDCRAFT_CORE, new File(buildCraftConfigFolder, "objects.cfg"));
-//        getOrSetObjConfig(false, RegistryConfig.setRegistryConfig(NameSpaces.BUILDCRAFT_CORE, new File(buildCraftConfigFolder, "objects.cfg")));
-//        BCLibConfig.guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
-
-//        detailedConfigManager = new FileConfigManager(
-//                " The buildcraft detailed configuration file. This contains a lot of miscellaneous options that have no "
-//                        + "affect on gameplay.\n You should refer to the BC source code for a detailed description of what these do. (https://github.com/BuildCraft/BuildCraft)\n"
-//                        + " This file will be overwritten every time that buildcraft starts, so don't change anything other than the values.");
-//        detailedConfigManager.setConfigFile(new File(cfgFolder, "detailed.properties"));
-
-        getConfigAndEnsureCreated(true); // ensure object created
-
+    public static void createProps() {
         // Variables to make
-        String general = Configuration.CATEGORY_GENERAL;
+        String general = "general";
         String display = "display";
         String worldgen = "worldgen";
         String performance = "performance";
 
         EnumRestartRequirement none = EnumRestartRequirement.NONE;
         EnumRestartRequirement world = EnumRestartRequirement.WORLD;
-        EnumRestartRequirement game = EnumRestartRequirement.GAME;
+//        EnumRestartRequirement game = EnumRestartRequirement.GAME;
 
-        propColourBlindMode = getConfigAndEnsureCreated(true).get(display, "colorBlindMode", false);
-        propColourBlindMode.setComment("Should I enable colorblind mode?");
-        none.setTo(propColourBlindMode);
+        propColourBlindMode = config
+                .define(display,
+                        "Should I enable colorblind mode?",
+                        none,
+                        "colorBlindMode", false);
 
-        propWorldGen = getConfigAndEnsureCreated(true).get(worldgen, "enable", true);
-        propWorldGen.setComment("Should BuildCraft generate anything in the world?");
-        game.setTo(propWorldGen);
+        propUseColouredLabels = config
+                .define(display,
+                        "Should colours be displayed as their own (or a similar) colour in tooltips?",
+                        none,
+                        "useColouredLabels", true);
 
-        propWorldGenWaterSpring = getConfigAndEnsureCreated(true).get(worldgen, "generateWaterSprings", true);
-        propWorldGenWaterSpring.setComment("Should BuildCraft generate water springs?");
-        game.setTo(propWorldGenWaterSpring);
+        propUseHighContrastColouredLabels = config
+                .define(display,
+                        "Should colours displayed in tooltips use higher-contrast colours?",
+                        none,
+                        "useHighContrastColouredLabels", false);
 
-        propMinePlayerProtected = getConfigAndEnsureCreated(true).get(general, "miningBreaksPlayerProtectedBlocks", false);
-        propMinePlayerProtected
-                .setComment("Should BuildCraft miners be allowed to break blocks using player-specific protection?");
-        none.setTo(propMinePlayerProtected);
+        propHidePower = config
+                .define(display,
+                        "Should all power values (MJ, MJ/t) be hidden?",
+                        none,
+                        "hidePowerValues", false);
 
-        propUseColouredLabels = getConfigAndEnsureCreated(true).get(display, "useColouredLabels", true);
-        propUseColouredLabels.setComment("Should colours be displayed as their own (or a similar) colour in tooltips?");
-        none.setTo(propUseColouredLabels);
+        propHideFluid = config
+                .define(display,
+                        "Should all fluid values (Buckets, mB, mB/t) be hidden?",
+                        none,
+                        "hideFluidValues", false);
 
-        propUseHighContrastColouredLabels = getConfigAndEnsureCreated(true).get(display, "useHighContrastColouredLabels", false);
-        propUseHighContrastColouredLabels
-                .setComment("Should colours displayed in tooltips use higher-contrast colours?");
-        none.setTo(propUseHighContrastColouredLabels);
+        propGuideBookEnableDetail = config
+                .define(display,
+                        "",
+                        none,
+                        "guideBookEnableDetail", false);
 
-        propHidePower = getConfigAndEnsureCreated(true).get(display, "hidePowerValues", false);
-        propHidePower.setComment("Should all power values (MJ, MJ/t) be hidden?");
-        none.setTo(propHidePower);
+        propUseBucketsStatic = config
+                .define(display,
+                        "Should static fluid values be displayed in terms of buckets rather than thousandths of a bucket? (B vs mB)",
+                        none,
+                        "useBucketsStatic", true);
 
-        propHideFluid = getConfigAndEnsureCreated(true).get(display, "hideFluidValues", false);
-        propHideFluid.setComment("Should all fluid values (Buckets, mB, mB/t) be hidden?");
-        none.setTo(propHideFluid);
+        propUseBucketsFlow = config
+                .define(display,
+                        "Should flowing fluid values be displayed in terms of buckets per second rather than thousandths of a bucket per tick? (B/s vs mB/t)",
+                        none,
+                        "useBucketsFlow", true);
 
-        propGuideBookEnableDetail = getConfigAndEnsureCreated(true).get(display, "guideBookEnableDetail", false);
-        none.setTo(propGuideBookEnableDetail);
+        propUseLongLocalizedName = config
+                .define(display,
+                        "Should localised strings be displayed in long or short form (10 mB / t vs 10 milli buckets per tick",
+                        none,
+                        "useLongLocalizedName", true);
 
-        propGuideItemSearchLimit = getConfigAndEnsureCreated(true).get(performance, "guideItemSearchLimit", 10_000);
-        propGuideItemSearchLimit.setComment("The maximum number of items that the guide book will index.");
-        propGuideItemSearchLimit.setMinValue(1_500);
-        propGuideItemSearchLimit.setMaxValue(5_000_000);
-        none.setTo(propGuideItemSearchLimit);
+        propDisplayTimeGap = config
+                .defineEnum(display,
+                        "Should localised strings be displayed in terms of seconds (1 MJ/s) or ticks (20 MJ/t)",
+                        none,
+                        "timeGap", TimeGap.SECONDS);
 
-        propUseBucketsStatic = getConfigAndEnsureCreated(true).get(display, "useBucketsStatic", true);
-        propUseBucketsStatic.setComment(
-                "Should static fluid values be displayed in terms of buckets rather than thousandths of a bucket? (B vs mB)");
-        none.setTo(propUseBucketsStatic);
+        propUseSwappableSprites = config
+                .define(display,
+                        "Disable this if you get texture errors with optifine. Disables some texture switching functionality "
+                                + "when changing config options such as colour blind mode.",
+                        world,
+                        "useSwappableSprites", true);
 
-        propUseBucketsFlow = getConfigAndEnsureCreated(true).get(display, "useBucketsFlow", true);
-        propUseBucketsFlow.setComment(
-                "Should flowing fluid values be displayed in terms of buckets per second rather than thousandths of a bucket per tick? (B/s vs mB/t)");
-        none.setTo(propUseBucketsFlow);
+        propItemRenderRotation = config
+                .defineEnum(display,
+                        "The rotation that items use when travelling through pipes. Set to 'enabled' for full rotation, "
+                                + "'disabled' for no rotation, or 'horizontals_only' to only rotate items when going horizontally.",
+                        none,
+                        "itemRenderRotation", RenderRotation.ENABLED);
 
-        propUseLongLocalizedName = getConfigAndEnsureCreated(true).get(display, "useLongLocalizedName", true);
-        propUseLongLocalizedName.setComment(
-                "Should localised strings be displayed in long or short form (10 mB / t vs 10 milli buckets per tick");
-        none.setTo(propUseLongLocalizedName);
+        propWorldGen = config
+                .define(worldgen,
+                        "Should BuildCraft generate anything in the world?",
+                        world,
+                        "enable", true);
 
-        propDisplayTimeGap = getConfigAndEnsureCreated(true).get(display, "timeGap", TimeGap.SECONDS.name().toLowerCase(Locale.ROOT));
-        propDisplayTimeGap
-                .setComment("Should localised strings be displayed in terms of seconds (1 MJ/s) or ticks (20 MJ/t)");
-        ConfigUtil.setEnumProperty(propDisplayTimeGap, TimeGap.values());
-        none.setTo(propDisplayTimeGap);
+        propWorldGenWaterSpring = config
+                .define(worldgen,
+                        "Should BuildCraft generate water springs?",
+                        world,
+                        "generateWaterSprings", true);
 
-        propUseSwappableSprites = getConfigAndEnsureCreated(true).get(display, "useSwappableSprites", true);
-        propUseSwappableSprites.setComment(
-                "Disable this if you get texture errors with optifine. Disables some texture switching functionality "
-                        + "when changing config options such as colour blind mode.");
-        game.setTo(propUseSwappableSprites);
+        propGuideItemSearchLimit = config
+                .defineInRange(performance,
+                        "The maximum number of items that the guide book will index.",
+                        none,
+                        "guideItemSearchLimit", 10_000, 1_500, 5_000_000);
 
-        propEnableAnimatedSprites = getConfigAndEnsureCreated(true).get(performance, "enableAnimatedSprites", true);
-        propEnableAnimatedSprites.setComment(
-                "Disable this if you get sub-standard framerates due to buildcraftcore's ~60 sprites animating every frame.");
-        none.setTo(propEnableAnimatedSprites);
+        propEnableAnimatedSprites = config
+                .define(performance,
+                        "Disable this if you get sub-standard framerates due to buildcraftcore's ~60 sprites animating every frame.",
+                        none,
+                        "enableAnimatedSprites", true);
 
-        propMaxGuideSearchResults = getConfigAndEnsureCreated(true).get(performance, "maxGuideSearchResults", 1200);
-        propMaxGuideSearchResults.setComment("The maximum number of search results to display in the guide book.");
-        propMaxGuideSearchResults.setMinValue(500).setMaxValue(5000);
-        none.setTo(propMaxGuideSearchResults);
+        propMaxGuideSearchResults = config
+                .defineInRange(performance,
+                        "The maximum number of search results to display in the guide book.",
+                        none,
+                        "maxGuideSearchResults", 1200, 500, 5000);
 
-        propItemRenderRotation = getConfigAndEnsureCreated(true).get(display, "itemRenderRotation", RenderRotation.ENABLED.name().toLowerCase(Locale.ROOT));
-        propItemRenderRotation.setComment(
-                "The rotation that items use when travelling through pipes. Set to 'enabled' for full rotation, "
-                        + "'disabled' for no rotation, or 'horizontals_only' to only rotate items when going horizontally.");
-        ConfigUtil.setEnumProperty(propItemRenderRotation, RenderRotation.values());
+        propMinePlayerProtected = config
+                .define(general,
+                        "Should BuildCraft miners be allowed to break blocks using player-specific protection?",
+                        none,
+                        "miningBreaksPlayerProtectedBlocks", false);
 
-        propChunkLoadLevel = getConfigAndEnsureCreated(true).get(general, "chunkLoadLevel", ChunkLoaderLevel.SELF_TILES.name().toLowerCase(Locale.ROOT));
-        propChunkLoadLevel.setComment("");
-        ConfigUtil.setEnumProperty(propChunkLoadLevel, ChunkLoaderLevel.values());
-        world.setTo(propChunkLoadLevel);
+        propChunkLoadLevel = config
+                .defineEnum(general,
+                        "",
+                        world,
+                        "chunkLoadLevel", ChunkLoaderLevel.SELF_TILES);
 
-        propItemLifespan = getConfigAndEnsureCreated(true).get(general, "itemLifespan", 60);
-        propItemLifespan.setMinValue(5).setMaxValue(600);
-        propItemLifespan.setComment("How long, in seconds, should items stay on the ground? (Vanilla = 300, default = 60)");
-        none.setTo(propItemLifespan);
+        propItemLifespan = config
+                .defineInRange(general,
+                        "How long, in seconds, should items stay on the ground? (Vanilla = 300, default = 60)",
+                        none,
+                        "itemLifespan", 60, 5, 600);
 
-        propPumpsConsumeWater = getConfigAndEnsureCreated(true).get(general, "pumpsConsumeWater", false);
-        propPumpsConsumeWater.setComment("Should pumps consume water? Enabling this will disable"
-                + " minor optimisations, but work properly with finite water mods.");
-        none.setTo(propPumpsConsumeWater);
+        propPumpsConsumeWater = config
+                .define(general,
+                        "Should pumps consume water? Enabling this will disable"
+                                + " minor optimisations, but work properly with finite water mods.",
+                        none,
+                        "pumpsConsumeWater", false);
 
-        propMarkerMaxDistance = getConfigAndEnsureCreated(true).get(general, "markerMaxDistance", 64);
-        propMarkerMaxDistance.setMinValue(16).setMaxValue(256);
-        propMarkerMaxDistance.setComment("How far, in minecraft blocks, should markers (volume and path) reach?");
-        none.setTo(propMarkerMaxDistance);
+        propMarkerMaxDistance = config
+                .defineInRange(general,
+                        "How far, in minecraft blocks, should markers (volume and path) reach?",
+                        none,
+                        "markerMaxDistance", 64, 16, 256);
 
-        propPumpMaxDistance = getConfigAndEnsureCreated(true).get(general, "pumpMaxDistance", 64);
-        propPumpMaxDistance.setMinValue(16).setMaxValue(128);
-        propPumpMaxDistance.setComment("How far, in minecraft blocks, should pumps reach in fluids?");
-        none.setTo(propPumpMaxDistance);
+        propPumpMaxDistance = config
+                .defineInRange(general,
+                        "How far, in minecraft blocks, should pumps reach in fluids?",
+                        none,
+                        "pumpMaxDistance", 64, 16, 128);
 
-        propNetworkUpdateRate = getConfigAndEnsureCreated(true).get(general, "updateFactor", networkUpdateRate);
-        propNetworkUpdateRate.setMinValue(1).setMaxValue(100);
-        propNetworkUpdateRate.setComment(
-                "How often, in ticks, should network update packets be sent? Increasing this might help network performance.");
-        none.setTo(propNetworkUpdateRate);
+        propNetworkUpdateRate = config
+                .defineInRange(general,
+                        "How often, in ticks, should network update packets be sent? Increasing this might help network performance.",
+                        none,
+                        "updateFactor", networkUpdateRate, 1, 100);
 
-        propMiningMultiplier = getConfigAndEnsureCreated(true).get(general, "miningMultiplier", 1.0);
-        propMiningMultiplier.setMinValue(1).setMaxValue(200);
-        propMiningMultiplier.setComment("How much power should be required for all mining machines?");
-        none.setTo(propMiningMultiplier);
+        propMiningMultiplier = config
+                .defineInRange(general,
+                        "How much power should be required for all mining machines?",
+                        none,
+                        "miningMultiplier", 1.0, 1, 200);
 
-        propMiningMaxDepth = getConfigAndEnsureCreated(true).get(general, "miningMaxDepth", 512);
-        propMiningMaxDepth.setMinValue(32).setMaxValue(4096);
-        propMiningMaxDepth.setComment("How much further down can miners (like the quarry or the mining well) dig?"
-                + "\n(Note: values above 256 only have an effect if a mod like cubic chunks is installed).");
-        none.setTo(propMiningMaxDepth);
+        propMiningMaxDepth = config
+                .defineInRange(general,
+                        "How much further down can miners (like the quarry or the mining well) dig?"
+                                + "\n(Note: values above 256 only have an effect if a mod like cubic chunks is installed).",
+                        none,
+                        "miningMaxDepth", 512, 32, 4096);
 
-        reloadConfig(game);
+        config.build();
+
+//        reloadConfig(EnumRestartRequirement.GAME);
+        reloadConfig(EnumRestartRequirement.WORLD);
         addReloadListener(BCCoreConfig::reloadConfig);
 
         // 1.18.2: ModConfigEvent is IModBusEvent
@@ -300,55 +313,52 @@ public class BCCoreConfig {
         }
     }
 
-    public static void postInit() {
+//    public static void postInit() {
 //        ConfigUtil.setLang(config);
-        ConfigUtil.setLang(getConfigAndEnsureCreated(true));
-        saveConfigs();
-    }
+//        saveConfigs();
+//    }
 
-    public static void saveConfigs() {
-        if (getConfigAndEnsureCreated(true).hasChanged()) {
-            getConfigAndEnsureCreated(true).save();
-        }
-        if (getConfigAndEnsureCreated(false).hasChanged()) {
-            getConfigAndEnsureCreated(false).save();
-        }
-    }
+//    public static void saveConfigs() {
+//        if (config.hasChanged()) {
+//            config.save();
+//        }
+//        if (objConfig.hasChanged()) {
+//            objConfig.save();
+//        }
+//    }
 
     public static void reloadConfig(EnumRestartRequirement restarted) {
-        minePlayerProtected = propMinePlayerProtected.getBoolean();
-        BCLibConfig.useColouredLabels = propUseColouredLabels.getBoolean();
-        BCLibConfig.useHighContrastLabelColours = propUseHighContrastColouredLabels.getBoolean();
-        hidePower = propHidePower.getBoolean();
-        hideFluid = propHideFluid.getBoolean();
-        BCLibConfig.guideShowDetail = propGuideBookEnableDetail.getBoolean();
-        BCLibConfig.guideItemSearchLimit = MathUtil.clamp(propGuideItemSearchLimit.getInt(), 1_500, 5_000_000);
-        BCLibConfig.useBucketsStatic = propUseBucketsStatic.getBoolean();
-        BCLibConfig.useBucketsFlow = propUseBucketsFlow.getBoolean();
-        BCLibConfig.useLongLocalizedName = propUseLongLocalizedName.getBoolean();
-        BCLibConfig.itemLifespan = propItemLifespan.getInt();
-        pumpsConsumeWater = propPumpsConsumeWater.getBoolean();
-        markerMaxDistance = propMarkerMaxDistance.getInt();
-        pumpMaxDistance = propPumpMaxDistance.getInt();
-        BCLibConfig.colourBlindMode = propColourBlindMode.getBoolean();
-        BCLibConfig.displayTimeGap = ConfigUtil.parseEnumForConfig(propDisplayTimeGap, TimeGap.TICKS);
-        BCLibConfig.rotateTravelingItems =
-                ConfigUtil.parseEnumForConfig(propItemRenderRotation, BCLibConfig.RenderRotation.ENABLED);
-        BCLibConfig.enableAnimatedSprites = propEnableAnimatedSprites.getBoolean();
-        miningMultiplier = MathUtil.clamp(propMiningMultiplier.getDouble(), 1, 200);
-        miningMaxDepth = propMiningMaxDepth.getInt();
+        minePlayerProtected = propMinePlayerProtected.get();
+        BCLibConfig.useColouredLabels = propUseColouredLabels.get();
+        BCLibConfig.useHighContrastLabelColours = propUseHighContrastColouredLabels.get();
+        hidePower = propHidePower.get();
+        hideFluid = propHideFluid.get();
+        BCLibConfig.guideShowDetail = propGuideBookEnableDetail.get();
+        BCLibConfig.guideItemSearchLimit = MathUtil.clamp(propGuideItemSearchLimit.get(), 1_500, 5_000_000);
+        BCLibConfig.useBucketsStatic = propUseBucketsStatic.get();
+        BCLibConfig.useBucketsFlow = propUseBucketsFlow.get();
+        BCLibConfig.useLongLocalizedName = propUseLongLocalizedName.get();
+        BCLibConfig.itemLifespan = propItemLifespan.get();
+        pumpsConsumeWater = propPumpsConsumeWater.get();
+        markerMaxDistance = propMarkerMaxDistance.get();
+        pumpMaxDistance = propPumpMaxDistance.get();
+        BCLibConfig.colourBlindMode = propColourBlindMode.get();
+        BCLibConfig.displayTimeGap = propDisplayTimeGap.get();
+        BCLibConfig.rotateTravelingItems = propItemRenderRotation.get();
+        BCLibConfig.enableAnimatedSprites = propEnableAnimatedSprites.get();
+        miningMultiplier = MathUtil.clamp(propMiningMultiplier.get(), 1, 200);
+        miningMaxDepth = propMiningMaxDepth.get();
 
         if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
-            BCLibConfig.chunkLoadingLevel =
-                    ConfigUtil.parseEnumForConfig(propChunkLoadLevel, BCLibConfig.ChunkLoaderLevel.SELF_TILES);
+            BCLibConfig.chunkLoadingLevel = propChunkLoadLevel.get();
 
-            if (EnumRestartRequirement.GAME.hasBeenRestarted(restarted)) {
-                worldGen = propWorldGen.getBoolean();
-                worldGenWaterSpring = propWorldGenWaterSpring.getBoolean();
-                BCLibConfig.useSwappableSprites = propUseSwappableSprites.getBoolean();
-            }
+//            if (EnumRestartRequirement.GAME.hasBeenRestarted(restarted)) {
+            worldGen = propWorldGen.get();
+            worldGenWaterSpring = propWorldGenWaterSpring.get();
+            BCLibConfig.useSwappableSprites = propUseSwappableSprites.get();
+//            }
         }
         BCLibConfig.refreshConfigs();
-        saveConfigs();
+//        saveConfigs();
     }
 }

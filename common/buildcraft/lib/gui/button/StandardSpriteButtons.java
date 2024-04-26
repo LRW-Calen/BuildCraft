@@ -92,7 +92,7 @@ public class StandardSpriteButtons {
         TINY_BUTTON_DRAWABLE.hovered = defineButton(sprite, rect.offset(20, 0));
 
         // Replace GuiAbstractButton + subclasses with this + GuiSpriteButton + related methods for generating text
-        // elements + core methods for creating buttons like the old system + move everything to json.
+        // elements + util methods for creating buttons like the old system + move everything to json.
         // But finish the filler gui before moving everything else to json
     }
 

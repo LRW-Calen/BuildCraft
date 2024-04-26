@@ -56,8 +56,8 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     public static final Property<Boolean> PROP_CONNECTED_LEFT = BooleanProperty.create("connected_left");
     public static final Property<Boolean> PROP_CONNECTED_RIGHT = BooleanProperty.create("connected_right");
 
-    public BlockHeatExchange(String id, BlockBehaviour.Properties props) {
-        super(id, props);
+    public BlockHeatExchange(String idBC, BlockBehaviour.Properties props) {
+        super(idBC, props);
         this.registerDefaultState(
                 this.getStateDefinition().any()
                         .setValue(PROP_PART, EnumExchangePart.MIDDLE)

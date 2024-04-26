@@ -13,7 +13,7 @@ public class BCRoboticsItems {
     private static final RegistrationHelper HELPER = new RegistrationHelper(BCRobotics.MODID);
 
 
-    public static void preInit(){
+    public static void preInit() {
 
     }
 }

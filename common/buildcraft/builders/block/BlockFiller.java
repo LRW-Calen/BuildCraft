@@ -27,7 +27,7 @@ import org.jetbrains.annotations.NotNull;
 public class BlockFiller extends BlockBCTile_Neptune<TileFiller> implements IBlockWithFacing {
     // public static final IProperty<EnumFillerPattern> PATTERN = BuildCraftProperties.FILLER_PATTERN;
 
-    //    public BlockFiller(Material material, String id)
+    // public BlockFiller(Material material, String id)
     public BlockFiller(String idBC, BlockBehaviour.Properties properties) {
         super(idBC, properties);
         // setDefaultState(getDefaultState().withProperty(PATTERN, EnumFillerPattern.NONE));

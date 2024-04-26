@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface ITickable {
     /** Like the old updateEntity(), except more generic. */
     @MustBeInvokedByOverriders
-//    void update();
     default void update() {
         LinkedList<Runnable> taskOfCurrentTile = tasks.get(this);
         if (taskOfCurrentTile != null && !taskOfCurrentTile.isEmpty()) {
@@ -25,9 +24,12 @@ public interface ITickable {
 
     // Calen
 
-    /** When world loading, BlockEntity#level may be null, or Level#getBlockState may cause dead lock
+    /**
+     * When world loading, BlockEntity#level may be null, or Level#getBlockState may cause dead lock
+     *
      * @param task
-     * @param forceDelay If true, the task will be delayed to next update() even if the world is not null. */
+     * @param forceDelay If true, the task will be delayed to next update() even if the world is not null.
+     */
     default void runWhenWorldNotNull(Runnable task, boolean forceDelay) {
         // Calen: don't create abstract method getLevel() in ITickable, because it will not be renamed when reobf, ant will become a different method from BlockEntity#getLevel.
         if (forceDelay || ((BlockEntity) this).getLevel() == null) {

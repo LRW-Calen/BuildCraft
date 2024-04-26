@@ -22,7 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import javax.annotation.Nullable;
 
-public class BlockReplacer extends BlockBCTile_Neptune implements IBlockWithFacing {
+public class BlockReplacer extends BlockBCTile_Neptune<TileReplacer> implements IBlockWithFacing {
     public BlockReplacer(String idBC, BlockBehaviour.Properties properties) {
         super(idBC, properties);
     }
@@ -40,7 +40,6 @@ public class BlockReplacer extends BlockBCTile_Neptune implements IBlockWithFaci
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         if (!world.isClientSide) {
 //            BCBuildersGuis.REPLACER.openGUI(player, pos);
-            // Calen
             if (world.getBlockEntity(pos) instanceof TileReplacer tile) {
                 MessageUtil.serverOpenTileGui(player, tile);
             }

@@ -50,9 +50,9 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
         BOUNDING_BOXES.put(Direction.WEST, BOUNDING_BOX_WEST);
     }
 
-    public BlockMarkerBase(String id, BlockBehaviour.Properties props) {
+    public BlockMarkerBase(String idBC, BlockBehaviour.Properties props) {
         super(
-                id,
+                idBC,
                 props
                         .strength(0.25F)
                         .noOcclusion()
@@ -164,7 +164,7 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
 
     @Override
     public InteractionResult attemptRotation(Level world, BlockPos pos, BlockState state, Direction sideWrenched) {
-        if (state.getBlock() instanceof BlockMarkerBase) {// Just check to make sure we have the right core...
+        if (state.getBlock() instanceof BlockMarkerBase) {// Just check to make sure we have the right block...
             Property<Direction> prop = BuildCraftProperties.BLOCK_FACING_6;
             return VanillaRotationHandlers.rotateEnumFacing(world, pos, state, prop, VanillaRotationHandlers.ROTATE_FACING);
         } else {

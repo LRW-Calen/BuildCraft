@@ -5,17 +5,19 @@
 package buildcraft.lib.registry;
 
 import buildcraft.api.core.BCDebugging;
-import buildcraft.api.transport.pipe.IItemPipe;
+import buildcraft.core.BCCore;
 import buildcraft.core.BCCoreConfig;
+import buildcraft.lib.config.Configuration;
+import buildcraft.lib.config.EnumRestartRequirement;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge_1_12_2.common.config.Configuration;
-import net.minecraftforge_1_12_2.common.config.Property;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -30,8 +32,13 @@ public class RegistryConfig {
     //
     // #######################
 
-    public static Configuration setRegistryConfig(String modid, File file) {
-        Configuration cfg = new Configuration(file);
+    public static Configuration setRegistryConfig(String modid, String file) {
+//        Configuration cfg = new Configuration(file);
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        Configuration cfg = new Configuration(builder, file);
+        ForgeConfigSpec spec = cfg.build();
+        ModContainer container = ModList.get().getModContainerById(BCCore.MODID).get();
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, file));
         return setRegistryConfig(modid, cfg);
     }
 
@@ -40,13 +47,12 @@ public class RegistryConfig {
         return config;
     }
 
-    // Calen this method always causes java.lang.IllegalStateException: Didn't find a config for buildcraftcore
+    // Calen: this method always causes java.lang.IllegalStateException: Didn't find a config for buildcraftcore
     // at buildcraftcore.lib.registry.RegistryConfig.useOtherModConfigFor(RegistryConfig.java:46) ~[%2387!/:?] {re:classloading}
 //    public static Configuration useOtherModConfigFor(String from, String to)
     public static void useOtherModConfigFor(String from, String to) {
 //        Configuration config = modObjectConfigs.get(getMod(to));
-//        if (config == null)
-//        {
+//        if (config == null) {
 //            throw new IllegalStateException("Didn't find a config for " + to);
 //        }
 //        modObjectConfigs.put(getMod(from), config);
@@ -60,7 +66,7 @@ public class RegistryConfig {
     //
     // #######################
 
-    //    public static boolean isEnabled(Item item)
+    // public static boolean isEnabled(Item item)
     public static boolean isEnabledItem(String idBC) {
 //        return isEnabled(getCategory(item), item.getRegistryName().getPath(),
 //                item.getRegistryName() + ".name");
@@ -69,13 +75,13 @@ public class RegistryConfig {
     }
 
     // Calen: in 1.12.2 pipe items are forced
-    // this isEnabled is never used on pipes
+    // this #isEnabled is never used on pipes
     public static boolean isEnabledPipeItemItem(String idBC) {
         String regPath = TagManager.getTag(idBC, TagManager.EnumTagType.REGISTRY_NAME).split(":")[1];
         return isEnabled("pipes", regPath, "item." + TagManager.getTag(idBC).getSingleTag(TagManager.EnumTagType.UNLOCALIZED_NAME) + ".name");
     }
 
-    //    public static boolean isEnabled(Block block)
+    // public static boolean isEnabled(Block block)
     public static boolean isEnabledBlock(String idBC) {
 //        return isEnabled(getCategory(block), block.getRegistryName().getPath(),
 //                block.getRegistryName() + ".name");
@@ -111,15 +117,15 @@ public class RegistryConfig {
     //
     // #######################
 
-    private static String getCategory(Object obj) {
-        if (obj instanceof IItemPipe) {
-            return "pipes";
-        } else if (obj instanceof Block) {
-            return "blocks";
-        } else {
-            return "items";
-        }
-    }
+//    private static String getCategory(Object obj) {
+//        if (obj instanceof IItemPipe) {
+//            return "pipes";
+//        } else if (obj instanceof Block) {
+//            return "blocks";
+//        } else {
+//            return "items";
+//        }
+//    }
 
     // Calen: Thread Safety
     private static ConcurrentHashMap<ModContainer, ModContainer> moduleConfigMapping = new ConcurrentHashMap<>();
@@ -127,7 +133,7 @@ public class RegistryConfig {
     // Calen
     private static Map<ModContainer, Configuration> getModObjectConfigs() {
         // just ensure Core Config loaded
-        BCCoreConfig.getConfigAndEnsureCreated(false);
+        BCCoreConfig.cinit();
         // ret
         return modObjectConfigs;
     }
@@ -142,11 +148,15 @@ public class RegistryConfig {
                 throw new RuntimeException("No config exists for the mod " + activeMod.getModId());
             }
         }
-        Property prop = config.get(category, resourcePath, true);
-        prop.setLanguageKey(langKey);
-        prop.setRequiresMcRestart(true);
-        prop.setRequiresWorldRestart(true);
-        boolean isEnabled = prop.getBoolean(true);
+
+        BooleanValue prop = config
+                .define(category,
+                        "",
+                        EnumRestartRequirement.WORLD,
+                        resourcePath, true);
+        config.build();
+        boolean isEnabled = prop.get();
+
         if (!isEnabled) {
             setDisabled(category, resourcePath);
         }
@@ -159,7 +169,8 @@ public class RegistryConfig {
 
     private static ModContainer getMod(String modid) {
         ModContainer container = ModList.get().getModContainerById(modid).get();
-        if (container == null) {
+//        if (container == null)
+        if (container == null || !(container instanceof FMLModContainer)) {
             throw new RuntimeException("No mod with an id of \"" + modid + "\" is loaded!");
         } else {
             return container;

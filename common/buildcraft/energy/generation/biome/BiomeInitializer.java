@@ -6,35 +6,6 @@
 
 package buildcraft.energy.generation.biome;
 
-import buildcraft.api.core.BCLog;
-import buildcraft.energy.BCEnergyConfig;
-import buildcraft.lib.BCLib;
-import com.mojang.datafixers.util.Pair;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Holder;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.level.biome.Climate.ParameterList;
-import net.minecraft.world.level.biome.Climate.ParameterPoint;
-import net.minecraft.world.level.biome.MultiNoiseBiomeSource;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.dimension.LevelStem;
-import net.minecraft.world.level.levelgen.NoiseBasedChunkGenerator;
-import net.minecraft.world.level.levelgen.WorldGenSettings;
-import net.minecraftforge.event.server.ServerAboutToStartEvent;
-import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.loading.FMLPaths;
-
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.LinkedList;
-import java.util.List;
-
 public class BiomeInitializer {
 //    @SubscribeEvent(priority = EventPriority.LOW)
 ////    public void initBiomeGens(WorldTypeEvent.InitBiomeGens event)
