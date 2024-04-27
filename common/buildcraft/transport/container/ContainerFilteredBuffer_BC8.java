@@ -36,7 +36,7 @@ public class ContainerFilteredBuffer_BC8 extends ContainerBCTile<TileFilteredBuf
                 }
             });
             // Filtered Buffer inventory slots
-//            addSlot(new SlotBase(tile.invMain, i, 8 + i * 18, 61));
+//            addSlotToContainer(new SlotBase(tile.invMain, i, 8 + i * 18, 61));
             addSlot(new SlotBase(tile.invMain, i, 8 + i * 18, 61));
         }
     }

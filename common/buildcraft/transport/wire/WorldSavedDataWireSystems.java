@@ -200,7 +200,7 @@ public class WorldSavedDataWireSystems extends SavedData {
         return nbt;
     }
 
-    //    @Override
+    // @Override
     public void readFromNBT(CompoundTag nbt) {
         wireSystems.clear();
         this.elementsToWireSystemsIndex.clear();
@@ -219,7 +219,7 @@ public class WorldSavedDataWireSystems extends SavedData {
         ServerLevel serverLevel = (ServerLevel) world;
         DimensionDataStorage storage = serverLevel.getDataStorage();
 //        WorldSavedDataWireSystems instance = (WorldSavedDataWireSystems) storage.getOrLoadData(WorldSavedDataWireSystems.class, DATA_NAME);
-        WorldSavedDataWireSystems instance = (WorldSavedDataWireSystems) storage.get((nbt) ->
+        WorldSavedDataWireSystems instance = storage.get((nbt) ->
         {
             WorldSavedDataWireSystems ret = new WorldSavedDataWireSystems();
             ret.readFromNBT(nbt);

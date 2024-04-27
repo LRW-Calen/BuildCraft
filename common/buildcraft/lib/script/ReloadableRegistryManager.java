@@ -98,8 +98,6 @@ public enum ReloadableRegistryManager implements IReloadableRegistryManager {
             isReloading = false;
         }
         MinecraftForge.EVENT_BUS.post(new EventBuildCraftReload.FinishLoad(this, set));
-//        // Calen
-//        MinecraftForge.EVENT_BUS.shutdown();
     }
 
     @Override

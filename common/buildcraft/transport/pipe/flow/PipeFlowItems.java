@@ -63,9 +63,8 @@ public final class PipeFlowItems extends PipeFlow implements IFlowItems {
     public PipeFlowItems(IPipe pipe, CompoundTag nbt) {
         super(pipe, nbt);
         ListTag list = nbt.getList("items", Tag.TAG_COMPOUND);
+        // Calen: when world loading, the level of TE is null
 //        long tickNow = pipe.getHolder().getPipeWorld().getTotalWorldTime();
-//        long tickNow = pipe.getHolder().getPipeWorld().getGameTime(); // Calen: on loading from save, the level has't been set to TE
-        // Calen
         long tickNow = nbt.getLong("tickNow");
 
         for (int i = 0; i < list.size(); i++) {
@@ -520,8 +519,7 @@ public final class PipeFlowItems extends PipeFlow implements IFlowItems {
 
     @Nonnull
     @Override
-    public ItemStack injectItem(@Nonnull ItemStack stack, boolean doAdd, Direction from, DyeColor colour,
-                                double speed) {
+    public ItemStack injectItem(@Nonnull ItemStack stack, boolean doAdd, Direction from, DyeColor colour, double speed) {
         if (pipe.getHolder().getPipeWorld().isClientSide) {
             throw new IllegalStateException("Cannot inject items on the client side!");
         }
@@ -597,9 +595,7 @@ public final class PipeFlowItems extends PipeFlow implements IFlowItems {
         items.add(item.timeToDest, item);
     }
 
-    /**
-     * Used internally to split up manual insertions from controlled extractions.
-     */
+    /** Used internally to split up manual insertions from controlled extractions. */
     private void insertItemEvents(@Nonnull ItemStack toInsert, DyeColor colour, double speed, Direction from) {
         IPipeHolder holder = pipe.getHolder();
 

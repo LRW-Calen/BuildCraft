@@ -15,7 +15,6 @@ import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.transport.client.model.key.PipeModelKey;
-import buildcraft.transport.tile.TilePipeHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -171,13 +170,12 @@ public final class Pipe implements IPipe, IDebuggable {
             behaviour.readPayload(buffer, side, ctx);
 
 //            PipeModelKey model = getModel();
-//            if (!model.equals(lastModel))
-//            {
+//            if (!model.equals(lastModel)) {
 //                lastModel = model;
 //                getHolder().scheduleRenderUpdate();
 //            }
             // Calen: when world loading, TilePipeHolder#getNeighbourTile -> [lib.tile] Ghost-loading tile at ...
-            ((TilePipeHolder) holder.getPipeTile()).runWhenWorldNotNull(
+            getHolder().runWhenWorldNotNull(
                     () ->
                     {
                         PipeModelKey model = getModel();
@@ -228,11 +226,10 @@ public final class Pipe implements IPipe, IDebuggable {
 
     // Caps
 
-    //    @Override
-    public boolean hasCapability(@Nonnull Capability<?> capability, Direction facing) {
+//    @Override
+//    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
 //        return getCapability(capability, facing) != null;
-        return getCapability(capability, facing).isPresent();
-    }
+//    }
 
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
@@ -287,10 +284,8 @@ public final class Pipe implements IPipe, IDebuggable {
                     continue;
                 }
 //                PipePluggable oPlug = oTile.getCapability(PipeApi.CAP_PLUG, facing.getOpposite());
-                LazyOptional<PipePluggable> capOptional = oTile.getCapability(PipeApi.CAP_PLUG, facing.getOpposite());
-//                PipePluggable oPlug = oTile.getCapability(PipeApi.CAP_PLUG, facing.getOpposite()).orElseGet(()->null);
-//                if (oPlug == null || !oPlug.isBlocking())
-                if ((!capOptional.isPresent()) || !capOptional.resolve().get().isBlocking()) {
+                PipePluggable oPlug = oTile.getCapability(PipeApi.CAP_PLUG, facing.getOpposite()).orElse(null);
+                if (oPlug == null || !oPlug.isBlocking()) {
                     if (canPipesConnect(facing, this, oPipe)) {
                         connected.put(facing, DEFAULT_CONNECTION_DISTANCE);
                         types.put(facing, ConnectedType.PIPE);
@@ -333,17 +328,11 @@ public final class Pipe implements IPipe, IDebuggable {
     }
 
     public void addDrops(NonNullList<ItemStack> toDrop, int fortune) {
-        // Calen: reg different item object for different colour
+        // Calen: reg different item objects for different colours
 //        Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition);
         Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition, colour);
         if (item != null) {
 //            toDrop.add(new ItemStack(item, 1, colour == null ? 0 : 1 + colour.ordinal()));
-//            ItemStack stack = new ItemStack(item, 1);
-//            ColourUtil.addColorTagToStack(stack, colour == null ? 0 : 1 + colour.ordinal());
-//            if (colour != null)
-//            {
-//                ColourUtil.addColorTagToStack(stack, colour);
-//            }
             toDrop.add(new ItemStack(item, 1));
         }
         flow.addDrops(toDrop, fortune);

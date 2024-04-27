@@ -46,7 +46,7 @@ public enum ModelPipe implements BakedModel {
     }
 
     /**
-     * @param extraData from {@link TilePipeHolder#getModelData()} in 1.18.2
+     * @param extraData Defined by {@link TilePipeHolder#getModelData()} in 1.18.2
      */
     @NotNull
     @Override
@@ -57,19 +57,16 @@ public enum ModelPipe implements BakedModel {
         }
 
 //        TilePipeHolder tile = null;
-//        if (state instanceof IExtendedBlockState)
-//        {
+//        if (state instanceof IExtendedBlockState) {
 //            IExtendedBlockState ext = (IExtendedBlockState) state;
 //            WeakReference<TilePipeHolder> ref = ext.getValue(BlockPipeHolder.PROP_TILE);
-//            if (ref != null)
-//            {
+//            if (ref != null) {
 //                tile = ref.get();
 //            }
 //        }
         TilePipeHolder tile = extraData.getData(BlockPipeHolder.PROP_TILE);
 
 //        BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
-//        RenderType layer = ItemBlockRenderTypes.getRenderType(state, true); // Calen: in 1.18.2 here will get entity_translucent_cull
         RenderType layer = MinecraftForgeClient.getRenderType();
 
         if (tile == null || tile.getPipe() == null) {
@@ -81,19 +78,13 @@ public enum ModelPipe implements BakedModel {
 
         // Calen:if only bake translucent, the colorless pipe texture will disappear
 ////        if (layer == BlockRenderLayer.TRANSLUCENT)
-//        if (layer == RenderType.translucent())
-//        {
+//        if (layer == RenderType.translucent()) {
 //            PipeAllTranslucentKey realKey = new PipeAllTranslucentKey(tile);
 //            return PipeModelCacheAll.cacheTranslucent.bake(realKey);
-//        }
-//        else
-//        {
+//        } else {
 //            PipeAllCutoutKey realKey = new PipeAllCutoutKey(tile);
 //            return PipeModelCacheAll.cacheCutout.bake(realKey);
 //        }
-
-//        PipeAllTranslucentKey realKey = new PipeAllTranslucentKey(tile);
-//        return PipeModelCacheAll.cacheTranslucent.bake(realKey);
 
         List<BakedQuad> translucent = PipeModelCacheAll.cacheTranslucent.bake(new PipeAllTranslucentKey(tile));
         List<BakedQuad> cutout = PipeModelCacheAll.cacheCutout.bake(new PipeAllCutoutKey(tile));
@@ -125,8 +116,6 @@ public enum ModelPipe implements BakedModel {
 //    public TextureAtlasSprite getParticleTexture()
     public TextureAtlasSprite getParticleIcon() {
 //        return Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
-//        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation("missingno"));
-//        return SpriteUtil.missingSprite();
         return SpriteUtil.white();
     }
 

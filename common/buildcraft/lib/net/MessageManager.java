@@ -262,9 +262,8 @@ public class MessageManager {
      * type should be on the CLIENT side.
      *
      * @param message The message to send
-     * @param point The {@link net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint} around which to
+     * @param point The {@link PacketDistributor.TargetPoint} around which to
      *            send */
-     */
 
     public static void sendToAllAround(IMessage message, PacketDistributor.TargetPoint point) {
 //        getSimpleNetworkWrapper(message).sendToAllAround(message, point);

@@ -24,9 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class BCTransportRegistries {
 
-    public static void preInit()
-//    static
-    {
+    public static void preInit() {
         PipeApi.pipeRegistry = PipeRegistry.INSTANCE;
         PipeApi.stripeRegistry = StripesRegistry.INSTANCE;
         PipeApi.extensionManager = PipeExtensionManager.INSTANCE;

@@ -61,21 +61,21 @@ public class GuiFilteredBuffer extends GuiBC8<ContainerFilteredBuffer_BC8> {
         // GL11.glPushMatrix();
         // GL11.glTranslatef(0, 0, 100);
 //        GlStateManager.disableDepth();
-        RenderSystem.disableDepthTest();
+        RenderUtil.disableDepth();
 //        GlStateManager.enableBlend();
-        RenderSystem.enableBlend();
+        RenderUtil.enableBlend();
 //        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 //        GlStateManager.color(1, 1, 1, 0.7f);
-        RenderSystem.setShaderColor(1, 1, 1, 0.7f);
+        RenderUtil.color(1, 1, 1, 0.7f);
         ICON_GUI.drawAt(mainGui.rootElement, poseStack);
 
 //        GlStateManager.color(1, 1, 1, 1);
-        RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderUtil.color(1, 1, 1, 1);
 //        GlStateManager.disableBlend();
-        RenderSystem.disableBlend();
+        RenderUtil.disableBlend();
 //        GlStateManager.enableDepth();
-        RenderSystem.disableDepthTest();
+        RenderUtil.enableDepth();
         // GL11.glPopMatrix();
     }
 

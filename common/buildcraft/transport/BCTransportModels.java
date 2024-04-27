@@ -37,7 +37,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
 import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -55,7 +54,7 @@ public class BCTransportModels {
     public static final IPluggableStaticBaker<KeyPlugPowerAdaptor> BAKER_PLUG_POWER_ADAPTOR;
 
     static {
-        // Calen: ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); runned, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
+        // Calen: to ensure ExpressionCompat ENUM_FACING = new NodeType<>("Facing", Direction.UP); runned, or will cause IllegalArgumentException: Unknown NodeType class net.minecraft.core.Direction
         ExpressionCompat.setup();
 
         BLOCKER = getStaticModel("plugs/blocker");
@@ -109,34 +108,13 @@ public class BCTransportModels {
         BlockEntityRenderers.register(BCTransportBlocks.pipeHolderTile.get(), RenderPipeHolder::new);
     }
 
-    @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onModelRegistry(ModelRegistryEvent event) {
-        // Calen: Useless
-//        PipeRegistry.INSTANCE.getAllRegisteredPipes().forEach((def) ->
-//                ForgeModelBakery.addSpecialModel(new ModelResourceLocation(def.identifier.getNamespace(), "pipe_" + def.identifier.getPath(), "inventory"))
-//        );
-//        if (BCFactoryBlocks.heatExchange != null)
-//        {
-//            ResourceLocation heatExchange = BCFactoryBlocks.heatExchange.getId();
-////            ModelLoader.setCustomStateMapper(
-//            ForgeModelBakery.addSpecialModel(new ResourceLocation(heatExchange.getNamespace(), "block/" + heatExchange.getPath()));
-//
-//        }
-//        ForgeModelBakery.addSpecialModel(new ModelResourceLocation("buildcrafttransport", "plug_blocker","inventory"));
-//        ForgeModelBakery.addSpecialModel(new ModelResourceLocation("buildcrafttransport", "plug_power_adaptor","inventory"));
-    }
-
-    @OnlyIn(Dist.CLIENT)
-//    @SubscribeEvent
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onModelBake(ModelBakeEvent event) {
-//        putModel(event, "pipe_holder#normal", ModelPipe.INSTANCE);
-//        putModel(event, "pipe_item#inventory", ModelPipeItem.INSTANCE);
         event.getModelRegistry().replaceAll(((resourceLocation, bakedModel) ->
         {
             if (resourceLocation instanceof ModelResourceLocation m) {
-                if (m.getNamespace().equals("buildcrafttransport")) {
+                if (m.getNamespace().equals(BCTransport.MODID)) {
                     if (m.getVariant().equals("inventory") && m.getPath().startsWith("pipe_")) {
                         return ModelPipeItem.INSTANCE;
                     } else if (m.getPath().equals("pipe_holder")) {

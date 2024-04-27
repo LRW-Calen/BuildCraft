@@ -154,6 +154,12 @@ public final class RegistrationHelper {
         return reg;
     }
 
+    public <I extends Item> RegistryObject<I> addForcedItem(String registryId, Supplier<I> item) {
+        RegistryObject<I> reg = ITEMS.register(registryId, item);
+        items.add(reg);
+        return reg;
+    }
+
     // Calen
     public <I extends Item> RegistryObject<I> addForcedBlockItem(String idBC, Supplier<I> item) {
 //        String id = "";

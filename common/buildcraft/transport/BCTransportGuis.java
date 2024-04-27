@@ -4,13 +4,14 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.transport;
 
-import buildcraft.api.transport.pipe.IPipeHolder;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.net.MessageUpdateTile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.network.NetworkHooks;
 
+@Deprecated(forRemoval = true)
 public enum BCTransportGuis {
     FILTERED_BUFFER,
     PIPE_DIAMOND,
@@ -24,28 +25,15 @@ public enum BCTransportGuis {
         return VALUES[id];
     }
 
-//    public void openGui(Player player)
-//    {
+//    public void openGui(EntityPlayer player) {
 //        openGui(player, 0, -1, 0);
 //    }
 
-    //    public void openGui(Player player, BlockPos pos)
-//    {
-////        openGui(player, pos.getX(), pos.getY(), pos.getZ());
-//        if (player instanceof ServerPlayer serverPlayer)
-//        {
-////        player.openGui(BCTransport.INSTANCE, ordinal(), player.getEntityWorld(), x, y, z);
-//            if (serverPlayer.level.getBlockEntity(pos) instanceof MenuProvider menuProvider)
-//            {
-//                NetworkHooks.openGui(serverPlayer, menuProvider, pos);
-//            }
-//            else
-//            {
-//                player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
-//            }
-//        }
+//    public void openGui(EntityPlayer player, BlockPos pos) {
+//        openGui(player, pos.getX(), pos.getY(), pos.getZ());
 //    }
-    public void openPipeGui(Player player, BlockPos pos, IPipeHolder holder) {
+
+    public void openPipeGui(Player player, BlockPos pos, IBCTileMenuProvider holder) {
 //        openGui(player, pos.getX(), pos.getY(), pos.getZ());
         if (player instanceof ServerPlayer serverPlayer) {
 //        player.openGui(BCTransport.INSTANCE, ordinal(), player.getEntityWorld(), x, y, z);
@@ -66,8 +54,7 @@ public enum BCTransportGuis {
         }
     }
 
-//    public void openGui(Player player, int x, int y, int z)
-//    {
-////        player.openGui(BCTransport.INSTANCE, ordinal(), player.getEntityWorld(), x, y, z);
+//    public void openGui(EntityPlayer player, int x, int y, int z) {
+//        player.openGui(BCTransport.INSTANCE, ordinal(), player.getEntityWorld(), x, y, z);
 //    }
 }

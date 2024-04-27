@@ -73,10 +73,8 @@ public final class PluggableHolder {
 
     // Network
 
-    /**
-     * Called by {@link TilePipeHolder#replacePluggable(Direction, PipePluggable)} to inform clients about the new
-     * pluggable.
-     */
+    /** Called by {@link TilePipeHolder#replacePluggable(Direction, PipePluggable)} to inform clients about the new
+     * pluggable. */
     public void sendNewPluggableData() {
         holder.sendMessage(PipeMessageReceiver.PLUGGABLES[side.ordinal()], this::writeCreationPayload);
     }
@@ -132,7 +130,7 @@ public final class PluggableHolder {
         }
     }
 
-    //    public void readPayload(PacketBufferBC buffer, Dist netSide, MessageContext ctx) throws IOException
+    // public void readPayload(PacketBufferBC buffer, Dist netSide, MessageContext ctx) throws IOException
     public void readPayload(PacketBufferBC buffer, NetworkDirection netSide, NetworkEvent.Context ctx) throws IOException {
         int id = buffer.readUnsignedByte();
         if (netSide == NetworkDirection.PLAY_TO_SERVER) {

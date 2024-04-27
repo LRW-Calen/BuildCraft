@@ -10,14 +10,12 @@ import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.transport.pipe.IItemPipe;
 import buildcraft.api.transport.pipe.IPipeRegistry;
 import buildcraft.api.transport.pipe.PipeDefinition;
+import buildcraft.lib.registry.RegistrationHelper;
 import buildcraft.transport.BCTransport;
 import buildcraft.transport.item.ItemPipeHolder;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import javax.annotation.Nonnull;
@@ -29,12 +27,10 @@ import java.util.Map;
 public enum PipeRegistry implements IPipeRegistry {
     INSTANCE;
 
-    public static final DeferredRegister<Item> PIPE_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, BCTransport.MODID);
+    public static final RegistrationHelper helper = new RegistrationHelper(BCTransport.MODID);
 
-    // private final RegistrationHelper helper = new RegistrationHelper(NameSpaces.BUILDCRAFT_TRANSPORT);
     private final Map<ResourceLocation, PipeDefinition> definitions = new HashMap<>();
-    //    private final Map<PipeDefinition, IItemPipe> pipeItems = new IdentityHashMap<>();
-//    private final Map<PipeDefinition, RegistryObject<? extends IItemPipe>> pipeItems = new IdentityHashMap<>();
+    // private final Map<PipeDefinition, IItemPipe> pipeItems = new IdentityHashMap<>();
     private final Map<PipeDefinition, Map<DyeColor, RegistryObject<? extends IItemPipe>>> pipeItems = new IdentityHashMap<>();
 
     @Override
@@ -44,7 +40,6 @@ public enum PipeRegistry implements IPipeRegistry {
 
     @Override
 //    public void setItemForPipe(PipeDefinition definition, @Nullable IItemPipe item)
-//    public void setItemForPipe(PipeDefinition definition, @Nullable RegistryObject<? extends IItemPipe> item)
     public void setItemForPipe(PipeDefinition definition, Map<DyeColor, RegistryObject<? extends IItemPipe>> item) {
         if (definition == null) {
             throw new NullPointerException("definition");
@@ -58,17 +53,18 @@ public enum PipeRegistry implements IPipeRegistry {
 
     @Override
 //    public ItemPipeHolder createItemForPipe(PipeDefinition definition)
-//    public RegistryObject<ItemPipeHolder> createItemForPipe(PipeDefinition definition)
     public Map<DyeColor, RegistryObject<? extends IItemPipe>> createItemForPipe(PipeDefinition definition) {
         Map<DyeColor, RegistryObject<? extends IItemPipe>> map = new HashMap<>();
 //        ItemPipeHolder item = ItemPipeHolder.createAndTag(definition);
-//        helper.addForcedItem(item);
+        // colorless
         RegistryObject<ItemPipeHolder> item = ItemPipeHolder.createAndTag(definition, null);
         if (definitions.values().contains(definition)) {
 //            setItemForPipe(definition, item);
             setItemForPipe(definition, map);
         }
         map.put(null, item);
+
+        // 16 colous
         for (DyeColor colour : DyeColor.values()) {
             item = ItemPipeHolder.createAndTag(definition, colour);
             map.put(colour, item);
@@ -77,22 +73,17 @@ public enum PipeRegistry implements IPipeRegistry {
         return map;
     }
 
-    // Calen: never used in 1.12.2
 //    @Override
-//    public IItemPipe createUnnamedItemForPipe(PipeDefinition definition, Consumer<Item> postCreate)
-//    {
-////        ItemPipeHolder item = ItemPipeHolder.create(PIPE_ITEMS，definition);
-//        RegistryObject<? extends IItemPipe>  item = ItemPipeHolder.create(PIPE_ITEMS，definition);
+//    public IItemPipe createUnnamedItemForPipe(PipeDefinition definition, Consumer<Item> postCreate) {
+//        ItemPipeHolder item = ItemPipeHolder.create(definition);
 //        postCreate.accept(item);
-////        helper.addForcedItem(item); // 这步是注册
-//        if (definitions.values().contains(definition))
-//        {
+//        helper.addForcedItem(item);
+//        if (definitions.values().contains(definition)) {
 //            setItemForPipe(definition, item);
 //        }
 //        return item;
 //    }
 
-    // Calen: reg different item object for different colour
     @Override
 //    public IItemPipe getItemForPipe(PipeDefinition definition)
     public IItemPipe getItemForPipe(PipeDefinition definition, DyeColor colour) {

@@ -111,7 +111,7 @@ public enum StripesHandlerDispenser implements IStripesHandlerItem {
         if (DispenserBlock.DISPENSER_REGISTRY.containsKey(stack.getItem())) {
             return false;
         }
-//        DispenseItemBehavior behaviour = DispenserBlock.DISPENSE_BEHAVIOR_REGISTRY.getObject(stack.getItem());
+//        IBehaviorDispenseItem behaviour = BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.getObject(stack.getItem());
         DispenseItemBehavior behaviour = DispenserBlock.DISPENSER_REGISTRY.get(stack.getItem());
         // Temp: for testing
         // if (!shouldHandle(stack)) {

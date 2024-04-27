@@ -35,14 +35,11 @@ public class ItemWire extends ItemBC_Neptune {
         }
     }
 
-    // Calen: not still useful in 1.18.2
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
-//        for (DyeColor color : DyeColor.values())
-//        {
-//            addVariant(variants, color.getId(), color.getName());
+//    @SideOnly(Side.CLIENT)
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
+//        for (EnumDyeColor color : EnumDyeColor.values()) {
+//            addVariant(variants, color.getMetadata(), color.getName());
 //        }
 //    }
 

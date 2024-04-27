@@ -15,7 +15,6 @@ import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.transport.client.PipeRegistryClient;
 import buildcraft.transport.pipe.Pipe;
 import buildcraft.transport.tile.TilePipeHolder;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
@@ -23,7 +22,6 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Direction;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,14 +34,7 @@ public class RenderPipeHolder implements BlockEntityRenderer<TilePipeHolder> {
     @Override
 //    public void renderTileEntityFast(TilePipeHolder pipe, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer)
     public void render(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
-//        // Calen test
-//        RenderSystem.enableBlend();
-//        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-
-//        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
         VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
-//        VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentItemSheet());
 
         Minecraft.getInstance().getProfiler().push("bc");
         Minecraft.getInstance().getProfiler().push("pipe");
@@ -62,7 +53,7 @@ public class RenderPipeHolder implements BlockEntityRenderer<TilePipeHolder> {
         Minecraft.getInstance().getProfiler().pop();
     }
 
-    //    private static void renderPluggables(TilePipeHolder pipe, double x, double y, double z, float partialTicks, BufferBuilder bb)
+    // private static void renderPluggables(TilePipeHolder pipe, double x, double y, double z, float partialTicks, BufferBuilder bb)
     public void renderPluggables(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay) {
         for (Direction face : Direction.values()) {
             PipePluggable plug = pipe.getPluggable(face);
@@ -104,7 +95,7 @@ public class RenderPipeHolder implements BlockEntityRenderer<TilePipeHolder> {
         }
     }
 
-    //    private static <B extends PipeBehaviour> void renderBehaviour(B behaviour, double x, double y, double z, float partialTicks, BufferBuilder bb)
+    // private static <B extends PipeBehaviour> void renderBehaviour(B behaviour, double x, double y, double z, float partialTicks, BufferBuilder bb)
     private static <B extends PipeBehaviour> void renderBehaviour(B behaviour, float partialTicks, PoseStack poseStack, VertexConsumer buffer, int combinedLight, int combinedOverlay) {
         IPipeBehaviourRenderer<B> renderer = PipeRegistryClient.getBehaviourRenderer(behaviour);
         if (renderer != null) {

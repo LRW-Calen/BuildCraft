@@ -43,14 +43,12 @@ public class ItemPipeHolder extends BlockItem implements IItemBuildCraft, IItemP
     private final DyeColor colour;
 //    private CreativeModeTab creativeTab;
 
-    //    protected ItemPipeHolder(PipeDefinition definition, String tagId)
+    // protected ItemPipeHolder(PipeDefinition definition, String tagId)
     protected ItemPipeHolder(PipeDefinition definition, String tagId, DyeColor colour) {
-//        super(BCTransportBlocks.pipeHolder.get(), definition.properties);
         super(BCTransportBlocks.pipeHolder.get(), definition.properties.tab(CreativeTabManager.getTab(TagManager.getTag(tagId, TagManager.EnumTagType.CREATIVE_TAB))));
         this.definition = definition;
         this.namespace = definition.identifier.getNamespace();
         this.id = tagId;
-//        this.id = definition.identifier.getPath();
 //        this.setMaxDamage(0);
 //        this.setHasSubtypes(true);
         if (!"".equals(id)) {
@@ -59,44 +57,29 @@ public class ItemPipeHolder extends BlockItem implements IItemBuildCraft, IItemP
         this.colour = colour;
     }
 
-    // Calen
     @Override
     public DyeColor getColour() {
         return colour;
     }
 
 
-    // Calen: Unused
-//    /**
-//     * Creates a new {@link ItemPipeHolder} without requiring a tag.
-//     */
-////    public static ItemPipeHolder create(PipeDefinition definition)
-//    public static RegistryObject<? extends IItemPipe> create(PipeDefinition definition)
-//    {
-////        return new ItemPipeHolder(definition, "");
-//        return PipeRegistry.PIPE_ITEMS.register("", () -> new ItemPipeHolder(definition, "pipe." + ""));
+//    /** Creates a new {@link ItemPipeHolder} without requiring a tag. */
+//    public static ItemPipeHolder create(PipeDefinition definition) {
+//        return new ItemPipeHolder(definition, "");
 //    }
 
-    /**
-     * Creates a new {@link ItemPipeHolder} with a tag that will be taken from {@link TagManager}.
-     */
+    /** Creates a new {@link ItemPipeHolder} with a tag that will be taken from {@link TagManager}. */
 //    public static ItemPipeHolder createAndTag(PipeDefinition definition)
-//    public static RegistryObject<ItemPipeHolder> createAndTag(PipeDefinition definition)
     public static RegistryObject<ItemPipeHolder> createAndTag(PipeDefinition definition, DyeColor colour) {
         ResourceLocation reg = definition.identifier;
+//        String tagId = "item.pipe." + reg.getResourceDomain() + "." + reg.getResourcePath();
         String suffix = colour == null ? "_colorless" : "_" + colour.getName();
-//        String tagId = "item.pipe." + reg.getNamespace() + "." + reg.getPath();
-//        String tagId = "item.pipe." + reg.getNamespace() + "." + reg.getPath();
         String tagId = "item.pipe." + reg.getNamespace() + "." + reg.getPath();
         String regName = TagManager.getTag(tagId, TagManager.EnumTagType.REGISTRY_NAME).replace(BCTransport.MODID + ":", "") + suffix;
-//        return new ItemPipeHolder(definition, tagId);
-//        return new ItemPipeHolder(definition, "pipe." + reg.getPath());
-        return PipeRegistry.PIPE_ITEMS.register(regName, () -> new ItemPipeHolder(definition, tagId, colour));
+        return PipeRegistry.helper.addForcedItem(regName, () -> new ItemPipeHolder(definition, tagId, colour));
     }
 
-    // Calen: never used in 1.12.2
-//    public ItemPipeHolder registerWithPipeApi()
-//    {
+//    public ItemPipeHolder registerWithPipeApi() {
 //        PipeApi.pipeRegistry.setItemForPipe(definition, this);
 //        return this;
 //    }
@@ -120,13 +103,10 @@ public class ItemPipeHolder extends BlockItem implements IItemBuildCraft, IItemP
         return definition;
     }
 
-    // Calen: not still useful in 1.18.2
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
-//        for (int i = 0; i <= 16; i++)
-//        {
+//    @SideOnly(Side.CLIENT)
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
+//        for (int i = 0; i <= 16; i++) {
 //            variants.put(i, new ModelResourceLocation("buildcrafttransport:pipe_item#inventory"));
 //        }
 //    }
@@ -140,9 +120,9 @@ public class ItemPipeHolder extends BlockItem implements IItemBuildCraft, IItemP
 //            EnumDyeColor colour = EnumDyeColor.byMetadata(meta - 1);
 //            colourComponent = ColourUtil.getTextFullTooltipSpecial(colour) + " ";
 //        }
+        String colourComponent = this.colour == null ? "" : (ColourUtil.getTextFullTooltipSpecial(this.colour) + " ");
 //        return colourComponent + super.getItemStackDisplayName(stack);
-        String colourStr = this.colour == null ? "" : (ColourUtil.getTextFullTooltipSpecial(this.colour) + " ");
-        return new TextComponent(colourStr).append(new TranslatableComponent(this.getDescriptionId(stack)));
+        return new TextComponent(colourComponent).append(new TranslatableComponent(this.getDescriptionId(stack)));
     }
 
     // TODO Calen getFontRenderer???
@@ -167,26 +147,19 @@ public class ItemPipeHolder extends BlockItem implements IItemBuildCraft, IItemP
         return this.unlocalizedName;
     }
 
-
-    // Calen Deprecated
 //    @Override
-//    public String getUnlocalizedName(ItemStack stack)
-//    {
+//    public String getUnlocalizedName(ItemStack stack) {
 //        return unlocalizedName;
 //    }
 
-    // Calen Deprecated
 //    @Override
-//    public Item setCreativeTab(CreativeModeTab tab)
-//    {
+//    public Item setCreativeTab(CreativeTabs tab) {
 //        creativeTab = tab;
 //        return this;
 //    }
 
-    // Calen Deprecated
 //    @Override
-//    public CreativeModeTab getCreativeTab()
-//    {
+//    public CreativeTabs getCreativeTab() {
 //        return creativeTab;
 //    }
 

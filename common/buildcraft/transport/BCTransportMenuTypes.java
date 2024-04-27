@@ -95,10 +95,6 @@ public class BCTransportMenuTypes {
         );
 
         if (FMLEnvironment.dist == Dist.CLIENT) {
-//        MenuScreens.register(PIPE_DIAMOND, BCTransportScreenConstructors.PIPE_DIAMOND);
-//        MenuScreens.register(PIPE_DIAMOND_WOOD, BCTransportScreenConstructors.PIPE_DIAMOND_WOOD);
-//        MenuScreens.register(PIPE_EMZULI, BCTransportScreenConstructors.PIPE_EMZULI);
-//        MenuScreens.register(FILTERED_BUFFER, BCTransportScreenConstructors.FILTERED_BUFFER);
             MenuScreens.register(PIPE_DIAMOND, GuiDiamondPipe::new);
             MenuScreens.register(PIPE_DIAMOND_WOOD, GuiDiamondWoodPipe::new);
             MenuScreens.register(PIPE_EMZULI, GuiEmzuliPipe_BC8::new);

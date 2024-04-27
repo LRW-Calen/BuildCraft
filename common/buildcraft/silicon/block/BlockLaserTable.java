@@ -10,6 +10,7 @@ import buildcraft.api.enums.EnumLaserTableType;
 import buildcraft.api.mj.ILaserTargetBlock;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.silicon.tile.*;
@@ -109,9 +110,9 @@ public class BlockLaserTable extends BlockBCTile_Neptune<TileLaserTableBase> imp
 //            case PROGRAMMING_TABLE:
 //        }
         if (!world.isClientSide) {
-            if (world.getBlockEntity(pos) instanceof TileBC_Neptune tile) {
+            if (world.getBlockEntity(pos) instanceof IBCTileMenuProvider tile) {
 //                BCSiliconGuis.ADVANCED_CRAFTING_TABLE.openGUI(player, pos, state);
-                MessageUtil.serverOpenTileGui(player, tile);
+                MessageUtil.serverOpenTileGui(player, tile, pos);
                 return InteractionResult.SUCCESS;
             }
         }

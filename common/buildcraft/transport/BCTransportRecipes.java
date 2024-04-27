@@ -11,6 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 // 1.18.2: use datagen!
 @Deprecated(forRemoval = true)
+//@Mod.EventBusSubscriber(modid = BCTransport.MODID)
 public class BCTransportRecipes {
 //    @GameRegistry.ObjectHolder("buildcraftsilicon:assembly_table")
 //    private static final Block SILICON_TABLE_ASSEMBLY = null;
@@ -38,8 +39,7 @@ public class BCTransportRecipes {
 //        addPipeUpgradeRecipe(BCTransportItems.pipeItemDiaWood, BCTransportItems.pipeItemEmzuli, Blocks.LAPIS_BLOCK);
 //
 //        Item waterproof = BCTransportItems.waterproof;
-//        if (waterproof == null)
-//        {
+//        if (waterproof == null) {
 //            waterproof = Items.SLIME_BALL;
 //        }
 //        addPipeUpgradeRecipe(BCTransportItems.pipeItemWood, BCTransportItems.pipeFluidWood, waterproof);
@@ -65,10 +65,8 @@ public class BCTransportRecipes {
 //        addPipeUpgradeRecipe(BCTransportItems.pipeItemSandstone, BCTransportItems.pipePowerSandstone, upgrade);
 //        // addPipeUpgradeRecipe(BCTransportItems.pipeItemDiamond, BCTransportItems.pipePowerDiamond, upgrade);
 
-//        if (BCTransportItems.wire != null)
-//        {
-//            for (DyeColor color : ColourUtil.COLOURS)
-//            {
+//        if (BCTransportItems.wire != null) {
+//            for (DyeColor color : ColourUtil.COLOURS) {
 ////                String name = String.format("wire-%s", color.getUnlocalizedName());
 //                String name = String.format("wire-%s", color.getSerializedName());
 //                ImmutableSet<IngredientStack> input = ImmutableSet.of(IngredientStack.of(Tags.Items.DUSTS_REDSTONE),
@@ -84,15 +82,13 @@ public class BCTransportRecipes {
 //        }
     }
 
-//    private static void addPipeRecipe(ItemPipeHolder pipe, Object material)
-//    {
+//    private static void addPipeRecipe(ItemPipeHolder pipe, Object material) {
 //        addPipeRecipe(pipe, material, material);
 //    }
 
 //    private static void addPipeRecipe(ItemPipeHolder pipe, Object left, Object right)
 //    {
-//        if (pipe == null)
-//        {
+//        if (pipe == null) {
 //            return;
 //        }
 //        ItemStack result = new ItemStack(pipe, 8);
@@ -101,8 +97,7 @@ public class BCTransportRecipes {
 //        recipe.setRegistryName(new ResourceLocation(pipe.getRegistryName() + "_colorless"));
 //        ForgeRegistries.RECIPES.register(recipe);
 //
-//        for (DyeColor colour : DyeColor.values())
-//        {
+//        for (DyeColor colour : DyeColor.values()) {
 //            ItemStack resultStack = new ItemStack(pipe, 8, colour.getMetadata() + 1);
 //            IRecipe colorRecipe = new ShapedOreRecipe(pipe.getRegistryName(), resultStack, "lgr", 'l', left, 'r', right,
 //                    'g', "blockGlass" + ColourUtil.getName(colour));
@@ -113,12 +108,10 @@ public class BCTransportRecipes {
 
 //    private static void addPipeUpgradeRecipe(ItemPipeHolder from, ItemPipeHolder to, Object additional)
 //    {
-//        if (from == null || to == null)
-//        {
+//        if (from == null || to == null) {
 //            return;
 //        }
-//        if (additional == null)
-//        {
+//        if (additional == null) {
 //            throw new NullPointerException("additional");
 //        }
 //
@@ -134,8 +127,7 @@ public class BCTransportRecipes {
 //                .setRegistryName(new ResourceLocation(to.getRegistryName() + "_colorless"));
 //        ForgeRegistries.RECIPES.register(upgradeRecipe);
 //
-//        for (DyeColor colour : ColourUtil.COLOURS)
-//        {
+//        for (DyeColor colour : ColourUtil.COLOURS) {
 //            ItemStack f = new ItemStack(from, 1, colour.getMetadata() + 1);
 //            ItemStack t = new ItemStack(to, 1, colour.getMetadata() + 1);
 //            IRecipe returnRecipeColored = new ShapelessOreRecipe(to.getRegistryName(), f, t)

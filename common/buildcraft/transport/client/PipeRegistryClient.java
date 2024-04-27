@@ -32,14 +32,12 @@ public enum PipeRegistryClient implements IClientRegistry {
     }
 
     @Override
-    public <B extends PipeBehaviour> void registerRenderer(Class<? extends B> behaviourClass,
-                                                           IPipeBehaviourRenderer<B> renderer) {
+    public <B extends PipeBehaviour> void registerRenderer(Class<? extends B> behaviourClass, IPipeBehaviourRenderer<B> renderer) {
         behaviourRenderMap.put(behaviourClass, renderer);
     }
 
     @Override
-    public <P extends PipePluggable> void registerRenderer(Class<? extends P> plugClass,
-                                                           IPlugDynamicRenderer<P> renderer) {
+    public <P extends PipePluggable> void registerRenderer(Class<? extends P> plugClass, IPlugDynamicRenderer<P> renderer) {
         plugRenderMap.put(plugClass, renderer);
     }
 

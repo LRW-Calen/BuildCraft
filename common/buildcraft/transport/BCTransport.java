@@ -22,7 +22,6 @@ import buildcraft.lib.registry.TagManager.TagEntry;
 import buildcraft.silicon.plug.FacadeStateManager;
 import buildcraft.transport.client.TransportItemModelPredicates;
 import buildcraft.transport.client.render.PipeTabButton;
-import buildcraft.transport.pipe.PipeRegistry;
 import buildcraft.transport.pipe.SchematicBlockPipe;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -31,13 +30,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.function.Consumer;
 
@@ -51,7 +47,6 @@ import java.util.function.Consumer;
 //@formatter:on
 @Mod(BCTransport.MODID)
 @Mod.EventBusSubscriber(modid = BCTransport.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
-//@formatter:on
 public class BCTransport {
     public static final String MODID = "buildcrafttransport";
 
@@ -63,17 +58,6 @@ public class BCTransport {
 
     public BCTransport() {
         INSTANCE = this;
-
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        PipeRegistry.PIPE_ITEMS.register(modEventBus);
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public static void clientSetup(FMLClientSetupEvent event) {
-        ItemBlockRenderTypes.setRenderLayer(BCTransportBlocks.pipeHolder.get(), RenderType.translucent());
-
-        TransportItemModelPredicates.register(event);
     }
 
     @SubscribeEvent
@@ -106,16 +90,22 @@ public class BCTransport {
         BCTransportProxy.getProxy().fmlPreInit();
 //
         MinecraftForge.EVENT_BUS.register(BCTransportEventDist.INSTANCE);
-
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            MinecraftForge.EVENT_BUS.register(PipeTabButton.class);
-        }
     }
 
     @SubscribeEvent
     public static void init(FMLCommonSetupEvent evt) {
         BCTransportProxy.getProxy().fmlInit();
         BCTransportRegistries.init();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void clientSetup(FMLClientSetupEvent event) {
+        ItemBlockRenderTypes.setRenderLayer(BCTransportBlocks.pipeHolder.get(), RenderType.translucent());
+
+        TransportItemModelPredicates.register(event);
+
+        MinecraftForge.EVENT_BUS.register(PipeTabButton.class);
     }
 
     // How much time we wasted during a tantrum

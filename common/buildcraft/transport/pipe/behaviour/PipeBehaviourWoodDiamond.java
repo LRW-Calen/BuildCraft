@@ -15,9 +15,9 @@ import buildcraft.api.transport.pipe.IPipe;
 import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 import buildcraft.lib.inventory.filter.*;
 import buildcraft.lib.misc.EntityUtil;
+import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
-import buildcraft.transport.BCTransportGuis;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -103,8 +103,7 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
     }
 
     @Override
-    public boolean onPipeActivate(Player player, HitResult trace, float hitX, float hitY, float hitZ,
-                                  EnumPipePart part) {
+    public boolean onPipeActivate(Player player, HitResult trace, float hitX, float hitY, float hitZ, EnumPipePart part) {
         if (EntityUtil.getWrenchHand(player) != null) {
             return super.onPipeActivate(player, trace, hitX, hitY, hitZ, part);
         }
@@ -116,7 +115,7 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
         }
         if (!player.level.isClientSide) {
 //            BCTransportGuis.PIPE_DIAMOND_WOOD.openGui(player, pipe.getHolder().getPipePos());
-            BCTransportGuis.PIPE_DIAMOND_WOOD.openPipeGui(player, pipe.getHolder().getPipePos(), pipe.getHolder());
+            MessageUtil.serverOpenTileGui(player, pipe.getHolder(), pipe.getHolder().getPipePos());
         }
         return true;
     }

@@ -8,19 +8,15 @@ package buildcraft.transport.client.render;
 
 import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.transport.pipe.IPipeFlowRenderer;
-import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.lib.client.render.fluid.FluidRenderer;
 import buildcraft.lib.client.render.fluid.FluidSpriteType;
 import buildcraft.lib.misc.RenderUtil;
 import buildcraft.lib.misc.VecUtil;
 import buildcraft.transport.pipe.Pipe;
 import buildcraft.transport.pipe.flow.PipeFlowFluids;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -53,15 +49,14 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
         Vec3[] offsets = flow.getOffsetsForRender(partialTicks);
 
         int blocklight = forRender.getRawFluid().getAttributes().getLuminosity(forRender);
-        IPipeHolder holder = flow.pipe.getHolder();
+//        IPipeHolder holder = flow.pipe.getHolder();
 //        combinedLight = holder.getPipeWorld().getCombinedLight(holder.getPipePos(), blocklight);
         combinedLight = RenderUtil.combineWithFluidLight(combinedLight, (byte) blocklight);
 
         FluidRenderer.vertex.lighti(combinedLight);
-        FluidRenderer.vertex.overlay(combinedOverlay); // Calen add
+        FluidRenderer.vertex.overlay(combinedOverlay);
 
-//        try (AutoTessellator tess = RenderUtil.getThreadLocalUnusedTessellator())
-//        {
+//        try (AutoTessellator tess = RenderUtil.getThreadLocalUnusedTessellator()) {
 //            BufferBuilder fluidBuffer = tess.tessellator.getBuffer();
 //            fluidBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 //            fluidBuffer.setTranslation(x, y, z);
@@ -71,12 +66,9 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
         boolean vertical = flow.pipe.isConnected(gas ? Direction.DOWN : Direction.UP);
 
         prof.popPush("build");
-        for (Direction face : Direction.values())
-//        Direction[] d = new Direction[]{Direction.NORTH};
-//        for (Direction face : d)
-        {
+        for (Direction face : Direction.values()) {
             double size = ((Pipe) flow.pipe).getConnectedDist(face);
-//                double amount = amounts[face.getIndex()];
+//            double amount = amounts[face.getIndex()];
             double amount = amounts[face.get3DDataValue()];
             if (face.getAxis() != Axis.Y) {
                 horizontal |= flow.pipe.isConnected(face) && amount > 0;
@@ -92,13 +84,13 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
                 radius = new Vec3(perc * 0.24, radius.y, perc * 0.24);
             }
 
-//                Vec3 offset = offsets[face.getIndex()];
+//            Vec3 offset = offsets[face.getIndex()];
             Vec3 offset = offsets[face.get3DDataValue()];
             // TODO Calen: when complete SpriteFluidFrozen.class, release the comments ##0-6/7
             // TODO Calen: if force use FROZEN, the texture will flash
             if (offset == null) offset = Vec3.ZERO;
 //            center = center.add(offset); // TODO Calen ##0/7
-//                fluidBuffer.setTranslation(x - offset.x, y - offset.y, z - offset.z);
+//            fluidBuffer.setTranslation(x - offset.x, y - offset.y, z - offset.z);
             poseStack.pushPose();
 
 //            poseStack.translate(-offset.x, -offset.y, -offset.z); // TODO Calen ##1/7
@@ -124,9 +116,7 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
         poseStack.pushPose();
 //        poseStack.translate(-offset.x, -offset.y, -offset.z); // TODO Calen ##2/7
         PoseStack.Pose pose = poseStack.last();
-        poseStack.popPose();
 
-//        // Calen test
         if (horizontal | !vertical) {
             Vec3 min = new Vec3(0.26, 0.26, 0.26);
             Vec3 max = new Vec3(0.74, 0.74, 0.74);
@@ -137,8 +127,8 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
             FluidRenderer.renderFluid(FluidSpriteType.FROZEN, forRender, amount, flow.capacity, min, max, pose, fluidBuffer, sides);
             horizPos += (max.y - min.y) * amount / flow.capacity;
         }
+        poseStack.popPose();
 
-//        // Calen test
         if (vertical && horizPos < 0.74) {
             double perc = amount / flow.capacity;
             perc = Math.sqrt(perc);
@@ -159,11 +149,8 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
 //            // gl state setup
 //            RenderHelper.disableStandardItemLighting();
 //            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 //            GlStateManager.enableBlend();
-        RenderSystem.enableBlend();
 //            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 //            GlStateManager.enableCull();
 
         prof.popPush("draw");
@@ -175,6 +162,5 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
 
         FluidRenderer.vertex.lighti((byte) 0xF, (byte) 0xF);
         prof.pop();
-
     }
 }

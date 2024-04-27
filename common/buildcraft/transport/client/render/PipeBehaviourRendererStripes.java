@@ -26,7 +26,6 @@ public enum PipeBehaviourRendererStripes implements IPipeBehaviourRenderer<PipeB
         Direction dir = stripes.direction;
         if (dir == null) return;
         MutableQuad[] quads = BCTransportModels.getStripesDynQuads(dir);
-        poseStack.pushPose();
 //        bb.setTranslation(x, y, z);
         int light = stripes.pipe.getHolder().getPipeWorld().getLightEngine().getRawBrightness(stripes.pipe.getHolder().getPipePos(), 0);
         for (MutableQuad q : quads) {
@@ -36,6 +35,5 @@ public enum PipeBehaviourRendererStripes implements IPipeBehaviourRenderer<PipeB
             q.render(poseStack.last(), bb);
         }
 //        bb.setTranslation(0, 0, 0);
-        poseStack.popPose();
     }
 }

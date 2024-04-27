@@ -16,7 +16,6 @@ import buildcraft.api.transport.pipe.*;
 import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 import buildcraft.api.transport.pluggable.PipePluggable;
 import buildcraft.lib.misc.*;
-import buildcraft.lib.tile.ITickable;
 import buildcraft.transport.BCTransportStatements;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -80,22 +79,19 @@ public class PipeBehaviourStripes extends PipeBehaviour implements IStripesActiv
     private void setDirection(@Nullable Direction newValue) {
         if (direction != newValue) {
             direction = newValue;
-//            if (!pipe.getHolder().getPipeWorld().isClientSide)
-//            {
+//            if (!pipe.getHolder().getPipeWorld().isRemote) {
 //                pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
 //            }
             // Calen: when world loading, NPE: Cannot read field "isClientSide" because the return value of "buildcraft.api.transport.pipe.IPipeHolder.getPipeWorld()" is null
-            if (pipe.getHolder() instanceof ITickable tickable) {
-                tickable.runWhenWorldNotNull(
-                        () ->
-                        {
-                            if (!pipe.getHolder().getPipeWorld().isClientSide) {
-                                pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
-                            }
-                        },
-                        false
-                );
-            }
+            pipe.getHolder().runWhenWorldNotNull(
+                    () ->
+                    {
+                        if (!pipe.getHolder().getPipeWorld().isClientSide) {
+                            pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
+                        }
+                    },
+                    false
+            );
         }
     }
 
@@ -255,6 +251,6 @@ public class PipeBehaviourStripes extends PipeBehaviour implements IStripesActiv
             return LazyOptional.of(() -> this).cast();
         }
 //        return super.getCapability(capability, facing);
-        return LazyOptional.empty();
+        return super.getCapability(capability, facing);
     }
 }

@@ -15,6 +15,7 @@ import buildcraft.builders.snapshot.GlobalSavedDataSnapshots;
 import buildcraft.builders.snapshot.Snapshot;
 import buildcraft.lib.delta.DeltaInt;
 import buildcraft.lib.delta.DeltaManager;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.data.IdAllocator;
 import buildcraft.lib.nbt.NbtSquisher;
@@ -47,7 +48,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.*;
 
-public class TileElectronicLibrary extends TileBC_Neptune implements ITickable, MenuProvider {
+public class TileElectronicLibrary extends TileBC_Neptune implements ITickable, IBCTileMenuProvider {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("library");
     @SuppressWarnings("WeakerAccess")
     public static final int NET_DOWN = IDS.allocId("DOWN");

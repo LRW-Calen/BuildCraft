@@ -59,7 +59,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
                     tileNbt.getCompound("pipe").get("col"),
                     DyeColor.class
             );
-            // Calen: reg different item object for different colour
+            // Calen: reg different item objects for different colours
 //            Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition);
             Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(definition, color);
             if (item != null) {
@@ -70,9 +70,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
 //                                color == null ? 0 : color.getMetadata() + 1
 //                        )
 //                );
-                ItemStack stack = new ItemStack(item, 1);
-//                ColourUtil.addColorTagToStack(stack, color == null ? 0 : color.getId() + 1);
-                builder.add(stack);
+                builder.add(new ItemStack(item, 1));
             }
             return builder.build();
         } catch (InvalidInputDataException e) {
@@ -85,8 +83,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
         SchematicBlockPipe schematicBlock = new SchematicBlockPipe();
         schematicBlock.tileNbt = tileNbt;
         // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
-////        schematicBlock.tileRotation = tileRotation.add(rotation);
-//        schematicBlock.tileRotation = tileRotation.getRotated(rotation);
+//        schematicBlock.tileRotation = tileRotation.add(rotation);
         return schematicBlock;
     }
 
@@ -102,19 +99,15 @@ public class SchematicBlockPipe implements ISchematicBlock {
         BlockState state = BCTransportBlocks.pipeHolder.get().defaultBlockState();
         boolean setBlockResult = world.setBlock(blockPos, state, Block.UPDATE_ALL_IMMEDIATE);
         if (setBlockResult) {
-//            BlockEntity tileEntity = BlockEntity.loadStatic(world, tileNbt);
+//            TileEntity tileEntity = TileEntity.create(world, tileNbt);
             BlockEntity tileEntity = BlockEntity.loadStatic(blockPos, state, tileNbt);
             if (tileEntity != null) {
-                // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
+                // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world#setBlockEntity
 //                tileEntity.setWorld(world);
-//                tileEntity.setLevel(world);
 //                world.setTileEntity(blockPos, tileEntity);
                 world.setBlockEntity(tileEntity);
-                // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
-//                if (tileRotation != Rotation.NONE)
-//                {
-////                    tileEntity.rotate(tileRotation);
-//                    world.setBlock(blockPos, state.rotate(tileRotation), 0);
+//                if (tileRotation != Rotation.NONE) {
+//                    tileEntity.rotate(tileRotation);
 //                }
                 return true;
             }
@@ -124,23 +117,20 @@ public class SchematicBlockPipe implements ISchematicBlock {
 
     @SuppressWarnings("Duplicates")
     @Override
-//    public boolean buildWithoutChecks(Level world, BlockPos blockPos)
+//    public boolean buildWithoutChecks(World world, BlockPos blockPos)
     public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos) {
         BlockState state = BCTransportBlocks.pipeHolder.get().defaultBlockState();
         if (world.setBlock(blockPos, state, 0)) {
-//            BlockEntity tileEntity = BlockEntity.loadStatic(world, tileNbt);
+//            TileEntity tileEntity = TileEntity.create(world, tileNbt);
             BlockEntity tileEntity = BlockEntity.loadStatic(blockPos, state, tileNbt);
             if (tileEntity != null) {
                 // Calen: tileEntity#setLevel and tileEntity#clearRemoved will be called in world.setBlockEntity
 //                tileEntity.setWorld(world);
-//                tileEntity.setLevel(world);
-                world.setBlockEntity(tileEntity);
 //                world.setTileEntity(blockPos, tileEntity);
+                world.setBlockEntity(tileEntity);
                 // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
-//                if (tileRotation != Rotation.NONE)
-//                {
-////                    tileEntity.rotate(tileRotation);
-//                    world.setBlock(blockPos, state.rotate(tileRotation), 0);
+//                if (tileRotation != Rotation.NONE) {
+//                    tileEntity.rotate(tileRotation);
 //                }
                 return true;
             }

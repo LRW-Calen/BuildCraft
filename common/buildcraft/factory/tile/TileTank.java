@@ -369,7 +369,7 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
         for (TileTank t : tanks) {
             int tankFilled = t.tank.fill(resource, doFill);
             if (tankFilled > 0) {
-                if (isPlayerInteracting & doFill == FluidAction.EXECUTE) {
+                if (isPlayerInteracting & doFill.execute()) {
                     t.sendNetworkUpdate(NET_RENDER_DATA);
                 }
                 resource.setAmount(resource.getAmount() - tankFilled);
@@ -432,7 +432,7 @@ public class TileTank extends TileBC_Neptune implements IDebuggable, IFluidHandl
             FluidStack drained = t.tank.drain(filter, realMax, doDrain);
 //            if (drained == null) continue;
             if (drained.isEmpty()) continue;
-            if (isPlayerInteracting & doDrain == FluidAction.EXECUTE) {
+            if (isPlayerInteracting & doDrain.execute()) {
                 t.sendNetworkUpdate(NET_RENDER_DATA);
             }
 //            if (total == null)

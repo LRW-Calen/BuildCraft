@@ -63,7 +63,8 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.*;
 
-public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITickable, IDebuggable {
+/** {@link IPipeHolder} implemented {@link ITickable} */
+public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, IDebuggable {
 
     protected static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("pipe");
 
@@ -194,12 +195,8 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
                 eventBus.registerHandler(FilterEventHandler.class);
             }
 //            int meta = stack.getMetadata();
-//            DyeColor color = ColourUtil.getStackColourFromTag(stack);
-//            if (meta > 0 && meta <= 16)
-//            if (color != null)
-//            {
-////                pipe.setColour(DyeColor.byId(meta - 1));
-////                pipe.setColour(color);
+//            if (meta > 0 && meta <= 16) {
+//                pipe.setColour(EnumDyeColor.byMetadata(meta - 1));
 //            }
             pipe.setColour(itemPipe.getColour());
         }
@@ -216,6 +213,7 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
     @Override
 //    public void invalidate()
     public void setRemoved() {
+//        super.invalidate();
         super.setRemoved();
         eventBus.fireEvent(new PipeEventTileState.Invalidate(this));
 //        wireManager.invalidate();
@@ -229,6 +227,7 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
     @Override
 //    public void validate()
     public void clearRemoved() {
+//        super.validate();
         super.clearRemoved();
         eventBus.fireEvent(new PipeEventTileState.Validate(this));
         wireManager.validate();
@@ -266,9 +265,10 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
     }
 
     // ITickable
+
     @Override
     public void update() {
-        ITickable.super.update();
+        IPipeHolder.super.update();
         redstoneValues = new int[6];
         // Tick objects
         if (pipe != null) {
@@ -627,8 +627,7 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
     }
 
 //    @Override
-//    public boolean hasFastRenderer()
-//    {
+//    public boolean hasFastRenderer() {
 //        return true;
 //    }
 
@@ -637,6 +636,8 @@ public class TilePipeHolder extends TileBC_Neptune implements IPipeHolder, ITick
     public IModelData getModelData() {
         return new ModelDataMap.Builder().withInitial(BlockPipeHolder.PROP_TILE, this).build();
     }
+
+    // MenuProvider
 
     @NotNull
     @Override

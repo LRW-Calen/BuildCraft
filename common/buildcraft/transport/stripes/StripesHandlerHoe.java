@@ -36,6 +36,14 @@ public enum StripesHandlerHoe implements IStripesHandlerItem {
         pos = pos.relative(direction);
 //        if (stack.onItemUse(
         if (stack.onItemUseFirst(
+//                player,
+//                world,
+//                pos,
+//                EnumHand.MAIN_HAND,
+//                EnumFacing.UP,
+//                0.0f,
+//                0.0f,
+//                0.0f
                 new UseOnContext(
                         world,
                         player,
@@ -48,14 +56,6 @@ public enum StripesHandlerHoe implements IStripesHandlerItem {
                                 false
                         )
                 )
-//                player,
-//                world,
-//                pos,
-//                InteractionHand.MAIN_HAND,
-//                Direction.UP,
-//                0.0f,
-//                0.0f,
-//                0.0f
         ) != InteractionResult.PASS)
         {
             return true;
@@ -63,6 +63,14 @@ public enum StripesHandlerHoe implements IStripesHandlerItem {
 
 //        if (direction != Direction.UP && stack.onItemUse(
         if (direction != Direction.UP && stack.onItemUseFirst(
+//                player,
+//                world,
+//                pos.down(),
+//                EnumHand.MAIN_HAND,
+//                EnumFacing.UP,
+//                0.0f,
+//                0.0f,
+//                0.0f
                 new UseOnContext(
                         world,
                         player,
@@ -75,14 +83,6 @@ public enum StripesHandlerHoe implements IStripesHandlerItem {
                                 false
                         )
                 )
-//                player,
-//                world,
-//                pos.below(),
-//                InteractionHand.MAIN_HAND,
-//                Direction.UP,
-//                0.0f,
-//                0.0f,
-//                0.0f
         ) != InteractionResult.PASS)
         {
             return true;
@@ -90,5 +90,4 @@ public enum StripesHandlerHoe implements IStripesHandlerItem {
 
         return false;
     }
-
 }

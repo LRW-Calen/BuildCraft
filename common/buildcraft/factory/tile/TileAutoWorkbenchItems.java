@@ -7,6 +7,7 @@ package buildcraft.factory.tile;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.BCFactoryMenuTypes;
 import buildcraft.factory.container.ContainerAutoCraftItems;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.MenuProvider;
@@ -15,7 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class TileAutoWorkbenchItems extends TileAutoWorkbenchBase implements MenuProvider {
+public class TileAutoWorkbenchItems extends TileAutoWorkbenchBase implements IBCTileMenuProvider {
     public TileAutoWorkbenchItems(BlockPos pos, BlockState blockState) {
         super(BCFactoryBlocks.autoWorkbenchItemsTile.get(), 3, 3, pos, blockState);
     }

@@ -31,6 +31,8 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Point3f;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+@OnlyIn(Dist.CLIENT)
 public enum ModelPipeItem implements BakedModel {
     INSTANCE;
 
@@ -86,7 +89,7 @@ public enum ModelPipeItem implements BakedModel {
         return ImmutableList.of();
     }
 
-    //    private static List<BakedQuad> getQuads(PipeFaceTex center, PipeFaceTex top, PipeFaceTex bottom, TextureAtlasSprite[] sprites, int colour, EnumPipeColourType colourType)
+    // private static List<BakedQuad> getQuads(PipeFaceTex center, PipeFaceTex top, PipeFaceTex bottom, TextureAtlasSprite[] sprites, int colour, EnumPipeColourType colourType)
     private static List<BakedQuad> getQuads(PipeFaceTex center, PipeFaceTex top, PipeFaceTex bottom, TextureAtlasSprite[] sprites, DyeColor rColour, EnumPipeColourType colourType) {
         // TEMP!
         top = center;
@@ -119,8 +122,7 @@ public enum ModelPipeItem implements BakedModel {
         return quads;
     }
 
-    private static void addQuads(MutableQuad[] from, TextureAtlasSprite[] sprites, List<BakedQuad> to,
-                                 PipeFaceTex face) {
+    private static void addQuads(MutableQuad[] from, TextureAtlasSprite[] sprites, List<BakedQuad> to, PipeFaceTex face) {
         MutableQuad copy = new MutableQuad();
         for (int i = 0; i < face.getCount(); i++) {
             int colour = face.getColour(i);
@@ -128,7 +130,7 @@ public enum ModelPipeItem implements BakedModel {
             TextureAtlasSprite sprite = getSprite(sprites, spriteIndex);
             // Calen: when reloading resource packs, sprite may be null and cause NPE
             if (sprite == null) {
-                return;
+                continue;
             }
             for (MutableQuad f : from) {
                 if (f == null) {
@@ -152,8 +154,7 @@ public enum ModelPipeItem implements BakedModel {
         return sprite;
     }
 
-    private static void addQuadsColoured(MutableQuad[] from, List<BakedQuad> to, TextureAtlasSprite sprite,
-                                         int colour) {
+    private static void addQuadsColoured(MutableQuad[] from, List<BakedQuad> to, TextureAtlasSprite sprite, int colour) {
         for (MutableQuad f : from) {
             if (f == null) {
                 continue;
@@ -230,20 +231,6 @@ public enum ModelPipeItem implements BakedModel {
             } else {
                 type = EnumPipeColourType.TRANSLUCENT;
             }
-            // Calen add
-
-//            int color;
-//            CompoundTag tag = stack.getTag();
-//            if (tag != null && tag.contains("color"))
-//            {
-//                color = tag.getInt("color");
-//            }
-//            else
-//            {
-//                color = 0;
-//            }
-//            List<BakedQuad> quads = getQuads(center, top, bottom, sprites, stack.getMetadata(), type);
-//            List<BakedQuad> quads = getQuads(center, top, bottom, sprites, ColourUtil.getStackColourFromTag(stack), type);
             List<BakedQuad> quads = getQuads(center, top, bottom, sprites, colour, type);
             return new ModelItemSimple(quads, ModelItemSimple.TRANSFORM_BLOCK, true);
         }

@@ -49,7 +49,7 @@ import java.util.*;
 public enum PipeExtensionManager implements IPipeExtensionManager {
     INSTANCE;
 
-    //    private final Int2ObjectOpenHashMap<List<PipeExtensionRequest>> requests = new Int2ObjectOpenHashMap<>();
+    // private final Int2ObjectOpenHashMap<List<PipeExtensionRequest>> requests = new Int2ObjectOpenHashMap<>();
     private final HashMap<String, List<PipeExtensionRequest>> requests = new HashMap<>();
     private final Set<PipeDefinition> retractionPipeDefs = new HashSet<>();
 
@@ -77,7 +77,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
 
     @SubscribeEvent
     public void tick(TickEvent.WorldTickEvent event) {
-//        if (event.phase != TickEvent.Phase.END || event.side != Dist.DEDICATED_SERVER)
+//        if (event.phase != Phase.END || event.side != Side.SERVER)
         if (event.phase != TickEvent.Phase.END || event.side != LogicalSide.SERVER) {
             return;
         }
@@ -144,9 +144,9 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
             }
         }
 
-        CompoundTag stripesNBTOld = new CompoundTag();
+//        NBTTagCompound stripesNBTOld = new NBTTagCompound();
 //        stripesTileOld.writeToNBT(stripesNBTOld);
-        stripesNBTOld = stripesTileOld.saveWithFullMetadata();
+        CompoundTag stripesNBTOld = stripesTileOld.saveWithFullMetadata();
 
         // Step 2: Remove previous pipe
 //        BlockSnapshot blockSnapshot2 = BlockSnapshot.getBlockSnapshot(w, p);
@@ -173,9 +173,9 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
             player.getInventory().clearContent();
             w.setBlock(p, stripesStateOld, Block.UPDATE_ALL);
 //            BlockEvent.PlaceEvent placeEvent = ForgeEventFactory.onPlayerBlockPlace(player, blockSnapshot2, r.dir, InteractionHand.MAIN_HAND);
-            boolean onBlockPlaceCanceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
+            canceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
 //            if (canceled = placeEvent.isCanceled())
-            if (onBlockPlaceCanceled) {
+            if (canceled) {
                 blockSnapshot2.restore(true);
                 BlockEntity tile = w.getBlockEntity(r.pos);
                 if (tile != null) {
@@ -317,8 +317,8 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
             BlockSnapshot blockSnapshot2 = BlockSnapshot.create(w.dimension(), w, p);
             w.setBlock(p, stripesStateOld, Block.UPDATE_ALL);
 //            BlockEvent.PlaceEvent placeEvent = ForgeEventFactory.onPlayerBlockPlace(player, blockSnapshot2, r.dir.getOpposite(), InteractionHand.MAIN_HAND);
-            boolean onBlockPlaceCanceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
-            if (onBlockPlaceCanceled) {
+            canceled = ForgeEventFactory.onBlockPlace(player, blockSnapshot2, r.dir.getOpposite());
+            if (canceled) {
                 stacksToSendBack.add(r.stack);
 
                 blockSnapshot1.restore(true);

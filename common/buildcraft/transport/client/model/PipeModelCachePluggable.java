@@ -52,7 +52,7 @@ public class PipeModelCachePluggable {
         private final ImmutableSet<PluggableModelKey> pluggables;
         private final int hash;
 
-        //        public PluggableKey(BlockRenderLayer layer, IPipeHolder holder)
+        // public PluggableKey(BlockRenderLayer layer, IPipeHolder holder)
         public PluggableKey(RenderType layer, IPipeHolder holder) {
             ImmutableSet.Builder<PluggableModelKey> builder = ImmutableSet.builder();
             for (Direction side : Direction.values()) {

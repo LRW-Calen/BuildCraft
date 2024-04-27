@@ -6,13 +6,13 @@
 
 package buildcraft.transport;
 
-import buildcraft.transport.client.render.PipeWireRenderer;
 import buildcraft.transport.net.PipeItemMessageQueue;
 import buildcraft.transport.wire.WorldSavedDataWireSystems;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -40,18 +40,18 @@ public enum BCTransportEventDist {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void onTextureStitch(TextureStitchEvent.Post event) {
-        PipeWireRenderer.clearWireCache();
+        // 1.18.2: no longer use GlList
+//        PipeWireRenderer.clearWireCache();
     }
 
-//    @SubscribeEvent
+    @SubscribeEvent
 //    public void onBlockPlace(BlockEvent.PlaceEvent event)
-//    {
-//        // event.setCanceled(true);
-//    }
+    public void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
+        // event.setCanceled(true);
+    }
 
-//    @SubscribeEvent
-//    public void onBlockBreak(BlockEvent.BreakEvent event)
-//    {
-//        // event.setCanceled(true);
-//    }
+    @SubscribeEvent
+    public void onBlockBreak(BlockEvent.BreakEvent event) {
+        // event.setCanceled(true);
+    }
 }

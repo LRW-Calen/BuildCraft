@@ -12,6 +12,7 @@ import buildcraft.core.item.ItemMapLocation;
 import buildcraft.core.item.ItemPaintbrush_BC8;
 import buildcraft.lib.delta.DeltaInt;
 import buildcraft.lib.delta.DeltaManager.EnumNetworkVisibility;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.data.IdAllocator;
 import buildcraft.lib.net.IMessage;
@@ -47,7 +48,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider {
+public class TileZonePlanner extends TileBC_Neptune implements ITickable, IDebuggable, IBCTileMenuProvider {
     protected static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("zone_planner");
     public static final int NET_PLAN_CHANGE = IDS.allocId("PLAN_CHANGE");
 

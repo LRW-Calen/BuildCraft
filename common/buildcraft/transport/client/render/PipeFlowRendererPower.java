@@ -44,7 +44,6 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
         }
 
 //        bb.setTranslation(x, y, z);
-        poseStack.pushPose();
 
         if (centrePower > 0) {
             for (Direction side : Direction.values()) {
@@ -61,7 +60,6 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
         }
 
 //        bb.setTranslation(0, 0, 0);
-        poseStack.popPose();
     }
 
     private static void renderSidePower(Direction side, double power, double centrePower, double offset, PoseStack.Pose pose, VertexConsumer bb) {

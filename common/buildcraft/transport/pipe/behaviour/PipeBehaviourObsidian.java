@@ -40,9 +40,7 @@ public class PipeBehaviourObsidian extends PipeBehaviour implements IMjRedstoneR
     private static final int DROP_GAP = 20;
 
     private final MjCapabilityHelper mjCaps = new MjCapabilityHelper(this);
-    /**
-     * Map of recently dropped item to the tick when it can be picked up
-     */
+    /** Map of recently dropped item to the tick when it can be picked up */
     private final WeakHashMap<ItemEntity, Long> entityDropTime = new WeakHashMap<>();
     private int toWaitTicks = 0;
 
@@ -130,9 +128,7 @@ public class PipeBehaviourObsidian extends PipeBehaviour implements IMjRedstoneR
         }
     }
 
-    /**
-     * @return The left over power
-     */
+    /** @return The left over power */
     protected long trySuckEntity(Entity entity, Direction faceFrom, long power, boolean simulate) {
         if (!entity.isAlive() || entity instanceof LivingEntity) {
             return power;

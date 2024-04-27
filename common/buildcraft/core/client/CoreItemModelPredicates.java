@@ -6,8 +6,11 @@ import buildcraft.core.item.ItemList_BC8;
 import buildcraft.lib.misc.StackUtil;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+@OnlyIn(Dist.CLIENT)
 public class CoreItemModelPredicates {
     public static final ResourceLocation PREDICATE_USED = new ResourceLocation("buildcraft", "used");
     public static final ResourceLocation PREDICATE_MAP_TYPE = new ResourceLocation("buildcraft", "map_type");

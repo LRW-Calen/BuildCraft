@@ -23,6 +23,7 @@ import buildcraft.lib.engine.EngineConnector;
 import buildcraft.lib.engine.TileEngineBase_BC8;
 import buildcraft.lib.fluid.Tank;
 import buildcraft.lib.fluid.TankProperties;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.gui.help.ElementHelpInfo;
 import buildcraft.lib.misc.CapUtil;
 import buildcraft.lib.misc.EntityUtil;
@@ -53,7 +54,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class TileEngineIron_BC8 extends TileEngineBase_BC8 implements MenuProvider {
+public class TileEngineIron_BC8 extends TileEngineBase_BC8 implements IBCTileMenuProvider {
     public static final int MAX_FLUID = 10_000;
 
     public static final double COOLDOWN_RATE = 0.05;

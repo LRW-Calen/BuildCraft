@@ -15,10 +15,10 @@ import buildcraft.lib.gui.button.IButtonClickEventListener;
 import buildcraft.lib.gui.button.IButtonClickEventTrigger;
 import buildcraft.lib.gui.elem.ToolTip;
 import buildcraft.lib.misc.LocaleUtil;
+import buildcraft.lib.misc.RenderUtil;
 import buildcraft.transport.container.ContainerDiamondWoodPipe;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond.FilterMode;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -41,10 +41,8 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
 
     private PipeBehaviourWoodDiamond pipe;
 
-    //    public GuiDiamondWoodPipe(Player player, PipeBehaviourWoodDiamond pipe, Inventory inventory, Component component)
+    // public GuiDiamondWoodPipe(Player player, PipeBehaviourWoodDiamond pipe, Inventory inventory, Component component)
     public GuiDiamondWoodPipe(ContainerDiamondWoodPipe container, Inventory inventory, Component component) {
-//        super(new ContainerDiamondWoodPipe(player, pipe));
-//        super(new ContainerDiamondWoodPipe(player, pipe), inventory, component);
         super(container, inventory, component);
 
 //        this.pipe = pipe;
@@ -123,7 +121,7 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
         font.draw(poseStack, LocaleUtil.localize("gui.inventory"), (int) mainGui.rootElement.getX() + 8, (int) mainGui.rootElement.getY() + imageHeight - 93, 0x404040);
         if (pipe.filterMode == FilterMode.ROUND_ROBIN) {
 //            GlStateManager.color(1, 1, 1, 1);
-            RenderSystem.setShaderColor(1, 1, 1, 1);
+            RenderUtil.color(1, 1, 1, 1);
             GuiIcon icon = pipe.filterValid ? ICON_ROUND_ROBIN_INDEX : ICON_ROUND_ROBIN_NONE;
             int x = pipe.filterValid ? 18 * pipe.currentFilter : 0;
             icon.drawAt(poseStack, mainGui.rootElement.getX() + 6 + x, mainGui.rootElement.getY() + 16);

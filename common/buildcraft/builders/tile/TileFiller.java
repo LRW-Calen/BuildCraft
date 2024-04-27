@@ -32,6 +32,7 @@ import buildcraft.builders.snapshot.Template.BuildingInfo;
 import buildcraft.builders.snapshot.TemplateBuilder;
 import buildcraft.core.marker.volume.*;
 import buildcraft.lib.block.BlockBCBase_Neptune;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.BoundingBoxUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.data.Box;
@@ -74,7 +75,7 @@ import java.util.UUID;
 import java.util.stream.IntStream;
 
 public class TileFiller extends TileBC_Neptune
-        implements ITickable, IDebuggable, ITileForTemplateBuilder, IFillerStatementContainer, IControllable, MenuProvider {
+        implements ITickable, IDebuggable, ITileForTemplateBuilder, IFillerStatementContainer, IControllable, IBCTileMenuProvider {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("filler");
     @SuppressWarnings("WeakerAccess")
     public static final int NET_CAN_EXCAVATE = IDS.allocId("CAN_EXCAVATE");

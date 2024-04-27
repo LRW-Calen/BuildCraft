@@ -11,8 +11,8 @@ import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.transport.pipe.IPipe;
 import buildcraft.api.transport.pipe.PipeBehaviour;
 import buildcraft.lib.misc.AdvancementUtil;
+import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
-import buildcraft.transport.BCTransportGuis;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -72,7 +72,7 @@ public abstract class PipeBehaviourDiamond extends PipeBehaviour {
                                   EnumPipePart part) {
         if (!player.level.isClientSide) {
 //            BCTransportGuis.PIPE_DIAMOND.openGui(player, pipe.getHolder().getPipePos());
-            BCTransportGuis.PIPE_DIAMOND.openPipeGui(player, pipe.getHolder().getPipePos(), pipe.getHolder());
+            MessageUtil.serverOpenTileGui(player, pipe.getHolder(), pipe.getHolder().getPipePos());
         }
         return true;
     }

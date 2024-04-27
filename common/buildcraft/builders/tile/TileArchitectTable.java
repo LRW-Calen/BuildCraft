@@ -28,6 +28,7 @@ import buildcraft.core.marker.volume.VolumeBox;
 import buildcraft.core.marker.volume.WorldSavedDataVolumeBoxes;
 import buildcraft.lib.delta.DeltaInt;
 import buildcraft.lib.delta.DeltaManager;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.BoundingBoxUtil;
 import buildcraft.lib.misc.MessageUtil;
@@ -70,7 +71,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.*;
 
-public class TileArchitectTable extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider {
+public class TileArchitectTable extends TileBC_Neptune implements ITickable, IDebuggable, IBCTileMenuProvider {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("architect");
     @SuppressWarnings("WeakerAccess")
     public static final int NET_BOX = IDS.allocId("BOX");

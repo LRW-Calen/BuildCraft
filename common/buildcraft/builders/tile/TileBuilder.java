@@ -25,6 +25,7 @@ import buildcraft.builders.snapshot.*;
 import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.fluid.Tank;
 import buildcraft.lib.fluid.TankManager;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.*;
 import buildcraft.lib.misc.data.Box;
 import buildcraft.lib.misc.data.IdAllocator;
@@ -73,7 +74,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TileBuilder extends TileBC_Neptune
-        implements ITickable, IDebuggable, ITileForTemplateBuilder, ITileForBlueprintBuilder, MenuProvider {
+        implements ITickable, IDebuggable, ITileForTemplateBuilder, ITileForBlueprintBuilder, IBCTileMenuProvider {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("builder");
     public static final int NET_CAN_EXCAVATE = IDS.allocId("CAN_EXCAVATE");
     public static final int NET_SNAPSHOT_TYPE = IDS.allocId("SNAPSHOT_TYPE");

@@ -34,8 +34,15 @@ public enum StripesHandlerPlaceBlock implements IStripesHandlerItem {
             return false;
         }
 //        stack.getItem().onItemUse(
-        stack.getItem().onItemUseFirst(
-                stack,
+        stack.onItemUseFirst(
+//                player,
+//                world,
+//                pos.offset(direction),
+//                EnumHand.MAIN_HAND,
+//                direction,
+//                0.5f,
+//                0.5f,
+//                0.5f
                 new UseOnContext(
                         world,
                         player,
@@ -48,14 +55,6 @@ public enum StripesHandlerPlaceBlock implements IStripesHandlerItem {
                                 false
                         )
                 )
-//            player,
-//            world,
-//            pos.relative(direction),
-//            InteractionHand.MAIN_HAND,
-//            direction,
-//            0.5f,
-//            0.5f,
-//            0.5f
         );
         return true;
     }

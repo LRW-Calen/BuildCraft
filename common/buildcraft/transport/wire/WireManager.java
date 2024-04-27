@@ -11,7 +11,6 @@ import buildcraft.api.transport.IWireManager;
 import buildcraft.api.transport.pipe.IPipe;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.transport.tile.TilePipeHolder;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.DyeColor;
@@ -243,7 +242,7 @@ public class WireManager implements IWireManager {
             }
 //            updateBetweens(false);
             // Calen: when world loading, TilePipeHolder#getNeighbourTile -> [lib.tile] Ghost-loading tile at ...
-            ((TilePipeHolder) holder.getPipeTile()).runWhenWorldNotNull(() -> updateBetweens(false), true);
+            getHolder().runWhenWorldNotNull(() -> updateBetweens(false), true);
         }
     }
 }

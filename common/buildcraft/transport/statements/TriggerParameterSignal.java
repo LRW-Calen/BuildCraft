@@ -118,8 +118,7 @@ public class TriggerParameterSignal implements IStatementParameter {
     }
 
     @Override
-    public TriggerParameterSignal onClick(IStatementContainer source, IStatement stmt, ItemStack stack,
-                                          StatementMouseClick mouse) {
+    public TriggerParameterSignal onClick(IStatementContainer source, IStatement stmt, ItemStack stack, StatementMouseClick mouse) {
         return null;
     }
 

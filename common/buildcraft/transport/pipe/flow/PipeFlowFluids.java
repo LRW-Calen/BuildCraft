@@ -59,9 +59,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
 
     public static final int NET_FLUID_AMOUNTS = 2;
 
-    /**
-     * The number of pixels the fluid moves by per millisecond
-     */
+    /** The number of pixels the fluid moves by per millisecond */
     public static final double FLOW_MULTIPLIER = 0.016;
 
     private final FluidTransferInfo fluidTransferInfo = PipeApi.getFluidTransferInfo(pipe.getDefinition());
@@ -192,7 +190,6 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         {
             FluidStack f = filter == null ? c : filter;
 //            return extractSimple(mb, f, handler, simulate);
-//            return extractSimple(mb, f, handler, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
             return extractSimple(mb, f, handler, action);
         };
 //        return tryExtractFluidInternal(millibuckets, from, extractor, simulate).getObject();
@@ -211,10 +208,10 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
 //                return extractSimple(mb, c, handler, simulate);
                 return extractSimple(mb, c, handler, action);
             }
-            if (handler instanceof IFluidHandlerAdv handlerAdv) {
+            if (handler instanceof IFluidHandlerAdv) {
                 // This will likely be cheaper
-//                IFluidHandlerAdv handlerAdv = (IFluidHandlerAdv) handler;
-//                return handlerAdv.drain(filter, mb, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
+                IFluidHandlerAdv handlerAdv = (IFluidHandlerAdv) handler;
+//                return handlerAdv.drain(filter, mb, !simulate);
                 return handlerAdv.drain(filter, mb, action);
             }
 
@@ -251,7 +248,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         FluidStack extract(int millibuckets, FluidStack current, IFluidHandler handler);
     }
 
-    //    private InteractionResultHolder<FluidStack> tryExtractFluidInternal(int millibuckets, Direction from, FluidExtractor extractor, boolean simulate)
+    // private InteractionResultHolder<FluidStack> tryExtractFluidInternal(int millibuckets, Direction from, FluidExtractor extractor, boolean simulate)
     private InteractionResultHolder<FluidStack> tryExtractFluidInternal(int millibuckets, Direction from, FluidExtractor extractor, IFluidHandler.FluidAction action) {
         if (from == null || millibuckets <= 0) {
             return FAILED_EXTRACT;
@@ -295,17 +292,15 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, toAdd);
     }
 
-    //    private static FluidStack extractSimple(int millibuckets, FluidStack filter, IFluidHandler handler, boolean simulate)
+    // private static FluidStack extractSimple(int millibuckets, FluidStack filter, IFluidHandler handler, boolean simulate)
     private static FluidStack extractSimple(int millibuckets, FluidStack filter, IFluidHandler handler, IFluidHandler.FluidAction action) {
         if (filter == null) {
 //            return handler.drain(millibuckets, !simulate);
-//            return handler.drain(millibuckets, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
             return handler.drain(millibuckets, action);
         }
         filter = filter.copy();
         filter.setAmount(millibuckets);
 //        FluidStack drained = handler.drain(filter, !simulate);
-//        FluidStack drained = handler.drain(filter, simulate ? IFluidHandler.FluidAction.SIMULATE : IFluidHandler.FluidAction.EXECUTE);
         FluidStack drained = handler.drain(filter, action);
 //        if (drained != null)
         if (!drained.isEmpty()) {
@@ -786,9 +781,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         }
     }
 
-    /**
-     * Holds data about a single section of this pipe.
-     */
+    /** Holds data about a single section of this pipe. */
     class Section implements IFluidHandler {
         final EnumPipePart part;
 
@@ -800,30 +793,22 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
 
         int currentTime = 0;
 
-        /**
-         * Map of [time] -> [amount inserted]. Used to implement the delayed fluid travelling.
-         */
+        /** Map of [time] -> [amount inserted]. Used to implement the delayed fluid travelling. */
         int[] incoming = new int[1];
 
         int incomingTotalCache = 0;
 
-        /**
-         * If 0 then fluids can move from this in either direction. If less than 0 then fluids can only move into this
+        /** If 0 then fluids can move from this in either direction. If less than 0 then fluids can only move into this
          * section from other tiles, and outputs to other sections. If greater than 0 then fluids can only move out of
-         * this section into other tiles.
-         */
+         * this section into other tiles. */
         int ticksInDirection = 0;
 
         // Client side fields
 
-        /**
-         * Used to interpolate between {@link #clientAmountThis} and {@link #clientAmountLast} for rendering.
-         */
+        /** Used to interpolate between {@link #clientAmountThis} and {@link #clientAmountLast} for rendering. */
         int clientAmountThis, clientAmountLast;
 
-        /**
-         * Holds the amount of fluid was last sent to us from the sever
-         */
+        /** Holds the amount of fluid was last sent to us from the sever */
         int target = 0;
 
         Vec3 offsetLast, offsetThis;
@@ -853,25 +838,19 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
             }
         }
 
-        /**
-         * @return The maximum amount of fluid that can be inserted into this pipe on this tick.
-         */
+        /** @return The maximum amount of fluid that can be inserted into this pipe on this tick. */
         int getMaxFilled() {
             int availableTotal = capacity - amount;
             int availableThisTick = fluidTransferInfo.transferPerTick - incoming[currentTime];
             return Math.min(availableTotal, availableThisTick);
         }
 
-        /**
-         * @return The maximum amount of fluid that can be extracted out of this pipe this tick.
-         */
+        /** @return The maximum amount of fluid that can be extracted out of this pipe this tick. */
         int getMaxDrained() {
             return Math.min(amount - incomingTotalCache, fluidTransferInfo.transferPerTick);
         }
 
-        /**
-         * @return The fluid filled
-         */
+        /** @return The fluid filled */
         int fill(int maxFill, boolean doFill) {
             int amountToFill = Math.min(getMaxFilled(), maxFill);
             if (amountToFill <= 0) {
@@ -898,11 +877,9 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
             return amountToFill;
         }
 
-        /**
-         * @param maxDrain
+        /** @param maxDrain
          * @param doDrain
-         * @return The amount drained
-         */
+         * @return The amount drained */
         int drainInternal(int maxDrain, boolean doDrain) {
             maxDrain = Math.min(maxDrain, getMaxDrained());
             if (maxDrain <= 0) {
@@ -929,9 +906,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
             return dir;
         }
 
-        /**
-         * @return True if this still contains fluid, false if not.
-         */
+        /** @return True if this still contains fluid, false if not. */
         boolean tickClient() {
             clientAmountLast = clientAmountThis;
 
@@ -993,9 +968,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
             return StackUtil.EMPTY_FLUID;
         }
 
-        /**
-         * @deprecated USE {@link #drainInternal(int, boolean)} rather than this!
-         */
+        /** @deprecated USE {@link #drainInternal(int, boolean)} rather than this! */
         @NotNull
         @Override
         @Deprecated
@@ -1003,27 +976,28 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
             return StackUtil.EMPTY_FLUID;
         }
 
-        @Override
-//        public IFluidTankProperties[] getTankProperties()
-        public int getTanks() {
+        // 1.18.2: divided into 3 methods
+//        @Override
+//        public IFluidTankProperties[] getTankProperties() {
 //            return new IFluidTankProperties[0];
+//        }
+
+        @Override
+        public int getTanks() {
             return 0;
         }
 
-        // Calen forced override
         @NotNull
         @Override
         public FluidStack getFluidInTank(int tank) {
             return StackUtil.EMPTY_FLUID;
         }
 
-        // Calen forced override
         @Override
         public int getTankCapacity(int tank) {
             return 0;
         }
 
-        // Calen forced override
         @Override
         public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
             return false;
@@ -1044,13 +1018,13 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
             }
 
             if (currentFluid == null || currentFluid.isFluidEqual(resource)) {
-                if (doFill == FluidAction.EXECUTE) {
+                if (doFill.execute()) {
                     if (currentFluid == null) {
                         setFluid(resource.copy());
                     }
                 }
-                int filled = fill(resource.getAmount(), doFill == FluidAction.EXECUTE);
-                if (filled > 0 && doFill == FluidAction.EXECUTE) {
+                int filled = fill(resource.getAmount(), doFill.execute());
+                if (filled > 0 && doFill.execute()) {
                     ticksInDirection = COOLDOWN_INPUT;
                 }
                 return filled;
@@ -1059,9 +1033,7 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         }
     }
 
-    /**
-     * Enum used for the current direction that a fluid is flowing.
-     */
+    /** Enum used for the current direction that a fluid is flowing. */
     enum Dir {
         IN(-1),
         NONE(0),

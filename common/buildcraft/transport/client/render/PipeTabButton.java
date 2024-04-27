@@ -71,6 +71,9 @@ public class PipeTabButton {
     @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onDrawScreenEventPre(ScreenEvent.DrawScreenEvent.Pre event) {
+        if (m_removeWidget == null || m_addRenderableWidget == null) {
+            return;
+        }
         try {
             if (event.getScreen() instanceof CreativeModeInventoryScreen screen) {
                 // pipes tab

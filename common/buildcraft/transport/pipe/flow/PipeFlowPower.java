@@ -199,7 +199,7 @@ public class PipeFlowPower extends PipeFlow implements IFlowPower, IDebuggable {
             return isReceiver ? LazyOptional.of(() -> sections.get(facing)).cast() : LazyOptional.empty();
         } else if (capability == MjAPI.CAP_CONNECTOR) {
 //            return MjAPI.CAP_CONNECTOR.cast(sections.get(facing));
-            return isReceiver ? LazyOptional.of(() -> sections.get(facing)).cast() : LazyOptional.empty();
+            return LazyOptional.of(() -> sections.get(facing)).cast();
         } else {
             return LazyOptional.empty();
         }
@@ -443,9 +443,7 @@ public class PipeFlowPower extends PipeFlow implements IFlowPower, IDebuggable {
         public final AverageInt clientDisplayAverage = new AverageInt(10);
         public double clientDisplayFlow, clientDisplayFlowLast;
 
-        /**
-         * Range: 0 to {@link MjAPI#MJ}
-         */
+        /** Range: 0 to {@link MjAPI#MJ} */
         public int displayPower;
         public EnumFlow displayFlow = EnumFlow.STATIONARY;
         public long nextPowerQuery;
@@ -455,9 +453,7 @@ public class PipeFlowPower extends PipeFlow implements IFlowPower, IDebuggable {
         long powerQuery;
         long internalPower;
 
-        /**
-         * Debugging fields
-         */
+        /** Debugging fields */
         long debugPowerInput, debugPowerOutput, debugPowerOffered;
 
         public Section(Direction side) {

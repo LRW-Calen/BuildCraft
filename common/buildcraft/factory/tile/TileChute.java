@@ -16,6 +16,7 @@ import buildcraft.factory.BCFactoryMenuTypes;
 import buildcraft.factory.block.BlockChute;
 import buildcraft.factory.container.ContainerChute;
 import buildcraft.lib.block.BlockBCBase_Neptune;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.inventory.ItemTransactorHelper;
 import buildcraft.lib.inventory.NoSpaceTransactor;
 import buildcraft.lib.inventory.TransactorEntityItem;
@@ -52,7 +53,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable, MenuProvider {
+public class TileChute extends TileBC_Neptune implements ITickable, IDebuggable, IBCTileMenuProvider {
     private static final ResourceLocation ADVANCEMENT_DID_INSERT = new ResourceLocation("buildcraftfactory:retired_hopper");
 
     private static final int PICKUP_MAX = 3;

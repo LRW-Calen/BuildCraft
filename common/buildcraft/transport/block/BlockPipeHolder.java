@@ -44,6 +44,7 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -75,9 +76,9 @@ import net.minecraftforge.common.ForgeMod;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -108,12 +109,10 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 
     // basics
 
+    // 1.18.2: use ModelProperty
 //    @Override
-////    protected BlockStateContainer createBlockState()
-//    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder)
-//    {
-////        return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] { PROP_TILE })
-//        super.createBlockStateDefinition(builder);
+//    protected BlockStateContainer createBlockState() {
+//        return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] { PROP_TILE });
 //    }
 
     @Override
@@ -123,63 +122,30 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     }
 
 //    @Override
-//    // Calen 好像不是isShapeFullBlock...
-//    public boolean isFullCube(BlockState state) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isFullBlock(BlockState state) {
-//        return false;
-//    }
-//
-//    @Override
-//    public boolean isOpaqueCube(BlockState state) {
+//    public boolean isFullCube(IBlockState state) {
 //        return false;
 //    }
 
-    @Override
-    public boolean propagatesSkylightDown(BlockState p_49928_, BlockGetter p_49929_, BlockPos p_49930_) {
-        return true;
-    }
+//    @Override
+//    public boolean isFullBlock(IBlockState state) {
+//        return false;
+//    }
 
-    @Override
-    public float getShadeBrightness(BlockState state, BlockGetter world, BlockPos pos) {
-        return 1.0F;
-    }
+//    @Override
+//    public boolean isOpaqueCube(IBlockState state) {
+//        return false;
+//    }
 
     // Collisions
 
-    // Calen from 1.12.2
-    protected static void addCollisionBoxToList(BlockPos pos, VoxelShape entityBox, List<VoxelShape> collidingBoxes, @Nullable VoxelShape blockBox) {
-//        if (blockBox != NULL_AABB)
-        if (blockBox != Shapes.empty()) {
-            VoxelShape axisalignedbb = blockBox.move(pos.getX(), pos.getY(), pos.getZ());
-
-//            if (entityBox.intersects(axisalignedbb))
-            if (Shapes.or(entityBox, axisalignedbb).isEmpty()) {
-                collidingBoxes.add(axisalignedbb);
-            }
-        }
-    }
-
-//    @Override
-//    public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context)
-//    {
-//        return getCollisionShape(state, world, pos, context);
-//    }
-
     @Override
-//    public void addCollisionBoxToList(BlockState state, Level world, BlockPos pos, VoxelShape entityBox,
-//                                      List<VoxelShape> collidingBoxes, Entity entityIn, boolean isPistonMoving)
-
-//    public VoxelShape getCollisionShape(@NotNull BlockState state, @NotNull BlockGetter world, @NotNull BlockPos pos, @NotNull CollisionContext context)
+//    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isPistonMoving)
     public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos) {
         TilePipeHolder tile = getPipe(world, pos, false);
         if (tile == null) {
             return Shapes.block();
         }
-        List<VoxelShape> collidingBoxes = new ArrayList<>();
+        List<VoxelShape> collidingBoxes = new LinkedList<>();
         boolean added = false;
         Pipe pipe = tile.getPipe();
         if (pipe != null) {
@@ -231,17 +197,16 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     }
 
     @Nullable
-//    public HitResultBC rayTrace(Level world, BlockPos pos, Player player)
+//    public RayTraceResult rayTrace(World world, BlockPos pos, EntityPlayer player)
     public RayTraceResultBC rayTrace(BlockGetter world, BlockPos pos, Player player) {
-//        Vec3 start = player.getPositionVector().addVector(0, player.getEyeHeight(), 0);
-//        Vec3 start = player.position().add(0, player.getEyeHeight(), 0);
+//        Vec3d start = player.getPositionVector().addVector(0, player.getEyeHeight(), 0);
         Vec3 start = player.getEyePosition();
         double reachDistance = 5;
-        if (player instanceof ServerPlayer serverPlayer) {
-//            reachDistance = serverPlayer.interactionManager.getBlockReachDistance();
+        if (player instanceof ServerPlayer) {
+//            reachDistance = ((EntityPlayerMP) player).interactionManager.getBlockReachDistance();
             reachDistance = player.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
         }
-//        Vec3 end = start.add(player.getLookVec().normalize().scale(reachDistance));
+//        Vec3d end = start.add(player.getLookVec().normalize().scale(reachDistance));
         Vec3 end = start.add(player.getLookAngle().normalize().scale(reachDistance));
         return rayTrace(world, pos, start, end);
     }
@@ -249,14 +214,12 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     // Calen: 1.18.2 no this method, seems should trace by ourselves
 //    @Override
 //    @Nullable
-//    public HitResult collisionRayTrace(BlockState state, Level world, BlockPos pos, Vec3 start, Vec3 end)
-//    {
+//    public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d start, Vec3d end) {
 //        return rayTrace(world, pos, start, end);
 //    }
 
-
     @Nullable
-//    public HitResultBC rayTrace(Level world, BlockPos pos, Vec3 start, Vec3 end)
+//    public RayTraceResult rayTrace(World world, BlockPos pos, Vec3d start, Vec3d end)
     public RayTraceResultBC rayTrace(BlockGetter world, BlockPos pos, Vec3 start, Vec3 end) {
         TilePipeHolder tile = getPipe(world, pos, false);
         if (tile == null) {
@@ -336,9 +299,8 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     }
 
     private RayTraceResultBC computeTrace(RayTraceResultBC lastBest, BlockPos pos, Vec3 start, Vec3 end, VoxelShape aabb, int part) {
-//        HitResultBC next = HitResultBC.rayTrace(pos, start, end, aabb.bounds());aabb.bounds().clip()
+//        RayTraceResult next = super.rayTrace(pos, start, end, aabb);
         RayTraceResultBC next = RayTraceResultBC.fromMcHitResult(AABB.clip(aabb.toAabbs(), start, end, pos));
-//        HitResultBC next = lastBest;
         if (next == null) {
             return lastBest;
         }
@@ -387,38 +349,25 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
         }
     }
 
-    // Calen test
-//    @Override
-//    public VoxelShape getInteractionShape(BlockState state, BlockGetter world, BlockPos pos)
-//    {
-//        return Shapes.box(0,0,0,0.5,0.5,0.5);
-//    }
-
     // Calen: this shape is the selected part of block
     @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public AABB getSelectedBoundingBox(BlockState state, Level world, BlockPos pos)
+//    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos)
     public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         TilePipeHolder tile = getPipe(world, pos, false);
         if (tile == null) {
 //            return FULL_BLOCK_AABB;
             return Shapes.block();
         }
-//        RayTraceResult trace = Minecraft.getMinecraft().objectMouseOver;
-//        Player player = Minecraft.getInstance().player;
-//        Vec3 eyePos = player.getEyePosition();
-//        HitResultBC trace = rayTrace(world, pos, eyePos, HitResultBC.getEndVec(player));
-//        HitResultBC trace = rayTrace(world, pos, Minecraft.getInstance().player);
         if (!(context instanceof EntityCollisionContext entityCollisionContext && entityCollisionContext.getEntity() instanceof Player)) {
             return getInteractionShape(state, world, pos);
         }
+//        RayTraceResult trace = Minecraft.getMinecraft().objectMouseOver;
         RayTraceResultBC trace = rayTrace(world, pos, ((Player) ((EntityCollisionContext) context).getEntity()));
         if (trace == null || trace.subHit < 0 || !pos.equals(trace.getBlockPos())) {
             // Perhaps we aren't the object the mouse is over
 //            return FULL_BLOCK_AABB;
-//            return Shapes.block();
-//            return Shapes.empty(); // Calen: if empty, then can Collide next block
-            return getInteractionShape(state, world, pos);
+            return getInteractionShape(state, world, pos); // Calen: Should not be full block so that we can collide a next block
         }
         int part = trace.subHit;
 //        AABB aabb = FULL_BLOCK_AABB;
@@ -455,11 +404,9 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
         }
         if (part >= 1 + 6 + 6) {
 //            return aabb.offset(pos);
-//            return aabb.move(pos.getX(), pos.getY(), pos.getZ());
             return aabb;
         } else {
 //            return (aabb == FULL_BLOCK_AABB ? aabb : aabb.grow(1 / 32.0)).offset(pos);
-//            return (aabb == Shapes.block() ? aabb : Shapes.create(aabb.move(pos.getX(), pos.getY(), pos.getZ()).bounds().inflate(1 / 32.0)));
             return (aabb == Shapes.block() ? aabb : Shapes.create(aabb.bounds().inflate(1 / 32.0)));
         }
     }
@@ -469,13 +416,11 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     public ItemStack getCloneItemStack(BlockState state, HitResult targetIn, BlockGetter world, BlockPos pos, Player player) {
         TilePipeHolder tile = getPipe(world, pos, false);
 //        if (tile == null || target == null)
-//        if (tile == null || targetIn == null || targetIn.getType() != HitResult.Type.BLOCK)
         if (tile == null) {
             return ItemStack.EMPTY;
         }
 
         // Calen: in 1.18.2 we can't create custom HitResult before #getCloneItemStack called (in 1.12.2 that's allowed with #collisionRayTrace)
-//        HitResultBC target = rayTrace(world, pos, player.getEyePosition(), HitResultBC.getEndVec(player));
         RayTraceResultBC target = rayTrace(world, pos, player);
 
         // Calen: target.getType() may be HitResult.Type.MISS
@@ -488,14 +433,14 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
             if (pipe != null) {
                 PipeDefinition def = pipe.getDefinition();
 //                Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(def);
-//                if (item != null)
-//                {
-////                    int meta = pipe.getColour() == null ? 0 : pipe.getColour().getId() + 1;
-//                    int meta = pipe.getColour() == null ? -1 : pipe.getColour().getId();
-//                    return ColourUtil.addColorTagToStack(new ItemStack(item, 1), meta);
-//                }
-                // Calen: reg different item object for different colour
-                return new ItemStack((Item) PipeApi.pipeRegistry.getItemForPipe(def, pipe.getColour()), 1);
+                Item item = (Item) PipeApi.pipeRegistry.getItemForPipe(def, pipe.getColour());
+                if (item != null) {
+                    // Calen: different item object for each colour
+                    // pipe.getColour() instead of meta
+//                    int meta = pipe.getColour() == null ? 0 : pipe.getColour().getMetadata() + 1;
+//                    return new ItemStack(item, 1, meta);
+                    return new ItemStack(item, 1);
+                }
             }
         } else if (target.subHit <= 12) {
             int pluggableHit = target.subHit - 7;
@@ -527,10 +472,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     }
 
     @Override
-//    public boolean onBlockActivated(
-//            Level world, BlockPos pos, BlockState state, Player player, InteractionHand hand,
-//                                    Direction side, float hitX, float hitY, float hitZ
-//    )
+//    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         float hitX = hitResult.getBlockPos().getX();
         float hitY = hitResult.getBlockPos().getY();
@@ -655,25 +597,25 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 
     @Override
 //    public boolean removedByPlayer(BlockState state, Level world, BlockPos pos, Player player, boolean willHarvest)
-    public boolean onDestroyedByPlayer(BlockState state, Level levelIn, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        if (levelIn.isClientSide) {
+    public boolean onDestroyedByPlayer(BlockState state, Level worldIn, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+        if (worldIn.isClientSide) {
 //            return false;
             // Calen: to call #addDestroyEffects in Client Thread to spawn particles
             // in 1.18.2, without #playerWillDestroy, the particle will not spawn, different to 1.12.2
-            playerWillDestroy(levelIn, pos, state, player);
+            playerWillDestroy(worldIn, pos, state, player);
             return false;
         }
 
-        ServerLevel level = (ServerLevel) levelIn;
+        ServerLevel world = (ServerLevel) worldIn;
 
-        TilePipeHolder tile = getPipe(level, pos, false);
+        TilePipeHolder tile = getPipe(world, pos, false);
         if (tile == null) {
 //            return super.removedByPlayer(state, level, pos, player, willHarvest);
-            return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+            return super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
         }
 
         NonNullList<ItemStack> toDrop = NonNullList.create();
-        RayTraceResultBC trace = rayTrace(level, pos, player);
+        RayTraceResultBC trace = rayTrace(world, pos, player);
         Direction side = null;
         EnumWirePart part = null;
         EnumWireBetween between = null;
@@ -687,7 +629,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
         if (side != null) {
             removePluggable(side, tile, toDrop);
             if (!player.isCreative()) {
-                InventoryUtil.dropAll(level, pos, toDrop);
+                InventoryUtil.dropAll(world, pos, toDrop);
             }
             return false;
         } else if (part != null) {
@@ -696,7 +638,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
             toDrop.add(stack);
             tile.wireManager.removePart(part);
             if (!player.isCreative()) {
-                InventoryUtil.dropAll(level, pos, toDrop);
+                InventoryUtil.dropAll(world, pos, toDrop);
             }
             tile.scheduleNetworkUpdate(IPipeHolder.PipeMessageReceiver.WIRES);
             return false;
@@ -710,41 +652,32 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
                 tile.wireManager.removePart(between.parts[0]);
             }
             if (!player.isCreative()) {
-                InventoryUtil.dropAll(level, pos, toDrop);
+                InventoryUtil.dropAll(world, pos, toDrop);
             }
             tile.scheduleNetworkUpdate(IPipeHolder.PipeMessageReceiver.WIRES);
             return false;
         } else {
-            // Calen: here not we can get the TileEntity, but when getDrops calls by MC the TileEntity will be null
-//            toDrop.addAll(getDrops(state, level, pos, 0));
-//            toDrop.addAll(getDrops(state, level, pos, null));
-            toDrop.addAll(getDrops(state, level, pos));
+//            toDrop.addAll(getDrops(world, pos, state, 0));
+            toDrop.addAll(getDrops(state, world, pos));
             for (Direction face : Direction.values()) {
                 removePluggable(face, tile, NonNullList.create());
             }
         }
         if (!player.isCreative()) {
-            InventoryUtil.dropAll(level, pos, toDrop);
+            InventoryUtil.dropAll(world, pos, toDrop);
         }
 //        return super.removedByPlayer(state, world, pos, player, willHarvest);
-        return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+        return super.onDestroyedByPlayer(state, world, pos, player, willHarvest, fluid);
     }
 
-    // Calen: if override getDrops(BlockState state, LootContext.Builder builder), world.getBlockEntity(pos) will be null when MC calls this method
+    // Calen: if overrides getDrops(BlockState state, LootContext.Builder builder), world.getBlockEntity(pos) will be null when MC calls this method
 //    @Override
-////    public void getDrops(NonNullList<ItemStack> toDrop, IBlockAccess world, BlockPos pos, BlockState state, int fortune)
-//    public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
+//    public void getDrops(NonNullList<ItemStack> toDrop, IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     private List<ItemStack> getDrops(BlockState state, Level world, BlockPos pos) {
-//        LootContext lootContext = builder.withParameter(LootContextParams.BLOCK_STATE, state).create(LootContextParamSets.BLOCK);
         NonNullList<ItemStack> toDrop = NonNullList.create();
-//        TilePipeHolder tile = getPipe(world, pos, false);
-//        TilePipeHolder tile = (TilePipeHolder) lootContext.getParamOrNull(LootContextParams.BLOCK_ENTITY); // Calen: this will get null
-//        TilePipeHolder tile = getPipe(builder.getLevel(), new BlockPos(builder.getParameter(LootContextParams.ORIGIN)), false);
         TilePipeHolder tile = getPipe(world, pos, false);
-        // Calen
         if (tile == null) {
-//            BCLog.logger.warn("[silicon.pipe.holder] Tried to remove BlockEntity of block [" + state + "] at [" + lootContext.getParam(LootContextParams.ORIGIN) + "] but fount no BlockEntity!");
-            BCLog.logger.warn("[silicon.pipe.holder] Tried to remove BlockEntity of block [" + state + "] at [" + pos + "] but fount no BlockEntity!");
+            BCLog.logger.warn("[transport.pipe.holder] Tried to remove BlockEntity of block [" + state + "] at [" + pos + "] but fount no BlockEntity!");
             return toDrop;
         }
         for (Direction face : Direction.values()) {
@@ -804,21 +737,21 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
         }
     }
 
-    // TOCO Calen
-//    @Override
-    public void harvestBlock(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te,
-                             ItemStack stack) {
+    @Override
+//    public void harvestBlock(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack)
+    public void playerDestroy(Level world, Player player, BlockPos pos, BlockState state, @Nullable BlockEntity te, ItemStack stack) {
 //        player.addStat(StatList.getBlockStats(this));
+        player.awardStat(Stats.BLOCK_MINED.get(this));
 //        player.addExhaustion(0.005F);
+        player.causeFoodExhaustion(0.005F);
+        dropResources(state, world, pos, te, player, stack);
     }
 
     // Calen: it seems no this method in 1.18.2
 //    @Override
-//    public boolean canBeConnectedTo(BlockGetter world, BlockPos pos, Direction facing)
-//    {
+//    public boolean canBeConnectedTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
 //        TilePipeHolder tile = getPipe(world, pos, false);
-//        if (tile == null)
-//        {
+//        if (tile == null) {
 //            return false;
 //        }
 //        PipePluggable pluggable = tile.getPluggable(facing);
@@ -826,11 +759,9 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 //    }
 
 //    @Override
-//    public boolean isSideSolid(BlockState base_state, BlockGetter world, BlockPos pos, Direction side)
-//    {
+//    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 //        TilePipeHolder tile = getPipe(world, pos, false);
-//        if (tile == null)
-//        {
+//        if (tile == null) {
 //            return false;
 //        }
 //        PipePluggable pluggable = tile.getPluggable(side);
@@ -838,18 +769,13 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 //    }
 
 //    @Override
-//    public BlockFaceShape getBlockFaceShape(IBlockAccess world, BlockState state, BlockPos pos, Direction face)
-//    public SupportType getBlockFaceShape(BlockGetter world, BlockState state, BlockPos pos, Direction face)
-//    {
+//    public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
 //        TilePipeHolder tile = getPipe(world, pos, false);
-//        if (tile == null)
-//        {
-////            return BlockFaceShape.UNDEFINED;
-//            return SupportType.FULL;
+//        if (tile == null) {
+//            return BlockFaceShape.UNDEFINED;
 //        }
 //        PipePluggable pluggable = tile.getPluggable(face);
-////        return pluggable != null ? pluggable.getBlockFaceShape() : BlockFaceShape.UNDEFINED;
-//        return pluggable != null ? pluggable.getBlockFaceShape() : SupportType.FULL;
+//        return pluggable != null ? pluggable.getBlockFaceShape() : BlockFaceShape.UNDEFINED;
 //    }
 
     private static void removePluggable(Direction side, TilePipeHolder tile, NonNullList<ItemStack> toDrop) {
@@ -860,7 +786,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
         }
     }
 
-    //    public static TilePipeHolder getPipe(IBlockAccess access, BlockPos pos, boolean requireServer)
+    // public static TilePipeHolder getPipe(IBlockAccess access, BlockPos pos, boolean requireServer)
     public static TilePipeHolder getPipe(BlockGetter access, BlockPos pos, boolean requireServer) {
         if (access instanceof Level) {
             return getPipe((Level) access, pos, requireServer);
@@ -889,8 +815,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     // Block overrides
 
     @Override
-    public boolean addLandingEffects(BlockState state, ServerLevel worldObj, BlockPos blockPosition,
-                                     BlockState iblockstate, LivingEntity entity, int numberOfParticles) {
+    public boolean addLandingEffects(BlockState state, ServerLevel worldObj, BlockPos blockPosition, BlockState iblockstate, LivingEntity entity, int numberOfParticles) {
         return super.addLandingEffects(state, worldObj, blockPosition, iblockstate, entity, numberOfParticles);
     }
 
@@ -963,14 +888,10 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 //            public boolean addHitEffects(BlockState state, Level world, HitResultBC target, ParticleManager manager)
             public boolean addHitEffects(BlockState state, Level worldIn, HitResult targetIn, ParticleEngine manager) {
                 ClientLevel world = (ClientLevel) worldIn;
-//                HitResultBC target = HitResultBC.fromMcHitResult((BlockHitResult) targetIn);
                 RayTraceResultBC target = rayTrace(world, ((BlockHitResult) targetIn).getBlockPos(), Minecraft.getInstance().player);
-//                Player player = Minecraft.getInstance().player;
-//                Vec3 eyePos = player.getEyePosition();
-//                HitResultBC target = rayTrace(world, ((BlockHitResult) targetIn).getBlockPos(), eyePos, HitResultBC.getEndVec(player));
                 BlockEntity te = world.getBlockEntity(target.getBlockPos());
-                if (te instanceof TilePipeHolder pipeHolder) {
-//                    TilePipeHolder pipeHolder = ((TilePipeHolder) te);
+                if (te instanceof TilePipeHolder) {
+                    TilePipeHolder pipeHolder = ((TilePipeHolder) te);
                     HitSpriteInfo info = getHitSpriteInfo(target, pipeHolder);
 
                     if (info == null) {
@@ -1007,16 +928,8 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
                     z += target.getBlockPos().getZ();
 
 //                    ParticleDigging particle = new ParticleDigging(world, x, y, z, 0, 0, 0, state);
-//                    PipeHolderBreakingParticle particle = new PipeHolderBreakingParticle(
-//                            (ClientLevel) world,
-//                            x, y, z,
-//                            0, 0, 0,
-//                            info.sprite
-//                    );
                     TerrainParticle particle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
 //                    particle.setBlockPos(target.getBlockPos());
-                    BlockPos pos = target.getBlockPos();
-//                    particle.setPos(pos.getX(), pos.getY(), pos.getZ());
                     particle.setPos(x, y, z);
 //                    particle.setParticleTexture(info.sprite);
                     particle.setSprite(info.sprite);
@@ -1029,16 +942,13 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 
                     return true;
                 }
-
                 return false;
             }
 
             @Override
             public boolean addDestroyEffects(BlockState state, Level worldIn, BlockPos pos, ParticleEngine manager) {
                 ClientLevel world = (ClientLevel) worldIn;
-//                HitResultBC hitResult = HitResultBC.fromMcHitResult((BlockHitResult) (Minecraft.getInstance().hitResult));
                 RayTraceResultBC hitResult = rayTrace(world, pos, Minecraft.getInstance().player);
-//                if (hitResult == null || !pos.equals(hitResult.getBlockPos()))
                 if (hitResult == null || !pos.equals(hitResult.getBlockPos())) {
                     return false;
                 }
@@ -1066,17 +976,10 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
                                 double _y = pos.getY() + info.aabb.minY + (y + 0.5) * sizeY / countY;
                                 double _z = pos.getZ() + info.aabb.minZ + (z + 0.5) * sizeZ / countZ;
 
-//                                 ParticleDigging particle = new ParticleDigging(world, _x, _y, _z, 0, 0, 0, state)
-//                                PipeHolderBreakingParticle particle = new PipeHolderBreakingParticle(
-//                                        world,
-//                                        _x, _y, _z,
-//                                        0, 0, 0,
-//                                        info.sprite
-//                                );
+//                                ParticleDigging particle = new ParticleDigging(world, _x, _y, _z, 0, 0, 0, state);
                                 TerrainParticle particle = new TerrainParticle(world, _x, _y, _z, 0, 0, 0, state);
-                                // Calen: is use pos, the particle will spawn at the corner of the block in 1.18.2
+                                // 1.18.2: if we use pos, the particle will spawn at the corner of the block
 //                                particle.setBlockPos(pos);
-//                                particle.setPos(pos.getX(), pos.getY(), pos.getZ());
                                 particle.setPos(_x, _y, _z);
 //                                particle.setParticleTexture(info.sprite);
                                 particle.setSprite(info.sprite);
@@ -1106,8 +1009,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     // paint
 
     @Override
-    public InteractionResult attemptPaint(Level world, BlockPos pos, BlockState state, Vec3 hitPos, Direction hitSide,
-                                          DyeColor paintColour) {
+    public InteractionResult attemptPaint(Level world, BlockPos pos, BlockState state, Vec3 hitPos, Direction hitSide, DyeColor paintColour) {
         TilePipeHolder tile = getPipe(world, pos, true);
         if (tile == null) {
             return InteractionResult.PASS;
@@ -1127,26 +1029,22 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
 
     // rendering
 
-    // Calen: moved to TilePipeHolder#getModelData
+    // 1.18.2: moved to TilePipeHolder#getModelData
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public BlockState getExtendedState(BlockState state, BlockGetter world, BlockPos pos)
-//    {
-////        IExtendedBlockState extended = (IExtendedBlockState) state;
-//        BlockState extended = state;
+//    @SideOnly(Side.CLIENT)
+//    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+//        IExtendedBlockState extended = (IExtendedBlockState) state;
 //        TilePipeHolder tile = getPipe(world, pos, false);
-//        if (tile != null)
-//        {
-//            extended = extended.setValue(PROP_TILE, new WeakReference<>(tile));
+//        if (tile != null) {
+//            extended = extended.withProperty(PROP_TILE, new WeakReference<>(tile));
 //        }
 //        return extended;
 //    }
 
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public boolean canRenderInLayer(BlockState state, RenderType layer)
-//    {
-//        return layer == RenderType.cutoutMipped() || layer == RenderType.translucent();
+//    @SideOnly(Side.CLIENT)
+//    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+//        return layer == BlockRenderLayer.CUTOUT_MIPPED || layer == BlockRenderLayer.TRANSLUCENT;
 //    }
 
     @Override
@@ -1169,10 +1067,9 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     @Override
 //    public int getStrongPower(BlockState blockState, BlockGetter blockAccess, BlockPos pos, Direction side)
     public int getDirectSignal(@NotNull BlockState blockState, @NotNull BlockGetter blockAccess, @NotNull BlockPos pos, @NotNull Direction side) {
-//        if (side == null)
-//        {
-//            return 0;
-//        }
+        if (side == null) {
+            return 0;
+        }
         TilePipeHolder tile = getPipe(blockAccess, pos, false);
         if (tile != null) {
             return tile.getRedstoneOutput(side.getOpposite());
@@ -1181,8 +1078,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune<TilePipeHolder> impleme
     }
 
 //    @Override
-//    public boolean isBlockNormalCube(BlockState state)
-//    {
+//    public boolean isBlockNormalCube(IBlockState state) {
 //        return false;
 //    }
 

@@ -220,7 +220,7 @@ public class ItemFragileFluidContainer extends ItemBC_Neptune implements IItemFl
             }
             int toDrain = Math.min(maxDrain, fluid.getAmount());
             FluidStack f = new FluidStack(fluid, toDrain);
-            if (doDrain == FluidAction.EXECUTE) {
+            if (doDrain.execute()) {
                 fluid.setAmount(fluid.getAmount() - toDrain);
                 if (fluid.getAmount() <= 0) {
                     fluid = StackUtil.EMPTY_FLUID;

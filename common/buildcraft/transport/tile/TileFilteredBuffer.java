@@ -7,6 +7,7 @@
 package buildcraft.transport.tile;
 
 import buildcraft.api.core.EnumPipePart;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.ItemHandlerFiltered;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
@@ -16,14 +17,13 @@ import buildcraft.transport.BCTransportMenuTypes;
 import buildcraft.transport.container.ContainerFilteredBuffer_BC8;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class TileFilteredBuffer extends TileBC_Neptune implements MenuProvider {
+public class TileFilteredBuffer extends TileBC_Neptune implements IBCTileMenuProvider {
     public final ItemHandlerSimple invFilter;
     public final ItemHandlerFiltered invMain;
 
@@ -36,6 +36,8 @@ public class TileFilteredBuffer extends TileBC_Neptune implements MenuProvider {
         invMain = new ItemHandlerFiltered(invFilter, false);
         itemManager.addInvHandler("main", invMain, EnumAccess.BOTH, EnumPipePart.VALUES);
     }
+
+    // MenuProvider
 
     @Override
     public Component getDisplayName() {

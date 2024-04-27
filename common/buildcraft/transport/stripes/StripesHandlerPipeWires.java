@@ -25,7 +25,7 @@ public class StripesHandlerPipeWires implements IStripesHandlerItem {
 
     @Override
     public boolean handle(Level world, BlockPos pos, Direction direction, ItemStack stack, Player player, IStripesActivator activator) {
-//        DyeColor pipeWireColor = DyeColor.byMetadata(stack.getMetadata());
+//        EnumDyeColor pipeWireColor = EnumDyeColor.byMetadata(stack.getMetadata());
         DyeColor pipeWireColor = ColourUtil.getStackColourFromTag(stack);
 
         for (int i = PIPES_TO_TRY; i > 0; i--) {

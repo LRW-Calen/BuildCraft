@@ -164,21 +164,26 @@ public abstract class BCBuildersProxy {
         @Override
         public void fmlPreInit() {
             super.fmlPreInit();
-            if (BCBuildersConfig.enableStencil) {
-                if (BCBuildersConfig.internalStencilCrashTest.get()) {
-                    BCLog.logger.warn("[builders.architect] Not enabling stencils because they have been force-disabled!");
-                } else {
-                    BCBuildersConfig.internalStencilCrashTest.set(true);
-//                    BCCoreConfig.saveConfigs();
-                    // TODO Calen Framebuffer???
-//                    Framebuffer framebuffer = Minecraft.getMinecraft().getFramebuffer();
-//                    if (!framebuffer.isStencilEnabled()) {
-//                        framebuffer.enableStencil();
-//                    }
-                    BCBuildersConfig.internalStencilCrashTest.set(false);
-//                    BCCoreConfig.saveConfigs();
-                }
-            }
+            // Calen: NullPointerException: Cannot set config value without assigned Config object present
+            // ...
+            // at net.minecraftforge.common.ForgeConfigSpec$ConfigValue.set(ForgeConfigSpec.java:873)
+            // at buildcraft.builders.BCBuildersProxy$ClientProxy.fmlPreInit(BCBuildersProxy.java:171)
+            // ...
+//            if (BCBuildersConfig.enableStencil) {
+//                if (BCBuildersConfig.internalStencilCrashTest.get()) {
+//                    BCLog.logger.warn("[builders.architect] Not enabling stencils because they have been force-disabled!");
+//                } else {
+//                    BCBuildersConfig.internalStencilCrashTest.set(true);
+////                    BCCoreConfig.saveConfigs();
+//                    // TODO Calen Framebuffer???
+////                    Framebuffer framebuffer = Minecraft.getMinecraft().getFramebuffer();
+////                    if (!framebuffer.isStencilEnabled()) {
+////                        framebuffer.enableStencil();
+////                    }
+//                    BCBuildersConfig.internalStencilCrashTest.set(false);
+////                    BCCoreConfig.saveConfigs();
+//                }
+//            }
             BCBuildersSprites.fmlPreInit();
             RenderQuarry.init();
 

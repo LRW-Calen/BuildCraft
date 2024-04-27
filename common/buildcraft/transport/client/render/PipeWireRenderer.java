@@ -13,7 +13,6 @@ import buildcraft.lib.client.model.ModelUtil.UvFaceData;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.model.MutableVertex;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
-import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.VecUtil;
 import buildcraft.transport.tile.TilePipeHolder;
 import buildcraft.transport.wire.EnumWireBetween;
@@ -31,7 +30,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.vecmath.Point3f;
 import javax.vecmath.Tuple3f;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -43,13 +41,13 @@ public class PipeWireRenderer {
 
     private static final Map<DyeColor, SpriteHolderRegistry.SpriteHolder> wireSprites =
             new EnumMap<>(DyeColor.class);
-    private static final int[] wireRenderingCache =
-            new int[(EnumWireBetween.VALUES.length + EnumWirePart.VALUES.length) * ColourUtil.COLOURS.length * 2];
+//    private static final int[] wireRenderingCache =
+//            new int[(EnumWireBetween.VALUES.length + EnumWirePart.VALUES.length) * ColourUtil.COLOURS.length * 2];
 
-    final static int WIRE_COUNT = EnumWirePart.VALUES.length * ColourUtil.COLOURS.length * 2;
+//    final static int WIRE_COUNT = EnumWirePart.VALUES.length * ColourUtil.COLOURS.length * 2;
 
     static {
-        Arrays.fill(wireRenderingCache, -1);
+//        Arrays.fill(wireRenderingCache, -1);
 
         for (DyeColor color : DyeColor.values()) {
             wireSprites.put(color, SpriteHolderRegistry.getHolder("buildcrafttransport:wires/" + color.getName()));
@@ -63,9 +61,9 @@ public class PipeWireRenderer {
         }
     }
 
-    public static void clearWireCache() {
-        Arrays.fill(wireRenderingCache, -1);
-    }
+//    public static void clearWireCache() {
+//        Arrays.fill(wireRenderingCache, -1);
+//    }
 
     public static SpriteHolderRegistry.SpriteHolder getWireSprite(DyeColor colour) {
         return wireSprites.get(colour);
@@ -226,13 +224,13 @@ public class PipeWireRenderer {
         double v = sprite.getInterpV(vertex.tex_v + vOffset);
 //        bb.tex(u, v);
         bb.uv((float) u, (float) v);
-        bb.overlayCoords(combinedOverlay); // Calen add
-        bb.uv2(combinedLight); // Calen add
-        bb.normal(pose.normal(), vertex.normal_x, vertex.normal_y, vertex.normal_z); // Calen add
+        bb.overlayCoords(combinedOverlay);
+        bb.uv2(combinedLight);
+        bb.normal(pose.normal(), vertex.normal_x, vertex.normal_y, vertex.normal_z);
         bb.endVertex();
     }
 
-    //    private static int compileQuads(MutableQuad[] quads, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
+    // private static int compileQuads(MutableQuad[] quads, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
     private static void compileQuads(MutableQuad[] quads, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay) {
         // Calen: it seems that gl compile is not supported in 1.18.2 so just render with MultiBufferSource
 //        int index = GlStateManager.glGenLists(1);
@@ -250,27 +248,27 @@ public class PipeWireRenderer {
 //        return index;
     }
 
-    private static int getIndex(EnumWirePart part, DyeColor colour, boolean isOn) {
-        return part.ordinal() * 32 + colour.ordinal() * 2 + (isOn ? 1 : 0);
-    }
+//    private static int getIndex(EnumWirePart part, DyeColor colour, boolean isOn) {
+//        return part.ordinal() * 32 + colour.ordinal() * 2 + (isOn ? 1 : 0);
+//    }
 
-    private static int getIndex(EnumWireBetween bet, DyeColor colour, boolean isOn) {
-        return WIRE_COUNT + bet.ordinal() * 32 + colour.ordinal() * 2 + (isOn ? 1 : 0);
-    }
+//    private static int getIndex(EnumWireBetween bet, DyeColor colour, boolean isOn) {
+//        return WIRE_COUNT + bet.ordinal() * 32 + colour.ordinal() * 2 + (isOn ? 1 : 0);
+//    }
 
-    //    private static int compileWire(EnumWirePart part, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
+    // private static int compileWire(EnumWirePart part, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
     private static void compileWire(EnumWirePart part, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay) {
 //        return compileQuads(getQuads(part), colour, isOn, pose, vb, combinedLight, combinedOverlay);
         compileQuads(getQuads(part), colour, isOn, pose, vb, combinedLight, combinedOverlay);
     }
 
-    //    private static int compileWire(EnumWireBetween between, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
+    // private static int compileWire(EnumWireBetween between, DyeColor colour, boolean isOn, PoseStack.Pose pose, VertexConsumer vb, int combinedLight, int combinedOverlay)
     private static void compileWire(EnumWireBetween between, DyeColor colour, boolean isOn, PoseStack.Pose pose, MultiBufferSource vb, int combinedLight, int combinedOverlay) {
 //        return compileQuads(getQuads(between), colour, isOn, pose, vb, combinedLight, combinedOverlay);
         compileQuads(getQuads(between), colour, isOn, pose, vb, combinedLight, combinedOverlay);
     }
 
-    //    public static void renderWires(TilePipeHolder pipe, double x, double y, double z, BufferBuilder bb)
+    // public static void renderWires(TilePipeHolder pipe, double x, double y, double z, BufferBuilder bb)
     public static void renderWires(TilePipeHolder pipe, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
 //        int combinedLight = pipe.getLevel().getLightEngine().getRawBrightness(pipe.getPipePos(), 0);
         int skyLight = combinedLight >> 16 & 0xFFFF;
@@ -279,36 +277,35 @@ public class PipeWireRenderer {
 //        RenderHelper.disableStandardItemLighting();
 //        GlStateManager.pushMatrix();
 //        GlStateManager.translate(x, y, z);
-        poseStack.pushPose();
         for (Map.Entry<EnumWirePart, DyeColor> partColor : pipe.getWireManager().parts.entrySet()) {
             EnumWirePart part = partColor.getKey();
             DyeColor color = partColor.getValue();
             boolean isOn = pipe.wireManager.isPowered(part);
-            int idx = getIndex(part, color, isOn);
+//            int idx = getIndex(part, color, isOn);
 //            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, isOn ? 240 : blockLight, skyLight);
             int combinedLight_New = (isOn ? 240 : blockLight) + (skyLight << 16);
-            if (wireRenderingCache[idx] == -1) {
+//            if (wireRenderingCache[idx] == -1) {
 //                wireRenderingCache[idx] = compileWire(part, color, isOn, poseStack.last(), vb, combinedLight_New, combinedOverlay);
-                compileWire(part, color, isOn, poseStack.last(), bufferSource, combinedLight_New, combinedOverlay);
-            }
+            compileWire(part, color, isOn, poseStack.last(), bufferSource, combinedLight_New, combinedOverlay);
+//            }
+//            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, isOn ? 240 : blockLight, skyLight);
 //            GlStateManager.callList(wireRenderingCache[idx]);
         }
         for (Map.Entry<EnumWireBetween, DyeColor> betweenColor : pipe.getWireManager().betweens.entrySet()) {
             EnumWireBetween between = betweenColor.getKey();
             DyeColor color = betweenColor.getValue();
             boolean isOn = pipe.wireManager.isPowered(between.parts[0]);
-            int idx = getIndex(between, color, isOn);
+//            int idx = getIndex(between, color, isOn);
 //            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, isOn ? 240 : blockLight, skyLight);
             int combinedLight_New = (isOn ? 240 : blockLight) + (skyLight << 16);
-            if (wireRenderingCache[idx] == -1) {
+//            if (wireRenderingCache[idx] == -1) {
 //                wireRenderingCache[idx] = compileWire(between, color, isOn);
-                compileWire(between, color, isOn, poseStack.last(), bufferSource, combinedLight_New, combinedOverlay);
-            }
+            compileWire(between, color, isOn, poseStack.last(), bufferSource, combinedLight_New, combinedOverlay);
+//            }
 //            GlStateManager.callList(wireRenderingCache[idx]);
         }
 //        GlStateManager.popMatrix();
 //        GlStateManager.enableLighting();
-        poseStack.popPose();
         /*
          * Directly rendering (like with a gllist) changes the colour directly, so we need to change the opengl state
          * directly

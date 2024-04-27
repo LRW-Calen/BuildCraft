@@ -77,7 +77,6 @@ public class BCTransportPipes {
 
         builder.logic(PipeBehaviourStructure::new, PipeBehaviourStructure::new);
         builder.builder.enableBorderColouring();
-//        structure = builder.idTex("structure").flow(PipeApi.flowStructure).define();
         structure = builder.idTex("structure_cobblestone").flow(PipeApi.flowStructure).define();
         builder.builder.enableColouring();
 

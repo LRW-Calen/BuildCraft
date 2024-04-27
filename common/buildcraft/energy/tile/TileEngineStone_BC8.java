@@ -15,6 +15,7 @@ import buildcraft.lib.delta.DeltaInt;
 import buildcraft.lib.delta.DeltaManager.EnumNetworkVisibility;
 import buildcraft.lib.engine.EngineConnector;
 import buildcraft.lib.engine.TileEngineBase_BC8;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.InventoryUtil;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
@@ -41,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 import java.util.List;
 
-public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements MenuProvider {
+public class TileEngineStone_BC8 extends TileEngineBase_BC8 implements IBCTileMenuProvider {
     private static final long MAX_OUTPUT = MjAPI.MJ;
     private static final long MIN_OUTPUT = MAX_OUTPUT / 3;
     // private static final long TARGET_OUTPUT = 0.375f;

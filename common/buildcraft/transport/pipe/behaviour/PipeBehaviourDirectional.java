@@ -14,7 +14,6 @@ import buildcraft.lib.misc.EntityUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.collect.OrderedEnumMap;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.lib.tile.ITickable;
 import buildcraft.transport.BCTransportStatements;
 import buildcraft.transport.statements.ActionPipeDirection;
 import net.minecraft.core.Direction;
@@ -94,9 +93,7 @@ public abstract class PipeBehaviourDirectional extends PipeBehaviour {
 
     protected abstract boolean canFaceDirection(Direction dir);
 
-    /**
-     * @return True if the facing direction changed.
-     */
+    /** @return True if the facing direction changed. */
     public boolean advanceFacing() {
         Direction current = currentDir.face;
         for (int i = 0; i < 6; i++) {
@@ -120,22 +117,18 @@ public abstract class PipeBehaviourDirectional extends PipeBehaviour {
         }
         this.currentDir = EnumPipePart.fromFacing(setTo);
         // Calen: on TE loading, the level hasn't been set
-//        if (!pipe.getHolder().getPipeWorld().isClientSide)
-//        if (FMLEnvironment.dist == Dist.DEDICATED_SERVER)
-//        {
+//        if (!pipe.getHolder().getPipeWorld().isRemote) {
 //            pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
 //        }
-        if (pipe.getHolder() instanceof ITickable tickable) {
-            tickable.runWhenWorldNotNull(
-                    () ->
-                    {
-                        if (!pipe.getHolder().getPipeWorld().isClientSide) {
-                            pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
-                        }
-                    },
-                    false
-            );
-        }
+        pipe.getHolder().runWhenWorldNotNull(
+                () ->
+                {
+                    if (!pipe.getHolder().getPipeWorld().isClientSide) {
+                        pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
+                    }
+                },
+                false
+        );
     }
 
     @PipeEventHandler

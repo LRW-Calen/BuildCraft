@@ -9,6 +9,7 @@ package buildcraft.factory.block;
 import buildcraft.factory.tile.TileAutoWorkbenchFluids;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
@@ -38,8 +39,8 @@ public class BlockAutoWorkbenchFluids extends BlockBCTile_Neptune<TileAutoWorkbe
         if (!world.isClientSide) {
             // TODO Calen tile impl MenuProvider
 //            BCFactoryGuis.AUTO_WORKBENCH_FLUIDS.openGUI(player, pos);
-            if (world.getBlockEntity(pos) instanceof TileAutoWorkbenchFluids tile) {
-                MessageUtil.serverOpenTileGui(player, tile);
+            if (world.getBlockEntity(pos) instanceof IBCTileMenuProvider tile) {
+                MessageUtil.serverOpenTileGui(player, tile, pos);
             }
         }
 //        return true;

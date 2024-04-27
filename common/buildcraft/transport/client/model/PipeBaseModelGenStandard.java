@@ -53,7 +53,6 @@ public enum PipeBaseModelGenStandard implements IPipeBaseModelGen {
             }
             SPRITES.put(def, array);
         }
-
     }
 
     @Override
@@ -68,17 +67,7 @@ public enum PipeBaseModelGenStandard implements IPipeBaseModelGen {
                 String name = def.textures[i];
                 TextureAtlasSprite sprite = sprites.get(name);
                 if (sprite == null) {
-//                    sprite = map.getTextureExtry(name);
                     sprite = event.getAtlas().getSprite(new ResourceLocation(name));
-//                    if (sprite == null)
-//                    {
-////                        sprite = AtlasSpriteVariants.createForConfig(new ResourceLocation(name));
-////                        map.setTextureEntry(sprite);
-//                    }
-//                    else
-//                    {
-//                        BCLog.logger.warn("Couldn't override " + name + ", using existing sprite " + sprite.getClass());
-//                    }
                     sprites.put(name, sprite);
                 }
                 array[i] = sprite;

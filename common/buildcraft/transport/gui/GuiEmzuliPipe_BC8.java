@@ -47,11 +47,7 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8> {
         PAINT_BUTTON_BUILDER.active = enabled.offset(0, 20);
     }
 
-    //    public GuiEmzuliPipe_BC8(Player player, PipeBehaviourEmzuli behaviour)
-//    public GuiEmzuliPipe_BC8(Player player, PipeBehaviourEmzuli behaviour, Inventory inventory, Component component)
     public GuiEmzuliPipe_BC8(ContainerEmzuliPipe_BC8 container, Inventory inventory, Component component) {
-//        super(new ContainerEmzuliPipe_BC8(player, behaviour));
-//        super(new ContainerEmzuliPipe_BC8(null, -1, player, behaviour), inventory, component);
         super(container, inventory, component);
 //        xSize = SIZE_X;
         imageWidth = SIZE_X;
@@ -117,16 +113,16 @@ public class GuiEmzuliPipe_BC8 extends GuiBC8<ContainerEmzuliPipe_BC8> {
         {
             DyeColor colour = getter.get();
 //            String line;
-//            Component line;
+            Component line;
             if (colour == null) {
 //                line = LocaleUtil.localize("gui.pipes.emzuli.nopaint");
-                list.add(new ToolTip(new TranslatableComponent("gui.pipes.emzuli.nopaint")));
+                line = new TranslatableComponent("gui.pipes.emzuli.nopaint");
             } else {
 //                line = LocaleUtil.localize("gui.pipes.emzuli.paint", ColourUtil.getTextFullTooltip(colour));
-                list.add(new ToolTip(new TranslatableComponent("gui.pipes.emzuli.paint", ColourUtil.getTextFullTooltip(colour))));
+                line = new TranslatableComponent("gui.pipes.emzuli.paint", ColourUtil.getTextFullTooltip(colour));
             }
 //            list.add(new ToolTip(line));
-//            list.add(new ToolTip(new TextComponent(line)));
+            list.add(new ToolTip(line));
         };
         mainGui.shownElements.add(new GuiElementToolTip(mainGui, area, tooltips));
     }

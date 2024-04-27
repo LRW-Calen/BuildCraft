@@ -21,6 +21,7 @@ import buildcraft.lib.expression.info.VariableInfo.VariableInfoBoolean.BooleanPo
 import buildcraft.lib.expression.info.VariableInfo.VariableInfoObject;
 import buildcraft.lib.expression.node.value.NodeVariableBoolean;
 import buildcraft.lib.expression.node.value.NodeVariableObject;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.data.ModelVariableData;
@@ -43,7 +44,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -64,7 +64,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class PluggableGate extends PipePluggable implements IWireEmitter, MenuProvider {
+public class PluggableGate extends PipePluggable implements IWireEmitter, IBCTileMenuProvider {
     public static final FunctionContext MODEL_FUNC_CTX_STATIC, MODEL_FUNC_CTX_DYNAMIC;
     private static final NodeVariableObject<String> MODEL_MATERIAL;
     private static final NodeVariableObject<String> MODEL_MODIFIER;
@@ -354,5 +354,10 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, MenuPr
             container.sendMessage(ContainerGate.ID_VALID_STATEMENTS);
         });
         return container;
+    }
+
+    @Override
+    public MessageUpdateTile onServerPlayerOpenNoSend(Player player) {
+        return holder.onServerPlayerOpenNoSend(player);
     }
 }

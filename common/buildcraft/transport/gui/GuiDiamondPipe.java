@@ -26,11 +26,11 @@ public class GuiDiamondPipe extends GuiBC8<ContainerDiamondPipe> {
     private static final GuiIcon ICON_GUI = new GuiIcon(TEXTURE, 0, 0, SIZE_X, SIZE_Y);
     private static final GuiIcon ICON_GUI_CB = new GuiIcon(TEXTURE_CB, 0, 0, SIZE_X, SIZE_Y);
 
-    //    IInventory playerInventory;
+    // IInventory playerInventory;
     Container playerInventory;
     IItemHandler filterInventory;
 
-    //    public GuiDiamondPipe(Player player, PipeBehaviourDiamond pipe, Inventory inventory, Component component)
+    // public GuiDiamondPipe(Player player, PipeBehaviourDiamond pipe, Inventory inventory, Component component)
     public GuiDiamondPipe(ContainerDiamondPipe container, Inventory inventory, Component component) {
 //        super(new ContainerDiamondPipe(null, -1, player, pipe), inventory, component);
         super(container, inventory, component);

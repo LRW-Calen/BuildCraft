@@ -5,8 +5,11 @@ import buildcraft.builders.item.ItemSchematicSingle;
 import buildcraft.builders.item.ItemSnapshot;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
+@OnlyIn(Dist.CLIENT)
 public class BuildersItemModelPredicates {
     public static final ResourceLocation PREDICATE_USED = new ResourceLocation("buildcraft", "used");
 

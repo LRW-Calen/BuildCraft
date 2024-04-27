@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
 //public abstract class ContainerBCTile<T extends TileBC_Neptune> extends ContainerBC_Neptune<T>
-public abstract class ContainerBCTile<T extends TileBC_Neptune & MenuProvider> extends ContainerBC_Neptune<T> {
+public abstract class ContainerBCTile<T extends TileBC_Neptune & IBCTileMenuProvider> extends ContainerBC_Neptune<T> {
     public final T tile;
 
     public ContainerBCTile(MenuType menuType, int id, Player player, T tile)

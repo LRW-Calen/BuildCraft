@@ -75,7 +75,6 @@ public class PluggablePowerAdaptor extends PipePluggable {
         if (cap == MjAPI.CAP_CONNECTOR || cap == MjAPI.CAP_RECEIVER || cap == MjAPI.CAP_REDSTONE_RECEIVER) {
             return holder.getPipe().getBehaviour().getCapability(cap, side);
         }
-//        return null;
         return LazyOptional.empty();
     }
 }

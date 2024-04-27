@@ -110,7 +110,6 @@ public class ActionParameterSignal implements IStatementParameter {
 //        String format = LocaleUtil.localize("gate.action.pipe.wire");
 //        Object[] args = { ColourUtil.getTextFullTooltip(c) };
 //        return String.format(format, args);
-//        return new TranslatableComponent("gate.action.pipe.wire", ColourUtil.getTextFullTooltip(c)).getString();
         return new TranslatableComponent("gate.action.pipe.wire", ColourUtil.getTextFullTooltipComponent(c));
     }
 

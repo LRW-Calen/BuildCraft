@@ -66,7 +66,6 @@ public class PipeBehaviourWood extends PipeBehaviourDirectional implements IMjRe
         }
     }
 
-    //    protected long extract(long power, boolean simulate)
     protected long extract(long power, boolean simulate) {
         if (power > 0) {
             if (pipe.getFlow() instanceof IFlowItems) {

@@ -20,6 +20,7 @@ import buildcraft.builders.snapshot.GlobalSavedDataSnapshots;
 import buildcraft.builders.snapshot.SchematicBlockManager;
 import buildcraft.builders.snapshot.Snapshot;
 import buildcraft.builders.snapshot.Snapshot.Header;
+import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.data.IdAllocator;
 import buildcraft.lib.tile.ITickable;
@@ -38,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
-public class TileReplacer extends TileBC_Neptune implements ITickable, MenuProvider {
+public class TileReplacer extends TileBC_Neptune implements ITickable, IBCTileMenuProvider {
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("replacer");
 
     public final ItemHandlerSimple invSnapshot = itemManager.addInvHandler(

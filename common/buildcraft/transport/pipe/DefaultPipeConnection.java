@@ -20,7 +20,8 @@ public enum DefaultPipeConnection implements ICustomPipeConnection {
     public float getExtension(Level world, BlockPos pos, Direction face, BlockState state) {
 //        AxisAlignedBB bb = state.getCollisionBoundingBox(world, pos);
         VoxelShape bb = state.getShape(world, pos);
-        if (bb == null) {
+//        if (bb == null)
+        if (bb == null || bb.isEmpty()) {
             return 0;
         }
 

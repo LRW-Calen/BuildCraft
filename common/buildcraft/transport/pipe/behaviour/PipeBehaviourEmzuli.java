@@ -18,7 +18,6 @@ import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
-import buildcraft.transport.BCTransportGuis;
 import buildcraft.transport.BCTransportStatements;
 import buildcraft.transport.statements.ActionExtractionPreset;
 import net.minecraft.core.Direction;
@@ -210,7 +209,7 @@ public class PipeBehaviourEmzuli extends PipeBehaviourWood {
 //        if (player.isServerWorld())
         if (player instanceof ServerPlayer) {
 //            BCTransportGuis.PIPE_EMZULI.openGui(player, pipe.getHolder().getPipePos());
-            BCTransportGuis.PIPE_EMZULI.openPipeGui(player, pipe.getHolder().getPipePos(), pipe.getHolder());
+            MessageUtil.serverOpenTileGui(player, pipe.getHolder(), pipe.getHolder().getPipePos());
         }
         return true;
     }

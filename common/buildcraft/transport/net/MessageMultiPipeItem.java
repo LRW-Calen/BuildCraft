@@ -69,8 +69,7 @@ public class MessageMultiPipeItem implements IMessage {
         }
     }
 
-    public void append(BlockPos pos, int stackId, byte stackCount, boolean toCenter, Direction side,
-                       DyeColor colour, byte timeToDest) {
+    public void append(BlockPos pos, int stackId, byte stackCount, boolean toCenter, Direction side, DyeColor colour, byte timeToDest) {
         List<TravellingItemData> list = items.get(pos);
         if (list == null) {
             if (items.size() >= MAX_POSITIONS) {
@@ -93,8 +92,7 @@ public class MessageMultiPipeItem implements IMessage {
         public final @Nullable DyeColor colour;
         public final byte timeToDest;
 
-        public TravellingItemData(int stackId, byte stackCount, boolean toCenter, Direction side, DyeColor colour,
-                                  byte timeToDest) {
+        public TravellingItemData(int stackId, byte stackCount, boolean toCenter, Direction side, DyeColor colour, byte timeToDest) {
             this.stackId = stackId;
             this.stackCount = stackCount;
             this.toCenter = toCenter;
