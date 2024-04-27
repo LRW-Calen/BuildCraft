@@ -6,6 +6,7 @@
 
 package buildcraft.builders.snapshot;
 
+import buildcraft.api.core.IFakeWorld;
 import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.schematics.ISchematicBlock;
 import buildcraft.api.schematics.SchematicBlockContext;
@@ -46,7 +47,7 @@ public final class SchematicBlockAir implements ISchematicBlock {
 
     @Override
 //    public boolean buildWithoutChecks(Level world, BlockPos blockPos)
-    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos) {
+    public boolean buildWithoutChecks(IFakeWorld world, BlockPos blockPos) {
         return true;
     }
 

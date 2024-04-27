@@ -1,8 +1,6 @@
 package buildcraft.silicon.recipe;
 
-import buildcraft.api.recipes.AssemblyRecipe;
-import buildcraft.api.recipes.AssemblyRecipeBasic;
-import buildcraft.api.recipes.AssemblyRecipeType;
+import buildcraft.api.recipes.EnumAssemblyRecipeType;
 import buildcraft.api.recipes.IngredientStack;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.common.collect.ImmutableSet;
@@ -32,7 +30,7 @@ public class AssemblyRecipeSerializer extends ForgeRegistryEntry<RecipeSerialize
     @Override
     public AssemblyRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
         String type = GsonHelper.getAsString(json, "type");
-        AssemblyRecipeType subType = AssemblyRecipeType.valueOf(GsonHelper.getAsString(json, "subType"));
+        EnumAssemblyRecipeType subType = EnumAssemblyRecipeType.valueOf(GsonHelper.getAsString(json, "subType"));
         AssemblyRecipe recipe = null;
         switch (subType) {
             case BASIC:
@@ -70,7 +68,7 @@ public class AssemblyRecipeSerializer extends ForgeRegistryEntry<RecipeSerialize
     @Override
     public AssemblyRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
         AssemblyRecipe recipe = null;
-        switch (buffer.readEnum(AssemblyRecipeType.class)) {
+        switch (buffer.readEnum(EnumAssemblyRecipeType.class)) {
             case BASIC:
                 long requiredMicroJoules = buffer.readLong();
                 Set<IngredientStack> requiredStacks = Sets.newHashSet();
@@ -90,15 +88,15 @@ public class AssemblyRecipeSerializer extends ForgeRegistryEntry<RecipeSerialize
     @Override
     public void toNetwork(FriendlyByteBuf buffer, AssemblyRecipe recipe) {
         if (recipe instanceof AssemblyRecipeBasic) {
-            buffer.writeEnum(AssemblyRecipeType.BASIC);
-            buffer.writeLong(recipe.getRequiredMicroJoulesForSerialize());
-            Set<IngredientStack> requiredStacks = recipe.getRequiredIngredientStacksForSerialize();
+            buffer.writeEnum(EnumAssemblyRecipeType.BASIC);
+            buffer.writeLong(recipe.getRequiredMicroJoules());
+            Set<IngredientStack> requiredStacks = recipe.getRequiredIngredientStacks();
             buffer.writeInt(requiredStacks.size());
             requiredStacks.forEach(ingredientStack -> ingredientStack.toNetwork(buffer));
-            ItemStack output = recipe.getOutputForSerialize().toArray(new ItemStack[0])[0];
+            ItemStack output = recipe.getOutput().toArray(new ItemStack[0])[0];
             buffer.writeItemStack(output, false);
         } else if (recipe instanceof FacadeAssemblyRecipes) {
-            buffer.writeEnum(AssemblyRecipeType.FACADE);
+            buffer.writeEnum(EnumAssemblyRecipeType.FACADE);
         }
     }
 }

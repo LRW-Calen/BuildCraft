@@ -1,9 +1,8 @@
 package buildcraft.silicon.recipe;
 
-import buildcraft.api.recipes.AssemblyRecipe;
-import buildcraft.api.recipes.AssemblyRecipeType;
+import buildcraft.api.BCModules;
+import buildcraft.api.recipes.EnumAssemblyRecipeType;
 import buildcraft.api.recipes.IngredientStack;
-import buildcraft.silicon.BCSilicon;
 import com.google.gson.JsonObject;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.resources.ResourceLocation;
@@ -16,20 +15,20 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class AssemblyRecipeBuilder {
-    public final AssemblyRecipeType type;
+    public final EnumAssemblyRecipeType type;
     public final long requiredMicroJoules;
     public final Set<IngredientStack> requiredStacks;
     public final ItemStack output;
 
     private AssemblyRecipeBuilder(long requiredMicroJoules, Set<IngredientStack> requiredStacks, @Nonnull ItemStack output) {
-        this.type = AssemblyRecipeType.BASIC;
+        this.type = EnumAssemblyRecipeType.BASIC;
         this.requiredMicroJoules = requiredMicroJoules;
         this.requiredStacks = requiredStacks;
         this.output = output;
     }
 
     private AssemblyRecipeBuilder() {
-        this.type = AssemblyRecipeType.FACADE;
+        this.type = EnumAssemblyRecipeType.FACADE;
         requiredMicroJoules = -1;
         requiredStacks = null;
         output = null;
@@ -45,7 +44,7 @@ public class AssemblyRecipeBuilder {
     }
 
     public void save(Consumer<FinishedRecipe> consumer, String name) {
-        consumer.accept(new AssemblyRecipeBuilder.AssemblyRecipeResult(BCSilicon.MODID, name));
+        consumer.accept(new AssemblyRecipeBuilder.AssemblyRecipeResult(BCModules.SILICON.getModId(), name));
     }
 
     public void save(Consumer<FinishedRecipe> consumer, String namespace, String name) {

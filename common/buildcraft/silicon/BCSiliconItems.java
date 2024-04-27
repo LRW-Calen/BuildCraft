@@ -2,6 +2,7 @@ package buildcraft.silicon;
 
 import buildcraft.api.enums.EnumRedstoneChipset;
 import buildcraft.api.facades.FacadeAPI;
+import buildcraft.api.facades.IFacadeItem;
 import buildcraft.lib.item.ItemPluggableSimple;
 import buildcraft.lib.item.ItemPropertiesCreator;
 import buildcraft.lib.registry.RegistrationHelper;
@@ -36,7 +37,7 @@ public class BCSiliconItems {
     public static RegistryObject<ItemPluggableLens> plugLens;
     public static RegistryObject<Item> plugPulsar;
     public static RegistryObject<Item> plugLightSensor;
-    public static RegistryObject<ItemPluggableFacade> plugFacade;
+    public static RegistryObject<? extends IFacadeItem> plugFacade;
 
 
     public static void preInit() {

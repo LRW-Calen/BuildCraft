@@ -6,6 +6,8 @@
 
 package buildcraft.lib.net;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.api.tiles.IDebuggable;
 import buildcraft.lib.item.ItemDebugger;
 import net.minecraft.core.BlockPos;

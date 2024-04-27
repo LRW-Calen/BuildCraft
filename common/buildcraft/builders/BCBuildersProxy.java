@@ -5,7 +5,6 @@
 package buildcraft.builders;
 
 import buildcraft.api.BCModules;
-import buildcraft.api.core.BCLog;
 import buildcraft.builders.client.render.RenderArchitectTables;
 import buildcraft.builders.client.render.RenderQuarry;
 import buildcraft.builders.snapshot.MessageSnapshotRequest;

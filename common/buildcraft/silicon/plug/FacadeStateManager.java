@@ -77,7 +77,7 @@ public enum FacadeStateManager implements IFacadeRegistry {
 
     // public static void receiveInterModComms(IMCMessage message)
     public static void receiveInterModComms(IMCMessage messageOuter, BcImcMessage messageInner) {
-        String id = messageInner.key;
+        String id = messageOuter.method();
         if (FacadeAPI.IMC_FACADE_DISABLE.equals(id)) {
 //            if (!message.isResourceLocationMessage()) {
 //                BCLog.logger.warn("[facade.imc] Received an invalid IMC message from " + message.getSender() + " - "

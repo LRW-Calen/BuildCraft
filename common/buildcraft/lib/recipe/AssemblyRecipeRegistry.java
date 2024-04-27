@@ -6,7 +6,7 @@
 
 package buildcraft.lib.recipe;
 
-import buildcraft.api.recipes.AssemblyRecipe;
+import buildcraft.api.recipes.IAssemblyRecipe;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -19,11 +19,10 @@ import java.util.List;
 public class AssemblyRecipeRegistry {
     @Deprecated
     // public static final Map<ResourceLocation, AssemblyRecipe> REGISTRY = new HashMap<>();
-    private static final List<AssemblyRecipe> REGISTRY = new LinkedList<>();
+    private static final List<IAssemblyRecipe> REGISTRY = new LinkedList<>();
 
-    // Calen
-    public static List<AssemblyRecipe> getAll(Level world) {
-        List<AssemblyRecipe> ret = world.getRecipeManager().getAllRecipesFor(AssemblyRecipe.TYPE);
+    public static List<IAssemblyRecipe> getAll(Level world) {
+        List<IAssemblyRecipe> ret = world.getRecipeManager().getAllRecipesFor(IAssemblyRecipe.TYPE);
         ret.addAll(REGISTRY);
         return ret;
     }
@@ -32,7 +31,7 @@ public class AssemblyRecipeRegistry {
      * Don't call this, and use datagen instead!
      */
     @Deprecated
-    public static void register(AssemblyRecipe recipe) {
+    public static void register(IAssemblyRecipe recipe) {
 //        REGISTRY.put(recipe.getRegistryName(), recipe);
         REGISTRY.add(recipe);
     }
@@ -40,10 +39,10 @@ public class AssemblyRecipeRegistry {
     // Calen: never used in 1.12.2
     @Nonnull
 //    public static List<AssemblyRecipe> getRecipesFor(@Nonnull NonNullList<ItemStack> possibleIn)
-    public static List<AssemblyRecipe> getRecipesFor(Level world, @Nonnull NonNullList<ItemStack> possibleIn) {
-        List<AssemblyRecipe> all = new ArrayList<>();
+    public static List<IAssemblyRecipe> getRecipesFor(Level world, @Nonnull NonNullList<ItemStack> possibleIn) {
+        List<IAssemblyRecipe> all = new ArrayList<>();
 //        for (AssemblyRecipe ar : REGISTRY.values())
-        for (AssemblyRecipe ar : getAll(world)) {
+        for (IAssemblyRecipe ar : getAll(world)) {
             if (!ar.getOutputs(possibleIn).isEmpty()) {
                 all.add(ar);
             }

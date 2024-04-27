@@ -6,6 +6,8 @@
 
 package buildcraft.silicon.plug;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import buildcraft.api.transport.IWireEmitter;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
@@ -21,12 +23,10 @@ import buildcraft.lib.expression.info.VariableInfo.VariableInfoBoolean.BooleanPo
 import buildcraft.lib.expression.info.VariableInfo.VariableInfoObject;
 import buildcraft.lib.expression.node.value.NodeVariableBoolean;
 import buildcraft.lib.expression.node.value.NodeVariableObject;
-import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.data.ModelVariableData;
 import buildcraft.lib.net.IPayloadWriter;
-import buildcraft.lib.net.MessageUpdateTile;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.silicon.BCSiliconMenuTypes;
 import buildcraft.silicon.client.model.key.KeyPlugGate;
@@ -259,7 +259,7 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, IBCTil
             // Calen 1.18.2: moved from ContainerGate#<init>
             // to recreate plug object before gui packed received
             // Client call in BCSiliconMenuTypes#GATE
-            MessageUpdateTile msg = this.logic.getPipeHolder().onServerPlayerOpenNoSend(player);
+            IMessage msg = this.logic.getPipeHolder().onServerPlayerOpenNoSend(player);
 //            BCSiliconGuis.GATE.openGui(player, pos, side.ordinal());
             MessageUtil.serverOpenGUIWithMsg(player, this, pos, side.ordinal(), msg);
         }
@@ -357,7 +357,7 @@ public class PluggableGate extends PipePluggable implements IWireEmitter, IBCTil
     }
 
     @Override
-    public MessageUpdateTile onServerPlayerOpenNoSend(Player player) {
+    public IMessage onServerPlayerOpenNoSend(Player player) {
         return holder.onServerPlayerOpenNoSend(player);
     }
 }

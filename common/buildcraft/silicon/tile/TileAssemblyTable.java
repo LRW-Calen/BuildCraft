@@ -7,13 +7,13 @@
 package buildcraft.silicon.tile;
 
 import buildcraft.api.core.EnumPipePart;
-import buildcraft.api.recipes.AssemblyRecipe;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.recipes.IAssemblyRecipe;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.InventoryUtil;
 import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.data.IdAllocator;
-import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.MessageManager;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.lib.recipe.AssemblyRecipeRegistry;
@@ -73,7 +73,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
         //TODO: rework this to not iterate over every recipe every tick
         int count = recipesStates.size();
 //        for (AssemblyRecipe recipe : AssemblyRecipeRegistry.REGISTRY.values())
-        for (AssemblyRecipe recipe : AssemblyRecipeRegistry.getAll(level)) {
+        for (IAssemblyRecipe recipe : AssemblyRecipeRegistry.getAll(level)) {
             Set<ItemStack> outputs = recipe.getOutputs(inv.stacks);
             for (ItemStack out : outputs) {
                 boolean found = false;
@@ -161,7 +161,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
             }
             index = 0;
             for (Map.Entry<AssemblyInstruction, EnumAssemblyRecipeState> entry : recipesStates.entrySet()) {
-                AssemblyRecipe recipe = entry.getKey().recipe;
+                IAssemblyRecipe recipe = entry.getKey().recipe;
                 EnumAssemblyRecipeState state = entry.getValue();
                 if (state == EnumAssemblyRecipeState.SAVED_ENOUGH && recipe != activeRecipe.recipe && (index > activeIndex || isActiveLast)) {
                     state = EnumAssemblyRecipeState.SAVED_ENOUGH_ACTIVE;
@@ -210,7 +210,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
         recipesStates.forEach((instruction, state) ->
         {
             CompoundTag entryTag = new CompoundTag();
-            entryTag.putString("recipe", instruction.recipe.getRegistryName().toString());
+            entryTag.putString("recipe", instruction.recipe.getId().toString());
             entryTag.put("output", instruction.output.serializeNBT());
             entryTag.putInt("state", state.ordinal());
             recipesStatesTag.add(entryTag);
@@ -251,7 +251,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
             buffer.writeInt(recipesStates.size());
             recipesStates.forEach((instruction, state) ->
             {
-                buffer.writeUtf(instruction.recipe.getRegistryName().toString());
+                buffer.writeUtf(instruction.recipe.getId().toString());
                 buffer.writeItemStack(instruction.output, false);
                 buffer.writeInt(state.ordinal());
             });
@@ -284,7 +284,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     public void sendRecipeStateToServer(AssemblyInstruction instruction, EnumAssemblyRecipeState state) {
         IMessage message = createMessage(NET_RECIPE_STATE, (buffer) ->
         {
-            buffer.writeUtf(instruction.recipe.getRegistryName().toString());
+            buffer.writeUtf(instruction.recipe.getId().toString());
             buffer.writeItemStack(instruction.output, false);
             buffer.writeInt(state.ordinal());
         });
@@ -304,16 +304,16 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
     @Nullable
     private AssemblyInstruction lookupRecipe(String name, ItemStack output) {
 //        AssemblyRecipe recipe = AssemblyRecipeRegistry.REGISTRY.get(new ResourceLocation(name));
-        Optional<AssemblyRecipe> recipe = AssemblyRecipeRegistry.getAll(level).stream().filter(r -> r.getRegistryName().equals(new ResourceLocation(name))).findFirst();
+        Optional<IAssemblyRecipe> recipe = AssemblyRecipeRegistry.getAll(level).stream().filter(r -> r.getId().equals(new ResourceLocation(name))).findFirst();
 //        return recipe != null ? new AssemblyInstruction(recipe, output) : null;
         return recipe.map(assemblyRecipe -> new AssemblyInstruction(assemblyRecipe, output)).orElse(null);
     }
 
     public class AssemblyInstruction implements Comparable<AssemblyInstruction> {
-        public final AssemblyRecipe recipe;
+        public final IAssemblyRecipe recipe;
         public final ItemStack output;
 
-        private AssemblyInstruction(AssemblyRecipe recipe, ItemStack output) {
+        private AssemblyInstruction(IAssemblyRecipe recipe, ItemStack output) {
             this.recipe = recipe;
             this.output = output;
         }
@@ -327,7 +327,7 @@ public class TileAssemblyTable extends TileLaserTableBase implements IAssemblyCr
         public boolean equals(Object obj) {
             if (!(obj instanceof AssemblyInstruction)) return false;
             AssemblyInstruction instruction = (AssemblyInstruction) obj;
-            return recipe.getRegistryName().equals(instruction.recipe.getRegistryName()) && ItemStack.matches(output, instruction.output);
+            return recipe.getId().equals(instruction.recipe.getId()) && ItemStack.matches(output, instruction.output);
         }
     }
 

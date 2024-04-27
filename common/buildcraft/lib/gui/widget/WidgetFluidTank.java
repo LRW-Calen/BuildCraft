@@ -6,13 +6,13 @@
 
 package buildcraft.lib.gui.widget;
 
+import buildcraft.api.net.IMessage;
 import buildcraft.lib.fluid.Tank;
 import buildcraft.lib.gui.*;
 import buildcraft.lib.gui.elem.ToolTip;
 import buildcraft.lib.gui.help.ElementHelpInfo.HelpPosition;
 import buildcraft.lib.gui.pos.IGuiArea;
 import buildcraft.lib.misc.GuiUtil;
-import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.PacketBufferBC;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.api.distmarker.Dist;

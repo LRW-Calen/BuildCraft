@@ -6,10 +6,10 @@
 
 package buildcraft.factory.block;
 
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import buildcraft.factory.tile.TileAutoWorkbenchFluids;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
-import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;

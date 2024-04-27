@@ -8,9 +8,9 @@ package buildcraft.silicon.block;
 
 import buildcraft.api.enums.EnumLaserTableType;
 import buildcraft.api.mj.ILaserTargetBlock;
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
-import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.silicon.tile.*;

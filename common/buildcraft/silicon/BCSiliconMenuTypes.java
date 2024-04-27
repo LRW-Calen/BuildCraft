@@ -1,8 +1,8 @@
 package buildcraft.silicon;
 
+import buildcraft.api.net.IMessage;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.lib.misc.MessageUtil;
-import buildcraft.lib.net.IMessage;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.silicon.container.ContainerAdvancedCraftingTable;
 import buildcraft.silicon.container.ContainerAssemblyTable;

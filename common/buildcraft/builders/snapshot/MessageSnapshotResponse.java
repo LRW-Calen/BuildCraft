@@ -6,8 +6,8 @@
 
 package buildcraft.builders.snapshot;
 
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import net.minecraft.network.FriendlyByteBuf;
 
 import java.io.IOException;

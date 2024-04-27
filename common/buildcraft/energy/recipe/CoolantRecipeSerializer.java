@@ -47,7 +47,7 @@ public class CoolantRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer
 
     public static void toJson(CoolantRecipeBuilder builder, JsonObject json) {
         json.addProperty("type", ICoolant.TYPE_ID.toString());
-        json.addProperty("coolantType", builder.type.getlowerName());
+        json.addProperty("coolantType", builder.type.getLowerName());
         json.add("fluid", JsonUtil.serializeFluidStack(builder.fluid));
         if (builder.type == EnumCoolantType.SOLID) {
             json.addProperty("multiplier", builder.multiplier);
@@ -83,7 +83,7 @@ public class CoolantRecipeSerializer extends ForgeRegistryEntry<RecipeSerializer
                 buffer.writeFloat(((IFluidCoolant) recipe).getDegreesCoolingPerMB());
                 return;
             case SOLID:
-                buffer.writeFloat(((ISolidCoolant) recipe).getMultiplierForSerialize());
+                buffer.writeFloat(((ISolidCoolant) recipe).getMultiplier());
                 buffer.writeItemStack(((ISolidCoolant) recipe).getSolid(), false);
                 return;
         }

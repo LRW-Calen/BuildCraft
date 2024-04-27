@@ -1,12 +1,12 @@
 package buildcraft.transport.net;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.api.transport.pipe.IPipe;
 import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pipe.PipeFlow;
 import buildcraft.lib.BCLibProxy;
 import buildcraft.lib.misc.MessageUtil;
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.transport.pipe.flow.PipeFlowItems;
 import net.minecraft.core.BlockPos;

@@ -4,13 +4,12 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.factory.tile;
 
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.BCFactoryMenuTypes;
 import buildcraft.factory.container.ContainerAutoCraftItems;
-import buildcraft.lib.gui.IBCTileMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;

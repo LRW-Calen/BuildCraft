@@ -6,7 +6,7 @@
 
 package buildcraft.lib.gui;
 
-import buildcraft.lib.net.IMessage;
+import buildcraft.api.net.IMessage;
 import buildcraft.lib.net.IPayloadReceiver;
 import buildcraft.lib.net.IPayloadWriter;
 import buildcraft.lib.net.PacketBufferBC;

@@ -6,10 +6,10 @@
 
 package buildcraft.transport.wire;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.api.transport.IWireManager;
 import buildcraft.api.transport.pipe.IPipeHolder;
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.block.entity.BlockEntity;

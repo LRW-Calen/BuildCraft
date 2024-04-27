@@ -4,6 +4,7 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.lib.net;
 
+import buildcraft.api.net.IMessage;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.io.IOException;

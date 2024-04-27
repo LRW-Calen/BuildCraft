@@ -6,12 +6,12 @@
 
 package buildcraft.transport.container;
 
+import buildcraft.api.net.IMessage;
 import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 import buildcraft.lib.gui.ContainerPipe;
 import buildcraft.lib.gui.Widget_Neptune;
 import buildcraft.lib.gui.slot.SlotPhantom;
 import buildcraft.lib.misc.MessageUtil;
-import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourEmzuli;

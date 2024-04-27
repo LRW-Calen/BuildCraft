@@ -6,19 +6,19 @@
 
 package buildcraft.robotics.tile;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import buildcraft.api.tiles.IDebuggable;
+import buildcraft.api.tiles.ITickable;
 import buildcraft.core.BCCoreItems;
 import buildcraft.core.item.ItemMapLocation;
 import buildcraft.core.item.ItemPaintbrush_BC8;
 import buildcraft.lib.delta.DeltaInt;
 import buildcraft.lib.delta.DeltaManager.EnumNetworkVisibility;
-import buildcraft.lib.gui.IBCTileMenuProvider;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.data.IdAllocator;
-import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.MessageManager;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.lib.tile.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
@@ -33,7 +33,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

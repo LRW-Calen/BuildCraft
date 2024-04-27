@@ -6,6 +6,8 @@
 
 package buildcraft.lib.net;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.lib.BCLibProxy;
 import buildcraft.lib.gui.ContainerBC_Neptune;
 import buildcraft.lib.misc.MessageUtil;

@@ -7,10 +7,12 @@
 package buildcraft.lib.fluid;
 
 import buildcraft.api.fuels.*;
+import buildcraft.energy.recipe.CoolantRecipeSerializer;
 import buildcraft.lib.misc.StackUtil;
 import com.google.common.collect.Lists;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -119,14 +121,14 @@ public enum CoolantRegistry implements ICoolantManager {
         return null;
     }
 
-    //    public static class Coolant implements IFluidCoolant
+    // public static class Coolant implements IFluidCoolant
     public static class FluidCoolant implements IFluidCoolant {
         private final FluidStack fluid;
         private final float degreesCoolingPerMB;
 
         private final ResourceLocation id;
 
-        //        public Coolant(FluidStack fluid, float degreesCoolingPerMB)
+        // public Coolant(FluidStack fluid, float degreesCoolingPerMB)
         public FluidCoolant(ResourceLocation id, FluidStack fluid, float degreesCoolingPerMB) {
             this.fluid = fluid;
             this.degreesCoolingPerMB = degreesCoolingPerMB;
@@ -166,9 +168,14 @@ public enum CoolantRegistry implements ICoolantManager {
         public ResourceLocation getId() {
             return id;
         }
+
+        @Override
+        public RecipeSerializer<ICoolant> getSerializer() {
+            return CoolantRecipeSerializer.INSTANCE;
+        }
     }
 
-    //    private static class SolidCoolant implements ISolidCoolant
+    // private static class SolidCoolant implements ISolidCoolant
     public static class SolidCoolant implements ISolidCoolant {
         private final ItemStack solid;
         private final FluidStack fluid;
@@ -211,13 +218,18 @@ public enum CoolantRegistry implements ICoolantManager {
         }
 
         @Override
-        public float getMultiplierForSerialize() {
+        public float getMultiplier() {
             return multiplier;
         }
 
         @Override
         public ResourceLocation getId() {
             return id;
+        }
+
+        @Override
+        public RecipeSerializer<ICoolant> getSerializer() {
+            return CoolantRecipeSerializer.INSTANCE;
         }
     }
 }

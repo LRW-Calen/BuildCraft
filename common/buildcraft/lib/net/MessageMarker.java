@@ -7,6 +7,8 @@
 package buildcraft.lib.net;
 
 import buildcraft.api.core.BCLog;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.lib.BCLibProxy;
 import buildcraft.lib.marker.MarkerCache;
 import buildcraft.lib.misc.MessageUtil;

@@ -6,9 +6,9 @@
 
 package buildcraft.core.marker.volume;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.lib.BCLibProxy;
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
 import buildcraft.lib.net.PacketBufferBC;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;

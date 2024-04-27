@@ -6,6 +6,8 @@
 
 package buildcraft.lib.net;
 
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.lib.debug.ClientDebuggables;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

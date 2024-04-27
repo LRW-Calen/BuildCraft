@@ -6,6 +6,7 @@
 
 package buildcraft.builders.snapshot;
 
+import buildcraft.api.core.IFakeWorld;
 import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.schematics.ISchematicBlock;
 import buildcraft.api.schematics.SchematicBlockContext;
@@ -330,7 +331,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
     @Override
     @SuppressWarnings("Duplicates")
 //    public boolean buildWithoutChecks(Level world, BlockPos blockPos)
-    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos) {
+    public boolean buildWithoutChecks(IFakeWorld world, BlockPos blockPos) {
         // Calen: if 0 -> FallingBlock will
         if (world.setBlock(blockPos, blockState, 0)) {
             if (tileNbt != null && blockState.hasBlockEntity()) {
@@ -349,8 +350,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
                     world.setBlockEntity(tileEntity);
                     // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //                    if (tileRotation != Rotation.NONE)
-////                    if (tileRotation != Rotation.NONE && tileEntity instanceof SkullBlockEntity skull)
-//                    {
+////                    if (tileRotation != Rotation.NONE && tileEntity instanceof SkullBlockEntity skull) {
 ////                        tileEntity.rotate(tileRotation);
 //                        world.getBlockState(blockPos).rotate(tileRotation);
 //                    }

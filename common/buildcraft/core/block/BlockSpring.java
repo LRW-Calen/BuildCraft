@@ -1,5 +1,6 @@
 package buildcraft.core.block;
 
+import buildcraft.api.blocks.ISpring;
 import buildcraft.api.enums.EnumSpring;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.misc.data.XorShift128Random;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Random;
 import java.util.function.BiFunction;
 
-public class BlockSpring extends BlockBCTile_Neptune {
+public class BlockSpring extends BlockBCTile_Neptune implements ISpring {
     // public static final Property<EnumSpring> SPRING_TYPE = BuildCraftProperties.SPRING_TYPE;
     public final EnumSpring springType;
 
@@ -134,4 +135,11 @@ public class BlockSpring extends BlockBCTile_Neptune {
     // public boolean func_149698_L() {
     // return false;
     // }
+
+    // ISpring
+
+    @Override
+    public EnumSpring getType() {
+        return springType;
+    }
 }

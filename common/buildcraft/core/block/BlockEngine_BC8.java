@@ -5,14 +5,20 @@
 package buildcraft.core.block;
 
 
+import buildcraft.api.core.IEngineType;
 import buildcraft.api.enums.EnumEngineType;
+import buildcraft.lib.client.model.ModelHolderVariable;
+import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.engine.BlockEngineBase_BC8;
 import buildcraft.lib.engine.TileEngineBase_BC8;
+import buildcraft.lib.misc.SpriteUtil;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.particle.TerrainParticle;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -23,6 +29,8 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IBlockRenderProperties;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 public class BlockEngine_BC8 extends BlockEngineBase_BC8<EnumEngineType> {
@@ -45,6 +53,35 @@ public class BlockEngine_BC8 extends BlockEngineBase_BC8<EnumEngineType> {
 ////        return TagManager.getTag("block.engine.bc." + engine.unlocalizedTag, TagManager.EnumTagType.UNLOCALIZED_NAME);
 //        return TagManager.getTag("block.engine.bc." + this.engineType.unlocalizedTag, TagManager.EnumTagType.UNLOCALIZED_NAME);
 //    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static final Map<IEngineType, ModelHolderVariable> engineModels = new HashMap<>();
+
+    @OnlyIn(Dist.CLIENT)
+    public static void setModel(IEngineType engineType, ModelHolderVariable model) {
+        engineModels.put(engineType, model);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private static final Map<IEngineType, LazyLoadedValue<TextureAtlasSprite>> engineParticles = new HashMap<>();
+
+    @OnlyIn(Dist.CLIENT)
+    private TextureAtlasSprite getEngineParticle(IEngineType engineType) {
+        return engineParticles.computeIfAbsent(engineType, (e) ->
+                new LazyLoadedValue<>(
+                        () ->
+                        {
+                            for (MutableQuad quad : engineModels.get(e).getCutoutQuads()) {
+                                if (quad.getFace() == Direction.DOWN) {
+                                    return quad.getSprite();
+                                }
+                            }
+                            return SpriteUtil.missingSprite();
+                        }
+                )
+
+        ).get();
+    }
 
     // Calen for particles instead of missingno
     @Override
@@ -70,7 +107,7 @@ public class BlockEngine_BC8 extends BlockEngineBase_BC8<EnumEngineType> {
 
                     TerrainParticle particle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
                     particle.setPos(x, y, z);
-                    TextureAtlasSprite texture = engineType.getPticle();
+                    TextureAtlasSprite texture = getEngineParticle(engineType);
                     if (texture == null) {
                         return false;
                     }
@@ -94,7 +131,7 @@ public class BlockEngine_BC8 extends BlockEngineBase_BC8<EnumEngineType> {
                     int countY = 2;
                     int countZ = 2;
 
-                    TextureAtlasSprite texture = engineType.getPticle();
+                    TextureAtlasSprite texture = getEngineParticle(engineType);
                     if (texture == null) {
                         return false;
                     }

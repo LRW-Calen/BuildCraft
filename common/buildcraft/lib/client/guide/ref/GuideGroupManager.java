@@ -1,15 +1,9 @@
 package buildcraft.lib.client.guide.ref;
 
+import buildcraft.api.BCBlocks;
+import buildcraft.api.BCItems;
 import buildcraft.api.statements.IStatement;
-import buildcraft.builders.BCBuildersBlocks;
-import buildcraft.core.BCCoreBlocks;
-import buildcraft.core.BCCoreItems;
-import buildcraft.energy.BCEnergyBlocks;
-import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.lib.client.guide.entry.*;
-import buildcraft.silicon.BCSiliconBlocks;
-import buildcraft.silicon.BCSiliconItems;
-import buildcraft.transport.BCTransportItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -37,81 +31,44 @@ public class GuideGroupManager {
     }
 
     private static void temp() {
-//        addEntries("buildcraftcore", "pipe_power_providers",
-//                BCCoreItems.Silicon.PLUG_PULSAR,
-//                BCCoreItems.Transport.PLUG_POWER_ADAPTOR,
-//                new ItemStack(BCCoreBlocks.Core.ENGINE),
-//                new ItemStack(BCCoreBlocks.Core.ENGINE, 1, 1),
-//                new ItemStack(BCCoreBlocks.Core.ENGINE, 1, 2))//
-//                .addKeyArray(
-//                        BCCoreItems.Transport.PIPE_WOOD_ITEM,
-//                        BCCoreItems.Transport.PIPE_DIAMOND_WOOD_ITEM,
-//                        BCCoreItems.Transport.PIPE_EMZULI_ITEM, BCCoreItems.Transport.PIPE_WOOD_FLUID,
-//                        BCCoreItems.Transport.PIPE_DIAMOND_WOOD_FLUID
-//                );
         addEntries("buildcraft", "pipe_power_providers",
-                BCSiliconItems.plugPulsar.get(),
-                BCTransportItems.plugPowerAdaptor.get(),
-                new ItemStack(BCCoreBlocks.engineWood.get()),
-                new ItemStack(BCEnergyBlocks.engineStone.get(), 1),
-                new ItemStack(BCEnergyBlocks.engineIron.get(), 1))//
+                BCItems.Silicon.PLUG_PULSAR,
+                BCItems.Transport.PLUG_POWER_ADAPTOR,
+                BCBlocks.Core.ENGINE_WOOD,
+                BCBlocks.Core.ENGINE_STONE,
+                BCBlocks.Core.ENGINE_IRON)//
                 .addKeyArray(
-                        (Item) BCTransportItems.pipeItemWood.get(null).get(),
-                        (Item) BCTransportItems.pipeItemDiaWood.get(null).get(),
-                        (Item) BCTransportItems.pipeItemEmzuli.get(null).get(),
-                        (Item) BCTransportItems.pipeFluidWood.get(null).get(),
-                        (Item) BCTransportItems.pipeFluidDiaWood.get(null).get()
+                        BCItems.Transport.PIPE_ITEMS_WOOD_COLORLESS,
+                        BCItems.Transport.PIPE_ITEMS_DIAMOND_WOOD_COLORLESS,
+                        BCItems.Transport.PIPE_ITEMS_EMZULI_COLORLESS,
+                        BCItems.Transport.PIPE_FLUIDS_WOOD_COLORLESS,
+                        BCItems.Transport.PIPE_FLUIDS_DIAMOND_WOOD_COLORLESS
                 );
-//        addEntries("buildcraftcore", "full_power_providers",
-//                new ItemStack(BCCoreBlocks.Core.ENGINE, 1, 1),
-//                new ItemStack(BCCoreBlocks.Core.ENGINE, 1, 2))
-//                .addKeyArray(
-//                        BCCoreBlocks.Builders.BUILDER, BCCoreBlocks.Builders.FILLER,
-//                        BCCoreBlocks.Builders.QUARRY,
-//                        BCCoreBlocks.Factory.DISTILLER,
-//                        BCCoreBlocks.Factory.MINING_WELL,
-//                        BCCoreBlocks.Factory.PUMP,
-//                        BCCoreBlocks.Silicon.LASER
-//                );
-        addEntries("buildcraft", "full_power_providers",
-                new ItemStack(BCEnergyBlocks.engineStone.get(), 1),
-                new ItemStack(BCEnergyBlocks.engineIron.get(), 1))
+        addEntries("buildcraftcore", "full_power_providers",
+                BCBlocks.Core.ENGINE_STONE,
+                BCBlocks.Core.ENGINE_IRON)
                 .addKeyArray(
-                        BCBuildersBlocks.builder.get(),
-                        BCBuildersBlocks.filler.get(),
-                        BCBuildersBlocks.quarry.get(),
-                        BCFactoryBlocks.distiller.get(),
-                        BCFactoryBlocks.miningWell.get(),
-                        BCFactoryBlocks.pump.get(),
-                        BCSiliconBlocks.laser.get()
+                        BCBlocks.Builders.BUILDER,
+                        BCBlocks.Builders.FILLER,
+                        BCBlocks.Builders.QUARRY,
+                        BCBlocks.Factory.DISTILLER,
+                        BCBlocks.Factory.MINING_WELL,
+                        BCBlocks.Factory.PUMP,
+                        BCBlocks.Silicon.LASER
                 );
-//        addEntries("buildcraft", "laser_power_providers",
-//                BCSiliconBlocks.laser)
-//                .addKeyArray(
-//                        BCCoreBlocks.Silicon.ADVANCED_CRAFTING_TABLE,
-//                        BCCoreBlocks.Silicon.ASSEMBLY_TABLE,
-//                        BCCoreBlocks.Silicon.INTEGRATION_TABLE
-//                );
         addEntries("buildcraft", "laser_power_providers",
-                BCSiliconBlocks.laser.get())
+                BCBlocks.Silicon.LASER)
                 .addKeyArray(
-                        BCSiliconBlocks.advancedCraftingTable.get(),
-                        BCSiliconBlocks.assemblyTable.get(),
-                        BCSiliconBlocks.integrationTable.get()
+                        BCBlocks.Silicon.ADVANCED_CRAFTING_TABLE,
+                        BCBlocks.Silicon.ASSEMBLY_TABLE,
+                        BCBlocks.Silicon.INTEGRATION_TABLE
                 );
-//        addEntries("buildcraftcore", "area_markers",
-//                BCCoreBlocks.Core.MARKER_VOLUME,
-//                BCCoreItems.Core.VOLUME_BOX)
-//                .addKeyArray(BCCoreBlocks.Builders.QUARRY,
-//                        BCCoreBlocks.Builders.ARCHITECT,
-//                        BCCoreBlocks.Builders.FILLER
-//                );
-        addEntries("buildcraft", "area_markers",
-                BCCoreBlocks.markerVolume.get(),
-                BCCoreItems.volumeBox.get())
-                .addKeyArray(BCBuildersBlocks.quarry.get(),
-                        BCBuildersBlocks.architect.get(),
-                        BCBuildersBlocks.filler.get()
+        addEntries("buildcraftcore", "area_markers",
+                BCBlocks.Core.MARKER_VOLUME,
+                BCItems.Core.VOLUME_BOX)
+                .addKeyArray(BCBlocks.Builders.QUARRY,
+                        BCBlocks.Builders.ARCHITECT,
+                        BCBlocks.Builders.FILLER
                 );
     }
 

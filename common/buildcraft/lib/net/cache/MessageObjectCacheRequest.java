@@ -6,8 +6,8 @@
 
 package buildcraft.lib.net.cache;
 
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.lib.net.PacketBufferBC;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;

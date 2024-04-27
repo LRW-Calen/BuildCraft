@@ -6,8 +6,8 @@
 
 package buildcraft.builders.snapshot;
 
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.lib.net.PacketBufferBC;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;

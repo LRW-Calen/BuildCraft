@@ -8,6 +8,7 @@ package buildcraft.energy;
 
 import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumPowerStage;
+import buildcraft.core.block.BlockEngine_BC8;
 import buildcraft.energy.client.render.RenderEngineIron;
 import buildcraft.energy.client.render.RenderEngineStone;
 import buildcraft.energy.event.ChristmasHandler;
@@ -59,13 +60,13 @@ public class BCEnergyModels {
                 "buildcraftenergy:models/tiles/engine_stone.json",
                 fnCtx
         );
-        EnumEngineType.STONE.setModel(ENGINE_STONE); // Calen
+        BlockEngine_BC8.setModel(EnumEngineType.STONE, ENGINE_STONE); // Calen
         ENGINE_IRON = new ModelHolderVariable(
 //                "buildcraftenergy:models/block/engine_iron.json",
                 "buildcraftenergy:models/tiles/engine_iron.json",
                 fnCtx
         );
-        EnumEngineType.IRON.setModel(ENGINE_IRON); // Calen
+        BlockEngine_BC8.setModel(EnumEngineType.IRON, ENGINE_IRON); // Calen
     }
 
     public static void fmlPreInit() {

@@ -17,6 +17,8 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
+// 1.18.2: use datagen
+@Deprecated(forRemoval = true)
 public class RecipeBuilderShaped {
     @Nonnull
     private ItemStack result = StackUtil.EMPTY;

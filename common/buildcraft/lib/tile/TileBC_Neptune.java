@@ -9,6 +9,7 @@ package buildcraft.lib.tile;
 import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
 import buildcraft.api.core.IPlayerOwned;
+import buildcraft.api.net.IMessage;
 import buildcraft.lib.cache.*;
 import buildcraft.lib.cap.CapabilityHelper;
 import buildcraft.lib.client.render.DetachedRenderer;

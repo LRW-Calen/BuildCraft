@@ -6,7 +6,7 @@
 
 package buildcraft.energy;
 
-import buildcraft.lib.net.MessageUpdateTile;
+import buildcraft.api.net.IMessage;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.Util;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -40,7 +40,7 @@ public enum BCEnergyGuis {
             if (tile instanceof MenuProvider menuProvider) {
 //                NetworkHooks.openGui(serverPlayer, menuProvider, pos);
 
-                MessageUpdateTile msg = tile.onServerPlayerOpenNoSend(player);
+                IMessage msg = tile.onServerPlayerOpenNoSend(player);
                 NetworkHooks.openGui(
                         serverPlayer, menuProvider, buf ->
                         {

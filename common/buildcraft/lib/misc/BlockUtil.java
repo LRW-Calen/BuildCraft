@@ -28,7 +28,6 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Explosion;
@@ -662,31 +661,5 @@ public final class BlockUtil {
 
     public static Block getBlockFromName(ResourceLocation name) {
         return ForgeRegistries.BLOCKS.getValue(name);
-    }
-
-    // Calen: from MC 1.12.2 Block.class
-
-    /**
-     * Common way to recolor a block with an external tool
-     *
-     * @param world The world
-     * @param pos   Block position in world
-     * @param side  The side hit with the coloring tool
-     * @param color The color to change to
-     * @return If the recoloring was successful
-     */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public static boolean recolorBlock(Level world, BlockPos pos, Direction side, DyeColor color) {
-        BlockState state = world.getBlockState(pos);
-        for (Property prop : state.getProperties()) {
-            if (prop.getName().equals("color") && prop.getValueClass() == DyeColor.class) {
-                DyeColor current = (DyeColor) state.getValue(prop);
-                if (current != color && prop.getPossibleValues().contains(color)) {
-                    world.setBlock(pos, state.setValue(prop, color), Block.UPDATE_ALL);
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }

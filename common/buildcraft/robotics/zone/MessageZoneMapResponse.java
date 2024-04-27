@@ -6,8 +6,8 @@
 
 package buildcraft.robotics.zone;
 
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import net.minecraft.network.FriendlyByteBuf;
 
 public class MessageZoneMapResponse implements IMessage {

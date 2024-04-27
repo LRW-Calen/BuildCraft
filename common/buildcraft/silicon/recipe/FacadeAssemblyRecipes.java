@@ -6,8 +6,8 @@
 
 package buildcraft.silicon.recipe;
 
+import buildcraft.api.BCItems;
 import buildcraft.api.mj.MjAPI;
-import buildcraft.api.recipes.AssemblyRecipe;
 import buildcraft.api.recipes.IngredientStack;
 import buildcraft.lib.misc.ItemStackKey;
 import buildcraft.lib.misc.StackUtil;
@@ -20,12 +20,10 @@ import buildcraft.silicon.plug.FacadeBlockStateInfo;
 import buildcraft.silicon.plug.FacadeInstance;
 import buildcraft.silicon.plug.FacadePhasedState;
 import buildcraft.silicon.plug.FacadeStateManager;
-import buildcraft.transport.BCTransportItems;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
@@ -39,14 +37,17 @@ import java.util.Set;
 public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeViewable.IRecipePowered {
     public static final FacadeAssemblyRecipes INSTANCE = new FacadeAssemblyRecipes();
 
-    static {
-//        INSTANCE.setRegistryName(new ResourceLocation("buildcrafttransport:facadeRecipes"));
-        INSTANCE.setRegistryName(new ResourceLocation("buildcrafttransport:facade_recipes"));
-    }
+//    static {
+//        INSTANCE.setRegistryName(new ResourceLocation("buildcrafttransport:facade_recipes"));
+//    }
 
     private static final int TIME_GAP = 500;
     private static final long MJ_COST = 64 * MjAPI.MJ;
     private static final ChangingObject<Long> MJ_COSTS = new ChangingObject<>(new Long[] { MJ_COST });
+
+    public FacadeAssemblyRecipes() {
+        name = new ResourceLocation("buildcrafttransport:facade_recipes");
+    }
 
     public static ItemStack createFacadeStack(FacadeBlockStateInfo info, boolean isHollow) {
         ItemStack stack = BCSiliconItems.plugFacade.get().createItemStack(FacadeInstance.createSingle(info, isHollow));
@@ -113,11 +114,11 @@ public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeView
 
     private static ItemStack baseRequirementStack() {
 //        if (BCItems.Transport.PIPE_STRUCTURE == null)
-        if (BCTransportItems.pipeStructure == null) {
+        if (BCItems.Transport.PIPE_STRUCTURE_COBBLESTONE_COLORLESS == null) {
             return new ItemStack(Blocks.COBBLESTONE_WALL);
         }
 //        return new ItemStack(BCTransportItems.PIPE_STRUCTURE, 3);
-        return new ItemStack((Item) BCTransportItems.pipeStructure.get(null).get(), 3);
+        return new ItemStack(BCItems.Transport.PIPE_STRUCTURE_COBBLESTONE_COLORLESS, 3);
     }
 
     @Override
@@ -141,17 +142,17 @@ public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeView
     }
 
     @Override
-    public long getRequiredMicroJoulesForSerialize() {
+    public long getRequiredMicroJoules() {
         return MJ_COST;
     }
 
     @Override
-    public Set<IngredientStack> getRequiredIngredientStacksForSerialize() {
+    public Set<IngredientStack> getRequiredIngredientStacks() {
         return ImmutableSet.of();
     }
 
     @Override
-    public Set<ItemStack> getOutputForSerialize() {
+    public Set<ItemStack> getOutput() {
         return ImmutableSet.of();
     }
 

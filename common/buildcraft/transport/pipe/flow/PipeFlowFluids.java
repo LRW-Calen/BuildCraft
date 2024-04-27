@@ -40,6 +40,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.network.NetworkDirection;
 import org.jetbrains.annotations.NotNull;
 
@@ -315,7 +316,8 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
     }
 
     @Override
-    public int insertFluidsForce(FluidStack fluid, @Nullable Direction from, boolean simulate) {
+//    public int insertFluidsForce(FluidStack fluid, @Nullable EnumFacing from, boolean simulate)
+    public int insertFluidsForce(FluidStack fluid, @Nullable Direction from, FluidAction action) {
         Section s = sections.get(EnumPipePart.CENTER);
         if (fluid == null || fluid.getAmount() == 0) {
             return 0;
@@ -323,14 +325,17 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         if (currentFluid != null && !currentFluid.isFluidEqual(fluid)) {
             return 0;
         }
-        if (currentFluid == null && !simulate) {
+//        if (currentFluid == null && !simulate)
+        if (currentFluid == null && action.execute()) {
             setFluid(fluid.copy());
         }
-        int filled = s.fill(fluid.getAmount(), !simulate);
+//        int filled = s.fill(fluid.getAmount(), !simulate);
+        int filled = s.fill(fluid.getAmount(), action.execute());
         if (filled == 0) {
             return 0;
         }
-        if (simulate) {
+//        if (simulate)
+        if (action.simulate()) {
             return filled;
         }
         if (from != null) {
@@ -341,7 +346,8 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
 
     @Override
     @Nullable
-    public FluidStack extractFluidsForce(int min, int max, @Nullable Direction section, boolean simulate) {
+//    public FluidStack extractFluidsForce(int min, int max, @Nullable EnumFacing section, boolean simulate)
+    public FluidStack extractFluidsForce(int min, int max, @Nullable Direction section, FluidAction action) {
         if (min > max) {
             throw new IllegalArgumentException("Minimum (" + min + ") > maximum (" + max + ")");
         }
@@ -354,7 +360,8 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         }
         int amount = MathUtil.clamp(s.amount, min, max);
         FluidStack fluid = new FluidStack(currentFluid, amount);
-        if (!simulate) {
+//        if (!simulate)
+        if (action.execute()) {
             s.amount -= amount;
             s.drainInternal(amount, false);
             if (s.amount == 0) {

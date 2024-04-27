@@ -8,6 +8,7 @@ package buildcraft.core;
 
 import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumPowerStage;
+import buildcraft.core.block.BlockEngine_BC8;
 import buildcraft.core.client.render.RenderEngineCreative;
 import buildcraft.core.client.render.RenderEngineWood;
 import buildcraft.core.client.render.RenderMarkerVolume;
@@ -58,13 +59,13 @@ public class BCCoreModels {
                 "buildcraftcore:models/tiles/engine_redstone.json",
                 fnCtx
         );
-        EnumEngineType.WOOD.setModel(ENGINE_REDSTONE); // Calen
+        BlockEngine_BC8.setModel(EnumEngineType.WOOD, ENGINE_REDSTONE); // Calen
         ENGINE_CREATIVE = new ModelHolderVariable(
 //                "buildcraftcore:models/block/engine_creative.json",
                 "buildcraftcore:models/tiles/engine_creative.json",
                 fnCtx
         );
-        EnumEngineType.CREATIVE.setModel(ENGINE_CREATIVE); // Calen
+        BlockEngine_BC8.setModel(EnumEngineType.CREATIVE, ENGINE_CREATIVE); // Calen
     }
 
     public static void fmlPreInit() {

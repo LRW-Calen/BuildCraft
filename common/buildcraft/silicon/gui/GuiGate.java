@@ -9,7 +9,6 @@ import buildcraft.lib.misc.collect.TypedKeyMap;
 import buildcraft.silicon.container.ContainerGate;
 import buildcraft.silicon.gate.GateLogic;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 

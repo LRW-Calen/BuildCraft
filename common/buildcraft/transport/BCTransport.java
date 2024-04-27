@@ -120,7 +120,7 @@ public class BCTransport {
         {
             if (message.messageSupplier().get() instanceof BcImcMessage bcImcMessage) {
 //                if (FacadeAPI.isFacadeMessageId(message.key))
-                if (FacadeAPI.isFacadeMessageId(bcImcMessage.key)) {
+                if (FacadeAPI.isFacadeMessageId(message.method())) {
                     // As this used to be in transport we will need to
                     // pass messages on to silicon
 

@@ -32,6 +32,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers;
@@ -119,7 +120,7 @@ public class BCSiliconModels {
     }
 
     public static void fmlPostInit() {
-        RenderUtil.registerItemColour(BCSiliconItems.plugFacade.get(), FacadeItemColours.INSTANCE);
+        RenderUtil.registerItemColour(((Item) BCSiliconItems.plugFacade.get()), FacadeItemColours.INSTANCE);
     }
 
     @SubscribeEvent

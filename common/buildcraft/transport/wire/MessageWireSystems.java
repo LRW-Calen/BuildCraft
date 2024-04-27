@@ -6,8 +6,8 @@
 
 package buildcraft.transport.wire;
 
-import buildcraft.lib.net.IMessage;
-import buildcraft.lib.net.IMessageHandler;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.network.FriendlyByteBuf;
 

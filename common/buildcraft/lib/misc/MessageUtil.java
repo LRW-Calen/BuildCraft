@@ -7,9 +7,9 @@
 package buildcraft.lib.misc;
 
 import buildcraft.api.core.BCLog;
-import buildcraft.lib.gui.IBCTileMenuProvider;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import buildcraft.lib.misc.data.DelayedList;
-import buildcraft.lib.net.IMessage;
 import buildcraft.lib.net.MessageManager;
 import buildcraft.lib.net.MessageUpdateTile;
 import buildcraft.lib.net.PacketBufferBC;
@@ -400,7 +400,7 @@ public class MessageUtil {
     // Calen
     public static void serverOpenTileGui(Player player, IBCTileMenuProvider tile, BlockPos pos) {
         if (player instanceof ServerPlayer serverPlayer) {
-            MessageUpdateTile msg = tile.onServerPlayerOpenNoSend(player);
+            IMessage msg = tile.onServerPlayerOpenNoSend(player);
             NetworkHooks.openGui(
                     serverPlayer, tile, buf ->
                     {
@@ -414,7 +414,7 @@ public class MessageUtil {
 
     public static <T extends TileBC_Neptune & IBCTileMenuProvider> void serverOpenTileGui(Player player, T tile) {
         if (player instanceof ServerPlayer serverPlayer) {
-            MessageUpdateTile msg = tile.onServerPlayerOpenNoSend(player);
+            IMessage msg = tile.onServerPlayerOpenNoSend(player);
             NetworkHooks.openGui(
                     serverPlayer, tile, buf ->
                     {

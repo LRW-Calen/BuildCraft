@@ -7,6 +7,8 @@ package buildcraft.lib.net;
 import buildcraft.api.IBuildCraftMod;
 import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.net.IMessageHandler;
 import buildcraft.core.BCCore;
 import buildcraft.lib.BCLib;
 import buildcraft.lib.BCLibProxy;

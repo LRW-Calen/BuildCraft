@@ -6,12 +6,12 @@
 
 package buildcraft.transport.pipe;
 
+import buildcraft.api.core.IFakeWorld;
 import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.schematics.ISchematicBlock;
 import buildcraft.api.schematics.SchematicBlockContext;
 import buildcraft.api.transport.pipe.PipeApi;
 import buildcraft.api.transport.pipe.PipeDefinition;
-import buildcraft.builders.snapshot.FakeWorld;
 import buildcraft.lib.misc.NBTUtilBC;
 import buildcraft.transport.BCTransportBlocks;
 import com.google.common.collect.ImmutableList;
@@ -118,7 +118,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
     @SuppressWarnings("Duplicates")
     @Override
 //    public boolean buildWithoutChecks(World world, BlockPos blockPos)
-    public boolean buildWithoutChecks(FakeWorld world, BlockPos blockPos) {
+    public boolean buildWithoutChecks(IFakeWorld world, BlockPos blockPos) {
         BlockState state = BCTransportBlocks.pipeHolder.get().defaultBlockState();
         if (world.setBlock(blockPos, state, 0)) {
 //            TileEntity tileEntity = TileEntity.create(world, tileNbt);

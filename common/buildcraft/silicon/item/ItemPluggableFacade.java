@@ -51,7 +51,8 @@ public class ItemPluggableFacade extends ItemBC_Neptune implements IItemPluggabl
     }
 
     @Nonnull
-    public ItemStack createItemStack(FacadeInstance state) {
+    @Override
+    public ItemStack createItemStack(IFacade state) {
         ItemStack item = new ItemStack(this);
         CompoundTag nbt = NBTUtilBC.getItemData(item);
         nbt.put("facade", state.writeToNbt());

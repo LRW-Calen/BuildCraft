@@ -6,6 +6,7 @@ import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.client.SiliconItemModelPredicates;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import javax.annotation.Nonnull;
@@ -30,7 +31,7 @@ public class SiliconItemModelGenerator extends BCBaseItemModelGenerator {
         // plugLightSensor
         getBuilder(BCSiliconItems.plugLightSensor.get().getRegistryName().toString()).parent(BUILTIN_ENTITY);
         // plugFacade
-        getBuilder(BCSiliconItems.plugFacade.get().getRegistryName().toString()).parent(BUILTIN_ENTITY);
+        getBuilder(((Item) BCSiliconItems.plugFacade.get()).getRegistryName().toString()).parent(BUILTIN_ENTITY);
 
         // chipsets
         withExistingParent(BCSiliconItems.chipsetRedstone.get().getRegistryName().toString(), GENERATED)

@@ -18,7 +18,7 @@
 
 package buildcraft.lib.block;
 
-import buildcraft.lib.tile.ITickable;
+import buildcraft.api.tiles.ITickable;
 import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;

@@ -4,8 +4,8 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.transport;
 
-import buildcraft.lib.gui.IBCTileMenuProvider;
-import buildcraft.lib.net.MessageUpdateTile;
+import buildcraft.api.net.IMessage;
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -42,7 +42,7 @@ public enum BCTransportGuis {
             // Client call in BCSiliconMenuTypes#GATE
 //            PacketBufferBC buffer = new PacketBufferBC(Unpooled.buffer());
 
-            MessageUpdateTile msg = holder.onServerPlayerOpenNoSend(player);
+            IMessage msg = holder.onServerPlayerOpenNoSend(player);
             NetworkHooks.openGui(
                     serverPlayer, holder, buf ->
                     {

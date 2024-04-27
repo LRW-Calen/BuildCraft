@@ -7,7 +7,7 @@
 package buildcraft.transport.tile;
 
 import buildcraft.api.core.EnumPipePart;
-import buildcraft.lib.gui.IBCTileMenuProvider;
+import buildcraft.api.tiles.IBCTileMenuProvider;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.ItemHandlerFiltered;
 import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;

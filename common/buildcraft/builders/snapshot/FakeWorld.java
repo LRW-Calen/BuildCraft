@@ -6,6 +6,7 @@
 
 package buildcraft.builders.snapshot;
 
+import buildcraft.api.core.IFakeWorld;
 import buildcraft.api.schematics.ISchematicBlock;
 import buildcraft.builders.BCBuilders;
 import com.google.common.collect.Lists;
@@ -23,7 +24,6 @@ import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.RecipeManager;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -48,7 +48,7 @@ import java.util.OptionalLong;
 
 @SuppressWarnings("NullableProblems")
 @OnlyIn(Dist.CLIENT)
-public class FakeWorld extends Level {
+public class FakeWorld extends IFakeWorld {
     // private static final ResourceKey<Biome> BIOME = Biomes.PLAINS;
     @SuppressWarnings("WeakerAccess")
     public static final BlockPos BLUEPRINT_OFFSET = new BlockPos(0, 127, 0);
