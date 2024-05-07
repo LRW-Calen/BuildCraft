@@ -19,7 +19,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.LazyLoadedValue;
-import net.minecraftforge.common.util.LazyOptional;
 
 import javax.vecmath.Vector3f;
 import java.util.List;

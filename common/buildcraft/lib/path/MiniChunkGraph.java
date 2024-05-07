@@ -46,7 +46,8 @@ public class MiniChunkGraph {
 
     public MiniChunkNode getFor(BlockPos pos) {
         BlockPos normalised = pos.subtract(min);
-        if (!TaskMiniChunkAnalyser.isValid(normalised)) throw new IllegalArgumentException("The position " + normalised + " was invalid! (from " + pos + ")");
+        if (!TaskMiniChunkAnalyser.isValid(normalised))
+            throw new IllegalArgumentException("The position " + normalised + " was invalid! (from " + pos + ")");
         int id = graphArray[normalised.getX()][normalised.getY()][normalised.getZ()];
         if (id >= 0) return nodes.get(id);
         throw new IllegalArgumentException("The position " + normalised + " had no graph! (gId = " + id + ")");

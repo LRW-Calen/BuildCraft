@@ -1,14 +1,13 @@
 package buildcraft.lib.misc;
 
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.Level;
 
 import java.util.Random;
 
 /** Utilities based around more complex (but common) usages of {@link Random}. */
 public class RandUtil {
     /** Creates a {@link Random} instance for a specific generator, for the specified chunk, in the specified world.
-     * 
+     *
      * @param world The world to generate for.
      * @param chunkX The chunk X co-ord to generate for.
      * @param chunkY The chunk X co-ord to generate for.
@@ -23,7 +22,7 @@ public class RandUtil {
     }
 
     /** Creates a {@link Random} instance for a specific generator, for the specified chunk, for a given world seed
-     * 
+     *
      * @param worldSeed The seed of a world to generate for.
      * @param chunkX The chunk X co-ord to generate for.
      * @param chunkY The chunk X co-ord to generate for.

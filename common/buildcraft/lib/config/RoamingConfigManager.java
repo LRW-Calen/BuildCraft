@@ -54,7 +54,8 @@ public class RoamingConfigManager extends StreamConfigManager {
     }
 
     @Override
-    protected void write() {}
+    protected void write() {
+    }
 
     @Override
     protected String comment() {

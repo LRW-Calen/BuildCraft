@@ -3,7 +3,6 @@ package buildcraft.lib.gui.json;
 import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.client.sprite.SpriteAtlas;
 import buildcraft.lib.misc.SpriteUtil;
-import net.minecraft.client.Minecraft;
 
 public class SpriteDelegate implements ISprite {
     public ISprite delegate;

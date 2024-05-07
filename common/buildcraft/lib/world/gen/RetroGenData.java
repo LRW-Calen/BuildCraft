@@ -34,7 +34,7 @@ public class RetroGenData extends SavedData {
 //        super(name);
     }
 
-//    @Override
+    // @Override
     public void readFromNBT(CompoundTag nbt) {
         gennedChunks.clear();
 

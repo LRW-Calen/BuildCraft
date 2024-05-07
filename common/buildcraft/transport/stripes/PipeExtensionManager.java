@@ -11,7 +11,6 @@ import buildcraft.api.core.BuildCraftAPI;
 import buildcraft.api.transport.IStripesActivator;
 import buildcraft.api.transport.IWireManager;
 import buildcraft.api.transport.pipe.*;
-import buildcraft.lib.cap.CapabilityHelper;
 import buildcraft.lib.misc.*;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
 import buildcraft.transport.wire.WireManager;

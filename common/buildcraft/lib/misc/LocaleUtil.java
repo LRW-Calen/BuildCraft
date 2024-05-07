@@ -122,6 +122,7 @@ public class LocaleUtil {
     }
 
     // Calen
+
     /** item.minecraft.firework_star.colorless is defined by BC, not MC. */
     public static String getColorTranslateKey(DyeColor colour) {
         return "item.minecraft.firework_star." + (colour == null ? "colorless" : colour.getName());

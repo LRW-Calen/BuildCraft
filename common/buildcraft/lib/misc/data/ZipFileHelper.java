@@ -25,7 +25,8 @@ public class ZipFileHelper {
     private final Map<String, byte[]> entries = new HashMap<>();
     private final Map<String, String> comments = new HashMap<>();
 
-    public ZipFileHelper() {}
+    public ZipFileHelper() {
+    }
 
     public ZipFileHelper(ZipInputStream zis) throws IOException {
         ZipEntry entry;

@@ -12,8 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.extensions.IForgeItem;
 
-import java.util.Arrays;
-
 public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem {
     /** The tag used to identify this in the {@link TagManager} */
     public final String idBC;
@@ -33,7 +31,7 @@ public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem 
 //    public final void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     public final void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
 //        if (isInCreativeTab(tab))
-            if (allowdedIn(tab)) {
+        if (allowdedIn(tab)) {
             addSubItems(tab, items);
         }
     }

@@ -37,7 +37,8 @@ public class IntegrationRecipeBasic extends IntegrationRecipe {
             return false;
         }
         NonNullList<ItemStack> toIntegrateCopy = toIntegrate.stream().filter(stack -> !stack.isEmpty()).collect(StackUtil.nonNullListCollector());
-        boolean stackMatches = this.toIntegrate.stream().allMatch((definition) -> {
+        boolean stackMatches = this.toIntegrate.stream().allMatch((definition) ->
+        {
             boolean matches = false;
             Iterator<ItemStack> iterator = toIntegrateCopy.iterator();
             while (iterator.hasNext()) {

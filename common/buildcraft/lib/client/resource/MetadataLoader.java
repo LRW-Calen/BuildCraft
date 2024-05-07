@@ -4,8 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraftforge.jarjar.metadata.MetadataIOHandler;
-import net.minecraftforge.jarjar.metadata.json.MetadataSerializer;
 
 import javax.annotation.Nullable;
 import java.io.FileNotFoundException;
@@ -13,6 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 // Calen: never used in 1.12.2
+
 /** Alternate metadata loader for {@link Resource#getMetadata(String)} */
 @Deprecated(forRemoval = true)
 public class MetadataLoader {

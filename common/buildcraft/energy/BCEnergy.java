@@ -2,9 +2,9 @@ package buildcraft.energy;
 
 import buildcraft.api.enums.EnumSpring;
 import buildcraft.core.BCCore;
+import buildcraft.lib.fluid.BCFluid;
 import buildcraft.lib.recipe.coolant.CoolantRecipeSerializer;
 import buildcraft.lib.recipe.fuel.FuelRecipeSerializer;
-import buildcraft.lib.fluid.BCFluid;
 import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.registry.TagManager;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;

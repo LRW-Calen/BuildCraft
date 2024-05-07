@@ -9,7 +9,6 @@ package buildcraft.lib.client.guide.data;
 import buildcraft.api.core.BCLog;
 import buildcraft.lib.client.guide.ETypeTag;
 import buildcraft.lib.client.guide.TypeOrder;
-import buildcraft.lib.misc.StringUtilBC;
 import net.minecraft.util.StringUtil;
 
 public class JsonTypeTags {

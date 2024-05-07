@@ -30,7 +30,8 @@ public class WorkerThreadUtil {
 
         ThreadFactory factory = new BasicThreadFactory.Builder().daemon(false)//
                 .namingPattern("BuildCraft Worker Thread %d")//
-                .uncaughtExceptionHandler((thread, e) -> {
+                .uncaughtExceptionHandler((thread, e) ->
+                {
                     e.printStackTrace();
                     throw new IllegalStateException(e);
                 })//

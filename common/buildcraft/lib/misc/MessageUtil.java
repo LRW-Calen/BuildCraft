@@ -223,7 +223,7 @@ public class MessageUtil {
 
     /** A copy of {@link NbtUtils#getName(Property, Comparable)} */
     private static <T extends Comparable<T>> String getName(Property<T> p_129211_, Comparable<?> p_129212_) {
-        return p_129211_.getName((T)p_129212_);
+        return p_129211_.getName((T) p_129212_);
     }
 
     public static BlockState readBlockState(FriendlyByteBuf buf) {

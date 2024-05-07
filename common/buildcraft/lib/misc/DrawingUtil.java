@@ -84,8 +84,9 @@ public class DrawingUtil {
         while (true) {
             drawPixel.accept(currentX, currentY);
             if (currentX == x2 && currentY == y2 ||
-                Math.abs(currentX - x1) > Math.abs(x2 - x1) ||
-                Math.abs(currentY - y1) > Math.abs(y2 - y1)) {
+                    Math.abs(currentX - x1) > Math.abs(x2 - x1) ||
+                    Math.abs(currentY - y1) > Math.abs(y2 - y1))
+            {
                 break;
             }
             if (error * 2 > -dx) {
@@ -135,8 +136,9 @@ public class DrawingUtil {
 
                     if (!filled) {
                         if ((nextNx * nextNx) + (ny * ny) + (nz * nz) <= 1 &&
-                            (nx * nx) + (nextNy * nextNy) + (nz * nz) <= 1 &&
-                            (nx * nx) + (ny * ny) + (nextNz * nextNz) <= 1) {
+                                (nx * nx) + (nextNy * nextNy) + (nz * nz) <= 1 &&
+                                (nx * nx) + (ny * ny) + (nextNz * nextNz) <= 1)
+                        {
                             continue;
                         }
                     }

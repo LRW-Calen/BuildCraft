@@ -2,7 +2,6 @@ package buildcraft.lib.command;
 
 import net.minecraft.Util;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 
 //public class CommandChangelog extends CommandBase

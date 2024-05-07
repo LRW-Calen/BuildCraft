@@ -6,9 +6,6 @@
 
 package buildcraft.lib.client.render.laser;
 
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector4f;
-
 public interface ILaserRenderer {
     void vertex(
             double x, double y, double z,
