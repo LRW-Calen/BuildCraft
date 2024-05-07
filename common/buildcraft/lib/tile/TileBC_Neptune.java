@@ -10,6 +10,7 @@ import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
 import buildcraft.api.core.IPlayerOwned;
 import buildcraft.api.net.IMessage;
+import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.cache.*;
 import buildcraft.lib.cap.CapabilityHelper;
 import buildcraft.lib.client.render.DetachedRenderer;
@@ -242,20 +243,20 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         return !hasLevel();
     }
 
-    // Calen: moved to BlockBCTile_Neptune#onRemove
-//    @Override
+    /** Called in {@link BlockBCTile_Neptune#onRemove(BlockState, Level, BlockPos, BlockState, boolean)}.
+     * No longer overrides a super method in 1.18.2 */
     public static boolean shouldRefresh(Level world, BlockPos pos, BlockState oldState, BlockState newState) {
         return oldState.getBlock() != newState.getBlock();
     }
 
     /** Called whenever the block holding this tile is exploded. Called by
-     * {@link Block#onBlockExploded(Level, BlockPos, Explosion)} */
+     * {@link Block#onBlockExploded(BlockState, Level, BlockPos, Explosion)} */
     public void onExplode(Explosion explosion) {
 
     }
 
     /** Called whenever the block is removed. Called by {@link #onExplode(Explosion)}, and
-     * {@link Block#breakBlock(Level, BlockPos, BlockState)} */
+     * {@link Block#onRemove(BlockState, Level, BlockPos, BlockState, boolean)} */
     public void onRemove() {
         NonNullList<ItemStack> toDrop = NonNullList.create();
         addDrops(toDrop, 0);
@@ -352,11 +353,10 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         tileCache.invalidate();
     }
 
-    // Calen
 //    @Override
-    public final boolean hasCapability(@Nonnull Capability<?> capability, Direction facing) {
-        return getCapability(capability, facing).isPresent();
-    }
+//    public final boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+//        return getCapability(capability, facing) != null;
+//    }
 
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
@@ -730,8 +730,6 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
         }
     }
 
-
-    // Calen
     @Override
 //    public CompoundTag writeToNBT(CompoundTag nbt)
     public void saveAdditional(CompoundTag nbt) {
@@ -752,11 +750,9 @@ public abstract class TileBC_Neptune extends BlockEntity implements IPayloadRece
     }
 
 //    @Override
-////    protected void setWorldCreate(Level world)
-//    public void setLevel(Level world)
-//    {
+//    protected void setWorldCreate(World world) {
 //        // The default impl doesn't actually set the world for some reason :/
-//        setLevel(world);
+//        setWorld(world);
 //    }
 
     // ##################

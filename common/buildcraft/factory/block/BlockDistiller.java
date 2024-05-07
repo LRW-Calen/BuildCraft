@@ -11,6 +11,7 @@ import buildcraft.factory.tile.TileDistiller_BC8;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.block.IBlockWithTickableTE;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -30,7 +31,7 @@ public class BlockDistiller extends BlockBCTile_Neptune<TileDistiller_BC8> imple
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level worldIn, BlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return BCFactoryBlocks.distillerTile.get().create(pos, state);
     }
 

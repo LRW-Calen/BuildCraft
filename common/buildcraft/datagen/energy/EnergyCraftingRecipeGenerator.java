@@ -4,7 +4,7 @@ import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyBlocks;
 import buildcraft.energy.BCEnergyFluids;
 import buildcraft.factory.BCFactoryBlocks;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import buildcraft.transport.BCTransportItems;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -33,9 +33,9 @@ public class EnergyCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("GpG")
                 .define('w', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .define('g', Ingredient.of(Tags.Items.GLASS_COLORLESS))
-                .define('G', Ingredient.of(OreDictTags.GEAR_IRON))
+                .define('G', Ingredient.of(OreDictionaryTags.GEAR_IRON))
                 .define('p', Ingredient.of(Items.PISTON))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_IRON))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_IRON))
                 .group(MOD_ID)
                 .save(consumer, MOD_ID + ":engine_iron");
         // engineStone
@@ -45,9 +45,9 @@ public class EnergyCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("GpG")
                 .define('w', Ingredient.of(Tags.Items.COBBLESTONE))
                 .define('g', Ingredient.of(Tags.Items.GLASS_COLORLESS))
-                .define('G', Ingredient.of(OreDictTags.GEAR_STONE))
+                .define('G', Ingredient.of(OreDictionaryTags.GEAR_STONE))
                 .define('p', Ingredient.of(Items.PISTON))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_STONE))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_STONE))
                 .group(MOD_ID)
                 .save(consumer, MOD_ID + ":engine_stone");
         // waterproof

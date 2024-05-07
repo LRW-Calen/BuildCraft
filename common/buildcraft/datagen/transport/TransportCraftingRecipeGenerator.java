@@ -3,7 +3,7 @@ package buildcraft.datagen.transport;
 import buildcraft.api.transport.pipe.IItemPipe;
 import buildcraft.builders.BCBuildersBlocks;
 import buildcraft.lib.misc.ColourUtil;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import buildcraft.transport.BCTransport;
 import buildcraft.transport.BCTransportBlocks;
 import buildcraft.transport.BCTransportItems;
@@ -44,15 +44,15 @@ public class TransportCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("wpw")
                 .define('p', Items.PISTON)
                 .define('c', Tags.Items.CHESTS_WOODEN)
-                .define('d', OreDictTags.pipeItemDiamond)
+                .define('d', OreDictionaryTags.pipeItemDiamond)
                 .define('w', ItemTags.PLANKS)
                 .unlockedBy("has_item", has(BCBuildersBlocks.quarry.get()))
                 .group(MOD_ID)
                 .save(consumer);
         // waterproof
         ShapelessRecipeBuilder.shapeless(BCTransportItems.waterproof.get())
-                .requires(OreDictTags.SEALANT)
-                .unlockedBy("has_item", has(OreDictTags.SEALANT))
+                .requires(OreDictionaryTags.SEALANT)
+                .unlockedBy("has_item", has(OreDictionaryTags.SEALANT))
                 .group(MOD_ID)
                 .save(consumer, MOD_ID + ":pipe_sealant");
         // pipe_structure
@@ -65,7 +65,7 @@ public class TransportCraftingRecipeGenerator extends RecipeProvider {
                 .save(consumer);
         // plug_blocker
         ShapelessRecipeBuilder.shapeless(BCTransportItems.plugBlocker.get(), 4)
-                .requires(OreDictTags.pipeStructure)
+                .requires(OreDictionaryTags.pipeStructure)
                 .unlockedBy("has_item", has(Tags.Items.COBBLESTONE))
                 .group(MOD_ID)
                 .save(consumer);
@@ -74,11 +74,11 @@ public class TransportCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("sis")
                 .pattern("sgs")
                 .pattern("srs")
-                .define('s', OreDictTags.pipeStructure)
-                .define('g', OreDictTags.GEAR_STONE)
+                .define('s', OreDictionaryTags.pipeStructure)
+                .define('g', OreDictionaryTags.GEAR_STONE)
                 .define('r', Tags.Items.DUSTS_REDSTONE)
                 .define('i', Tags.Items.INGOTS_GOLD)
-                .unlockedBy("has_item", has(OreDictTags.GEAR_STONE))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_STONE))
                 .group(MOD_ID)
                 .save(consumer);
 
@@ -89,7 +89,7 @@ public class TransportCraftingRecipeGenerator extends RecipeProvider {
         addPipeRecipe(BCTransportItems.pipeItemQuartz, Tags.Items.STORAGE_BLOCKS_QUARTZ);
         addPipeRecipe(BCTransportItems.pipeItemIron, Tags.Items.INGOTS_IRON);
         addPipeRecipe(BCTransportItems.pipeItemGold, Tags.Items.INGOTS_GOLD);
-        addPipeRecipe(BCTransportItems.pipeItemClay, OreDictTags.CLAY);
+        addPipeRecipe(BCTransportItems.pipeItemClay, OreDictionaryTags.CLAY);
         addPipeRecipe(BCTransportItems.pipeItemSandstone, Tags.Items.SANDSTONE);
         addPipeRecipe(BCTransportItems.pipeItemVoid, Tags.Items.DYES_BLACK, Tags.Items.DUSTS_REDSTONE);
         addPipeRecipe(BCTransportItems.pipeItemObsidian, Tags.Items.OBSIDIAN);
@@ -97,10 +97,10 @@ public class TransportCraftingRecipeGenerator extends RecipeProvider {
         addPipeRecipe(BCTransportItems.pipeItemLapis, Tags.Items.STORAGE_BLOCKS_LAPIS);
         addPipeRecipe(BCTransportItems.pipeItemDaizuli, Tags.Items.STORAGE_BLOCKS_LAPIS, Tags.Items.GEMS_DIAMOND);
         addPipeRecipe(BCTransportItems.pipeItemDiaWood, ItemTags.PLANKS, Tags.Items.GEMS_DIAMOND);
-        addPipeRecipe(BCTransportItems.pipeItemStripes, OreDictTags.GEAR_GOLD);
+        addPipeRecipe(BCTransportItems.pipeItemStripes, OreDictionaryTags.GEAR_GOLD);
         addPipeUpgradeRecipe(BCTransportItems.pipeItemDiaWood, BCTransportItems.pipeItemEmzuli, Tags.Items.STORAGE_BLOCKS_LAPIS);
 
-        TagKey<Item> waterproof = OreDictTags.waterproof;
+        TagKey<Item> waterproof = OreDictionaryTags.waterproof;
         addPipeUpgradeRecipe(BCTransportItems.pipeItemWood, BCTransportItems.pipeFluidWood, waterproof);
         addPipeUpgradeRecipe(BCTransportItems.pipeItemCobble, BCTransportItems.pipeFluidCobble, waterproof);
         addPipeUpgradeRecipe(BCTransportItems.pipeItemStone, BCTransportItems.pipeFluidStone, waterproof);

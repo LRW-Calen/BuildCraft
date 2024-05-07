@@ -17,7 +17,7 @@ import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.net.PacketBufferBC;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -27,9 +27,7 @@ import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Defines a widget that represents a phantom slot.
- */
+/** Defines a widget that represents a phantom slot. */
 public class WidgetPhantomSlot extends Widget_Neptune<ContainerBC_Neptune> {
     private static final byte NET_CLIENT_TO_SERVER_CLICK = 0;
     private static final byte NET_SERVER_TO_CLIENT_ITEM = 0;
@@ -135,9 +133,8 @@ public class WidgetPhantomSlot extends Widget_Neptune<ContainerBC_Neptune> {
         public void drawForeground(PoseStack poseStack, float partialTicks) {
 //            RenderHelper.enableGUIStandardItemLighting();
             RenderUtil.enableGUIStandardItemLighting();
-//            gui.mc.getItemRenderer().renderGuiItem(getStack(), (int) getX(), (int) getY());
-//            gui.mc.getItemRenderer().renderGuiItem(getStack(), 0, 0);
-            gui.mc.getItemRenderer().renderGuiItem(getStack(), (int) (getX() - gui.rootElement.getX()), (int) (getY() - gui.rootElement.getY()));
+//            gui.mc.getRenderItem().renderItemAndEffectIntoGUI(getStack(), (int) getX(), (int) getY());
+            gui.mc.getItemRenderer().renderAndDecorateItem(getStack(), (int) (getX() - gui.rootElement.getX()), (int) (getY() - gui.rootElement.getY()));
 //            RenderHelper.disableStandardItemLighting();
             RenderUtil.disableStandardItemLighting();
             if (contains(gui.mouse) && shouldDrawHighlight()) {
@@ -160,15 +157,10 @@ public class WidgetPhantomSlot extends Widget_Neptune<ContainerBC_Neptune> {
                 byte flags = 0;
                 if (button == 1) flags |= CLICK_FLAG_SINGLE;
 //                if (GuiScreen.isShiftKeyDown()) flags |= CLICK_FLAG_SHIFT;
-                if (
-                        InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_LSHIFT)
-                                ||
-                                InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_RSHIFT)
-                )
-                {
+                if (Screen.hasShiftDown()) {
                     flags |= CLICK_FLAG_SHIFT;
                 }
-                // Calen should not -100 in 1.18.2
+                // Calen: should not -100 in 1.18.2
 //                if (gui.mc.gameSettings.keyBindPickBlock.isActiveAndMatches(button - 100))
                 if (gui.mc.options.keyPickItem.isActiveAndMatches(InputConstants.Type.MOUSE.getOrCreate(button))) {
                     flags |= CLICK_FLAG_CLONE;

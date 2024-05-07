@@ -30,6 +30,10 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import java.util.Map;
 
+/**
+ * The methods are just copied from the super classes and changed some vars
+ * to make oils behave like they did in 1.12.2.
+ */
 public abstract class BCFluid extends ForgeFlowingFluid {
     protected BCFluidRegistryContainer fluidRegistryContainer;
     protected boolean isGas = this.getAttributes().isGaseous();
@@ -43,10 +47,7 @@ public abstract class BCFluid extends ForgeFlowingFluid {
         return fluidRegistryContainer;
     }
 
-//    public BCFluidAttributes getAttributes()
-//    {
-//        return (BCFluidAttributes) super.getAttributes();
-//    }
+    // Flow & Still
 
     public static class Flowing extends BCFluid {
         public Flowing(Properties properties, BCFluidRegistryContainer reg) {
@@ -82,9 +83,8 @@ public abstract class BCFluid extends ForgeFlowingFluid {
         }
     }
 
-    // Calen: the above are just copy from the super classes and changed some details to make the fluid behavior like that in 1.12.2
-
     // ForgeFlowingFluid
+
     @Override
     protected boolean canBeReplacedWith(FluidState state, BlockGetter level, BlockPos pos, Fluid fluidIn, Direction direction) {
         // Based on the water implementation, may need to be overriden for mod fluids that shouldn't behave like water.
@@ -92,7 +92,13 @@ public abstract class BCFluid extends ForgeFlowingFluid {
     }
 
     // FlowingFluid
-    // Calen for gas spread up
+
+    /**
+     * To make gas spread up.
+     * @param world
+     * @param pos
+     * @param state
+     */
     @Override
     protected void spread(LevelAccessor world, BlockPos pos, FluidState state) {
         Direction spreadDirection = isGas ? Direction.UP : Direction.DOWN;
@@ -112,21 +118,6 @@ public abstract class BCFluid extends ForgeFlowingFluid {
 
         }
     }
-
-    // Calen: to protect water block
-    // here not necessary, see #canHoldFluid
-//    @Override
-//    protected boolean canSpreadTo(BlockGetter p_75978_, BlockPos p_75979_, BlockState p_75980_, Direction p_75981_, BlockPos p_75982_, BlockState p_75983_, FluidState p_75984_, Fluid p_75985_)
-//    {
-//        if (p_75984_.is(FluidTags.WATER))
-//        {
-//            return false;
-//        }
-//        else
-//        {
-//            return super.canSpreadTo(p_75978_, p_75979_, p_75980_, p_75981_, p_75982_, p_75983_, p_75984_, p_75985_);
-//        }
-//    }
 
     @Override
     protected FluidState getNewLiquid(LevelReader world, BlockPos pos, BlockState state) {
@@ -312,7 +303,7 @@ public abstract class BCFluid extends ForgeFlowingFluid {
         }
     }
 
-    //    @Override
+    // @Override
     protected boolean isWaterHole(BlockGetter p_75957_, Fluid p_75958_, BlockPos p_75959_, BlockState p_75960_, BlockPos p_75961_, BlockState p_75962_) {
         if (!this.canPassThroughWall(isGas ? Direction.UP : Direction.DOWN, p_75957_, p_75959_, p_75960_, p_75961_, p_75962_)) {
             return false;
@@ -321,6 +312,7 @@ public abstract class BCFluid extends ForgeFlowingFluid {
         }
     }
 
+    /** To protect water block */
     @Override
     protected boolean canHoldFluid(BlockGetter p_75973_, BlockPos p_75974_, BlockState p_75975_, Fluid p_75976_) {
         // Calen: for oil spread on water and not replace water
@@ -372,22 +364,4 @@ public abstract class BCFluid extends ForgeFlowingFluid {
             return hasSameAbove(p_76050_, p_76051_, p_76052_) ? 1.0F : p_76050_.getOwnHeight();
         }
     }
-
-//    public static class Properties extends ForgeFlowingFluid.Properties
-//    {
-//        Supplier<? extends BCFluidBlock> block;
-//
-//        public Properties(Supplier<? extends Fluid> still, Supplier<? extends Fluid> flowing, Supplier<? extends BCFluidBlock> block, FluidAttributes.Builder attributes)
-//        {
-//            super(still, flowing, attributes);
-//            this.block = block;
-//        }
-//
-//        @Override
-//        public ForgeFlowingFluid.Properties bucket(Supplier<? extends Item> bucket)
-//        {
-//            return super.bucket(bucket);
-//        }
-//    }
-
 }

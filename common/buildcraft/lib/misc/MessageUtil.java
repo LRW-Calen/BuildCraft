@@ -17,12 +17,11 @@ import buildcraft.lib.tile.TileBC_Neptune;
 import com.mojang.authlib.GameProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.util.internal.StringUtil;
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -30,18 +29,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class MessageUtil {
     private static final DelayedList<Runnable> DELAYED_SERVER_TASKS = DelayedList.createConcurrent();
@@ -78,8 +77,7 @@ public class MessageUtil {
     public static void sendToAllWatching(Level worldObj, BlockPos pos, IMessage message) {
         if (worldObj instanceof ServerLevel server) {
 //            PlayerChunkMapEntry playerChunkMap = server.getPlayerChunkMap().getEntry(pos.getX() >> 4, pos.getZ() >> 4);
-//            if (playerChunkMap == null)
-//            {
+//            if (playerChunkMap == null) {
 //                // No-one was watching this chunk.
 //                return;
 //            }
@@ -194,66 +192,66 @@ public class MessageUtil {
         return null;
     }
 
-    // Calen writeBlockState readBlockState 互相收发 能对应上即可
-
-    /**
-     * Writes a block state using the block ID and its metadata. Not suitable for full states.
-     */
+    /** Writes a block state using the block ID and its metadata. Not suitable for full states. */
     public static void writeBlockState(FriendlyByteBuf buf, BlockState state) {
-        buf.writeNbt(NbtUtils.writeBlockState(state));
-//        Block block = state.getBlock();
-//        block.getCloneItemStack(state,)
-//        buf.writeUtf(block.getRegistryName().getPath());
+//        buf.writeNbt(NbtUtils.writeBlockState(state));
+        Block block = state.getBlock();
+        buf.writeResourceLocation(block.getRegistryName());
 //        int meta = block.getMetaFromState(state);
 //        buf.writeByte(meta);
 //        BlockState readState = block.getStateFromMeta(meta);
 //        if (readState != state) {
 //            buf.writeBoolean(true);
-//            Map<Property, Comparable<?>> differingProperties = new HashMap<>();
-//            for (Property<?> property : state.getProperties()) {
-//                Comparable<?> inputValue = state.getValue(property);
-//                Comparable<?> readValue = readState.getValue(property);
-//                if (!inputValue.equals(readValue)) {
-//                    differingProperties.put(property, inputValue);
-//                }
+        Map<Property<?>, Comparable<?>> differingProperties = new HashMap<>();
+        for (Property<?> property : state.getProperties()) {
+            Comparable<?> inputValue = state.getValue(property);
+//            Comparable<?> readValue = readState.getValue(property);
+//            if (!inputValue.equals(readValue)) {
+            differingProperties.put(property, inputValue);
 //            }
-//            buf.writeByte(differingProperties.size());
-//            for (Entry<Property, Comparable<?>> entry : differingProperties.entrySet()) {
-//                buf.writeUtf(entry.getKey().getName());
-//                buf.writeUtf(entry.getKey().getName(entry.getValue()));
-//            }
+        }
+        buf.writeByte(differingProperties.size());
+        for (Entry<Property<?>, Comparable<?>> entry : differingProperties.entrySet()) {
+            buf.writeUtf(entry.getKey().getName());
+//            buf.writeUtf(entry.getKey().getName(entry.getValue()));
+            buf.writeUtf(getName(entry.getKey(), entry.getValue()));
+        }
 //        } else {
 //            buf.writeBoolean(false);
 //        }
     }
 
-    public static BlockState readBlockState(FriendlyByteBuf buf) {
-        return NbtUtils.readBlockState(buf.readNbt());
-//        String id = buf.readUtf();
-//        Block block = ForgeRegistries.BLOCKS.getValue(ResourceLocation.tryParse(id));
-//        int meta = buf.readUnsignedByte();
-//        BlockState state = block..getStateFromMeta(meta);
-//        if (buf.readBoolean()) {
-//            int count = buf.readByte();
-//            for (int p = 0; p < count; p++) {
-//                String name = buf.readUtf(256);
-//                String value = buf.readUtf(256);
-//                Property<?> prop = state.getProperties()..getBlock().getBlockState().getProperty(name);
-//                state = propertyReadHelper(state, value, prop);
-//            }
-//        }
-//        return state;
+    /** A copy of {@link NbtUtils#getName(Property, Comparable)} */
+    private static <T extends Comparable<T>> String getName(Property<T> p_129211_, Comparable<?> p_129212_) {
+        return p_129211_.getName((T)p_129212_);
     }
 
-    private static <T extends Comparable<T>> BlockState propertyReadHelper(BlockState state, String value,
-                                                                           Property<T> prop) {
+    public static BlockState readBlockState(FriendlyByteBuf buf) {
+//        return NbtUtils.readBlockState(buf.readNbt());
+        ResourceLocation id = buf.readResourceLocation();
+        Block block = ForgeRegistries.BLOCKS.getValue(id);
+//        int meta = buf.readUnsignedByte();
+//        IBlockState state = block.getStateFromMeta(meta);
+        BlockState state = block.defaultBlockState();
+//        if (buf.readBoolean()) {
+        int count = buf.readByte();
+        for (int p = 0; p < count; p++) {
+            String name = buf.readUtf(256);
+            String value = buf.readUtf(256);
+//            IProperty<?> prop = state.getBlock().getBlockState().getProperty(name);
+            Property<?> prop = block.getStateDefinition().getProperty(name);
+            state = propertyReadHelper(state, value, prop);
+        }
+//        }
+        return state;
+    }
+
+    private static <T extends Comparable<T>> BlockState propertyReadHelper(BlockState state, String value, Property<T> prop) {
         return state.setValue(prop, prop.getValue(value).get());
     }
 
-    /**
-     * {@link FriendlyByteBuf#writeEnum(Enum)} can only write *actual* enum values - so not null. This method allows
-     * for writing an enum value, or null.
-     */
+    /** {@link FriendlyByteBuf#writeEnum(Enum)} can only write *actual* enum values - so not null. This method allows
+     * for writing an enum value, or null. */
     public static void writeEnumOrNull(ByteBuf buffer, Enum<?> value) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         if (value == null) {
@@ -264,10 +262,8 @@ public class MessageUtil {
         }
     }
 
-    /**
-     * {@link FriendlyByteBuf#readEnum(Class)} can only read *actual* enum values - so not null. This method allows
-     * for reading an enum value, or null.
-     */
+    /** {@link FriendlyByteBuf#readEnum(Class)} can only read *actual* enum values - so not null. This method allows
+     * for reading an enum value, or null. */
     public static <E extends Enum<E>> E readEnumOrNull(ByteBuf buffer, Class<E> clazz) {
         PacketBufferBC buf = PacketBufferBC.asPacketBufferBc(buffer);
         if (buf.readBoolean()) {
@@ -316,10 +312,8 @@ public class MessageUtil {
         return new FriendlyByteBuf(buf);
     }
 
-    /**
-     * Checks to make sure that this buffer has been *completely* read (so that there are no readable bytes left
-     * over
-     */
+    /** Checks to make sure that this buffer has been *completely* read (so that there are no readable bytes left
+     * over */
     public static void ensureEmpty(ByteBuf buf, boolean throwError, String extra) {
         int readableBytes = buf.readableBytes();
         int rb = readableBytes;
@@ -442,13 +436,9 @@ public class MessageUtil {
     }
 
     // Calen
-    public static void serverOpenItemGui(Player player, Item item) {
+    public static <I extends Item & MenuProvider> void serverOpenItemGui(Player player, I item) {
         if (player instanceof ServerPlayer serverPlayer) {
-            if (item instanceof MenuProvider provider) {
-                NetworkHooks.openGui(serverPlayer, provider, serverPlayer.blockPosition());
-            } else {
-                player.sendMessage(new TranslatableComponent("buildcraft.error.open_null_menu"), Util.NIL_UUID);
-            }
+            NetworkHooks.openGui(serverPlayer, item, serverPlayer.blockPosition());
         }
     }
 }

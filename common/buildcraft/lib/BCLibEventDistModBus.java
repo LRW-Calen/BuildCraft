@@ -18,9 +18,7 @@ import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = BCSilicon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public enum BCLibEventDistModBus {
     INSTANCE;
 

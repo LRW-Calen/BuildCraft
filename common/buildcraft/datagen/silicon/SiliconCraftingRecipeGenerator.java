@@ -1,6 +1,6 @@
 package buildcraft.datagen.silicon;
 
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import buildcraft.silicon.BCSilicon;
 import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.silicon.BCSiliconItems;
@@ -37,7 +37,7 @@ public class SiliconCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("OrO")
                 .define('r', BCSiliconItems.chipsetRedstone.get())
                 .define('c', Tags.Items.CHESTS_WOODEN)
-                .define('t', OreDictTags.WORKBENCHES_ITEM)
+                .define('t', OreDictionaryTags.WORKBENCHES_ITEM)
                 .define('O', Tags.Items.OBSIDIAN)
                 .unlockedBy("has_item", has(BCSiliconItems.chipsetRedstone.get()))
                 .group(MOD_ID)
@@ -49,9 +49,9 @@ public class SiliconCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("OgO")
                 .define('r', Tags.Items.DUSTS_REDSTONE)
                 .define('d', Tags.Items.GEMS_DIAMOND)
-                .define('g', OreDictTags.GEAR_DIAMOND)
+                .define('g', OreDictionaryTags.GEAR_DIAMOND)
                 .define('O', Tags.Items.OBSIDIAN)
-                .unlockedBy("has_item", has(OreDictTags.GEAR_DIAMOND))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_DIAMOND))
                 .group(MOD_ID)
                 .save(consumer);
         // integration_table
@@ -60,10 +60,10 @@ public class SiliconCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("OrO")
                 .pattern("OgO")
                 .define('r', BCSiliconItems.chipsetIron.get())
-                .define('g', OreDictTags.GEAR_DIAMOND)
+                .define('g', OreDictionaryTags.GEAR_DIAMOND)
                 .define('i', Tags.Items.INGOTS_GOLD)
                 .define('O', Tags.Items.OBSIDIAN)
-                .unlockedBy("has_item", has(OreDictTags.GEAR_DIAMOND))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_DIAMOND))
                 .group(MOD_ID)
                 .save(consumer);
         // laser

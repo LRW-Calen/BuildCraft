@@ -17,9 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * @deprecated Help *should* be moved to GuiElementContainer rather than this.
- */
+/** @deprecated Help *should* be moved to GuiElementContainer rather than this. */
 @Deprecated
 public class GuiElementContainerHelp implements IGuiElement {
     public final BuildCraftGui gui;
@@ -48,25 +46,19 @@ public class GuiElementContainerHelp implements IGuiElement {
         calc = false;
     }
 
-    /**
-     * Adds the given element to be drawn. Note that the element must be based around (0, 0), NOT this element.
-     */
+    /** Adds the given element to be drawn. Note that the element must be based around (0, 0), NOT this element. */
     public void add(IGuiElement element) {
         internalElements.add(element);
         recalcSize();
     }
 
-    /**
-     * Adds all of the given elements, like in {@link #add(IGuiElement)}
-     */
+    /** Adds all of the given elements, like in {@link #add(IGuiElement)} */
     public void addAll(IGuiElement... elements) {
         Collections.addAll(internalElements, elements);
         recalcSize();
     }
 
-    /**
-     * Adds all of the given elements, like in {@link #add(IGuiElement)}
-     */
+    /** Adds all of the given elements, like in {@link #add(IGuiElement)} */
     public void addAll(Collection<IGuiElement> elements) {
         internalElements.addAll(elements);
         recalcSize();

@@ -9,7 +9,10 @@ package buildcraft.lib.client.sprite;
 import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
 import buildcraft.api.core.render.ISprite;
+import buildcraft.lib.client.resource.DataMetadataSection;
+import buildcraft.lib.client.resource.MetadataLoader;
 import buildcraft.lib.misc.SpriteUtil;
+import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -58,13 +61,12 @@ public class SpriteHolderRegistry {
         return getHolder(new ResourceLocation(location));
     }
 
-    //    public static void onTextureStitchPre(TextureAtlas map)
+    // public static void onTextureStitchPre(TextureAtlas map)
     public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         // Calen: for the ForgeModelBakery.White.instance() texture missing in 1.18.2
         event.addSprite(new ResourceLocation("minecraft", "white"));
 
         for (SpriteHolder holder : HOLDER_MAP.values()) {
-
 //            holder.onTextureStitchPre(map);
             holder.onTextureStitchPre(event);
         }
@@ -77,7 +79,6 @@ public class SpriteHolderRegistry {
 //        TextureAtlas map = Minecraft.getInstance().getTextureMapBlocks();
         TextureAtlas map = Minecraft.getInstance().getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS);
 //        GlStateManager.bindTexture(map.getGlTextureId());
-//        RenderSystem.bindTexture(map.getId());
         GL11.glBindTexture(3553, map.getId());
 
         for (int l = 0; l < 4; l++) {
@@ -105,7 +106,6 @@ public class SpriteHolderRegistry {
 
     public static void onTextureStitchPost(TextureStitchEvent.Post event) {
         for (SpriteHolder holder : HOLDER_MAP.values()) {
-
 //            holder.onTextureStitchPre(map);
             holder.onTextureStitchPost(event);
         }
@@ -136,11 +136,9 @@ public class SpriteHolderRegistry {
         }
     }
 
-    /**
-     * Holds a reference to a {@link TextureAtlasSprite} that is automatically refreshed when the resource packs are
+    /** Holds a reference to a {@link TextureAtlasSprite} that is automatically refreshed when the resource packs are
      * reloaded. As such you should store this in a static final field in a client-side class, and make sure that the
-     * class is initialised before init.
-     */
+     * class is initialised before init. */
     @OnlyIn(Dist.CLIENT)
     public static class SpriteHolder implements ISprite {
         public final ResourceLocation spriteLocation;
@@ -156,20 +154,16 @@ public class SpriteHolderRegistry {
         // Calen: TextureStitchEvent.Pre -> load the texture into TextureAtlas.LOCATION_BLOCKS
         // TextureStitchEvent.Post -> get the loaded texture u v from TextureAtlas.LOCATION_BLOCKS
 
-        //        protected void onTextureStitchPre(TextureAtlas map)
+        // protected void onTextureStitchPre(TextureAtlas map)
         protected void onTextureStitchPre(TextureStitchEvent.Pre event) {
-            event.addSprite(spriteLocation);
 //            extraData = null;
 //            TextureAtlasSprite varSprite = AtlasSpriteVariants.createForConfig(spriteLocation);
-//            if (map.setTextureEntry(varSprite))
-//            {
+//            if (map.setTextureEntry(varSprite)) {
 //                sprite = varSprite;
+//            } else {
+//                sprite = map.getTextureExtry(varSprite.getIconName());
 //            }
-//            else
-//            {
-////                sprite = map.getTextureExtry(varSprite.getIconName());
-//                sprite = map.getSprite(varSprite.getName());
-//            }
+            event.addSprite(spriteLocation);
         }
 
         protected void onTextureStitchPost(TextureStitchEvent.Post event) {
@@ -217,18 +211,16 @@ public class SpriteHolderRegistry {
         }
 
         // Calen: never used in 1.12.2
-//        public DataMetadataSection getExtraData(boolean samePack)
-//        {
-//            if (extraData == null)
-//            {
+//        public DataMetadataSection getExtraData(boolean samePack) {
+//            if (extraData == null) {
 //                ResourceLocation actualLocation = SpriteUtil.transformLocation(spriteLocation);
 //                extraData = MetadataLoader.getData(actualLocation, samePack);
 //            }
-//            if (extraData == null)
-//            {
+//            if (extraData == null) {
 //                extraData = new DataMetadataSection(new JsonObject());
 //            }
 //            return extraData;
 //        }
+//    }
     }
 }

@@ -16,10 +16,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.item.DyeColor;
 
-/**
- * A special class dedicated to adding support to minecraft-specific types to "buildcraft.lib.expression". This isn't
- * part of that package as then we can safely distribute it separately.
- */
+/** A special class dedicated to adding support to minecraft-specific types to "buildcraft.lib.expression". This isn't
+ * part of that package as then we can safely distribute it separately. */
 public class ExpressionCompat {
 
     public static final FunctionContext RENDERING = DefaultContexts.RENDERING;

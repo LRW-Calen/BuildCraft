@@ -7,6 +7,7 @@ package buildcraft.core.block;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.tile.TileMarkerVolume;
 import buildcraft.lib.block.BlockMarkerBase;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -28,7 +29,7 @@ public class BlockMarkerVolume extends BlockMarkerBase {
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level worldIn, BlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return BCCoreBlocks.markerVolumeTile.get().create(pos, state);
     }
 

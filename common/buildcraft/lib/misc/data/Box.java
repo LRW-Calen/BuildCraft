@@ -31,9 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-/**
- * MUTABLE integer variant of AABB, with a few BC-specific methods
- */
+/** MUTABLE integer variant of AxisAlignedBB, with a few BC-specific methods */
 public class Box implements IBox {
 
     // Client side cache: used to compare current laser type with previously
@@ -219,10 +217,8 @@ public class Box implements IBox {
         return this;
     }
 
-    /**
-     * IMPORTANT: Use {@link #contains(Vec3)}instead of the returned {@link AABB#contains(Vec3)} as the
-     * logic is different!
-     */
+    /** IMPORTANT: Use {@link #contains(Vec3)}instead of the returned {@link AABB#contains(Vec3)} as the
+     * logic is different! */
     public AABB getBoundingBox() {
         return new AABB(min, max.offset(VecUtil.POS_ONE));
     }
@@ -264,23 +260,17 @@ public class Box implements IBox {
         return PositionUtil.randomBlockPos(rand, min, max.offset(1, 1, 1));
     }
 
-    /**
-     * Delegate for {@link PositionUtil#isCorner(BlockPos, BlockPos, BlockPos)}
-     */
+    /** Delegate for {@link PositionUtil#isCorner(BlockPos, BlockPos, BlockPos)} */
     public boolean isCorner(BlockPos pos) {
         return PositionUtil.isCorner(min, max, pos);
     }
 
-    /**
-     * Delegate for {@link PositionUtil#isOnEdge(BlockPos, BlockPos, BlockPos)}
-     */
+    /** Delegate for {@link PositionUtil#isOnEdge(BlockPos, BlockPos, BlockPos)} */
     public boolean isOnEdge(BlockPos pos) {
         return PositionUtil.isOnEdge(min, max, pos);
     }
 
-    /**
-     * Delegate for {@link PositionUtil#isOnFace(BlockPos, BlockPos, BlockPos)}
-     */
+    /** Delegate for {@link PositionUtil#isOnFace(BlockPos, BlockPos, BlockPos)} */
     public boolean isOnFace(BlockPos pos) {
         return PositionUtil.isOnFace(min, max, pos);
     }
@@ -294,9 +284,7 @@ public class Box implements IBox {
         return false;
     }
 
-    /**
-     * @return The intersection box (if these two boxes are intersecting) or null if they were not.
-     */
+    /** @return The intersection box (if these two boxes are intersecting) or null if they were not. */
     @Nullable
     public Box getIntersect(Box box) {
         if (doesIntersectWith(box)) {
@@ -307,12 +295,10 @@ public class Box implements IBox {
         return null;
     }
 
-    /**
-     * Calculates the total number of blocks on the edge. This is identical to (but faster than) calling
+    /** Calculates the total number of blocks on the edge. This is identical to (but faster than) calling
      * {@link #getBlocksOnEdge()}.{@link List#size() size()}
      *
-     * @return The size of the list returned by {@link #getBlocksOnEdge()}.
-     */
+     * @return The size of the list returned by {@link #getBlocksOnEdge()}. */
     public int getBlocksOnEdgeCount() {
         return PositionUtil.getCountOnEdge(min(), max());
     }

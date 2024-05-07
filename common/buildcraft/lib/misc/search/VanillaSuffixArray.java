@@ -6,9 +6,7 @@ import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.util.List;
 
-/**
- * An implementation of {@link SuffixArray} that delegates to a vanilla minecraft {@link SuffixArray}.
- */
+/** An implementation of {@link ISuffixArray} that delegates to a vanilla minecraft {@link SuffixArray}. */
 public final class VanillaSuffixArray<T> implements ISuffixArray<T> {
     private final SuffixArray<T> vanillaSuffixArray;
 

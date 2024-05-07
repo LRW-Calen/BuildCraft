@@ -58,8 +58,7 @@ public class DelegateItemHandler implements IItemHandlerModifiable, IItemHandler
         return IItemHandlerFiltered.super.getFilter(slot);
     }
 
-    // Calen: default true in 1.12.2
     public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return true;
+        return delegate.isItemValid(slot, stack);
     }
 }

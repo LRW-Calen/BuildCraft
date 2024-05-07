@@ -195,8 +195,8 @@ public class FluidRenderer {
      * @param cap The maximum amount of fluid that could be in the stack. Usually the capacity of the tank.
      * @param min The minimum coordinate that the tank should be rendered from
      * @param max The maximum coordinate that the tank will be rendered to.
-     * @param pose The {@link PoseStack.Pose}
-     * @param bb The {@link VertexConsumer} that the fluid will be rendered into.
+     * @param poseIn The {@link PoseStack.Pose}
+     * @param bbIn The {@link VertexConsumer} that the fluid will be rendered into.
      * @param sideRender A size 6 boolean array that determines if the face will be rendered. If it is null then all
      * faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns. */
     public static void renderFluid(
@@ -206,8 +206,8 @@ public class FluidRenderer {
             double cap,
             Vec3 min,
             Vec3 max,
-            PoseStack.Pose pose,
-            VertexConsumer bb,
+            PoseStack.Pose poseIn,
+            VertexConsumer bbIn,
             boolean[] sideRender
     ) {
         if (fluid == null || fluid.getRawFluid() == null || amount <= 0) {
@@ -230,9 +230,9 @@ public class FluidRenderer {
             realMax = VecUtil.replaceValue(max, Axis.Y, MathUtil.interp(height, min.y, max.y));
         }
 
-        FluidRenderer.bb = bb;
+        FluidRenderer.bb = bbIn;
 //        FluidRenderer.poseStack = poseStack;
-        FluidRenderer.pose = pose;
+        FluidRenderer.pose = poseIn;
 
         if (type == null) {
             type = FluidSpriteType.STILL;
@@ -248,9 +248,7 @@ public class FluidRenderer {
         final double zb = realMax.z;
 
         // TODO Calen FROZEN TextureAtlas
-        if (type == FluidSpriteType.FROZEN)
-//        if (false)
-        {
+        if (type == FluidSpriteType.FROZEN) {
             if (min.x > 1) {
                 xTexDiff = Math.floor(min.x);
             } else if (min.x < 0) {
@@ -361,9 +359,7 @@ public class FluidRenderer {
         return s != null ? s : SpriteUtil.missingSprite();
     }
 
-    /**
-     * Helper function to add a vertex.
-     */
+    /** Helper function to add a vertex. */
     private static void vertex(double x, double y, double z) {
         vertex.positiond(x, y, z);
         texmap.apply(x - xTexDiff, y - yTexDiff, z - zTexDiff);
@@ -462,7 +458,7 @@ public class FluidRenderer {
 //        tess.draw();
         tess.end();
 //        GlStateManager.color(1, 1, 1);
-        RenderSystem.setShaderColor(1, 1, 1, 1);
+        RenderUtil.color(1, 1, 1);
         sprite = null;
         bb = null;
     }

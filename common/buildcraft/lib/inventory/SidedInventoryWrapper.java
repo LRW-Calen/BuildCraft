@@ -15,13 +15,13 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nonnull;
 
 public final class SidedInventoryWrapper extends AbstractInvItemTransactor {
-    //    private final WorldlyContainer sided;
+    // private final WorldlyContainer sided;
     private final WorldlyContainer sided;
     private final InventoryWrapper normal;
     private final Direction face;
     private final int[] slots;
 
-    //    public SidedInventoryWrapper(WorldlyContainer sided, Direction face)
+    // public SidedInventoryWrapper(WorldlyContainer sided, Direction face)
     public SidedInventoryWrapper(WorldlyContainer sided, Direction face) {
         this.sided = sided;
         this.normal = new InventoryWrapper(sided);

@@ -8,21 +8,24 @@ import buildcraft.api.properties.BuildCraftProperties;
 import buildcraft.lib.registry.TagManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.common.Tags;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockBCBase_Neptune extends Block {
     public static final Property<Direction> PROP_FACING = BuildCraftProperties.BLOCK_FACING;
@@ -30,30 +33,27 @@ public class BlockBCBase_Neptune extends Block {
 
     /** The tag used to identify this in the {@link TagManager}. Note that this may be empty if this block doesn't use
      * the tag system. */
-    public final String id;
-//    public final String namespace;
+    public final String idBC;
 
-    /** @param id The ID that will be looked up in the {@link TagManager} when registering blocks. Pass null or the
+    /** @param idBC The ID that will be looked up in the {@link TagManager} when registering blocks. Pass null or the
      *            empty string to bypass the {@link TagManager} entirely. */
-    public BlockBCBase_Neptune(String id, Properties props) {
+    public BlockBCBase_Neptune(String idBC, Properties props) {
         super(props);
-//        if (id == null)
-//        {
-//            id.toString().equals("");
-//        }
-        this.id = id;
-//        this.namespace = namespace;
+        if (idBC == null) {
+            idBC = "";
+        }
+        this.idBC = idBC;
 
 //        // Sensible default block properties
 //        setHardness(5.0F);
 //        setResistance(10.0F);
 //        setSoundType(SoundType.METAL);
 
-        if (!id.isEmpty()) {
+        if (!idBC.isEmpty()) {
             // Init names from the tag manager
 //            setUnlocalizedName("tile." + TagManager.getTag(id, TagManager.EnumTagType.UNLOCALIZED_NAME) + ".name");
             // Calen: for BCEnergy chocolate engine
-            String unlocalizedName = TagManager.getTag(id, TagManager.EnumTagType.UNLOCALIZED_NAME);
+            String unlocalizedName = TagManager.getTag(idBC, TagManager.EnumTagType.UNLOCALIZED_NAME);
             if (unlocalizedName.startsWith("buildcraft.christmas.")) {
                 unlocalizedName = unlocalizedName.replace("buildcraft.christmas.", "buildcraft.christmas.tile.") + ".name";
             } else {
@@ -75,50 +75,53 @@ public class BlockBCBase_Neptune extends Block {
     }
 
     // IBlockState
-    // @Override
+
+    protected void addProperties(List<Property<?>> properties) {
+        if (this instanceof IBlockWithFacing) {
+            properties.add(((IBlockWithFacing) this).getFacingProperty());
+        }
+    }
+
     @Override
 //    protected BlockStateContainer createBlockState()
     protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        if (this instanceof IBlockWithFacing) {
-            builder.add(((IBlockWithFacing) this).getFacingProperty());
-        }
+        List<Property<?>> properties = new ArrayList<>();
+        addProperties(properties);
+//        return new BlockStateContainer(this, properties.toArray(new IProperty<?>[0]));
+        builder.add(properties.toArray(new Property<?>[0]));
     }
 
-    //    @Override
-//    public int getMetaFromState(BlockState state)
-//    {
+//    @Override
+//    public int getMetaFromState(IBlockState state) {
 //        int meta = 0;
-//        if (this instanceof IBlockWithFacing)
-//        {
-//            if (((IBlockWithFacing) this).canFaceVertically())
-//            {
-//                meta |= state.getValue(((IBlockWithFacing) this).getFacingProperty()).get3DDataValue();
-//            }
-//            else
-//            {
-//                meta |= state.getValue(((IBlockWithFacing) this).getFacingProperty()).get2DDataValue();
+//        if (this instanceof IBlockWithFacing) {
+//            if (((IBlockWithFacing) this).canFaceVertically()) {
+//                meta |= state.getValue(((IBlockWithFacing) this).getFacingProperty()).getIndex();
+//            } else {
+//                meta |= state.getValue(((IBlockWithFacing) this).getFacingProperty()).getHorizontalIndex();
 //            }
 //        }
 //        return meta;
 //    }
 
 //    @Override
-//    public BlockState getStateFromMeta(int meta) {
-//        BlockState state = defaultBlockState();
+//    public IBlockState getStateFromMeta(int meta) {
+//        IBlockState state = getDefaultState();
 //        if (this instanceof IBlockWithFacing) {
 //            IBlockWithFacing b = (IBlockWithFacing) this;
-//            Property<Direction> prop = b.getFacingProperty();
+//            IProperty<EnumFacing> prop = b.getFacingProperty();
 //            if (b.canFaceVertically()) {
-//                state = state.setValue(prop, Direction.from3DDataValue(Direction.values()[meta & 7].getOpposite().get3DDataValue()));
+//                state = state.withProperty(prop, EnumFacing.getFront(meta & 7));
 //            } else {
-//                state = state.withProperty(prop, Direction.getHorizontal(meta & 3));
+//                state = state.withProperty(prop, EnumFacing.getHorizontal(meta & 3));
 //            }
 //        }
 //        return state;
 //    }
 
     @Override
+//    public IBlockState withRotation(IBlockState state, Rotation rot)
     public BlockState rotate(BlockState state, Rotation rot) {
         if (this instanceof IBlockWithFacing) {
             Property<Direction> prop = ((IBlockWithFacing) this).getFacingProperty();
@@ -129,6 +132,7 @@ public class BlockBCBase_Neptune extends Block {
     }
 
     @Override
+//    public IBlockState withMirror(IBlockState state, Mirror mirror)
     public BlockState mirror(BlockState state, Mirror mirror) {
         if (this instanceof IBlockWithFacing) {
             Property<Direction> prop = ((IBlockWithFacing) this).getFacingProperty();
@@ -139,6 +143,7 @@ public class BlockBCBase_Neptune extends Block {
     }
 
     @Override
+//    public boolean rotateBlock(World world, BlockPos pos, EnumFacing axis)
     public BlockState rotate(BlockState state, LevelAccessor world, BlockPos pos, Rotation direction) {
         if (this instanceof IBlockWithFacing) {
             if (!((IBlockWithFacing) this).canBeRotated(world, pos, world.getBlockState(pos))) {
@@ -146,30 +151,24 @@ public class BlockBCBase_Neptune extends Block {
                 return state;
             }
         }
-        return super.rotate(world.getBlockState(pos), world, pos, Rotation.CLOCKWISE_90);
+//        return super.rotateBlock(world, pos, axis);
+        return super.rotate(world.getBlockState(pos), world, pos, direction);
     }
 
     // Others
 
     // Calen: this is called when the block not been placed, to choose a state for place
     @Override
-    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context)
-//    public BlockState getStateForPlacement(Level world, BlockPos pos, Direction facing, float hitX, float hitY,
-//                                           float hitZ, int meta, LivingEntity placer, InteractionHand hand)
-    {
-        Level world = context.getLevel();
+//    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand)
+    public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
         BlockPos pos = context.getClickedPos();
-        Direction facing = context.getClickedFace();
-        float hitX = context.getClickedPos().getX();
-        float hitY = context.getClickedPos().getY();
-        float hitZ = context.getClickedPos().getZ();
-//        int meta = context.;
         LivingEntity placer = context.getPlayer();
-        InteractionHand hand = context.getHand();
 //        BlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand);
         BlockState state = super.getStateForPlacement(context);
-        if (this instanceof IBlockWithFacing b) {
+        if (this instanceof IBlockWithFacing) {
+//            EnumFacing orientation = placer.getHorizontalFacing();
             Direction orientation = placer.getDirection();
+            IBlockWithFacing b = (IBlockWithFacing) this;
             if (b.canFaceVertically()) {
 //                if (MathHelper.abs((float) placer.getX() - pos.getX()) < 2.0F
                 if (Mth.abs((float) placer.getX() - pos.getX()) < 2.0F
@@ -192,17 +191,16 @@ public class BlockBCBase_Neptune extends Block {
         return state;
     }
 
-//    public static boolean isExceptBlockForAttachWithPiston(Block attachBlock)
-//    {
+    public static boolean isExceptBlockForAttachWithPiston(Block attachBlock) {
 //        return Block.isExceptBlockForAttachWithPiston(attachBlock);
-//    }
+        return isExceptionBlockForAttaching(attachBlock) || attachBlock == Blocks.PISTON || attachBlock == Blocks.STICKY_PISTON || attachBlock == Blocks.PISTON_HEAD;
+    }
 
-    // Calen
-//    @Override
-//    public MutableComponent getName()
-//    {
-//        return new TranslatableComponent("tile." + TagManager.getTag("block." + getRegistryName().getPath(), TagManager.EnumTagType.UNLOCALIZED_NAME) + ".name");
-//    }
+    protected static boolean isExceptionBlockForAttaching(Block attachBlock)
+    {
+        return attachBlock instanceof ShulkerBoxBlock || attachBlock instanceof LeavesBlock || attachBlock instanceof TrapDoorBlock || attachBlock == Blocks.BEACON || attachBlock == Blocks.CAULDRON || attachBlock == Blocks.GLASS || attachBlock == Blocks.GLOWSTONE || attachBlock == Blocks.ICE || attachBlock == Blocks.SEA_LANTERN || attachBlock.builtInRegistryHolder().is(Tags.Blocks.STAINED_GLASS);
+    }
+
     // Calen:
     // in 1.18.2 setUnlocalizedName setRegistryName are unvailable
     @Override
@@ -217,54 +215,24 @@ public class BlockBCBase_Neptune extends Block {
     }
 
     // Calen: from mc 1.12.2
-    // should be custom called, not by mc
+    // should be called where we want, not by mc
     public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile) {
         return state;
     }
 
-//    @Override
-//    @OverridingMethodsMustInvokeSuper
-//    public void neighborChanged(BlockState state, Level world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos, boolean isMoving)
-//    {
-//        super.neighborChanged(state, world, pos, neighborBlock, neighbourPos, isMoving);
-//        // Calen
-//        checkActualStateAndUpdate(state, world, pos);
-//    }
+    // Calen
 
-    public void checkActualStateAndUpdate(BlockState state, Level world, BlockPos pos, BlockEntity tile) {
-        // Calen
+    /**
+     * To call {@link #getActualState(BlockState, LevelAccessor, BlockPos, BlockEntity)} and update BlockState if required.
+     * @param state
+     * @param world
+     * @param pos
+     * @param tile Whether null is allowed depends on how {@link #getActualState(BlockState, LevelAccessor, BlockPos, BlockEntity)} overrides.
+     */
+    public void checkActualStateAndUpdate(BlockState state, Level world, BlockPos pos, @Nullable BlockEntity tile) {
         BlockState newState = getActualState(state, world, pos, tile);
         if (!newState.equals(state)) {
             world.setBlockAndUpdate(pos, newState);
         }
     }
-
-//    @OverridingMethodsMustInvokeSuper
-//    @Override
-//    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result)
-//    {
-//        InteractionResult ret = super.use(state, world, pos, player, hand, result);
-//        checkActualStateAndUpdate(state, world, pos);
-//        return ret;
-//    }
-//
-//    @Override
-//    @OverridingMethodsMustInvokeSuper
-//    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, Random random)
-//    {
-//        super.randomTick(state, world, pos, random);
-//
-//        // Calen
-//        checkActualStateAndUpdate(state, world, pos);
-//    }
-//
-//    @Override
-//    @OverridingMethodsMustInvokeSuper
-//    public void setPlacedBy(@Nonnull Level world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack)
-//    {
-//        super.setPlacedBy(world, pos, state, placer, stack);
-//
-//        // Calen
-//        checkActualStateAndUpdate(state, world, pos);
-//    }
 }

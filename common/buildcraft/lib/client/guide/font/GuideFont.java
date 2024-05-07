@@ -84,6 +84,7 @@ public class GuideFont implements IFontRenderer {
             }
         }
 //        GlStateManager.enableAlpha();
+        RenderUtil.enableAlpha();
 //        GlStateManager.disableDepth();
         RenderUtil.disableDepth();
 //        GlStateManager.enableBlend();

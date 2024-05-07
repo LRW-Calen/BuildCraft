@@ -67,7 +67,7 @@ public class GuideCraftingFactory implements GuidePartFactory {
         return null;
     }
 
-    //    public static GuidePartFactory getFactory(IRecipe recipe)
+    // public static GuidePartFactory getFactory(IRecipe recipe)
     public static GuidePartFactory getFactory(Recipe<?> recipe) {
 //        ItemStack output = recipe.getRecipeOutput();
         ItemStack output = recipe.getResultItem();

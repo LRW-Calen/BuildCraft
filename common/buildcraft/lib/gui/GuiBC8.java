@@ -28,13 +28,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
 
-/**
- * Future rename: "GuiContainerBuildCraft"
- */
-public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractContainerScreen<C> {
+/** Future rename: "GuiContainerBuildCraft" */
+public abstract class GuiBC8<C extends ContainerBC_Neptune<?>> extends AbstractContainerScreen<C> {
     public final BuildCraftGui mainGui;
     public final C container;
 
@@ -42,8 +41,8 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
         this(container, g -> new BuildCraftGui(g, BuildCraftGui.createWindowedArea(g)), inventory, component);
     }
 
-    public GuiBC8(C container, Function<GuiBC8<?>, BuildCraftGui> constructor, Inventory inventory, Component p_97743_) {
-        super(container, inventory, p_97743_);
+    public GuiBC8(C container, Function<GuiBC8<?>, BuildCraftGui> constructor, Inventory inventory, Component component) {
+        super(container, inventory, component);
         this.container = container;
         this.mainGui = constructor.apply(this);
         standardLedgerInit();
@@ -63,7 +62,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
         imageHeight = 10;
     }
 
-    // Calen FIX
+    // Calen:
     // when the window size changed, init() will be called
     // without mainGui.shownElements.clear(), the elements (including the tooltip) will be added again and again
     private boolean firstCallInit = true;
@@ -125,7 +124,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
         super.fillGradient(poseStack, left, top, right, bottom, startColor, endColor);
     }
 
-    //    public List<Button> getButtonList()
+    // public List<Button> getButtonList()
     public List<Widget> getButtonList() {
 //        return buttonList;
         return renderables;
@@ -139,8 +138,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
     // Gui -- double -> int
 
     // Calen: never used
-//    public void drawTexturedModalRect(PoseStack poseStack, double posX, double posY, double textureX, double textureY, double width, double height)
-//    {
+//    public void drawTexturedModalRect(PoseStack poseStack, double posX, double posY, double textureX, double textureY, double width, double height) {
 //        int x = MathHelper.floor(posX);
 //        int y = MathHelper.floor(posY);
 //        int u = MathHelper.floor(textureX);
@@ -149,23 +147,6 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
 //        int h = MathHelper.floor(height);
 ////        super_drawTexturedModalRect(poseStack, x, y, u, v, w, h, zLevel);
 //        blit(poseStack, x, y, u, v, w, h);
-//    }
-
-//    // Calen from 1.12.2
-//    public void super_drawTexturedModalRect(PoseStack poseStack, float xCoord, float yCoord, int minU, int minV, int maxU, int maxV, float zLevel)
-//    {
-//        Matrix4f pose = poseStack.last().pose();
-//        float f = 0.00390625F;
-//        float f1 = 0.00390625F;
-//        RenderSystem.setShader(GameRenderer::getPositionTexShader); // Calen: without thios, the texture will not appear
-//        Tesselator tessellator = Tesselator.getInstance();
-//        BufferBuilder bufferbuilder = tessellator.getBuilder();
-//        bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
-//        bufferbuilder.vertex(pose, (xCoord + 0.0F), (yCoord + maxV), zLevel).uv(((float) (minU + 0) * 0.00390625F), ((float) (minV + maxV) * 0.00390625F)).endVertex();
-//        bufferbuilder.vertex(pose, (xCoord + maxU), (yCoord + maxV), zLevel).uv(((float) (minU + maxU) * 0.00390625F), ((float) (minV + maxV) * 0.00390625F)).endVertex();
-//        bufferbuilder.vertex(pose, (xCoord + maxU), (yCoord + 0.0F), zLevel).uv(((float) (minU + maxU) * 0.00390625F), ((float) (minV + 0) * 0.00390625F)).endVertex();
-//        bufferbuilder.vertex(pose, (xCoord + 0.0F), (yCoord + 0.0F), zLevel).uv(((float) (minU + 0) * 0.00390625F), ((float) (minV + 0) * 0.00390625F)).endVertex();
-//        tessellator.end();
 //    }
 
     public void drawTexturedModalRect(PoseStack poseStack, int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn, int heightIn, float zLevel) {
@@ -198,9 +179,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
 
     // Other
 
-    /**
-     * @deprecated Use {@link GuiUtil#drawItemStackAt(ItemStack, PoseStack, int, int)} instead
-     */
+    /** @deprecated Use {@link GuiUtil#drawItemStackAt(ItemStack, PoseStack, int, int)} instead */
     @Deprecated
     public static void drawItemStackAt(ItemStack stack, PoseStack poseStack, int x, int y) {
         GuiUtil.drawItemStackAt(stack, poseStack, x, y);
@@ -217,8 +196,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
     @Override
 //    protected final void drawGuiContainerBackgroundLayer(PoseStack poseStack, float partialTicks, int mouseX, int mouseY)
     protected final void renderBg(PoseStack poseStack, float partialTicks, int mouseX, int mouseY) {
-        // Calen: if only drawBackgroundLayer -> sound text will make bg disappear
-//        mainGui.drawBackgroundLayer(poseStack, partialTicks, mouseX, mouseY, this::drawDefaultBackground);
+//        mainGui.drawBackgroundLayer(partialTicks, mouseX, mouseY, this::drawDefaultBackground);
         mainGui.drawBackgroundLayer(poseStack, partialTicks, mouseX, mouseY, () -> renderBackground(poseStack));
         drawBackgroundLayer(partialTicks, poseStack);
         mainGui.drawElementBackgrounds(poseStack);
@@ -289,12 +267,10 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
 
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
-//    public boolean charTyped(char typedChar, int keyCode)
     public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
 //        if (!mainGui.onKeyTyped(typedChar, keyCode))
         if (!mainGui.onKeyTyped(typedChar, keyCode, modifiers)) {
 //            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.keyPressed(typedChar, keyCode, modifiers);
         } else {
             return true;
@@ -302,10 +278,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
     }
 
     public boolean charTyped(char typedChar, int keyCode) {
-//        if (!mainGui.onKeyTyped(typedChar, keyCode))
         if (!mainGui.charTyped(typedChar, keyCode)) {
-//            super.keyTyped(typedChar, keyCode);
-//            super.charTyped(typedChar, keyCode);
             return super.charTyped(typedChar, keyCode);
         } else {
             return true;
@@ -318,9 +291,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends AbstractCont
     protected void drawForegroundLayer(PoseStack poseStack) {
     }
 
-    /**
-     * Like {@link #drawForegroundLayer()}, but is called after all {@link IGuiElement}'s have been drawn.
-     */
+    /** Like {@link #drawForegroundLayer(PoseStack)}, but is called after all {@link IGuiElement}'s have been drawn. */
     protected void drawForegroundLayerAboveElements() {
     }
 }

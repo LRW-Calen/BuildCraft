@@ -43,13 +43,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 import java.util.Optional;
 
-//public class GuiGuide extends Screen
-//public class GuiGuide extends Screen implements MenuAccess<ContainerGuide>
+//public class GuiGuide extends GuiScreen
 public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
     public static final ResourceLocation ICONS_1 = Gui.GUI_ICONS_LOCATION;
     public static final ResourceLocation ICONS_2 = new ResourceLocation("buildcraftlib:textures/gui/guide/icons.png");
@@ -181,9 +181,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
     private boolean isOpening = false;
     private boolean showingContentsMenu = false;
 
-    /**
-     * Float between -90 and 90}
-     */
+    /** Float between -90 and 90} */
     private float openingAngleLast = -90, openingAngleNext = -90;
 
     public int minX, minY;
@@ -196,17 +194,17 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
     private IFontRenderer currentFont = FontManager.INSTANCE.getOrLoadFont("SansSerif", 9);
     private float lastPartialTicks;
 
-    //    public GuiGuide()
+    // public GuiGuide()
     public GuiGuide(ContainerGuide container, Component component) {
         this(container, (GuideBook) null, component);
     }
 
-    //    public GuiGuide(String bookName)
+    // public GuiGuide(String bookName)
     public GuiGuide(ContainerGuide container, String bookName, Component component) {
         this(container, GuideBookRegistry.INSTANCE.getBook(bookName), component);
     }
 
-    //    private GuiGuide(@Nullable GuideBook book)
+    // private GuiGuide(@Nullable GuideBook book)
     private GuiGuide(ContainerGuide container, @Nullable GuideBook book, Component component) {
         super(component);
         // Calen
@@ -214,7 +212,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
 
         this.book = book;
         this.bookData = book != null ? book.data : GuideManager.BOOK_ALL_DATA;
-//        minecraft = Minecraft.getInstance(); // Calen: 1.18.2把这个参数放到super构造里了
+//        mc = Minecraft.getMinecraft(); // Calen: in Screen#init()
         openPage(new GuidePageContents(this));
     }
 
@@ -538,7 +536,6 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
             int y = (int) mouse.getY();
             for (List<Component> tooltip : tooltips) {
 //                drawHoveringText(tooltip, (int) mouse.getX(), y);
-//                renderTooltip(poseStack, tooltip, StackUtil.EMPTY.getTooltipImage(), (int) mouse.getX(), y);
                 renderTooltip(poseStack, tooltip, Optional.empty(), (int) mouse.getX(), y);
                 y += tooltip.size() * font.lineHeight + 10;
             }
@@ -632,10 +629,8 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
 
     @Override
 //    protected void keyTyped(char typedChar, int keyCode) throws IOException
-//    public boolean charTyped(char typedChar, int keyCode)
     public boolean keyPressed(int typedChar, int keyCode, int modifiers) {
 //        super.keyTyped(typedChar, keyCode);
-//        super.charTyped(typedChar, keyCode);
         super.keyPressed(typedChar, keyCode, modifiers);
 //        if (currentPage.keyTyped(typedChar, keyCode))
         if (currentPage.keyTyped(typedChar, keyCode, modifiers)) {
@@ -643,7 +638,7 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
             return true;
         }
 //        if (Keyboard.isKeyDown(Keyboard.KEY_F3) && keyCode == Keyboard.KEY_T)
-        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && keyCode == InputConstants.KEY_T) {
+        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && typedChar == InputConstants.KEY_T) {
             GuideManager.INSTANCE.reload();
             while (true) {
                 currentPage = currentPage.createReloaded();
@@ -672,25 +667,22 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
 //            minecraft.getToastGui().add(new ToastInformation("buildcraft.guide_book.reloaded", icon));
             minecraft.getToasts().addToast(new ToastInformation("buildcraft.guide_book.reloaded", icon));
         }
-        if (keyCode == minecraft.options.keyLeft.getKey().getValue()) {
+        if (typedChar == minecraft.options.keyLeft.getKey().getValue()) {
             currentPage.lastPage();
-        } else if (keyCode == minecraft.options.keyRight.getKey().getValue()) {
+        } else if (typedChar == minecraft.options.keyRight.getKey().getValue()) {
             currentPage.nextPage();
         }
         return true;
     }
 
     public boolean charTyped(char typedChar, int keyCode) {
-//        super.keyTyped(typedChar, keyCode);
-//        super.charTyped(typedChar, keyCode);
         super.charTyped(typedChar, keyCode);
-//        if (currentPage.keyTyped(typedChar, keyCode))
         if (currentPage.charTyped(typedChar, keyCode)) {
 //            return;
             return true;
         }
 //        if (Keyboard.isKeyDown(Keyboard.KEY_F3) && keyCode == Keyboard.KEY_T)
-        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && keyCode == InputConstants.KEY_T) {
+        if (InputConstants.isKeyDown(Minecraft.getInstance().getWindow().getWindow(), InputConstants.KEY_F3) && typedChar == InputConstants.KEY_T) {
             GuideManager.INSTANCE.reload();
             while (true) {
                 currentPage = currentPage.createReloaded();
@@ -719,9 +711,9 @@ public class GuiGuide extends Screen implements MenuAccess<ContainerGuide> {
 //            minecraft.getToastGui().add(new ToastInformation("buildcraft.guide_book.reloaded", icon));
             minecraft.getToasts().addToast(new ToastInformation("buildcraft.guide_book.reloaded", icon));
         }
-        if (keyCode == minecraft.options.keyLeft.getKey().getValue()) {
+        if (typedChar == minecraft.options.keyLeft.getKey().getValue()) {
             currentPage.lastPage();
-        } else if (keyCode == minecraft.options.keyRight.getKey().getValue()) {
+        } else if (typedChar == minecraft.options.keyRight.getKey().getValue()) {
             currentPage.nextPage();
         }
         return true;

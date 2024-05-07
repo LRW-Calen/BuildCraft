@@ -33,15 +33,21 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.DoubleBlockCombiner.BlockType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.EmptyFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -60,10 +66,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.BiPredicate;
+import java.util.function.Function;
 
 public final class BlockUtil {
 
-    /** @return A list of itemstacks that are dropped from the block, or null if the block is air */
+    /** The {@link LootContext.Builder} is created like in {@link Block#getDrops(BlockState, ServerLevel, BlockPos, BlockEntity)},
+     * with an additional loot parameter {@link FakePlayer}.
+     *
+     * @return A list of itemstacks that are dropped from the block, or null if the block is air */
     @Nullable
     public static NonNullList<ItemStack> getItemStackFromBlock(ServerLevel world, BlockPos pos, GameProfile owner) {
         BlockState state = world.getBlockState(pos);
@@ -75,27 +86,33 @@ public final class BlockUtil {
         // Use the (old) method as not all mods have converted to the new one
         // (and the old method calls the new one internally)
 //        List<ItemStack> drops = block.getDrops(world, pos, state, 0);
-        List<ItemStack> drops = block.getDrops(state, world, pos, world.getBlockEntity(pos));
         Player fakePlayer = BuildCraftAPI.fakePlayerProvider.getFakePlayer(world, owner, pos);
 //        float dropChance = ForgeEventFactory.fireBlockHarvesting(drops, world, pos, state, 0, 1.0F, false, fakePlayer);
-        float dropChance = 1;
+
+        LootContext.Builder lootcontext$builder = (new LootContext.Builder(world))
+                .withRandom(world.random)
+                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+                .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(pos))
+                .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, fakePlayer);
+        List<ItemStack> drops = state.getDrops(lootcontext$builder);
 
         NonNullList<ItemStack> returnList = NonNullList.create();
-        for (ItemStack s : drops) {
-            if (world.random.nextFloat() <= dropChance) {
-                returnList.add(s);
-            }
-        }
-
+//        for (ItemStack s : drops) {
+//            if (world.rand.nextFloat() <= dropChance) {
+//                returnList.add(s);
+//            }
+//        }
+        returnList.addAll(drops);
         return returnList;
+
     }
 
     public static boolean breakBlock(ServerLevel world, BlockPos pos, BlockPos ownerPos, GameProfile owner) {
         return breakBlock(world, pos, BCLibConfig.itemLifespan * 20, ownerPos, owner);
     }
 
-    public static boolean breakBlock(ServerLevel world, BlockPos pos, int forcedLifespan, BlockPos ownerPos,
-                                     GameProfile owner) {
+    public static boolean breakBlock(ServerLevel world, BlockPos pos, int forcedLifespan, BlockPos ownerPos, GameProfile owner) {
         NonNullList<ItemStack> items = NonNullList.create();
 
         if (breakBlock(world, pos, items, ownerPos, owner)) {
@@ -162,8 +179,7 @@ public final class BlockUtil {
         return player;
     }
 
-    public static boolean breakBlock(ServerLevel world, BlockPos pos, NonNullList<ItemStack> drops, BlockPos ownerPos,
-                                     GameProfile owner) {
+    public static boolean breakBlock(ServerLevel world, BlockPos pos, NonNullList<ItemStack> drops, BlockPos ownerPos, GameProfile owner) {
         FakePlayer fakePlayer = BuildCraftAPI.fakePlayerProvider.getFakePlayer(world, owner, ownerPos);
         BreakEvent breakEvent = new BreakEvent(world, pos, world.getBlockState(pos), fakePlayer);
         MinecraftForge.EVENT_BUS.post(breakEvent);
@@ -193,15 +209,13 @@ public final class BlockUtil {
         world.addFreshEntity(entityitem);
     }
 
-    public static Optional<List<ItemStack>> breakBlockAndGetDrops(ServerLevel world, BlockPos pos,
-                                                                  @Nonnull ItemStack tool, GameProfile owner) {
+    public static Optional<List<ItemStack>> breakBlockAndGetDrops(ServerLevel world, BlockPos pos, @Nonnull ItemStack tool, GameProfile owner) {
         return breakBlockAndGetDrops(world, pos, tool, owner, false);
     }
 
     /** @param grabAll If true then this will pickup every item in range of the position, false to only get the items
      *            that the dropped while breaking the block. */
-    public static Optional<List<ItemStack>> breakBlockAndGetDrops(ServerLevel world, BlockPos pos,
-                                                                  @Nonnull ItemStack tool, GameProfile owner, boolean grabAll) {
+    public static Optional<List<ItemStack>> breakBlockAndGetDrops(ServerLevel world, BlockPos pos, @Nonnull ItemStack tool, GameProfile owner, boolean grabAll) {
         AABB aabb = new AABB(pos).inflate(1);
         Set<Entity> entities;
         if (grabAll) {
@@ -300,47 +314,33 @@ public final class BlockUtil {
     public static boolean isFullFluidBlock(BlockState state, Level world, BlockPos pos) {
         Block block = state.getBlock();
 //        if (block instanceof IFluidBlock)
-        if (block instanceof IFluidBlock fluidBlock) {
-//            FluidStack fluid = ((IFluidBlock) block).drain(world, pos, IFluidHandler.FluidAction.SIMULATE);
-            FluidStack fluid = fluidBlock.drain(world, pos, IFluidHandler.FluidAction.SIMULATE);
+        if (block instanceof IFluidBlock) {
+            FluidStack fluid = ((IFluidBlock) block).drain(world, pos, IFluidHandler.FluidAction.SIMULATE);
 //            return fluid == null || fluid.getAmount() > 0;
-            return fluid.isEmpty() || fluid.getAmount() > 0;
+            return !fluid.isEmpty() || fluid.getAmount() > 0;
         } else if (block instanceof LiquidBlock) {
             int level = state.getValue(LiquidBlock.LEVEL);
-            return level == 0;
+//            return level == 0;
+            return level == 8;
         }
         return false;
     }
 
     public static Fluid getFluid(Level world, BlockPos pos) {
-//        BlockState blockState = world.getBlockState(pos);
-//        Block block = blockState.getBlock();
-//        return getFluid(block);
-        // drainBlock(world, pos, IFluidHandler.FluidAction.SIMULATE)只能尝试取容器里的流体不能取方块流体?
-//        FluidStack fluid = drainBlock(world, pos, IFluidHandler.FluidAction.SIMULATE);
-//        // Calen added: && !fluid.isEmpty() 空流体会返回一个EmptyFluid对象
-//        return fluid != null && !fluid.isEmpty() ? fluid.getFluid() : null;
-        // Calen: this may be better
-//        Fluid ret = world.getFluidState(pos).getType();
-//        return (ret == null || ret instanceof EmptyFluid) ? null : ret;
 //        FluidStack fluid = drainBlock(world, pos, false);
+        FluidStack fluid = drainBlock(world, pos, IFluidHandler.FluidAction.SIMULATE);
 //        return fluid != null ? fluid.getFluid() : null;
-        FluidStack ret = drainBlock(world, pos, IFluidHandler.FluidAction.SIMULATE);
-        return (ret == null || ret.isEmpty()) ? null : ret.getFluid();
+        return (fluid == null || fluid.isEmpty()) ? null : fluid.getFluid();
     }
 
     public static Fluid getFluidWithFlowing(Level world, BlockPos pos) {
-//        BlockState blockState = world.getBlockState(pos);
+//        IBlockState blockState = world.getBlockState(pos);
 //        Block block = blockState.getBlock();
-////        if (block == Blocks.FLOWING_WATER)
-//        if (block == Blocks.WATER)
-//        {
-//            return Fluids.WATER;
+//        if (block == Blocks.FLOWING_WATER) {
+//            return FluidRegistry.WATER;
 //        }
-////        if (block == Blocks.FLOWING_LAVA)
-//        if (block == Blocks.LAVA)
-//        {
-//            return Fluids.LAVA;
+//        if (block == Blocks.FLOWING_LAVA) {
+//            return FluidRegistry.LAVA;
 //        }
 //        return getFluid(block);
         // Calen: this may be better
@@ -358,30 +358,22 @@ public final class BlockUtil {
 
     public static Fluid getFluidWithoutFlowing(BlockState state) {
         Block block = state.getBlock();
-//        if (block instanceof BlockFluidClassic)
-//        {
-//            if (((BlockFluidClassic) block).isSourceBlock(new SingleBlockAccess(state), SingleBlockAccess.POS))
-//            {
+//        if (block instanceof BlockFluidClassic) {
+//            if (((BlockFluidClassic) block).isSourceBlock(new SingleBlockAccess(state), SingleBlockAccess.POS)) {
 //                return getFluid(block);
 //            }
 //        }
         if (block instanceof LiquidBlock) {
-//            if (state.getFluidState().getAmount() != 0)
-//            {
+//            if (state.getValue(BlockLiquid.LEVEL) != 0) {
 //                return null;
 //            }
-////            if (block == Blocks.WATER || block == Blocks.FLOWING_WATER)
-//            if (block == Blocks.WATER)
-//            {
-//                return Fluids.WATER;
+//            if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+//                return FluidRegistry.WATER;
 //            }
-////            if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA)
-//            if (block == Blocks.LAVA)
-//            {
-//                return Fluids.LAVA;
+//            if (block == Blocks.LAVA || block == Blocks.FLOWING_LAVA) {
+//                return FluidRegistry.LAVA;
 //            }
-////            return FluidRegistry.lookupFluidForBlock(block);
-//            return state.getFluidState().getType();
+//            return FluidRegistry.lookupFluidForBlock(block);
             FluidState fluidState = state.getFluidState();
             Fluid fluid = fluidState.getType();
             if (fluid != null && !(fluid instanceof EmptyFluid) && fluid.isSource(fluidState)) {
@@ -406,22 +398,28 @@ public final class BlockUtil {
         return fluid;
     }
 
+    /**
+     * Drain the fluid in the block if the fluid is Source.
+     * {@link FluidUtil#getFluidHandler(Level, BlockPos, Direction)} can only get the handler of BlockEntity, not the fluid of FluidBlock.
+     * {@link FluidUtil#tryPickUpFluid(ItemStack, Player, Level, BlockPos, Direction)} can get fluid from both BlockEntity & FluidBlock,
+     * and this method is similar rto it.
+     * @param world
+     * @param pos
+     * @param doDrain
+     * @return
+     */
     public static FluidStack drainBlock(Level world, BlockPos pos, IFluidHandler.FluidAction doDrain) {
-        // Calen: never pick up flowing fake fluid
         BlockState state = world.getBlockState(pos);
         if (!state.getFluidState().getType().isSource(state.getFluidState())) {
             return StackUtil.EMPTY_FLUID;
         }
-        // 1.18.2 getFluidHandler只可挖有capability的BE的流体 tryPickUpFluid可以挖流体方块和BE中流体
         IFluidHandler handler;
         Block block = state.getBlock();
-        // 写法参考 FluidUtil#public static FluidActionResult tryPickUpFluid(@Nonnull ItemStack emptyContainer, @Nullable Player playerIn, Level level, BlockPos pos, Direction side)
         if (block instanceof IFluidBlock fluidBlock) {
             handler = new FluidBlockWrapper(fluidBlock, world, pos);
         } else if (block instanceof BucketPickup bucketPickup) {
             handler = new BucketPickupHandlerWrapper(bucketPickup, world, pos);
         } else {
-            // Calen: 1.18.2 this can only get FluidHandler of TileEntity
             handler = FluidUtil.getFluidHandler(world, pos, null).orElse(null);
         }
         if (handler != null) {
@@ -434,9 +432,6 @@ public final class BlockUtil {
     /** Create an explosion which only affects a single block. */
     public static void explodeBlock(Level world, BlockPos pos) {
 //        if (FMLCommonHandler.instance().getEffectiveSide().isClient())
-//        {
-//            return;
-//        }
         if (world.isClientSide) {
             return;
         }
@@ -529,44 +524,68 @@ public final class BlockUtil {
         }
     };
 
+    /**
+     * Just like {@link ChestBlock#combine(BlockState, Level, BlockPos, boolean)} and
+     * {@link DoubleBlockCombiner#combineWithNeigbour(BlockEntityType, Function, Function, DirectionProperty, BlockState, LevelAccessor, BlockPos, BiPredicate)}.
+     * @param inv
+     * @return
+     */
     // public static TileEntityChest getOtherDoubleChest(TileEntity inv)
     public static ChestBlockEntity getOtherDoubleChest(BlockEntity inv) {
         if (inv instanceof ChestBlockEntity) {
-//            ChestBlockEntity chest = (ChestBlockEntity) inv;
+            ChestBlockEntity chest = (ChestBlockEntity) inv;
 //
-//            ChestBlockEntity adjacent = null;
+//            TileEntityChest adjacent = null;
 //
 //            chest.checkForAdjacentChests();
 //
-//            if (chest.adjacentChestXNeg != null)
-//            {
+//            if (chest.adjacentChestXNeg != null) {
 //                adjacent = chest.adjacentChestXNeg;
 //            }
 //
-//            if (chest.adjacentChestXPos != null)
-//            {
+//            if (chest.adjacentChestXPos != null) {
 //                adjacent = chest.adjacentChestXPos;
 //            }
 //
-//            if (chest.adjacentChestZNeg != null)
-//            {
+//            if (chest.adjacentChestZNeg != null) {
 //                adjacent = chest.adjacentChestZNeg;
 //            }
 //
-//            if (chest.adjacentChestZPos != null)
-//            {
+//            if (chest.adjacentChestZPos != null) {
 //                adjacent = chest.adjacentChestZPos;
 //            }
 //
 //            return adjacent;
 
-            return ((ChestBlock) Blocks.CHEST).combine(inv.getBlockState(), inv.getLevel(), inv.getBlockPos(), true).apply(CHEST_COMBINER).orElse(null);
+            Level world = inv.getLevel();
+            BlockState thisState = inv.getBlockState();
+            BlockPos thisPos = inv.getBlockPos();
+
+            DirectionProperty directionProperty = ChestBlock.FACING;
+            Function<BlockState, BlockType> p_52824_ = ChestBlock::getBlockType;
+            BlockType doubleblockcombiner$blocktype = p_52824_.apply(thisState);
+            boolean flag = doubleblockcombiner$blocktype == BlockType.SINGLE;
+            if (flag) {
+                return null;
+            } else {
+                BlockPos otherPos = thisPos.relative(ChestBlock.getConnectedDirection(thisState));
+                BlockState otherState = world.getBlockState(otherPos);
+                if (otherState.is(thisState.getBlock())) {
+                    BlockType doubleblockcombiner$blocktype1 = p_52824_.apply(otherState);
+                    if (doubleblockcombiner$blocktype1 != BlockType.SINGLE
+                            && doubleblockcombiner$blocktype != doubleblockcombiner$blocktype1
+                            && otherState.getValue(directionProperty) == thisState.getValue(directionProperty))
+                    {
+                        return (ChestBlockEntity) chest.getType().getBlockEntity(world, otherPos);
+                    }
+                }
+                return null;
+            }
         }
         return null;
     }
 
-    public static <T extends Comparable<T>> BlockState copyProperty(Property<T> property, BlockState dst,
-                                                                    BlockState src) {
+    public static <T extends Comparable<T>> BlockState copyProperty(Property<T> property, BlockState dst, BlockState src) {
         return dst.getProperties().contains(property) ? dst.setValue(property, src.getValue(property)) : dst;
     }
 
@@ -574,13 +593,11 @@ public final class BlockUtil {
         return a.getValue(property).compareTo(b.getValue(property));
     }
 
-    public static <T extends Comparable<T>> String getPropertyStringValue(BlockState blockState,
-                                                                          Property<T> property) {
+    public static <T extends Comparable<T>> String getPropertyStringValue(BlockState blockState, Property<T> property) {
         return property.getName(blockState.getValue(property));
     }
 
-    public static Map<String, String> getPropertiesStringMap(BlockState blockState,
-                                                             Collection<Property<?>> properties) {
+    public static Map<String, String> getPropertiesStringMap(BlockState blockState, Collection<Property<?>> properties) {
         ImmutableMap.Builder<String, String> mapBuilder = new ImmutableMap.Builder<>();
         for (Property<?> property : properties) {
             mapBuilder.put(property.getName(), getPropertyStringValue(blockState, property));
@@ -611,8 +628,7 @@ public final class BlockUtil {
         };
     }
 
-    public static boolean blockStatesWithoutBlockEqual(BlockState a, BlockState b,
-                                                       Collection<Property<?>> ignoredProperties) {
+    public static boolean blockStatesWithoutBlockEqual(BlockState a, BlockState b, Collection<Property<?>> ignoredProperties) {
         return Sets.intersection(new HashSet<>(a.getProperties()), new HashSet<>(b.getProperties())).stream()
                 .filter(property -> !ignoredProperties.contains(property))
                 .allMatch(property -> Objects.equals(a.getValue(property), b.getValue(property)));

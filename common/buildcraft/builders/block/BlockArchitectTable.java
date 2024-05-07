@@ -25,6 +25,8 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 //public class BlockArchitectTable extends BlockBCTile_Neptune implements IBlockWithFacing
 public class BlockArchitectTable extends BlockBCTile_Neptune<TileArchitectTable> implements IBlockWithFacing, IBlockWithTickableTE<TileArchitectTable> {
     public static final Property<Boolean> PROP_VALID = BuildCraftProperties.VALID;
@@ -41,12 +43,9 @@ public class BlockArchitectTable extends BlockBCTile_Neptune<TileArchitectTable>
     }
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
-//        super.addProperties(properties);
-        super.createBlockStateDefinition(builder);
-//        properties.add(PROP_VALID);
-        builder.add(PROP_VALID);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.add(PROP_VALID);
     }
 
 //    @Override

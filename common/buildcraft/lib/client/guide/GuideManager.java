@@ -67,27 +67,19 @@ public enum GuideManager implements ResourceManagerReloadListener {
 
     private final List<PageEntry<?>> entries = new ArrayList<>();
 
-    /**
-     * The keys are the partial paths, not the full ones!
+    /** The keys are the partial paths, not the full ones!
      * <p>
-     * For example a partial path might be "buildcraftcore:wrench.md" and the
-     */
+     * For example a partial path might be "buildcraftcore:wrench.md" and the */
     private final Map<ResourceLocation, GuidePageFactory> pages = new HashMap<>();
     private final Map<ItemStack, GuidePageFactory> generatedPages = new HashMap<>();
 
-    /**
-     * Internal use only! Use {@link #addChild(ResourceLocation, JsonTypeTags, PageLink)} instead!
-     */
+    /** Internal use only! Use {@link #addChild(ResourceLocation, JsonTypeTags, PageLink)} instead! */
     public ISuffixArray<PageLink> quickSearcher;
-    /**
-     * Every {@link PageLink} that has been added to {@link #quickSearcher}.
-     */
+    /** Every {@link PageLink} that has been added to {@link #quickSearcher}. */
     private final Set<PageLink> pageLinksAdded = new HashSet<>();
     private final Map<GuideBook, Map<TypeOrder, ContentsNode>> contents = new HashMap<>();
 
-    /**
-     * Every object added to the guide. Generally this means {@link Item}'s and {@link IStatement}'s.
-     */
+    /** Every object added to the guide. Generally this means {@link Item}'s and {@link IStatement}'s. */
     public final Set<Object> objectsAdded = new HashSet<>();
 
     private boolean isInReload = false;
@@ -272,7 +264,7 @@ public enum GuideManager implements ResourceManagerReloadListener {
         }
     }
 
-    //    private void generateContentsPage(Profiler prof)
+    // private void generateContentsPage(Profiler prof)
     private void generateContentsPage(ProfilerFiller prof) {
         prof.push("clear");
         objectsAdded.clear();
@@ -292,7 +284,7 @@ public enum GuideManager implements ResourceManagerReloadListener {
             GuidePageFactory entryFactory = GuideManager.INSTANCE.getFactoryFor(partialLocation);
 
             PageEntry<?> entry = mapEntry.getValue();
-//            Component translatedTitle = entry.title;
+//            String translatedTitle = entry.title;
             ISimpleDrawable icon = entry.createDrawable();
 //            PageLine line = new PageLine(icon, icon, 2, translatedTitle, true);
             PageLine line = new PageLine(icon, icon, 2, entry.titleKey, entry.title, true);

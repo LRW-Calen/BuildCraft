@@ -11,7 +11,7 @@ import buildcraft.api.recipes.IngredientStack;
 import buildcraft.api.recipes.IntegrationRecipe;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.lib.recipe.IntegrationRecipeRegistry;
+import buildcraft.lib.recipe.integration.IntegrationRecipeRegistry;
 import buildcraft.lib.tile.item.ItemHandlerManager;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
 import buildcraft.silicon.BCSiliconBlocks;

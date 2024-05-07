@@ -16,9 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-/**
- * An image button that draws its states downwards, starting at baseU.
- */
+/** An image button that draws its states downwards, starting at baseU. */
 @OnlyIn(Dist.CLIENT)
 @Deprecated
 public class GuiImageButton extends GuiAbstractButton {
@@ -50,7 +48,7 @@ public class GuiImageButton extends GuiAbstractButton {
 //        GlStateManager.color(1, 1, 1, 1);
         RenderUtil.color(1, 1, 1, 1);
 //        GlStateManager.enableAlpha();
-        RenderSystem.colorMask(true, true, true, true);
+        RenderUtil.enableAlpha();
 //        GlStateManager.disableBlend();
         RenderUtil.disableBlend();
 

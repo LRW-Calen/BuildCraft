@@ -17,7 +17,7 @@ public abstract class PageLink implements IContentsLeaf {
     public final PageLine text;
     public final String textKey;
     public final boolean startVisible;
-    //    private final String lowerCaseName;
+    // private final String lowerCaseName;
     private final Component lowerCaseName;
     private boolean visible;
 
@@ -25,7 +25,6 @@ public abstract class PageLink implements IContentsLeaf {
         this.text = text;
         this.startVisible = startVisible;
 //        lowerCaseName = text.text.toLowerCase(Locale.ROOT);
-//        lowerCaseName = text.text.getString().toLowerCase(Locale.ROOT);
         lowerCaseName = text.text;
         textKey = text.textKey.toLowerCase(Locale.ROOT);
         visible = startVisible;
@@ -36,17 +35,13 @@ public abstract class PageLink implements IContentsLeaf {
     public Component getSearchName() {
         return lowerCaseName;
     }
-    // Calen
-
 
     @Override
     public String getKey() {
         return textKey;
     }
 
-    /**
-     * @return The tooltip to be shown if it is different to the search name and displayed text.
-     */
+    /** @return The tooltip to be shown if it is different to the search name and displayed text. */
     @Nullable
     protected List<Component> getTooltip() {
         return null;

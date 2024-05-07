@@ -15,12 +15,13 @@ import net.minecraft.world.level.material.PushReaction;
 public class BCMaterialFluid extends Material {
     // public BCMaterialFluid(MapColor color, boolean canBurn)
     public BCMaterialFluid(MaterialColor color, boolean canBurn) {
-        super(color, /*liquid*/ true, /*solid*/ false, /*blocksMotion*/ false, /*solidBlocking*/ false, /*flammable*/ canBurn, /*replaceable*/ false, /*pushReaction*/ PushReaction.NORMAL);
+        super(color, /*liquid*/ true, /*solid*/ false, /*blocksMotion*/ true, /*solidBlocking*/ false, /*flammable*/ canBurn, /*replaceable*/ false, /*pushReaction*/ PushReaction.DESTROY);
     }
 
-    @Override
-//    public boolean blocksMovement()
-    public boolean blocksMotion() {
-        return true;
-    }
+    // 1.18.2: p_76327_
+//    @Override
+////    public boolean blocksMovement()
+//    public boolean blocksMotion() {
+//        return true;
+//    }
 }

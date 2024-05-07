@@ -10,6 +10,7 @@ import buildcraft.builders.tile.TileFiller;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.misc.MessageUtil;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -21,8 +22,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class BlockFiller extends BlockBCTile_Neptune<TileFiller> implements IBlockWithFacing {
     // public static final IProperty<EnumFillerPattern> PATTERN = BuildCraftProperties.FILLER_PATTERN;
@@ -36,10 +40,8 @@ public class BlockFiller extends BlockBCTile_Neptune<TileFiller> implements IBlo
     // BlockState
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
-//        super.addProperties(properties);
-        super.createBlockStateDefinition(builder);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
         // properties.add(PATTERN);
     }
 
@@ -54,7 +56,7 @@ public class BlockFiller extends BlockBCTile_Neptune<TileFiller> implements IBlo
 
     @Override
 //    public TileBC_Neptune createTileEntity(World world, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return new TileFiller(pos, state);
     }
 

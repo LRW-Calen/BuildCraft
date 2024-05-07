@@ -26,17 +26,10 @@ public class ItemDebugger extends ItemBC_Neptune {
     }
 
     @Override
+//    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand)
     public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx) {
-        Player player = ctx.getPlayer();
         Level world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
-        InteractionHand hand = ctx.getHand();
-        Direction side = ctx.getClickedFace();
-        Vec3 vec3Pos = ctx.getClickLocation();
-        double hitX = vec3Pos.x;
-        double hitY = vec3Pos.y;
-        double hitZ = vec3Pos.z;
-
 
         if (world.isClientSide()) {
             return InteractionResult.PASS;
@@ -51,12 +44,6 @@ public class ItemDebugger extends ItemBC_Neptune {
         }
         return InteractionResult.FAIL;
     }
-
-//    public InteractionResult onItemUseFirst(Player player, Level world, BlockPos pos, Direction side, float hitX, float hitY, float hitZ, InteractionHand hand)
-//    {
-//        ItemStack stack = player.getItemInHand(hand);
-//        return onItemUseFirst(stack, new UseOnContext(world, player, hand, stack, new BlockHitResult(new Vec3(hitX, hitY, hitZ), side, pos, false)));
-//    }
 
     public static boolean isShowDebugInfo(Player player) {
         return player.getAbilities().instabuild ||

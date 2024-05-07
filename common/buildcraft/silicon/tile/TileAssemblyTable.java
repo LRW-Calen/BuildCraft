@@ -16,7 +16,7 @@ import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.data.IdAllocator;
 import buildcraft.lib.net.MessageManager;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.lib.recipe.AssemblyRecipeRegistry;
+import buildcraft.lib.recipe.assembly.AssemblyRecipeRegistry;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.craft.IAssemblyCraft;
 import buildcraft.lib.tile.item.ItemHandlerManager;

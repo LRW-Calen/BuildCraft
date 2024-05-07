@@ -30,7 +30,7 @@ public enum GuideCraftingRecipes implements IStackRecipes {
 
     private static final boolean USE_INDEX = true;
 
-    //    private Map<Item, Set<Recipe>> inputIndexMap, outputIndexMap;
+    // private Map<Item, Set<Recipe>> inputIndexMap, outputIndexMap;
     private Map<Item, Set<Recipe<?>>> inputIndexMap, outputIndexMap;
 
     @Override
@@ -78,21 +78,19 @@ public enum GuideCraftingRecipes implements IStackRecipes {
         }
     }
 
-    //    private void generateInputIndex0(Recipe recipe)
-    private void generateInputIndex0(CraftingRecipe recipe) {
+    // private void generateInputIndex0(Recipe recipe)
+    private void generateInputIndex0(Recipe<?> recipe) {
         for (Ingredient ing : recipe.getIngredients()) {
             generateIngredientIndex(recipe, ing, inputIndexMap);
         }
     }
 
-    //    private static void generateIngredientIndex(Recipe recipe, Ingredient ing, Map<Item, Set<Recipe>> indexMap)
     private static void generateIngredientIndex(Recipe<?> recipe, Ingredient ing, Map<Item, Set<Recipe<?>>> indexMap) {
         for (ItemStack stack : ing.getItems()) {
             appendIndex(stack, recipe, indexMap);
         }
     }
 
-    //    private static void appendIndex(ItemStack stack, Recipe recipe, Map<Item, Set<Recipe>> indexMap)
     private static void appendIndex(ItemStack stack, Recipe<?> recipe, Map<Item, Set<Recipe<?>>> indexMap) {
 //        Set<Recipe> list = indexMap.get(stack.getItem());
         Set<Recipe<?>> list = indexMap.get(stack.getItem());
@@ -103,7 +101,6 @@ public enum GuideCraftingRecipes implements IStackRecipes {
         list.add(recipe);
     }
 
-    //    private static boolean checkRecipeUses(Recipe recipe, @Nonnull ItemStack target)
     private static boolean checkRecipeUses(Recipe<?> recipe, @Nonnull ItemStack target) {
         NonNullList<Ingredient> ingrediants = recipe.getIngredients();
         if (ingrediants.isEmpty()) {
@@ -173,7 +170,7 @@ public enum GuideCraftingRecipes implements IStackRecipes {
         }
     }
 
-    //    private void generateOutputIndex0(IRecipe recipe)
+    // private void generateOutputIndex0(IRecipe recipe)
     private void generateOutputIndex0(Recipe<?> recipe) {
         if (recipe instanceof IRecipeViewable) {
             ChangingItemStack changing = ((IRecipeViewable) recipe).getRecipeOutputs();
@@ -191,7 +188,7 @@ public enum GuideCraftingRecipes implements IStackRecipes {
         }
     }
 
-    //    private static boolean checkRecipeOutputs(IRecipe recipe, ItemStack target)
+    // private static boolean checkRecipeOutputs(IRecipe recipe, ItemStack target)
     private static boolean checkRecipeOutputs(Recipe<?> recipe, ItemStack target) {
         if (recipe instanceof IRecipeViewable) {
             ChangingItemStack changing = ((IRecipeViewable) recipe).getRecipeOutputs();

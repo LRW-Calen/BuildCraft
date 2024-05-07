@@ -83,8 +83,8 @@ public class BCCoreBlocks {
             );
             decoratedMap.put(decoratedBlock, reg);
         }
-        markerVolume = HELPER.addBlockAndItem("block.marker.volume", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION).strength(0.25F), BlockMarkerVolume::new);
-        markerPath = HELPER.addBlockAndItem("block.marker.path", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION), BlockMarkerPath::new);
+        markerVolume = HELPER.addBlockAndItem("block.marker.volume", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION).strength(0.25F).noOcclusion().noCollission(), BlockMarkerVolume::new);
+        markerPath = HELPER.addBlockAndItem("block.marker.path", BlockPropertiesCreator.createDefaultProperties(Material.DECORATION).strength(0.25F).noOcclusion().noCollission(), BlockMarkerPath::new);
         if (BCLib.DEV) {
             powerTester = HELPER.addBlockAndItem("block.power_tester", BlockPropertiesCreator.createDefaultProperties(Material.METAL), BlockPowerConsumerTester::new);
         }

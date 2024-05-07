@@ -18,7 +18,7 @@ import buildcraft.lib.misc.JsonUtil;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraft.util.LazyLoadedValue;
 
 import java.util.Arrays;
 
@@ -89,7 +89,7 @@ public class JsonVariableFaceUV {
         VariablePartCuboidBase.VariableFaceData data = new VariablePartCuboidBase.VariableFaceData();
         ModelUtil.TexturedFace face = spriteLookup.get(texture.evaluate());
 //        data.sprite = face.sprite;
-        data.sprite = LazyOptional.of(() -> face.sprite);
+        data.sprite = new LazyLoadedValue<>(() -> face.sprite);
         data.rotations = (int) textureRotation.evaluate();
         data.uvs.minU = (float) (uv[0].evaluate() / 16.0);
         data.uvs.minV = (float) (uv[1].evaluate() / 16.0);

@@ -3,7 +3,7 @@ package buildcraft.energy.generation.structure;
 import buildcraft.api.core.BCLog;
 import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyConfig;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.data.worldgen.StructureFeatures;
@@ -88,7 +88,7 @@ public class OilStructureRegistry {
                     OilStructureRegistry.STRUCTURE_FEATURE_KEY,
                     OilStructureRegistry.STRUCTURE_FEATURE.configured(
                             OilFeatureConfiguration.INSTANCE,
-                            OreDictTags.OIL_GEN
+                            OreDictionaryTags.OIL_GEN
                     )
             );
 

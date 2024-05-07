@@ -7,6 +7,7 @@ package buildcraft.core.block;
 import buildcraft.core.tile.TileMarkerPath;
 import buildcraft.lib.block.BlockMarkerBase;
 import buildcraft.lib.misc.PermissionUtil;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -24,7 +25,7 @@ public class BlockMarkerPath extends BlockMarkerBase {
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level worldIn, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return new TileMarkerPath(pos, state);
     }
 

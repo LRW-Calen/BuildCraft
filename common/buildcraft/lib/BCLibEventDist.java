@@ -96,7 +96,6 @@ public enum BCLibEventDist {
         DetachedRenderer.INSTANCE.renderWorldLastEvent(player, partialTicks, event.getPoseStack(), event.getCamera());
     }
 
-    // Forge Bus
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
@@ -105,7 +104,6 @@ public enum BCLibEventDist {
         }
     }
 
-    // Forge Bus
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void clientTick(TickEvent.ClientTickEvent event) {
@@ -136,6 +134,7 @@ public enum BCLibEventDist {
 
     // Calen: from BCLib
     @SubscribeEvent
+//    public static void serverStarting(FMLServerStartingEvent event)
     public static void serverStarting(ServerStartingEvent event) {
 //        event.registerServerCommand(new CommandBuildCraft());
         CommandDispatcher<CommandSourceStack> dispatcher = event.getServer().getCommands().getDispatcher();
@@ -147,8 +146,7 @@ public enum BCLibEventDist {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-//    public static void onTagsUpdatedEvent(TagsUpdatedEvent event)
-    public static void onTagsUpdatedEvent(RecipesUpdatedEvent event) {
+    public static void reload(RecipesUpdatedEvent event) {
         for (ResourceManagerReloadListener reloadListener : reloadListeners) {
             reloadListener.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
         }

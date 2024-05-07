@@ -13,9 +13,7 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * Specialised class for rendering {@link IStatementParameter}.
- */
+/** Specialised class for rendering {@link IStatementParameter}. */
 public class ParameterRenderer {
 
     private static final ISimpleDrawable BACKGROUND_DRAWABLE = (p, x, y) ->

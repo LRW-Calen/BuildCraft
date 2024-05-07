@@ -16,6 +16,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.EmptyBlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -64,18 +65,16 @@ public class StackUtil {
      * cannot be relied on for anything more than simple blocks. */
     @Nonnull
     public static ItemStack getItemStackForState(BlockState state) {
-        return state.getBlock().getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state);
-//        Block b = state.getBlock();
+        Block b = state.getBlock();
 //        ItemStack stack = new ItemStack(b);
-//        if (stack.isEmpty())
-//        {
+//        if (stack.isEmpty()) {
 //            return StackUtil.EMPTY;
 //        }
-////        if (stack.getHasSubtypes())
-////        {
-////            stack = new ItemStack(stack.getItem(), 1, b.getMetaFromState(state));
-////        }
+//        if (stack.getHasSubtypes()) {
+//            stack = new ItemStack(stack.getItem(), 1, b.getMetaFromState(state));
+//        }
 //        return stack;
+        return b.getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state);
     }
 
     /** Checks to see if the given required stack is contained fully in the given container stack. */
@@ -213,14 +212,15 @@ public class StackUtil {
 
     /* ITEM COMPARISONS */
 
+    // TODO Calen: Arrays.stream(oreIDs).anyMatch(comparison::is) may be better?
+
     /** Determines whether the given ItemStack should be considered equivalent for crafting purposes.
      *
      * @param base The stack to compare to.
      * @param comparison The stack to compare.
      * @param oreDictionary true to take the Forge OreDictionary into account.
      * @return true if comparison should be considered a crafting equivalent for base. */
-    public static boolean isCraftingEquivalent(@Nonnull ItemStack base, @Nonnull ItemStack comparison,
-                                               boolean oreDictionary) {
+    public static boolean isCraftingEquivalent(@Nonnull ItemStack base, @Nonnull ItemStack comparison, boolean oreDictionary) {
         if (isMatchingItem(base, comparison, true, false)) {
             return true;
         }
@@ -253,24 +253,24 @@ public class StackUtil {
     // public static boolean isCraftingEquivalent(int[] oreIDs, ItemStack comparison)
     public static boolean isCraftingEquivalent(TagKey<Item>[] oreIDs, ItemStack comparison) {
 //        if (oreIDs.length > 0)
-//        {
+        if (oreIDs.length > 0) {
 //            for (int id : oreIDs)
-//            {
+            for (TagKey<Item> id : oreIDs) {
 //                for (ItemStack itemstack : OreDictionary.getOres(OreDictionary.getOreName(id)))
-//                {
-//                    if (comparison.getItem() == itemstack.getItem()
+                for (ItemStack itemstack : ForgeRegistries.ITEMS.tags().getTag(id).stream().map(i -> new ItemStack(i, 1)).toList()) {
+                    if (comparison.getItem() == itemstack.getItem()
 //                            && (itemstack.getItemDamage() == OreDictionary.WILDCARD_VALUE
+                            && (itemstack.getDamageValue() == Short.MAX_VALUE
 //                            || comparison.getItemDamage() == itemstack.getItemDamage()))
-//                    {
-//                        return true;
-//                    }
-//                }
-//            }
-//        }
-//
-//        return false;
+                            || comparison.getDamageValue() == itemstack.getDamageValue()))
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
 
-        return Arrays.stream(oreIDs).anyMatch(tag -> comparison.is(tag));
+        return false;
     }
 
     public static boolean isMatchingItemOrList(final ItemStack base, final ItemStack comparison) {
@@ -324,12 +324,9 @@ public class StackUtil {
         if (base.getItem() != comparison.getItem()) {
             return false;
         }
-//        if (matchDamage && base.getHasSubtypes())
-//        {
-//            if (!isWildcard(base) && !isWildcard(comparison))
-//            {
-//                if (base.getDamageValue() != comparison.getDamageValue())
-//                {
+//        if (matchDamage && base.getHasSubtypes()) {
+//            if (!isWildcard(base) && !isWildcard(comparison)) {
+//                if (base.getItemDamage() != comparison.getItemDamage()) {
 //                    return false;
 //                }
 //            }
@@ -379,7 +376,6 @@ public class StackUtil {
     public static boolean isWildcard(int damage) {
 //        return damage == -1 || damage == OreDictionary.WILDCARD_VALUE;
         return damage == -1 || damage == Short.MAX_VALUE;
-//        return damage == -1;
     }
 
     /** @return An empty, nonnull list that cannot be modified (as it cannot be expanded and it has a size of 0) */
@@ -450,7 +446,7 @@ public class StackUtil {
         }
         if (!stack.hasTag()) {
 //            return Objects.hash(stack.getItem(), stack.getMetadata());
-            return Objects.hash(stack.getItem());
+            return Objects.hash(stack.getItem(), stack.getDamageValue());
         }
         return stack.serializeNBT().hashCode();
     }

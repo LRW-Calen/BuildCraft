@@ -17,15 +17,15 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class MessageDebugResponse implements IMessage {
-    //    private final List<String> left = new ArrayList<>();
-//    private final List<String> right = new ArrayList<>();
+    // private final List<String> left = new ArrayList<>();
     private final List<Component> left = new ArrayList<>();
+    // private final List<String> right = new ArrayList<>();
     private final List<Component> right = new ArrayList<>();
 
     public MessageDebugResponse() {
     }
 
-    //    public MessageDebugResponse(List<String> left, List<String> right)
+    // public MessageDebugResponse(List<String> left, List<String> right)
     public MessageDebugResponse(List<Component> left, List<Component> right) {
         this.left.addAll(left);
         this.right.addAll(right);

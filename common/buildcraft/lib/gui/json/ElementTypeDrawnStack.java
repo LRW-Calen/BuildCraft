@@ -30,11 +30,13 @@ public class ElementTypeDrawnStack extends ElementType {
 
 //        Item item = JsonUtils.getItem(json.json, "id");
         Item item = GsonHelper.getAsItem(json.json, "id");
+
+        // 1.18.2: to ensure no meta appears
         int meta = resolveEquationInt(json, "meta", ctx);
-        // Calen
         if (meta != 0) {
-            throw new RuntimeException("[lib.gui.json] Found stack with meta in " + json + " , but meta is not supported in this MC version");
+            throw new RuntimeException("[lib.gui.json] Found stack with meta in " + json + " , but meta is not supported in this MC version!");
         }
+
 //        ItemStack stack = new ItemStack(item, 1, meta);
         ItemStack stack = new ItemStack(item, 1);
 

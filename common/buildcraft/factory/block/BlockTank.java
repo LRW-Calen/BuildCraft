@@ -12,6 +12,7 @@ import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.tile.TileTank;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -37,6 +38,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank> implements ICustomPipeConnection, ITankBlockConnector, SimpleWaterloggedBlock, IBlockWithTickableTE<TileTank> {
     public static final Property<Boolean> JOINED_BELOW = BuildCraftProperties.JOINED_BELOW;
@@ -53,15 +55,15 @@ public class BlockTank<T extends TileTank> extends BlockBCTile_Neptune<TileTank>
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return BCFactoryBlocks.tankTile.get().create(pos, state);
     }
 
     @Override
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(BuildCraftProperties.JOINED_BELOW);
-        builder.add(BlockStateProperties.WATERLOGGED);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.add(JOINED_BELOW);
+        properties.add(BlockStateProperties.WATERLOGGED);
     }
 
     // 1.18.2: moved to BCFactory#clientSetup

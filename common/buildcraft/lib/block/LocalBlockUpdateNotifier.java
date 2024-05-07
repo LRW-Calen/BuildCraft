@@ -3,6 +3,7 @@ package buildcraft.lib.block;
 import buildcraft.lib.BCLib;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.event.VanillaGameEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -18,46 +19,20 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = BCLib.MODID) // Calen
 public class LocalBlockUpdateNotifier {
 
-    private static final Map<Level, LocalBlockUpdateNotifier> instanceMap = new WeakHashMap<>();
+    private static final Map<LevelAccessor, LocalBlockUpdateNotifier> instanceMap = new WeakHashMap<>();
     private final Set<ILocalBlockUpdateSubscriber> subscriberSet = new HashSet<>();
 
 
-    private LocalBlockUpdateNotifier(Level world)
-//    private LocalBlockUpdateNotifier(Level world, BlockPos pos)
-    {
-
-////        IWorldEventListener worldEventListener = new WorldEventListenerAdapter()
-//        WorldEventListenerAdapter worldEventListener = new WorldEventListenerAdapter()
-//        {
-//            //            @Override
-////            public void notifyBlockUpdate(@Nonnull Level world, @Nonnull BlockPos eventPos, @Nonnull BlockState oldState, @Nonnull BlockState newState, int flags)
-////            {
-////                notifySubscribersInRange(world, eventPos, oldState, newState, flags);
-////            }
-//            private PositionSource positionSource = new BlockPositionSource(pos);
-//
+    private LocalBlockUpdateNotifier(LevelAccessor world) {
+//        IWorldEventListener worldEventListener = new WorldEventListenerAdapter() {
 //            @Override
-//            public PositionSource getListenerSource()
-//            {
-//                return positionSource;
-//            }
-//
-//            @Override
-//            public int getListenerRadius()
-//            {
-//                return getRange();
-//            }
-//
-//            @Override
-//            public boolean handleGameEvent(Level world, GameEvent event, @Nullable Entity entity, BlockPos eventPos)
-//            {
-//                notifySubscribersInRange(world, eventPos);
-//                return false;
+//            public void notifyBlockUpdate(@Nonnull World world, @Nonnull BlockPos eventPos, @Nonnull IBlockState oldState,
+//                                          @Nonnull IBlockState newState, int flags) {
+//                notifySubscribersInRange(world, eventPos, oldState, newState, flags);
 //            }
 //        };
 //        // Calen: moved to #handleForgeEvent
-////        world.addEventListener(worldEventListener);
-//        ChunkUtil.getChunk(world, pos, true).getEventDispatcher(SectionPos.blockToSectionCoord(pos.getY())).register(worldEventListener);
+//        world.addEventListener(worldEventListener);
     }
 
     private static final List<GameEvent> listenedEvents = List.of(GameEvent.BLOCK_CHANGE, GameEvent.EXPLODE, GameEvent.BLOCK_PLACE, GameEvent.BLOCK_DESTROY);
@@ -76,7 +51,6 @@ public class LocalBlockUpdateNotifier {
                     }
             );
         }
-
     }
 
     /**
@@ -85,12 +59,9 @@ public class LocalBlockUpdateNotifier {
      * @param world the Level where BlockUpdate events will be listened for
      * @return the instance of LocalBlockUpdateNotifier for the given world
      */
-    public static LocalBlockUpdateNotifier instance(Level world)
-//    public static LocalBlockUpdateNotifier instance(Level world, BlockPos pos)
-    {
+    public static LocalBlockUpdateNotifier instance(LevelAccessor world) {
         if (!instanceMap.containsKey(world)) {
             instanceMap.put(world, new LocalBlockUpdateNotifier(world));
-//            instanceMap.put(world, new LocalBlockUpdateNotifier(world, pos));
         }
         return instanceMap.get(world);
     }
@@ -135,19 +106,4 @@ public class LocalBlockUpdateNotifier {
             }
         }
     }
-
-//    private int getRange()
-//    {
-//        int updateRange = 0;
-//        for (ILocalBlockUpdateSubscriber subscriber : subscriberSet)
-//        {
-//            int updateRange_i = subscriber.getUpdateRange();
-//            if (updateRange_i > updateRange)
-//            {
-//                updateRange = updateRange_i;
-//            }
-//        }
-//        return updateRange;
-//    }
-
 }

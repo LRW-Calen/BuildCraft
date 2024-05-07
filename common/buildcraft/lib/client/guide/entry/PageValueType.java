@@ -24,8 +24,7 @@ import java.util.Objects;
 
 public abstract class PageValueType<T> {
 
-    public abstract OptionallyDisabled<PageEntry<T>> deserialize(ResourceLocation name, JsonObject json,
-                                                                 JsonDeserializationContext ctx);
+    public abstract OptionallyDisabled<PageEntry<T>> deserialize(ResourceLocation name, JsonObject json, JsonDeserializationContext ctx);
 
     public abstract Class<T> getEntryClass();
 

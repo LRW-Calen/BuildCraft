@@ -28,7 +28,7 @@ public class VanillaRotationHandlers {
     /* Player friendly rotations- these only rotate through sides that are touching (only 90 degree changes, in any
      * axis), rather than jumping around. */
     public static final OrderedEnumMap<Direction> ROTATE_HORIZONTAL, ROTATE_FACING, ROTATE_TORCH, ROTATE_HOPPER;
-    // Calen: not still useful. we handle skull and level in #rotateSkull #rotateLever
+    // Calen: not still used. we handle skull and level in #rotateSkull #rotateLever
 //    public static final OrderedEnumMap<VoxelShape> ROTATE_LEVER;
 
     static {
@@ -67,7 +67,7 @@ public class VanillaRotationHandlers {
         CustomRotationHelper.INSTANCE.registerHandlerForAll(ObserverBlock.class, getHandlerFreely(ObserverBlock.class));
         CustomRotationHelper.INSTANCE.registerHandlerForAll(EndRodBlock.class, getHandlerFreely(EndRodBlock.class));
         CustomRotationHelper.INSTANCE.registerHandlerForAll(FenceGateBlock.class, getHandlerHorizontalFreely(FenceGateBlock.class));
-//        CustomRotationHelper.INSTANCE.registerHandlerForAll(BlockRedstoneDiode.class, getHandlerHorizontalFreely(BlockRedstoneDiode.class));
+        CustomRotationHelper.INSTANCE.registerHandlerForAll(DiodeBlock.class, getHandlerHorizontalFreely(DiodeBlock.class));
         CustomRotationHelper.INSTANCE.registerHandlerForAll(PumpkinBlock.class, getHandlerHorizontalFreely(PumpkinBlock.class));
         CustomRotationHelper.INSTANCE.registerHandlerForAll(GlazedTerracottaBlock.class, getHandlerHorizontalFreely(GlazedTerracottaBlock.class));
         CustomRotationHelper.INSTANCE.registerHandlerForAll(AnvilBlock.class, getHandlerHorizontalFreely(AnvilBlock.class));
@@ -160,7 +160,7 @@ public class VanillaRotationHandlers {
 //            return rotateAnyTypeAuto(world, pos, state, BlockLever.FACING, ROTATE_LEVER, EnumOrientation::getFacing);
             Direction direction = state.getValue(HorizontalDirectionalBlock.FACING);
             BlockState newState = state.setValue(HorizontalDirectionalBlock.FACING, direction.getClockWise());
-            if (state.getBlock().canSurvive(newState, world, pos)) {
+            if (newState.canSurvive(world, pos)) {
                 world.setBlock(pos, newState, Block.UPDATE_ALL);
                 return InteractionResult.SUCCESS;
             } else {
@@ -215,48 +215,38 @@ public class VanillaRotationHandlers {
 
     private static InteractionResult rotateLadder(Level world, BlockPos pos, BlockState state, Direction sideWrenched) {
         if (state.getBlock() instanceof LadderBlock) {
-            BlockState newState = state.rotate(world, pos, Rotation.CLOCKWISE_90);
-//            BlockState newState = state.setValue(LadderBlock.FACING, sideWrenched.getOpposite());
-            if (state.getBlock().canSurvive(newState, world, pos)) {
-                world.setBlock(pos, newState, Block.UPDATE_ALL);
-                return InteractionResult.SUCCESS;
-            }
-            // BC Old
-//            Predicate<Direction> tester = toTry ->
-//            {
-//                BlockPos offsetPos = pos.relative(toTry.getOpposite());
-//                BlockState offsetState = world.getBlockState(offsetPos);
-//                return !offsetState.getBlock().isSignalSource(offsetState) &&
-//                        offsetState.getVisualShape(world, offsetPos, CollisionContext.empty()).getFaceShape(toTry) == BlockFaceShape.SOLID
-//                        && !BlockBCBase_Neptune.isExceptBlockForAttachWithPiston(offsetState.getBlock());
-//            };
-//            return rotateAnyTypeManual(world, pos, state, LadderBlock.FACING, ROTATE_HORIZONTAL, tester);
+            Predicate<Direction> tester = toTry ->
+            {
+                BlockPos offsetPos = pos.relative(toTry.getOpposite());
+                BlockState offsetState = world.getBlockState(offsetPos);
+                return !offsetState.getBlock().isSignalSource(offsetState) &&
+//                        offsetState.getBlockFaceShape(world, offsetPos, toTry) == BlockFaceShape.SOLID &&
+                        state.setValue(LadderBlock.FACING, toTry).canSurvive(world, pos) &&
+                        !BlockBCBase_Neptune.isExceptBlockForAttachWithPiston(offsetState.getBlock());
+            };
+            return rotateAnyTypeManual(world, pos, state, LadderBlock.FACING, ROTATE_HORIZONTAL, tester);
         }
         return InteractionResult.PASS;
     }
 
     private static InteractionResult rotateTorch(Level world, BlockPos pos, BlockState state, Direction sideWrenched) {
-        if (state.getBlock() instanceof WallTorchBlock) {
-//            Predicate<Direction> tester = toTry ->
-//            {
-////                return Blocks.TORCH.canSurvive(state, world, pos);
+        Block b = state.getBlock();
+        if (b instanceof WallTorchBlock || b instanceof RedstoneWallTorchBlock) {
+            Predicate<Direction> tester = toTry ->
+            {
+                BlockPos offsetPos = pos.relative(toTry.getOpposite());
+                BlockState offsetState = world.getBlockState(offsetPos);
 //
-////                BlockPos offsetPos = pos.relative(toTry.getOpposite());
-////                BlockState offsetState = world.getBlockState(offsetPos);
-////
-////                if (toTry == Direction.UP && Blocks.TORCH.canSurvive(state,world,pos)) {
-////                    return true;
-////                } else if (toTry != Direction.UP && toTry != Direction.DOWN) {
-////                    return offsetState.getVisualShape(world,pos, CollisionContext.empty()).getFaceShape(toTry) == BlockFaceShape.SOLID && !BlockBCBase_Neptune.isExceptBlockForAttachWithPiston(offsetState.getBlock());
-////                }
-////                return false;
-//            };
-//            return rotateAnyTypeManual(world, pos, state, TorchBlock.FACING, ROTATE_TORCH, tester);
-            BlockState newState = state.setValue(WallTorchBlock.FACING, sideWrenched.getOpposite());
-            if (state.getBlock().canSurvive(newState, world, pos)) {
-                world.setBlock(pos, newState, Block.UPDATE_ALL);
-                return InteractionResult.SUCCESS;
-            }
+//                if (toTry == EnumFacing.UP && offsetState.getBlock().canPlaceTorchOnTop(state, world, offsetPos)) {
+//                    return true;
+//                } else if (toTry != EnumFacing.UP && toTry != EnumFacing.DOWN) {
+//                    return offsetState.getBlockFaceShape(world, offsetPos, toTry) == BlockFaceShape.SOLID && !BlockBCBase_Neptune.isExceptBlockForAttachWithPiston(offsetState.getBlock());
+//                }
+//                return false;
+                return state.setValue(HorizontalDirectionalBlock.FACING, toTry).canSurvive(world, pos)
+                        && !BlockBCBase_Neptune.isExceptBlockForAttachWithPiston(offsetState.getBlock());
+            };
+            return rotateAnyTypeManual(world, pos, state, HorizontalDirectionalBlock.FACING, ROTATE_TORCH, tester);
         }
         return InteractionResult.PASS;
     }
@@ -332,7 +322,7 @@ public class VanillaRotationHandlers {
             if (true) {
                 BlockEntity tile = world.getBlockEntity(pos);
                 if (tile instanceof SkullBlockEntity) {
-                    // BC Old
+                    // 1.12.2 Old
 //                    SkullBlockEntity tileSkull = (SkullBlockEntity) tile;
 //
 //                    int rot = ObfuscationReflectionHelper.getPrivateValue(SkullBlockEntity.class, tileSkull, "skullRotation", "field_" + "145910_i");
@@ -353,8 +343,7 @@ public class VanillaRotationHandlers {
                 }
                 return InteractionResult.PASS;
             }
-//            else
-//            {
+//            else {
 //                return rotateOnce(world, pos, state, SkullBlock.ROTATION, ROTATE_HORIZONTAL);
 //            }
         }
@@ -425,7 +414,7 @@ public class VanillaRotationHandlers {
     //@formatter:on
     {
 //        Predicate<E> tester = toTry -> state.getBlock().canPlaceBlockOnSide(world, pos, mapper.apply(toTry));
-        Predicate<E> tester = toTry -> state.getMaterial().isReplaceable();
+        Predicate<E> tester = toTry -> state.setValue(prop, toTry).canSurvive(world, pos);
         return rotateAnyTypeManual(world, pos, state, prop, possible, tester);
     }
 

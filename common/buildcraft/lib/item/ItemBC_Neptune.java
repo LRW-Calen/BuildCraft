@@ -18,10 +18,8 @@ public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem 
     /** The tag used to identify this in the {@link TagManager} */
     public final String idBC;
 
-    public ItemBC_Neptune(String idBC, Item.Properties properties, Runnable... runBeforeInit) {
-//        super(properties);
+    public ItemBC_Neptune(String idBC, Item.Properties properties) {
         super(properties.tab(CreativeTabManager.getTab(TagManager.getTag(idBC, TagManager.EnumTagType.CREATIVE_TAB))));
-        Arrays.stream(runBeforeInit).forEach(Runnable::run); // Calen
         this.idBC = idBC;
         init();
     }
@@ -32,8 +30,10 @@ public class ItemBC_Neptune extends Item implements IItemBuildCraft, IForgeItem 
     }
 
     @Override
+//    public final void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items)
     public final void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (allowdedIn(tab)) {
+//        if (isInCreativeTab(tab))
+            if (allowdedIn(tab)) {
             addSubItems(tab, items);
         }
     }

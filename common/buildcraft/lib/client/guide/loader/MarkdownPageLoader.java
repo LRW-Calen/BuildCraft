@@ -75,7 +75,6 @@ public enum MarkdownPageLoader implements IPageLoaderText {
 //            }
 //            stack = new ItemStack(stack.getItem(), stack.getCount(), meta);
 //            stack = new ItemStack(stack.getItem(), stack.getCount());
-//        throw new RuntimeException("[lib.guide.loader.xml] Found meta data [" + data + "] in tag [" + tag + "] but meta data is not supported in this ms version.");
 //        } catch (NumberFormatException nfe) {
 //            return new OptionallyDisabled<>(args[2] + " was not a valid number: " + nfe.getLocalizedMessage());
 //        }

@@ -8,9 +8,10 @@ package buildcraft.lib.world;
 
 import net.minecraft.world.level.gameevent.GameEventListener;
 
+@Deprecated(forRemoval = true)
 //public class WorldEventListenerAdapter implements IWorldEventListener
 public abstract class WorldEventListenerAdapter implements GameEventListener {
-    //    @Override
+//    @Override
 //    public void notifyBlockUpdate(@Nonnull Level world,
 //                                  @Nonnull BlockPos pos,
 //                                  @Nonnull BlockState oldState,

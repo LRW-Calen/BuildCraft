@@ -2,8 +2,8 @@ package buildcraft.factory;
 
 import buildcraft.core.BCCore;
 import buildcraft.factory.loot.LootConditionSpreading;
-import buildcraft.factory.recipe.DistillationRecipeSerializer;
-import buildcraft.factory.recipe.HeatExchangeRecipeSerializer;
+import buildcraft.lib.recipe.refinery.DistillationRecipeSerializer;
+import buildcraft.lib.recipe.refinery.HeatExchangeRecipeSerializer;
 import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.registry.TagManager;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;

@@ -52,12 +52,9 @@ public class BlockFrame extends BlockBCBase_Neptune {
     }
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
-//        super.addProperties(properties);
-        super.createBlockStateDefinition(builder);
-//        properties.addAll(CONNECTED_MAP.values());
-        CONNECTED_MAP.values().forEach(builder::add);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.addAll(CONNECTED_MAP.values());
     }
 
     @Override

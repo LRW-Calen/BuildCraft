@@ -22,7 +22,7 @@ public class PageLinkStatement extends PageLink {
 
     public final IStatement statement;
     public final List<Component> tooltip;
-    //    public final String searchText;
+    // public final String searchText;
     public final Component searchText;
     public final String textKey;
 
@@ -33,10 +33,8 @@ public class PageLinkStatement extends PageLink {
         if (tip.isEmpty()) {
             String uniqueTag = statement.getUniqueTag();
             this.tooltip = ImmutableList.of(new TextComponent(uniqueTag));
-//            this.searchText = uniqueTag.getString().toLowerCase(Locale.ROOT);
-//            this.searchText = new TextComponent(uniqueTag.getContents().toLowerCase(Locale.ROOT));
+//            this.searchText = uniqueTag.toLowerCase(Locale.ROOT);
             this.searchText = new TextComponent(uniqueTag);
-//            this.textKey = uniqueTag.getContents().toLowerCase(Locale.ROOT);
             this.textKey = statement.getDescriptionKey().toLowerCase(Locale.ROOT);
         } else {
             this.tooltip = tip;
@@ -48,11 +46,8 @@ public class PageLinkStatement extends PageLink {
                     joinedTooltip.append(new TextComponent(" "));
                 }
             }
-//            this.searchText = ChatFormatting.stripFormatting(joinedTooltip).toLowerCase(Locale.ROOT);
-//            this.searchText = new TextComponent(ChatFormatting.stripFormatting(joinedTooltip).toLowerCase(Locale.ROOT));
-//            this.searchText = new TextComponent(ChatFormatting.stripFormatting(joinedTooltip).toLowerCase(Locale.ROOT));
+//            this.searchText = TextFormatting.getTextWithoutFormattingCodes(joinedTooltip).toLowerCase(Locale.ROOT);
             this.searchText = joinedTooltip;
-//            this.textKey = ChatFormatting.stripFormatting(joinedTooltip).toLowerCase(Locale.ROOT);
             this.textKey = ChatFormatting.stripFormatting(statement.getTooltipKey().stream().collect(Collectors.joining("_", "", "")).toLowerCase(Locale.ROOT));
         }
     }
@@ -64,7 +59,7 @@ public class PageLinkStatement extends PageLink {
         List<String> tooltipKeys = statement.getTooltipKey();
         Component title = tooltip.isEmpty() ? new TextComponent(statement.getUniqueTag()) : tooltip.get(0);
         String titleKey = tooltipKeys.isEmpty() ? statement.getDescriptionKey() : tooltipKeys.get(0);
-//        return new PageLine(icon, icon, 2, (BaseComponent) title, true);
+//        return new PageLine(icon, icon, 2, title, true);
         return new PageLine(icon, icon, 2, titleKey, title, true);
     }
 

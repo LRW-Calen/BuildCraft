@@ -50,7 +50,6 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 //        }
 //    }
 
-    // Calen: never used
 //    public boolean isRegistered(E type) {
 //        return engineTileConstructors.containsKey(type);
 //    }
@@ -73,7 +72,6 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 //    @Override
 ////    protected BlockStateContainer createBlockState()
 //    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
-//        // Calen: 不super! engine没有facing属性
 ////        super.createBlockStateDefinition(builder);
 ////        builder.add(getEngineProperty());
 //    }

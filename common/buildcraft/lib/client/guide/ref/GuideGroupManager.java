@@ -112,15 +112,13 @@ public class GuideGroupManager {
         knownTypes.add(type);
     }
 
-    /**
-     * This checks to see if then given object is valid. There are two types of validity:
+    /** This checks to see if then given object is valid. There are two types of validity:
      * <ul>
      * <li>If the object is of one of the registered classes in {@link GuideGroupManager#knownClasses}</li>
      * <li>If the object is not null or is an invalid value in some other way.</li>
      * </ul>
      * This will throw an exception if the value is not of a registered class, and return false if it is an invalid
-     * value in some other way (for example if it is null).
-     */
+     * value in some other way (for example if it is null). */
     static boolean isValidObject(Object value) {
         if (value == null) {
             return false;

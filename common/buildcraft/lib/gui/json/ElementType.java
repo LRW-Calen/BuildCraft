@@ -34,11 +34,9 @@ public abstract class ElementType {
         this.name = name;
     }
 
-    protected abstract IGuiElement deserialize0(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info,
-                                                JsonGuiElement json);
+    protected abstract IGuiElement deserialize0(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json);
 
-    public final IGuiElement deserialize(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info,
-                                         JsonGuiElement json) {
+    public final IGuiElement deserialize(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json) {
         IGuiElement element = deserialize0(gui, parent, info, json);
         if (element instanceof GuiElementSimple) {
             ((GuiElementSimple) element).name = json.fullName;
@@ -76,8 +74,7 @@ public abstract class ElementType {
         return element;
     }
 
-    protected static void addChildren(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json,
-                                      String subName, Consumer<IGuiElement> to) {
+    protected static void addChildren(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json, String subName, Consumer<IGuiElement> to) {
         List<JsonGuiElement> children = json.getChildren(subName);
         for (JsonGuiElement child : children) {
             for (JsonGuiElement c : child.iterate(child.context)) {
@@ -92,8 +89,7 @@ public abstract class ElementType {
         }
     }
 
-    protected static void addType(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json,
-                                  String subName, Consumer<IGuiElement> to, ElementType type) {
+    protected static void addType(BuildCraftJsonGui gui, IGuiPosition parent, JsonGuiInfo info, JsonGuiElement json, String subName, Consumer<IGuiElement> to, ElementType type) {
         JsonGuiElement ch = json.getChildElement(subName, json.json.get(subName));
         if (!ch.properties.containsKey("area") && !ch.properties.containsKey("area[0]")
                 && !ch.properties.containsKey("pos[0]"))
@@ -192,13 +188,11 @@ public abstract class ElementType {
         }
     }
 
-    public static boolean resolveEquationBool(JsonGuiElement json, String member, FunctionContext ctx,
-                                              boolean _default) {
+    public static boolean resolveEquationBool(JsonGuiElement json, String member, FunctionContext ctx, boolean _default) {
         return getEquationBool(json, member, ctx, _default).evaluate();
     }
 
-    public static INodeBoolean getEquationBool(JsonGuiElement json, String member, FunctionContext ctx,
-                                               boolean _default) {
+    public static INodeBoolean getEquationBool(JsonGuiElement json, String member, FunctionContext ctx, boolean _default) {
         String eqn = json.properties.get(member);
         if (eqn == null) {
             return NodeConstantBoolean.of(_default);
@@ -210,8 +204,7 @@ public abstract class ElementType {
         }
     }
 
-    public static IGuiPosition resolvePosition(JsonGuiElement json, String name, IGuiPosition parent,
-                                               FunctionContext ctx) {
+    public static IGuiPosition resolvePosition(JsonGuiElement json, String name, IGuiPosition parent, FunctionContext ctx) {
         String eqn = json.properties.get(name);
         if (eqn == null) {
             INodeDouble x = getEquationDouble(json, name + "[0]", ctx);

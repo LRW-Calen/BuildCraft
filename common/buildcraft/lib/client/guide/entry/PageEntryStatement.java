@@ -57,8 +57,7 @@ public class PageEntryStatement extends PageValueType<IStatement> {
     }
 
     @Override
-    public OptionallyDisabled<PageEntry<IStatement>> deserialize(ResourceLocation name, JsonObject json,
-                                                                 JsonDeserializationContext ctx) {
+    public OptionallyDisabled<PageEntry<IStatement>> deserialize(ResourceLocation name, JsonObject json, JsonDeserializationContext ctx) {
 //        String stmntName = JsonUtils.getString(json, "statement");
         String stmntName = GsonHelper.getAsString(json, "statement");
         IStatement stmnt = StatementManager.statements.get(stmntName);

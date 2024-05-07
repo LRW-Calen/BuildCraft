@@ -97,11 +97,11 @@ public class ScriptableRegistry<E> extends SimpleReloadableRegistry<E> implement
         List<Path> jarRoots = new ArrayList<>();
 
         for (ModFileInfo container : LoadingModList.get().getModFiles()) {
-            // Calen
+            // Calen 1.18.2
             if (container.moduleName().equals("forge")) {
                 continue;
             }
-            // BC 1.12.2
+            // 1.12.2
             File source = container.getFile().getFilePath().toFile();
             if (!source.exists()) {
                 continue;
@@ -148,7 +148,8 @@ public class ScriptableRegistry<E> extends SimpleReloadableRegistry<E> implement
     }
 
     private void visitFile(List<FileSystem> openFileSystems, Map<File, Path> loadedFiles, List<Path> roots, File source) {
-        if (loadedFiles.containsKey(source)) {
+//        if (loadedFiles.containsKey(source))
+        if (loadedFiles.containsKey(source) || !source.exists()) {
             return;
         }
         Path root = getRoot(openFileSystems, source);

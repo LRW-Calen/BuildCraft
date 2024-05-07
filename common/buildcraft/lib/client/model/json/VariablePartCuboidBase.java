@@ -18,6 +18,7 @@ import buildcraft.lib.misc.RenderUtil;
 import com.google.gson.JsonObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraftforge.common.util.LazyOptional;
 
 import javax.vecmath.Vector3f;
@@ -61,9 +62,9 @@ public abstract class VariablePartCuboidBase extends JsonVariableModelPart {
                     quad.lightb(l, (byte) 0);
                     quad.colouri(rgba);
 //                    quad.texFromSprite(data.sprite);
-                    quad.texFromSprite(data.sprite.resolve().get());
+                    quad.texFromSprite(data.sprite.get());
 //                    quad.setSprite(data.sprite);
-                    quad.setSprite(data.sprite.resolve().get());
+                    quad.setSprite(data.sprite.get());
                     quad.setShade(s);
                     if (data.bothSides) {
                         addTo.add(quad.copyAndInvertNormal());
@@ -80,8 +81,8 @@ public abstract class VariablePartCuboidBase extends JsonVariableModelPart {
 
     public static class VariableFaceData {
         public ModelUtil.UvFaceData uvs = new ModelUtil.UvFaceData();
-        //        public TextureAtlasSprite sprite;
-        public LazyOptional<TextureAtlasSprite> sprite;
+        // public TextureAtlasSprite sprite;
+        public LazyLoadedValue<TextureAtlasSprite> sprite;
         public int rotations = 0;
         public boolean invertNormal = false;
         public boolean bothSides = false;

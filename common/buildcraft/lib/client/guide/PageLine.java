@@ -13,19 +13,13 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.function.Supplier;
 
-/**
- * Stores information about a single line of text. This may be displayed as more than a single line though.
- */
+/** Stores information about a single line of text. This may be displayed as more than a single line though. */
 public class PageLine implements Comparable<PageLine> {
-    /**
-     * Can be any of the boxes, any icon with dimensions different to these will render incorrectly.
-     */
+    /** Can be any of the boxes, any icon with dimensions different to these will render incorrectly. */
     public ISimpleDrawable startIcon;
     public ISimpleDrawable startIconHovered;
     public final int indent;
-    /**
-     * This will be wrapped automatically when it is rendered.
-     */
+    /** This will be wrapped automatically when it is rendered. */
     public final Component text;
     public final String textKey;
     public final boolean link;
@@ -37,13 +31,11 @@ public class PageLine implements Comparable<PageLine> {
         this(null, null, indent, textKey, text, isLink);
     }
 
-    public PageLine(ISimpleDrawable startIcon, ISimpleDrawable startIconHovered, int indent, String textKey, Component text,
-                    boolean isLink) {
+    public PageLine(ISimpleDrawable startIcon, ISimpleDrawable startIconHovered, int indent, String textKey, Component text, boolean isLink) {
         this(startIcon, startIconHovered, indent, textKey, text, isLink, null);
     }
 
-    public PageLine(ISimpleDrawable startIcon, ISimpleDrawable startIconHovered, int indent, String textKey, Component text, boolean link,
-                    @Nullable Supplier<List<Component>> tooltipSupplier) {
+    public PageLine(ISimpleDrawable startIcon, ISimpleDrawable startIconHovered, int indent, String textKey, Component text, boolean link, @Nullable Supplier<List<Component>> tooltipSupplier) {
         if (text == null) throw new NullPointerException("text");
         this.startIcon = startIcon;
         this.startIconHovered = startIconHovered;

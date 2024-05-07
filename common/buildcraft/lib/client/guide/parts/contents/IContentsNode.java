@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface IContentsNode {
 
-    //    String getSearchName();
+    // String getSearchName();
     Component getSearchName();
 
     // Calen
@@ -20,9 +20,7 @@ public interface IContentsNode {
 
     void resetVisibility();
 
-    /**
-     * Should set the visibility to true if this node is contained in the given set.
-     */
+    /** Should set the visibility to true if this node is contained in the given set. */
     void setVisible(Set<PageLink> matches);
 
     void sort();

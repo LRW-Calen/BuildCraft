@@ -101,9 +101,7 @@ public class FluidSmoother implements IDebuggable {
         return null;
     }
 
-    /**
-     * Delegate for {@link Tank#getCapacity()} - useful if this is the only object exposed for rendering.
-     */
+    /** Delegate for {@link Tank#getCapacity()} - useful if this is the only object exposed for rendering. */
     public int getCapacity() {
         return tank.getCapacity();
     }

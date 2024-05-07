@@ -17,15 +17,16 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.HitResult.Type;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ClientDebuggables {
-    //    public static final List<String> SERVER_LEFT = new ArrayList<>();
-//    public static final List<String> SERVER_RIGHT = new ArrayList<>();
+    // public static final List<String> SERVER_LEFT = new ArrayList<>();
     public static final List<Component> SERVER_LEFT = new ArrayList<>();
+    // public static final List<String> SERVER_RIGHT = new ArrayList<>();
     public static final List<Component> SERVER_RIGHT = new ArrayList<>();
 
     @Nullable
@@ -46,24 +47,22 @@ public class ClientDebuggables {
         if (mouseOver == null) {
             return null;
         }
-//        HitResult.Type type = mouseOver.getType();
+//        RayTraceResult.Type type = mouseOver.typeOfHit;
+        Type type = mouseOver.getType();
         ClientLevel world = mc.level;
         if (world == null) {
             return null;
         }
-//        if (type == RayTraceResult.Type.BLOCK)
-//        if (type == HitResult.Type.BLOCK)
-        if (mouseOver instanceof BlockHitResult blockHitResult) {
-            BlockPos pos = blockHitResult.getBlockPos();
+        if (type == Type.BLOCK) {
+            BlockPos pos = ((BlockHitResult) mouseOver).getBlockPos();
             BlockEntity tile = world.getBlockEntity(pos);
             if (tile instanceof IDebuggable) {
                 return (IDebuggable) tile;
             }
         }
 //        else if (type == RayTraceResult.Type.ENTITY)
-//        else if (type == HitResult.Type.ENTITY)
-        else if (mouseOver instanceof EntityHitResult entityHitResult) {
-            Entity entity = entityHitResult.getEntity();
+        else if (type == Type.ENTITY) {
+            Entity entity = ((EntityHitResult) mouseOver).getEntity();
             if (entity instanceof IDebuggable) {
                 return (IDebuggable) entity;
             }

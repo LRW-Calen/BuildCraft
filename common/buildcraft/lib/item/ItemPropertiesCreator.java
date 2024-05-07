@@ -3,7 +3,6 @@ package buildcraft.lib.item;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
-// Calen
 public class ItemPropertiesCreator {
     public static Item.Properties common64() {
         return new Item.Properties()
@@ -33,5 +32,9 @@ public class ItemPropertiesCreator {
         return new Item.Properties()
                 .stacksTo(64)
                 .rarity(Rarity.EPIC);
+    }
+
+    public static Item.Properties blockItem() {
+        return new Item.Properties();
     }
 }

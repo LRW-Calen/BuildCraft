@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -36,12 +37,10 @@ public class ListMatchHandlerFluid extends ListMatchHandler {
             NonNullList<ItemStack> stacks = NonNullList.create();
 //            item.getSubItems(CreativeModeTab.TAB_SEARCH, stacks);
             item.fillItemCategory(CreativeModeTab.TAB_SEARCH, stacks);
-            stacks.add(new ItemStack(item, 1));
             for (ItemStack toTry : stacks) {
 //                IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(toTry);
                 IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(toTry).orElse(null);
 //                if (fluidHandler != null && fluidHandler.drain(1, false) == null)
-//                if (fluidHandler != null && fluidHandler.drain(1, IFluidHandler.FluidAction.SIMULATE) == null)
                 if (fluidHandler != null && !fluidHandler.drain(1, IFluidHandler.FluidAction.SIMULATE).isEmpty()) {
                     clientExampleHolders.add(toTry);
                 }
@@ -110,7 +109,7 @@ public class ListMatchHandlerFluid extends ListMatchHandler {
                     IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(potentialHolder).orElse(null);
                     if (fluidHandler != null
 //                            && (fluidHandler.fill(fStack, true) > 0 || fluidHandler.drain(fStack, false) != null)
-                            && (fluidHandler.fill(fStack, IFluidHandler.FluidAction.EXECUTE) > 0 || fluidHandler.drain(fStack, IFluidHandler.FluidAction.SIMULATE) != null)
+                            && (fluidHandler.fill(fStack, FluidAction.EXECUTE) > 0 || !fluidHandler.drain(fStack, FluidAction.SIMULATE).isEmpty())
                     )
                     {
                         examples.add(fluidHandler.getContainer());
@@ -127,13 +126,13 @@ public class ListMatchHandlerFluid extends ListMatchHandler {
                 examples.add(stack);
 //                FluidStack contained = fluidHandler.drain(Integer.MAX_VALUE, true);
                 FluidStack contained = fluidHandler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.EXECUTE);
-                if (contained != null) {
+                if (!contained.isEmpty()) {
                     examples.add(fluidHandler.getContainer());
                     for (ItemStack potential : clientExampleHolders) {
 //                        IFluidHandlerItem potentialHolder = FluidUtil.getFluidHandler(potential);
                         IFluidHandlerItem potentialHolder = FluidUtil.getFluidHandler(potential).orElse(null);
 //                        if (potentialHolder.fill(contained, true) > 0)
-                        if (potentialHolder.fill(contained, IFluidHandler.FluidAction.EXECUTE) > 0) {
+                        if (potentialHolder != null && potentialHolder.fill(contained, IFluidHandler.FluidAction.EXECUTE) > 0) {
                             examples.add(potentialHolder.getContainer());
                         }
                     }

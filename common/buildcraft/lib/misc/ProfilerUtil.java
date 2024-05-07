@@ -92,8 +92,7 @@ public class ProfilerUtil {
      * @param dest The method to call with the finished lines.
      * @throws E if {@link ILogAcceptor#write(String)} throws an exception. */
 //    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
-    public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName,
-                                                                  ILogAcceptor<E> dest) throws E {
+    public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName, ILogAcceptor<E> dest) throws E {
         writeProfilerResults(profiler, rootName, -1, dest);
     }
 
@@ -103,35 +102,23 @@ public class ProfilerUtil {
      * @param dest The method to call with the finished lines.
      * @throws E if {@link ILogAcceptor#write(String)} throws an exception. */
 //    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
-    public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName,
-                                                                  long totalNanoseconds, ILogAcceptor<E> dest) throws E {
+    public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds, ILogAcceptor<E> dest) throws E {
         writeProfilerResults_Internal(profiler, rootName, totalNanoseconds, 0, dest);
     }
 
     // private static <E extends Throwable> void writeProfilerResults_Internal(Profiler profiler, String sectionName,
-    private static <E extends Throwable> void writeProfilerResults_Internal(ActiveProfiler profiler, String sectionName,
-                                                                            long totalNanoseconds, int indent, ILogAcceptor<E> dest) throws E {
+    private static <E extends Throwable> void writeProfilerResults_Internal(ActiveProfiler profiler, String sectionName, long totalNanoseconds, int indent, ILogAcceptor<E> dest) throws E {
 
 //        List<Profiler.Result> list = profiler.getProfilingData(sectionName);
         ActiveProfiler.PathEntry list = profiler.getEntry(sectionName);
-//        Profiler.Result results = profiler.getResults();
-//        Set<Pair<String, MetricCategory>> s = profiler.getChartedPaths();
-//        List<Pair<String, MetricCategory>> list = s.stream().toList();
 
 //        if (list != null && list.size() >= 3)
         if (list != null && list.getCount() >= 3) {
 //            for (int i = 1; i < list.size(); ++i)
             for (String key : list.getCounters().keySet()) {
-//                Pair<String, MetricCategory> p = list.get(i);
-
 //                Profiler.Result result = list.get(i);
                 long result = list.getCounters().getLong(key);
                 StringBuilder builder = new StringBuilder();
-                // Calen
-//                builder.append(p.getValue().name());
-//                builder.append(" - ");
-//                builder.append(p.getValue().getDescription());
-
                 builder.append(String.format("[%02d] ", indent));
 
                 for (int j = 0; j < indent; ++j) {
@@ -149,7 +136,7 @@ public class ProfilerUtil {
                 if (totalNanoseconds > 0) {
                     builder.append(" (");
 //                    long nano = (long) (result.totalUsePercentage * totalNanoseconds / 100);
-                    long nano = (long) (list.getMaxDuration() * totalNanoseconds / 100);
+                    long nano = (long) (list.getMaxDuration() * totalNanoseconds / 100L);
                     if (nano < 99_999) {
                         builder.append(NumberFormat.getInstance().format(nano));
                         builder.append("ns");

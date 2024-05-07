@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -32,17 +31,14 @@ import java.util.*;
 public class RenderUtil {
 
     private static final ThreadLocal<TessellatorQueue> threadLocalTessellators;
-    private static final MethodHandle HANDLE_FORGE_TESSELLATOR;
+    // private static final MethodHandle HANDLE_FORGE_TESSELLATOR;
     private static final MethodHandle HANDLE_IS_BUFFER_DRAWING;
 
     static {
         threadLocalTessellators = ThreadLocal.withInitial(TessellatorQueue::new);
-        HANDLE_FORGE_TESSELLATOR = null;
-//        HANDLE_IS_BUFFER_DRAWING = null;
 //        HANDLE_FORGE_TESSELLATOR = createGetter(TileEntityRendererDispatcher.class, Tessellator.class, "batchBuffer");
-//        HANDLE_FORGE_TESSELLATOR = createGetter(BlockEntityRenderDispatcher.class, Tesselator.class, "batchBuffer");
 //        HANDLE_IS_BUFFER_DRAWING = createGetter(BufferBuilder.class, boolean.class, "isDrawing", "field_179010_r");
-        HANDLE_IS_BUFFER_DRAWING = createGetter(BufferBuilder.class, boolean.class, "isDrawing", "field_179010_r", "building", "f_85661_");
+        HANDLE_IS_BUFFER_DRAWING = createGetter(BufferBuilder.class, boolean.class, "building", "f_85661_");
     }
 
     private static MethodHandle createGetter(Class<?> owner, Class<?> type, String... names) {
@@ -79,9 +75,7 @@ public class RenderUtil {
         }
     }
 
-    /**
-     * Takes _RGB (alpha is set to 1)
-     */
+    /** Takes _RGB (alpha is set to 1) */
     public static void setGLColorFromInt(int color) {
         float red = (color >> 16 & 255) / 255.0F;
         float green = (color >> 8 & 255) / 255.0F;
@@ -91,9 +85,7 @@ public class RenderUtil {
         RenderSystem.setShaderColor(red, green, blue, 1.0F);
     }
 
-    /**
-     * Takes ARGB
-     */
+    /** Takes ARGB */
     public static void setGLColorFromIntPlusAlpha(int color) {
         float alpha = (color >>> 24 & 255) / 255.0F;
         float red = (color >> 16 & 255) / 255.0F;
@@ -136,51 +128,32 @@ public class RenderUtil {
         return MinecraftForgeClient.getRenderType() == RenderType.translucent();
     }
 
-    /**
-     * @return true if this thread is the main minecraft thread, used for all client side game logic and (by default)
-     * tile entity rendering.
-     */
+    /** @return true if this thread is the main minecraft thread, used for all client side game logic and (by default)
+     *         tile entity rendering. */
     public static boolean isMainRenderThread() {
         return Minecraft.getInstance().renderOnThread();
     }
 
-//    /**
-//     * @return The first unused {@link Tessellator} for the current thread that uses the given vertex format. (Unused =
-//     * {@link #isDrawing(BufferBuilder)} returns false).
-//     */
-
-    /**
-     * @return The first unused {@link Tesselator} for the current thread that uses the given vertex format. (Unused =
-     * {@link #isDrawing(BufferBuilder)} returns false).
-     */
+    /** @return The first unused {@link Tesselator} for the current thread that uses the given vertex format. (Unused =
+     *         {@link #isDrawing(BufferBuilder)} returns false). */
     public static AutoTessellator getThreadLocalUnusedTessellator() {
         return threadLocalTessellators.get().nextFreeTessellator();
     }
 
-//    /**
-//     * @return The forge {@link Tessellator} used for rendering {@link FastTESR}'s.
-//     */
+//    /** @return The forge {@link Tesselator} used for rendering {@link BlockEntityRenderer}'s. */
+//    public static Tessellator getMainTessellator() {
+//        if (!isMainRenderThread()) {
+//            throw new IllegalStateException("Not the main thread!");
+//        }
+//        try {
+//            return (Tessellator) HANDLE_FORGE_TESSELLATOR.invokeExact(TileEntityRendererDispatcher.instance);
+//        } catch (Throwable t) {
+//            throw new Error(t);
+//        }
+//    }
 
-    /**
-     * @return The forge {@link Tesselator} used for rendering {@link BlockEntityRenderer}'s.
-     */
-//    public static Tessellator getMainTessellator()
-    public static Tesselator getMainTessellator() {
-        if (!isMainRenderThread()) {
-            throw new IllegalStateException("Not the main thread!");
-        }
-        try {
-//            return (Tessellator) HANDLE_FORGE_TESSELLATOR.invokeExact(Minecraft.getInstance().getBlockEntityRenderDispatcher());
-            return (Tesselator) HANDLE_FORGE_TESSELLATOR.invokeExact(Minecraft.getInstance().getBlockEntityRenderDispatcher());
-        } catch (Throwable t) {
-            throw new Error(t);
-        }
-    }
-
-    /**
-     * @return True if the given {@link BufferBuilder} is currently in the middle of drawing. Essentially returns true
-     * if {@link BufferBuilder#begin(VertexFormat.Mode, VertexFormat)} would throw an exception.
-     */
+    /** @return True if the given {@link BufferBuilder} is currently in the middle of drawing. Essentially returns true
+     *         if {@link BufferBuilder#begin(VertexFormat.Mode, VertexFormat)} would throw an exception. */
     public static boolean isDrawing(BufferBuilder bb) {
         try {
             return (boolean) HANDLE_IS_BUFFER_DRAWING.invokeExact(bb);
@@ -225,15 +198,8 @@ public class RenderUtil {
     }
 
     // Calen
-    public static void bindTexture(ResourceLocation texture) {
-        RenderSystem.setShaderTexture(0, texture);
-    }
 
-    // Calen
-
-    /**
-     * Sets OpenGL lighting for rendering blocks as items inside GUI screens (such as containers).
-     */
+    /** Sets OpenGL lighting for rendering blocks as items inside GUI screens (such as containers). */
     public static void enableGUIStandardItemLighting() {
         // Calen: maybe not right
         Lighting.setupFor3DItems();
@@ -250,15 +216,17 @@ public class RenderUtil {
 
     // Calen
 
-    /**
-     * Disables the OpenGL lighting properties enabled by enableStandardItemLighting
-     */
+    /** Disables the OpenGL lighting properties enabled by enableStandardItemLighting */
     public static void disableStandardItemLighting() {
         // TODO Calen disableStandardItemLighting???
 //        GlStateManager.disableLighting();
 //        GlStateManager.disableLight(0);
 //        GlStateManager.disableLight(1);
 //        GlStateManager.disableColorMaterial();
+    }
+
+    public static void enableAlpha() {
+        RenderSystem.colorMask(true, true, true, true);
     }
 
     static class TessellatorQueue {

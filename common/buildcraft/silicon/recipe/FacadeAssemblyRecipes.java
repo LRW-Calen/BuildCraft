@@ -7,6 +7,7 @@
 package buildcraft.silicon.recipe;
 
 import buildcraft.api.BCItems;
+import buildcraft.api.facades.IFacadeItem;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.api.recipes.IngredientStack;
 import buildcraft.lib.misc.ItemStackKey;
@@ -14,7 +15,8 @@ import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.recipe.ChangingItemStack;
 import buildcraft.lib.recipe.ChangingObject;
 import buildcraft.lib.recipe.IRecipeViewable;
-import buildcraft.silicon.BCSiliconItems;
+import buildcraft.lib.recipe.assembly.AssemblyRecipe;
+import buildcraft.lib.recipe.assembly.IFacadeAssemblyRecipes;
 import buildcraft.silicon.item.ItemPluggableFacade;
 import buildcraft.silicon.plug.FacadeBlockStateInfo;
 import buildcraft.silicon.plug.FacadeInstance;
@@ -34,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeViewable.IRecipePowered {
+public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeViewable.IRecipePowered, IFacadeAssemblyRecipes {
     public static final FacadeAssemblyRecipes INSTANCE = new FacadeAssemblyRecipes();
 
 //    static {
@@ -50,7 +52,7 @@ public class FacadeAssemblyRecipes extends AssemblyRecipe implements IRecipeView
     }
 
     public static ItemStack createFacadeStack(FacadeBlockStateInfo info, boolean isHollow) {
-        ItemStack stack = BCSiliconItems.plugFacade.get().createItemStack(FacadeInstance.createSingle(info, isHollow));
+        ItemStack stack = ((IFacadeItem) BCItems.Silicon.PLUG_FACADE).createItemStack(FacadeInstance.createSingle(info, isHollow));
         stack.setCount(6);
         return stack;
     }

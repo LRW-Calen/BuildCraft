@@ -9,7 +9,7 @@ package buildcraft.lib.gui.button;
 
 import net.minecraft.resources.ResourceLocation;
 
-@Deprecated
+@Deprecated(forRemoval = true)
 public interface IButtonTextureSet {
 
     int getX();

@@ -15,13 +15,11 @@ import java.util.List;
 
 public final class CraftingUtil {
 
-    /**
-     * Deactivate constructor
-     */
+    /** Deactivate constructor */
     private CraftingUtil() {
     }
 
-    //    public static Recipe findMatchingRecipe(CraftingContainer par1InventoryCrafting, Level par2World)
+    // public static Recipe findMatchingRecipe(CraftingContainer par1InventoryCrafting, Level par2World)
     public static CraftingRecipe findMatchingRecipe(CraftingContainer par1InventoryCrafting, Level par2World) {
 //        List<IRecipe> recipes = GameRegistry.findRegistry(IRecipe.class).getValues();
         List<CraftingRecipe> recipes = par2World.getRecipeManager().getRecipesFor(RecipeType.CRAFTING, par1InventoryCrafting, par2World);
@@ -32,6 +30,5 @@ public final class CraftingUtil {
             }
         }
         return null;
-
     }
 }

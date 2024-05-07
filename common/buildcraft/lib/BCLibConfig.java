@@ -8,6 +8,8 @@ package buildcraft.lib;
 
 import buildcraft.lib.chunkload.IChunkLoadingTile;
 import buildcraft.lib.chunkload.IChunkLoadingTile.LoadType;
+import buildcraft.lib.client.sprite.AtlasSpriteSwappable;
+import buildcraft.lib.client.sprite.AtlasSpriteVariants;
 import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.LocaleUtil;
 import net.minecraft.ChatFormatting;

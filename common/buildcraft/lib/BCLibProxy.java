@@ -23,6 +23,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.packs.AbstractPackResources;
+import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -45,7 +47,7 @@ import java.util.List;
 
 //public abstract class BCLibProxy implements IGuiHandler
 public abstract class BCLibProxy {
-    //    @SidedProxy(modId = BCLib.MODID)
+    // @SidedProxy(modId = BCLib.MODID)
     private static BCLibProxy proxy;
 
     public static BCLibProxy getProxy() {
@@ -114,14 +116,12 @@ public abstract class BCLibProxy {
     }
 
 //    @Override
-//    public Object getServerGuiElement(int ID, Player player, Level world, int x, int y, int z)
-//    {
+//    public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 //        return null;
 //    }
 
 //    @Override
-//    public Object getClientGuiElement(int ID, Player player, Level world, int x, int y, int z)
-//    {
+//    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 //        return null;
 //    }
 
@@ -147,8 +147,8 @@ public abstract class BCLibProxy {
 
             DetachedRenderer.INSTANCE.addRenderer(RenderMatrixType.FROM_WORLD_ORIGIN, MarkerRenderer.INSTANCE);
             DetachedRenderer.INSTANCE.addRenderer(RenderMatrixType.FROM_WORLD_ORIGIN, DebugRenderHelper.INSTANCE);
-//            // various sprite registers
-//            BCLibSprites.fmlPreInitClient(); Calen: moved to BCLib.class
+            // various sprite registers
+            BCLibSprites.fmlPreInitClient();
             BCLibConfig.configChangeListeners.add(LibConfigChangeListener.INSTANCE);
 
             MessageManager.setHandler(MessageMarker.class, MessageMarker.HANDLER, Dist.CLIENT);
@@ -172,10 +172,10 @@ public abstract class BCLibProxy {
 //                reloadable.registerReloadListener(GuideManager.INSTANCE);
                 this.registerReloadListener(reloadable, GuideManager.INSTANCE);
             }
-//            GuiConfigManager.loadFromConfigFile(); // Calen: moved to BCLibEventDistForgeBus#onTagsUpdatedEvent
+//            GuiConfigManager.loadFromConfigFile(); // Calen: moved to BCLibEventDist#reload
         }
 
-        // Calen: ReloadableResourceManager#registerReloadListener in 1.18.2 lacks something, here is what there should have in 1.12.2
+        // Calen: ReloadableResourceManager#registerReloadListener in 1.18.2 lacks something, here is what there should be in 1.12.2
         private void registerReloadListener(ReloadableResourceManager reloadable, ResourceManagerReloadListener reloadListener) {
             reloadable.registerReloadListener(GuideManager.INSTANCE);
             // Calen: moved to BCLibEventDistForgeBus#onTextureStitchPost
@@ -241,35 +241,33 @@ public abstract class BCLibProxy {
             for (Pack pack : Minecraft.getInstance().getResourcePackRepository().getAvailablePacks()) {
 //                IResourcePack pack = entry.getResourcePack();
 //                if (pack instanceof AbstractResourcePack)
-//                if (pack instanceof AbstractPackResources)
-//                {
-                // TODO Calen get ResourcePack file???
+                PackResources opened = pack.open();
+                if (opened instanceof AbstractPackResources) {
 //                    AbstractResourcePack p = (AbstractResourcePack) pack;
+                    AbstractPackResources p = (AbstractPackResources) opened;
 //                    Object f = ObfuscationReflectionHelper.getPrivateValue(AbstractResourcePack.class, p, 1);
-//                    if (!(f instanceof File))
-//                    {
+//                    if (!(f instanceof File)) {
 //                        throw new Error("We've got the wrong field! (Expected a file but got " + f + ")");
 //                    }
 //                    files.add((File) f);
-//                }
+                    if (p.file.exists()) {
+                        files.add(p.file);
+                    }
+                }
+                opened.close();
             }
             return files;
         }
 
 //        @Override
-//        public Object getClientGuiElement(int id, Player player, Level world, int x, int y, int z)
-//        {
-//            if (id == 0)
-//            {
-//                InteractionHand hand = x == 0 ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
-//                ItemStack stack = player.getItemInHand(hand);
+//        public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+//            if (id == 0) {
+//                EnumHand hand = x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+//                ItemStack stack = player.getHeldItem(hand);
 //                String name = ItemGuide.getBookName(stack);
-//                if (name == null)
-//                {
+//                if (name == null) {
 //                    return new GuiGuide();
-//                }
-//                else
-//                {
+//                } else {
 //                    return new GuiGuide(name);
 //                }
 //            }

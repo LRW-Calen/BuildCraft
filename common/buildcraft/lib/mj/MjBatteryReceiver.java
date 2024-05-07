@@ -6,7 +6,6 @@
 
 package buildcraft.lib.mj;
 
-
 import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.IMjReadable;
 import buildcraft.api.mj.IMjReceiver;

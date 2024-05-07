@@ -22,7 +22,6 @@ import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -42,12 +41,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-/**
- * Provides a useful implementation of a fluid tank that can save + load, and has a few helper functions. Can
- * optionally specify a filter to only allow a limited types of fluids in the tank.
- */
+/** Provides a useful implementation of a fluid tank that can save + load, and has a few helper functions. Can
+ * optionally specify a filter to only allow a limited types of fluids in the tank. */
 public class Tank extends FluidTank implements IFluidHandlerAdv {
-    // Calen added from 1.12.2
+    // Calen: added from 1.12.2
     public boolean canDrain = true;
 
     public void setCanDrain(boolean canDrain) {
@@ -93,23 +90,15 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
 
     protected static Map<Fluid, Integer> fluidColors = new HashMap<>();
 
-    /**
-     * Creates a tank with the given name and capacity (in milli buckets) with no filter set (so any fluid can go into
-     * the tank)
-     */
+    /** Creates a tank with the given name and capacity (in milli buckets) with no filter set (so any fluid can go into
+     * the tank) */
     public Tank(@Nonnull String name, int capacity, BlockEntity tile) {
         this(name, capacity, tile, null);
     }
 
-    public Tank(String name) {
-        this(name, 0, null, null);
-    }
-
-    /**
-     * Creates a tank with the given name and capacity (in milli buckets) with the specified filter set. If the filter
+    /** Creates a tank with the given name and capacity (in milli buckets) with the specified filter set. If the filter
      * returns true for a given fluidstack then it will be allowed in the tank. The given fluidstack will NEVER be
-     * null.
-     */
+     * null. */
     public BlockEntity tile; // Calen added
 
     public Tank(@Nonnull String name, int capacity, BlockEntity tile, @Nullable Predicate<FluidStack> filter) {
@@ -176,17 +165,13 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
         return this;
     }
 
-    /**
-     * Writes some additional information to the nbt, for example {@link SingleUseTank} will write out the filtering
-     * fluid.
-     */
+    /** Writes some additional information to the nbt, for example {@link SingleUseTank} will write out the filtering
+     * fluid. */
     protected void writeTankToNBT(CompoundTag nbt) {
     }
 
-    /**
-     * Reads some additional information to the nbt, for example {@link SingleUseTank} will read in the filtering
-     * fluid.
-     */
+    /** Reads some additional information to the nbt, for example {@link SingleUseTank} will read in the filtering
+     * fluid. */
     protected void readTankFromNBT(CompoundTag nbt) {
     }
 
@@ -202,7 +187,6 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
 //        if (fluidStack != null && amount > 0)
         if (!fluidStack.isEmpty() && amount > 0) {
 //            toolTip.add(fluidStack.getLocalizedName());
-//            toolTip.add(Component.nullToEmpty(fluidStack.getDisplayName().getContents()));
             toolTip.add(fluidStack.getDisplayName());
         }
         toolTip.add(new TextComponent(ChatFormatting.GRAY + LocaleUtil.localizeFluidStaticAmount(amount, getCapacity())));
@@ -214,8 +198,7 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
 //            toolTip.add(serverFluid.getLocalizedName());
             toolTip.add(serverFluid.getDisplayName());
 //            toolTip.add(LocaleUtil.localizeFluidStaticAmount(serverFluid.amount, getCapacity()));
-//            toolTip.add(Component.nullToEmpty(LocaleUtil.localizeFluidStaticAmount(serverFluid.getAmount(), getCapacity())));
-            toolTip.add(new TextComponent(LocaleUtil.localizeFluidStaticAmount(serverFluid.getAmount(), getCapacity())));
+            toolTip.add(LocaleUtil.localizeFluidStaticAmountComponent(serverFluid.getAmount(), getCapacity()));
         }
     }
 
@@ -269,15 +252,6 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
             return fluid.getDisplayName().getString() + LocaleUtil.localizeFluidStaticAmount(this);
         }
         return LocaleUtil.localizeFluidStaticAmount(0, getCapacity());
-    }
-
-    // Calen
-    public MutableComponent getContentsComponent() {
-//        if (fluid != null)
-        if (!fluid.isEmpty()) {
-            return new TextComponent("").append(fluid.getDisplayName()).append(LocaleUtil.localizeFluidStaticAmountComponent(this));
-        }
-        return LocaleUtil.localizeFluidStaticAmountComponent(0, getCapacity());
     }
 
     public void writeToBuffer(PacketBufferBC buffer) {
@@ -340,11 +314,9 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
         }
     }
 
-    /**
-     * Attempts to transfer the given stack to this tank.
+    /** Attempts to transfer the given stack to this tank.
      *
-     * @return The left over item after attempting to add the stack to this tank.
-     */
+     * @return The left over item after attempting to add the stack to this tank. */
     public ItemStack transferStackToTank(ContainerBC_Neptune container, ItemStack stack) {
         Player player = container.player;
         // first try to fill this tank from the item
@@ -393,8 +365,7 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
         }
         // Now try to drain the fluid into the item
 //        IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(copy);
-        LazyOptional<IFluidHandlerItem> fluidHandlerOptional = FluidUtil.getFluidHandler(copy);
-        IFluidHandlerItem fluidHandler = fluidHandlerOptional.orElse(null);
+        IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(copy).orElse(null);
         if (fluidHandler == null) return stack;
         FluidStack drained = drain(capacity, FluidAction.SIMULATE);
 //        if (drained == null || drained.getAmount() <= 0) return stack;
@@ -424,12 +395,10 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
         return stack;
     }
 
-    /**
-     * Maps the given stack to a fluid result.
+    /** Maps the given stack to a fluid result.
      *
      * @param stack The stack to map. This will ALWAYS have an {@link ItemStack#getCount()} of 1.
-     * @param space The maximum amount of fluid that can be accepted by this tank.
-     */
+     * @param space The maximum amount of fluid that can be accepted by this tank. */
     protected FluidGetResult map(ItemStack stack, int space) {
         LazyOptional<IFluidHandlerItem> fluidHandlerOptional = FluidUtil.getFluidHandler(stack.copy());
         IFluidHandlerItem fluidHandler = fluidHandlerOptional.orElse(null);

@@ -21,35 +21,35 @@ public class TankProperties {
         this.canDrain = canDrain;
     }
 
-    //    @Override
+    // @Override
     public FluidStack getContents() {
         FluidStack current = tank.getFluid();
 //        return current == null ? null : current.copy();
         return (current == null || current.getRawFluid() instanceof EmptyFluid) ? StackUtil.EMPTY_FLUID : current.copy();
     }
 
-    //    @Override
+    // @Override
     public int getCapacity() {
         return tank.getCapacity();
     }
 
-    //    @Override
+    // @Override
     public boolean canFill() {
         return canFill;
     }
 
-    //    @Override
+    // @Override
     public boolean canDrain() {
         return canDrain;
     }
 
-    //    @Override
+    // @Override
     public boolean canFillFluidType(FluidStack fluidStack) {
 //        return canFill() && tank.canFillFluidType(fluidStack);
         return canFill() && tank.isFluidValid(fluidStack);
     }
 
-    //    @Override
+    // @Override
     public boolean canDrainFluidType(FluidStack fluidStack) {
         return canDrain();
     }

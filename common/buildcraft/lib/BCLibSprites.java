@@ -28,18 +28,14 @@ public class BCLibSprites {
 
     static {
         LOCK = getHolder("icons/lock");
-//        WARNING_MINOR = getHolder("icons/warning_minor");
         WARNING_MINOR = getHolder("icons/warning_minor");
         WARNING_MAJOR = getHolder("icons/warning_major");
         LOADING = getHolder("icons/loading");
         LEDGER_LEFT = getHolder("icons/ledger_left");
-//        LEDGER_LEFT = getHolder("textures/icons/ledger_left.png");
         LEDGER_RIGHT = getHolder("icons/ledger_right");
-//        LEDGER_RIGHT = getHolder("textures/icons/ledger_right.png");
         HELP = getHolder("icons/help");
         HELP_SPLIT = getHolder("icons/help_split");
         DEBUG = getHolder("items/debugger");
-//        ENGINE_INACTIVE = getHolder("icons/engine_inactive");
         ENGINE_INACTIVE = getHolder("icons/engine_inactive");
         ENGINE_ACTIVE = getHolder("icons/engine_active");
         ENGINE_WARM = getHolder("icons/engine_warm");

@@ -15,7 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.function.IntFunction;
 
 public class SlotDisplay extends Slot {
-    //    private static IInventory emptyInventory = new InventoryBasic("[Null]", true, 0);
+    // private static IInventory emptyInventory = new InventoryBasic("[Null]", true, 0);
     private static Container emptyInventory = new SimpleContainer(0);
     private final IntFunction<ItemStack> getter;
 

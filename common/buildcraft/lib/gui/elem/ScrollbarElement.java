@@ -43,9 +43,7 @@ public class ScrollbarElement extends GuiElementSimple implements IInteractionEl
         setPosition(((gui.mouse.getY() - getY()) * len + (h / 2)) / h);
     }
 
-    /**
-     * This is called EVEN IF the mouse is not inside your width and height!
-     */
+    /** This is called EVEN IF the mouse is not inside your width and height! */
     @Override
     public void onMouseClicked(int button) {
         if (contains(gui.mouse)) {
@@ -56,9 +54,7 @@ public class ScrollbarElement extends GuiElementSimple implements IInteractionEl
         }
     }
 
-    /**
-     * This is called EVEN IF the mouse is not inside your width and height!
-     */
+    /** This is called EVEN IF the mouse is not inside your width and height! */
     @Override
 //    public void onMouseDragged(int button, long ticksSinceClick)
     public void onMouseDragged(int button) {
@@ -67,9 +63,7 @@ public class ScrollbarElement extends GuiElementSimple implements IInteractionEl
         }
     }
 
-    /**
-     * This is called EVEN IF the mouse is not inside your width and height!
-     */
+    /** This is called EVEN IF the mouse is not inside your width and height! */
     @Override
     public void onMouseReleased(int button) {
         if (isClicking && button == 0) {

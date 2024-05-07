@@ -14,12 +14,12 @@ import buildcraft.api.registry.BuildCraftRegistryManager;
 import buildcraft.api.transport.pipe.PipeApi;
 import buildcraft.lib.crops.CropHandlerPlantable;
 import buildcraft.lib.crops.CropHandlerReeds;
-import buildcraft.lib.fluid.CoolantRegistry;
-import buildcraft.lib.fluid.FuelRegistry;
+import buildcraft.lib.recipe.coolant.CoolantRegistry;
+import buildcraft.lib.recipe.fuel.FuelRegistry;
 import buildcraft.lib.guide.GuideBookRegistry;
 import buildcraft.lib.misc.FakePlayerProvider;
-import buildcraft.lib.recipe.IntegrationRecipeRegistry;
-import buildcraft.lib.recipe.RefineryRecipeRegistry;
+import buildcraft.lib.recipe.integration.IntegrationRecipeRegistry;
+import buildcraft.lib.recipe.refinery.RefineryRecipeRegistry;
 import buildcraft.lib.registry.PluggableRegistry;
 import buildcraft.lib.script.ReloadableRegistryManager;
 
@@ -45,7 +45,6 @@ public class BCLibRegistries {
         BuildcraftRecipeRegistry.refineryRecipes = RefineryRecipeRegistry.INSTANCE;
         BuildcraftFuelRegistry.fuel = FuelRegistry.INSTANCE;
         BuildcraftFuelRegistry.coolant = CoolantRegistry.INSTANCE;
-
     }
 
     public static void fmlInit() {

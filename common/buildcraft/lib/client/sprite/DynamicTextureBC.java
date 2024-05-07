@@ -17,6 +17,7 @@ import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+// TODO Calen: ZonePlanner TESR Texture
 @OnlyIn(Dist.CLIENT)
 public class DynamicTextureBC {
     public final int width, height;
@@ -26,7 +27,7 @@ public class DynamicTextureBC {
     private DynamicTexture dynamicTexture;
 
     // Calen test
-    private final ResourceLocation lightTextureLocation;
+//    private final ResourceLocation lightTextureLocation;
 
     public DynamicTextureBC(int iWidth, int iHeight) {
         width = iWidth;
@@ -36,13 +37,9 @@ public class DynamicTextureBC {
 //        heightPow2 = MathHelper.smallestEncompassingPowerOfTwo(iHeight);
         heightPow2 = Mth.smallestEncompassingPowerOfTwo(iHeight);
 //        dynamicTexture = new DynamicTexture(widthPow2, heightPow2);
-//        dynamicTexture = new DynamicTexture(widthPow2, heightPow2, true);
         dynamicTexture = new DynamicTexture(widthPow2, heightPow2, false);
-        lightTextureLocation = Minecraft.getInstance().getTextureManager().register("bc_dynamic_" + dynamicTexture.getId(), dynamicTexture);
+//        lightTextureLocation = Minecraft.getInstance().getTextureManager().register("bc_dynamic_" + dynamicTexture.getId(), dynamicTexture);
         colorMap = dynamicTexture.getPixels().makePixelArray();
-
-
-//        dynamicTexture.upload();
     }
 
     public void setColord(int x, int y, double r, double g, double b, double a) {
@@ -74,17 +71,9 @@ public class DynamicTextureBC {
 
     public void bindGlTexture() {
 //        GlStateManager.bindTexture(dynamicTexture.getId());
-
-//        int i = GlStateManager._getActiveTexture();
-//        RenderSystem.activeTexture('\u84c0' + dynamicTexture.getId());
-//        RenderSystem.enableTexture();
-//        RenderSystem.bindTexture(dynamicTexture.getId());
-        RenderSystem.setShaderTexture(0, lightTextureLocation);
-        Minecraft.getInstance().getTextureManager().bindForSetup(this.lightTextureLocation);
-//        GlStateManager._activeTexture(i);
-
-//        RenderSystem._setShaderTexture(0, dynamicTexture.getId());
-//        RenderSystem.setShaderTexture(0, dynamicTexture.getId());
+        RenderSystem.setShaderTexture(0, dynamicTexture.getId());
+//        RenderSystem.setShaderTexture(0, lightTextureLocation);
+//        Minecraft.getInstance().getTextureManager().bindForSetup(this.lightTextureLocation);
     }
 
     public void deleteGlTexture() {
@@ -123,8 +112,8 @@ public class DynamicTextureBC {
 
     private static void vertexUV(BufferBuilder bb, double x, double y, double z, double u, double v) {
 //        bb.pos(x, y, z);
-//        bb.tex(u, v);
         bb.vertex(x, y, z);
+//        bb.tex(u, v);
         bb.uv((float) u, (float) v);
         bb.endVertex();
     }

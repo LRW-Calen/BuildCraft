@@ -10,6 +10,7 @@ import buildcraft.api.core.BCLog;
 import buildcraft.lib.client.guide.ETypeTag;
 import buildcraft.lib.client.guide.TypeOrder;
 import buildcraft.lib.misc.StringUtilBC;
+import net.minecraft.util.StringUtil;
 
 public class JsonTypeTags {
     public static final JsonTypeTags EMPTY = new JsonTypeTags("", "", "");
@@ -76,8 +77,7 @@ public class JsonTypeTags {
         String current = null;
         for (String string : strings) {
             current = string;
-//            if (!StringUtils.isNullOrEmpty(current))
-            if (!StringUtilBC.isNullOrEmpty(current)) {
+            if (!StringUtil.isNullOrEmpty(current)) {
                 break;
             }
         }

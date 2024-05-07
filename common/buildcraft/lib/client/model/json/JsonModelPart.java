@@ -12,6 +12,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSyntaxException;
+import net.minecraft.client.renderer.block.model.BlockElement;
 import net.minecraft.core.Direction;
 import net.minecraft.util.GsonHelper;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** {@link BlockPart} but with a few extra features */
+/** {@link BlockElement} but with a few extra features */
 public class JsonModelPart {
     public final JsonQuad[] quads;
 

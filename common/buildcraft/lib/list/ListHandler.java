@@ -38,17 +38,13 @@ public final class ListHandler {
             stacks = NonNullList.withSize(WIDTH, StackUtil.EMPTY);
         }
 
-        /**
-         * Checks to see if this line is completely blank, and no data would be lost if this line was not saved.
-         */
+        /** Checks to see if this line is completely blank, and no data would be lost if this line was not saved. */
         public boolean isDefault() {
             if (precise || byType || byMaterial) return false;
             return !hasItems();
         }
 
-        /**
-         * Checks to see if this line has any items
-         */
+        /** Checks to see if this line has any items */
         public boolean hasItems() {
             for (ItemStack stack : stacks) {
                 if (!stack.isEmpty()) return true;

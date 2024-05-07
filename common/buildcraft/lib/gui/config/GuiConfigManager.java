@@ -21,10 +21,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-/**
- * Stores configuration values about GUI elements. Primarily which ledger is open, however json based gui's may add
- * config options per-gui.
- */
+/** Stores configuration values about GUI elements. Primarily which ledger is open, however json based gui's may add
+ * config options per-gui. */
 public class GuiConfigManager {
     public static final Map<String, GuiPropertyConstructor> customGuiProperties = new HashMap<>();
     private static final Map<ResourceLocation, GuiConfigSet> properties;

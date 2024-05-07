@@ -6,7 +6,6 @@
 
 package buildcraft.lib.gui;
 
-
 import buildcraft.lib.gui.pos.IGuiArea;
 
 import java.util.List;

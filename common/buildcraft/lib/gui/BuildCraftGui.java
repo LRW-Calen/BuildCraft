@@ -25,8 +25,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A gui element that allows for easy implementation of an actual {@link Screen} class.
+/** A gui element that allows for easy implementation of an actual {@link Screen} class.
  * <p>
  * This isn't final, although you should generally only subclass this for additional library functionality, not to
  * render out a particular gui.
@@ -50,18 +49,13 @@ import java.util.List;
  * </ul>
  * For both {@link #drawBackgroundLayer(PoseStack, float, int, int, Runnable)} and {@link #drawElementForegrounds(Runnable, PoseStack)} the
  * {@link Runnable} passed will only be called once, and it's call time will differ based on the
- * {@link #currentMenu}.
- */
+ * {@link #currentMenu}. */
 public class BuildCraftGui {
 
-    /**
-     * Used to control if this gui should show debugging lines, and other oddities that help development.
-     */
+    /** Used to control if this gui should show debugging lines, and other oddities that help development. */
     public static final IVariableNodeBoolean isDebuggingEnabled;
 
-    /**
-     * If true then the debug icon will be shown.
-     */
+    /** If true then the debug icon will be shown. */
     public static final IVariableNodeBoolean isDebuggingShown;
 
     static {
@@ -73,34 +67,26 @@ public class BuildCraftGui {
     public static final GuiSpriteScaled SPRITE_DEBUG = new GuiSpriteScaled(BCLibSprites.DEBUG, 16, 16);
 
     public final Minecraft mc = Minecraft.getInstance();
-    public final AbstractContainerScreen gui;
+    public final Screen gui;
     public final MousePosition mouse = new MousePosition();
 
-    /**
-     * The area that encompasses the entire screen.
-     */
+    /** The area that encompasses the entire screen. */
     public final IGuiArea screenElement;
 
-    /**
-     * The area that most of the GUI elements should be in. For most container-based gui's this will be a rectangle
+    /** The area that most of the GUI elements should be in. For most container-based gui's this will be a rectangle
      * smaller than the entire screen. For gui's that display outside of a world this will probably be the entire
-     * screen, and then this will equal the {@link #screenElement}.
-     */
+     * screen, and then this will equal the {@link #screenElement}. */
     public final IGuiArea rootElement;
 
-    /**
-     * All of the {@link IGuiElement} which will be drawn by this gui.
-     */
+    /** All of the {@link IGuiElement} which will be drawn by this gui. */
     public final List<IGuiElement> shownElements = new ArrayList<>();
     public IMenuElement currentMenu;
 
-    /**
-     * Ledger-style elements.
-     */
+    /** Ledger-style elements. */
     public IGuiPosition lowerLeftLedgerPos, lowerRightLedgerPos;
     private float lastPartialTicks;
 
-    public BuildCraftGui(AbstractContainerScreen gui, IGuiArea rootElement) {
+    public BuildCraftGui(Screen gui, IGuiArea rootElement) {
         this.gui = gui;
         this.screenElement = GuiUtil.AREA_WHOLE_SCREEN;
         this.rootElement = rootElement;
@@ -109,11 +95,9 @@ public class BuildCraftGui {
         lowerRightLedgerPos = rootElement.getPosition(1, -1).offset(0, 5);
     }
 
-    /**
-     * Creates a new {@link BuildCraftGui} that uses the entire screen for display. Ledgers are displayed on the
-     * opposite side (so that they expand properly).
-     */
-    public BuildCraftGui(AbstractContainerScreen gui) {
+    /** Creates a new {@link BuildCraftGui} that uses the entire screen for display. Ledgers are displayed on the
+     * opposite side (so that they expand properly). */
+    public BuildCraftGui(Screen gui) {
         this.gui = gui;
         this.screenElement = GuiUtil.AREA_WHOLE_SCREEN;
         this.rootElement = screenElement;
@@ -122,18 +106,14 @@ public class BuildCraftGui {
         lowerRightLedgerPos = screenElement.offset(5, 5);
     }
 
-    /**
-     * Creates a new {@link BuildCraftGui} that takes it's {@link #rootElement} from the {@link AbstractContainerMenu}'s
-     * size.
-     */
+    /** Creates a new {@link BuildCraftGui} that takes it's {@link #rootElement} from the {@link AbstractContainerMenu}'s
+     * size. */
 //    public static IGuiArea createWindowedArea(GuiContainer gui)
-    public static IGuiArea createWindowedArea(AbstractContainerScreen gui) {
+    public static IGuiArea createWindowedArea(AbstractContainerScreen<?> gui) {
         return IGuiArea.create(gui::getGuiLeft, gui::getGuiTop, gui::getXSize, gui::getYSize);
     }
 
-    /**
-     * @return The current partial ticks value.
-     */
+    /** @return The current partial ticks value. */
     public final float getLastPartialTicks() {
         return lastPartialTicks;
     }
@@ -182,7 +162,7 @@ public class BuildCraftGui {
         return tooltips;
     }
 
-    // private int drawTooltip(ToolTip tooltip, Matrix4f mat, double x, double y)
+    // private int drawTooltip(ToolTip tooltip, double x, double y)
     private int drawTooltip(ToolTip tooltip, PoseStack mat, double x, double y) {
         int _x = (int) Math.round(x);
         int _y = (int) Math.round(y);
@@ -243,7 +223,7 @@ public class BuildCraftGui {
         }
     }
 
-    //    public void preDrawForeground()
+    // public void preDrawForeground()
     public void preDrawForeground(PoseStack poseStack) {
 //        GlStateManager.pushMatrix();
         poseStack.pushPose();
@@ -260,9 +240,8 @@ public class BuildCraftGui {
      *            {@link IMenuElement#shouldFullyOverride()}. This will draw above all of the normal elements.
      *            {@link GL11#GL_DEPTH_TEST} will have been disabled for this. */
     public void drawElementForegrounds(Runnable menuBackgroundRenderer, PoseStack poseStack) {
-        // Calen test
-//        RenderSystem.enableDepthTest();
-        RenderUtil.disableDepth();
+        // Calen: if disableDepth, tooltip will be under currentMenu
+        RenderUtil.enableDepth();
 
         for (IGuiElement element : shownElements) {
             if (element != currentMenu) {
@@ -273,20 +252,14 @@ public class BuildCraftGui {
         IMenuElement m = currentMenu;
         if (m != null) {
             if (m.shouldFullyOverride() && menuBackgroundRenderer != null) {
-                // Calen: if disableDepth, tooltip will be under currentMenu
-                RenderUtil.enableDepth();
 //                GlStateManager.disableDepth();
-//                RenderSystem.disableDepthTest();
                 menuBackgroundRenderer.run();
 //                GlStateManager.enableDepth();
-//                RenderSystem.enableDepthTest();
             }
             m.drawBackground(lastPartialTicks, poseStack);
             m.drawForeground(poseStack, lastPartialTicks);
         }
 
-        // Calen test
-        RenderUtil.enableDepth();
         GuiUtil.drawVerticallyAppending(mouse, getAllTooltips(), this::drawTooltip, poseStack);
 
         if (isDebuggingEnabled.evaluate()) {
@@ -347,10 +320,8 @@ public class BuildCraftGui {
         }
     }
 
-    /**
-     * @return True if the {@link #currentMenu} {@link IMenuElement#shouldFullyOverride() fully overrides} other mouse
-     * clicks, false otherwise.
-     */
+    /** @return True if the {@link #currentMenu} {@link IMenuElement#shouldFullyOverride() fully overrides} other mouse
+     *         clicks, false otherwise. */
 //    public boolean onMouseClicked(int mouseX, int mouseY, int mouseButton)
     public boolean onMouseClicked(double mouseX, double mouseY, int mouseButton) {
         mouse.setMousePosition(mouseX, mouseY);
@@ -378,7 +349,7 @@ public class BuildCraftGui {
         return false;
     }
 
-    //    public void onMouseDragged(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick)
+    // public void onMouseDragged(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick)
     public void onMouseDragged(double mouseX, double mouseY, int clickedMouseButton) {
         mouse.setMousePosition(mouseX, mouseY);
 
@@ -399,7 +370,7 @@ public class BuildCraftGui {
         }
     }
 
-    //    public void onMouseReleased(int mouseX, int mouseY, int state)
+    // public void onMouseReleased(int mouseX, int mouseY, int state)
     public void onMouseReleased(double mouseX, double mouseY, int state) {
         mouse.setMousePosition(mouseX, mouseY);
 
@@ -418,7 +389,7 @@ public class BuildCraftGui {
         }
     }
 
-    //    public boolean onKeyTyped(char typedChar, int keyCode)
+    // public boolean onKeyTyped(char typedChar, int keyCode)
     public boolean onKeyTyped(int typedChar, int keyCode, int modifiers) {
         boolean action = false;
         IMenuElement m = currentMenu;

@@ -2,7 +2,7 @@ package buildcraft.transport.client.render;
 
 import buildcraft.api.core.BCLog;
 import buildcraft.lib.misc.ColourUtil;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import buildcraft.lib.registry.CreativeTabManager;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -152,7 +152,7 @@ public class PipeTabButton {
             screen.getMenu().items.clear();
             tab.fillItemList(screen.getMenu().items);
             DyeColor dyeColor = colour == 1 ? null : DyeColor.byId(colour - 2);
-            TagKey<Item> tag = OreDictTags.pipeColorTags.get(dyeColor);
+            TagKey<Item> tag = OreDictionaryTags.pipeColorTags.get(dyeColor);
             Iterator<ItemStack> itr = screen.getMenu().items.iterator();
             while (itr.hasNext()) {
                 ItemStack stack = itr.next();

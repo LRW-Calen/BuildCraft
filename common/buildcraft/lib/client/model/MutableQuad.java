@@ -18,10 +18,8 @@ import net.minecraft.world.phys.Vec3;
 
 import javax.vecmath.*;
 
-/**
- * Holds all of the information necessary to make a {@link BakedQuad}. This provides a variety of methods to quickly
- * set or get different elements. This currently holds 4 {@link MutableVertex}.
- */
+/** Holds all of the information necessary to make a {@link BakedQuad}. This provides a variety of methods to quickly
+ * set or get different elements. This currently holds 4 {@link MutableVertex}. */
 public class MutableQuad {
     public static final MutableQuad[] EMPTY_ARRAY = new MutableQuad[0];
 
@@ -299,6 +297,11 @@ public class MutableQuad {
     /** Sets the normal for all vertices to the specified {@link Vector3f}. */
     public MutableQuad normalvf(Vector3f vec) {
         return normalf(vec.x, vec.y, vec.z);
+    }
+
+    /** Sets the normal for all vertices to the specified {@link Vec3i}. */
+    public MutableQuad normalvi(Vec3i vec) {
+        return normalf(vec.getX(), vec.getY(), vec.getZ());
     }
 
     /** Sets the normal for all vertices to the specified {@link Vec3}. */

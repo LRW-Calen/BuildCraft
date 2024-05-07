@@ -31,30 +31,17 @@ import javax.vecmath.*;
  */
 @OnlyIn(Dist.CLIENT)
 public class MutableVertex {
-    /**
-     * The position of this vertex.
-     */
+    /** The position of this vertex. */
     public float position_x, position_y, position_z;
-    /**
-     * The normal of this vertex. Might not be normalised. Default value is [0, 1, 0].
-     */
+    /** The normal of this vertex. Might not be normalised. Default value is [0, 1, 0]. */
     public float normal_x, normal_y, normal_z;
-    /**
-     * The colour of this vertex, where each one is a number in the range 0-255. Default value is 255.
-     */
+    /** The colour of this vertex, where each one is a number in the range 0-255. Default value is 255. */
     public short colour_r, colour_g, colour_b, colour_a;
-    /**
-     * The texture co-ord of this vertex. Should usually be between 0-1
-     */
+    /** The texture co-ord of this vertex. Should usually be between 0-1 */
     public float tex_u, tex_v;
-    /**
-     * The light of this vertex. Should be in the range 0-15.
-     * Calen: 现在是int的两半 只存0-15的话还原回去会有问题
-     */
-//    public short light_block, light_sky;
+    /** The light of this vertex. Should be in the range 0-15. */
     public byte light_block, light_sky;
-    //    // Calen
-//    public int light_1_18_2;
+    // Calen
     public int overlay;
 
     public MutableVertex() {
@@ -130,9 +117,7 @@ public class MutableVertex {
         data[offset + 4] = Float.floatToRawIntBits(tex_u);
         data[offset + 5] = Float.floatToRawIntBits(tex_v);
         // ELEMENT_UV2 Light 2 Short -> 1 int
-        data[offset + 6] = Float.floatToRawIntBits(0);
-//        data[offset + 6] = lightc();
-//        data[offset + 6] = ((15 << 20) | (15 << 4));
+        data[offset + 6] = lightc();
         // Calen: NORMAL_3B + ELEMENT_PADDING 1B -> 1 Int
         data[offset + 7] = normalToPackedInt();
     }
@@ -149,7 +134,9 @@ public class MutableVertex {
         tex_v = Float.intBitsToFloat(data[offset + 5]);
         // TEX_2S
         lighti(data[offset + 6]);
-        normalf(0, 1, 0);
+//        normalf(0, 1, 0);
+        // NORMAL_3B
+        normali(data[offset + 7]);
     }
 
     public void fromBakedItem(int[] data, int offset) {
@@ -162,29 +149,29 @@ public class MutableVertex {
         // TEX_2F
         tex_u = Float.intBitsToFloat(data[offset + 4]);
         tex_v = Float.intBitsToFloat(data[offset + 5]);
+        // TEX_2S
+//        lightf(1, 1);
+        lighti(data[offset + 6]);
         // NORMAL_3B
-        normali(data[offset + 6]);
-        lightf(1, 1);
+        normali(data[offset + 7]);
     }
 
     // Rendering
 
-    //    public void render(BufferBuilder bb)
+    // public void render(BufferBuilder bb)
     public void render(PoseStack.Pose pose, VertexConsumer vertexConsumer) {
         VertexFormat vf = vertexConsumer.getVertexFormat();
         if (vf == DefaultVertexFormat.BLOCK) {
             renderAsBlock(pose, vertexConsumer);
         } else {
-//            for (VertexFormatElement vfe : vf.getElements())
-//            {
+//            for (VertexFormatElement vfe : vf.getElements()) {
 //                if (vfe.getUsage() == Usage.POSITION)
 //                    renderPosition(vertexConsumer, pose.pose());
 //                else if (vfe.getUsage() == Usage.NORMAL)
 //                    renderNormal(pose.normal(), vertexConsumer);
 //                else if (vfe.getUsage() == Usage.COLOR)
 //                    renderColour(vertexConsumer);
-//                else if (vfe.getUsage() == Usage.UV)
-//                {
+//                else if (vfe.getUsage() == Usage.UV) {
 //                    if (vfe.getIndex() == 0)
 //                        renderTex(vertexConsumer);
 //                    else if (vfe.getIndex() == 1)
@@ -212,12 +199,10 @@ public class MutableVertex {
         vertexConsumer.endVertex();
     }
 
-    /**
-     * Renders this vertex into the given {@link BufferBuilder}, assuming that the {@link VertexFormat} is
+    /** Renders this vertex into the given {@link BufferBuilder}, assuming that the {@link VertexFormat} is
      * {@link DefaultVertexFormat#BLOCK}.
      * <p>
-     * Slight performance increase over {@link #render(PoseStack.Pose, VertexConsumer)}.
-     */
+     * Slight performance increase over {@link #render(PoseStack.Pose, VertexConsumer)}. */
 //    public void renderAsBlock(BufferBuilder bb)
     public void renderAsBlock(PoseStack.Pose lastMatrix, VertexConsumer buffer) {
 //        buffer.vertex(poseStack.last().pose(), position_x, position_y, position_z); // Calen test
@@ -231,7 +216,7 @@ public class MutableVertex {
         buffer.endVertex();
     }
 
-    //    public void renderPosition(BufferBuilder bb)
+    // public void renderPosition(BufferBuilder bb)
     public void renderPosition(VertexConsumer bb, com.mojang.math.Matrix4f matrix4f) {
 //        bb.pos(position_x, position_y, position_z);
         bb.vertex(matrix4f, position_x, position_y, position_z);
@@ -241,7 +226,7 @@ public class MutableVertex {
         bb.normal(normal, normal_x, normal_y, normal_z);
     }
 
-    //    public void renderColour(BufferBuilder bb)
+    // public void renderColour(BufferBuilder bb)
     public void renderColour(VertexConsumer bb) {
         bb.color(colour_r, colour_g, colour_b, colour_a);
     }
@@ -285,19 +270,15 @@ public class MutableVertex {
         return new Point3f(position_x, position_y, position_z);
     }
 
-    /**
-     * Sets the current normal for this vertex based off the given vector.<br>
+    /** Sets the current normal for this vertex based off the given vector.<br>
      * Note: This calls {@link #normalf(float, float, float)} internally, so refer to that for more warnings.
      *
-     * @see #normalf(float, float, float)
-     */
+     * @see #normalf(float, float, float) */
     public MutableVertex normalv(Tuple3f vec) {
         return normalf(vec.x, vec.y, vec.z);
     }
 
-    /**
-     * Sets the current normal given the x, y, and z coordinates. These are NOT normalised or checked.
-     */
+    /** Sets the current normal given the x, y, and z coordinates. These are NOT normalised or checked. */
     public MutableVertex normalf(float x, float y, float z) {
         normal_x = x;
         normal_y = y;
@@ -316,9 +297,7 @@ public class MutableVertex {
         return normalf(-normal_x, -normal_y, -normal_z);
     }
 
-    /**
-     * @return The current normal vector of this vertex. This might be normalised.
-     */
+    /** @return The current normal vector of this vertex. This might be normalised. */
     public Vector3f normal() {
         return new Vector3f(normal_x, normal_y, normal_z);
     }
@@ -397,9 +376,7 @@ public class MutableVertex {
         return this;
     }
 
-    /**
-     * Multiplies the colour by {@link MutableQuad#diffuseLight(float, float, float)} for the normal.
-     */
+    /** Multiplies the colour by {@link MutableQuad#diffuseLight(float, float, float)} for the normal. */
     public MutableVertex multShade() {
         return multColourd(MutableQuad.diffuseLight(normal_x, normal_y, normal_z));
     }
@@ -443,16 +420,15 @@ public class MutableVertex {
         return this;
     }
 
-    public MutableVertex lighti(byte block, byte sky)
-//    public MutableVertex lighti(short block, short sky)
-    {
+    // public MutableVertex maxLighti(int block, int sky)
+    public MutableVertex lighti(byte block, byte sky) {
         light_block = (byte) block;
         light_sky = (byte) sky;
         return this;
     }
 
     public MutableVertex maxLighti(byte block, byte sky) {
-//        return lighti(((short) Math.max(block, light_block)), ((short) Math.max(sky, light_sky)));
+//        return lighti(Math.max(block, light_block), Math.max(sky, light_sky));
         return lighti((byte) Math.max(block, light_block), (byte) Math.max(sky, light_sky));
     }
 
@@ -461,9 +437,9 @@ public class MutableVertex {
     }
 
     public int lightc() {
-        // Calen: BC 1.12.2 made a mistake!
-        // without(), + will be calculated before <<
-        return (light_sky << 20) + (light_block << 4);
+        // Calen FIX: BC 1.12.2 made a mistake!
+        // without (), + will be calculated before <<
+        return (light_block << 4) + (light_sky << 20);
     }
 
     public int[] lighti() {
@@ -533,9 +509,7 @@ public class MutableVertex {
         return scalef((float) x, (float) y, (float) z);
     }
 
-    /**
-     * Rotates around the X axis by angle.
-     */
+    /** Rotates around the X axis by angle. */
     public void rotateX(float angle) {
 //        float cos = MathHelper.cos(angle);
         float cos = Mth.cos(angle);
@@ -544,9 +518,7 @@ public class MutableVertex {
         rotateDirectlyX(cos, sin);
     }
 
-    /**
-     * Rotates around the Y axis by angle.
-     */
+    /** Rotates around the Y axis by angle. */
     public void rotateY(float angle) {
 //        float cos = MathHelper.cos(angle);
         float cos = Mth.cos(angle);
@@ -555,9 +527,7 @@ public class MutableVertex {
         rotateDirectlyY(cos, sin);
     }
 
-    /**
-     * Rotates around the Z axis by angle.
-     */
+    /** Rotates around the Z axis by angle. */
     public void rotateZ(float angle) {
 //        float cos = MathHelper.cos(angle);
         float cos = Mth.cos(angle);

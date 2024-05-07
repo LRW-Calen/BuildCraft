@@ -6,27 +6,25 @@
 
 package buildcraft.lib.client.guide.font;
 
+import buildcraft.lib.misc.FontUtil;
 import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 
-import java.util.Arrays;
 import java.util.List;
 
-/**
- * Implements a font that delegates to Minecraft's own {@link Font}
- */
+/** Implements a font that delegates to Minecraft's own {@link Font} */
 public enum MinecraftFont implements IFontRenderer {
     INSTANCE;
 
-    private static Font getFont() {
+    private static Font getFontRenderer() {
         return Minecraft.getInstance().font;
     }
 
     @Override
     public int getStringWidth(String text) {
-        return getFont().width(text);
+        return getFontRenderer().width(text);
     }
 
     @Override
@@ -36,7 +34,7 @@ public enum MinecraftFont implements IFontRenderer {
 
     @Override
     public int getMaxFontHeight() {
-        return getFont().lineHeight;
+        return getFontRenderer().lineHeight;
     }
 
     @Override
@@ -54,27 +52,13 @@ public enum MinecraftFont implements IFontRenderer {
             x -= getStringWidth(text) / 2;
         }
 
-//        int v = getFont().draw(poseStack,text, x, y, colour, shadow);
-//        int v = getFont().drawShadow(poseStack,text, x, y, colour, shadow);
+//        int v = getFontRenderer().drawString(text, x, y, colour, shadow);
         int v;
-
-//        Font font = getFont();
-//        // 和buildcraft.lib.client.render.font.DelegateFontRenderer里面差不多
-//        ///////////////////////////////////////////////////////////////////////////////////////
         if (shadow) {
-//            int shadowColor = (colour & 16579836) >> 2 | colour & -16777216;
-//            int shadow_i = font.drawShadow(poseStack, text, x, y, shadowColor);
-//            int foreText_i = font.draw(poseStack, text, x, y, colour);
-//            v = Math.max(shadow_i, foreText_i);
-            v = getFont().drawShadow(poseStack, text, x, y, colour);
+            v = getFontRenderer().drawShadow(poseStack, text, x, y, colour);
         } else {
-//            v = font.draw(poseStack, text, x, y, colour);
-            v = getFont().draw(poseStack, text, x, y, colour);
+            v = getFontRenderer().draw(poseStack, text, x, y, colour);
         }
-//        // 返回值 1.12.2 FontRenderer:334 文本和shadow取大
-//        // i = Math.max(i, this.renderString(text, x, y, color, false));
-//        // dropShadow -> 调用2次renderString 分别渲染shadow和上层文本
-//        ///////////////////////////////////////////////////////////////////////////////////////
         v -= x;
 //        GlStateManager.color(1f, 1f, 1f);
         RenderUtil.color(1f, 1f, 1f);
@@ -88,7 +72,7 @@ public enum MinecraftFont implements IFontRenderer {
 
     @Override
     public List<String> wrapString(String text, int maxWidth, boolean shadow, float scale) {
-        return Arrays.stream(getFont().plainSubstrByWidth(text, (int) (maxWidth / scale)).split("\n")).toList();
-//        return getFont().listFormattedStringToWidth(text, (int) (maxWidth / scale));
+//        return getFontRenderer().listFormattedStringToWidth(text, (int) (maxWidth / scale));
+        return FontUtil.listFormattedStringToWidth(text, (int) (maxWidth / scale));
     }
 }

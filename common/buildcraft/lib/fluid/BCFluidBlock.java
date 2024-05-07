@@ -9,6 +9,7 @@ package buildcraft.lib.fluid;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -25,6 +26,8 @@ import java.util.function.Supplier;
 
 public class BCFluidBlock extends LiquidBlock {
     private boolean sticky = false;
+    private final LazyLoadedValue<Boolean> displaceWater;
+    private final LazyLoadedValue<Boolean> displaceLava;
 
     public BCFluidBlock(Supplier<? extends FlowingFluid> p_54694_, BlockBehaviour.Properties properties, boolean sticky) {
         super(p_54694_, properties);
@@ -32,45 +35,28 @@ public class BCFluidBlock extends LiquidBlock {
                 this.stateDefinition.any()
                         .setValue(LEVEL, Integer.valueOf(0))
         );
+        displaceWater = new LazyLoadedValue<>(() -> this.getFluid().getAttributes().getDensity() > 1000);
+        displaceLava = new LazyLoadedValue<>(() -> this.getFluid().getAttributes().getDensity() > 9000);
+
         this.sticky = sticky;
-//        this.setRegistryName(namespace, path); // Calen: don't set reg name here, or will cause IllegalStateException at ForgeRegistryEntry:29
 //        renderLayer = BlockRenderLayer.SOLID; // Calen: moved to BCEnergy#clientInit
     }
 
-//    public BCFluidBlock(Fluid fluid, Material material)
-//    {
-//        super(fluid, material);
-//    }
-
-    // displacements.put(...)
     @Override
-    public boolean canBeReplaced(BlockState p_56589_, BlockPlaceContext p_56590_) {
-//        displacements.put(Blocks.WATER, displaceWater);
-//        displacements.put(Blocks.FLOWING_WATER, displaceWater);
-//
-//        Boolean displaceLava = fluid.getDensity() > 9000;
-//        displacements.put(Blocks.LAVA, displaceLava);
-//        displacements.put(Blocks.FLOWING_LAVA, displaceLava);
-//        RenderProperties.get(this).
-//        RenderType.solid().
-        Boolean displaceWater = this.getFluid().getAttributes().getDensity() > 1000;
-        Boolean displaceLava = this.getFluid().getAttributes().getDensity() > 9000;
-        Item itemInHand = p_56590_.getItemInHand().getItem();
-        if (itemInHand == Items.WATER_BUCKET && displaceWater) {
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
+        Item itemInHand = context.getItemInHand().getItem();
+        if (itemInHand == Items.WATER_BUCKET && displaceWater.get()) {
             return false;
-        } else if (itemInHand == Items.LAVA_BUCKET && displaceLava) {
+        } else if (itemInHand == Items.LAVA_BUCKET && displaceLava.get()) {
             return false;
         } else {
             return true;
         }
     }
 
-
 //    @Override
-//    public Boolean isEntityInsideMaterial(BlockAccess world, BlockPos pos, BlockState state, Entity entity, double yToTest, Material material, boolean testingHead)
-//    {
-//        if (material == Material.WATER)
-//        {
+//    public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos pos, IBlockState state, Entity entity, double yToTest, Material material, boolean testingHead) {
+//        if (material == Material.WATER) {
 //            return true;
 //        }
 //        return null;
@@ -96,8 +82,7 @@ public class BCFluidBlock extends LiquidBlock {
         }
     }
 
-//    public void setSticky(boolean sticky)
-//    {
+//    public void setSticky(boolean sticky) {
 //        this.sticky = sticky;
 //    }
 }

@@ -18,7 +18,7 @@ public class SimpleSuffixArray<T> implements ISuffixArray<T> {
     private static final boolean USE_AVL = true;
     private static final boolean SPLIT_WORDS = true;
 
-    //    private final List<String> tempAddedNames = new ArrayList<>();
+    // private final List<String> tempAddedNames = new ArrayList<>();
     private final List<Component> tempAddedNames = new ArrayList<>();
     private final List<T> tempAddedObjects = new ArrayList<>();
     private int maxLength = 0;

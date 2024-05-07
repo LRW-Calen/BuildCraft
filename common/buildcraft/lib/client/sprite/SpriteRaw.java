@@ -8,6 +8,7 @@ package buildcraft.lib.client.sprite;
 
 import buildcraft.api.core.render.ISprite;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 
 /** Defines a sprite that is taken directly from the given resource location. */

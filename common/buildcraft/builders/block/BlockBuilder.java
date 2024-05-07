@@ -27,6 +27,8 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 //public class BlockBuilder extends BlockBCTile_Neptune implements IBlockWithFacing
 public class BlockBuilder extends BlockBCTile_Neptune<TileBuilder> implements IBlockWithFacing, IBlockWithTickableTE<TileBuilder> {
     public static final Property<EnumOptionalSnapshotType> SNAPSHOT_TYPE = BuildCraftProperties.SNAPSHOT_TYPE;
@@ -43,12 +45,9 @@ public class BlockBuilder extends BlockBCTile_Neptune<TileBuilder> implements IB
     // BlockState
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
-//        super.addProperties(properties);
-        super.createBlockStateDefinition(builder);
-//        properties.add(SNAPSHOT_TYPE);
-        builder.add(SNAPSHOT_TYPE);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.add(SNAPSHOT_TYPE);
     }
 
     @Override

@@ -3,7 +3,7 @@ package buildcraft.datagen.transport;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.api.recipes.IngredientStack;
 import buildcraft.lib.misc.ColourUtil;
-import buildcraft.silicon.recipe.AssemblyRecipeBuilder;
+import buildcraft.lib.recipe.assembly.AssemblyRecipeBuilder;
 import buildcraft.transport.BCTransport;
 import buildcraft.transport.BCTransportItems;
 import com.google.common.collect.ImmutableSet;

@@ -158,9 +158,9 @@ public class LaserContext {
 
     private void vertex(int i) {
         if (useNormalColour) {
-            renderer.vertex(matrix, normal, x[i], y[i], z[i], u[i], v[i], l[i], overlay, n[0], n[1], n[2], diffuse);
+            renderer.vertex(x[i], y[i], z[i], u[i], v[i], l[i], overlay, n[0], n[1], n[2], diffuse);
         } else {
-            renderer.vertex(matrix, normal, x[i], y[i], z[i], u[i], v[i], l[i], overlay, 0, 1, 0, 1);
+            renderer.vertex(x[i], y[i], z[i], u[i], v[i], l[i], overlay, 0, 1, 0, 1);
         }
     }
 }

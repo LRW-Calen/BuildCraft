@@ -18,25 +18,19 @@ public class ListMatchHandlerTools extends ListMatchHandler {
         if (type == Type.TYPE) {
 //            Set<String> toolClassesSource = stack.getItem().getToolClasses(stack);
 //            Set<String> toolClassesTarget = target.getItem().getToolClasses(stack);
-//            if (toolClassesSource.size() > 0 && toolClassesTarget.size() > 0)
-//            {
-//                if (precise)
-//                {
-//                    if (toolClassesSource.size() != toolClassesTarget.size())
-//                    {
+//            if (toolClassesSource.size() > 0 && toolClassesTarget.size() > 0) {
+//                if (precise) {
+//                    if (toolClassesSource.size() != toolClassesTarget.size()) {
 //                        return false;
 //                    }
 //                }
-//                for (String s : toolClassesSource)
-//                {
-//                    if (!toolClassesTarget.contains(s))
-//                    {
+//                for (String s : toolClassesSource) {
+//                    if (!toolClassesTarget.contains(s)) {
 //                        return false;
 //                    }
 //                }
 //                return true;
 //            }
-            // Calen
             if (stack.getItem() instanceof TieredItem item1 && target.getItem() instanceof TieredItem item2) {
                 return item1.getTier() == item2.getTier();
             }

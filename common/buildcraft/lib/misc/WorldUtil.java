@@ -24,10 +24,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import javax.annotation.Nullable;
 
 public class WorldUtil {
-    //    public static boolean isWorldCreative(Level world)
-//    {
+//    public static boolean isWorldCreative(World world) {
 //        return world.getWorldInfo().getGameType().isCreative();
 //    }
+
     public static boolean mayPlace(Level world, Block blockIn, BlockPos pos, boolean skipCollisionCheck, Direction sidePlacedOn, @Nullable Player placer) {
         BlockState iblockstate1 = world.getBlockState(pos);
         VoxelShape axisalignedbb = skipCollisionCheck ? null : blockIn.defaultBlockState().getCollisionShape(world, pos);
@@ -40,9 +40,17 @@ public class WorldUtil {
         else if (iblockstate1.getMaterial() == Material.DECORATION && blockIn == Blocks.ANVIL) {
             return true;
         } else {
-            // TODO Calen canPlaceBlockOnSide?
 //            return iblockstate1.getBlock().isReplaceable(this, pos) && blockIn.canPlaceBlockOnSide(this, pos, sidePlacedOn);
-            return iblockstate1.canBeReplaced(new BlockPlaceContext(world, placer, InteractionHand.MAIN_HAND, StackUtil.EMPTY, BlockHitResult.miss(Vec3.ZERO, Direction.NORTH, pos)));
+            return iblockstate1.canBeReplaced(
+                    new BlockPlaceContext(
+                            world,
+                            placer,
+                            InteractionHand.MAIN_HAND,
+                            StackUtil.EMPTY,
+                            BlockHitResult.miss(Vec3.ZERO, Direction.NORTH, pos)
+                    )
+            )
+                    && blockIn.canSurvive(world.getBlockState(pos), world, pos);
         }
     }
 }

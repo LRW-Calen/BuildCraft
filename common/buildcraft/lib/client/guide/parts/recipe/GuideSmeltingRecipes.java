@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SmeltingRecipe;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.block.Blocks;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 public enum GuideSmeltingRecipes implements IStackRecipes {
     INSTANCE;
@@ -31,18 +33,15 @@ public enum GuideSmeltingRecipes implements IStackRecipes {
 //        Map<ItemStack, ItemStack> old = FurnaceRecipes.instance().getSmeltingList();
         List<SmeltingRecipe> old = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING);
 //        recipes = new TreeMap<>(Comparator.comparing(ItemStack::getDisplayName));
-        recipes = new ArrayList<>();
+//        recipes = new ArrayList<>();
 //        recipes.putAll(old);
         recipes = old;
         // Calen: no meta in 1.18.2
-//        if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE)
-//        {
+//        if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
 //            List<GuidePartFactory> list = new ArrayList<>();
-//            for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
-//            {
+//            for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet()) {
 //                if (StackUtil.doesEitherStackMatch(stack, StackUtil.asNonNull(recipe.getValue()))//
-//                        || StackUtil.doesEitherStackMatch(stack, StackUtil.asNonNull(recipe.getKey())))
-//                {
+//                        || StackUtil.doesEitherStackMatch(stack, StackUtil.asNonNull(recipe.getKey()))) {
 //                    list.add(new GuideSmeltingFactory(recipe.getKey(), recipe.getValue()));
 //                }
 //            }
@@ -61,7 +60,7 @@ public enum GuideSmeltingRecipes implements IStackRecipes {
             return ImmutableList.of(new GuideSmeltingFactory(recipe.getIngredients(), recipe.getResultItem()));
         }
 
-        if (stack.getItem() == Blocks.FURNACE.asItem()) {
+        if (stack.getItem() == Items.FURNACE) {
             List<GuidePartFactory> list = new ArrayList<>();
 //            for (Entry<ItemStack, ItemStack> recipe : recipes.entrySet())
             for (SmeltingRecipe recipe_i : recipes) {

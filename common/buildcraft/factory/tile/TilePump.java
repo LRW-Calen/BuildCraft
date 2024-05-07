@@ -164,7 +164,7 @@ public class TilePump extends TileMiner {
         Direction[] directions = queueFluid.getAttributes().isGaseous() ? SEARCH_GASEOUS : SEARCH_NORMAL;
         boolean isWater
 //                = !BCCoreConfig.pumpsConsumeWater && FluidUtilBC.areFluidsEqual(queueFluid, Fluids.WATER);
-                = !BCCoreConfig.pumpsConsumeWater && FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(queueFluid, Fluids.WATER);
+                = !BCCoreConfig.pumpsConsumeWater && FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(queueFluid, Fluids.WATER);
         final int maxLengthSquared = BCCoreConfig.pumpMaxDistance * BCCoreConfig.pumpMaxDistance;
         outer:
         while (!nextPosesToCheck.isEmpty()) {
@@ -187,7 +187,7 @@ public class TilePump extends TileMiner {
                         Fluid fluidAt = BlockUtil.getFluidWithFlowing(level, offsetPos);
                         prof.endStartSection("eq_cmp");
 //                        boolean eq = FluidUtilBC.areFluidsEqual(fluidAt, queueFluid);
-                        boolean eq = FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(fluidAt, queueFluid);
+                        boolean eq = FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(fluidAt, queueFluid);
                         prof.endSection();
                         if (eq) {
                             prof.startSection("prevPath");
@@ -222,7 +222,7 @@ public class TilePump extends TileMiner {
                         Fluid fluidBelow = BlockUtil.getFluidWithoutFlowing(below);
                         if (
 //                                FluidUtilBC.areFluidsEqual(fluidBelow, Fluids.WATER) || below.getMaterial().isSolid()
-                                FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(fluidBelow, Fluids.WATER) || below.getMaterial().isSolid()
+                                FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(fluidBelow, Fluids.WATER) || below.getMaterial().isSolid()
                         ) {
                             isInfiniteWaterSource = true;
                             prof.endSection();
@@ -264,7 +264,7 @@ public class TilePump extends TileMiner {
     private static boolean isOil(Fluid queueFluid) {
         if (BCModules.ENERGY.isLoaded()) {
 //            return FluidUtilBC.areFluidsEqual(queueFluid, BCEnergyFluids.crudeOil[0]);
-            return FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(queueFluid, BCEnergyFluids.crudeOil[0].get().getSource());
+            return FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(queueFluid, BCEnergyFluids.crudeOil[0].get().getSource());
         }
         return false;
     }
@@ -272,7 +272,7 @@ public class TilePump extends TileMiner {
     private boolean canDrain(BlockPos blockPos) {
         Fluid fluid = BlockUtil.getFluid(level, blockPos);
 //        return tank.isEmpty() ? fluid != null : FluidUtilBC.areFluidsEqual(fluid, tank.getFluidType());
-        return tank.isEmpty() ? fluid != null : FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(fluid, tank.getFluidType());
+        return tank.isEmpty() ? fluid != null : FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(fluid, tank.getFluidType());
     }
 
     private void nextPos() {
@@ -360,7 +360,7 @@ public class TilePump extends TileMiner {
                 isInfiniteWaterSource &= !BCCoreConfig.pumpsConsumeWater;
                 if (isInfiniteWaterSource) {
 //                    isInfiniteWaterSource = FluidUtilBC.areFluidsEqual(drain.getRawFluid(), Fluids.WATER);
-                    isInfiniteWaterSource = FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(drain.getRawFluid(), Fluids.WATER);
+                    isInfiniteWaterSource = FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(drain.getRawFluid(), Fluids.WATER);
                 }
                 AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT_DRAIN_ANY);
                 if (!isInfiniteWaterSource) {

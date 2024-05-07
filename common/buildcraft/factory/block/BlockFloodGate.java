@@ -30,6 +30,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate> {
@@ -45,17 +46,14 @@ public class BlockFloodGate extends BlockBCTile_Neptune<TileFloodGate> {
     }
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
-//        super.addProperties(properties);
-        super.createBlockStateDefinition(builder);
-//        properties.addAll(CONNECTED_MAP.values());
-        CONNECTED_MAP.values().forEach(builder::add);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.addAll(CONNECTED_MAP.values());
     }
 
     @Override
 //    public TileBC_Neptune createTileEntity(World world, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return new TileFloodGate(pos, state);
     }
 

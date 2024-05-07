@@ -6,7 +6,6 @@
 
 package buildcraft.lib.misc;
 
-
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
@@ -14,9 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-/**
- * Predicate that compares values of specified NBT keys subset.
- */
+/** Predicate that compares values of specified NBT keys subset. */
 public class StackNbtMatcher implements StackMatchingPredicate {
     private String[] keys;
 

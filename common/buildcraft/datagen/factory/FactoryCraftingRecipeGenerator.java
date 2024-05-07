@@ -4,7 +4,7 @@ import buildcraft.energy.BCEnergyFluids;
 import buildcraft.factory.BCFactory;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.BCFactoryItems;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -27,9 +27,9 @@ public class FactoryCraftingRecipeGenerator extends RecipeProvider {
         // autoworkbench_item
         ShapedRecipeBuilder.shaped(BCFactoryBlocks.autoWorkbenchItems.get())
                 .pattern("gwg")
-                .define('g', Ingredient.of(OreDictTags.GEAR_STONE))
-                .define('w', Ingredient.of(OreDictTags.WORKBENCHES_ITEM))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_STONE))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_STONE))
+                .define('w', Ingredient.of(OreDictionaryTags.WORKBENCHES_ITEM))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_STONE))
                 .group(MOD_ID)
                 .save(consumer);
         // chute
@@ -38,9 +38,9 @@ public class FactoryCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("igi")
                 .pattern(" i ")
                 .define('c', Ingredient.of(Tags.Items.CHESTS_WOODEN))
-                .define('g', Ingredient.of(OreDictTags.GEAR_STONE))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_STONE))
                 .define('i', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_STONE))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_STONE))
                 .group(MOD_ID)
                 .save(consumer);
         // distiller
@@ -49,7 +49,7 @@ public class FactoryCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("tgt")
                 .define('r', Ingredient.of(Items.REDSTONE_TORCH))
                 .define('t', Ingredient.of(BCFactoryBlocks.tank.get()))
-                .define('g', Ingredient.of(OreDictTags.GEAR_DIAMOND))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_DIAMOND))
                 .unlockedBy("has_item", has(BCFactoryBlocks.tank.get()))
                 .group(MOD_ID)
                 .save(consumer);
@@ -60,7 +60,7 @@ public class FactoryCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("ibi")
                 .define('b', Ingredient.of(Items.IRON_BARS))
                 .define('t', Ingredient.of(BCFactoryBlocks.tank.get()))
-                .define('g', Ingredient.of(OreDictTags.GEAR_IRON))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_IRON))
                 .define('i', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .unlockedBy("has_item", has(BCFactoryBlocks.tank.get()))
                 .group(MOD_ID)
@@ -71,9 +71,9 @@ public class FactoryCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("###")
                 .pattern("igi")
                 .define('i', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .define('g', Ingredient.of(OreDictTags.GEAR_IRON))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_IRON))
                 .define('#', Ingredient.of(Tags.Items.GLASS_COLORLESS))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_IRON))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_IRON))
                 .group(MOD_ID)
                 .save(consumer);
         // mining_well
@@ -83,9 +83,9 @@ public class FactoryCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("ipi")
                 .define('p', Ingredient.of(Items.IRON_PICKAXE))
                 .define('r', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
-                .define('g', Ingredient.of(OreDictTags.GEAR_IRON))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_IRON))
                 .define('i', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_IRON))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_IRON))
                 .group(MOD_ID)
                 .save(consumer);
         // pump
@@ -96,7 +96,7 @@ public class FactoryCraftingRecipeGenerator extends RecipeProvider {
                 .define('r', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
                 .define('b', Ingredient.of(Items.BUCKET))
                 .define('t', Ingredient.of(BCFactoryBlocks.tank.get()))
-                .define('g', Ingredient.of(OreDictTags.GEAR_IRON))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_IRON))
                 .define('i', Ingredient.of(Tags.Items.INGOTS_IRON))
                 .unlockedBy("has_item", has(BCFactoryBlocks.tank.get()))
                 .group(MOD_ID)

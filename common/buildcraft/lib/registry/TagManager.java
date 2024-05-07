@@ -13,14 +13,12 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-/**
- * Stores several types of "tag" (strings) for BuildCraft. A central place for all of them to init in. Refer to the
+/** Stores several types of "tag" (strings) for BuildCraft. A central place for all of them to init in. Refer to the
  * "static" block for all of the tag ID's
  * <p>
  * You are free to add your own tags (say for addons) but it is recommended that you include your addon name somewhere
  * near the start - we don't want name clashes between addons or an addon and BC itself. If you want more types of tags
- * keys then just make an issue for it, and it will probably be added.
- */
+ * keys then just make an issue for it, and it will probably be added. */
 public class TagManager {
     // Calen: thread safety
 //    private static final Map<String, TagEntry> idsToEntry = new HashMap<>();
@@ -72,7 +70,7 @@ public class TagManager {
         OREDICT_NAME,
         REGISTRY_NAME,
         CREATIVE_TAB,
-        // Calen: not still useful in 1.18.2
+        // Calen: not still used in 1.18.2
 //        MODEL_LOCATION,
     }
 
@@ -81,9 +79,7 @@ public class TagManager {
     }
 
     public static class TagEntry {
-        /**
-         * The actual ID
-         */
+        /** The actual ID */
         public final String id;
         private final Map<EnumTagType, String> tags = new EnumMap<>(EnumTagType.class);
         private final Map<EnumTagTypeMulti, List<String>> multiTags = new EnumMap<>(EnumTagTypeMulti.class);
@@ -131,9 +127,8 @@ public class TagManager {
             return setSingleTag(EnumTagType.CREATIVE_TAB, creativeTab);
         }
 
-        // Calen: not still useful in 1.18.2
-//        public TagEntry model(String modelLocation)
-//        {
+        // Calen: not still used in 1.18.2
+//        public TagEntry model(String modelLocation) {
 //            return setSingleTag(EnumTagType.MODEL_LOCATION, modelLocation);
 //        }
 
@@ -147,8 +142,7 @@ public class TagManager {
             return this;
         }
 
-//        public TagEntry oldReg(String... tags)
-//        {
+//        public TagEntry oldReg(String... tags) {
 //            return addMultiTag(EnumTagTypeMulti.OLD_REGISTRY_NAME, tags);
 //        }
     }
@@ -157,7 +151,7 @@ public class TagManager {
         return idsToEntry.get(id);
     }
 
-    //    public static TagEntry registerTag(String id)
+    // public static TagEntry registerTag(String id)
     public TagEntry registerTag(String id) {
         TagEntry entry = new TagEntry(id);
         idsToEntry.put(id, entry);
@@ -173,15 +167,15 @@ public class TagManager {
     //
     // #########################
 
-    //    private static final Deque<List<TagEntry>> batchTasks = new ArrayDeque<>();
+    // private static final Deque<List<TagEntry>> batchTasks = new ArrayDeque<>();
     private final Deque<List<TagEntry>> batchTasks = new ArrayDeque<>();
 
-    //    public static void startBatch()
+    // public static void startBatch()
     public void startBatch() {
         batchTasks.push(new ArrayList<>());
     }
 
-    //    public static void endBatch(Consumer<TagEntry> consumer)
+    // public static void endBatch(Consumer<TagEntry> consumer)
     public void endBatch(Consumer<TagEntry> consumer) {
         batchTasks.pop().forEach(consumer);
     }
@@ -190,17 +184,7 @@ public class TagManager {
         return tag ->
         {
             if (tag == null) {
-                try {
-                    throw new RuntimeException("666666666666666666666666666");
-                } catch (Exception e) {
-                    System.out.println("666666666666666666666666666666666666666666666");
-                    System.out.println("666666666666666666666666666666666666666666666");
-                    System.out.println("666666666666666666666666666666666666666666666");
-                    e.printStackTrace();
-                    System.out.println("666666666666666666666666666666666666666666666");
-                    System.out.println("666666666666666666666666666666666666666666666");
-                    System.out.println("666666666666666666666666666666666666666666666");
-                }
+                throw new RuntimeException("[lib.tagmanager.prepend] Tag is null!");
             }
             if (tag.hasSingleTag(type)) {
                 tag.setSingleTag(type, prefix + tag.getSingleTag(type));

@@ -6,7 +6,6 @@
 
 package buildcraft.lib.misc;
 
-
 import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nonnull;

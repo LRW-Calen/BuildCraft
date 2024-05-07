@@ -42,8 +42,8 @@ public class ItemTransactorHelper {
             return trans.resolve().get();
         }
 
-        LazyOptional<IItemHandler> handler = provider.getCapability(CapUtil.CAP_ITEMS, face);
-        if (!handler.isPresent()) {
+        IItemHandler handler = provider.getCapability(CapUtil.CAP_ITEMS, face).orElse(null);
+        if (handler == null) {
 //            if (provider instanceof ISidedInventory)
             if (provider instanceof WorldlyContainer) {
 //                return new SidedInventoryWrapper((ISidedInventory) provider, face);
@@ -57,7 +57,7 @@ public class ItemTransactorHelper {
         if (handler instanceof IItemTransactor) {
             return (IItemTransactor) handler;
         }
-        return new ItemHandlerWrapper(handler.resolve().get());
+        return new ItemHandlerWrapper(handler);
     }
 
     @Nonnull

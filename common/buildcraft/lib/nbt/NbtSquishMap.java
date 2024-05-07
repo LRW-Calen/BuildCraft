@@ -14,9 +14,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Defines a map of commonly used tags.
- */
+/** Defines a map of commonly used tags. */
 public class NbtSquishMap {
     // TODO: Try adding "ImmutableTagCompound" and "ImmutableTagList" to see if the equals() and hashCode() of compounds
     // is a problem atm

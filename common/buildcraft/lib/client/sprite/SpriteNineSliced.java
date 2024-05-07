@@ -14,9 +14,7 @@ import net.minecraft.client.renderer.GameRenderer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-/**
- * Defines and draws a 9-sliced sprite.
- */
+/** Defines and draws a 9-sliced sprite. */
 @OnlyIn(Dist.CLIENT)
 public class SpriteNineSliced {
     public final ISprite sprite;
@@ -57,13 +55,12 @@ public class SpriteNineSliced {
     }
 
     public void draw(PoseStack poseStack, double x, double y, double width, double height) {
-        // Calen test
         sprite.bindTexture();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
 
         // Calen: should enableBlend to enable alpha, or the fluid tank overlay will not be seen
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         Tesselator tess = Tesselator.getInstance();
         BufferBuilder vb = tess.getBuilder();
 //        vb.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
@@ -71,8 +68,6 @@ public class SpriteNineSliced {
 //        vb.setTranslation(x, y, 0);
         poseStack.pushPose();
         poseStack.translate(x, y, 0);
-
-//        PoseStack.Pose lastPose = poseStack.last();
 
         double sx = xScale;
         double sy = yScale;
@@ -83,7 +78,6 @@ public class SpriteNineSliced {
         double[] va = { 0, yMin, yMax, 1 };
 
         quad(vb, poseStack, xa, ya, ua, va, 0, 0);
-        // Calen test
         quad(vb, poseStack, xa, ya, ua, va, 0, 1);
         quad(vb, poseStack, xa, ya, ua, va, 0, 2);
 
@@ -112,14 +106,6 @@ public class SpriteNineSliced {
         vertex(vb, poseStack.last(), x[xis], y[yIB], u[xis], v[yIB]);
         vertex(vb, poseStack.last(), x[xIB], y[yIB], u[xIB], v[yIB]);
         vertex(vb, poseStack.last(), x[xIB], y[yis], u[xIB], v[yis]);
-
-//        GuiComponent.blit(
-//                poseStack,
-//                (int)x[xis],(int)y[yis],
-//                (float) u[xis], (float)v[yis],
-//                (int)(x[xIB]-x[xis]),(int)(y[yIB]-y[yis]),
-//                (int)(u[xIB]-u[xis]),(int)(v[yIB]-v[yis])
-//        );
     }
 
     private void vertex(BufferBuilder vb, PoseStack.Pose pose, double x, double y, double texU, double texV) {
@@ -127,7 +113,6 @@ public class SpriteNineSliced {
         vb.vertex(pose.pose(), (float) x, (float) y, 0);
 //        vb.tex(sprite.getInterpU(texU), sprite.getInterpV(texV));
         vb.uv((float) sprite.getInterpU(texU), (float) sprite.getInterpV(texV));
-//        vb.uv((float) texU, (float) texV);
         vb.endVertex();
     }
 }

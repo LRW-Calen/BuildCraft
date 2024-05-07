@@ -1,6 +1,7 @@
 package buildcraft.lib.command;
 
 import buildcraft.lib.script.ReloadableRegistryManager;
+import net.minecraft.server.MinecraftServer;
 
 //public class CommandReloadRegistries extends CommandBase
 public class CommandReloadRegistries extends BCSubCommandBase {
@@ -8,7 +9,7 @@ public class CommandReloadRegistries extends BCSubCommandBase {
         super(
                 "reload",
                 "command.buildcraft.reload",
-                0,
+                4,
                 (arg) ->
                 {
                     ReloadableRegistryManager.DATA_PACKS.reloadAll();
@@ -16,22 +17,4 @@ public class CommandReloadRegistries extends BCSubCommandBase {
                 }
         );
     }
-
-//    @Override
-//    public String getName()
-//    {
-//        return "reload";
-//    }
-//
-//    @Override
-//    public String getUsage(ICommandSender sender)
-//    {
-//        return "command.buildcraft.reload";
-//    }
-//
-//    @Override
-//    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
-//    {
-//        ReloadableRegistryManager.DATA_PACKS.reloadAll();
-//    }
 }

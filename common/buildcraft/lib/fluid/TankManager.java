@@ -31,10 +31,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Provides a simple way to save+load and send+receive data for any number of tanks. This also attempts to fill all of
- * the tanks one by one via the {@link #fill(FluidStack, FluidAction)} and {@link #drain(FluidStack, FluidAction)} methods.
- */
+/** Provides a simple way to save+load and send+receive data for any number of tanks. This also attempts to fill all of
+ * the tanks one by one via the {@link #fill(FluidStack, FluidAction)} and {@link #drain(FluidStack, FluidAction)} methods.*/
 public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAdv, INBTSerializable<CompoundTag> {
     private final List<Tank> tanks = new ArrayList<>();
 
@@ -119,9 +117,9 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
         int left = resource.getAmount();
         for (Tank tank : getDrainOrderTanks()) {
             // Calen: in 1.18.2 isFluidEqual may ret f if amount of one is 0
+            // Calen: should use resource, draining.getFluid() will ret EMPTY
 //            if (!draining.isFluidEqual(tank.getFluid()))
-            if (tank.getFluid().getRawFluid() != resource.getRawFluid()) // Calen: should use resource, draining.getFluid() will ret EMPTY
-            {
+            if (tank.getFluid().getRawFluid() != resource.getRawFluid()) {
                 continue;
             }
             FluidStack drained = tank.drain(left, doDrain);

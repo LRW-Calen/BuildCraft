@@ -6,23 +6,24 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 
 public class BCSubCommandBase {
-    private final String NAME;
-    private final String USAGE;
-    private final int PERMISSION;
-    private final Command<CommandSourceStack> EXECUTE;
+    private final String name;
+    private final String usage;
+    private final int permission;
+    private final Command<CommandSourceStack> execute;
 
-    BCSubCommandBase(String NAME, String USAGE, int PERMISSION, Command<CommandSourceStack> EXECUTE) {
-        this.NAME = NAME;
-        this.USAGE = USAGE;
-        this.PERMISSION = PERMISSION;
-        this.EXECUTE = EXECUTE;
+    BCSubCommandBase(String name, String usage, int permission, Command<CommandSourceStack> execute) {
+        this.name = name;
+        this.usage = usage;
+        this.permission = permission;
+        this.execute = execute;
     }
 
     void addSubcommand(LiteralArgumentBuilder<CommandSourceStack> parentCommand) {
         parentCommand
-                .then(Commands.literal(NAME) // 子命令
-                        .requires((req) -> req.hasPermission(PERMISSION)) // 0->Player 2-> OP
-                        .executes(EXECUTE) // 回调
+                .then(
+                        Commands.literal(name)
+                                .requires((req) -> req.hasPermission(permission))
+                                .executes(execute)
                 );
     }
 }

@@ -97,8 +97,12 @@ public class MessageManager {
         registerMessageClass(module, clazz, null, sides);
     }
 
-    public static <I extends IMessage> void registerMessageClass(IBuildCraftMod module, Class<I> messageClass,
-                                                                 IMessageHandler<I, ?> messageHandler, Dist... sides) {
+    public static <I extends IMessage> void registerMessageClass(
+            IBuildCraftMod module,
+            Class<I> messageClass,
+            IMessageHandler<I, ?> messageHandler,
+            Dist... sides
+    ) {
         PerModHandler modHandler = MOD_HANDLERS.computeIfAbsent(module, PerModHandler::new);
         PerMessageInfo<I> messageInfo = (PerMessageInfo<I>) modHandler.knownMessages.get(messageClass);
         if (messageInfo == null) {
@@ -158,6 +162,16 @@ public class MessageManager {
         }
     }
 
+    /**
+     * Both direction is allowed if parameter direction of {@link SimpleChannel#messageBuilder(Class, int, NetworkDirection)} is null.
+     * When message handled, we should call {@link net.minecraftforge.network.NetworkEvent.Context#setPacketHandled(boolean)},
+     * or [Unknown custom packet identifier: buildcraftlib:default] will appear in console
+     *
+     * @param handler
+     * @param id
+     * @param info
+     * @param <I>
+     */
     private static <I extends IMessage> void postInitSingle(PerModHandler handler, int id, PerMessageInfo<I> info) {
         boolean cl = info.clientHandler != null;
         boolean sv = info.serverHandler != null;
@@ -173,22 +187,19 @@ public class MessageManager {
 
 //        handler.netWrapper.registerMessage(wrapHandler(info.clientHandler, msgClass), msgClass, id, Side.CLIENT);
 //        handler.netWrapper.registerMessage(wrapHandler(info.serverHandler, msgClass), msgClass, id, Side.SERVER);
-        // Calen: null -> both directions are ok
         handler.netWrapper.messageBuilder(msgClass, id, null)
                 .encoder(I::toBytes)
                 .decoder((buf) -> (I) IMessage.staticFromBytes(msgClass, buf))
                 .consumer((msg, supplier) ->
                 {
                     NetworkEvent.Context context = supplier.get();
-                    IMessageHandler messageHandler = null;
+                    IMessageHandler<I, ?> messageHandler = null;
                     if (context.getDirection() == NetworkDirection.PLAY_TO_SERVER) {
                         messageHandler = info.serverHandler;
                     } else if (context.getDirection() == NetworkDirection.PLAY_TO_CLIENT) {
                         messageHandler = info.clientHandler;
                     }
                     IMessage reply = wrapHandler(messageHandler, msgClass).onMessage(msg, context);
-                    // Calen: Should setPacketHandled!
-                    // or the console will say: Unknown custom packet identifier: buildcraftlib:default
                     context.setPacketHandled(true);
                 })
                 .add();

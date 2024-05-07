@@ -5,6 +5,8 @@ import buildcraft.api.core.BCLog;
 import buildcraft.api.facades.FacadeAPI;
 import buildcraft.api.imc.BcImcMessage;
 import buildcraft.core.BCCore;
+import buildcraft.lib.recipe.assembly.AssemblyRecipeRegistry;
+import buildcraft.lib.recipe.assembly.AssemblyRecipeSerializer;
 import buildcraft.lib.registry.CreativeTabManager;
 import buildcraft.lib.registry.CreativeTabManager.CreativeTabBC;
 import buildcraft.lib.registry.RegistryConfig;
@@ -16,7 +18,7 @@ import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.plug.FacadeBlockStateInfo;
 import buildcraft.silicon.plug.FacadeInstance;
 import buildcraft.silicon.plug.FacadeStateManager;
-import buildcraft.silicon.recipe.AssemblyRecipeSerializer;
+import buildcraft.silicon.recipe.FacadeAssemblyRecipes;
 import buildcraft.silicon.recipe.FacadeSwapRecipeSerializer;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -126,6 +128,8 @@ public class BCSilicon {
         IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
         registry.register(AssemblyRecipeSerializer.INSTANCE);
         registry.register(FacadeSwapRecipeSerializer.INSTANCE);
+
+        AssemblyRecipeRegistry.FACADE_ASSEMBLY_RECIPE = FacadeAssemblyRecipes.INSTANCE;
     }
 
     @OnlyIn(Dist.CLIENT)

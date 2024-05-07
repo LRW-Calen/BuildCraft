@@ -22,11 +22,11 @@ import net.minecraftforge.common.world.ForgeChunkManager.TicketHelper;
 import java.util.*;
 
 public class ChunkLoaderManager {
-    //    private static final Map<WorldPos, Ticket> TICKETS = new HashMap<>();
+    // private static final Map<WorldPos, Ticket> TICKETS = new HashMap<>();
     private static final Map<WorldPos, Pair<LongSet, LongSet>> TICKETS = new HashMap<>();
 
     /**
-     * This should be called in {@link BlockEntity#validate()}, if a tile entity might be able to load. A check is
+     * This should be called in {@link BlockEntity#clearRemoved()}, if a tile entity might be able to load. A check is
      * performed to see if the config allows it
      */
     public static <T extends BlockEntity & IChunkLoadingTile> void loadChunksForTile(T tile) {
@@ -41,14 +41,6 @@ public class ChunkLoaderManager {
     }
 
     public static <T extends BlockEntity & IChunkLoadingTile> void releaseChunksFor(T tile) {
-//        ForgeChunkManager.releaseTicket(TICKETS.remove(new WorldPos(tile)));
-//        if (tile.getLevel() instanceof ServerLevel serverLevel)
-//        {
-//            for (ChunkPos chunkPos_i : tile.getChunksToLoad())
-//            {
-//                releaseChunk(serverLevel, tile.getBlockPos(), chunkPos_i, true);
-//            }
-//        }
         if (!(tile.getLevel() instanceof ServerLevel)) {
             return;
         }
@@ -75,8 +67,7 @@ public class ChunkLoaderManager {
 //                    ForgeChunkManager.Type.NORMAL
 //            );
             ticket = new Pair<>(new LongOpenHashSet(), new LongOpenHashSet());
-//            if (ticket == null)
-//            {
+//            if (ticket == null) {
 //                BCLog.logger.warn("[lib.chunkloading] Failed to chunkload " + tile.getClass().getName() + " at " + tile.getBlockPos());
 //                return;
 //            }
@@ -121,7 +112,7 @@ public class ChunkLoaderManager {
         return chunkPoses;
     }
 
-    //    public static void rebindTickets(List<TicketTracker> tickets, Level world)
+    // public static void rebindTickets(List<TicketTracker> tickets, Level world)
     public static void rebindTickets(ServerLevel world, TicketHelper ticketHelper) {
         Map<BlockPos, Pair<LongSet, LongSet>> tickets = ticketHelper.getBlockTickets();
         TICKETS.clear();

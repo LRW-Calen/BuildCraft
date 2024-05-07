@@ -13,7 +13,7 @@ public class InventorySlotHolder {
 
     public final Slot[] slots;
 
-    //    public InventorySlotHolder(Container container, IInventory inventory)
+    // public InventorySlotHolder(Container container, IInventory inventory)
     public InventorySlotHolder(AbstractContainerMenu container, Container inventory) {
         List<Slot> list = new ArrayList<>();
 //        for (Slot s : container.inventorySlots)

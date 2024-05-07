@@ -15,9 +15,7 @@ import net.minecraft.network.chat.TextComponent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fluids.FluidStack;
 
-import javax.annotation.Nullable;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
@@ -32,13 +30,11 @@ public final class StringUtilBC {
     private StringUtilBC() {
     }
 
-    // Calen changed
     public static List<Component> splitIntoLines(String string) {
-        List<Component> newList = new ArrayList<>();
-        for (String s : newLineSplitter.splitToList(string.replaceAll("\\n", "\n"))) {
-            newList.add(new TextComponent(s));
-        }
-        return newList;
+        return newLineSplitter
+                .splitToList(string.replaceAll("\\n", "\n"))
+                .stream().map(s -> (Component) new TextComponent(s))
+                .toList();
     }
 
     /** Formats a string to be displayed on a white background (for example a book background), replacing any
@@ -133,13 +129,6 @@ public final class StringUtilBC {
      *         ignore case when comparing. */
     public static Comparator<String> compareBasicReadable() {
         return BasicReadableStringComparator.INSTANCE;
-    }
-
-    // Calen from 1.12.2 StringUtils.class
-
-    /** Returns a value indicating whether the given string is null or empty. */
-    public static boolean isNullOrEmpty(@Nullable String string) {
-        return org.apache.commons.lang3.StringUtils.isEmpty(string);
     }
 
     enum BasicReadableStringComparator implements Comparator<String> {

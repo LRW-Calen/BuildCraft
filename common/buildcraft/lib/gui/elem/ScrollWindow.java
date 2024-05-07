@@ -94,10 +94,8 @@ public class ScrollWindow implements IContainingElement {
         }
     }
 
-    /**
-     * Assumes that all elements added are added starting at {@link #calculateNextPosition()}, after every one was
-     * added.
-     */
+    /** Assumes that all elements added are added starting at {@link #calculateNextPosition()}, after every one was
+     * added. */
     public ScrollbarData calculateScrollbarData() {
         double totalHeight = 0;
         for (IGuiElement element : innerElements) {

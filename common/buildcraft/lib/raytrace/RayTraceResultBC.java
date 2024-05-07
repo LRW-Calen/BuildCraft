@@ -8,10 +8,8 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 
 public class RayTraceResultBC extends BlockHitResult {
-    /**
-     * Used to determine what sub-segment is hit
-     */
-    // Calen: from 1.12.2
+    /** From 1.12.2.
+     * Used to determine what sub-segment is hit */
     public int subHit = -1;
     public final Direction sideHit;
     private final BlockHitResult delegate;
@@ -23,7 +21,7 @@ public class RayTraceResultBC extends BlockHitResult {
         this.sideHit = delegate.getDirection();
     }
 
-    public boolean isEmpety() {
+    public boolean isEmpty() {
         return delegate == null;
     }
 

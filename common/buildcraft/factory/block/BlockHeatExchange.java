@@ -12,6 +12,7 @@ import buildcraft.factory.tile.TileHeatExchange;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.block.IBlockWithTickableTE;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
@@ -34,6 +35,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
+import java.util.List;
 import java.util.Locale;
 
 public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> implements ICustomPipeConnection, IBlockWithFacing, IBlockWithTickableTE<TileHeatExchange> {
@@ -68,13 +70,12 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
     }
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@Nonnull StateDefinition.Builder<Block, BlockState> builder) {
-        super.createBlockStateDefinition(builder);
-        builder.add(PROP_PART);
-        builder.add(PROP_CONNECTED_Y);
-        builder.add(PROP_CONNECTED_LEFT);
-        builder.add(PROP_CONNECTED_RIGHT);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.add(PROP_PART);
+        properties.add(PROP_CONNECTED_Y);
+        properties.add(PROP_CONNECTED_LEFT);
+        properties.add(PROP_CONNECTED_RIGHT);
     }
 
     @Override
@@ -189,7 +190,7 @@ public class BlockHeatExchange extends BlockBCTile_Neptune<TileHeatExchange> imp
 
     @Override
 //    public TileBC_Neptune createTileEntity(Level world, BlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return new TileHeatExchange(pos, state);
     }
 

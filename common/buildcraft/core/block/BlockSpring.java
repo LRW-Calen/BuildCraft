@@ -2,7 +2,7 @@ package buildcraft.core.block;
 
 import buildcraft.api.blocks.ISpring;
 import buildcraft.api.enums.EnumSpring;
-import buildcraft.lib.block.BlockBCTile_Neptune;
+import buildcraft.lib.block.BlockBCBase_Neptune;
 import buildcraft.lib.misc.data.XorShift128Random;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -17,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Random;
 import java.util.function.BiFunction;
 
-public class BlockSpring extends BlockBCTile_Neptune implements ISpring {
+public class BlockSpring extends BlockBCBase_Neptune implements EntityBlock, ISpring {
     // public static final Property<EnumSpring> SPRING_TYPE = BuildCraftProperties.SPRING_TYPE;
     public final EnumSpring springType;
 

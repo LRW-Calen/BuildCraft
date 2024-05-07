@@ -27,8 +27,7 @@ public class GuiElementStatementParam extends GuiElementSimple
     private final int paramIndex;
     private final boolean draw;
 
-    public GuiElementStatementParam(BuildCraftGui gui, IGuiArea element, IStatementContainer container,
-                                    FullStatement<?> ref, int index, boolean draw) {
+    public GuiElementStatementParam(BuildCraftGui gui, IGuiArea element, IStatementContainer container, FullStatement<?> ref, int index, boolean draw) {
         super(gui, element);
         this.container = container;
         this.ref = ref;

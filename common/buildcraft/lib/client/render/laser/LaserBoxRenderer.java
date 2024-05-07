@@ -24,18 +24,15 @@ import java.util.List;
 public class LaserBoxRenderer {
     private static final double RENDER_SCALE = 1 / 16.05;
 
-    // Calen: it seems GLList cannot be used in 1.18.2 world rendering
-//    public static void renderLaserBoxStatic(Box box, LaserType type, boolean center)
-//    {
-//        if (box == null || box.min() == null || box.max() == null)
-//        {
+    // Calen: seems GlList cannot be used in 1.18.2 world rendering
+//    public static void renderLaserBoxStatic(Box box, LaserType type, boolean center) {
+//        if (box == null || box.min() == null || box.max() == null) {
 //            return;
 //        }
 //
 //        makeLaserBox(box, type, center);
 //
-//        for (LaserData_BC8 data : box.laserData)
-//        {
+//        for (LaserData_BC8 data : box.laserData) {
 //            LaserRenderer_BC8.renderLaserStatic(data);
 //        }
 //    }
@@ -130,5 +127,4 @@ public class LaserBoxRenderer {
         Vec3 two = max.add(new Vec3(faceForMax.getNormal().getX(), faceForMax.getNormal().getY(), faceForMax.getNormal().getZ()).scale(1 / 16D));
         return new LaserData_BC8(type, one, two, RENDER_SCALE);
     }
-
 }

@@ -27,7 +27,7 @@ public class GuideSmeltingFactory implements GuidePartFactory {
     private final ItemStack output;
     private final int hash;
 
-    //    public GuideSmeltingFactory(ItemStack input, ItemStack output)
+    // public GuideSmeltingFactory(ItemStack input, ItemStack output)
     public GuideSmeltingFactory(NonNullList<Ingredient> input, ItemStack output) {
 //        this.input = StackUtil.asNonNull(input);
         this.input = input;

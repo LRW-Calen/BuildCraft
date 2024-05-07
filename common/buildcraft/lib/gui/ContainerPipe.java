@@ -5,7 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.MenuType;
 
 //public abstract class ContainerPipe extends ContainerBC_Neptune
-public abstract class ContainerPipe extends ContainerBC_Neptune {
+public abstract class ContainerPipe extends ContainerBC_Neptune<IPipeHolder> {
 
     public final IPipeHolder pipeHolder;
 

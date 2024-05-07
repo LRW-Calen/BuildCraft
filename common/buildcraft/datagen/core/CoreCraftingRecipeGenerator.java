@@ -4,7 +4,7 @@ import buildcraft.api.enums.EnumDecoratedBlock;
 import buildcraft.core.BCCore;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.BCCoreItems;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import net.minecraft.advancements.critereon.ImpossibleTrigger;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
@@ -43,36 +43,36 @@ public class CoreCraftingRecipeGenerator extends RecipeProvider {
                 .pattern(" o ")
                 .pattern("oio")
                 .pattern(" o ")
-                .define('i', Ingredient.of(OreDictTags.GEAR_WOOD))
+                .define('i', Ingredient.of(OreDictionaryTags.GEAR_WOOD))
                 .define('o', Ingredient.of(Tags.Items.COBBLESTONE))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_WOOD))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_WOOD))
                 .group(MOD_ID)
                 .save(consumer);
         ShapedRecipeBuilder.shaped(BCCoreItems.gearIron.get())
                 .pattern(" o ")
                 .pattern("oio")
                 .pattern(" o ")
-                .define('i', Ingredient.of(OreDictTags.GEAR_STONE))
+                .define('i', Ingredient.of(OreDictionaryTags.GEAR_STONE))
                 .define('o', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_STONE))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_STONE))
                 .group(MOD_ID)
                 .save(consumer);
         ShapedRecipeBuilder.shaped(BCCoreItems.gearGold.get())
                 .pattern(" o ")
                 .pattern("oio")
                 .pattern(" o ")
-                .define('i', Ingredient.of(OreDictTags.GEAR_IRON))
+                .define('i', Ingredient.of(OreDictionaryTags.GEAR_IRON))
                 .define('o', Ingredient.of(Tags.Items.INGOTS_GOLD))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_IRON))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_IRON))
                 .group(MOD_ID)
                 .save(consumer);
         ShapedRecipeBuilder.shaped(BCCoreItems.gearDiamond.get())
                 .pattern(" o ")
                 .pattern("oio")
                 .pattern(" o ")
-                .define('i', Ingredient.of(OreDictTags.GEAR_GOLD))
+                .define('i', Ingredient.of(OreDictionaryTags.GEAR_GOLD))
                 .define('o', Ingredient.of(Tags.Items.GEMS_DIAMOND))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_GOLD))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_GOLD))
                 .group(MOD_ID)
                 .save(consumer);
 
@@ -111,9 +111,9 @@ public class CoreCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("g")
                 .pattern("w")
                 .define('r', Ingredient.of(Items.REDSTONE_TORCH))
-                .define('g', Ingredient.of(OreDictTags.GEAR_WOOD))
-                .define('w', Ingredient.of(OreDictTags.WRENCH))
-                .unlockedBy("has_item", has(OreDictTags.WRENCH))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_WOOD))
+                .define('w', Ingredient.of(OreDictionaryTags.WRENCH))
+                .unlockedBy("has_item", has(OreDictionaryTags.WRENCH))
                 .group(MOD_ID)
                 .save(consumer);
         // engine
@@ -123,7 +123,7 @@ public class CoreCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("GpG")
                 .define('w', Ingredient.of(ItemTags.PLANKS))
                 .define('g', Ingredient.of(Tags.Items.GLASS_COLORLESS))
-                .define('G', Ingredient.of(OreDictTags.GEAR_WOOD))
+                .define('G', Ingredient.of(OreDictionaryTags.GEAR_WOOD))
                 .define('p', Ingredient.of(Blocks.PISTON))
                 .unlockedBy("has_item", has(Items.PISTON))
                 .group(MOD_ID)
@@ -134,8 +134,8 @@ public class CoreCraftingRecipeGenerator extends RecipeProvider {
                 .pattern(" G ")
                 .pattern(" I ")
                 .define('I', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .define('G', Ingredient.of(OreDictTags.GEAR_STONE))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_STONE))
+                .define('G', Ingredient.of(OreDictionaryTags.GEAR_STONE))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_STONE))
                 .group(MOD_ID)
                 .save(consumer);
 
@@ -146,16 +146,16 @@ public class CoreCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("s  ")
                 .define('i', Ingredient.of(Tags.Items.STRING))
                 .define('s', Ingredient.of(Tags.Items.RODS_WOODEN))
-                .define('g', Ingredient.of(OreDictTags.GEAR_WOOD))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_WOOD))
                 .define('w', Ingredient.of(ItemTags.WOOL))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_WOOD))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_WOOD))
                 .group(MOD_ID)
                 .save(consumer);
         for (DyeColor colour : DyeColor.values()) {
             ShapelessRecipeBuilder.shapeless(BCCoreItems.colourBrushMap.get(colour).get())
-                    .requires(OreDictTags.PAINT_BRUSH)
+                    .requires(OreDictionaryTags.PAINT_BRUSH)
                     .requires(colour.getTag())
-                    .unlockedBy("has_item", has(OreDictTags.GEAR_WOOD))
+                    .unlockedBy("has_item", has(OreDictionaryTags.GEAR_WOOD))
                     .group(MOD_ID)
                     .save(consumer);
         }

@@ -6,7 +6,7 @@
     {
       "ingredient": {
         "type": "forge:nbt",
-        "item": "buildcraftsilicon:chipset_iron",
+        "item": "buildcraftsilicon:chipset_gold",
         "count": 1
       },
       "count": 1

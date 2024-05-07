@@ -25,11 +25,9 @@ public abstract class MarkerConnection<C extends MarkerConnection<C>> {
         this.subCache = subCache;
     }
 
-    /**
-     * Removes the specified marker from this connection. This should be called via
+    /** Removes the specified marker from this connection. This should be called via
      * {@link MarkerSubCache#removeMarker(BlockPos)}. This may need to remove itself and split itself up (if the resulting
-     * connection is invalid).
-     */
+     * connection is invalid). */
     public abstract void removeMarker(BlockPos pos);
 
     public abstract Collection<BlockPos> getMarkerPositions();
@@ -37,7 +35,7 @@ public abstract class MarkerConnection<C extends MarkerConnection<C>> {
     @OnlyIn(Dist.CLIENT)
     public abstract void renderInWorld(PoseStack poseStack);
 
-    //    public void getDebugInfo(BlockPos caller, List<String> left)
+    // public void getDebugInfo(BlockPos caller, List<String> left)
     public void getDebugInfo(BlockPos caller, List<Component> left) {
         Collection<BlockPos> positions = getMarkerPositions();
         List<BlockPos> list = new ArrayList<>(positions);

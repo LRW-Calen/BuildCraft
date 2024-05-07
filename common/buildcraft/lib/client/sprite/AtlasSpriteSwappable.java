@@ -17,7 +17,7 @@ public abstract class AtlasSpriteSwappable extends TextureAtlasSprite {
     private TextureAtlasSprite current;
     private boolean needsSwapping = true;
 
-    //    public AtlasSpriteSwappable(String baseName)
+    // public AtlasSpriteSwappable(String baseName)
     public AtlasSpriteSwappable(TextureAtlas atlas, TextureAtlasSprite.Info textureInfo, int atlasWidth, int atlasHeight, int spriteX, int spriteY, int mipmapLevel, NativeImage nativeImage) {
 //        super(baseName);
         super(atlas, textureInfo, atlasWidth, atlasHeight, spriteX, spriteY, mipmapLevel, nativeImage);

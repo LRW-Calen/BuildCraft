@@ -30,7 +30,7 @@ class NbtSquishMapWriter {
     static boolean debug;
     static final boolean sort = true;
     static final Boolean packList = null;
-    //    static final Profiler profiler = NbtSquisher.profiler;
+    // static final Profiler profiler = NbtSquisher.profiler;
     static final ProfilerFiller profiler = NbtSquisher.profiler;
     private final NbtSquishMap map;
 
@@ -191,9 +191,7 @@ class NbtSquishMapWriter {
         profiler.pop();
     }
 
-    /**
-     * Similar to {@link FriendlyByteBuf#writeVarInt(int)}
-     */
+    /** Similar to {@link FriendlyByteBuf#writeVarInt(int)} */
     private static void writeVarInt(DataOutput to, int input) throws IOException {
         while ((input & -128) != 0) {
             to.writeByte((input & 0x7f) | 0x80);

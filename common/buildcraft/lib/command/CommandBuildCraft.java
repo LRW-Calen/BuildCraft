@@ -12,31 +12,18 @@ public class CommandBuildCraft {
 
     public static final LiteralArgumentBuilder<CommandSourceStack> COMMAND =
             LiteralArgumentBuilder.<CommandSourceStack>literal(NAME)
-                    .requires((req) -> req.hasPermission(0)) // 0->Player 2-> OP
-            ;
+                    .requires((req) -> req.hasPermission(0));
 
-    //    public CommandBuildCraft()
-//    {
+//    public CommandBuildCraft() {
 //        addSubcommand(new CommandVersion());
 //        addSubcommand(new CommandChangelog());
 //        addSubcommand(new CommandReloadRegistries());
 //    }
+
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         new CommandVersion().addSubcommand(COMMAND);
         new CommandChangelog().addSubcommand(COMMAND);
         new CommandReloadRegistries().addSubcommand(COMMAND);
         dispatcher.register(COMMAND);
     }
-
-//    @Override
-//    public String getName()
-//    {
-//        return "buildcraft";
-//    }
-
-//    @Override
-//    public String getUsage(ICommandSender sender)
-//    {
-//        return "command.buildcraft.help";
-//    }
 }

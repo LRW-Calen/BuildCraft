@@ -5,15 +5,20 @@
 package buildcraft.core.item;
 
 import buildcraft.api.items.IList;
+import buildcraft.core.BCCoreItems;
 import buildcraft.core.BCCoreMenuTypes;
 import buildcraft.core.list.ContainerList;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.list.ListHandler;
-import buildcraft.lib.misc.*;
+import buildcraft.lib.misc.AdvancementUtil;
+import buildcraft.lib.misc.MessageUtil;
+import buildcraft.lib.misc.NBTUtilBC;
+import buildcraft.lib.misc.StackUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -47,11 +52,10 @@ public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider 
 //    public ActionResult<ItemStack> onItemRightClick(Level world, Player player, EnumHand hand)
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         AdvancementUtil.unlockAdvancement(player, ADVANCEMENT);
-        ItemStack handItemStack = player.getItemInHand(hand);
 //        BCCoreGuis.LIST.openGUI(player);
-        MessageUtil.serverOpenItemGui(player, handItemStack.getItem());
+        MessageUtil.serverOpenItemGui(player, BCCoreItems.list.get());
 //        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, handItemStack);
+        return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
     }
 
 //    @Override
@@ -72,7 +76,7 @@ public class ItemList_BC8 extends ItemBC_Neptune implements IList, MenuProvider 
     public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag flag) {
         String name = getName_INamedItem(StackUtil.asNonNull(stack));
 //        if (StringUtils.isNullOrEmpty(name)) return;
-        if (StringUtilBC.isNullOrEmpty(name)) return;
+        if (StringUtil.isNullOrEmpty(name)) return;
 //        tooltip.add(TextFormatting.ITALIC + name);
         tooltip.add(new TextComponent(ChatFormatting.ITALIC + name));
     }

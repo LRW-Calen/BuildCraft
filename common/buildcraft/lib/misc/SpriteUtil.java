@@ -14,6 +14,7 @@ import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture.Type;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
@@ -27,13 +28,12 @@ import java.util.Map;
 
 public class SpriteUtil {
 
-    //    private static final ResourceLocation LOCATION_SKIN_LOADING = new ResourceLocation("skin:loading");
+    // private static final ResourceLocation LOCATION_SKIN_LOADING = new ResourceLocation("skin:loading");
     private static final ResourceLocation LOCATION_SKIN_LOADING = new ResourceLocation("textures/entity/steve.png");
     private static final Map<GameProfile, GameProfile> CACHED = new HashMap<>();
 
     public static void bindBlockTextureMap() {
 //        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-//        bindTexture(InventoryMenu.BLOCK_ATLAS);
         bindTexture(TextureAtlas.LOCATION_BLOCKS);
     }
 
@@ -46,15 +46,12 @@ public class SpriteUtil {
         RenderSystem.setShaderTexture(0, identifier);
     }
 
-    /**
-     * Transforms the given {@link ResourceLocation}, adding ".png" to the end and prepending that
-     * {@link ResourceLocation#getPath()} with "textures/", just like what {@link TextureAtlas} does.
-     */
+    /** Transforms the given {@link ResourceLocation}, adding ".png" to the end and prepending that
+     * {@link ResourceLocation#getPath()} with "textures/", just like what {@link TextureAtlas} does. */
     public static ResourceLocation transformLocation(ResourceLocation location) {
         return new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + ".png");
     }
 
-    // Calen: never used in 1.12.2
     @Nullable
     public static ResourceLocation getSkinSpriteLocation(GameProfile profile) {
         ResourceLocation loc = getSkinSpriteLocation0(profile);
@@ -110,7 +107,6 @@ public class SpriteUtil {
             return BCLibSprites.LOCK;
         }
         return new SpriteRaw(loc, 8, 8, 8, 8, 64);
-//        return new SpriteRaw(loc, 8, 8, 8, 8);
     }
 
     @Nullable
@@ -123,23 +119,12 @@ public class SpriteUtil {
             return null;
         }
         return new SpriteRaw(loc, 40, 8, 8, 8, 64);
-//        return new SpriteRaw(loc, 40, 8, 8, 8);
     }
 
-    //    private static TextureAtlasSprite MISSING_NO;
     private static LazyLoadedValue<TextureAtlasSprite> MISSING_NO = new LazyLoadedValue<>(() ->
-            Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation("missingno")));
+            Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(MissingTextureAtlasSprite.getLocation()));
 
     public static TextureAtlasSprite missingSprite() {
-        // Calen: RL: MissingTextureAtlasSprite#MISSING_TEXTURE_LOCATION
-//        return Minecraft.getInstance().getBlockRenderer()..getTextureMapBlocks().getMissingSprite();
-//        return Minecraft.getInstance().getTextureManager().getTexture(new ResourceLocation("missingno"));
-//        return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation("missingno"));
-//        if (MISSING_NO == null)
-//        {
-//            MISSING_NO = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(new ResourceLocation("missingno"));
-//        }
-//        return MISSING_NO;
         return MISSING_NO.get();
     }
 

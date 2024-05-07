@@ -4,7 +4,7 @@ import buildcraft.builders.BCBuilders;
 import buildcraft.builders.BCBuildersBlocks;
 import buildcraft.builders.BCBuildersItems;
 import buildcraft.core.BCCoreBlocks;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -34,7 +34,7 @@ public class BuildersCraftingRecipeGenerator extends RecipeProvider {
                 .define('m', Ingredient.of(BCCoreBlocks.markerVolume.get()))
                 .define('y', Ingredient.of(Tags.Items.DYES_YELLOW))
                 .define('c', Ingredient.of(Items.CRAFTING_TABLE))
-                .define('d', Ingredient.of(OreDictTags.GEAR_DIAMOND))
+                .define('d', Ingredient.of(OreDictionaryTags.GEAR_DIAMOND))
                 .define('s', Ingredient.of(BCBuildersItems.snapshotBLUEPRINT.get()))
                 .unlockedBy("has_item", has(BCCoreBlocks.markerVolume.get()))
                 .group(MOD_ID)
@@ -55,11 +55,11 @@ public class BuildersCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("gig")
                 .pattern("dpd")
                 .define('p', Ingredient.of(Items.DIAMOND_PICKAXE))
-                .define('i', Ingredient.of(OreDictTags.GEAR_IRON))
-                .define('g', Ingredient.of(OreDictTags.GEAR_GOLD))
-                .define('d', Ingredient.of(OreDictTags.GEAR_DIAMOND))
+                .define('i', Ingredient.of(OreDictionaryTags.GEAR_IRON))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_GOLD))
+                .define('d', Ingredient.of(OreDictionaryTags.GEAR_DIAMOND))
                 .define('r', Ingredient.of(Tags.Items.DUSTS_REDSTONE))
-                .unlockedBy("has_item", has(OreDictTags.GEAR_DIAMOND))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_DIAMOND))
                 .group(MOD_ID)
                 .save(consumer);
         // template
@@ -80,8 +80,8 @@ public class BuildersCraftingRecipeGenerator extends RecipeProvider {
                 .define('b', Ingredient.of(Tags.Items.DYES_BLACK))
                 .define('m', Ingredient.of(BCCoreBlocks.markerVolume.get()))
                 .define('y', Ingredient.of(Tags.Items.DYES_YELLOW))
-                .define('c', Ingredient.of(OreDictTags.WORKBENCHES_ITEM))
-                .define('d', Ingredient.of(OreDictTags.GEAR_DIAMOND))
+                .define('c', Ingredient.of(OreDictionaryTags.WORKBENCHES_ITEM))
+                .define('d', Ingredient.of(OreDictionaryTags.GEAR_DIAMOND))
                 .define('s', Ingredient.of(Tags.Items.CHESTS_WOODEN))
                 .unlockedBy("has_item", has(BCCoreBlocks.markerVolume.get()))
                 .group(MOD_ID)
@@ -92,7 +92,7 @@ public class BuildersCraftingRecipeGenerator extends RecipeProvider {
                 .pattern("sbs")
                 .pattern("iri")
                 .define('i', Ingredient.of(Tags.Items.INGOTS_IRON))
-                .define('g', Ingredient.of(OreDictTags.GEAR_IRON))
+                .define('g', Ingredient.of(OreDictionaryTags.GEAR_IRON))
                 .define('s', Ingredient.of(Tags.Items.BOOKSHELVES))
                 .define('b', Ingredient.of(BCBuildersItems.snapshotBLUEPRINT.get()))
                 .define('r', Ingredient.of(Tags.Items.DUSTS_REDSTONE))

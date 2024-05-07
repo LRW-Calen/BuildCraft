@@ -33,8 +33,7 @@ public class BCLibItems {
         return enableDebugger;
     }
 
-
-    // Calen: should not static because guide/debugger enabling in <cinit> in Lib main class will call <cinit> here
+    /** We should not create register objects in {@link  #<cinit>} because guide/debugger are enabled in {@link buildcraft.core.BCCore#<cinit>} */
     public static void fmlPreInit() {
         if (isGuideEnabled()) {
             guide = HELPER.addForcedItem("item.guide", ItemPropertiesCreator.common64(), ItemGuide::new);

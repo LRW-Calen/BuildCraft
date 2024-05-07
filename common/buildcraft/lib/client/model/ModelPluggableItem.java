@@ -75,7 +75,6 @@ public class ModelPluggableItem implements BakedModel {
         return ItemOverrides.EMPTY;
     }
 
-    // Calen: Forced Override
     @Override
     public boolean usesBlockLight() {
         return false;

@@ -39,12 +39,8 @@ public class ItemRenderUtil {
 
     private static final Random modelOffsetRandom = new Random(0);
 
-//    private static final ItemEntity dummyEntityItem = new ItemEntity(null);
-//    private static final ItemEntity dummyEntityItem = new ItemEntity(null, 0, 0, 0, StackUtil.EMPTY);
-    // Calen: in ItemEntity#<init> level.random.nextDouble() will be called
-    // level should never be null
-
     // Calen: maybe not used, null value will cause exception when TC3 EquipmentChangeWatcher attach caps
+//    private static final EntityItem dummyEntityItem = new EntityItem(null);
 //    private static final ItemEntity dummyEntityItem = new ItemEntity(null, 0, 0, 0, StackUtil.EMPTY, 0, 0, 0);
 
     //    private static final RenderEntityItem customItemRenderer =
@@ -53,14 +49,12 @@ public class ItemRenderUtil {
 //            new ItemEntityRenderer(null)
 //            {
 //                @Override
-//                public boolean shouldSpreadItems()
-//                {
+//                public boolean shouldSpreadItems() {
 //                    return false;
 //                }
 //
 //                @Override
-//                public boolean shouldBob()
-//                {
+//                public boolean shouldBob() {
 //                    return false;
 //                }
 //            };
@@ -72,53 +66,38 @@ public class ItemRenderUtil {
 //                .build(CacheLoader.from(ItemRenderUtil::makeItemGlList));
     }
 
-//    private static Integer makeItemGlList(ItemStackKey item)
-//    {
+//    private static Integer makeItemGlList(ItemStackKey item) {
 //        int list = GLAllocation.generateDisplayLists(1);
 //        GL11.glNewList(list, GL11.GL_COMPILE);
-////        renderItemImpl(0, 0, 0, item.baseStack);
-//        renderItemImpl(item.baseStack);
+//        renderItemImpl(0, 0, 0, item.baseStack);
 //        GL11.glEndList();
 //        return list;
 //    }
 
-//    private static void onStackRemove(RemovalNotification<ItemStackKey, Integer> notification)
-//    {
+//    private static void onStackRemove(RemovalNotification<ItemStackKey, Integer> notification) {
 //        Integer val = notification.getValue();
-//        if (val != null)
-//        {
+//        if (val != null) {
 //            GLAllocation.deleteDisplayLists(val);
 //        }
 //    }
 
-//    //    private static void renderItemImpl(double x, double y, double z, ItemStack stack)
-//    private static void renderItemImpl(ItemStack stack)
-//    {
+//    private static void renderItemImpl(double x, double y, double z, ItemStack stack) {
 //        GL11.glPushMatrix();
 //        GL11.glTranslated(0, -0.2, 0);
 //        GL11.glScaled(0.9, 0.9, 0.9);
 //
-//        PoseStack poseStack = RenderSystem.getModelViewStack();
-//        MultiBufferSource bufferSource = Minecraft.getInstance().renderBuffers().bufferSource();
-//
 //        // This is broken - some stacks render too big but some render way too small.
 //        // Also not all stacks are centered :/
 //
-//        if (stack.getItem() instanceof BlockItem)
-//        {
-////            dummyEntityItem.hoverStart = 0;
-//            dummyEntityItem.flyDist = 0;
-//        }
-//        else
-//        {
+//        if (stack.getItem() instanceof ItemBlock) {
+//            dummyEntityItem.hoverStart = 0;
+//        } else {
 //            // Items are rotated by 45 degrees
-////            dummyEntityItem.hoverStart = (float) (45 * Math.PI / 180);
-//            dummyEntityItem.flyDist = (float) (45 * Math.PI / 180);
+//            dummyEntityItem.hoverStart = (float) (45 * Math.PI / 180);
 //        }
 //
 //        dummyEntityItem.setItem(stack);
-////        customItemRenderer.doRender(dummyEntityItem, x, y, z, 0, 0);
-//        customItemRenderer.render(dummyEntityItem, 0, 0, poseStack, bufferSource, /*light*/ 0);
+//        customItemRenderer.doRender(dummyEntityItem, x, y, z, 0, 0);
 //
 //        GL11.glPopMatrix();
 //    }
@@ -127,20 +106,14 @@ public class ItemRenderUtil {
 
     private static boolean inBatch = false;
 
-    /**
-     * Used to render a lot of items in sequential order. Assumes that you don't change the glstate inbetween calls.
-     * You must call {@link #endItemBatch()} after your have rendered all of the items.
-     */
+    /** Used to render a lot of items in sequential order. Assumes that you don't change the glstate inbetween calls. */
 //    public static void renderItemStack(double x, double y, double z, ItemStack stack, int lightc, Direction dir, BufferBuilder bb)
     public static void renderItemStack(ItemStack stack, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb) {
 //        renderItemStack(x, y, z, stack, stack.getCount(), lightc, dir, bb);
         renderItemStack(stack, stack.getCount(), lightc, dir, poseStack, bb);
     }
 
-    /**
-     * Used to render a lot of items in sequential order. Assumes that you don't change the glstate inbetween calls.
-     * You must call {@link #endItemBatch()} after your have rendered all of the items.
-     */
+    /** Used to render a lot of items in sequential order. Assumes that you don't change the glstate inbetween calls. */
 //    public static void renderItemStack(double x, double y, double z, ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb)
     public static void renderItemStack(ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb) {
         if (stack.isEmpty()) {
@@ -167,7 +140,7 @@ public class ItemRenderUtil {
         }
     }
 
-    //    private static void renderItemStackInternal(double x, double y, double z, ItemStack stack, int stackCount, int lightc, Direction dir, BufferBuilder bb)
+    // private static void renderItemStackInternal(double x, double y, double z, ItemStack stack, int stackCount, int lightc, Direction dir, BufferBuilder bb)
     private static void renderItemStackInternal(ItemStack stack, int stackCount, int lightc, Direction dir, PoseStack poseStack, VertexConsumer bb) {
         if (dir == null) {
             dir = Direction.EAST;
@@ -180,8 +153,6 @@ public class ItemRenderUtil {
         model = model.getOverrides().resolve(model, stack, null, null, /*seed*/ 0);
 //        boolean requireGl = stack.hasEffect() || model.isBuiltInRenderer();
         boolean requireGl = stack.isEnchanted() || model.isCustomRenderer();
-
-//        RenderSystem.setShader(GameRenderer::getRendertypeItemEntityTranslucentCullShader);
 
         if (bb != null && !requireGl) {
 
@@ -218,18 +189,16 @@ public class ItemRenderUtil {
                         if (quad.isTinted()) {
 //                            int colour = Minecraft.getInstance().getItemColors().colorMultiplier(stack, quad.getTintIndex());
                             int colour = Minecraft.getInstance().getItemColors().getColor(stack, quad.getTintIndex());
-//                            if (EntityRenderer.anaglyphEnable)
-//                            {
+//                            if (EntityRenderer.anaglyphEnable) {
 //                                colour = TextureUtil.anaglyphColor(colour);
 //                            }
                             q.multColouri(colour, colour >> 8, colour >> 16, 0xFF);
                         }
                         q.lighti(lightc);
+                        // Calen: if not 1 1 1, the item will look dark
 //                        Vector3f normal = q.getCalculatedNormal();
 //                        q.normalvf(normal);
-//                        q.normalf(1,1,1);
-                        Vec3i normal = quad.getDirection().getNormal();
-                        q.normalf(normal.getX(), normal.getY(), normal.getZ());
+                        q.normalf(1, 1, 1);
                         q.multShade();
                         q.render(poseStack.last(), bb);
                     }
@@ -242,11 +211,7 @@ public class ItemRenderUtil {
         }
         // Calen
         else {
-//            float scale = 0.30f;
-//            poseStack.pushPose();
-//            poseStack.scale(scale, scale, scale);
             Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, lightc, OverlayTexture.NO_OVERLAY, poseStack, Minecraft.getInstance().renderBuffers().bufferSource(), 0);
-//            poseStack.popPose();
         }
 
         if (!inBatch) {
@@ -261,8 +226,7 @@ public class ItemRenderUtil {
 //            RenderHelper.disableStandardItemLighting();
             RenderUtil.disableStandardItemLighting();
         }
-//        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightc % (float) 0x1_00_00,
-//                lightc / (float) 0x1_00_00);
+//        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lightc % (float) 0x1_00_00, lightc / (float) 0x1_00_00);
 //        Minecraft.getInstance().getRenderItem().renderItem(stack, model);
         Minecraft.getInstance().getItemRenderer().renderModelLists(model, stack, lightc, OverlayTexture.NO_OVERLAY, poseStack, bb);
     }

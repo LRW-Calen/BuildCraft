@@ -169,8 +169,8 @@ public class BCEnergyFluids {
 
         // Properties
         ForgeFlowingFluid.Properties fluidProperties = new ForgeFlowingFluid.Properties(
-                fluidRegistryContainer::getStillFluid,
-                fluidRegistryContainer::getFlowingFluid,
+                fluidRegistryContainer::getStill,
+                fluidRegistryContainer::getFlowing,
                 attributeBuilder
         )
                 .bucket(fluidRegistryContainer::getBucket)
@@ -211,7 +211,7 @@ public class BCEnergyFluids {
                 flowId,
                 () -> new BCFluid.Flowing(fluidProperties, fluidRegistryContainer)
         );
-        fluidRegistryContainer.setFlow(flow);
+        fluidRegistryContainer.setFlowing(flow);
         allFlow.add(flow);
 
         // Bucket
@@ -222,7 +222,7 @@ public class BCEnergyFluids {
         RegistryObject<BucketItem> bucket = bucketRegister.register(
                 bucketId,
                 () -> new BCBucketItem(
-                        fluidRegistryContainer::getStillFluid,
+                        fluidRegistryContainer::getStill,
                         bucketProp
                 )
         );
@@ -245,7 +245,7 @@ public class BCEnergyFluids {
         RegistryObject<BCFluidBlock> block = blockRegister.register(
                 blockId,
                 () -> new BCFluidBlock(
-                        fluidRegistryContainer::getStillFluid,
+                        fluidRegistryContainer::getStill,
                         blockProp,
                         // block.setSticky(sticky)
                         sticky

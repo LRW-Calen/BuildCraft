@@ -139,7 +139,7 @@ public class TileFloodGate extends TileBC_Neptune implements ITickable, IDebugga
         }
         Fluid fluid = BlockUtil.getFluidWithFlowing(level, offsetPos);
 //        return fluid != null && FluidUtilBC.areFluidsEqual(fluid, tank.getFluidType())
-        return fluid != null && FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(fluid, tank.getFluidType())
+        return fluid != null && FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(fluid, tank.getFluidType())
                 && BlockUtil.getFluidWithoutFlowing(getLocalState(offsetPos)) == null;
     }
 
@@ -149,7 +149,7 @@ public class TileFloodGate extends TileBC_Neptune implements ITickable, IDebugga
         }
         Fluid fluid = BlockUtil.getFluid(level, offsetPos);
 //        return FluidUtilBC.areFluidsEqual(fluid, tank.getFluidType());
-        return FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(fluid, tank.getFluidType());
+        return FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(fluid, tank.getFluidType());
     }
 
     private boolean canFillThrough(BlockPos pos) {
@@ -158,7 +158,7 @@ public class TileFloodGate extends TileBC_Neptune implements ITickable, IDebugga
         }
         Fluid fluid = BlockUtil.getFluidWithFlowing(level, pos);
 //        return FluidUtilBC.areFluidsEqual(fluid, tank.getFluidType());
-        return FluidUtilBC.areFluidsEqualIgnoreStillOrFlow(fluid, tank.getFluidType());
+        return FluidUtilBC.areFluidsEqualIgnoringStillOrFlow(fluid, tank.getFluidType());
     }
 
     // ITickable

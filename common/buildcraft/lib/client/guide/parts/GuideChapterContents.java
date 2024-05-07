@@ -12,8 +12,6 @@ import net.minecraft.network.chat.TranslatableComponent;
 public class GuideChapterContents extends GuideChapter {
     public GuideChapterContents(GuiGuide gui) {
 //        super(gui, I18n.format("buildcraft.guide.chapter.contents"));
-//        super(gui, I18n.get("buildcraft.guide.chapter.contents"));
-//        super(gui, new TranslatableComponent("buildcraft.guide.chapter.contents"));
         super(gui, "buildcraft.guide.chapter.contents", new TranslatableComponent("buildcraft.guide.chapter.contents"));
     }
 

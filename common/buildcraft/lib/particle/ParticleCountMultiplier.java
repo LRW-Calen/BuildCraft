@@ -48,5 +48,4 @@ public enum ParticleCountMultiplier implements IParticlePositionPipe {
 
         return list;
     }
-
 }

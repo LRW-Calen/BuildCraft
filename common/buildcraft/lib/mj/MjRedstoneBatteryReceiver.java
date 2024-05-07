@@ -6,7 +6,6 @@
 
 package buildcraft.lib.mj;
 
-
 import buildcraft.api.mj.IMjRedstoneReceiver;
 import buildcraft.api.mj.MjBattery;
 

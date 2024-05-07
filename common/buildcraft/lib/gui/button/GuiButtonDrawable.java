@@ -5,7 +5,6 @@ import buildcraft.lib.gui.ISimpleDrawable;
 import buildcraft.lib.gui.pos.IGuiArea;
 import buildcraft.lib.gui.pos.IGuiPosition;
 import buildcraft.lib.misc.RenderUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 public final class GuiButtonDrawable extends GuiAbstractButton {
@@ -54,8 +53,9 @@ public final class GuiButtonDrawable extends GuiAbstractButton {
 //        GlStateManager.color(1, 1, 1, 1);
         RenderUtil.color(1, 1, 1, 1);
 //        GlStateManager.enableAlpha();
+        RenderUtil.enableAlpha();
 //        GlStateManager.disableBlend();
-        RenderSystem.disableBlend();
+        RenderUtil.disableBlend();
 
         if (enabled) {
             boolean hovered = isMouseOver();

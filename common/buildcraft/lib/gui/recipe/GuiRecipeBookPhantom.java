@@ -10,10 +10,8 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 
 import java.util.function.Consumer;
 
-/**
- * A {@link RecipeBookComponent} that can always craft things, as it puts the required items into phantom slots (Either
- * {@link SlotPhantom} or {@link ItemHandlerManager} with an argument of {@link EnumAccess#PHANTOM}.
- */
+/** A {@link RecipeBookComponent} that can always craft things, as it puts the required items into phantom slots (Either
+ * {@link SlotPhantom} or {@link ItemHandlerManager} with an argument of {@link EnumAccess#PHANTOM}. */
 // TODO Calen: this is not used, because not found how to add recipe book in 1.18.2
 //public class GuiRecipeBookPhantom extends GuiRecipeBook
 public class GuiRecipeBookPhantom extends RecipeBookComponent {
@@ -21,24 +19,20 @@ public class GuiRecipeBookPhantom extends RecipeBookComponent {
 //    private static final Field FIELD_GUI_BOOK;
 //    private static final Field FIELD_BUTTON_TOGGLE;
 
-    //    public final Consumer<Recipe> recipeSetter;
+    // public final Consumer<Recipe> recipeSetter;
     public final Consumer<CraftingRecipe> recipeSetter;
 //    private boolean wasFilteringCraftable;
 
 //    // Unfortunately we have to use reflection in order to replace the necessary fields :(
-//    static
-//    {
-//        try
-//        {
+//    static {
+//        try {
 ////            Class<?> clazzGuiRecipeBook = GuiRecipeBook.class;
 //            Class<?> clazzGuiRecipeBook = RecipeBookComponent.class;
 //            Field fldReipePage = null;
 //            Field fldButtonToggle = null;
 //
-//            for (Field fld : clazzGuiRecipeBook.getDeclaredFields())
-//            {
-//                if (fld.getType() == RecipeBookPage.class)
-//                {
+//            for (Field fld : clazzGuiRecipeBook.getDeclaredFields()) {
+//                if (fld.getType() == RecipeBookPage.class) {
 //                    if (fldReipePage == null)
 //                    {
 //                        fldReipePage = fld;
@@ -51,27 +45,21 @@ public class GuiRecipeBookPhantom extends RecipeBookComponent {
 ////                else if (fld.getType() == GuiButtonToggle.class)
 //                else if (fld.getType() == StateSwitchingButton.class)
 //                {
-//                    if (fldButtonToggle == null)
-//                    {
+//                    if (fldButtonToggle == null) {
 //                        fldButtonToggle = fld;
-//                    }
-//                    else
-//                    {
+//                    } else {
 //                        throw new IllegalStateException("Found multiple fields!");
 //                    }
 //                }
 //            }
-//            if (fldReipePage == null || fldButtonToggle == null)
-//            {
+//            if (fldReipePage == null || fldButtonToggle == null) {
 //                throw new Error("Couldn't find the required fields!");
 //            }
 //            fldReipePage.setAccessible(true);
 //            fldButtonToggle.setAccessible(true);
 //            FIELD_GUI_BOOK = fldReipePage;
 //            FIELD_BUTTON_TOGGLE = fldButtonToggle;
-//        }
-//        catch (Throwable roe)
-//        {
+//        } catch (Throwable roe) {
 //            throw new Error(roe);
 //        }
 //    }
@@ -97,13 +85,11 @@ public class GuiRecipeBookPhantom extends RecipeBookComponent {
     @Override
     public void removed() {
         super.removed();
-//        if (wasFilteringCraftable)
-//        {
+//        if (wasFilteringCraftable) {
 ////            Minecraft.getMinecraft().player.getRecipeBook().setFilteringCraftable(true);
 //            Minecraft.getInstance().player.getRecipeBook().setFiltering(this.menu.getRecipeBookType(), true);
 //        }
     }
-
 
     public void initVisuals(boolean someBoolean, CraftingContainer invCrafting) {
         this.initVisuals();

@@ -5,7 +5,7 @@ import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.BCCoreItems;
 import buildcraft.datagen.base.BCBaseAdvancementGenerator;
 import buildcraft.lib.BCLibItems;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.FrameType;
 import net.minecraft.advancements.RequirementsStrategy;
@@ -53,19 +53,19 @@ public class CoreAdvancementGenerator extends BCBaseAdvancementGenerator {
                 .parent(root)
                 .requirements(RequirementsStrategy.AND)
                 .addCriterion("gear_wood",
-                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictTags.GEAR_WOOD))
+                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictionaryTags.GEAR_WOOD))
                 )
                 .addCriterion("gear_stone",
-                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictTags.GEAR_STONE))
+                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictionaryTags.GEAR_STONE))
                 )
                 .addCriterion("gear_iron",
-                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictTags.GEAR_IRON))
+                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictionaryTags.GEAR_IRON))
                 )
                 .addCriterion("gear_gold",
-                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictTags.GEAR_GOLD))
+                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictionaryTags.GEAR_GOLD))
                 )
                 .addCriterion("gear_diamond",
-                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictTags.GEAR_DIAMOND))
+                        InventoryChangeTrigger.TriggerInstance.hasItems(tag(OreDictionaryTags.GEAR_DIAMOND))
                 )
                 .save(consumer, NAMESPACE + ":gears");
         GEARS = gears;

@@ -175,8 +175,8 @@ public class DelegateFontRenderer extends Font {
     }
 
     /**
-     * Remove all newline characters from the end of the string
-     * from 1.12.2
+     * Remove all newline characters from the end of the string.
+     * From 1.12.2
      */
     private String trimStringNewline(String text) {
         while (text != null && text.endsWith("\n")) {

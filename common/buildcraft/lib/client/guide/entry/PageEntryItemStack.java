@@ -88,7 +88,6 @@ public class PageEntryItemStack extends PageValueType<ItemStackValueFilter> {
             prof.push("search");
 //            item.getSubItems(CreativeTabs.SEARCH, stacks);
             item.fillItemCategory(CreativeModeTab.TAB_SEARCH, stacks);
-//            stacks.add(new ItemStack(item));
             prof.popPush("itr_search");
             if (stacks.size() > 200) {
                 // Likely a "super-item" which is constructed from a different registry
@@ -129,8 +128,7 @@ public class PageEntryItemStack extends PageValueType<ItemStackValueFilter> {
     }
 
     @Override
-    public OptionallyDisabled<PageEntry<ItemStackValueFilter>> deserialize(ResourceLocation name, JsonObject json,
-                                                                           JsonDeserializationContext ctx) {
+    public OptionallyDisabled<PageEntry<ItemStackValueFilter>> deserialize(ResourceLocation name, JsonObject json, JsonDeserializationContext ctx) {
         JsonElement jStack = json.get("stack");
         if (jStack == null) {
             throw new JsonSyntaxException(
@@ -183,8 +181,6 @@ public class PageEntryItemStack extends PageValueType<ItemStackValueFilter> {
     // Calen
     @Override
     public String getTitleKey(ItemStackValueFilter value) {
-//        return value.stack.baseStack.getDisplayName().getString();
-//        return value.stack.baseStack.getHoverName().getString();
         return value.stack.baseStack.getItem().getDescriptionId(value.stack.baseStack);
     }
 
@@ -211,8 +207,7 @@ public class PageEntryItemStack extends PageValueType<ItemStackValueFilter> {
                 return false;
             }
             if (entry.matchMeta) {
-//                if (base.getMetadata() != test.getMetadata())
-//                {
+//                if (base.getMetadata() != test.getMetadata()){
 //                    return false;
 //                }
 //                throw new RuntimeException("[lib.guide.debug] Meta not supported in 1.18.2!"); // Calen

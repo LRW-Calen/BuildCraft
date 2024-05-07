@@ -99,8 +99,7 @@ public class GuiUtil {
     }
 
     /** Draws multiple elements, one after each other. */
-    public static <D> void drawVerticallyAppending(IGuiPosition element, Iterable<? extends D> iterable,
-                                                   IVerticalAppendingDrawer<D> drawer, PoseStack matrix) {
+    public static <D> void drawVerticallyAppending(IGuiPosition element, Iterable<? extends D> iterable, IVerticalAppendingDrawer<D> drawer, PoseStack matrix) {
         double x = element.getX();
         double y = element.getY();
         for (D drawable : iterable) {
@@ -123,8 +122,7 @@ public class GuiUtil {
 
     @FunctionalInterface
     public interface IVerticalAppendingDrawer<D> {
-        //        double draw(D drawable, double x, double y);
-//        double draw(D drawable, Matrix4f mat, double x, double y);
+        // double draw(D drawable, double x, double y);
         double draw(D drawable, PoseStack mat, double x, double y);
     }
 
@@ -142,17 +140,15 @@ public class GuiUtil {
      * @param maxTextWidth the maximum width of the text in the tooltip box. Set to a negative number to have no max
      *            width.
      * @param font the font for drawing the text in the tooltip box */
-//    public static int drawHoveringText(Matrix4f mat, List<Component> textLines, final int mouseX, final int mouseY,
+//    public static int drawHoveringText(List<String> textLines, final int mouseX, final int mouseY,
     public static int drawHoveringText(PoseStack poseStack, List<Component> textLines, final int mouseX, final int mouseY,
                                        final int screenWidth, final int screenHeight, final int maxTextWidth, Font font) {
         if (!textLines.isEmpty()) {
 //            GlStateManager.disableRescaleNormal();
 //            RenderHelper.disableStandardItemLighting();
 //            GlStateManager.disableLighting();
-//            Lighting.
             // Calen: not need to disableDepth, GuiUtils.drawGradientRect will enableDepthTest
 //            GlStateManager.disableDepth();
-//            RenderSystem.disableDepthTest();
             int tooltipTextWidth = 0;
 
             for (Component textLine : textLines) {
@@ -272,9 +268,8 @@ public class GuiUtil {
             }
 
 //            GlStateManager.enableLighting();
-            // Calen disableDeepth not called before
+            // Calen: disableDepth not called before
 //            GlStateManager.enableDepth();
-//            RenderSystem.enableDepthTest();
 //            RenderHelper.enableStandardItemLighting();
 //            GlStateManager.enableRescaleNormal();
             return tooltipHeight + 5;
@@ -308,8 +303,7 @@ public class GuiUtil {
         Gui.fill(p_93173_, xMin, yMin, xMax, yMax, colour);
     }
 
-    public static void drawTexturedModalRect(PoseStack poseStack, double posX, double posY, double textureX, double textureY, double width,
-                                             double height) {
+    public static void drawTexturedModalRect(PoseStack poseStack, double posX, double posY, double textureX, double textureY, double width, double height) {
 //        int x = MathHelper.floor(posX);
         int x = Mth.floor(posX);
 //        int y = MathHelper.floor(posY);
@@ -365,10 +359,8 @@ public class GuiUtil {
     public static AutoGlScissor scissor(IGuiArea area) {
         GuiRectangle rect = area.asImmutable();
         // Calen: RenderSystem.enableScissor() contains _enableScissorTest()
-//        if (scissorRegions.isEmpty())
-//        {
-////            GL11.glEnable(GL11.GL_SCISSOR_TEST);
-//            GlStateManager._enableScissorTest();
+//        if (scissorRegions.isEmpty()) {
+//            GL11.glEnable(GL11.GL_SCISSOR_TEST);
 //        }
         scissorRegions.push(rect);
         scissor0();
@@ -415,21 +407,17 @@ public class GuiUtil {
     }
 
     private static void scissor0(double x, double y, double width, double height) {
-        Window window = Minecraft.getInstance().getWindow();
-        double scaleFactor = window.getGuiScale();
+//        Minecraft mc = Minecraft.getMinecraft();
 //        ScaledResolution res = new ScaledResolution(mc);
 //        double scaleW = mc.displayWidth / res.getScaledWidth_double();
-//        double scaleW = window.getGuiScaledWidth() / res.getScaledWidth_double();
 //        double scaleH = mc.displayHeight / res.getScaledHeight_double();
-//        double scaleH = window.getGuiScaledHeight() / res.getScaledHeight_double();
+        Window window = Minecraft.getInstance().getWindow();
+        double scaleFactor = window.getGuiScale();
 //        int rx = (int) (x * scaleW);
         int rx = (int) (x * scaleFactor);
 //        int ry = (int) (mc.displayHeight - (y + height) * scaleH);
-//        int ry = (int) (window.getGuiScaledHeight() - (y + height) * scaleH);
         int ry = (int) ((window.getGuiScaledHeight() - height - y) * scaleFactor);
 //        GL11.glScissor(rx, ry, (int) (width * scaleW), (int) (height * scaleH));
-//        GlStateManager._scissorBox(rx, ry, (int) (width * scaleW), (int) (height * scaleH));
-//        GlStateManager._scissorBox(rx, ry, (int) (width * scaleFactor), (int) (height * scaleFactor));
         RenderSystem.enableScissor(rx, ry, (int) (width * scaleFactor), (int) (height * scaleFactor));
     }
 
@@ -437,8 +425,7 @@ public class GuiUtil {
         return GuiUtil.subRelative(sprite, u / size, v / size, width / size, height / size);
     }
 
-    public static ISprite subAbsolute(ISprite sprite, double uMin, double vMin, double uMax, double vMax,
-                                      double spriteSize) {
+    public static ISprite subAbsolute(ISprite sprite, double uMin, double vMin, double uMax, double vMax, double spriteSize) {
         double size = spriteSize;
         return GuiUtil.subAbsolute(sprite, uMin / size, vMin / size, uMax / size, vMax / size);
     }
@@ -512,8 +499,7 @@ public class GuiUtil {
         return adv ? TooltipFlag.Default.ADVANCED : TooltipFlag.Default.NORMAL;
     }
 
-    public static WrappedTextData getWrappedTextData(String text, IFontRenderer fontRenderer, int maxWidth,
-                                                     boolean shadow, float scale) {
+    public static WrappedTextData getWrappedTextData(String text, IFontRenderer fontRenderer, int maxWidth, boolean shadow, float scale) {
         List<String> lines = fontRenderer.wrapString(text, maxWidth, shadow, scale);
         return new WrappedTextData(fontRenderer, lines.toArray(new String[0]), shadow, scale, maxWidth,
                 (int) (lines.size() * fontRenderer.getFontHeight("Ly") * scale));
@@ -526,8 +512,7 @@ public class GuiUtil {
         public final boolean shadow;
         public final int width, height;
 
-        public WrappedTextData(IFontRenderer renderer, String[] lines, boolean shadow, float scale, int width,
-                               int height) {
+        public WrappedTextData(IFontRenderer renderer, String[] lines, boolean shadow, float scale, int width, int height) {
             this.renderer = renderer;
             this.lines = lines;
             this.shadow = shadow;

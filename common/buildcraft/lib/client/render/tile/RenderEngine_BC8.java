@@ -17,7 +17,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.profiling.ProfilerFiller;
 
-//public abstract class RenderEngine_BC8<T extends TileEngineBase_BC8> extends FastTESR<T>
 public abstract class RenderEngine_BC8<T extends TileEngineBase_BC8> implements BlockEntityRenderer<T> {
     public RenderEngine_BC8(BlockEntityRendererProvider.Context context) {
     }

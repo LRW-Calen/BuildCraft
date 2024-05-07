@@ -33,10 +33,8 @@ import net.minecraft.network.chat.TranslatableComponent;
 
 import java.util.*;
 
-/**
- * The base menu for showing all the locations. Should never be registered with and guide managers, this is special and
- * controls them all.
- */
+/** The base menu for showing all the locations. Should never be registered with and guide managers, this is special and
+ * controls them all. */
 public class GuidePageContents extends GuidePageBase {
     private static final int ORDER_OFFSET_X = -10;
     private static final int ORDER_OFFSET_Y = -10;
@@ -44,19 +42,16 @@ public class GuidePageContents extends GuidePageBase {
     private ContentsNodeGui contents;
     private final EditBox searchText;
     private String lastSearchText = "";
-    /**
-     * -1 if all of the results can be displayed or the actual number of results if it's too many.
-     */
+    /** -1 if all of the results can be displayed or the actual number of results if it's too many. */
     private int realResultCount = -1;
 
-    //    private final int DEFAULT_TEXT_COLOR = 0xFF_00_00_00;
+    // private final int DEFAULT_TEXT_COLOR = 0xFF_00_00_00;
     private final int DEFAULT_TEXT_COLOR = 0xFF_00_BF_FF;
 
     public GuidePageContents(GuiGuide gui) {
         super(gui);
         loadMainGui();
-//        Font fr = new ConfigurableFontRenderer(gui.mc.fontRenderer).disableShadow();
-//        Font fr = new ConfigurableFontRenderer(Minecraft.getInstance().font).disableShadow();
+//        FontRenderer fr = new ConfigurableFontRenderer(gui.mc.fontRenderer).disableShadow();
         Font fr = Minecraft.getInstance().font;
 //        searchText = new GuiTextField(0, fr, 0, 0, 80, fr.FONT_HEIGHT + 5);
         searchText = new EditBox(fr, 0, 0, 80, fr.lineHeight + 5, new TextComponent(""));
@@ -72,7 +67,7 @@ public class GuidePageContents extends GuidePageBase {
     public GuidePageBase createReloaded() {
         GuidePageContents newPage = new GuidePageContents(gui);
 //        newPage.searchText.setText(searchText.getText());
-        newPage.searchText.insertText(searchText.getValue());
+        newPage.searchText.setValue(searchText.getValue());
         newPage.searchText.setCursorPosition(searchText.getCursorPosition());
         newPage.searchText.setFocused(searchText.isFocused());
 //        newPage.searchText.setSelectionPos(searchText.getSelectionEnd());
@@ -248,8 +243,7 @@ public class GuidePageContents extends GuidePageBase {
     }
 
     @Override
-    public void handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, double mouseX, double mouseY, int mouseButton,
-                                 int index, boolean isEditing) {
+    public void handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, double mouseX, double mouseY, int mouseButton, int index, boolean isEditing) {
         super.handleMouseClick(poseStack, x, y, width, height, mouseX, mouseY, mouseButton, index, isEditing);
         if (index % 2 == 0) {
             int oX = x + ORDER_OFFSET_X;
@@ -307,17 +301,14 @@ public class GuidePageContents extends GuidePageBase {
 
     @Override
 //    public boolean keyTyped(char typedChar, int keyCode) throws IOException
-//    public boolean keyTyped(char typedChar, int keyCode)
     public boolean keyTyped(int typedChar, int keyCode, int modifiers) {
 //        return searchText.textboxKeyTyped(typedChar, keyCode);
-//        return searchText.charTyped(typedChar, keyCode);
         return searchText.keyPressed(typedChar, keyCode, modifiers);
     }
 
     @Override
     public boolean charTyped(char typedChar, int keyCode) {
 //        return searchText.textboxKeyTyped(typedChar, keyCode);
-//        return searchText.charTyped(typedChar, keyCode);
         return searchText.charTyped(typedChar, keyCode);
     }
 }

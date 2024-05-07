@@ -22,7 +22,7 @@ import net.minecraftforge.network.NetworkEvent;
 import java.io.IOException;
 import java.util.List;
 
-public class WidgetFluidTank<C extends ContainerBC_Neptune> extends Widget_Neptune<C> {
+public class WidgetFluidTank<C extends ContainerBC_Neptune<?>> extends Widget_Neptune<C> {
     private static final byte NET_CLICK = 0;
 
     private final Tank tank;

@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.event.RegistryEvent.MissingMappings;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -64,17 +64,16 @@ public enum MigrationManager {
     }
 
     @SubscribeEvent
-    public void onMissingBlocks(MissingMappings<Block> missing) {
+    public void onMissingBlocks(RegistryEvent.MissingMappings<Block> missing) {
         onMissingMappings(missing, blockMigrations);
     }
 
     @SubscribeEvent
-    public void onMissingItems(MissingMappings<Item> missing) {
+    public void onMissingItems(RegistryEvent.MissingMappings<Item> missing) {
         onMissingMappings(missing, itemMigrations);
     }
 
-    private static <T extends IForgeRegistryEntry<T>> void onMissingMappings(MissingMappings<T> missing,
-                                                                             Map<String, T> migrations) {
+    private static <T extends IForgeRegistryEntry<T>> void onMissingMappings(RegistryEvent.MissingMappings<T> missing, Map<String, T> migrations) {
         ImmutableList<Mapping<T>> all = missing.getAllMappings();
         if (all.isEmpty()) {
             return;

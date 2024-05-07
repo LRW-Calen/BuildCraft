@@ -11,10 +11,6 @@ import javax.vecmath.Vector4f;
 
 public interface ILaserRenderer {
     void vertex(
-//            PoseStack.Pose pose,
-//            VertexConsumer bufferBuilder,
-            Matrix4f matrix,
-            Vector4f normal,
             double x, double y, double z,
             double u, double v,
             int lmap,

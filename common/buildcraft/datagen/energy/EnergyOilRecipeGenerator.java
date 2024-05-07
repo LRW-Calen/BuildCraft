@@ -2,10 +2,10 @@ package buildcraft.datagen.energy;
 
 import buildcraft.api.mj.MjAPI;
 import buildcraft.energy.BCEnergyFluids;
-import buildcraft.energy.recipe.CoolantRecipeBuilder;
-import buildcraft.energy.recipe.FuelRecipeBuilder;
-import buildcraft.factory.recipe.DistillationRecipeBuilder;
-import buildcraft.factory.recipe.HeatExchangeRecipeBuilder;
+import buildcraft.lib.recipe.coolant.CoolantRecipeBuilder;
+import buildcraft.lib.recipe.fuel.FuelRecipeBuilder;
+import buildcraft.lib.recipe.refinery.DistillationRecipeBuilder;
+import buildcraft.lib.recipe.refinery.HeatExchangeRecipeBuilder;
 import buildcraft.lib.fluid.BCFluid;
 import buildcraft.lib.fluid.BCFluidAttributes;
 import buildcraft.lib.misc.MathUtil;

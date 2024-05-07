@@ -9,7 +9,7 @@ import java.util.Set;
 //public class RecipeListPhantom extends RecipeList
 public class RecipeListPhantom extends RecipeCollection {
 
-    //    public RecipeListPhantom(RecipeList from) throws ReflectiveOperationException
+    // public RecipeListPhantom(RecipeList from) throws ReflectiveOperationException
     public RecipeListPhantom(RecipeCollection from) throws ReflectiveOperationException {
 //        getRecipes().addAll(from.getRecipes());
         super(from.getRecipes());
@@ -22,6 +22,7 @@ public class RecipeListPhantom extends RecipeCollection {
                 fld.setAccessible(true);
                 Object object = fld.get(from);
                 if (first) {
+                    // TODO Calen which field?
 ////                    ((BitSet) object).set(0, getRecipes().size());
 //                    ((Set) object).set(0, getRecipes().size());
                 }

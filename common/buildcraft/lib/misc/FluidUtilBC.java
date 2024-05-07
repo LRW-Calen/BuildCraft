@@ -19,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -48,17 +47,13 @@ public class FluidUtilBC {
             if (target == null) {
                 continue;
             }
-            LazyOptional<IFluidHandler> l = target.getCapability(CapUtil.CAP_FLUIDS, side.getOpposite());
-//            if(l!=null)
-            if (l.isPresent()) {
-                IFluidHandler handler = l.orElse(null);
-                if (handler != null) {
-                    int used = handler.fill(potential.copy(), FluidAction.EXECUTE);
+            IFluidHandler handler = target.getCapability(CapUtil.CAP_FLUIDS, side.getOpposite()).orElse(null);
+            if (handler != null) {
+                int used = handler.fill(potential.copy(), FluidAction.EXECUTE);
 
-                    if (used > 0) {
-                        drained += used;
-                        potential.setAmount(potential.getAmount() - used);
-                    }
+                if (used > 0) {
+                    drained += used;
+                    potential.setAmount(potential.getAmount() - used);
                 }
             }
         }
@@ -96,6 +91,8 @@ public class FluidUtilBC {
         return (a == null && b == null) || (a != null && a.isFluidEqual(b) && a.getAmount() == b.getAmount());
     }
 
+    // Calen: use areFluidsEqualIgnoringStillOrFlow in 1.18.2
+    @Deprecated(forRemoval = true)
     public static boolean areFluidsEqual(Fluid a, Fluid b) {
         if (a == null || b == null) {
             return a == b;
@@ -104,49 +101,21 @@ public class FluidUtilBC {
     }
 
     // Calen
-    public static boolean areFluidsEqualIgnoreStillOrFlow(Fluid a, Fluid b) {
+    public static boolean areFluidsEqualIgnoringStillOrFlow(Fluid a, Fluid b) {
         if (a == null || b == null) {
             return a == b;
         }
-//        Item bucketA = a.getBucket();
-//        Item bucketB = b.getBucket();
-//        if (bucketA == null || bucketB == null)
-//        {
-//            return bucketA == bucketB;
-//        }
-//        return bucketA.equals(bucketB);
         return a.isSame(b);
     }
 
-//    public static boolean areFluidsEqual(Fluid a, FluidRegistryObject<ForgeFlowingFluid.Source, ForgeFlowingFluid.Flowing, LiquidBlock, BucketItem> b)
-//    {
-//        if (a == null && b == null)
-//        {
-//            return true;
-//        }
-//        else if (a == null && b.getFluid() == null)
-//        {
-//            return true;
-//        }
-//        else if (a == null || b.getFluid() == null)
-//        {
-//            return false;
-//        }
-//        return a.getRegistryName().getPath().equals(b.getFluid().getRegistryName().getPath());
-//    }
-
-    /**
-     * @return The fluidstack that was moved, or null if no fluid was moved.
-     */
+    /** @return The fluidstack that was moved, or null if no fluid was moved. */
     @Nullable
     public static FluidStack move(IFluidHandler from, IFluidHandler to) {
         return move(from, to, Integer.MAX_VALUE);
     }
 
-    /**
-     * @param max The maximum amount of fluid to move.
-     * @return The fluidstack that was moved, or null if no fluid was moved.
-     */
+    /** @param max The maximum amount of fluid to move.
+     * @return The fluidstack that was moved, or null if no fluid was moved. */
     @Nullable
     public static FluidStack move(IFluidHandler from, IFluidHandler to, int max) {
         if (from == null || to == null) {
@@ -196,8 +165,7 @@ public class FluidUtilBC {
         return new FluidStack(drained, accepted);
     }
 
-    public static InteractionResult onTankActivated(Player player, BlockPos pos, InteractionHand hand,
-                                                    IFluidHandler fluidHandler) {
+    public static InteractionResult onTankActivated(Player player, BlockPos pos, InteractionHand hand, IFluidHandler fluidHandler) {
         Level world = player.level;
         ItemStack held = player.getItemInHand(hand);
         if (held.isEmpty()) {

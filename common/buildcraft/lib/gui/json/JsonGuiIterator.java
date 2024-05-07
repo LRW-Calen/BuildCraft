@@ -112,10 +112,8 @@ public class JsonGuiIterator {
             return canIterate;
         }
 
-        /**
-         * @return True if the iteration has finished, false if not.
-         * @throws JsonSyntaxException if {@link #count} exceded 1000
-         */
+        /** @return True if the iteration has finished, false if not.
+         * @throws JsonSyntaxException if {@link #count} exceded 1000 */
         public boolean iterate() {
             count++;
             if (count > 1000) {

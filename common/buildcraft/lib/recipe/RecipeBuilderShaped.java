@@ -95,30 +95,24 @@ public class RecipeBuilderShaped {
         return objs;
     }
 
-//    public ShapedOreRecipe buildRotated()
-//    {
+//    public ShapedOreRecipe buildRotated() {
 //        int fromRows = shape.size();
 //        int toRows = shape.get(0).length();
 //        StringBuilder[] strings = new StringBuilder[toRows];
-//        for (int toRow = 0; toRow < toRows; toRow++)
-//        {
+//        for (int toRow = 0; toRow < toRows; toRow++) {
 //            strings[toRow] = new StringBuilder();
 //        }
-//        for (String toAdd : shape)
-//        {
-//            for (int toRow = 0; toRow < toRows; toRow++)
-//            {
+//        for (String toAdd : shape) {
+//            for (int toRow = 0; toRow < toRows; toRow++) {
 //                strings[toRow].append(toAdd.charAt(toRow));
 //            }
 //        }
 //        Object[] objs = new Object[toRows + objects.size() * 2];
 //        int offset = 0;
-//        for (StringBuilder string : strings)
-//        {
+//        for (StringBuilder string : strings) {
 //            objs[offset++] = string.toString();
 //        }
-//        for (char c : objects.keys())
-//        {
+//        for (char c : objects.keys()) {
 //            objs[offset++] = c;
 //            objs[offset++] = objects.get(c);
 //        }
@@ -145,8 +139,7 @@ public class RecipeBuilderShaped {
 //        ForgeRegistries.RECIPES.register(recipe.setRegistryName(regName));
     }
 
-//    public void registerRotated()
-//    {
+//    public void registerRotated() {
 //        ensureValid();
 //        ForgeRegistries.RECIPES.register(buildRotated().setRegistryName(result.getItem().getRegistryName()));
 //    }

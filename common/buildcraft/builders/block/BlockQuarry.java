@@ -14,6 +14,7 @@ import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.block.IBlockWithTickableTE;
 import buildcraft.lib.misc.AdvancementUtil;
 import buildcraft.lib.misc.CapUtil;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -32,12 +33,14 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class BlockQuarry extends BlockBCTile_Neptune<TileQuarry> implements IBlockWithFacing, IBlockWithTickableTE<TileQuarry> {
     private static final ResourceLocation ADVANCEMENT = new ResourceLocation("buildcraftbuilders:shaping_the_world");
@@ -56,17 +59,12 @@ public class BlockQuarry extends BlockBCTile_Neptune<TileQuarry> implements IBlo
     }
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
-//        super.addProperties(properties);
-        super.createBlockStateDefinition(builder);
-//        properties.addAll(BuildCraftProperties.CONNECTED_MAP.values());
-        BuildCraftProperties.CONNECTED_MAP.values().forEach(builder::add);
-
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.addAll(BuildCraftProperties.CONNECTED_MAP.values());
     }
 
-
-    //    private boolean isConnected(IBlockAccess world, BlockPos pos, IBlockState state, Direction side)
+    // private boolean isConnected(IBlockAccess world, BlockPos pos, IBlockState state, Direction side)
     private boolean isConnected(LevelAccessor world, BlockPos pos, BlockState state, Direction side) {
         Direction facing = side;
 //        if (Arrays.asList(Direction.HORIZONTALS).contains(facing))
@@ -98,7 +96,7 @@ public class BlockQuarry extends BlockBCTile_Neptune<TileQuarry> implements IBlo
 
     @Override
 //    public TileBC_Neptune createTileEntity(World world, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
 //        return new TileQuarry();
         return new TileQuarry(pos, state);
     }

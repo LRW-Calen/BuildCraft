@@ -21,10 +21,7 @@ import net.minecraftforge.fluids.IFluidTank;
 
 import javax.annotation.Nullable;
 import java.text.NumberFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.IllegalFormatException;
-import java.util.Set;
+import java.util.*;
 
 /** The central class for localizing objects. */
 public class LocaleUtil {
@@ -64,7 +61,8 @@ public class LocaleUtil {
      * @param key The key to localize
      * @return The localized key, or the input key if no localization was found. */
     public static String localize(String key) {
-        String localized = I18n.get(key);
+//        String localized = I18n.get(key);
+        String localized = new TranslatableComponent(key).getString();
         if (localized == key) {
             if (DEBUG && failedStrings.add(localized)) {
                 BCLog.logger.warn("[lib.locale] Attempted to localize '" + key + "' but no localization existed!");
@@ -81,17 +79,28 @@ public class LocaleUtil {
      * @param args The arguments to put into the localized key
      * @return The localized string. */
     public static String localize(String key, Object... args) {
-//        String localized = I18n.get(key);
-        String localized = new TranslatableComponent(key, args).getString();
-        if (localized == key) {
-            if (DEBUG && failedStrings.add(localized)) {
-                BCLog.logger.warn("[lib.locale] Attempted to localize '" + key + "' but no localization existed!");
-            }
-            return key + " " + Arrays.toString(args);
-        }
-        try {
+//        String localized = I18n.translateToLocal(key);
+//        if (localized == key) {
+//            if (DEBUG && failedStrings.add(localized)) {
+//                BCLog.logger.warn("[lib.locale] Attempted to localize '" + key + "' but no localization existed!");
+//            }
+//            return key + " " + Arrays.toString(args);
+//        }
+//        try {
 //            return String.format(localized, args);
-            return I18n.get(key, args);
+//        } catch (IllegalFormatException ife) {
+//            return "Bad Format: " + ife.getMessage();
+//        }
+
+        try {
+            String localized = new TranslatableComponent(key, args).getString();
+            if (Objects.equals(localized, key)) {
+                if (DEBUG && failedStrings.add(localized)) {
+                    BCLog.logger.warn("[lib.locale] Attempted to localize '" + key + "' but no localization existed!");
+                }
+                return key + " " + Arrays.toString(args);
+            }
+            return localized;
         } catch (IllegalFormatException ife) {
             return "Bad Format: " + ife.getMessage();
         }
@@ -113,10 +122,8 @@ public class LocaleUtil {
     }
 
     // Calen
+    /** item.minecraft.firework_star.colorless is defined by BC, not MC. */
     public static String getColorTranslateKey(DyeColor colour) {
-//        return localize("item.fireworksCharge." + colour.getName());
-//        return "item.minecraft.firework_star." + colour.getName();
-        // Calen
         return "item.minecraft.firework_star." + (colour == null ? "colorless" : colour.getName());
     }
 
@@ -233,9 +240,7 @@ public class LocaleUtil {
     }
 
     // Calen
-    //    public static String localizeMj(long mj)
     public static MutableComponent localizeMjComponent(long mj) {
-//        return localize(localeKeyMjStatic, MjAPI.formatMj(mj));
         return new TranslatableComponent(localeKeyMjStatic, MjAPI.formatMj(mj));
     }
 

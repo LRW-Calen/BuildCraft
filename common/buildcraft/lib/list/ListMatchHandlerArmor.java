@@ -6,7 +6,9 @@
 
 package buildcraft.lib.list;
 
+import buildcraft.api.core.BuildCraftAPI;
 import buildcraft.api.lists.ListMatchHandler;
+import buildcraft.lib.BCLibProxy;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
@@ -16,11 +18,9 @@ import java.util.EnumSet;
 
 public class ListMatchHandlerArmor extends ListMatchHandler {
     private static EnumSet<EquipmentSlot> getArmorTypes(ItemStack stack) {
-//        Player player = BCLibProxy.getProxy().getClientPlayer();
-//        if (player == null)
-//        {
-////            player = BuildCraftAPI.fakePlayerProvider.getBuildCraftPlayer(DimensionManager.getWorld(0));
-//            player = BuildCraftAPI.fakePlayerProvider.getBuildCraftPlayer(null);
+//        EntityPlayer player = BCLibProxy.getProxy().getClientPlayer();
+//        if (player == null) {
+//            player = BuildCraftAPI.fakePlayerProvider.getBuildCraftPlayer(DimensionManager.getWorld(0));
 //        }
         EnumSet<EquipmentSlot> types = EnumSet.noneOf(EquipmentSlot.class);
 

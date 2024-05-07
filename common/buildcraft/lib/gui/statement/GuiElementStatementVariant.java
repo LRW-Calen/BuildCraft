@@ -18,9 +18,7 @@ import java.util.List;
 public class GuiElementStatementVariant extends GuiElementSimple implements IMenuElement {
     public static final SpriteNineSliced SELECTION_HOVER = GuiElementStatement.SELECTION_HOVER;
 
-    /**
-     * An array containing [offset][X,Y]
-     */
+    /** An array containing [offset][X,Y] */
     private static final int[][] OFFSET_HOVER = {
             // Centre
             { 0, 0 },
@@ -36,16 +34,14 @@ public class GuiElementStatementVariant extends GuiElementSimple implements IMen
     private final IGuiSlot[] possible;
     private final IGuiArea[] posPossible;
 
-    public GuiElementStatementVariant(BuildCraftGui gui, IGuiArea element, IReference<? extends IGuiSlot> ref,
-                                      IGuiSlot[] possible, IGuiArea[] posPossible) {
+    public GuiElementStatementVariant(BuildCraftGui gui, IGuiArea element, IReference<? extends IGuiSlot> ref, IGuiSlot[] possible, IGuiArea[] posPossible) {
         super(gui, element);
         this.ref = ref;
         this.possible = possible;
         this.posPossible = posPossible;
     }
 
-    public static GuiElementStatementVariant create(BuildCraftGui gui, IGuiArea parent,
-                                                    IReference<? extends IGuiSlot> ref, IGuiSlot[] possible) {
+    public static GuiElementStatementVariant create(BuildCraftGui gui, IGuiArea parent, IReference<? extends IGuiSlot> ref, IGuiSlot[] possible) {
         int count = Math.min(OFFSET_HOVER.length, possible.length);
         possible = possible.length == count ? possible : Arrays.copyOf(possible, count);
         IGuiArea[] posPossible = new IGuiArea[count];

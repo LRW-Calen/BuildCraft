@@ -22,7 +22,7 @@ public final class PageLinkItemStack extends PageLink {
 
     public final ItemStack stack;
     public final List<Component> tooltip;
-    //    public final String searchText;
+    // public final String searchText;
     public final Component searchText;
 
     public static PageLinkItemStack create(boolean startVisible, ItemStack stack, ProfilerFiller prof) {
@@ -33,7 +33,7 @@ public final class PageLinkItemStack extends PageLink {
         String searchText = joinTooltip(tooltip);
         prof.popPush("create_line");
         ISimpleDrawable icon = new GuiStack(stack);
-//        PageLine text = new PageLine(icon, icon, 2, (BaseComponent) tooltip.get(0), true);
+//        PageLinkItemStack page = new PageLinkItemStack(text, startVisible, stack, tooltip, searchText);
         PageLine text = new PageLine(icon, icon, 2, tooltip.get(0).getString(), tooltip.get(0), true);
         prof.pop();
         PageLinkItemStack page = new PageLinkItemStack(text, startVisible, stack, tooltip, searchText);
@@ -86,7 +86,7 @@ public final class PageLinkItemStack extends PageLink {
         this.searchText = new TextComponent(searchText);
     }
 
-    //    private PageLinkItemStack(boolean startVisible, ItemStack stack, Profiler prof)
+    // private PageLinkItemStack(boolean startVisible, ItemStack stack, Profiler prof)
     private PageLinkItemStack(boolean startVisible, ItemStack stack, ProfilerFiller prof) {
         super(createPageLine(stack, prof), startVisible);
         this.stack = stack;
@@ -98,7 +98,7 @@ public final class PageLinkItemStack extends PageLink {
         prof.pop();
     }
 
-    //    private static PageLine createPageLine(ItemStack stack, Profiler prof)
+    // private static PageLine createPageLine(ItemStack stack, Profiler prof)
     private static PageLine createPageLine(ItemStack stack, ProfilerFiller prof) {
         prof.push("create_line");
         ISimpleDrawable icon = new GuiStack(stack);

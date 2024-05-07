@@ -50,8 +50,7 @@ public class GuidePartMulti extends GuidePart {
     }
 
     @Override
-    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
-                                         double mouseX, double mouseY) {
+    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index, double mouseX, double mouseY) {
         if (isVisible()) {
             for (GuidePart part : parts) {
                 current = part.handleMouseClick(poseStack, x, y, width, height, current, index, mouseX, mouseY);

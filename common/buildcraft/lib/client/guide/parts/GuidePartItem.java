@@ -22,13 +22,13 @@ public abstract class GuidePartItem extends GuidePart {
         super(gui);
     }
 
-    //    protected void drawItemStack(ItemStackKey stack, int x, int y)
+    // protected void drawItemStack(ItemStackKey stack, int x, int y)
     protected void drawItemStack(ItemStackKey stack, int x, int y) {
 //        drawItemStack(stack.baseStack, x, y);
         drawItemStack(stack.baseStack, x, y);
     }
 
-    //    protected void drawItemStack(ItemStack stack, int x, int y)
+    // protected void drawItemStack(ItemStack stack, int x, int y)
     protected void drawItemStack(ItemStack stack, int x, int y) {
         if (stack != null && !stack.isEmpty()) {
 //            GlStateManager.color(1, 1, 1);

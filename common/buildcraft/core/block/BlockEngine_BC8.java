@@ -54,7 +54,6 @@ public class BlockEngine_BC8 extends BlockEngineBase_BC8<EnumEngineType> {
 //        return TagManager.getTag("block.engine.bc." + this.engineType.unlocalizedTag, TagManager.EnumTagType.UNLOCALIZED_NAME);
 //    }
 
-    @OnlyIn(Dist.CLIENT)
     public static final Map<IEngineType, ModelHolderVariable> engineModels = new HashMap<>();
 
     @OnlyIn(Dist.CLIENT)
@@ -62,7 +61,6 @@ public class BlockEngine_BC8 extends BlockEngineBase_BC8<EnumEngineType> {
         engineModels.put(engineType, model);
     }
 
-    @OnlyIn(Dist.CLIENT)
     private static final Map<IEngineType, LazyLoadedValue<TextureAtlasSprite>> engineParticles = new HashMap<>();
 
     @OnlyIn(Dist.CLIENT)

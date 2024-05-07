@@ -10,6 +10,7 @@ import buildcraft.builders.tile.TileReplacer;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
 import buildcraft.lib.misc.MessageUtil;
+import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -30,7 +31,7 @@ public class BlockReplacer extends BlockBCTile_Neptune<TileReplacer> implements 
     @Nullable
     @Override
 //    public TileBC_Neptune createTileEntity(World world, IBlockState state)
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+    public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
         return new TileReplacer(pos, state);
     }
 

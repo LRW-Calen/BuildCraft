@@ -17,6 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 
 public class ListMatchHandlerOreDictionary extends ListMatchHandler {
     private static int getUppercaseCount(String s) {
@@ -43,11 +44,8 @@ public class ListMatchHandlerOreDictionary extends ListMatchHandler {
         TagKey<Item>[] matchesIds = target.getTags().toList().toArray(new TagKey[0]);
 
 //        String[] oreNames = new String[oreIds.length];
-//        TagKey<Item>[] oreNames = new TagKey[oreIds.length];
-//        for (int i = 0; i < oreIds.length; i++)
-//        {
-////            oreNames[i] = OreDictionary.getOreName(oreIds[i]);
-//            oreNames[i] = oreIds[i];
+//        for (int i = 0; i < oreIds.length; i++) {
+//            oreNames[i] = OreDictionary.getOreName(oreIds[i]);
 //        }
         TagKey<Item>[] oreNames = oreIds;
 
@@ -56,7 +54,8 @@ public class ListMatchHandlerOreDictionary extends ListMatchHandler {
             for (TagKey<Item> i : oreIds) {
 //                for (int j : matchesIds)
                 for (TagKey<Item> j : matchesIds) {
-                    if (i == j) {
+//                    if (i == j)
+                    if (i.equals(j)) {
                         return true;
                     }
                 }
@@ -67,24 +66,23 @@ public class ListMatchHandlerOreDictionary extends ListMatchHandler {
             // cases in which a given stone is also used for crafting equivalents.
 //            String s = getBestOreString(oreNames);
 //            TagKey<Item> s = getBestOreString(oreNames);
-//            if (s != null)
-            {
+//            if (s != null){
 //                Set<Integer> stackIds = ListOreDictionaryCache.INSTANCE.getListOfPartialMatches(
 //                        type == Type.MATERIAL ? ListOreDictionaryCache.getMaterial(s) : ListOreDictionaryCache.getType(s));
-                TagKey<Item>[] stackIds = oreNames;
-//                if (stackIds != null)
-                {
+            TagKey<Item>[] stackIds = oreNames;
+//                if (stackIds != null) {
 //                    for (int j : stackIds)
-                    for (TagKey<Item> j : stackIds) {
+            for (TagKey<Item> j : stackIds) {
 //                        for (int k : matchesIds)
-                        for (TagKey<Item> k : matchesIds) {
-                            if (j == k) {
-                                return true;
-                            }
-                        }
+                for (TagKey<Item> k : matchesIds) {
+//                    if (j == k)
+                    if (j.equals(k)) {
+                        return true;
                     }
                 }
+//                }
             }
+//            }
         }
 
         return false;
@@ -96,7 +94,7 @@ public class ListMatchHandlerOreDictionary extends ListMatchHandler {
         return !stack.getTags().toList().isEmpty();
     }
 
-    //    private static String getBestOreString(String[] oreIds)
+    // private static String getBestOreString(String[] oreIds)
     private static TagKey<Item> getBestOreString(TagKey<Item>[] oreIds) {
 //        String s = null;
         TagKey<Item> s = null;
@@ -125,7 +123,6 @@ public class ListMatchHandlerOreDictionary extends ListMatchHandler {
                 NonNullList<ItemStack> tempStack = NonNullList.create();
 //                stack.getItem().getSubItems(CreativeModeTab.SEARCH, tempStack);
                 stack.getItem().fillItemCategory(CreativeModeTab.TAB_SEARCH, tempStack);
-                tempStack.add(stack);
                 for (ItemStack is : tempStack) {
                     if (is.getItem() == stack.getItem()) {
                         stacks.add(is);
@@ -137,73 +134,48 @@ public class ListMatchHandlerOreDictionary extends ListMatchHandler {
 
 //        String[] oreNames = new String[oreIds.length];
         TagKey<Item>[] oreNames = oreIds;
-//        for (int i = 0; i < oreIds.length; i++)
-//        {
-////            oreNames[i] = OreDictionary.getOreName(oreIds[i]);
+//        for (int i = 0; i < oreIds.length; i++) {
 //            oreNames[i] = OreDictionary.getOreName(oreIds[i]);
 //        }
 
-//        if (type == Type.CLASS)
-//        {
-////            for (String s : oreNames)
-//            for (TagKey<Item> s : oreNames)
-//            {
-////                stacks.addAll(OreDictionary.getOres(s));
-//                stacks.addAll(ForgeRegistries.ITEMS.tags().getTag(s).stream().map(i -> new ItemStack(i, 1)).toList());
+//        if (type == Type.CLASS) {
+//            for (String s : oreNames) {
+//                stacks.addAll(OreDictionary.getOres(s));
 //            }
-//        }
-//        else
-//        {
-//////            String s = getBestOreString(oreNames);
-////            TagKey<Item> s = getBestOreString(oreNames);
-////            if (s != null)
-////            {
-//////                Set<Integer> stackIds = ListOreDictionaryCache.INSTANCE.getListOfPartialMatches(
-////////                        type == Type.MATERIAL ? ListOreDictionaryCache.getMaterial(s) : ListOreDictionaryCache.getType(s)
-//////                        type == Type.MATERIAL ? ListOreDictionaryCache.getMaterial(s.location().getPath()) : ListOreDictionaryCache.getType(s.location().getPath())
-//////                );
-////                TagKey<Item>[] stackIds = oreNames;
-//////                if (stackIds != null)
-//////                {
-//////                    for (int j : stackIds)
-//////                    {
-////////                        stacks.addAll(OreDictionary.getOres(OreDictionary.getOreName(j)));
-//////                        stacks.addAll(ForgeRegistries.ITEMS.tags().getTag(j).stream().map(i -> new ItemStack(i, 1)).toList());
-//////                    }
-//////                }
-////            }
-//            for (TagKey<Item> j : oreNames)
-//            {
-////                        stacks.addAll(OreDictionary.getOres(OreDictionary.getOreName(j)));
-//                stacks.addAll(ForgeRegistries.ITEMS.tags().getTag(j).stream().map(i -> new ItemStack(i, 1)).toList());
+//        } else {
+//            String s = getBestOreString(oreNames);
+//            if (s != null) {
+//                Set<Integer> stackIds = ListOreDictionaryCache.INSTANCE.getListOfPartialMatches(
+//                        type == Type.MATERIAL ? ListOreDictionaryCache.getMaterial(s) : ListOreDictionaryCache.getType(s));
+//                if (stackIds != null) {
+//                    for (int j : stackIds) {
+//                        stacks.addAll(OreDictionary.getOres(OreDictionary.getOreName(j)));
+//                    }
+//                }
 //            }
 //        }
         for (TagKey<Item> j : oreNames) {
-//                        stacks.addAll(OreDictionary.getOres(OreDictionary.getOreName(j)));
             stacks.addAll(ForgeRegistries.ITEMS.tags().getTag(j).stream().map(i -> new ItemStack(i, 1)).toList());
         }
 
-        NonNullList<ItemStack> wildcard = NonNullList.create();
+//        NonNullList<ItemStack> wildcard = NonNullList.create();
 
         // Calen: no getHasSubtypes
-//        for (ItemStack is : stacks)
-//        {
-////            if (is != null && is.getItemDamage() == OreDictionary.WILDCARD_VALUE && is.getHasSubtypes())
-//            if (is != null && is.getDamageValue() == Short.MAX_VALUE)
-//            {
+//        for (ItemStack is : stacks) {
+//            if (is != null && is.getItemDamage() == OreDictionary.WILDCARD_VALUE && is.getHasSubtypes()) {
 //                wildcard.add(is);
 //            }
 //        }
-        for (ItemStack is : wildcard) {
-            NonNullList<ItemStack> wll = NonNullList.create();
-//            is.getItem().getSubItems(CreativeModeTab.MISC, wll);
-            is.getItem().fillItemCategory(CreativeModeTab.TAB_MISC, wll);
-            wll.add(is);
-            if (wll.size() > 0) {
-                stacks.remove(is);
-                stacks.addAll(wll);
-            }
-        }
+//        for (ItemStack is : wildcard) {
+//            NonNullList<ItemStack> wll = NonNullList.create();
+////            is.getItem().getSubItems(CreativeModeTab.MISC, wll);
+//            is.getItem().fillItemCategory(CreativeModeTab.TAB_MISC, wll);
+//            wll.add(is);
+//            if (wll.size() > 0) {
+//                stacks.remove(is);
+//                stacks.addAll(wll);
+//            }
+//        }
 
         return stacks;
     }

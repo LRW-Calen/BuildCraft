@@ -67,9 +67,7 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement {
     protected IGuiPosition positionAppending;
     protected String title = "unknown";
 
-    /**
-     * -1 means shrinking, 0 no change, 1 expanding
-     */
+    /** -1 means shrinking, 0 no change, 1 expanding */
     private int currentDifference = 0;
 
     @Nullable
@@ -141,9 +139,7 @@ public class Ledger_Neptune implements IInteractionElement, IContainingElement {
         }
     }
 
-    /**
-     * The default implementation only works if all the elements are based around {@link #positionLedgerStart}
-     */
+    /** The default implementation only works if all the elements are based around {@link #positionLedgerStart} */
     public void calculateMaxSize() {
         double w = CLOSED_WIDTH;
         double h = CLOSED_HEIGHT;

@@ -51,8 +51,7 @@ public class ItemHandlerSimple extends AbstractInvItemTransactor implements IIte
         this(size, (slot, stack) -> true, StackInsertionFunction.getDefaultInserter(), callback);
     }
 
-    public ItemHandlerSimple(int size, StackInsertionChecker checker, StackInsertionFunction insertionFunction,
-                             @Nullable StackChangeCallback callback) {
+    public ItemHandlerSimple(int size, StackInsertionChecker checker, StackInsertionFunction insertionFunction, @Nullable StackChangeCallback callback) {
         stacks = NonNullList.withSize(size, StackUtil.EMPTY);
         this.checker = checker;
         this.inserter = insertionFunction;
@@ -269,12 +268,12 @@ public class ItemHandlerSimple extends AbstractInvItemTransactor implements IIte
     }
 
     @Override
-    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return canSet(slot, stack);
+    public String toString() {
+        return "ItemHandlerSimple " + stacks;
     }
 
     @Override
-    public String toString() {
-        return "ItemHandlerSimple " + stacks;
+    public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+        return canSet(slot, stack);
     }
 }

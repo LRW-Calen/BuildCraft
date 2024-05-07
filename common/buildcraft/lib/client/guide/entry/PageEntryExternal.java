@@ -13,17 +13,14 @@ import net.minecraft.util.profiling.ProfilerFiller;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * An external page type that doesn't correspond to any object in the game. Used for detailing configs, resource packs,
- * model files, etc.
- */
+/** An external page type that doesn't correspond to any object in the game. Used for detailing configs, resource packs,
+ * model files, etc. */
 public class PageEntryExternal extends PageValueType<String> {
 
     public static final PageEntryExternal INSTANCE = new PageEntryExternal();
 
     @Override
-    public OptionallyDisabled<PageEntry<String>> deserialize(ResourceLocation name, JsonObject json,
-                                                             JsonDeserializationContext ctx) {
+    public OptionallyDisabled<PageEntry<String>> deserialize(ResourceLocation name, JsonObject json, JsonDeserializationContext ctx) {
         String value = PageValue.getTitle(json);
         return new OptionallyDisabled<>(new PageEntry<>(this, name, json, value));
     }

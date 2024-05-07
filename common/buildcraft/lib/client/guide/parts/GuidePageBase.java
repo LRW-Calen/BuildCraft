@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GuidePageBase extends GuidePart {
-    /**
-     * The current page that is being rendered
-     */
+    /** The current page that is being rendered */
     private int index = 0;
     protected int numPages = -1;
 
@@ -116,19 +114,17 @@ public abstract class GuidePageBase extends GuidePart {
         return current;
     }
 
-    //    public abstract String getTitle();
+    // public abstract String getTitle();
     public abstract Component getTitle();
 
     public boolean shouldPersistHistory() {
         return true;
     }
 
-    /**
-     * Called when the {@link GuideManager} is reloaded.
+    /** Called when the {@link GuideManager} is reloaded.
      *
      * @return A page that can be shown and is valid after the reload, or null if this page cannot continue through a
-     * reload.
-     */
+     *         reload. */
     @Nullable
     public GuidePageBase createReloaded() {
         return null;
@@ -136,8 +132,7 @@ public abstract class GuidePageBase extends GuidePart {
 
     public abstract List<GuideChapter> getChapters();
 
-    protected GuidePart getClicked(PoseStack poseStack, Iterable<GuidePart> iterable, int x, int y, int width, int height, int mouseX,
-                                   int mouseY, int index) {
+    protected GuidePart getClicked(PoseStack poseStack, Iterable<GuidePart> iterable, int x, int y, int width, int height, int mouseX, int mouseY, int index) {
         PagePosition pos = new PagePosition(0, 0);
         for (GuidePart part : iterable) {
             pos = part.renderIntoArea(poseStack, x, y, width, height, pos, -1);
@@ -239,8 +234,7 @@ public abstract class GuidePageBase extends GuidePart {
 
     }
 
-    //    public boolean keyTyped(char typedChar, int keyCode) throws IOException
-//    public boolean keyTyped(char typedChar, int keyCode)
+    // public boolean keyTyped(char typedChar, int keyCode) throws IOException
     public boolean keyTyped(int typedChar, int keyCode, int modifiers) {
         return false;
     }

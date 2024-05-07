@@ -16,22 +16,14 @@ import net.minecraft.world.inventory.MenuType;
 public abstract class ContainerBCTile<T extends TileBC_Neptune & IBCTileMenuProvider> extends ContainerBC_Neptune<T> {
     public final T tile;
 
-    public ContainerBCTile(MenuType menuType, int id, Player player, T tile)
-//    public ContainerBCTile(MenuType menuType, int id, Player player, T tile, @Nullable FriendlyByteBuf data)
-    {
+    public ContainerBCTile(MenuType menuType, int id, Player player, T tile) {
         super(menuType, id, player);
         this.tile = tile;
-        // Calen: Moved to BCxxxGuis:MessageUpdateTile msg = tile.onServerPlayerOpenNoSend(player);
+        // Calen: Moved to MessageUtil#serverOpenTileGui:MessageUpdateTile msg = tile.onServerPlayerOpenNoSend(player);
         // to ensure the message received before GUI opened in client
-        // not call in Client, just handle the MessageUpdateTile in Client
-//        if (!tile.getLevel().isClientSide)
-//        {
+        // Not called in Client. We just handle the MessageUpdateTile in Client
+//        if (!tile.getLevel().isClientSide) {
 //            tile.onPlayerOpen(player);
-//        }
-        // Calen test
-//        if (tile.getLevel().isClientSide)
-//        {
-//            GuiUtil.clientHandleUpdateTileMsgBeforeOpen(tile, data);
 //        }
     }
 

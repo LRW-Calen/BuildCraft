@@ -20,8 +20,7 @@ public class GuidePartNewPage extends GuidePart {
     }
 
     @Override
-    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
-                                         double mouseX, double mouseY) {
+    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index, double mouseX, double mouseY) {
         return current.newPage();
     }
 }

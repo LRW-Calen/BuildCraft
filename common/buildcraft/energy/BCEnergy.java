@@ -2,8 +2,8 @@ package buildcraft.energy;
 
 import buildcraft.api.enums.EnumSpring;
 import buildcraft.core.BCCore;
-import buildcraft.energy.recipe.CoolantRecipeSerializer;
-import buildcraft.energy.recipe.FuelRecipeSerializer;
+import buildcraft.lib.recipe.coolant.CoolantRecipeSerializer;
+import buildcraft.lib.recipe.fuel.FuelRecipeSerializer;
 import buildcraft.lib.fluid.BCFluid;
 import buildcraft.lib.registry.RegistryConfig;
 import buildcraft.lib.registry.TagManager;

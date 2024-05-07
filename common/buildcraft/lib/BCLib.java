@@ -6,6 +6,9 @@ package buildcraft.lib;
 
 import buildcraft.api.BCModules;
 import buildcraft.api.core.BCLog;
+import buildcraft.api.mj.MjAPI;
+import buildcraft.api.tiles.TilesAPI;
+import buildcraft.api.transport.pipe.PipeApi;
 import buildcraft.lib.block.VanillaPaintHandlers;
 import buildcraft.lib.block.VanillaRotationHandlers;
 import buildcraft.lib.chunkload.ChunkLoaderManager;
@@ -22,7 +25,6 @@ import buildcraft.lib.registry.TagManager.TagEntry;
 import buildcraft.lib.script.ReloadableRegistryManager;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.world.ForgeChunkManager;
 import net.minecraftforge.event.RegistryEvent;
@@ -35,11 +37,18 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import java.util.function.Consumer;
 
 //@formatter:off
+//@Mod(
+//        modid = BCLib.MODID,
+//        name = "BuildCraft Lib",
+//        version = BCLib.VERSION,
+//        updateJSON = "https://mod-buildcraft.com/version/versions.json",
+//        acceptedMinecraftVersions = "(gradle_replace_mcversion,)",
+//        dependencies = "required-after:forge@(gradle_replace_forgeversion,)"
+//)
 @Mod(BCLib.MODID)
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 //@formatter:on
@@ -66,14 +75,6 @@ public class BCLib {
 
     public BCLib() {
         INSTANCE = this;
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        modEventBus.addListener(CapUtil::registerCaps);
-
-        // various sprite registers
-        if (FMLEnvironment.dist == Dist.CLIENT) {
-            BCLibSprites.fmlPreInitClient();
-        }
 
         ExpressionCompat.setup();
     }
@@ -86,6 +87,14 @@ public class BCLib {
 
     @SubscribeEvent
     public static void preInit(FMLConstructModEvent evt) {
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(CapUtil::registerCapability);
+        modEventBus.addListener(MjAPI::registerCapability);
+        modEventBus.addListener(TilesAPI::registerCapability);
+        modEventBus.addListener(PipeApi::registerCapability);
+
+        modEventBus.register(BCLibEventDistModBus.class);
+
         MOD_CONTAINER = ModList.get().getModContainerById(MODID).get();
 
         try {
@@ -203,7 +212,6 @@ public class BCLib {
     }
 
     private static TagEntry registerTag(String id) {
-//        return TagManager.registerTag(id);
 //        return TagManager.registerTag(id);
         return tagManager.registerTag(id);
     }

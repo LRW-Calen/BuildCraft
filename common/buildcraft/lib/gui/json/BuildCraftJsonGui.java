@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.Slot;
@@ -26,11 +27,9 @@ import net.minecraft.world.inventory.Slot;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-/**
- * A GUI that is defined (mostly) in a json file. Note that callers generally have to add {@link Slot}'s,
+/** A GUI that is defined (mostly) in a json file. Note that callers generally have to add {@link Slot}'s,
  * {@link ISprite}'s and configure buttons in code - currently this only allows for completely defining simple elements
- * via json, more complex ones must be implemented in code.
- */
+ * via json, more complex ones must be implemented in code. */
 public class BuildCraftJsonGui extends BuildCraftGui {
 
     public final ResourceLocation jsonGuiDefinition;
@@ -50,12 +49,12 @@ public class BuildCraftJsonGui extends BuildCraftGui {
         time = context.putVariableDouble("time");
     }
 
-    public BuildCraftJsonGui(AbstractContainerScreen gui, ResourceLocation jsonGuiDefinition) {
+    public BuildCraftJsonGui(Screen gui, ResourceLocation jsonGuiDefinition) {
         super(gui);
         this.jsonGuiDefinition = jsonGuiDefinition;
     }
 
-    public BuildCraftJsonGui(AbstractContainerScreen gui, IGuiArea rootElement, ResourceLocation jsonGuiDefinition) {
+    public BuildCraftJsonGui(Screen gui, IGuiArea rootElement, ResourceLocation jsonGuiDefinition) {
         super(gui, rootElement);
         this.jsonGuiDefinition = jsonGuiDefinition;
     }

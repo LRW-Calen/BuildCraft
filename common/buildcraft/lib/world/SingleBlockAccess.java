@@ -14,10 +14,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 
-/**
- * An {@link LevelAccessor} for getting the properties of a single {@link BlockState}
- * at the {@link SingleBlockAccess#POS}
- */
+/** An {@link LevelAccessor} for getting the properties of a single {@link BlockState}
+ * at the {@link SingleBlockAccess#POS} */
 //public class SingleBlockAccess implements LevelAccessor
 public class SingleBlockAccess implements BlockGetter {
     public static final BlockPos POS = BlockPos.ZERO;
@@ -32,11 +30,12 @@ public class SingleBlockAccess implements BlockGetter {
         return null;
     }
 
-//    @Override
+    @Override
 //    public int getCombinedLight(BlockPos pos, int lightValue)
-//    {
+    public int getLightEmission(BlockPos pos) {
 //        return lightValue << 4;
-//    }
+        return 0;
+    }
 
     @Override
     public BlockState getBlockState(BlockPos pos) {
@@ -49,16 +48,14 @@ public class SingleBlockAccess implements BlockGetter {
     }
 
 //    @Override
-//    public boolean isEmptyBlock(BlockPos pos)
-//    {
+//    public boolean isEmptyBlock(BlockPos pos) {
 ////        return getBlockState(pos).getBlock().isAir(state, this, pos);
 //        return getBlockState(pos).isAir();
 //    }
 
 //    @Override
 ////    public Biome getBiome(BlockPos pos) {
-//    public Holder<Biome> getBiome(BlockPos pos)
-//    {
+//    public Holder<Biome> getBiome(BlockPos pos) {
 ////        this.getBiomeManager().getBiome(pos);
 //        return ForgeRegistries.BIOMES.getHolder(Biomes.PLAINS).get();
 //    }
@@ -70,8 +67,7 @@ public class SingleBlockAccess implements BlockGetter {
 
 //    @Override
 //    public int getStrongPower(BlockPos pos, Direction direction)
-//    public int getDirectSignal(BlockPos pos, Direction direction)
-//    {
+//    public int getDirectSignal(BlockPos pos, Direction direction) {
 //        return 0;
 //    }
 
@@ -82,10 +78,8 @@ public class SingleBlockAccess implements BlockGetter {
 
 //    @Override
 //    public boolean isSideSolid(BlockPos pos, Direction side, boolean _default)
-//    public boolean isFaceSturdy(BlockPos pos, Direction side, boolean _default)
-//    {
-//        if (POS.equals(pos))
-//        {
+//    public boolean isFaceSturdy(BlockPos pos, Direction side, boolean _default) {
+//        if (POS.equals(pos)) {
 //            return _default;
 //        }
 //        return state.isFaceSturdy(this, pos, side);

@@ -70,9 +70,7 @@ public class InventoryUtil {
 
     // Sending items around
 
-    /**
-     * @return The leftover stack
-     */
+    /** @return The leftover stack */
     @Nonnull
     public static ItemStack addToRandomInventory(Level world, BlockPos pos, @Nonnull ItemStack stack) {
         if (stack.isEmpty()) {
@@ -92,14 +90,11 @@ public class InventoryUtil {
         return stack;
     }
 
-    /**
-     * Look around the tile given in parameter in all 6 position, tries to add the items to a random injectable tile
+    /** Look around the tile given in parameter in all 6 position, tries to add the items to a random injectable tile
      * around. Will make sure that the location from which the items are coming from (identified by the from parameter)
-     * isn't used again so that entities doesn't go backwards. Returns true if successful, false otherwise.
-     */
+     * isn't used again so that entities doesn't go backwards. Returns true if successful, false otherwise. */
     @Nonnull
-    public static ItemStack addToRandomInjectable(Level world, BlockPos pos, Direction ignore,
-                                                  @Nonnull ItemStack stack) {
+    public static ItemStack addToRandomInjectable(Level world, BlockPos pos, Direction ignore, @Nonnull ItemStack stack) {
         if (stack.isEmpty()) {
             return StackUtil.EMPTY;
         }
@@ -118,19 +113,15 @@ public class InventoryUtil {
         return stack;
     }
 
-    /**
-     * Attempts to add the given stack to the best acceptor, in this order: {@link IItemHandler} instances,
-     * {@link IInjectable} instances, and finally dropping it down on the ground.
-     */
+    /** Attempts to add the given stack to the best acceptor, in this order: {@link IItemHandler} instances,
+     * {@link IInjectable} instances, and finally dropping it down on the ground. */
     public static void addToBestAcceptor(Level world, BlockPos pos, Direction ignore, @Nonnull ItemStack stack) {
         stack = addToRandomInjectable(world, pos, ignore, stack);
         stack = addToRandomInventory(world, pos, stack);
         drop(world, pos, stack);
     }
 
-    /**
-     * Adds every stack from src to dst. Doesn't add empty stacks.
-     */
+    /** Adds every stack from src to dst. Doesn't add empty stacks. */
     public static void addAll(IItemHandler src, NonNullList<ItemStack> dst) {
         for (int i = 0; i < src.getSlots(); i++) {
             ItemStack stack = src.getStackInSlot(i);
@@ -140,10 +131,8 @@ public class InventoryUtil {
         }
     }
 
-    /**
-     * Adds the given {@link ItemStack} to the player's inventory, or drops it in front of them if their was not enough
-     * room.
-     */
+    /** Adds the given {@link ItemStack} to the player's inventory, or drops it in front of them if their was not enough
+     * room. */
     public static void addToPlayer(Player player, ItemStack stack) {
 //        if (player.inventory.addItemStackToInventory(stack))
         if (player.getInventory().add(stack)) {

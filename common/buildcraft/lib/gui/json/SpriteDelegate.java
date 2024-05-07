@@ -3,6 +3,7 @@ package buildcraft.lib.gui.json;
 import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.client.sprite.SpriteAtlas;
 import buildcraft.lib.misc.SpriteUtil;
+import net.minecraft.client.Minecraft;
 
 public class SpriteDelegate implements ISprite {
     public ISprite delegate;
@@ -13,7 +14,6 @@ public class SpriteDelegate implements ISprite {
 
     public SpriteDelegate() {
 //        this(new SpriteAtlas(Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite()));
-//        this(new SpriteAtlas(Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_PARTICLES).apply(new ResourceLocation("missingno"))));
         this(new SpriteAtlas(SpriteUtil.missingSprite()));
     }
 

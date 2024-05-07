@@ -28,11 +28,9 @@ public class ItemPluggableSimple extends ItemBC_Neptune implements IItemPluggabl
 
     private static final IPlacementPredicate ALWAYS_CAN = (item, h, s) -> true;
 
-    /**
-     * Returns true if the {@link IPipeHolder}'s
+    /** Returns true if the {@link IPipeHolder}'s
      * {@link PipeBehaviour#getCapability(net.minecraftforge.common.capabilities.Capability, Direction)} returns a
-     * non-null value for {@link MjAPI#CAP_REDSTONE_RECEIVER}.
-     */
+     * non-null value for {@link MjAPI#CAP_REDSTONE_RECEIVER}. */
     public static final IPlacementPredicate PIPE_BEHAVIOUR_ACCEPTS_RS_POWER = (item, pipeHolder, side) ->
     {
         IPipe pipe = pipeHolder.getPipe();

@@ -1,7 +1,7 @@
 package buildcraft.datagen.robotics;
 
 import buildcraft.factory.BCFactory;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import buildcraft.robotics.BCRoboticsBlocks;
 import buildcraft.transport.BCTransportItems;
 import net.minecraft.data.DataGenerator;
@@ -32,7 +32,7 @@ public class RoboticsCraftingRecipeGenerator extends RecipeProvider {
                 .define('w', ItemTags.PLANKS)
                 .define('p', Blocks.PISTON)
                 .define('c', Blocks.CHEST)
-                .unlockedBy("has_item", has(OreDictTags.GEAR_STONE))
+                .unlockedBy("has_item", has(OreDictionaryTags.GEAR_STONE))
                 .group(MOD_ID)
                 .save(consumer);
     }

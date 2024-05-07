@@ -2,7 +2,7 @@ package buildcraft.datagen.base;
 
 import buildcraft.api.BCModules;
 import buildcraft.energy.generation.biome.BCBiomeRegistry;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.tags.BiomeTagsProvider;
 import net.minecraft.tags.BiomeTags;
@@ -18,7 +18,7 @@ public class BCBiomeTagsGenerator extends BiomeTagsProvider {
     @Override
     protected void addTags() {
         // Add anything but nether, end and void biomes
-        tag(OreDictTags.OIL_GEN)
+        tag(OreDictionaryTags.OIL_GEN)
                 .addTag(Tags.Biomes.IS_OVERWORLD)
         ;
         tag(Biomes.IS_HOT)

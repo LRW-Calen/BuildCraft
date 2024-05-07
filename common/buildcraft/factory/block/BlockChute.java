@@ -34,6 +34,7 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Map;
 
 public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlockWithFacing, IBlockWithTickableTE<TileChute> {
@@ -91,12 +92,9 @@ public class BlockChute extends BlockBCTile_Neptune<TileChute> implements IBlock
 //    }
 
     @Override
-//    protected void addProperties(List<IProperty<?>> properties)
-    protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
-//        super.addProperties(properties);
-        super.createBlockStateDefinition(builder);
-//        properties.addAll(CONNECTED_MAP.values());
-        CONNECTED_MAP.values().forEach(builder::add);
+    protected void addProperties(List<Property<?>> properties) {
+        super.addProperties(properties);
+        properties.addAll(CONNECTED_MAP.values());
     }
 
     // Calen: not found a similar method like getActualState of 1.12.2

@@ -12,10 +12,7 @@ import buildcraft.api.transport.IStripesActivator;
 import buildcraft.api.transport.IWireManager;
 import buildcraft.api.transport.pipe.*;
 import buildcraft.lib.cap.CapabilityHelper;
-import buildcraft.lib.misc.BlockUtil;
-import buildcraft.lib.misc.InventoryUtil;
-import buildcraft.lib.misc.SoundUtil;
-import buildcraft.lib.misc.StackUtil;
+import buildcraft.lib.misc.*;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
 import buildcraft.transport.wire.WireManager;
 import com.mojang.authlib.GameProfile;
@@ -131,7 +128,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
         final GameProfile owner;
         // Fetch owner
         {
-            IPipeHolder holder = CapabilityHelper.getCapability(stripesTileOld, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
+            IPipeHolder holder = CapUtil.getCapability(stripesTileOld, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
             if (stripesTileOld == null || holder == null) {
                 BCLog.logger
                         .warn("Found an invalid request at " + r.pos + " as " + stripesTileOld + " was not a pipe tile!");
@@ -242,7 +239,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
         final GameProfile owner;
         // Fetch owner
         {
-            IPipeHolder holder = CapabilityHelper.getCapability(stripesTileOld, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
+            IPipeHolder holder = CapUtil.getCapability(stripesTileOld, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
             if (stripesTileOld == null || holder == null) {
                 BCLog.logger.warn("Found an invalid request at " + r.pos + " as " + stripesTileOld + " was not a pipe tile!");
                 return;
@@ -352,7 +349,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
             stripesTileNew.onLoad();
         }
 
-        IPipeHolder stripesPipeHolderNew = CapabilityHelper.getCapability(stripesTileNew, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
+        IPipeHolder stripesPipeHolderNew = CapUtil.getCapability(stripesTileNew, PipeApi.CAP_PIPE_HOLDER, null).orElse(null);
         if (stripesPipeHolderNew != null) {
             if (!canceled) {
                 IWireManager wireManager = stripesPipeHolderNew.getWireManager();
@@ -380,7 +377,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
 
     private boolean isValidRetractionPath(Level w, PipeExtensionRequest r, Direction retractDir) {
         BlockEntity tile = w.getBlockEntity(r.pos.relative(retractDir));
-        IPipe pipe = CapabilityHelper.getCapability(tile, PipeApi.CAP_PIPE, null).orElse(null);
+        IPipe pipe = CapUtil.getCapability(tile, PipeApi.CAP_PIPE, null).orElse(null);
         if (pipe != null) {
             boolean connected = false;
             for (Direction facing : Direction.values()) {

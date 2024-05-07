@@ -52,29 +52,23 @@ public enum XmlPageLoader implements IPageLoaderText {
     public static final Map<String, SpecialParser> TAG_FACTORIES = new HashMap<>();
     public static final Map<String, MultiPartJoiner> GUIDE_PART_MULTIS = new HashMap<>();
 
-    /**
-     * Used to show "in-game" guide information, narrated from the perspective of the player. (As if they were actively
+    /** Used to show "in-game" guide information, narrated from the perspective of the player. (As if they were actively
      * researching how everything worked). The inverse is for a more formal, wikipedia-like tone used to convey the
      * information, pure and simple.
      * <p>
-     * This is enabled by default in-game, and always disabled in exports.
-     */
+     * This is enabled by default in-game, and always disabled in exports. */
     public static boolean SHOW_LORE = true;
 
-    /**
-     * Used to show extra "hints" that the described thing can be used for, or different ways of using it in
+    /** Used to show extra "hints" that the described thing can be used for, or different ways of using it in
      * combinations with other blocks/items. Essentially this is for "recommended usages" of different things. (As
      * working this out is part of the fun it is not required. As such this is disabled by default, but toggle-able
-     * in-game and planned to be toggle-able when exported.
-     */
+     * in-game and planned to be toggle-able when exported. */
     public static boolean SHOW_HINTS = false;
 
-    /**
-     * Used to show all of the numbers used when calculating various things, like pipe flow rate, extraction rate,
+    /** Used to show all of the numbers used when calculating various things, like pipe flow rate, extraction rate,
      * pulse rate, etc.
      * <p>
-     * Disabled by default, but toggle-able in-game and planned to be toggle-able when exported.
-     */
+     * Disabled by default, but toggle-able in-game and planned to be toggle-able when exported. */
     public static boolean shouldShowDetail() {
         return BCLibConfig.guideShowDetail;
     }
@@ -200,15 +194,14 @@ public enum XmlPageLoader implements IPageLoaderText {
         TAG_FACTORIES.put(string, parser);
     }
 
-    //    @Override
+    @Override
     public GuidePageFactory loadPage(BufferedReader reader, ResourceLocation name, PageEntry<?> entry, ProfilerFiller prof) throws IOException {
         try (IProfilerSection p = new ProfilerBC(prof).start("xml")) {
             return loadPage0(reader, name, entry, prof);
         }
     }
 
-    private static GuidePageFactory loadPage0(BufferedReader reader, ResourceLocation name, PageEntry<?> entry,
-                                              ProfilerFiller prof) throws IOException, InvalidInputDataException {
+    private static GuidePageFactory loadPage0(BufferedReader reader, ResourceLocation name, PageEntry<?> entry, ProfilerFiller prof) throws IOException, InvalidInputDataException {
         // Needs to support:
         // - start/end tags (such as <lore></lore>)
         // - nested tags (such as <lore>Spooky<bold> Skeletons</bold></lore>)
@@ -373,9 +366,7 @@ public enum XmlPageLoader implements IPageLoaderText {
         };
     }
 
-    /**
-     * Parses a single tag. Note that the tag might not be the length of the whole string.
-     */
+    /** Parses a single tag. Note that the tag might not be the length of the whole string. */
     @Nullable
     public static XmlTag parseTag(String string) throws InvalidInputDataException {
         if (!string.startsWith("<")) {
@@ -447,17 +438,11 @@ public enum XmlPageLoader implements IPageLoaderText {
     }
 
     public enum XmlTagState {
-        /**
-         * {@code <tag>}
-         */
+        /** {@code <tag>} */
         START,
-        /**
-         * {@code <tag/>}
-         */
+        /** {@code <tag/>} */
         COMPLETE,
-        /**
-         * {@code </tag>}
-         */
+        /** {@code </tag>} */
         END;
     }
 
@@ -774,18 +759,14 @@ public enum XmlPageLoader implements IPageLoaderText {
         }
 
         if (data != null) {
-//            try
-//            {
+//            try {
 //                int meta = Integer.parseInt(data.trim());
-//                if (meta == -1)
-//                {
+//                if (meta == -1) {
 //                    // Use oredict
 //                    meta = OreDictionary.WILDCARD_VALUE;
 //                }
 //                stack = new ItemStack(stack.getItem(), stack.getCount(), meta);
-//            }
-//            catch (NumberFormatException nfe)
-//            {
+//            } catch (NumberFormatException nfe) {
 //                BCLog.logger.warn("[lib.guide.loader.xml] " + data + " was not a valid number: " + nfe.getMessage());
 //            }
             throw new RuntimeException("[lib.guide.loader.xml] Found meta data [" + data + "] in tag [" + tag + "] but meta data is not supported in this ms version.");

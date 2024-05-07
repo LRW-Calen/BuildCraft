@@ -10,26 +10,24 @@ import buildcraft.lib.misc.ItemStackKey;
 import buildcraft.lib.misc.StackUtil;
 import com.google.common.collect.Lists;
 import net.minecraft.core.NonNullList;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
-
-/**
- * Defines an {@link ItemStack} that changes between a specified list of stacks. Useful for displaying possible inputs
+/** Defines an {@link ItemStack} that changes between a specified list of stacks. Useful for displaying possible inputs
  * or outputs for recipes that use the oredictionary, or recipes that vary the output depending on the metadata of the
- * input (for example a pipe colouring recipe)
- */
+ * input (for example a pipe colouring recipe) */
 public final class ChangingItemStack extends ChangingObject<ItemStackKey> {
-    /**
-     * Creates a stack list that iterates through all of the given stacks. This does NOT check possible variants.
+    /** Creates a stack list that iterates through all of the given stacks. This does NOT check possible variants.
      *
-     * @param stacks The list to iterate through.
-     */
+     * @param stacks The list to iterate through. */
 //    public ChangingItemStack(NonNullList<ItemStack> stacks)
     // Calen: ? is ItemStack or Ingredient
     public ChangingItemStack(NonNullList<?> stacks) {
@@ -44,14 +42,13 @@ public final class ChangingItemStack extends ChangingObject<ItemStackKey> {
         super(makeStackArray(stack));
     }
 
-//    public ChangingItemStack(String oreId)
-//    {
-//        TagKey<Item> p_206407_
-//        ItemPredicate.Builder.item().of(p_206407_).build()
+    // public ChangingItemStack(String oreId)
+    public ChangingItemStack(TagKey<Item> oreId) {
 //        this(OreDictionary.getOres(oreId));
-//    }
+        this(NonNullList.of(ForgeRegistries.ITEMS.tags().getTag(oreId).stream().map(ItemStack::new).toArray(ItemStack[]::new)));
+    }
 
-    //    private static ItemStackKey[] makeListArray(NonNullList<ItemStack> stacks)
+    // private static ItemStackKey[] makeListArray(NonNullList<ItemStack> stacks)
     private static ItemStackKey[] makeListArray(NonNullList<?> items) {
 //        return makeStackArray(stacks.toArray(new ItemStack[0]));
         List<ItemStack> ret = Lists.newArrayList();

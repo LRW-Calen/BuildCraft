@@ -30,9 +30,7 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.Map.Entry;
 
-/**
- * {@link JsonModel} but any element can change depending on variables.
- */
+/** {@link JsonModel} but any element can change depending on variables. */
 public class JsonVariableModel extends JsonVariableObject {
     // Never allow ao or textures to be variable - they need to be hardcoded so that we can stitch them
     public final boolean ambientOcclusion;
@@ -152,10 +150,8 @@ public class JsonVariableModel extends JsonVariableObject {
         rules = rulesP.toArray(new JsonModelRule[rulesP.size()]);
     }
 
-    /**
-     * Creates a half copy of this -- textures are fully copied, but everything else is taken dierctly (as its
-     * effectivly immutable)
-     */
+    /** Creates a half copy of this -- textures are fully copied, but everything else is taken dierctly (as its
+     * effectivly immutable) */
     public JsonVariableModel(JsonVariableModel from) {
         textures = new HashMap<>(from.textures);
         cutoutElements = from.cutoutElements;
@@ -168,7 +164,7 @@ public class JsonVariableModel extends JsonVariableObject {
         if (ModelHolderRegistry.DEBUG) {
             BCLog.logger.info("[lib.model] The model " + modelLocation + " requires these sprites:");
         }
-        // Calen: 引擎的贴图是靠这里加载出来的↓
+        // Calen: Engine textures are loaded here
         ReloadSource srcModel = new ReloadSource(modelLocation, SourceType.MODEL);
         for (Entry<String, JsonTexture> entry : textures.entrySet()) {
             JsonTexture lookup = entry.getValue();
@@ -246,7 +242,6 @@ public class JsonVariableModel extends JsonVariableObject {
         return bakePart(cutoutElements, this::lookupTexture);
     }
 
-    // Calen: no usage
     public MutableQuad[] getTranslucentQuads() {
         return bakePart(translucentElements, this::lookupTexture);
     }

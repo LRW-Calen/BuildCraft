@@ -8,20 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public interface IContainingElement extends IInteractionElement {
-    /**
-     * @return The backing list of the contained elements. Must be modifiable, and changes must be reflected by future
-     * calls.
-     */
+    /** @return The backing list of the contained elements. Must be modifiable, and changes must be reflected by future
+     *         calls. */
     List<IGuiElement> getChildElements();
 
     default IGuiPosition getChildElementPosition() {
         return this;
     }
 
-    /**
-     * Called after {@link #getChildElements()} is added to, possibly last (so it might not be called after every
-     * addition).
-     */
+    /** Called after {@link #getChildElements()} is added to, possibly last (so it might not be called after every
+     * addition). */
     default void calculateSizes() {
 
     }

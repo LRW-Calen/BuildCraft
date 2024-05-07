@@ -23,11 +23,11 @@ import java.io.IOException;
 import java.util.function.Function;
 
 public class GuideImageFactory implements GuidePartFactory {
-    //    private final ISprite sprite;
+    // private final ISprite sprite;
     private ISprite sprite;
-    //    private final int srcWidth, srcHeight;
+    // private final int srcWidth, srcHeight;
     private int srcWidth, srcHeight;
-    //    private final int width, height;
+    // private final int width, height;
     private int width, height;
 
     public GuideImageFactory(String location) {

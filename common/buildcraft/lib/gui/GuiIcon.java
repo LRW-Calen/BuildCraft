@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 @OnlyIn(Dist.CLIENT)
 public class GuiIcon implements ISimpleDrawable {
@@ -69,7 +70,7 @@ public class GuiIcon implements ISimpleDrawable {
         draw(sprite, poseStack, x, y, x + drawnWidth, y + drawnHeight);
     }
 
-    //    public void drawCustomQuad(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
+    // public void drawCustomQuad(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
     public void drawCustomQuad(PoseStack poseStack, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4) {
         sprite.bindTexture();
 
@@ -93,7 +94,6 @@ public class GuiIcon implements ISimpleDrawable {
 //        vertDirect(poseStack, bufferbuilder, x3, y3, uMax * q[2], vMin * q[2], 0, q[2]);
 //        vertDirect(poseStack, bufferbuilder, x4, y4, uMin * q[3], vMin * q[3], 0, q[3]);
 
-        // Calen
         Matrix4f pose = poseStack.last().pose();
 //        bufferbuilder.vertex(pose, (float) x1, (float) y2, 0).uv((float) uMin, (float) vMax).endVertex();
 //        bufferbuilder.vertex(pose, (float) x2, (float) y2, 0).uv((float) uMax, (float) vMax).endVertex();
@@ -108,55 +108,44 @@ public class GuiIcon implements ISimpleDrawable {
         tessellator.end();
     }
 
-    private static double[] calcQ(double x1, double y1, double x2, double y2, double x3, double y3, double x4,
-                                  double y4) {
-        // Method contents taken from http://www.bitlush.com/posts/arbitrary-quadrilaterals-in-opengl-es-2-0
-        // (or github https://github.com/bitlush/android-arbitrary-quadrilaterals-in-opengl-es-2-0 if the site is down)
-        // this code is by Keith Wood
+//    private static double[] calcQ(double x1, double y1, double x2, double y2, double x3, double y3, double x4,
+//                                  double y4) {
+//        // Method contents taken from http://www.bitlush.com/posts/arbitrary-quadrilaterals-in-opengl-es-2-0
+//        // (or github https://github.com/bitlush/android-arbitrary-quadrilaterals-in-opengl-es-2-0 if the site is down)
+//        // this code is by Keith Wood
+//
+//        double ax = x3 - x1;
+//        double ay = y3 - y1;
+//        double bx = x4 - x2;
+//        double by = y4 - y2;
+//
+//        double cross = ax * by - ay * bx;
+//
+//        if (cross != 0) {
+//            double cy = y1 - y2;
+//            double cx = x1 - x2;
+//
+//            double s = (ax * cy - ay * cx) / cross;
+//
+//            if (s > 0 && s < 1) {
+//                double t = (bx * cy - by * cx) / cross;
+//
+//                if (t > 0 && t < 1) {
+//                    double q0 = 1 / (1 - t);
+//                    double q1 = 1 / (1 - s);
+//                    double q2 = 1 / t;
+//                    double q3 = 1 / s;
+//                    return new double[] { q0, q1, q2, q3 };
+//                }
+//            }
+//        }
+//        // in case (for some reason) some of the input was wrong then we will fail back to default rendering
+//        return new double[] { 1, 1, 1, 1 };
+//    }
 
-        double ax = x3 - x1;
-        double ay = y3 - y1;
-        double bx = x4 - x2;
-        double by = y4 - y2;
-
-        double cross = ax * by - ay * bx;
-
-        if (cross != 0) {
-            double cy = y1 - y2;
-            double cx = x1 - x2;
-
-            double s = (ax * cy - ay * cx) / cross;
-
-            if (s > 0 && s < 1) {
-                double t = (bx * cy - by * cx) / cross;
-
-                if (t > 0 && t < 1) {
-                    double q0 = 1 / (1 - t);
-                    double q1 = 1 / (1 - s);
-                    double q2 = 1 / t;
-                    double q3 = 1 / s;
-                    return new double[] { q0, q1, q2, q3 };
-                }
-            }
-        }
-        // in case (for some reason) some of the input was wrong then we will fail back to default rendering
-        return new double[] { 1, 1, 1, 1 };
-    }
-
-//    //    private static void vertDirect(double x, double y, double s, double t, double r, double q)
-//    private static void vertDirect(PoseStack poseStack, BufferBuilder bufferbuilder, double x, double y, double s, double t, double r, double q)
-//    {
+//    private static void vertDirect(double x, double y, double s, double t, double r, double q) {
 //        GL11.glTexCoord4d(s, t, r, q);
 //        GL11.glVertex2d(x, y);
-////        bufferbuilder.vertex().uv(x, y).end
-//        double[] texCoords = {s0, t0, s1, t1, s2, t2, s3, t3};
-//        double[] vertices = {x0, y0, x1, y1, x2, y2, x3, y3};
-//
-//        for (int i = 0; i < 4; i++)
-//        {
-//            // 设置当前顶点的位置
-//            bufferbuilder.vertex(vertices[i * 2], vertices[i * 2 + 1], 0).uv(texCoords[i * 2], texCoords[i * 2 + 1]).endVertex();
-//        }
 //    }
 
     public void drawCutInside(IGuiArea element, PoseStack poseStack) {

@@ -1,6 +1,5 @@
 package buildcraft.lib.misc;
 
-
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
 

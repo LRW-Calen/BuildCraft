@@ -2,6 +2,7 @@ package buildcraft.lib.client;
 
 import buildcraft.lib.gui.ISimpleDrawable;
 import buildcraft.lib.misc.RenderUtil;
+import buildcraft.lib.misc.SpriteUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
@@ -26,7 +27,7 @@ public class ToastInformation implements Toast {
 //    public Visibility draw(GuiToast toastGui, long delta)
     public Visibility render(PoseStack poseStack, ToastComponent toastGui, long delta) {
 //        toastGui.getMinecraft().getTextureManager().bindTexture(TEXTURE_TOASTS);
-        RenderUtil.bindTexture(TEXTURE);
+        SpriteUtil.bindTexture(TEXTURE);
 //        GlStateManager.color(1.0F, 1.0F, 1.0F);
         RenderUtil.color(1.0F, 1.0F, 1.0F);
 //        toastGui.drawTexturedModalRect(0, 0, 0, 0, 160, 32);

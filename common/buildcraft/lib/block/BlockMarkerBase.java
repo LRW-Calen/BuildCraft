@@ -6,13 +6,16 @@ package buildcraft.lib.block;
 
 import buildcraft.api.blocks.ICustomRotationHandler;
 import buildcraft.api.properties.BuildCraftProperties;
+import buildcraft.lib.tile.TileMarker;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -25,7 +28,7 @@ import javax.annotation.Nonnull;
 import java.util.EnumMap;
 import java.util.Map;
 
-public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICustomRotationHandler {
+public abstract class BlockMarkerBase extends BlockBCTile_Neptune<TileMarker> implements ICustomRotationHandler {
     private static final Map<Direction, VoxelShape> BOUNDING_BOXES = new EnumMap<>(Direction.class);
 
     private static final double halfWidth = 0.1;
@@ -51,17 +54,12 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
     }
 
     public BlockMarkerBase(String idBC, BlockBehaviour.Properties props) {
-        super(
-                idBC,
-                props
-                        .strength(0.25F)
-                        .noOcclusion()
-                        .noCollission()
-        );
+        super(idBC, props);
+//        setHardness(0.25f);
 
         this.registerDefaultState(this.getStateDefinition().any()
                         .setValue(BuildCraftProperties.BLOCK_FACING_6, Direction.UP)
-//                .setValue(BuildCraftProperties.ACTIVE, false) // Calen: only changes, never used
+//                        .setValue(BuildCraftProperties.ACTIVE, false) // Calen: only changes, never used
         );
     }
 
@@ -74,26 +72,22 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
     }
 
 //    @Override
-//    public int getMetaFromState(BlockState state)
-//    {
-//        return state.getValue(BuildCraftProperties.BLOCK_FACING_6).ordinal();
+//    public int getMetaFromState(IBlockState state) {
+//        return state.getValue(BuildCraftProperties.BLOCK_FACING_6).getIndex();
 //    }
 
-    //    @Override
-//    public BlockState getStateFromMeta(int meta)
-//    {
-//        return defaultBlockState().setValue(BuildCraftProperties.BLOCK_FACING_6, Direction.values()[meta]);
+//    @Override
+//    public IBlockState getStateFromMeta(int meta) {
+//        return getDefaultState().withProperty(BuildCraftProperties.BLOCK_FACING_6, EnumFacing.getFront(meta));
 //    }
 
     // Calen: ACTIVE only changes, but never used
 //    @Override
-////    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos)
-//    public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos, BlockEntity tile)
-//    {
-//        tile = tile == null ? world.getBlockEntity(pos) : tile;
-//        if (tile instanceof TileMarker marker)
-//        {
-//            state = state.setValue(BuildCraftProperties.ACTIVE, marker.isActiveForRender());
+//    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
+//        TileEntity tile = world.getTileEntity(pos);
+//        if (tile instanceof TileMarker) {
+//            TileMarker<?> marker = (TileMarker<?>) tile;
+//            state = state.withProperty(BuildCraftProperties.ACTIVE, marker.isActiveForRender());
 //        }
 //        return state;
 //    }
@@ -124,13 +118,13 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
     }
 
     @Override
-//    public AABB getCollisionShape(BlockState state, BlockAccess world, BlockPos pos)
+//    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos)
     public VoxelShape getCollisionShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
         return Shapes.empty();
     }
 
     @Override
-//    public AABB getBoundingBox(BlockState state, BlockAccess source, BlockPos pos)
+//    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
     public VoxelShape getShape(BlockState state, BlockGetter source, BlockPos pos, CollisionContext context) {
         return BOUNDING_BOXES.get(state.getValue(BuildCraftProperties.BLOCK_FACING_6));
     }
@@ -144,11 +138,15 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
         return state;
     }
 
-    // TODO Calen canPlaceBlockOnSide??? canSurvive?
-//    @Override
-    public boolean canPlaceBlockOnSide(Level world, BlockPos pos, Direction side) {
-        BlockState state = world.getBlockState(pos);
-        return state.isFaceSturdy(world, pos.relative(side.getOpposite()), side);
+    @Override
+//    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side)
+    public boolean canSurvive(BlockState state, LevelReader world, BlockPos pos) {
+        Direction facing = state.getValue(BuildCraftProperties.BLOCK_FACING_6);
+        Direction sideOn = facing.getOpposite();
+        BlockPos otherPos = pos.relative(sideOn);
+        BlockState otherState = world.getBlockState(otherPos);
+//        return world.isSideSolid(pos.offset(side.getOpposite()), side);
+        return otherState.isFaceSturdy(world, otherPos, facing, SupportType.CENTER);
     }
 
     @Override
@@ -156,8 +154,9 @@ public abstract class BlockMarkerBase extends BlockBCTile_Neptune implements ICu
         if (state.getBlock() != this) {
             return;
         }
-        Direction sideOn = state.getValue(BuildCraftProperties.BLOCK_FACING_6);
-        if (!canPlaceBlockOnSide(world, pos, sideOn)) {
+//        Direction sideOn = state.getValue(BuildCraftProperties.BLOCK_FACING_6);
+//        if (!canPlaceBlockOnSide(world, pos, sideOn))
+        if (!canSurvive(state, world, pos)) {
             world.destroyBlock(pos, true);
         }
     }

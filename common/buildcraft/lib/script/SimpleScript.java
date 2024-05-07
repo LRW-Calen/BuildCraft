@@ -133,8 +133,15 @@ public class SimpleScript {
 
     private static File logDir;
 
-    public SimpleScript(ScriptableRegistry<?> registry, Path scriptDirRoot, String scriptDomain, Path scriptFolder,
-                        Path scriptFile, List<Path> roots, List<String> scriptContents) {
+    public SimpleScript(
+            ScriptableRegistry<?> registry,
+            Path scriptDirRoot,
+            String scriptDomain,
+            Path scriptFolder,
+            Path scriptFile,
+            List<Path> roots,
+            List<String> scriptContents
+    ) {
         this.scriptDirRoot = scriptDirRoot;
         this.domain = scriptDomain;
         this.scriptFolder = scriptFolder;
@@ -902,8 +909,7 @@ public class SimpleScript {
         }
 
         @Nullable
-        private LineToken checkForString(boolean isComment, int start, LineData data, String line, boolean isMultiLine,
-                                         char end) {
+        private LineToken checkForString(boolean isComment, int start, LineData data, String line, boolean isMultiLine, char end) {
             if (isComment) {
                 for (int i = start; i < line.length(); i++) {
                     if (line.startsWith("*/", i)) {

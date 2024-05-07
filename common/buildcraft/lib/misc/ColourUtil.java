@@ -7,6 +7,7 @@
 package buildcraft.lib.misc;
 
 import buildcraft.lib.BCLibConfig;
+import buildcraft.lib.client.render.font.SpecialColourFontRenderer;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Direction;
@@ -135,8 +136,7 @@ public class ColourUtil {
         replaceColourForBlack(colour, with, with);
     }
 
-    private static void replaceColourForBlack(ChatFormatting colour, ChatFormatting normal,
-                                              ChatFormatting highContrast) {
+    private static void replaceColourForBlack(ChatFormatting colour, ChatFormatting normal, ChatFormatting highContrast) {
         REPLACE_FOR_BLACK[colour.ordinal()] = normal;
         REPLACE_FOR_BLACK_HIGH_CONTRAST[colour.ordinal()] = highContrast;
     }
@@ -145,8 +145,7 @@ public class ColourUtil {
         replaceColourForWhite(colour, with, with);
     }
 
-    private static void replaceColourForWhite(ChatFormatting colour, ChatFormatting normal,
-                                              ChatFormatting highContrast) {
+    private static void replaceColourForWhite(ChatFormatting colour, ChatFormatting normal, ChatFormatting highContrast) {
         REPLACE_FOR_WHITE[colour.ordinal()] = normal;
         REPLACE_FOR_WHITE_HIGH_CONTRAST[colour.ordinal()] = highContrast;
     }
@@ -184,11 +183,9 @@ public class ColourUtil {
         return Arrays.copyOf(NAMES, NAMES.length);
     }
 
-    /**
-     * Returns a string formatted for use in a tooltip (or anything else with a black background). If
+    /** Returns a string formatted for use in a tooltip (or anything else with a black background). If
      * {@link BCLibConfig#useColouredLabels} is true then this will make prefix the string with an appropriate
-     * {@link ChatFormatting} colour, and postfix with {@link ChatFormatting#RESET}
-     */
+     * {@link ChatFormatting} colour, and postfix with {@link ChatFormatting#RESET} */
     public static String getTextFullTooltip(DyeColor colour) {
         if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertColourToTextFormat(colour);
@@ -237,14 +234,8 @@ public class ColourUtil {
         }
     }
 
-    /**
-     * Similar to {@link #getTextFullTooltip(DyeColor)}, but outputs a string specifically designed for
-     * {@link SpecialColourFontRenderer}. MUST be the first string used!
-     */
-
-    // Calen: without cache, thin method will decrease FPS when item in hand or creative tab
-    private static final Map<DyeColor, String> colorStringCache = new HashMap<>();
-
+    /** Similar to {@link #getTextFullTooltip(DyeColor)}, but outputs a string specifically designed for
+     * {@link SpecialColourFontRenderer}. MUST be the first string used! */
     public static String getTextFullTooltipSpecial(DyeColor colour) {
         // Calen
         if (colour == null) {
@@ -306,12 +297,9 @@ public class ColourUtil {
         }
     }
 
-
-    /**
-     * Returns a string formatted for use in a tooltip (or anything else with a black background). If
+    /** Returns a string formatted for use in a tooltip (or anything else with a black background). If
      * {@link BCLibConfig#useColouredLabels} is true then this will make prefix the string with an appropriate
-     * {@link ChatFormatting} colour, and postfixed with {@link ChatFormatting#RESET}
-     */
+     * {@link ChatFormatting} colour, and postfixed with {@link ChatFormatting#RESET} */
     public static String getTextFullTooltip(Direction face) {
         if (BCLibConfig.useColouredLabels) {
             ChatFormatting formatColour = convertFaceToTextFormat(face);
@@ -333,10 +321,8 @@ public class ColourUtil {
         }
     }
 
-    /**
-     * Returns a {@link ChatFormatting} colour that will display correctly on a black background, so it won't use any
-     * of the darker colours (as they will be difficult to see).
-     */
+    /** Returns a {@link ChatFormatting} colour that will display correctly on a black background, so it won't use any
+     * of the darker colours (as they will be difficult to see). */
     public static ChatFormatting getTextFormatForBlack(ChatFormatting in) {
         if (in.isColor()) {
             if (BCLibConfig.useHighContrastLabelColours) {
@@ -349,10 +335,8 @@ public class ColourUtil {
         }
     }
 
-    /**
-     * Returns a {@link ChatFormatting} colour that will display correctly on a white background, so it won't use any
-     * of the lighter colours (as they will be difficult to see).
-     */
+    /** Returns a {@link ChatFormatting} colour that will display correctly on a white background, so it won't use any
+     * of the lighter colours (as they will be difficult to see). */
     public static ChatFormatting getTextFormatForWhite(ChatFormatting in) {
         if (in.isColor()) {
             if (BCLibConfig.useHighContrastLabelColours) {
@@ -365,19 +349,14 @@ public class ColourUtil {
         }
     }
 
-    /**
-     * Converts an {@link DyeColor} into an equivalent {@link ChatFormatting} for display.
-     */
+    /** Converts an {@link DyeColor} into an equivalent {@link ChatFormatting} for display. */
 //    public static ChatFormatting convertColourToTextFormat(DyeColor colour)
     public static ChatFormatting convertColourToTextFormat(@Nullable DyeColor colour) {
 //        return COLOUR_TO_FORMAT[colour.ordinal()];
-        // Calen
         return colour == null ? null : COLOUR_TO_FORMAT[colour.ordinal()];
     }
 
-    /**
-     * Converts an {@link Direction} into an equivalent {@link ChatFormatting} for display.
-     */
+    /** Converts an {@link Direction} into an equivalent {@link ChatFormatting} for display. */
     public static ChatFormatting convertFaceToTextFormat(Direction face) {
         return FACE_TO_FORMAT[face.ordinal()];
     }
@@ -420,10 +399,8 @@ public class ColourUtil {
         }
     }
 
-    /**
-     * Similar to {@link ChatFormatting#stripFormatting(String)}, but also removes every special char
-     * that {@link #getTextFullTooltipSpecial(DyeColor)} can add.
-     */
+    /** Similar to {@link ChatFormatting#stripFormatting(String)}, but also removes every special char
+     * that {@link #getTextFullTooltipSpecial(DyeColor)} can add. */
     public static String stripAllFormatCodes(String string) {
         return ALL_FORMAT_MATCHER.matcher(string).replaceAll("");
     }

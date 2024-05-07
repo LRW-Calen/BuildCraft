@@ -13,11 +13,11 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+/** Provides a simple way of mapping {@link Capability}'s to instances. Also allows for additional providers */
 public class CapabilityHelper implements ICapabilityProvider {
     private final Map<EnumPipePart, Map<Capability<?>, Supplier<?>>> caps = new EnumMap<>(EnumPipePart.class);
 
     private final List<ICapabilityProvider> additional = new ArrayList<>();
-
 
     public CapabilityHelper() {
         for (EnumPipePart face : EnumPipePart.VALUES) {
@@ -59,13 +59,13 @@ public class CapabilityHelper implements ICapabilityProvider {
         return provider;
     }
 
-    // Calen: replaced by getCapability().isPresent()
+    // 1.18.2: use getCapability().isPresent()
 //    @Override
-//    public boolean hasCapability(@Nonnull Capability<?> capability, Direction facing)
-//    {
-//        return getCapability(capability, facing).isPresent();
+//    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+//        return getCapability(capability, facing) != null;
 //    }
 
+    @SuppressWarnings("unchecked")
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, Direction facing) {
@@ -83,18 +83,5 @@ public class CapabilityHelper implements ICapabilityProvider {
             }
         }
         return LazyOptional.empty();
-    }
-
-    /**
-     * Attempts to fetch the given capability from the given provider, or returns null if either of those two are
-     * null.
-     */
-    @Nullable
-    public static <T> LazyOptional<T> getCapability(ICapabilityProvider provider, Capability<T> capability, Direction facing) {
-        if (provider == null || capability == null) {
-//            return null;
-            return LazyOptional.empty();
-        }
-        return provider.getCapability(capability, facing);
     }
 }

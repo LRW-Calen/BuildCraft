@@ -11,6 +11,7 @@ import buildcraft.lib.container.ContainerGuide;
 import buildcraft.lib.guide.GuideBook;
 import buildcraft.lib.guide.GuideBookRegistry;
 import buildcraft.lib.misc.AdvancementUtil;
+import buildcraft.lib.misc.MessageUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -18,7 +19,6 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -29,11 +29,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
-// 这好像是那本书？
-//public class ItemGuide extends ItemBC_Neptune
 public class ItemGuide extends ItemBC_Neptune implements MenuProvider {
     private static final String DEFAULT_BOOK = "buildcraftcore:main";
     private static final ResourceLocation ADVANCEMENT = new ResourceLocation("buildcraftcore:guide");
@@ -47,11 +44,8 @@ public class ItemGuide extends ItemBC_Neptune implements MenuProvider {
     @Override
     public InteractionResultHolder<ItemStack> use(Level world, Player player, InteractionHand hand) {
         AdvancementUtil.unlockAdvancement(player, ADVANCEMENT);
-//        player.openGui(BCLib.INSTANCE, 0, world, hand == InteractionHand.MAIN_HAND ? 0 : 1, 0, 0);
-//        player.openMenu(BCLib.INSTANCE, 0, world, hand == InteractionHand.MAIN_HAND ? 0 : 1, 0, 0);
-        if (player instanceof ServerPlayer serverPlayer) {
-            NetworkHooks.openGui(serverPlayer, this, serverPlayer.blockPosition());
-        }
+//        player.openGui(BCLib.INSTANCE, 0, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+        MessageUtil.serverOpenItemGui(player, this);
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(hand));
     }
 
@@ -90,7 +84,8 @@ public class ItemGuide extends ItemBC_Neptune implements MenuProvider {
         nbt.putString(TAG_BOOK_NAME, book);
     }
 
-    // Calen: GUI
+    // MenuProvider
+
     @Override
     public Component getDisplayName() {
         return new TextComponent(ItemGuide.DEFAULT_BOOK);

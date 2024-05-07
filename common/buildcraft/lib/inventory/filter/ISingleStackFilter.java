@@ -6,7 +6,6 @@
 
 package buildcraft.lib.inventory.filter;
 
-
 import net.minecraft.world.item.ItemStack;
 
 @FunctionalInterface

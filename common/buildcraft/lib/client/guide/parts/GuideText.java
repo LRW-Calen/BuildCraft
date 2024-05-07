@@ -16,7 +16,7 @@ import java.util.List;
 public class GuideText extends GuidePart {
     public final PageLine text;
 
-    //    public GuideText(GuiGuide gui, Component text)
+    // public GuideText(GuiGuide gui, String text)
     public GuideText(GuiGuide gui, String textKey, Component text) {
 //        this(gui, new PageLine(0, text, false));
         this(gui, new PageLine(0, textKey, text, false));
@@ -40,8 +40,7 @@ public class GuideText extends GuidePart {
     }
 
     @Override
-    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index,
-                                         double mouseX, double mouseY) {
+    public PagePosition handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, PagePosition current, int index, double mouseX, double mouseY) {
         return renderLine(poseStack, current, text, x, y, width, height, -1);
     }
 

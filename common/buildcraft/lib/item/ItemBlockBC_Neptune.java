@@ -20,20 +20,18 @@ import net.minecraft.world.level.Level;
 import java.util.List;
 
 public class ItemBlockBC_Neptune extends BlockItem implements IItemBuildCraft {
-    public final String id;
+    public final String idBC;
     private String unlocalizedName;
 
-
     public ItemBlockBC_Neptune(BlockBCBase_Neptune block, Item.Properties properties) {
-//        super(block, properties);
-        super(block, properties.tab(CreativeTabManager.getTab(TagManager.getTag("item." + block.id, TagManager.EnumTagType.CREATIVE_TAB))));
-        this.id = "item." + block.id;
+        super(block, properties.tab(CreativeTabManager.getTab(TagManager.getTag("item." + block.idBC, TagManager.EnumTagType.CREATIVE_TAB))));
+        this.idBC = "item." + block.idBC;
         init();
     }
 
     @Override
     public String getIdBC() {
-        return id;
+        return idBC;
     }
 
     @Override

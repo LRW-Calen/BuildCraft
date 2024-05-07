@@ -30,7 +30,7 @@ public class VanillaPaintHandlers {
         registerDoubleTypedHandler(Blocks.TERRACOTTA, createColourBlockMap("minecraft", "_stained_glass_pane"));
     }
 
-    //    private static void registerDoubleTypedHandler(Block clear, Block dyed, Property<DyeColor> colourProp)
+    // private static void registerDoubleTypedHandler(Block clear, Block dyed, Property<DyeColor> colourProp)
     private static void registerDoubleTypedHandler(Block clear, Map<DyeColor, ? extends Block> dyed) {
 //        ICustomPaintHandler handler = createDoubleTypedPainter(clear, dyed, colourProp);
         ICustomPaintHandler handler = createDoubleTypedPainter(clear, dyed);
@@ -39,7 +39,7 @@ public class VanillaPaintHandlers {
         dyed.values().forEach(b -> CustomPaintHelper.INSTANCE.registerHandler(b, handler));
     }
 
-    //    public static ICustomPaintHandler createDoubleTypedPainter(Block clear, Block dyed, Property<DyeColor> colourProp)
+    // public static ICustomPaintHandler createDoubleTypedPainter(Block clear, Block dyed, Property<DyeColor> colourProp)
     public static ICustomPaintHandler createDoubleTypedPainter(Block clear, Map<DyeColor, ? extends Block> dyed) {
         return (world, pos, state, hitPos, hitSide, to) ->
         {

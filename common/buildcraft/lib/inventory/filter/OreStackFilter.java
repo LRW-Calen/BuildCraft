@@ -20,12 +20,10 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Returns true if the stack matches any one one of the filter stacks.
- */
+/** Returns true if the stack matches any one one of the filter stacks. */
 public class OreStackFilter implements IStackFilter {
 
-    //    private final String[] ores;
+    // private final String[] ores;
     private final List<TagKey<Item>> ores = NonNullList.create();
 
     public OreStackFilter(String... iOres) {

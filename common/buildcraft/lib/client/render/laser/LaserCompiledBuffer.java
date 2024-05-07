@@ -10,31 +10,31 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import gnu.trove.list.array.TDoubleArrayList;
+import gnu.trove.list.array.TFloatArrayList;
 import gnu.trove.list.array.TIntArrayList;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Vector4f;
 
 @OnlyIn(Dist.CLIENT)
 public class LaserCompiledBuffer {
     private static final int DOUBLE_STRIDE = 5;
-    private static final int INT_STRIDE = 2;
+    //    private static final int INT_STRIDE = 2;
+    private static final int INT_STRIDE = 3;
+    private static final int NORMAL_STRIDE = 3;
     private final int vertices;
     private final double[] da;
     private final int[] ia;
+//    private final float[] normals;
 
-    public LaserCompiledBuffer(int vertices, double[] da, int[] ia) {
+    // public LaserCompiledBuffer(int vertices, double[] da, int[] ia)
+    public LaserCompiledBuffer(int vertices, double[] da, int[] ia, float[] normals) {
         this.vertices = vertices;
         this.da = da;
         this.ia = ia;
+//        this.normals = normals;
     }
 
-    /**
-     * Assumes the buffer uses {@link DefaultVertexFormat#BLOCK}
-     */
+    /** Assumes the buffer uses {@link DefaultVertexFormat#BLOCK} */
     public void render(PoseStack.Pose pose, VertexConsumer buffer) {
         for (int i = 0; i < vertices; i++) {
             // POSITION_3F
@@ -49,17 +49,15 @@ public class LaserCompiledBuffer {
             buffer.uv((float) da[DOUBLE_STRIDE * i + 3], (float) da[DOUBLE_STRIDE * i + 4]);
 
             // Calen Overlay
-            buffer.overlayCoords(OverlayTexture.NO_OVERLAY);
+            buffer.overlayCoords(ia[INT_STRIDE * i + 1]);
 
             // TEX_2S
-            int lmap = ia[INT_STRIDE * i + 1];
+            int lmap = ia[INT_STRIDE * i + 2];
 //            buffer.lightmap((lmap >> 16) & 0xFFFF, lmap & 0xFFFF);
-//            buffer.uv2(light_1_18_2);
-//            buffer.uv2((lmap >> 16) & 0xFFFF, lmap & 0xFFFF); // Calen: this light level too high -> wrong
-            buffer.uv2(lmap); // Calen: this right
-//            buffer.normal(pose.normal(), normal_x, normal_y, normal_z);
-//            buffer.normal(pose.normal(), 0, 0, 0); // Calen test
-            buffer.normal(pose.normal(), 1, 1, 1); // Calen test
+            buffer.uv2(lmap);
+
+            buffer.normal(pose.normal(), 1, 1, 1);
+//            buffer.normal(pose.normal(), normals[NORMAL_STRIDE * i + 0], normals[NORMAL_STRIDE * i + 1], normals[NORMAL_STRIDE * i + 2]);
 
             buffer.endVertex();
         }
@@ -69,6 +67,7 @@ public class LaserCompiledBuffer {
         private final boolean useNormalColour;
         private final TDoubleArrayList doubleData = new TDoubleArrayList();
         private final TIntArrayList intData = new TIntArrayList();
+        private final TFloatArrayList normalData = new TFloatArrayList();
         private int vertices = 0;
 
         public Builder(boolean useNormalColour) {
@@ -77,7 +76,6 @@ public class LaserCompiledBuffer {
 
         @Override
         public void vertex(
-                Matrix4f matrix, Vector4f normal,
                 double x, double y, double z,
                 double u, double v,
                 int lmap, int overlay,
@@ -101,14 +99,23 @@ public class LaserCompiledBuffer {
             doubleData.add(u);
             doubleData.add(v);
 
+            // OVERLAY
+            intData.add(overlay);
+
             // TEX_2S
             intData.add(lmap);
+
+//            // NORMAL_3F
+//            normalData.add(nx);
+//            normalData.add(ny);
+//            normalData.add(nz);
 
             vertices++;
         }
 
         public LaserCompiledBuffer build() {
-            return new LaserCompiledBuffer(vertices, doubleData.toArray(), intData.toArray());
+//            return new LaserCompiledBuffer(vertices, doubleData.toArray(), intData.toArray());
+            return new LaserCompiledBuffer(vertices, doubleData.toArray(), intData.toArray(), normalData.toArray());
         }
     }
 }

@@ -2,7 +2,7 @@ package buildcraft.datagen.lib;
 
 import buildcraft.lib.BCLib;
 import buildcraft.lib.BCLibItems;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -22,11 +22,11 @@ public class LibCraftingRecipeGenerator extends RecipeProvider {
     protected void buildCraftingRecipes(Consumer<FinishedRecipe> consumer) {
         // guide
         ShapelessRecipeBuilder.shapeless(BCLibItems.guide.get())
-                .requires(OreDictTags.GEAR_WOOD)
+                .requires(OreDictionaryTags.GEAR_WOOD)
                 .requires(Items.PAPER)
                 .requires(Items.PAPER)
                 .requires(Items.PAPER)
-                .unlockedBy("has_item", has(OreDictTags.WORKBENCHES_ITEM))
+                .unlockedBy("has_item", has(OreDictionaryTags.WORKBENCHES_ITEM))
                 .group(MOD_ID)
                 .save(consumer);
     }

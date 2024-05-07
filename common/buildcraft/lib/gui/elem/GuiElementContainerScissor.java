@@ -7,9 +7,7 @@ import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.GuiUtil.AutoGlScissor;
 import com.mojang.blaze3d.vertex.PoseStack;
 
-/**
- * A type of {@link GuiElementContainer2} that restricts the visible size of elements contained within.
- */
+/** A type of {@link GuiElementContainer2} that restricts the visible size of elements contained within. */
 public class GuiElementContainerScissor extends GuiElementContainer2 {
 
     public final IGuiArea area;

@@ -30,9 +30,7 @@ public abstract class GuideChapter extends GuidePart {
 
     public final PageLine chapter;
 
-    /**
-     * 0 is the minimum value, and corresponds to the top-level of chapter.
-     */
+    /** 0 is the minimum value, and corresponds to the top-level of chapter. */
     public final int level;
     private int hoverProgress = 0, hoverProgressLast = 0;
     protected EnumGuiSide lastDrawn = null;
@@ -49,15 +47,13 @@ public abstract class GuideChapter extends GuidePart {
         RIGHT
     }
 
-    //    public GuideChapter(GuiGuide gui, String chapter)
-//    public GuideChapter(GuiGuide gui, Component chapter)
+    //public GuideChapter(GuiGuide gui, String chapter)
     public GuideChapter(GuiGuide gui, String chapterKey, Component chapter) {
 //        this(gui, 0, chapter);
         this(gui, 0, chapterKey, chapter);
     }
 
-    //    public GuideChapter(GuiGuide gui, int level, String text)
-//    public GuideChapter(GuiGuide gui, int level, Component text)
+    // public GuideChapter(GuiGuide gui, int level, String text)
     public GuideChapter(GuiGuide gui, int level, String textKey, Component text) {
         super(gui);
         ISimpleDrawable icon = (p, x, y) ->
@@ -155,10 +151,8 @@ public abstract class GuideChapter extends GuidePart {
         return renderLine(poseStack, current, chapter, x, y, width, height, -1);
     }
 
-    /**
-     * @param drawCentral TODO
-     * @return The additional number of chapter segments drawn.
-     */
+    /** @param drawCentral TODO
+     * @return The additional number of chapter segments drawn. */
     public int draw(PoseStack poseStack, int yIndex, float partialTicks, boolean drawCentral) {
 
         int drawnCount = 1;
@@ -267,9 +261,7 @@ public abstract class GuideChapter extends GuidePart {
         return fullHeight;
     }
 
-    /**
-     * @return 0 for not hovered, 1 for the main chapter, or 2 for the arrow (if present).
-     */
+    /** @return 0 for not hovered, 1 for the main chapter, or 2 for the arrow (if present). */
     protected int getMousePart() {
         IFontRenderer font = gui.getCurrentFont();
         String text = chapter.text.getString();

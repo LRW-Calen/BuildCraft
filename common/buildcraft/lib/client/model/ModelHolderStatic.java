@@ -25,11 +25,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-/**
- * Holds a model that will never change except if the json file it is defined from is changed.
+/** Holds a model that will never change except if the json file it is defined from is changed.
  *
- * @deprecated Unused -- and a lot of duplicated code with ModelHolderVariable
- */
+ * @deprecated Unused -- and a lot of duplicated code with ModelHolderVariable */
 @Deprecated
 public class ModelHolderStatic extends ModelHolder {
     private final ImmutableMap<String, String> textureLookup;

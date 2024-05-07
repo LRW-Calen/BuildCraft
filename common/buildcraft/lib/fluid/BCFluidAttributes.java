@@ -69,7 +69,6 @@ public class BCFluidAttributes extends FluidAttributes {
 
     public Component getBareLocalizedName() {
 //        return super.getLocalizedName(stack);
-//        return super.getDisplayName(stack);
         return new TranslatableComponent(getTranslationKey());
     }
 
@@ -107,7 +106,6 @@ public class BCFluidAttributes extends FluidAttributes {
             heatable = value;
             return this;
         }
-
 
         public BCFluidAttributes build(Fluid fluid) {
             return factory.apply(this, fluid);

@@ -26,20 +26,14 @@ import java.util.Map.Entry;
 
 public class ItemHandlerManager implements ICapabilityProvider, INBTSerializable<CompoundTag> {
     public enum EnumAccess {
-        /**
-         * An {@link IItemHandler} that shouldn't be accessible by external sources.
-         */
+        /** An {@link IItemHandler} that shouldn't be accessible by external sources. */
         NONE,
-        /**
-         * Same as {@link #NONE}, but the contents of this inventory won't be dropped when the block is removed.
-         * Additionally the items will be considered "free", and so items can be duplicated into these slots
-         */
+        /** Same as {@link #NONE}, but the contents of this inventory won't be dropped when the block is removed.
+         * Additionally the items will be considered "free", and so items can be duplicated into these slots */
         PHANTOM,
         INSERT,
         EXTRACT,
-        /**
-         * Full interaction is allowed.
-         */
+        /** Full interaction is allowed. */
         BOTH
     }
 
@@ -55,8 +49,7 @@ public class ItemHandlerManager implements ICapabilityProvider, INBTSerializable
         }
     }
 
-    public <T extends INBTSerializable<CompoundTag> & IItemHandlerModifiable> T addInvHandler(String key, T handler,
-                                                                                              EnumAccess access, EnumPipePart... parts) {
+    public <T extends INBTSerializable<CompoundTag> & IItemHandlerModifiable> T addInvHandler(String key, T handler, EnumAccess access, EnumPipePart... parts) {
         if (parts == null) {
             parts = new EnumPipePart[0];
         }
@@ -96,15 +89,13 @@ public class ItemHandlerManager implements ICapabilityProvider, INBTSerializable
         return addInvHandler(key, handler, access, parts);
     }
 
-    public ItemHandlerSimple addInvHandler(String key, int size, StackInsertionChecker checker, EnumAccess access,
-                                           EnumPipePart... parts) {
+    public ItemHandlerSimple addInvHandler(String key, int size, StackInsertionChecker checker, EnumAccess access, EnumPipePart... parts) {
         ItemHandlerSimple handler = new ItemHandlerSimple(size, callback);
         handler.setChecker(checker);
         return addInvHandler(key, handler, access, parts);
     }
 
-    public ItemHandlerSimple addInvHandler(String key, int size, StackInsertionFunction insertionFunction,
-                                           EnumAccess access, EnumPipePart... parts) {
+    public ItemHandlerSimple addInvHandler(String key, int size, StackInsertionFunction insertionFunction, EnumAccess access, EnumPipePart... parts) {
         ItemHandlerSimple handler = new ItemHandlerSimple(size, callback);
         handler.setInsertor(insertionFunction);
         return addInvHandler(key, handler, access, parts);
@@ -122,11 +113,9 @@ public class ItemHandlerManager implements ICapabilityProvider, INBTSerializable
         }
     }
 
-    //    @Override
-//    public boolean hasCapability(@Nonnull Capability<?> capability, Direction facing)
-//    {
-//        if (capability == CapUtil.CAP_ITEMS)
-//        {
+//    @Override
+//    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+//        if (capability == CapUtil.CAP_ITEMS) {
 //            Wrapper wrapper = wrappers.get(EnumPipePart.fromFacing(facing));
 //            return wrapper.combined != null;
 //        }

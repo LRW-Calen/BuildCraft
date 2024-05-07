@@ -12,7 +12,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public final class WorldPos {
     @SuppressWarnings("WeakerAccess")
-    public final String dimension; // BC: int
+//    public final int dimension;
+    public final String dimension;
     public final BlockPos pos;
 
     @SuppressWarnings("WeakerAccess")
@@ -22,7 +23,7 @@ public final class WorldPos {
     }
 
     public WorldPos(Level world, BlockPos pos) {
-        this(world.dimension().location().getPath(), pos);
+        this(world.dimension().location().toString(), pos);
     }
 
     public WorldPos(BlockEntity tile) {
@@ -34,7 +35,8 @@ public final class WorldPos {
         return this == o ||
                 o != null &&
                         getClass() == o.getClass() &&
-                        dimension == ((WorldPos) o).dimension &&
+//                        dimension == ((WorldPos) o).dimension &&
+                        dimension.equals(((WorldPos) o).dimension) &&
                         pos.equals(((WorldPos) o).pos);
 
     }

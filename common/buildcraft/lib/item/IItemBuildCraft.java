@@ -19,29 +19,24 @@ public interface IItemBuildCraft {
 
     public abstract void setUnlocalizedName(String unlocalizedName);
 
-    // Calen: not still useful in 1.18.2
-//    /**
-//     * Sets up all of the model information for this item. This is called multiple times, and you *must* make sure that
+    // Calen: not still used in 1.18.2
+//    /** Sets up all of the model information for this item. This is called multiple times, and you *must* make sure that
 //     * you add all the same values each time. Use {@link #addVariant(TIntObjectHashMap, int, String)} to help get
-//     * everything correct.
-//     */
-//    @OnlyIn(Dist.CLIENT)
-//    default void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
+//     * everything correct. */
+//    @SideOnly(Side.CLIENT)
+//    default void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
 //        addVariant(variants, 0, "");
 //    }
 
-    // Calen: not still useful in 1.18.2
-//    default void addVariant(TIntObjectHashMap<ModelResourceLocation> variants, int meta, String suffix)
-//    {
-//        String tag = TagManager.getTag(getIdBC().toString(), TagManager.EnumTagType.MODEL_LOCATION);
+    // Calen: not still used in 1.18.2
+//    default void addVariant(TIntObjectHashMap<ModelResourceLocation> variants, int meta, String suffix) {
+//        String tag = TagManager.getTag(id(), EnumTagType.MODEL_LOCATION);
 //        variants.put(meta, new ModelResourceLocation(tag + suffix, "inventory"));
 //    }
 
-    // Calen: not still useful in 1.18.2
-//    @OnlyIn(Dist.CLIENT)
-//    default void registerVariants()
-//    {
+    // Calen: not still used in 1.18.2
+//    @SideOnly(Side.CLIENT)
+//    default void registerVariants() {
 //        Item thisItem = (Item) this;
 //        TIntObjectHashMap<ModelResourceLocation> variants = new TIntObjectHashMap<>();
 //        addModelVariants(variants);

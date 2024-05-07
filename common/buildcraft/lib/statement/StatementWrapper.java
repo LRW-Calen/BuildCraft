@@ -22,9 +22,7 @@ import java.util.Objects;
 public abstract class StatementWrapper implements IStatement, Comparable<StatementWrapper> {
     public final IStatement delegate;
 
-    /**
-     * Used to determine the background colour of triggers and actions.
-     */
+    /** Used to determine the background colour of triggers and actions. */
     public final EnumPipePart sourcePart;
 
     public StatementWrapper(IStatement delegate, EnumPipePart sourcePart) {
@@ -32,63 +30,51 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
         this.sourcePart = sourcePart;
     }
 
-    /**
-     * @see IStatement#getUniqueTag()
-     */
+    /** @see buildcraft.api.statements.IStatement#getUniqueTag() */
     @Override
     public String getUniqueTag() {
         return this.delegate.getUniqueTag();
     }
 
-    /**
-     * @see IStatement#maxParameters()
-     */
+    /** @see buildcraft.api.statements.IStatement#maxParameters() */
     @Override
     public int maxParameters() {
         return this.delegate.maxParameters();
     }
 
-    /**
-     * @see IStatement#minParameters()
-     */
+    /** @see buildcraft.api.statements.IStatement#minParameters() */
     @Override
     public int minParameters() {
         return this.delegate.minParameters();
     }
 
-    /**
-     * @see IStatement#getDescription()
-     */
+    /** @see buildcraft.api.statements.IStatement#getDescription() */
     @Override
     public Component getDescription() {
         return this.delegate.getDescription();
     }
 
     // Calen
+
+    /** @see IStatement#getDescriptionKey() */
     @Override
     public String getDescriptionKey() {
         return this.delegate.getDescriptionKey();
     }
 
-    /**
-     * @see IStatement#createParameter(int)
-     */
+    /** @see buildcraft.api.statements.IStatement#createParameter(int) */
     @Override
     public IStatementParameter createParameter(int index) {
         return this.delegate.createParameter(index);
     }
 
-    /**
-     * @see IStatement#rotateLeft()
-     */
+    /** @see buildcraft.api.statements.IStatement#rotateLeft() */
     @Override
     public IStatement rotateLeft() {
         return this.delegate.rotateLeft();
     }
 
-    /**
-     * @see IStatement#getSprite()
-     */
+    /** @see buildcraft.api.statements.IStatement#getSprite() */
     @Override
     public ISprite getSprite() {
         return this.delegate.getSprite();
@@ -123,7 +109,7 @@ public abstract class StatementWrapper implements IStatement, Comparable<Stateme
         List<String> list = delegate.getTooltipKey();
         if (sourcePart != EnumPipePart.CENTER) {
             list = new ArrayList<>(list);
-            list.add("gate.side" + ColourUtil.getTextFullTooltip(sourcePart.face));
+            list.add("gate.side." + ColourUtil.getTextFullTooltip(sourcePart.face));
         }
         return list;
     }

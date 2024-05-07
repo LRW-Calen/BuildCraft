@@ -26,16 +26,14 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class NbtSquisher {
-    //    public static final Profiler profiler = new Profiler();
-//    public static final ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
+    // public static final Profiler profiler = new Profiler();
     public static final ProfilerFiller profiler = Minecraft.getInstance() == null ? new ActiveProfiler(Util.timeSource, () ->
     {
         return 0;
     }, false) : Minecraft.getInstance().getProfiler();
-    /**
-     * Used by testing classes to replace ByteBuf instances with PrintingByteBuf -- but we don't have that
-     * class in main because it makes checkstyle complain.
-     */
+
+    /** Used by testing classes to replace ByteBuf instances with PrintingByteBuf -- but we don't have that
+     * class in main because it makes checkstyle complain. */
     public static Function<ByteBuf, FriendlyByteBuf> debugBuffer = null;
 
     private static final int TYPE_MC_GZIP = NbtSquishConstants.VANILLA_COMPRESSED;

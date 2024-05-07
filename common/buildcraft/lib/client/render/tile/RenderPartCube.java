@@ -16,21 +16,15 @@ import net.minecraftforge.client.model.ForgeModelBakery;
 
 import javax.vecmath.Point3f;
 
-/**
- * A variable sized element (like LED) that can render somewhere in a TESR. Passing a resolver instance will let you
- * modify the location, colour, lightmap, and size of the single element. This does not allow for different textures.
- */
+/** A variable sized element (like LED) that can render somewhere in a TESR. Passing a resolver instance will let you
+ * modify the location, colour, lightmap, and size of the single element. This does not allow for different textures. */
 @OnlyIn(Dist.CLIENT)
 public class RenderPartCube {
-    /**
-     * The centre of this element.
-     */
+    /** The centre of this element. */
     public final MutableVertex center = new MutableVertex();
     public double sizeX = 1 / 16.0, sizeY = 1 / 16.0, sizeZ = 1 / 16.0;
 
-    /**
-     * Constructs a simple cube configured for a LED.
-     */
+    /** Constructs a simple cube configured for a LED. */
     public RenderPartCube() {
         this(1 / 16.0, 1 / 16.0, 1 / 16.0);
     }
@@ -42,16 +36,13 @@ public class RenderPartCube {
     public void setWhiteTex() {
         // Calen: at TextureStitchEvent.Post ForgeModelBakery.White.instance() cannot be called
         // RuntimeException: getAtlasTexture called too early! (ModelManager.java:99)
-////        TextureAtlasSprite sprite = ModelLoader.White.INSTANCE;
         TextureAtlasSprite sprite = ForgeModelBakery.White.instance();
-//        // Reset the vertex so that edits don't spill out to other tiles.
+        // Reset the vertex so that edits don't spill out to other tiles.
         center.texf(sprite.getU(8), sprite.getV(8));
     }
 
-    /**
-     * Renders an element, without changing the vertex. However this does ignore the "normal" and "texture" components
-     * of the vertex.
-     */
+    /** Renders an element, without changing the vertex. However this does ignore the "normal" and "texture" components
+     * of the vertex. */
 //    public void render(BufferBuilder bb)
     public void render(PoseStack poseStack, VertexConsumer bb) {
         Point3f pos = center.positionvf();
@@ -98,7 +89,7 @@ public class RenderPartCube {
         vertex(poseStack, bb, center, x - rX, y - rY, z + rZ);
     }
 
-    //    private static void vertex(BufferBuilder vb, MutableVertex center, double x, double y, double z)
+    // private static void vertex(BufferBuilder vb, MutableVertex center, double x, double y, double z)
     private static void vertex(PoseStack poseStack, VertexConsumer vb, MutableVertex center, double x, double y, double z) {
         // Using DefaultVertexFormats.BLOCK
         // -- POSITION_3F // pos
@@ -114,18 +105,4 @@ public class RenderPartCube {
         center.renderNormal(poseStack.last().normal(), vb); // Calen add
         vb.endVertex();
     }
-
-    // Calen test
-//    private static Vector4d transformDouble(double x, double y, double z, double w, Matrix4d p_123608_)
-//    {
-//        double f = x;
-//        double f1 = y;
-//        double f2 = z;
-//        double f3 = w;
-//        x = p_123608_.m00 * f + p_123608_.m01 * f1 + p_123608_.m02 * f2 + p_123608_.m03 * f3;
-//        y = p_123608_.m10 * f + p_123608_.m11 * f1 + p_123608_.m12 * f2 + p_123608_.m13 * f3;
-//        z = p_123608_.m20 * f + p_123608_.m21 * f1 + p_123608_.m22 * f2 + p_123608_.m23 * f3;
-//        w = p_123608_.m30 * f + p_123608_.m31 * f1 + p_123608_.m32 * f2 + p_123608_.m33 * f3;
-//        return new Vector4d(x, y, z, w);
-//    }
 }

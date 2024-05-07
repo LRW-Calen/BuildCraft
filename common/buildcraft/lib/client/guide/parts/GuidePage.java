@@ -24,7 +24,7 @@
 
  public class GuidePage extends GuidePageBase {
      public final ImmutableList<GuidePart> parts;
-     //     public final String title;
+     // public final String title;
      public final Component title;
      public final String titleKey;
      public final GuideChapter chapterContents;
@@ -33,8 +33,7 @@
      public GuidePage(GuiGuide gui, List<GuidePart> parts, PageValue<?> entry) {
          super(gui);
          // Calen: here is called when opening guide page
-//         this.title = StringUtilBC.formatStringForWhite(entry.title.getString());
-//         this.title = new TextComponent(StringUtilBC.formatStringForWhite(entry.title.getString()));
+//         this.title = StringUtilBC.formatStringForWhite(entry.title);
          this.title = new TextComponent(StringUtilBC.formatStringForWhite(entry.title.getString()));
          this.titleKey = StringUtilBC.formatStringForWhite(entry.titleKey);
          this.chapterContents = new GuideChapterContents(gui);
@@ -67,7 +66,6 @@
 
          if (!linksToOther.isEmpty()) {
 //             parts.add(new GuideChapterWithin(gui, LocaleUtil.localize("buildcraft.guide.meta.group.linking_to")));
-//             parts.add(new GuideChapterWithin(gui, new TranslatableComponent("buildcraft.guide.meta.group.linking_to")));
              parts.add(new GuideChapterWithin(gui, "buildcraft.guide.meta.group.linking_to", new TranslatableComponent("buildcraft.guide.meta.group.linking_to")));
              for (GuidePartGroup g : linksToOther) {
                  parts.add(g);
@@ -77,7 +75,6 @@
 
          if (!linksToThis.isEmpty()) {
 //             parts.add(new GuideChapterWithin(gui, LocaleUtil.localize("buildcraft.guide.meta.group.linked_from")));
-//             parts.add(new GuideChapterWithin(gui, new TranslatableComponent("buildcraft.guide.meta.group.linked_from")));
              parts.add(new GuideChapterWithin(gui, "buildcraft.guide.meta.group.linked_from", new TranslatableComponent("buildcraft.guide.meta.group.linked_from")));
              for (GuidePartGroup g : linksToThis) {
                  parts.add(g);
@@ -145,8 +142,7 @@
      }
 
      @Override
-     public void handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, double mouseX, double mouseY, int mouseButton,
-                                  int index, boolean isEditing) {
+     public void handleMouseClick(PoseStack poseStack, int x, int y, int width, int height, double mouseX, double mouseY, int mouseButton, int index, boolean isEditing) {
          super.handleMouseClick(poseStack, x, y, width, height, mouseX, mouseY, mouseButton, index, isEditing);
 
          PagePosition part = new PagePosition(0, 0);

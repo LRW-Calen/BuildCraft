@@ -33,6 +33,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.Capability;
@@ -160,7 +161,6 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
                     redrawBlock();
                     // TODO Calen notifyNeighborsRespectDebug???
 //                    world.notifyNeighborsRespectDebug(getPos(), getBlockType(), true);
-//                    level.isDebug().notifyNeighborsRespectDebug(getBlockPos(), getBlockType(), true);
                     return InteractionResult.SUCCESS;
                 }
                 return InteractionResult.FAIL;

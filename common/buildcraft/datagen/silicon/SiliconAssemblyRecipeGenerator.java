@@ -13,7 +13,7 @@ import buildcraft.silicon.gate.EnumGateMaterial;
 import buildcraft.silicon.gate.EnumGateModifier;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.item.ItemPluggableGate;
-import buildcraft.silicon.recipe.AssemblyRecipeBuilder;
+import buildcraft.lib.recipe.assembly.AssemblyRecipeBuilder;
 import com.google.common.collect.ImmutableSet;
 import net.minecraft.core.Registry;
 import net.minecraft.data.DataGenerator;

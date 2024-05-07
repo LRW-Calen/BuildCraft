@@ -125,8 +125,7 @@ public class JsonUtil {
         }
     };
 
-    public static <K, V> ImmutableMap<K, V> getSubAsImmutableMap(JsonObject obj, String sub,
-                                                                 TypeToken<HashMap<K, V>> token) {
+    public static <K, V> ImmutableMap<K, V> getSubAsImmutableMap(JsonObject obj, String sub, TypeToken<HashMap<K, V>> token) {
         if (!obj.has(sub)) {
             return ImmutableMap.of();
         }
@@ -141,8 +140,7 @@ public class JsonUtil {
         }
     }
 
-    public static <T> ImmutableList<T> getSubAsImmutableList(JsonObject obj, String sub,
-                                                             TypeToken<ArrayList<T>> token) {
+    public static <T> ImmutableList<T> getSubAsImmutableList(JsonObject obj, String sub, TypeToken<ArrayList<T>> token) {
         if (!obj.has(sub)) {
             return ImmutableList.of();
         }
@@ -219,10 +217,8 @@ public class JsonUtil {
         return getAsStringArray(obj.get(string));
     }
 
-    /**
-     * Tries to get a translatable text component from the json as a string. This will either get the prefix directly
-     * for a {@link TranslatableComponent}, or the prefix plus "_raw" for a raw {@link TextComponent}.
-     */
+    /** Tries to get a translatable text component from the json as a string. This will either get the prefix directly
+     * for a {@link TranslatableComponent}, or the prefix plus "_raw" for a raw {@link TextComponent}. */
     public static MutableComponent getTextComponent(JsonObject json, String subPrefix, String localePrefix) {
         if (json.has(subPrefix)) {
 //            String str = JsonUtils.getString(json, subPrefix);

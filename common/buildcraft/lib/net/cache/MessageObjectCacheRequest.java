@@ -12,9 +12,7 @@ import buildcraft.lib.net.PacketBufferBC;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.FriendlyByteBuf;
 
-/**
- * Signifies a client to server request for the value of a cached object, given its ID.
- */
+/** Signifies a client to server request for the value of a cached object, given its ID. */
 public class MessageObjectCacheRequest implements IMessage {
 
     private int cacheId;

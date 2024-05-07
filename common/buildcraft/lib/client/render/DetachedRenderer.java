@@ -9,21 +9,21 @@ package buildcraft.lib.client.render;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Dispatches "detached renderer elements" - rendering that does not require a specific tile or entity in the world
- * (perhaps held item HUD elements)
- */
+/** Dispatches "detached renderer elements" - rendering that does not require a specific tile or entity in the world
+ * (perhaps held item HUD elements) */
 @OnlyIn(Dist.CLIENT)
 public enum DetachedRenderer {
     INSTANCE;
@@ -79,7 +79,7 @@ public enum DetachedRenderer {
     }
 
     public void renderWorldLastEvent(Player player, float partialTicks, PoseStack poseStack, Camera camera) {
-//        Minecraft.getInstance().getBlockRenderer().getModelRenderer().renderEngine.bindTexture(TextureAtlas.LOCATION_BLOCKS);
+//        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
 //        Minecraft.getInstance().entityRenderer.enableLightmap();
 
@@ -99,13 +99,12 @@ public enum DetachedRenderer {
     }
 
     public static void fromWorldOriginPre(Player player, float partialTicks, PoseStack poseStack, Camera camera) {
-////        GL11.glPushMatrix();
+//        GL11.glPushMatrix();
         poseStack.pushPose();
-//        Vec3 diff = new Vec3(0, 0, 0);
-//        diff = diff.subtract(player.getEyePosition(partialTicks));
-//        diff = diff.add(0, player.getEyeHeight(), 0);
-////        GL11.glTranslated(diff.x, diff.y, diff.z);
-//        posestack.translate(diff.x, diff.y, diff.z);
+//        Vec3d diff = new Vec3d(0, 0, 0);
+//        diff = diff.subtract(player.getPositionEyes(partialTicks));
+//        diff = diff.addVector(0, player.getEyeHeight(), 0);
+//        GL11.glTranslated(diff.x, diff.y, diff.z);
         Vec3 vec3 = camera.getPosition();
         double d0 = vec3.x();
         double d1 = vec3.y();
@@ -114,7 +113,7 @@ public enum DetachedRenderer {
     }
 
     public static void fromWorldOriginPost(PoseStack poseStack) {
-////        GL11.glPopMatrix();
+//        GL11.glPopMatrix();
         poseStack.popPose();
     }
 }

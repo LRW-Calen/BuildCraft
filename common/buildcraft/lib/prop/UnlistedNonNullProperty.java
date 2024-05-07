@@ -6,54 +6,34 @@
 
 package buildcraft.lib.prop;
 
-
-import net.minecraft.world.level.block.state.properties.Property;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Optional;
-
+// 1.18.2: use ModelProperty
+@Deprecated(forRemoval = true)
 //public class UnlistedNonNullProperty<V> implements IUnlistedProperty<V>
-public class UnlistedNonNullProperty extends Property<ComparableTilePropValue> {
+public class UnlistedNonNullProperty<V> {
     public final String name;
 
     public UnlistedNonNullProperty(String name) {
-        super(name, ComparableTilePropValue.class);
         this.name = name;
     }
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
 //    @Override
-//    public boolean isValid(V value)
-//    {
+//    public String getName() {
+//        return name;
+//    }
+//
+//    @Override
+//    public boolean isValid(V value) {
 //        return value != null;
 //    }
-
-    @SuppressWarnings("unchecked")
+//
+//    @SuppressWarnings("unchecked")
 //    @Override
-//    public Class getType()
-//    {
+//    public Class getType() {
 //        return Object.class;
 //    }
-
-    @Override
-    public Collection<ComparableTilePropValue> getPossibleValues() {
-        return Collections.EMPTY_LIST;
-    }
-
-
-    @Override
-//    public String valueToString(V value)
-    public String getName(ComparableTilePropValue value) {
-        return "";
-    }
-
-    @Override
-    public Optional<ComparableTilePropValue> getValue(String name) {
-        return Optional.empty();
-    }
+//
+//    @Override
+//    public String valueToString(V value) {
+//        return value.toString();
+//    }
 }

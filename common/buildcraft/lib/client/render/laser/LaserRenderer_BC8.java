@@ -10,6 +10,7 @@ import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
+import com.google.common.cache.RemovalNotification;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -46,7 +47,7 @@ public class LaserRenderer_BC8 {
                 .expireAfterWrite(5, TimeUnit.SECONDS)//
                 .build(CacheLoader.from(LaserRenderer_BC8::makeDynamicLaser));
 
-        // Calen: not used, because it seems GlList is not available in 1.18.2
+        // Calen: not used. Seems GlList is not available in 1.18.2
 ////        FORMAT_LESS = new VertexFormat();
 ////        FORMAT_LESS.addElement(DefaultVertexFormats.POSITION_3F);
 ////        FORMAT_LESS.addElement(DefaultVertexFormats.TEX_2F);
@@ -89,10 +90,8 @@ public class LaserRenderer_BC8 {
     }
 
     // Calen: it seems GLList cannot be used in 1.18.2 world rendering
-//    private static LaserCompiledList makeStaticLaser(LaserData_BC8 data)
-//    {
-//        try (LaserCompiledList.Builder renderer = new LaserCompiledList.Builder(data.enableDiffuse))
-//        {
+//    private static LaserCompiledList makeStaticLaser(LaserData_BC8 data) {
+//        try (LaserCompiledList.Builder renderer = new LaserCompiledList.Builder(data.enableDiffuse)) {
 //            makeLaser(data, renderer);
 //            return renderer.build();
 //        }
@@ -111,11 +110,9 @@ public class LaserRenderer_BC8 {
     }
 
     // Calen: it seems GLList cannot be used in 1.18.2 world rendering
-//    private static void removeCompiledLaser(RemovalNotification<LaserData_BC8, LaserCompiledList> notification)
-//    {
+//    private static void removeCompiledLaser(RemovalNotification<LaserData_BC8, LaserCompiledList> notification) {
 //        LaserCompiledList comp = notification.getValue();
-//        if (comp != null)
-//        {
+//        if (comp != null) {
 //            comp.delete();
 //        }
 //    }
@@ -171,8 +168,7 @@ public class LaserRenderer_BC8 {
     }
 
     // Calen: it seems GLList cannot be used in 1.18.2 world rendering
-//    public static void renderLaserStatic(LaserData_BC8 data)
-//    {
+//    public static void renderLaserStatic(LaserData_BC8 data) {
 //        ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
 //        profiler.push("compute");
 //        LaserCompiledList compiled = COMPILED_STATIC_LASERS.getUnchecked(data);
@@ -182,9 +178,7 @@ public class LaserRenderer_BC8 {
 //        profiler.pop();
 //    }
 
-    /**
-     * Assumes the buffer uses {@link DefaultVertexFormat#BLOCK}
-     */
+    /** Assumes the buffer uses {@link DefaultVertexFormat#BLOCK} */
     public static void renderLaserDynamic(LaserData_BC8 data, PoseStack.Pose pose, VertexConsumer buffer) {
         ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("compute");

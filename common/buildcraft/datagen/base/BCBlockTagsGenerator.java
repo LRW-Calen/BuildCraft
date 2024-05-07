@@ -4,7 +4,7 @@ import buildcraft.api.BCModules;
 import buildcraft.builders.BCBuildersBlocks;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.factory.BCFactoryBlocks;
-import buildcraft.lib.oredicttag.OreDictTags;
+import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.transport.BCTransportBlocks;
 import net.minecraft.data.DataGenerator;
@@ -69,7 +69,7 @@ public class BCBlockTagsGenerator extends BlockTagsProvider {
                 )
         ;
 
-        tag(OreDictTags.WORKBENCHES_BLOCK)
+        tag(OreDictionaryTags.WORKBENCHES_BLOCK)
                 .add(Blocks.CRAFTING_TABLE)
         ;
     }

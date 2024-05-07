@@ -35,7 +35,7 @@ public class GuideSmelting extends GuidePartItem {
     private final ItemStack furnace;
     private final int hash;
 
-    //    public GuideSmelting(GuiGuide gui, @Nonnull ItemStack input, @Nonnull ItemStack output)
+    // public GuideSmelting(GuiGuide gui, @Nonnull ItemStack input, @Nonnull ItemStack output)
     public GuideSmelting(GuiGuide gui, @Nonnull NonNullList<Ingredient> input, @Nonnull ItemStack output) {
         super(gui);
         this.input = new ChangingItemStack(input);

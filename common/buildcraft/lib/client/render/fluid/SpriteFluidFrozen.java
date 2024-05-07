@@ -22,15 +22,10 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import java.io.IOException;
 
 // TODO Calen
-public class SpriteFluidFrozen extends TextureAtlasSprite
-//public class SpriteFluidFrozen
-{
-    /**
-     * The source sprite of this fluid.
-     */
+public class SpriteFluidFrozen extends TextureAtlasSprite {
+    /** The source sprite of this fluid. */
     public final ResourceLocation srcLocation;
 //    private int[][] data = null;
-
 
     private NativeImage data = new NativeImage(16, 16, false);
 

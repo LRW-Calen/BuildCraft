@@ -30,10 +30,8 @@ public abstract class TileMarker<C extends MarkerConnection<C>> extends TileBC_N
         return getCache().getSubCache(level);
     }
 
-    /**
-     * @return True if this has lasers being emitted, or any other reason you want. Activates the surrounding "glow"
-     * parts for the block model.
-     */
+    /** @return True if this has lasers being emitted, or any other reason you want. Activates the surrounding "glow"
+     *         parts for the block model. */
     public abstract boolean isActiveForRender();
 
     public C getCurrentConnection() {
@@ -57,7 +55,6 @@ public abstract class TileMarker<C extends MarkerConnection<C>> extends TileBC_N
 //    public void invalidate()
     public void setRemoved() {
         super.setRemoved();
-        // BC原版注释
         // getLocalCache().removeMarker(getPos());
     }
 

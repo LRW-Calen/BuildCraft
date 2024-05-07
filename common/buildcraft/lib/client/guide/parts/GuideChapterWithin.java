@@ -13,15 +13,13 @@ import net.minecraft.network.chat.Component;
 public class GuideChapterWithin extends GuideChapter {
     private int lastPage = -1;
 
-    //    public GuideChapterWithin(GuiGuide gui, int level, String text)
-//    public GuideChapterWithin(GuiGuide gui, int level, Component text)
+    // public GuideChapterWithin(GuiGuide gui, int level, String text)
     public GuideChapterWithin(GuiGuide gui, int level, String textKey, Component text) {
 //        super(gui, level, text);
         super(gui, level, textKey, text);
     }
 
-    //    public GuideChapterWithin(GuiGuide gui, String chapter)
-//    public GuideChapterWithin(GuiGuide gui, Component chapter)
+    // public GuideChapterWithin(GuiGuide gui, String chapter)
     public GuideChapterWithin(GuiGuide gui, String chapterKey, Component chapter) {
 //        this(gui, 0, chapter);
         this(gui, 0, chapterKey, chapter);
