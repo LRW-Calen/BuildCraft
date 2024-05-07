@@ -13,6 +13,7 @@ import net.minecraft.world.item.TieredItem;
 import javax.annotation.Nonnull;
 
 public class ListMatchHandlerTools extends ListMatchHandler {
+    /** Matches tool type (axe...), not tier (wooden/iron/...). */
     @Override
     public boolean matches(Type type, @Nonnull ItemStack stack, @Nonnull ItemStack target, boolean precise) {
         if (type == Type.TYPE) {
@@ -32,7 +33,7 @@ public class ListMatchHandlerTools extends ListMatchHandler {
 //                return true;
 //            }
             if (stack.getItem() instanceof TieredItem item1 && target.getItem() instanceof TieredItem item2) {
-                return item1.getTier() == item2.getTier();
+                return item1.getClass() == item2.getClass();
             }
         }
         return false;
