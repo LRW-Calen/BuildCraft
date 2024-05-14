@@ -142,18 +142,16 @@ public class TilePump extends TileMiner {
         }
 
 //        Profiler debugProf = new Profiler();
-        ProfilerFiller debugProf = level.getProfiler();
 //        debugProf.profilingEnabled = DEBUG_PUMP;
+        ProfilerFiller debugProf = ProfilerUtil.newProfiler(DEBUG_PUMP);
         ProfilerUtil.ProfilerEntry prof = ProfilerUtil.createEntry(debugProf, level.getProfiler());
         Stopwatch watch = Stopwatch.createStarted();
         debugProf.push("root");
         buildQueue0(prof, queueFluid, nextPosesToCheck, checked);
         debugProf.pop();
         watch.stop();
-//        if (DEBUG_PUMP)
-        if (DEBUG_PUMP && debugProf instanceof ActiveProfiler activeProfiler) {
-//            ProfilerUtil.logProfilerResults(debugProf, "root", watch.elapsed(TimeUnit.NANOSECONDS));
-            ProfilerUtil.logProfilerResults(activeProfiler, "root", watch.elapsed(TimeUnit.NANOSECONDS));
+        if (DEBUG_PUMP) {
+            ProfilerUtil.logProfilerResults((ActiveProfiler) debugProf, "root", watch.elapsed(TimeUnit.NANOSECONDS));
         }
     }
 

@@ -60,7 +60,7 @@ public class BlockFrame extends BlockBCBase_Neptune {
         return getActualState(thisState, world, thisPos);
     }
 
-    //    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
+    // public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos)
     public BlockState getActualState(BlockState state, LevelAccessor world, BlockPos pos) {
         for (Direction side : CONNECTED_MAP.keySet()) {
             Block block = world.getBlockState(pos.relative(side)).getBlock();
@@ -71,14 +71,12 @@ public class BlockFrame extends BlockBCBase_Neptune {
 
     // Calen: moved to BuildCraftBuilders#onRenderRegister
 //    @Override
-//    public BlockRenderLayer getBlockLayer()
-//    {
+//    public BlockRenderLayer getBlockLayer() {
 //        return BlockRenderLayer.CUTOUT;
 //    }
 
 //    @Override
-//    public boolean isFullCube(IBlockState state)
-//    {
+//    public boolean isFullCube(IBlockState state) {
 //        return false;
 //    }
 

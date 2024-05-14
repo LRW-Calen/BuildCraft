@@ -100,7 +100,7 @@ public class ListMatchHandlerOreDictionary extends ListMatchHandler {
         int suc = 0, suct;
         for (TagKey<Item> st : oreIds) {
 //            suct = getUppercaseCount(st);
-            suct = getUppercaseCount(st.location().getPath());
+            suct = getUppercaseCount(st.location().toString());
             if (s == null || suct > suc) {
                 s = st;
                 suc = suct;

@@ -23,7 +23,7 @@ public enum BCLibEventDistModBus {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void modelBake(ModelBakeEvent event) {
+    public void modelBake(ModelBakeEvent event) {
         SpriteHolderRegistry.exportTextureMap();
         LaserRenderer_BC8.clearModels();
         ModelHolderRegistry.onModelBake();
@@ -32,7 +32,7 @@ public enum BCLibEventDistModBus {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void textureStitchPre(TextureStitchEvent.Pre event) {
+    public void textureStitchPre(TextureStitchEvent.Pre event) {
         ReloadManager.INSTANCE.preReloadResources();
 //        TextureMap map = event.getMap();
         TextureAtlas map = event.getAtlas();
@@ -43,14 +43,14 @@ public enum BCLibEventDistModBus {
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @OnlyIn(Dist.CLIENT)
-    public static void textureStitchPreLow(TextureStitchEvent.Pre event) {
+    public void textureStitchPreLow(TextureStitchEvent.Pre event) {
 //        FluidRenderer.onTextureStitchPre(event.getAtlas());
         FluidRenderer.onTextureStitchPre(event);
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void textureStitchPost(TextureStitchEvent.Post event) {
+    public void textureStitchPost(TextureStitchEvent.Post event) {
         // Calen should not map.location().equals(TextureAtlas.LOCATION_BLOCKS)
         // or the engine texture will not be loaded
         SpriteHolderRegistry.onTextureStitchPost(event);

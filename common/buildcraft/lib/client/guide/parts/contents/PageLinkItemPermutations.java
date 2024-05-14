@@ -8,6 +8,7 @@ import buildcraft.lib.client.guide.parts.GuidePage;
 import buildcraft.lib.client.guide.parts.GuidePageFactory;
 import buildcraft.lib.client.guide.parts.GuidePart;
 import buildcraft.lib.misc.ItemStackKey;
+import buildcraft.lib.misc.ProfilerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -34,7 +35,7 @@ public final class PageLinkItemPermutations extends PageLink {
 
 //            Profiler prof = new Profiler();
 //            prof.profilingEnabled = true;
-            ProfilerFiller prof = Minecraft.getInstance().getProfiler();
+            ProfilerFiller prof = ProfilerUtil.newProfiler();
             for (ItemStack stack : permutations) {
                 parts.add(PageLinkItemStack.create(true, stack, prof).createGuidePart(gui));
             }

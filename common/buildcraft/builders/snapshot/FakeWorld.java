@@ -9,6 +9,7 @@ package buildcraft.builders.snapshot;
 import buildcraft.api.core.IFakeWorld;
 import buildcraft.api.schematics.ISchematicBlock;
 import buildcraft.builders.BCBuilders;
+import buildcraft.lib.misc.ProfilerUtil;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
@@ -52,7 +53,25 @@ public class FakeWorld extends IFakeWorld {
     // private static final ResourceKey<Biome> BIOME = Biomes.PLAINS;
     @SuppressWarnings("WeakerAccess")
     public static final BlockPos BLUEPRINT_OFFSET = new BlockPos(0, 127, 0);
-    private static final Holder<DimensionType> DIMENSION_TYPE = Holder.direct(DimensionType.create(OptionalLong.empty(), true, false, false, true, 1.0D, false, false, true, false, true, -64, 384, 384, BlockTags.INFINIBURN_OVERWORLD, DimensionType.OVERWORLD_EFFECTS, 0.0F));
+    private static final Holder<DimensionType> DIMENSION_TYPE = Holder.direct(DimensionType.create(
+            OptionalLong.empty(), // fixedTime
+            true, // hasSkylight
+            false, // hasCeiling
+            false, // ultraWarm
+            true, // natural
+            1.0D, // coordinateScale
+            false, // createDragonFight
+            false, // piglinSafe
+            true, // bedWorks
+            false, // respawnAnchorWorks
+            true, // hasRaids
+            -64, // minY
+            384, // height
+            384, // logicalHeight
+            BlockTags.INFINIBURN_OVERWORLD, // infiniburn
+            DimensionType.OVERWORLD_EFFECTS, // effectsLocation
+            0.0F
+    ));
     private static final WritableLevelData LEVEL_DATA = new ClientLevel.ClientLevelData(Difficulty.PEACEFUL, true, false);
 
     private final FakeChunkProvider chunkProvider;
@@ -93,7 +112,7 @@ public class FakeWorld extends IFakeWorld {
                         new ResourceLocation(BCBuilders.MODID, "fake")
                 ),
                 DIMENSION_TYPE,
-                Minecraft.getInstance()::getProfiler,
+                ProfilerUtil::newProfiler,
                 /*pIsClientSide*/ true,
                 false,
                 0

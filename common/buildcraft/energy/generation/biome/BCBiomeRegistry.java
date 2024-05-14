@@ -26,7 +26,7 @@ public class BCBiomeRegistry {
 //        BiomeManager.addBiome(BiomeManager.BiomeType.COOL, new BiomeManager.BiomeEntry(RESOURCE_KEY_BIOME_OIL_OCEAN, 10));
 //    }
 
-    //    static
+    // static
     public static void init() {
 //        boolean log = OilGenerator.DEBUG_OILGEN_BASIC;
 //        // 海洋油田

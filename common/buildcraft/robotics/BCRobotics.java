@@ -72,7 +72,6 @@ public class BCRobotics {
         BCRoboticsProxy.getProxy().fmlPostInit();
     }
 
-
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public static void onTesrReg(RegisterRenderers event) {

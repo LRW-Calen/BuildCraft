@@ -10,6 +10,7 @@ import buildcraft.api.core.EnumPipePart;
 import buildcraft.lib.BCLibConfig;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.misc.RenderUtil;
+import buildcraft.lib.misc.SpriteUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -216,7 +217,7 @@ public class ItemRenderUtil {
         if (!inBatch) {
             inBatch = true;
 //            Minecraft.getInstance().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+            SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
 //            GL11.glPushMatrix();
             poseStack.pushPose();
 //            GL11.glTranslated(x, y, z);

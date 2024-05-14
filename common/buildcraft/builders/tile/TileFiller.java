@@ -383,10 +383,19 @@ public class TileFiller extends TileBC_Neptune
         }
         markerBox = nbt.getBoolean("markerBox");
         patternStatement.readFromNbt(nbt.getCompound("patternStatement"));
-        updateBuildingInfo();
-        if (nbt.contains("builder")) {
-            Optional.ofNullable(getBuilder()).ifPresent(builder -> builder.deserializeNBT(nbt.getCompound("builder")));
-        }
+//        updateBuildingInfo();
+//        if (nbt.contains("builder")) {
+//            Optional.ofNullable(getBuilder()).ifPresent(builder -> builder.deserializeNBT(nbt.getCompound("builder")));
+//        }
+        CompoundTag copy = nbt.copy();
+        runWhenWorldNotNull(() ->
+                {
+                    updateBuildingInfo();
+                    if (copy.contains("builder")) {
+                        Optional.ofNullable(getBuilder()).ifPresent(builder -> builder.deserializeNBT(nbt.getCompound("builder")));
+                    }
+                },
+                false);
     }
 
     // Rendering
@@ -407,8 +416,7 @@ public class TileFiller extends TileBC_Neptune
 
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public double getMaxRenderDistanceSquared()
-//    {
+//    public double getMaxRenderDistanceSquared() {
 //        return Double.MAX_VALUE;
 //    }
 

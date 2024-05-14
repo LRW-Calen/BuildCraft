@@ -3,20 +3,20 @@ package buildcraft.energy;
 import buildcraft.api.BCModules;
 import buildcraft.energy.item.BCBucketItem;
 import buildcraft.lib.fluid.*;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.BlockSource;
-import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.*;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fluids.DispenseFluidContainer;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.ModList;
@@ -25,7 +25,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -231,7 +230,7 @@ public class BCEnergyFluids {
         // Block
         String blockId = "fluid_block_" + name + "_heat_" + heat;
         BlockBehaviour.Properties blockProp = BlockBehaviour.Properties.of(
-                        new BCMaterialFluid(
+                        fluidMaterial(
                                 // def.setMapColour(getMapColor(texDark))
                                 getMapColor(texDark),
                                 // def.setFlammable(flammable)
@@ -256,6 +255,10 @@ public class BCEnergyFluids {
         // TODO Calen setLightOpacity???
 //        block.setLightOpacity(3);
         return still;
+    }
+
+    private static Material fluidMaterial(MaterialColor color, boolean canBurn) {
+        return new Material(color, /*liquid*/ true, /*solid*/ false, /*blocksMotion*/ true, /*solidBlocking*/ false, /*flammable*/ canBurn, /*replaceable*/ false, /*pushReaction*/ PushReaction.DESTROY);
     }
 
     // private static MapColor getMapColor(int color)
@@ -303,24 +306,9 @@ public class BCEnergyFluids {
         return Collections.unmodifiableList(allFlow);
     }
 
-    private static final DispenseItemBehavior BUCKET_DISPENSE_BEHAVIOR = new DefaultDispenseItemBehavior() {
-        @Nonnull
-        @Override
-        public ItemStack execute(@Nonnull BlockSource source, @Nonnull ItemStack stack) {
-            Level world = source.getLevel();
-            DispensibleContainerItem bucket = (DispensibleContainerItem) stack.getItem();
-            BlockPos pos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
-            if (bucket.emptyContents(null, world, pos, null)) {
-                bucket.checkExtraContent(null, world, stack, pos);
-                return new ItemStack(Items.BUCKET);
-            }
-            return super.execute(source, stack);
-        }
-    };
-
     public static void registerBucketDispenserBehavior() {
         for (RegistryObject<BCFluid.Source> fluid : getAllStill()) {
-            DispenserBlock.registerBehavior(fluid.get().getBucket(), BUCKET_DISPENSE_BEHAVIOR);
+            DispenserBlock.registerBehavior(fluid.get().getBucket(), DispenseFluidContainer.getInstance());
         }
     }
 }

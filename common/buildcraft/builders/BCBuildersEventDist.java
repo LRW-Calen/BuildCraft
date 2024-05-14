@@ -14,6 +14,7 @@ import buildcraft.builders.snapshot.ClientSnapshots;
 import buildcraft.builders.snapshot.Snapshot;
 import buildcraft.builders.snapshot.Snapshot.Header;
 import buildcraft.builders.tile.TileQuarry;
+import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
@@ -135,7 +136,8 @@ public enum BCBuildersEventDist {
             int backgroundColor = 0xF0100010;
             Tesselator tesselator = Tesselator.getInstance();
             BufferBuilder bufferbuilder = tesselator.getBuilder();
-            // Calen: should not use GuiUtils.drawGradientRect because duplicated bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
+            // 1.16.5: should use GuiUtils.drawGradientRect because bufferbuilder not started
+            // 1.18.2: should not use GuiUtils.drawGradientRect because duplicated bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR)
             // Calen: z is after x y in 1.18.2
 //            GuiUtils.drawGradientRect(pose, zLevel, pX - 3, pY - 4, pX + sX + 3, pY - 3, backgroundColor, backgroundColor);
 //            GuiUtils.drawGradientRect(pose, zLevel, pX - 3, pY + sY + 3, pX + sX + 3, pY + sY + 4, backgroundColor, backgroundColor);
@@ -161,7 +163,7 @@ public enum BCBuildersEventDist {
             // Calen: draw and recover the context
             RenderSystem.enableDepthTest();
             RenderSystem.disableTexture();
-            RenderSystem.enableBlend();
+            RenderUtil.enableBlend();
             RenderSystem.defaultBlendFunc();
             tesselator.end();
             RenderSystem.disableBlend();

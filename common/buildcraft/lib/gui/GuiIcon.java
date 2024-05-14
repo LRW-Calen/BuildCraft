@@ -11,6 +11,7 @@ import buildcraft.lib.client.sprite.SpriteRaw;
 import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.gui.pos.IGuiArea;
 import buildcraft.lib.gui.pos.IGuiPosition;
+import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
@@ -204,6 +205,7 @@ public class GuiIcon implements ISimpleDrawable {
         double vMax = sprite.getInterpV(1);
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader); // Calen: this should be here or the bg will not appear <- From GuiComponent#innerBlit
+        RenderUtil.enableBlend();
 //        Tessellator tess = Tessellator.getInstance();
         Tesselator tess = Tesselator.getInstance();
 //        BufferBuilder vb = tess.getBuffer();

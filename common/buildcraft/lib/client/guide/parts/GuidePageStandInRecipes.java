@@ -11,6 +11,7 @@ import buildcraft.lib.client.guide.entry.ItemStackValueFilter;
 import buildcraft.lib.client.guide.entry.PageEntryItemStack;
 import buildcraft.lib.client.guide.entry.PageValue;
 import buildcraft.lib.client.guide.loader.XmlPageLoader;
+import buildcraft.lib.misc.ProfilerUtil;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -29,7 +30,7 @@ public class GuidePageStandInRecipes extends GuidePage {
     @Nonnull
     public static GuidePageFactory createFactory(@Nonnull ItemStack stack) {
 //        List<GuidePartFactory> factories = XmlPageLoader.loadAllCrafting(stack, new Profiler(), 0);
-        List<GuidePartFactory> factories = XmlPageLoader.loadAllCrafting(stack, Minecraft.getInstance().getProfiler(), 0);
+        List<GuidePartFactory> factories = XmlPageLoader.loadAllCrafting(stack, ProfilerUtil.newProfiler(), 0);
         if (factories.isEmpty()) {
             return (gui) ->
             {

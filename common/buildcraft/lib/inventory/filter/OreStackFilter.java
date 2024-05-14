@@ -59,8 +59,8 @@ public class OreStackFilter implements IStackFilter {
     @Override
     public NonNullList<ItemStack> getExamples() {
 //        return Arrays.stream(ores).map(OreDictionary::getOres).flatMap(Collection::stream).distinct().collect(StackUtil.nonNullListCollector());
-        NonNullList ret = NonNullList.create();
-        ores.forEach(o -> ret.addAll(ForgeRegistries.ITEMS.tags().getTag(o).stream().toList()));
+        NonNullList<ItemStack> ret = NonNullList.create();
+        ores.forEach(o -> ret.addAll(ForgeRegistries.ITEMS.tags().getTag(o).stream().map(ItemStack::new).toList()));
         return ret;
     }
 

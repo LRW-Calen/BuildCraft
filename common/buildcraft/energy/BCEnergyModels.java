@@ -76,7 +76,6 @@ public class BCEnergyModels {
         modEventBus.register(BCEnergyModels.class);
     }
 
-
     @SubscribeEvent
     public static void onTesrReg(RegisterRenderers event) {
         BlockEntityRenderers.register(BCEnergyBlocks.engineStoneTile.get(), RenderEngineStone::new);

@@ -18,7 +18,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public class LaserCompiledBuffer {
     private static final int DOUBLE_STRIDE = 5;
-    //    private static final int INT_STRIDE = 2;
+    // private static final int INT_STRIDE = 2;
     private static final int INT_STRIDE = 3;
     private static final int NORMAL_STRIDE = 3;
     private final int vertices;

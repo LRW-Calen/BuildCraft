@@ -93,7 +93,7 @@ public class BCLib {
         modEventBus.addListener(TilesAPI::registerCapability);
         modEventBus.addListener(PipeApi::registerCapability);
 
-        modEventBus.register(BCLibEventDistModBus.class);
+        modEventBus.register(BCLibEventDistModBus.INSTANCE);
 
         MOD_CONTAINER = ModList.get().getModContainerById(MODID).get();
 
@@ -138,7 +138,7 @@ public class BCLib {
         BuildCraftObjectCaches.fmlPreInit();
 //        NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, BCLibProxy.getProxy());
 //
-        MinecraftForge.EVENT_BUS.register(BCLibEventDist.class);
+        MinecraftForge.EVENT_BUS.register(BCLibEventDist.INSTANCE);
         MinecraftForge.EVENT_BUS.register(MigrationManager.INSTANCE);
 //        MinecraftForge.EVENT_BUS.register(FluidManager.class); // Calen: not used in 1.18.2
 

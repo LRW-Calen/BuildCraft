@@ -29,6 +29,9 @@ public enum GuideAssemblyRecipes implements IStackRecipes {
     @Override
     public List<GuidePartFactory> getUsages(@Nonnull ItemStack stack) {
         List<GuidePartFactory> usages = new ArrayList<>();
+        if (Minecraft.getInstance().level == null) {
+            return usages;
+        }
 //        boolean all = stack.getItem() == Item.getItemFromBlock(BCBlocks.Silicon.ASSEMBLY_TABLE);
         boolean all = stack.getItem() == Item.byBlock(BCBlocks.Silicon.ASSEMBLY_TABLE);
 //        for (AssemblyRecipe recipe : AssemblyRecipeRegistry.REGISTRY.values())
@@ -46,6 +49,9 @@ public enum GuideAssemblyRecipes implements IStackRecipes {
     @Override
     public List<GuidePartFactory> getRecipes(@Nonnull ItemStack stack) {
         List<GuidePartFactory> recipes = new ArrayList<>();
+        if (Minecraft.getInstance().level == null) {
+            return recipes;
+        }
 //        for (AssemblyRecipe recipe : AssemblyRecipeRegistry.REGISTRY.values())
         for (IAssemblyRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(AssemblyRecipe.TYPE)) {
             for (ItemStack output : recipe.getOutputPreviews()) {

@@ -47,7 +47,7 @@ public enum BCLibEventDist {
     INSTANCE;
 
     @SubscribeEvent
-    public static void onEntityJoinWorld(EntityJoinWorldEvent event) {
+    public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
         if (entity instanceof ServerPlayer) {
             ServerPlayer playerMP = (ServerPlayer) entity;
@@ -57,7 +57,7 @@ public enum BCLibEventDist {
     }
 
     @SubscribeEvent
-    public static void onWorldUnload(WorldEvent.Unload event) {
+    public void onWorldUnload(WorldEvent.Unload event) {
         LevelAccessor levelAccessor = event.getWorld();
         if (levelAccessor instanceof Level level) {
             MarkerCache.onWorldUnload(level);
@@ -69,7 +69,7 @@ public enum BCLibEventDist {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void onReloadFinish(EventBuildCraftReload.FinishLoad event) {
+    public void onReloadFinish(EventBuildCraftReload.FinishLoad event) {
         // Note: when you need to add server-side listeners the client listeners need to be moved to BCLibProxy
         GuideManager.INSTANCE.onRegistryReload(event);
     }
@@ -77,13 +77,13 @@ public enum BCLibEventDist {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
 //    public static void onConnectToServer(ClientConnectedToServerEvent event)
-    public static void onConnectToServer(ClientPlayerNetworkEvent.LoggedInEvent event) {
+    public void onConnectToServer(ClientPlayerNetworkEvent.LoggedInEvent event) {
         BuildCraftObjectCaches.onClientJoinServer();
     }
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void renderWorldLast(RenderLevelStageEvent event) {
+    public void renderWorldLast(RenderLevelStageEvent event) {
         // Calen: AFTER_SKY is the correct state for this render
         if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SKY) {
             return;
@@ -97,7 +97,7 @@ public enum BCLibEventDist {
     }
 
     @SubscribeEvent
-    public static void serverTick(TickEvent.ServerTickEvent event) {
+    public void serverTick(TickEvent.ServerTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             BCAdvDebugging.INSTANCE.onServerPostTick();
             MessageUtil.postServerTick();
@@ -106,7 +106,7 @@ public enum BCLibEventDist {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void clientTick(TickEvent.ClientTickEvent event) {
+    public void clientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             BuildCraftObjectCaches.onClientTick();
             MessageUtil.postClientTick();
@@ -135,7 +135,7 @@ public enum BCLibEventDist {
     // Calen: from BCLib
     @SubscribeEvent
 //    public static void serverStarting(FMLServerStartingEvent event)
-    public static void serverStarting(ServerStartingEvent event) {
+    public void serverStarting(ServerStartingEvent event) {
 //        event.registerServerCommand(new CommandBuildCraft());
         CommandDispatcher<CommandSourceStack> dispatcher = event.getServer().getCommands().getDispatcher();
         CommandBuildCraft.register(dispatcher);
@@ -146,7 +146,7 @@ public enum BCLibEventDist {
 
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
-    public static void reload(RecipesUpdatedEvent event) {
+    public void reload(RecipesUpdatedEvent event) {
         for (ResourceManagerReloadListener reloadListener : reloadListeners) {
             reloadListener.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
         }
@@ -154,7 +154,7 @@ public enum BCLibEventDist {
     }
 
     // Calen: only client call
-    public static void addReloadListeners(ResourceManagerReloadListener reloadListener) {
+    public void addReloadListeners(ResourceManagerReloadListener reloadListener) {
         reloadListeners.add(reloadListener);
     }
 

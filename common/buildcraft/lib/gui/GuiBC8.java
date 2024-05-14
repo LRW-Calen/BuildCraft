@@ -14,6 +14,7 @@ import buildcraft.lib.gui.ledger.LedgerOwnership;
 import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.gui.pos.IGuiArea;
 import buildcraft.lib.misc.GuiUtil;
+import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
@@ -149,7 +150,7 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune<?>> extends AbstractC
 //    }
 
     public void drawTexturedModalRect(PoseStack poseStack, int xCoord, int yCoord, TextureAtlasSprite textureSprite, int widthIn, int heightIn, float zLevel) {
-        RenderSystem.enableBlend();
+        RenderUtil.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         Matrix4f pose = poseStack.last().pose();
         RenderSystem.setShader(GameRenderer::getPositionTexShader); // Calen: without this, the texture will not appear

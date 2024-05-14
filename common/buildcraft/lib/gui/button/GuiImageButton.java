@@ -10,6 +10,7 @@ import buildcraft.lib.gui.BuildCraftGui;
 import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.RenderUtil;
+import buildcraft.lib.misc.SpriteUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
@@ -43,7 +44,7 @@ public class GuiImageButton extends GuiAbstractButton {
         }
 
 //        gui.mc.renderEngine.bindTexture(texture);
-        RenderSystem.setShaderTexture(0, texture);
+        SpriteUtil.bindTexture(texture);
 
 //        GlStateManager.color(1, 1, 1, 1);
         RenderUtil.color(1, 1, 1, 1);

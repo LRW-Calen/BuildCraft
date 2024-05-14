@@ -14,6 +14,7 @@ import buildcraft.lib.client.render.laser.LaserBoxRenderer;
 import buildcraft.lib.client.render.laser.LaserData_BC8;
 import buildcraft.lib.client.render.laser.LaserRenderer_BC8;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
+import buildcraft.lib.misc.RenderUtil;
 import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.lib.misc.VecUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -88,21 +89,21 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
         profiler.push("quarry");
         profiler.push("setup");
 
-        SpriteUtil.bindBlockTextureMap();
-//        RenderHelper.disableStandardItemLighting();
-//        GlStateManager.enableBlend();
-        RenderSystem.enableBlend();
-//        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//        SpriteUtil.bindBlockTextureMap();
+////        RenderHelper.disableStandardItemLighting();
+////        GlStateManager.enableBlend();
+//        RenderUtil.enableBlend();
+////        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+//        RenderSystem.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-//        if (Minecraft.isAmbientOcclusionEnabled())
-        if (Minecraft.useAmbientOcclusion()) {
-//            GlStateManager.shadeModel(GL11.GL_SMOOTH);
-            RenderSystem.setShader(GameRenderer::getRendertypeEntitySmoothCutoutShader);
-        } else {
-//            GlStateManager.shadeModel(GL11.GL_FLAT);
-            RenderSystem.setShader(GameRenderer::getBlockShader);
-        }
+////        if (Minecraft.isAmbientOcclusionEnabled())
+//        if (Minecraft.useAmbientOcclusion()) {
+////            GlStateManager.shadeModel(GL11.GL_SMOOTH);
+//            RenderSystem.setShader(GameRenderer::getRendertypeEntitySmoothCutoutShader);
+//        } else {
+////            GlStateManager.shadeModel(GL11.GL_FLAT);
+//            RenderSystem.setShader(GameRenderer::getBlockShader);
+//        }
 
 //        GlStateManager.pushMatrix();
         poseStack.pushPose();

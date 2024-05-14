@@ -2,168 +2,124 @@ package buildcraft.lib.misc;
 
 
 import buildcraft.api.core.BCLog;
-import net.minecraft.util.profiling.ActiveProfiler;
-import net.minecraft.util.profiling.ProfilerFiller;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import net.minecraft.Util;
+import net.minecraft.util.profiling.*;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 
 /** Provides a few methods for writing the results from a vanilla {@link ProfilerFiller} to a file or something else. */
 public class ProfilerUtil {
 
-    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link System#out} as the
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String)} with {@link System#out} as the
      * {@link ILogAcceptor}. */
 //    public static void printProfilerResults(Profiler profiler, String rootName)
     public static void printProfilerResults(ActiveProfiler profiler, String rootName) {
-        printProfilerResults(profiler, rootName, -1);
+//        printProfilerResults(profiler, rootName, -1);
+        printProfilerResults(profiler, rootName);
     }
 
-    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link System#out} as the
-     * {@link ILogAcceptor}. */
-//    public static void printProfilerResults(Profiler profiler, String rootName, long totalNanoseconds)
-    public static void printProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds) {
-        writeProfilerResults(profiler, rootName, totalNanoseconds, System.out::println);
-    }
+//    /** Calls {@link #writeProfilerResults(Profiler, String, ILogAcceptor)} with {@link System#out} as the
+//     * {@link ILogAcceptor}. */
+//    public static void printProfilerResults(Profiler profiler, String rootName, long totalNanoseconds) {
+//        writeProfilerResults(profiler, rootName, totalNanoseconds, System.out::println);
+//    }
 
-    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link BCLog#logger
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String)} with {@link BCLog#logger
      * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}. */
 //    public static void logProfilerResults(Profiler profiler, String rootName)
     public static void logProfilerResults(ActiveProfiler profiler, String rootName) {
         logProfilerResults(profiler, rootName, -1);
     }
 
-    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} with {@link BCLog#logger
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String)} with {@link BCLog#logger
      * BCLog.logger}::{@link org.apache.logging.log4j.Logger#info(CharSequence) info} as the {@link ILogAcceptor}. */
 //    public static void logProfilerResults(Profiler profiler, String rootName, long totalNanoseconds)
     public static void logProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds) {
-        writeProfilerResults(profiler, rootName, totalNanoseconds, BCLog.logger::info);
+//        writeProfilerResults(profiler, rootName, totalNanoseconds, BCLog.logger::info);
+        writeProfilerResults(profiler, rootName);
     }
 
-    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
-     *
-     * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
-     *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while writing
-     *             the profiler results. */
-//    public static void saveProfilerResults(Profiler profiler, String rootName, Path dest) throws IOException
-    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, Path dest) throws IOException {
-        saveProfilerResults(profiler, rootName, -1, dest);
-    }
+//    /** Calls {@link #writeProfilerResults(Profiler, String, ILogAcceptor)} but saves the output to a file.
+//     *
+//     * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
+//     *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while writing
+//     *             the profiler results. */
+//    public static void saveProfilerResults(Profiler profiler, String rootName, Path dest) throws IOException {
+//        saveProfilerResults(profiler, rootName, -1, dest);
+//    }
 
-    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
-     *
-     * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
-     *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while wrting
-     *             the profiler results. */
-//    public static void saveProfilerResults(Profiler profiler, String rootName, File dest) throws IOException
-    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, File dest) throws IOException {
-        dest = dest.getAbsoluteFile();
-        dest.getParentFile().mkdirs();
-        saveProfilerResults(profiler, rootName, -1, dest.toPath());
-    }
+//    /** Calls {@link #writeProfilerResults(Profiler, String, ILogAcceptor)} but saves the output to a file.
+//     *
+//     * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
+//     *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while wrting
+//     *             the profiler results. */
+//    public static void saveProfilerResults(Profiler profiler, String rootName, File dest) throws IOException {
+//        dest = dest.getAbsoluteFile();
+//        dest.getParentFile().mkdirs();
+//        saveProfilerResults(profiler, rootName, -1, dest.toPath());
+//    }
 
-    /** Calls {@link #writeProfilerResults(ActiveProfiler, String, ILogAcceptor)} but saves the output to a file.
+    /** Calls {@link #writeProfilerResults(ActiveProfiler, String)} but saves the output to a file.
      *
-     * @param totalNanoseconds The total amount of time that the profiler's root section took, or -1 if this isn't
-     *            known.
      * @throws IOException if the file exists but is a directory rather than a regular file, does not exist but cannot
      *             be created, or cannot be opened for any other reason, or if an I/O exception occurred while writing
      *             the profiler results. */
 //    public static void saveProfilerResults(Profiler profiler, String rootName, long totalNanoseconds, Path dest)
-    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds, Path dest)
-            throws IOException {
+    public static void saveProfilerResults(ActiveProfiler profiler, String rootName, Path dest) throws IOException {
         try (BufferedWriter br = Files.newBufferedWriter(dest, StandardOpenOption.WRITE,
                 StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE))
         {
-            writeProfilerResults(profiler, rootName, str ->
-            {
-                br.write(str);
-                br.newLine();
-            });
+//            writeProfilerResults(profiler, rootName, str -> {
+//                br.write(str);
+//                br.newLine();
+//            });
+            writeProfilerResults(profiler, rootName);
             br.flush();
         }
     }
 
-    /** @param rootName The base name to use. Most of the time you just want to use "root".
-     * @param dest The method to call with the finished lines.
-     * @throws E if {@link ILogAcceptor#write(String)} throws an exception. */
-//    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
-    public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName, ILogAcceptor<E> dest) throws E {
-        writeProfilerResults(profiler, rootName, -1, dest);
-    }
+//    /** @param rootName The base name to use. Most of the time you just want to use "root".
+//     * @param dest The method to call with the finished lines.
+//     * @throws E if {@link ILogAcceptor#write(String)} throws an exception. */
+//    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName, ILogAcceptor<E> dest) throws E {
+//        writeProfilerResults(profiler, rootName, -1, dest);
+//    }
 
     /** @param rootName The base name to use. Most of the time you just want to use "root".
-     * @param totalNanoseconds The total amount of time that the profiler's root section took, or -1 if this isn't
-     *            known.
-     * @param dest The method to call with the finished lines.
      * @throws E if {@link ILogAcceptor#write(String)} throws an exception. */
-//    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName,
-    public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName, long totalNanoseconds, ILogAcceptor<E> dest) throws E {
-        writeProfilerResults_Internal(profiler, rootName, totalNanoseconds, 0, dest);
+//    public static <E extends Throwable> void writeProfilerResults(Profiler profiler, String rootName, long totalNanoseconds, ILogAcceptor<E> dest) throws E
+    public static <E extends Throwable> void writeProfilerResults(ActiveProfiler profiler, String rootName) throws E {
+        StringBuilder builder = new StringBuilder();
+        FilledProfileResults result = (FilledProfileResults) profiler.getResults();
+        writeProfilerResults_Internal(result, rootName, 0, builder);
     }
 
-    // private static <E extends Throwable> void writeProfilerResults_Internal(Profiler profiler, String sectionName,
-    private static <E extends Throwable> void writeProfilerResults_Internal(ActiveProfiler profiler, String sectionName, long totalNanoseconds, int indent, ILogAcceptor<E> dest) throws E {
-
-//        List<Profiler.Result> list = profiler.getProfilingData(sectionName);
-        ActiveProfiler.PathEntry list = profiler.getEntry(sectionName);
-
-//        if (list != null && list.size() >= 3)
-        if (list != null && list.getCount() >= 3) {
-//            for (int i = 1; i < list.size(); ++i)
-            for (String key : list.getCounters().keySet()) {
-//                Profiler.Result result = list.get(i);
-                long result = list.getCounters().getLong(key);
-                StringBuilder builder = new StringBuilder();
-                builder.append(String.format("[%02d] ", indent));
-
-                for (int j = 0; j < indent; ++j) {
-                    builder.append("|   ");
-                }
-
-//                builder.append(result.profilerName);
-                builder.append(key);
-                builder.append(" - ");
-//                builder.append(String.format("%.2f", result.usePercentage));
-                builder.append(String.format("%.2f", result));
-                builder.append("%/");
-//                builder.append(String.format("%.2f", result.totalUsePercentage));
-                builder.append(String.format("%.2f", list.getCount()));
-                if (totalNanoseconds > 0) {
-                    builder.append(" (");
-//                    long nano = (long) (result.totalUsePercentage * totalNanoseconds / 100);
-                    long nano = (long) (list.getMaxDuration() * totalNanoseconds / 100L);
-                    if (nano < 99_999) {
-                        builder.append(NumberFormat.getInstance().format(nano));
-                        builder.append("ns");
-                    } else if (nano < 99_999_999) {
-                        builder.append(NumberFormat.getInstance().format(nano / 1000));
-                        builder.append("µs");
-                    } else if (nano < 99_999_999_999L) {
-                        builder.append(NumberFormat.getInstance().format(nano / 1_000_000));
-                        builder.append("ms");
-                    } else {
-                        builder.append(NumberFormat.getInstance().format(nano / 1_000_000_000));
-                        builder.append("s");
+    // private static <E extends Throwable> void writeProfilerResults_Internal(Profiler profiler, String sectionName, long totalNanoseconds, int indent, ILogAcceptor<E> dest) throws E
+    private static <E extends Throwable> void writeProfilerResults_Internal(FilledProfileResults result, String sectionName, int indent, StringBuilder builder) throws E {
+        List<ResultField> list = result.getTimes(sectionName);
+        Object2LongMap<String> object2longmap = ObjectUtils.firstNonNull(result.entries.get(sectionName), FilledProfileResults.EMPTY).getCounters();
+        object2longmap.forEach((p_230100_3_, p_230100_4_) ->
+        {
+            FilledProfileResults.indentLine(builder, indent).append('#').append(p_230100_3_).append(' ').append((Object) p_230100_4_).append('/').append(p_230100_4_ / (long) result.getTickDuration()).append('\n');
+        });
+        if (list.size() >= 3) {
+            for (int i = 1; i < list.size(); ++i) {
+                ResultField datapoint = list.get(i);
+                FilledProfileResults.indentLine(builder, indent).append(datapoint.name).append('(').append(datapoint.count).append('/').append(String.format(Locale.ROOT, "%.0f", (float) datapoint.count / (float) result.getTickDuration())).append(')').append(" - ").append(String.format(Locale.ROOT, "%.2f", datapoint.percentage)).append("%/").append(String.format(Locale.ROOT, "%.2f", datapoint.globalPercentage)).append("%\n");
+                if (!"unspecified".equals(datapoint.name)) {
+                    try {
+                        writeProfilerResults_Internal(result, sectionName + '\u001e' + datapoint.name, indent + 1, builder);
+                    } catch (Exception exception) {
+                        builder.append("[[ EXCEPTION ").append((Object) exception).append(" ]]");
                     }
-                    builder.append(")");
-                }
-                dest.write(builder.toString());
-
-//                if (!"unspecified".equals(result.profilerName))
-                if (!"unspecified".equals(key)) {
-                    if (indent > 20) {
-                        // Something probably went wrong
-                        dest.write("[[ Too deep! ]]");
-                        continue;
-                    }
-//                    writeProfilerResults_Internal(profiler, sectionName + "." + result.profilerName, totalNanoseconds,
-                    writeProfilerResults_Internal(profiler, sectionName + "." + key, totalNanoseconds,
-                            indent + 1, dest);
                 }
             }
         }
@@ -267,4 +223,26 @@ public class ProfilerUtil {
         }
     }
 
+    // Calen
+    public static ActiveProfiler newProfiler() {
+        ActiveProfiler ret = new ActiveProfiler(Util.timeSource, () ->
+        {
+            return 0;
+        }, false);
+        ret.startTick();
+        return ret;
+    }
+
+    public static ProfilerFiller newProfiler(boolean enable) {
+        if (enable) {
+            ActiveProfiler ret = new ActiveProfiler(Util.timeSource, () ->
+            {
+                return 0;
+            }, false);
+            ret.startTick();
+            return ret;
+        } else {
+            return InactiveProfiler.INSTANCE;
+        }
+    }
 }

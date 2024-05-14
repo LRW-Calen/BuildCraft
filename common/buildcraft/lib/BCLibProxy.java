@@ -177,10 +177,13 @@ public abstract class BCLibProxy {
 
         // Calen: ReloadableResourceManager#registerReloadListener in 1.18.2 lacks something, here is what there should be in 1.12.2
         private void registerReloadListener(ReloadableResourceManager reloadable, ResourceManagerReloadListener reloadListener) {
-            reloadable.registerReloadListener(GuideManager.INSTANCE);
+            /* Calen: Don't call reloadable.registerReloadListener(reloadListener).
+             * Load everything at RecipesUpdatedEvent.
+             * When switching language before joining a world, Minecraft.getInstance().level is null, and recipes will not be loaded. */
+//            reloadable.registerReloadListener(reloadListener);
             // Calen: moved to BCLibEventDistForgeBus#onTextureStitchPost
 //            reloadListener.onResourceManagerReload(reloadable);
-            BCLibEventDist.addReloadListeners(reloadListener);
+            BCLibEventDist.INSTANCE.addReloadListeners(reloadListener);
         }
 
         @Override

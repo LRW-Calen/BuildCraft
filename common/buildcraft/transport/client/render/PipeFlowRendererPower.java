@@ -99,6 +99,7 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
             MutableQuad quad = ModelUtil.createFace(face, centreF, radiusF, uvs);
             quad.texFromSprite(sprite);
             quad.lighti((byte) 15, (byte) 15);
+            quad.normalf(1, 1, 1);
             quad.render(pose, bb);
         }
     }
@@ -130,6 +131,7 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
             MutableQuad quad = ModelUtil.createFace(face, centre, radiusP, uvs);
             quad.texFromSprite(sprite);
             quad.lighti((byte) 15, (byte) 15);
+            quad.normalf(1, 1, 1);
             quad.render(pose, bb);
         }
     }

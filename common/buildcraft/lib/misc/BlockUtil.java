@@ -508,22 +508,6 @@ public final class BlockUtil {
         world.updateNeighbourForOutputSignal(pos, block);
     }
 
-    // Calen: ChestBlock#CHEST_COMBINER
-    // TODO Calen maybe not right
-    private static final DoubleBlockCombiner.Combiner<ChestBlockEntity, Optional<ChestBlockEntity>> CHEST_COMBINER = new DoubleBlockCombiner.Combiner<ChestBlockEntity, Optional<ChestBlockEntity>>() {
-        public Optional<ChestBlockEntity> acceptDouble(ChestBlockEntity p_51591_, ChestBlockEntity p_51592_) {
-            return Optional.of(p_51592_);
-        }
-
-        public Optional<ChestBlockEntity> acceptSingle(ChestBlockEntity p_51589_) {
-            return Optional.empty();
-        }
-
-        public Optional<ChestBlockEntity> acceptNone() {
-            return Optional.empty();
-        }
-    };
-
     /**
      * Just like {@link ChestBlock#combine(BlockState, Level, BlockPos, boolean)} and
      * {@link DoubleBlockCombiner#combineWithNeigbour(BlockEntityType, Function, Function, DirectionProperty, BlockState, LevelAccessor, BlockPos, BiPredicate)}.

@@ -6,6 +6,8 @@
 
 package buildcraft.lib.client.sprite;
 
+import buildcraft.lib.misc.RenderUtil;
+import buildcraft.lib.misc.SpriteUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.Tesselator;
@@ -69,7 +71,7 @@ public class DynamicTextureBC {
 
     public void bindGlTexture() {
 //        GlStateManager.bindTexture(dynamicTexture.getId());
-        RenderSystem.setShaderTexture(0, dynamicTexture.getId());
+        SpriteUtil.bindTexture(dynamicTexture.getId());
 //        RenderSystem.setShaderTexture(0, lightTextureLocation);
 //        Minecraft.getInstance().getTextureManager().bindForSetup(this.lightTextureLocation);
     }

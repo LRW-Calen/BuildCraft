@@ -378,7 +378,7 @@ public class FluidRenderer {
             sprite = SpriteUtil.missingSprite();
         }
 //        Minecraft.getInstance().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
 //        RenderUtil.setGLColorFromInt(fluid.getFluid().getColor(fluid));
         RenderUtil.setGLColorFromInt(fluid.getFluid().getAttributes().getColor(fluid));
 

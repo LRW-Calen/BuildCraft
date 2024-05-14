@@ -29,11 +29,9 @@ public class FakeChunk extends LevelChunk {
 //            p_156374_.clearRemoved();
             BlockEntity blockentity = this.blockEntities.put(blockpos.immutable(), p_156374_);
             // Calen: setRemoved -> IllegalArgumentException: Cannot use model data for a level other than the current client level
-//            if (blockentity != null && blockentity != p_156374_)
-//            {
+//            if (blockentity != null && blockentity != p_156374_) {
 //                blockentity.setRemoved();
 //            }
-
         }
     }
 }

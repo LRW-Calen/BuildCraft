@@ -316,8 +316,7 @@ public class SchematicBlockDefault implements ISchematicBlock {
 //                    tileEntity.setLevel(world);
                     world.setBlockEntity(tileEntity);
                     // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
-//                    if (tileRotation != Rotation.NONE)
-//                    {
+//                    if (tileRotation != Rotation.NONE) {
 ////                        tileEntity.rotate(tileRotation);
 //                    }
                 }

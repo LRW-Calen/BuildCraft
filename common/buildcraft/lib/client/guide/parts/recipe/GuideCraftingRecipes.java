@@ -12,6 +12,7 @@ import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.recipe.ChangingItemStack;
 import buildcraft.lib.recipe.IRecipeViewable;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.Item;
@@ -44,6 +45,9 @@ public enum GuideCraftingRecipes implements IStackRecipes {
                 return ImmutableList.of();
             }
         } else {
+            if (Minecraft.getInstance().level == null) {
+                return Lists.newArrayList();
+            }
 //            recipes = ForgeRegistries.RECIPES;
             recipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING);
         }
@@ -72,6 +76,9 @@ public enum GuideCraftingRecipes implements IStackRecipes {
         if (inputIndexMap == null) {
             inputIndexMap = new IdentityHashMap<>();
 //            for (Recipe recipe : ForgeRegistries.RECIPES)
+            if (Minecraft.getInstance().level == null) {
+                return;
+            }
             for (CraftingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING)) {
                 generateInputIndex0(recipe);
             }
@@ -143,6 +150,9 @@ public enum GuideCraftingRecipes implements IStackRecipes {
             }
 
         } else {
+            if (Minecraft.getInstance().level == null) {
+                return Lists.newArrayList();
+            }
 //            recipes = ForgeRegistries.RECIPES;
             recipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.CRAFTING);
         }
@@ -163,6 +173,9 @@ public enum GuideCraftingRecipes implements IStackRecipes {
     private void generateOutputIndex() {
         if (outputIndexMap == null) {
             outputIndexMap = new IdentityHashMap<>();
+            if (Minecraft.getInstance().level == null) {
+                return;
+            }
 //            for (Recipe recipe : ForgeRegistries.RECIPES)
             for (Recipe<?> recipe : Minecraft.getInstance().level.getRecipeManager().getRecipes()) {
                 generateOutputIndex0(recipe);

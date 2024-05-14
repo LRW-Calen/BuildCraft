@@ -44,7 +44,7 @@ public class GuideGroupManager {
                         BCItems.Transport.PIPE_FLUIDS_WOOD_COLORLESS,
                         BCItems.Transport.PIPE_FLUIDS_DIAMOND_WOOD_COLORLESS
                 );
-        addEntries("buildcraftcore", "full_power_providers",
+        addEntries("buildcraft", "full_power_providers",
                 BCBlocks.Core.ENGINE_STONE,
                 BCBlocks.Core.ENGINE_IRON)
                 .addKeyArray(
@@ -63,7 +63,7 @@ public class GuideGroupManager {
                         BCBlocks.Silicon.ASSEMBLY_TABLE,
                         BCBlocks.Silicon.INTEGRATION_TABLE
                 );
-        addEntries("buildcraftcore", "area_markers",
+        addEntries("buildcraft", "area_markers",
                 BCBlocks.Core.MARKER_VOLUME,
                 BCItems.Core.VOLUME_BOX)
                 .addKeyArray(BCBlocks.Builders.QUARRY,

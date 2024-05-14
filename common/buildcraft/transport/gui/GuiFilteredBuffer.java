@@ -7,6 +7,7 @@ package buildcraft.transport.gui;
 import buildcraft.lib.gui.GuiBC8;
 import buildcraft.lib.gui.GuiIcon;
 import buildcraft.lib.misc.RenderUtil;
+import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.container.ContainerFilteredBuffer_BC8;
 import com.mojang.blaze3d.platform.GlStateManager;
@@ -49,7 +50,7 @@ public class GuiFilteredBuffer extends GuiBC8<ContainerFilteredBuffer_BC8> {
                 this.itemRenderer.renderAndDecorateItem(this.minecraft.player, stack, (int) currentX, (int) currentY, 0);
             } else {
 //                this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-                RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+                SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
 //                this.drawTexturedModalRect((int) currentX, (int) currentY, BCTransportSprites.NOTHING_FILTERED_BUFFER_SLOT.getSprite(), 16, 16);
                 this.drawTexturedModalRect(poseStack, (int) currentX, (int) currentY, BCTransportSprites.NOTHING_FILTERED_BUFFER_SLOT.getSprite(), 16, 16, 0);
             }

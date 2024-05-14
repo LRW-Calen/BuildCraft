@@ -6,6 +6,8 @@
 
 package buildcraft.builders.snapshot;
 
+import buildcraft.lib.misc.RenderUtil;
+import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.lib.net.MessageManager;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -151,7 +153,7 @@ public enum ClientSnapshots {
 //        GlStateManager.enableDepth();
         RenderSystem.enableDepthTest();
 //        GlStateManager.enableBlend();
-        RenderSystem.enableBlend();
+        RenderUtil.enableBlend();
 //        GlStateManager.pushMatrix();
         poseStack.pushPose();
 ////        GlStateManager.matrixMode(GL11.GL_PROJECTION);
@@ -236,7 +238,7 @@ public enum ClientSnapshots {
 //        GlStateManager.translate(0, snapshotSize * 0.1F, 0);
         poseStack.translate(0, snapshotSize * 0.1F, 0);
 //        Minecraft.getMinecraft().getRenderManager().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
         // TODO Draw blocks in GUI???
 //        new WorldVertexBufferUploader().draw(bufferBuilder);
         // Calen: setupRenderState+end will make the main tooltip box background disappear

@@ -443,8 +443,7 @@ public class TileArchitectTable extends TileBC_Neptune implements ITickable, IDe
     // Calen: moved to RenderArchitectTable#shouldRenderOffScreen+getViewDistance
 //    @Override
 //    @OnlyIn(Dist.CLIENT)
-//    public double getMaxRenderDistanceSquared()
-//    {
+//    public double getMaxRenderDistanceSquared() {
 //        return Double.MAX_VALUE;
 //    }
 }

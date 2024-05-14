@@ -50,18 +50,6 @@ public class OilStructureRegistry {
             OilStructure::deserialize,
             STRUCTURE_ID.toString()
     );
-    public static final Holder<ConfiguredFeature<ProbabilityFeatureConfiguration, ?>> CONFIGURED_FEATURE_HOLDER =
-            FeatureUtils.register(
-                    STRUCTURE_ID.toString(),
-                    Feature.SEAGRASS,
-                    new ProbabilityFeatureConfiguration(0.3F)
-            );
-    public static final Holder<PlacedFeature> PLACED_FEATURE_HOLDER =
-            PlacementUtils.register(
-                    STRUCTURE_ID.toString(),
-                    CONFIGURED_FEATURE_HOLDER,
-                    modifiers(80)
-            );
 
     public static List<PlacementModifier> modifiers(int p_195234_) {
         return List.of(

@@ -41,6 +41,10 @@ public class SpriteUtil {
         bindTexture(new ResourceLocation(identifier));
     }
 
+    public static void bindTexture(int identifier) {
+        RenderSystem.setShaderTexture(0, identifier);
+    }
+
     public static void bindTexture(ResourceLocation identifier) {
 //        Minecraft.getInstance().textureManager.bindForSetup(identifier);
         RenderSystem.setShaderTexture(0, identifier);

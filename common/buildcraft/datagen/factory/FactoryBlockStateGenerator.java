@@ -354,7 +354,7 @@ public class FactoryBlockStateGenerator extends BCBaseBlockStateGenerator {
         );
 
         // Tube
-        builtinEntity(BCFactoryBlocks.tube.get());
+        builtinEntity(BCFactoryBlocks.tube.get(), "buildcraftfactory:blocks/pump/tube");
 
         // distiller
         simple4FacingBlock(

@@ -231,7 +231,7 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
 //            GlStateManager.disableDepth();
             RenderUtil.disableDepth();
             // Calen
-            RenderSystem.enableBlend();
+            RenderUtil.enableBlend();
             RenderSystem.defaultBlendFunc();
 
             forEachFilter((slot, filterStack) ->

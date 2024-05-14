@@ -2,6 +2,7 @@ package buildcraft.lib.client.sprite;
 
 import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.expression.api.IExpressionNode.INodeDouble;
+import buildcraft.lib.misc.SpriteUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.resources.ResourceLocation;
 
@@ -23,7 +24,7 @@ public class SpriteChanging implements ISprite {
     @Override
     public void bindTexture() {
 //        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(location.get()));
-        RenderSystem.setShaderTexture(0, new ResourceLocation(location.get()));
+        SpriteUtil.bindTexture(new ResourceLocation(location.get()));
     }
 
     @Override

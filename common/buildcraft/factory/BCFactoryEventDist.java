@@ -34,7 +34,7 @@ public enum BCFactoryEventDist {
 //    }
 
     @SubscribeEvent
-    public static void onPlayerDestroyBlock(BlockEvent.BreakEvent event) {
+    public void onPlayerDestroyBlock(BlockEvent.BreakEvent event) {
         if (event.getState().getBlock() != BCFactoryBlocks.tube.get()) {
             return;
         }

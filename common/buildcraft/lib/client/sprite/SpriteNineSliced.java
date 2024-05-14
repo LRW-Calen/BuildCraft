@@ -8,6 +8,7 @@ package buildcraft.lib.client.sprite;
 
 import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.gui.pos.IGuiArea;
+import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import net.minecraft.client.renderer.GameRenderer;
@@ -58,7 +59,7 @@ public class SpriteNineSliced {
         sprite.bindTexture();
 
         // Calen: should enableBlend to enable alpha, or the fluid tank overlay will not be seen
-        RenderSystem.enableBlend();
+        RenderUtil.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         Tesselator tess = Tesselator.getInstance();

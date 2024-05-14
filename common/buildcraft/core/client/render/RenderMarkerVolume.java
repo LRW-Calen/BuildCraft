@@ -20,6 +20,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.phys.Vec3;
@@ -62,6 +63,8 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
         Minecraft.getInstance().getProfiler().push("marker");
         Minecraft.getInstance().getProfiler().push("volume");
 
+        poseStack.pushPose();
+
         // Calen: 1.18.2 should not call these
 //        DetachedRenderer.fromWorldOriginPre(Minecraft.getMinecraft().player, partialTicks);
 //        RenderHelper.disableStandardItemLighting();
@@ -71,8 +74,10 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
         Set<Axis> taken = volume == null ? ImmutableSet.of() : volume.getConnectedAxis();
 
         // 1.18.2 poseStack has translated to marker pos before #render called
-//        Vec3d start = VecUtil.add(VEC_HALF, marker.getPos());
-        Vec3 start = VEC_HALF;
+        // LaserRenderer_BC8#renderLaserDynamic should accept world pos, not the offset pos
+        Vec3 start = VecUtil.add(VEC_HALF, marker.getBlockPos());
+        BlockPos markerPos = marker.getBlockPos();
+        poseStack.translate(-markerPos.getX(), -markerPos.getY(), -markerPos.getZ());
 
         VertexConsumer buffer = bufferSource.getBuffer(Sheets.solidBlockSheet());
         for (Direction face : Direction.values()) {
@@ -83,6 +88,8 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
             renderLaser(start, end, face.getAxis(), poseStack, buffer);
         }
 
+        poseStack.popPose();
+
 //        RenderHelper.enableStandardItemLighting();
 //        DetachedRenderer.fromWorldOriginPost();
 
@@ -91,11 +98,11 @@ public class RenderMarkerVolume implements BlockEntityRenderer<TileMarkerVolume>
         Minecraft.getInstance().getProfiler().pop();
     }
 
-    private static void renderLaser(Vec3 min, Vec3 max, Axis axis, PoseStack poseStack, VertexConsumer buffer) {
+    private static void renderLaser(Vec3 minWorldPos, Vec3 maxWorldPos, Axis axis, PoseStack poseStack, VertexConsumer buffer) {
         Direction faceForMin = VecUtil.getFacing(axis, true);
         Direction faceForMax = VecUtil.getFacing(axis, false);
-        Vec3 one = offset(min, faceForMin);
-        Vec3 two = offset(max, faceForMax);
+        Vec3 one = offset(minWorldPos, faceForMin);
+        Vec3 two = offset(maxWorldPos, faceForMax);
         LaserData_BC8 data = new LaserData_BC8(LASER_TYPE, one, two, SCALE);
 //        LaserRenderer_BC8.renderLaserStatic(data);
         LaserRenderer_BC8.renderLaserDynamic(data, poseStack.last(), buffer);

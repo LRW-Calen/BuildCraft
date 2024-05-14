@@ -14,7 +14,7 @@ import buildcraft.lib.tile.TileBC_Neptune;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class BlockPump<T extends TilePump> extends BlockBCTile_Neptune<TilePump> implements IBlockWithTickableTE<TilePump> {
+public class BlockPump extends BlockBCTile_Neptune<TilePump> implements IBlockWithTickableTE<TilePump> {
     public BlockPump(String idBC, Properties props) {
         super(idBC, props);
     }

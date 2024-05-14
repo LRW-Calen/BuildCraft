@@ -64,8 +64,7 @@ public class BCBiomes {
         BiomeDefaultFeatures.addDefaultMushrooms(biomegenerationsettings$builder);
         BiomeDefaultFeatures.addDesertExtraVegetation(biomegenerationsettings$builder);
         BiomeDefaultFeatures.addDesertExtraDecoration(biomegenerationsettings$builder);
-        // oil
-        biomegenerationsettings$builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OilStructureRegistry.PLACED_FEATURE_HOLDER);
+
         return biome(
                 Biome.Precipitation.NONE,
                 Biome.BiomeCategory.DESERT,
@@ -97,8 +96,7 @@ public class BCBiomes {
         biomegenerationsettings$builder.addFeature(GenerationStep.Decoration.VEGETAL_DECORATION, AquaticPlacements.SEAGRASS_NORMAL);
         BiomeDefaultFeatures.addDefaultSeagrass(biomegenerationsettings$builder);
         BiomeDefaultFeatures.addColdOceanExtraVegetation(biomegenerationsettings$builder);
-        // oil
-        biomegenerationsettings$builder.addFeature(GenerationStep.Decoration.SURFACE_STRUCTURES, OilStructureRegistry.PLACED_FEATURE_HOLDER);
+
         return biome(
                 Biome.Precipitation.RAIN,
                 Biome.BiomeCategory.OCEAN,

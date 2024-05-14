@@ -6,6 +6,7 @@
 
 package buildcraft.lib.client.render;
 
+import buildcraft.lib.misc.SpriteUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
@@ -78,7 +79,7 @@ public enum DetachedRenderer {
 
     public void renderWorldLastEvent(Player player, float partialTicks, PoseStack poseStack, Camera camera) {
 //        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
 //        Minecraft.getInstance().entityRenderer.enableLightmap();
 
         for (RenderMatrixType type : RenderMatrixType.values()) {

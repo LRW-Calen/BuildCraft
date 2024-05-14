@@ -2,6 +2,8 @@ package buildcraft.transport.client.render;
 
 import buildcraft.api.core.BCLog;
 import buildcraft.lib.misc.ColourUtil;
+import buildcraft.lib.misc.RenderUtil;
+import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.lib.oredictionarytag.OreDictionaryTags;
 import buildcraft.lib.registry.CreativeTabManager;
 import com.mojang.blaze3d.platform.InputConstants;
@@ -81,7 +83,7 @@ public class PipeTabButton {
                     // screen changed
                     if (screen != PipeTabButton.screen) {
                         if (PipeTabButton.screen != null) {
-                            m_removeWidget.invoke(PipeTabButton.screen, button);
+                            removeButton(PipeTabButton.screen, button);
                         }
                         PipeTabButton.screen = screen;
                         button = newButton(screen);
@@ -98,7 +100,7 @@ public class PipeTabButton {
                     else if (screen.renderables.contains(button) && (button.x != (screen.getGuiLeft() + LEFT_POS_ADD) || button.y != (screen.getGuiTop() + TOP_POS_ADD))) {
                         // Calen: accesstransformer doesn't work for removeWidget & addRenderableWidget
                         // When gradle refreshed, runClient will be not able to launch mc
-                        m_removeWidget.invoke(screen, button);
+                        removeButton(screen, button);
                         button = newButton(screen);
                         m_addRenderableWidget.invoke(screen, button);
                         updateTabItems(screen);
@@ -106,13 +108,13 @@ public class PipeTabButton {
                 }
                 // no longer pipes tab
                 else {
-                    m_removeWidget.invoke(screen, button);
+                    removeButton(screen, button);
                 }
             }
             // CreativeModeInventoryScreen closed
             else {
                 if (PipeTabButton.screen != null) {
-                    m_removeWidget.invoke(PipeTabButton.screen, button);
+                    removeButton(PipeTabButton.screen, button);
                     button = null;
                     PipeTabButton.screen = null;
                 }
@@ -120,6 +122,11 @@ public class PipeTabButton {
         } catch (ReflectiveOperationException e) {
             BCLog.logger.error(e);
         }
+    }
+
+    public static void removeButton(CreativeModeInventoryScreen screen, Button button) throws ReflectiveOperationException {
+        m_removeWidget.invoke(screen, button);
+        screen.renderables.remove(button);
     }
 
     private static final TranslatableComponent ALL = new TranslatableComponent("gui.creativetab.pipe.button.all");
@@ -194,14 +201,15 @@ public class PipeTabButton {
             super(x, y, w, h, message, func);
         }
 
+        @Override
         public void renderButton(PoseStack poseStack, int x, int y, float particleTicks) {
             Minecraft minecraft = Minecraft.getInstance();
             Font font = minecraft.font;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            RenderSystem.setShaderTexture(0, WIDGETS_LOCATION);
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+            SpriteUtil.bindTexture(WIDGETS_LOCATION);
+            RenderUtil.color(1.0F, 1.0F, 1.0F, this.alpha);
             int i = this.getYImage(this.isHoveredOrFocused());
-            RenderSystem.enableBlend();
+            RenderUtil.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
             // LU

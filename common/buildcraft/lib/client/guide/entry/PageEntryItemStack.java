@@ -18,6 +18,7 @@ import buildcraft.lib.gui.GuiStack;
 import buildcraft.lib.gui.ISimpleDrawable;
 import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.ItemStackKey;
+import buildcraft.lib.misc.ProfilerUtil;
 import buildcraft.lib.registry.RegistryConfig;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -236,6 +237,6 @@ public class PageEntryItemStack extends PageValueType<ItemStackValueFilter> {
     @Override
     public void addPageEntries(ItemStackValueFilter value, GuiGuide gui, List<GuidePart> parts) {
 //        XmlPageLoader.appendAllCrafting(value.stack.baseStack, parts, gui, new Profiler());
-        XmlPageLoader.appendAllCrafting(value.stack.baseStack, parts, gui, Minecraft.getInstance().getProfiler());
+        XmlPageLoader.appendAllCrafting(value.stack.baseStack, parts, gui, ProfilerUtil.newProfiler());
     }
 }

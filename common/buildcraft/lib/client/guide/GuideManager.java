@@ -127,7 +127,7 @@ public enum GuideManager implements ResourceManagerReloadListener {
     private void reload0(ResourceManager resourceManager) {
 //        Profiler prof = new Profiler();
 //        prof.profilingEnabled = DEBUG;
-        ProfilerFiller prof = Minecraft.getInstance().getProfiler();
+        ProfilerFiller prof = ProfilerUtil.newProfiler(DEBUG);
         prof.push("root");
         prof.push("reload");
         Stopwatch watch = Stopwatch.createStarted();

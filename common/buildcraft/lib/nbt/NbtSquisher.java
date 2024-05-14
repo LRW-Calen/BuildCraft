@@ -8,16 +8,14 @@ package buildcraft.lib.nbt;
 
 import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.data.NbtSquishConstants;
+import buildcraft.lib.misc.ProfilerUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;
 import io.netty.buffer.ByteBufOutputStream;
-import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.profiling.ActiveProfiler;
 import net.minecraft.util.profiling.ProfilerFiller;
 
 import java.io.*;
@@ -27,10 +25,7 @@ import java.util.zip.GZIPOutputStream;
 
 public class NbtSquisher {
     // public static final Profiler profiler = new Profiler();
-    public static final ProfilerFiller profiler = Minecraft.getInstance() == null ? new ActiveProfiler(Util.timeSource, () ->
-    {
-        return 0;
-    }, false) : Minecraft.getInstance().getProfiler();
+    public static final ProfilerFiller profiler = ProfilerUtil.newProfiler();
 
     /** Used by testing classes to replace ByteBuf instances with PrintingByteBuf -- but we don't have that
      * class in main because it makes checkstyle complain. */

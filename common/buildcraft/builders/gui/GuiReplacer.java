@@ -36,11 +36,8 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer> {
     }
 
     @Override
-    public void initGui()
-//    protected void init()
-    {
+    public void initGui() {
 //        super.initGui();
-//        super.init();
 //        nameField = new GuiTextField(0, fontRenderer, guiLeft + 30, guiTop + 117, 138, 12);
 //        nameField = new EditBox(font, leftPos + 30, topPos + 117, 138, 12, new TextComponent(""));
         nameField = new EditBox(font, 30, 117, 138, 12, new TextComponent(""));

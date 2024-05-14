@@ -9,6 +9,7 @@ package buildcraft.lib.client.guide.parts.recipe;
 import buildcraft.lib.client.guide.parts.GuidePartFactory;
 import buildcraft.lib.misc.StackUtil;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +27,9 @@ public enum GuideSmeltingRecipes implements IStackRecipes {
 
     @Override
     public List<GuidePartFactory> getUsages(@Nonnull ItemStack stack) {
+        if (Minecraft.getInstance().level == null) {
+            return Lists.newArrayList();
+        }
 //        Map<ItemStack, ItemStack> recipes;
         List<SmeltingRecipe> recipes;
 //        Map<ItemStack, ItemStack> old = FurnaceRecipes.instance().getSmeltingList();
@@ -75,6 +79,9 @@ public enum GuideSmeltingRecipes implements IStackRecipes {
     public List<GuidePartFactory> getRecipes(@Nonnull ItemStack stack) {
         List<GuidePartFactory> list = new ArrayList<>();
 
+        if (Minecraft.getInstance().level == null) {
+            return list;
+        }
 //        for (Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet())
         for (SmeltingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMELTING)) {
 //            ItemStack input = StackUtil.asNonNull(entry.getKey());
