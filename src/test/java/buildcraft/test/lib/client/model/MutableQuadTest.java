@@ -1,24 +1,19 @@
 package buildcraft.test.lib.client.model;
 
+import buildcraft.lib.client.model.MutableQuad;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import org.junit.Assert;
 import org.junit.Test;
 
-import buildcraft.lib.client.model.MutableQuad;
-
-public class MutableQuadTest
-{
+public class MutableQuadTest {
 
     @Test
-    public void testRotations()
-    {
+    public void testRotations() {
 //        for (EnumFacing from : EnumFacing.VALUES)
-        for (Direction from : Direction.values())
-        {
+        for (Direction from : Direction.values()) {
 //            for (EnumFacing to : EnumFacing.VALUES)
-            for (Direction to : Direction.values())
-            {
+            for (Direction to : Direction.values()) {
 //                Vec3i vec = from.getDirectionVec();
                 Vec3i vec = from.getNormal();
                 MutableQuad q = new MutableQuad();

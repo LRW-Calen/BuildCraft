@@ -13,7 +13,6 @@ import buildcraft.lib.client.guide.entry.PageValue;
 import buildcraft.lib.client.guide.loader.XmlPageLoader;
 import buildcraft.lib.misc.ProfilerUtil;
 import com.google.common.collect.ImmutableList;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 

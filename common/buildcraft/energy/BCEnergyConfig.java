@@ -33,7 +33,7 @@ public class BCEnergyConfig {
     public static double mediumOilGenProb;
     public static double largeOilGenProb;
 
-    public static final Set<String> excludedDimensions = new HashSet();
+    public static final Set<String> excludedDimensions = new HashSet<>();
     /** If false then {@link #excludedDimensions} should be treated as a whitelist rather than a blacklist. */
     public static boolean excludedDimensionsIsBlackList;
     public static final Set<ResourceLocation> excessiveBiomes = new HashSet<>();
@@ -103,26 +103,26 @@ public class BCEnergyConfig {
                 .defineInRange("worldgen.oil",
                         "The rate of occurrence of oil wells.",
                         world,
-                        "generationRate", 1.0, 0, 100);
+                        "generationRate", 1.0);
 
 
         propSmallOilGenProb = config
                 .defineInRange("worldgen.oil.spawn_probability",
                         "The percentage probability of a small oil spawn",
                         world,
-                        "generationRate", 2.0, 0, 100);
+                        "small", 2.0);
 
         propMediumOilGenProb = config
                 .defineInRange("worldgen.oil.spawn_probability",
                         "The percentage probability of a medium oil spawn",
                         world,
-                        "generationRate", 0.1, 0, 100);
+                        "medium", 0.1);
 
         propLargeOilGenProb = config
                 .defineInRange("worldgen.oil.spawn_probability",
                         "The percentage probability of a large oil spawn",
                         world,
-                        "generationRate", 0.04, 0, 100);
+                        "large", 0.04);
 
 
         propEnableOilSpouts = config
@@ -135,25 +135,25 @@ public class BCEnergyConfig {
                 .defineInRange("worldgen.oil.spouts",
                         "The minimum height for small oil spouts",
                         world,
-                        "small_min_height", 6, 1, 100);
+                        "small_min_height", 6);
 
         propSmallSpoutMaxHeight = config
                 .defineInRange("worldgen.oil.spouts",
                         "The maximum height for small oil spouts",
                         world,
-                        "small_max_height", 12, 1, 100);
+                        "small_max_height", 12);
 
         propLargeSpoutMinHeight = config
                 .defineInRange("worldgen.oil.spouts",
                         "The minimum height for large oil spouts",
                         world,
-                        "large_min_height", 10, 1, 100);
+                        "large_min_height", 10);
 
         propLargeSpoutMaxHeight = config
                 .defineInRange("worldgen.oil.spouts",
                         "The maximum height for large oil spouts",
                         world,
-                        "large_max_height", 20, 1, 100);
+                        "large_max_height", 20);
 
 
         String[] _excessive = { //

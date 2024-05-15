@@ -1,12 +1,10 @@
 package buildcraft.test.lib.misc;
 
+import buildcraft.lib.misc.MessageUtil;
 import io.netty.buffer.Unpooled;
-
 import net.minecraft.network.FriendlyByteBuf;
 import org.junit.Assert;
 import org.junit.Test;
-
-import buildcraft.lib.misc.MessageUtil;
 
 public class MessageUtilTester {
     @Test

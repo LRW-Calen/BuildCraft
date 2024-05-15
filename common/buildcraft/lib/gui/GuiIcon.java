@@ -171,6 +171,7 @@ public class GuiIcon implements ISimpleDrawable {
         double vMax = sprite.getInterpV(displayHeight / height);
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderUtil.enableBlend();
 //        Tessellator tess = Tessellator.getInstance();
         Tesselator tess = Tesselator.getInstance();
 //        BufferBuilder vb = tess.getBuffer();

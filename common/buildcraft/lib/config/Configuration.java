@@ -115,6 +115,22 @@ public class Configuration {
         return ret;
     }
 
+    public synchronized DoubleValue defineInRange(String category, String comment, EnumRestartRequirement worldRestart, String subPath, double defaultValue) {
+        lock.lock();
+        comment = ensureCommentNotEmpty(comment, subPath);
+        String fullPath = category + "." + subPath;
+        builder
+                .translation("config." + fullPath)
+                .comment(comment);
+        if (worldRestart == EnumRestartRequirement.WORLD) {
+            builder.worldRestart();
+        }
+        DoubleValue ret = builder.defineInRange(fullPath, defaultValue, 0D, Double.MAX_VALUE);
+        all.add(ret);
+        lock.unlock();
+        return ret;
+    }
+
     public synchronized DoubleValue defineInRange(String category, String comment, EnumRestartRequirement worldRestart, String subPath, double defaultValue, double min, double max) {
         lock.lock();
         comment = ensureCommentNotEmpty(comment, subPath);

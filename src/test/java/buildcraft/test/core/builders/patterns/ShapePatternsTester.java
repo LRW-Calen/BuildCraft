@@ -1,10 +1,18 @@
 package buildcraft.test.core.builders.patterns;
 
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.List;
-import java.util.stream.Collectors;
-
+import buildcraft.api.filler.FillerManager;
+import buildcraft.api.filler.IFilledTemplate;
+import buildcraft.api.filler.IFillerPatternShape;
+import buildcraft.api.statements.IStatementParameter;
+import buildcraft.builders.BCBuildersStatements;
+import buildcraft.builders.registry.FillerRegistry;
+import buildcraft.builders.snapshot.Snapshot;
+import buildcraft.builders.snapshot.Template;
+import buildcraft.builders.snapshot.pattern.parameter.PatternParameterFacing;
+import buildcraft.builders.snapshot.pattern.parameter.PatternParameterHollow;
+import buildcraft.lib.misc.StringUtilBC;
+import buildcraft.lib.misc.VecUtil;
+import buildcraft.test.VanillaSetupBaseTester;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import org.junit.Assert;
@@ -14,21 +22,10 @@ import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
 import org.junit.runner.RunWith;
 
-import buildcraft.api.filler.FillerManager;
-import buildcraft.api.filler.IFilledTemplate;
-import buildcraft.api.filler.IFillerPatternShape;
-import buildcraft.api.statements.IStatementParameter;
-
-import buildcraft.lib.misc.StringUtilBC;
-import buildcraft.lib.misc.VecUtil;
-
-import buildcraft.builders.BCBuildersStatements;
-import buildcraft.builders.registry.FillerRegistry;
-import buildcraft.builders.snapshot.Snapshot;
-import buildcraft.builders.snapshot.Template;
-import buildcraft.builders.snapshot.pattern.parameter.PatternParameterFacing;
-import buildcraft.builders.snapshot.pattern.parameter.PatternParameterHollow;
-import buildcraft.test.VanillaSetupBaseTester;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RunWith(Theories.class)
 public class ShapePatternsTester extends VanillaSetupBaseTester {
@@ -39,20 +36,20 @@ public class ShapePatternsTester extends VanillaSetupBaseTester {
      * (Hopefully enough to show up regressions). */
     @DataPoints
     public static BlockPos[] sizes = { //
-        new BlockPos(1, 1, 1), new BlockPos(2, 1, 1), new BlockPos(3, 1, 1), //
-        new BlockPos(2, 2, 2), new BlockPos(3, 2, 2), new BlockPos(4, 2, 2), //
-        new BlockPos(2, 3, 2), new BlockPos(2, 2, 3), new BlockPos(2, 8, 2), //
-        new BlockPos(3, 3, 3), new BlockPos(4, 4, 4), new BlockPos(5, 5, 5), //
-        new BlockPos(6, 6, 6), new BlockPos(7, 7, 7), new BlockPos(11, 13, 12) //
+            new BlockPos(1, 1, 1), new BlockPos(2, 1, 1), new BlockPos(3, 1, 1), //
+            new BlockPos(2, 2, 2), new BlockPos(3, 2, 2), new BlockPos(4, 2, 2), //
+            new BlockPos(2, 3, 2), new BlockPos(2, 2, 3), new BlockPos(2, 8, 2), //
+            new BlockPos(3, 3, 3), new BlockPos(4, 4, 4), new BlockPos(5, 5, 5), //
+            new BlockPos(6, 6, 6), new BlockPos(7, 7, 7), new BlockPos(11, 13, 12) //
     };
 
     @BeforeClass
     public static void setupRegistries() {
         FillerManager.registry = FillerRegistry.INSTANCE;
         patterns = Arrays.stream(BCBuildersStatements.PATTERNS)
-            .filter(IFillerPatternShape.class::isInstance)
-            .map(IFillerPatternShape.class::cast)
-            .collect(Collectors.toList());
+                .filter(IFillerPatternShape.class::isInstance)
+                .map(IFillerPatternShape.class::cast)
+                .collect(Collectors.toList());
     }
 
     @Theory
@@ -89,7 +86,7 @@ public class ShapePatternsTester extends VanillaSetupBaseTester {
 
     /** Ensure that (for the same implicit size sphere) SPHERE, SPHERE_HALF, SPHERE_QUARTER, and SPHERE_EIGHTH all
      * generate the same sphere.
-     * 
+     *
      * @param size an eighth of the size of the entire sphere. */
     @Theory
     public void testSphereEquality(BlockPos size) {
@@ -98,7 +95,7 @@ public class ShapePatternsTester extends VanillaSetupBaseTester {
         System.out.println("Testing spheres for equality in " + StringUtilBC.blockPosToString(fullSize));
 
         IStatementParameter[] fullParams = new IStatementParameter[] { //
-            PatternParameterHollow.HOLLOW, //
+                PatternParameterHollow.HOLLOW, //
         };
         IFilledTemplate filledTemplateFull = createFilledTemplate(fullSize);
         Assert.assertTrue(BCBuildersStatements.PATTERN_SPHERE.fillTemplate(filledTemplateFull, fullParams));
@@ -108,8 +105,8 @@ public class ShapePatternsTester extends VanillaSetupBaseTester {
         for (Direction face : Direction.values()) {
             BlockPos halfSize = VecUtil.replaceValue(fullSize, face.getAxis(), VecUtil.getValue(size, face.getAxis()));
             IStatementParameter[] params = new IStatementParameter[] { //
-                PatternParameterHollow.HOLLOW, //
-                PatternParameterFacing.get(face) //
+                    PatternParameterHollow.HOLLOW, //
+                    PatternParameterFacing.get(face) //
             };
             IFilledTemplate filledTemplateHalf = createFilledTemplate(halfSize);
             Assert.assertTrue(BCBuildersStatements.PATTERN_HEMI_SPHERE.fillTemplate(filledTemplateHalf, params));
@@ -122,13 +119,13 @@ public class ShapePatternsTester extends VanillaSetupBaseTester {
                     for (int x = 0; x <= filledTemplateHalf.getMax().getX(); x++) {
                         if (filledTemplateFull.get(x + dx, y + dy, z + dz) != filledTemplateHalf.get(x, y, z)) {
                             Assert.fail(
-                                String.format(
-                                    "Half sphere[%s] didn't match full sphere at (%s, %s, %s)",
-                                    face,
-                                    x,
-                                    y,
-                                    z
-                                )
+                                    String.format(
+                                            "Half sphere[%s] didn't match full sphere at (%s, %s, %s)",
+                                            face,
+                                            x,
+                                            y,
+                                            z
+                                    )
                             );
                         }
                     }

@@ -1,22 +1,17 @@
 package buildcraft.test.lib.fluid;
 
+import buildcraft.lib.fluid.Tank;
+import buildcraft.lib.fluid.TankManager;
+import buildcraft.test.VanillaSetupBaseTester;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.junit.Assert;
 import org.junit.Test;
 
-import net.minecraftforge.fluids.FluidStack;
-
-import buildcraft.lib.fluid.Tank;
-import buildcraft.lib.fluid.TankManager;
-
-import buildcraft.test.VanillaSetupBaseTester;
-
-public class TankManagerTester extends VanillaSetupBaseTester
-{
+public class TankManagerTester extends VanillaSetupBaseTester {
     @Test
-    public void testSimpleMoving()
-    {
+    public void testSimpleMoving() {
         TankManager manager = new TankManager();
         manager.add(new Tank("tank_1", 3, null));
 //        Assert.assertEquals(2, manager.fill(new FluidStack(FluidRegistry.WATER, 2), true));

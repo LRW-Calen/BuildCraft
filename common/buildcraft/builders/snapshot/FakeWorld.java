@@ -13,7 +13,6 @@ import buildcraft.lib.misc.ProfilerUtil;
 import com.google.common.collect.Lists;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.*;
 import net.minecraft.resources.ResourceKey;

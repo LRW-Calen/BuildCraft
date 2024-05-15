@@ -1,10 +1,9 @@
 package buildcraft.test.lib.misc.data;
 
+import buildcraft.lib.misc.data.AverageLong;
 import net.minecraft.nbt.CompoundTag;
 import org.junit.Assert;
 import org.junit.Test;
-
-import buildcraft.lib.misc.data.AverageLong;
 
 public class AverageLongTester {
     @Test

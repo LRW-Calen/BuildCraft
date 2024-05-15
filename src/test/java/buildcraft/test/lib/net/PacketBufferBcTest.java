@@ -1,13 +1,11 @@
 package buildcraft.test.lib.net;
 
+import buildcraft.lib.net.PacketBufferBC;
 import io.netty.buffer.Unpooled;
-
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.DyeColor;
 import org.junit.Assert;
 import org.junit.Test;
-
-import buildcraft.lib.net.PacketBufferBC;
 
 public class PacketBufferBcTest {
     @Test
@@ -24,14 +22,14 @@ public class PacketBufferBcTest {
         buffer.writeBoolean(true);
 
         byte[] expected = {
-            // writeInt(49)
-            0, 0, 0, 49,
-            // flag(true, false, true)
-            1 + 4,
-            // writeShort(95)
-            0, 95,
-            // writeByte(11)
-            11
+                // writeInt(49)
+                0, 0, 0, 49,
+                // flag(true, false, true)
+                1 + 4,
+                // writeShort(95)
+                0, 95,
+                // writeByte(11)
+                11
 
         };
 

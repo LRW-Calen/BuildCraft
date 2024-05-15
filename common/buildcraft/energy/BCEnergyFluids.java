@@ -2,7 +2,10 @@ package buildcraft.energy;
 
 import buildcraft.api.BCModules;
 import buildcraft.energy.item.BCBucketItem;
-import buildcraft.lib.fluid.*;
+import buildcraft.lib.fluid.BCFluid;
+import buildcraft.lib.fluid.BCFluidAttributes;
+import buildcraft.lib.fluid.BCFluidBlock;
+import buildcraft.lib.fluid.BCFluidRegistryContainer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.BucketItem;

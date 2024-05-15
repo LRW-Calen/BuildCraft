@@ -1,16 +1,13 @@
 package buildcraft.test.lib.inventory;
 
+import buildcraft.api.inventory.IItemTransactor;
+import buildcraft.lib.tile.item.ItemHandlerSimple;
+import buildcraft.lib.tile.item.StackInsertionFunction;
+import buildcraft.test.VanillaSetupBaseTester;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.junit.Assert;
 import org.junit.Test;
-
-import buildcraft.api.inventory.IItemTransactor;
-
-import buildcraft.lib.tile.item.ItemHandlerSimple;
-import buildcraft.lib.tile.item.StackInsertionFunction;
-
-import buildcraft.test.VanillaSetupBaseTester;
 
 public class ItemTransactorTester extends VanillaSetupBaseTester {
     @Test

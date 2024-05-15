@@ -157,17 +157,4 @@ public enum BCLibEventDist {
     public void addReloadListeners(ResourceManagerReloadListener reloadListener) {
         reloadListeners.add(reloadListener);
     }
-
-//    // Calen: to load guide
-//    // moved from BCLibProxy$ClientProxy#fmlPostInit
-//    // at fmlPostInit -> RuntimeException: getAtlasTexture called too early!
-//    @OnlyIn(Dist.CLIENT)
-//    @SubscribeEvent
-//    public static void onTextureStitchPost(TextureStitchEvent.Post event)
-//    {
-//        if(event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS))
-//        {
-//            GuideManager.INSTANCE.onResourceManagerReload(Minecraft.getInstance().getResourceManager());
-//        }
-//    }
 }

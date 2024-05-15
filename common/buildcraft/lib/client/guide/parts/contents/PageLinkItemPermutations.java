@@ -9,7 +9,6 @@ import buildcraft.lib.client.guide.parts.GuidePageFactory;
 import buildcraft.lib.client.guide.parts.GuidePart;
 import buildcraft.lib.misc.ItemStackKey;
 import buildcraft.lib.misc.ProfilerUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.ItemStack;

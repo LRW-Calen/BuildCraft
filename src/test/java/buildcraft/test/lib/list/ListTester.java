@@ -1,14 +1,12 @@
 package buildcraft.test.lib.list;
 
+import buildcraft.api.lists.ListMatchHandler.Type;
+import buildcraft.lib.list.ListMatchHandlerTools;
+import buildcraft.test.VanillaSetupBaseTester;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.junit.Assert;
 import org.junit.Test;
-
-import buildcraft.api.lists.ListMatchHandler.Type;
-
-import buildcraft.lib.list.ListMatchHandlerTools;
-import buildcraft.test.VanillaSetupBaseTester;
 
 public class ListTester extends VanillaSetupBaseTester {
     @Test

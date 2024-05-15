@@ -1,11 +1,11 @@
 package buildcraft.test;
 
-import java.io.InputStream;
-import java.io.PrintStream;
-
 import net.minecraft.SharedConstants;
 import net.minecraft.server.Bootstrap;
 import org.junit.BeforeClass;
+
+import java.io.InputStream;
+import java.io.PrintStream;
 
 public class VanillaSetupBaseTester {
     @BeforeClass

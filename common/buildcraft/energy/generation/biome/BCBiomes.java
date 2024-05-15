@@ -1,7 +1,6 @@
 package buildcraft.energy.generation.biome;
 
 import buildcraft.energy.BCEnergy;
-import buildcraft.energy.generation.structure.OilStructureRegistry;
 import net.minecraft.data.worldgen.BiomeDefaultFeatures;
 import net.minecraft.data.worldgen.placement.AquaticPlacements;
 import net.minecraft.sounds.Music;

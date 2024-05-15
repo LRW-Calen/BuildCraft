@@ -11,7 +11,6 @@ import buildcraft.lib.BCLibConfig;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.misc.RenderUtil;
 import buildcraft.lib.misc.SpriteUtil;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.CrashReport;
