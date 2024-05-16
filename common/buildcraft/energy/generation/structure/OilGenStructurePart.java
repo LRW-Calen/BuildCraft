@@ -69,9 +69,8 @@ public abstract class OilGenStructurePart {
      * @param pos The block pos we set to oil block
      */
     public static void setOil(LevelAccessor world, BlockPos pos) {
-        world.setBlock(pos, OIL_BLOCK_STATE, Block.UPDATE_CLIENTS);
+        world.setBlock(pos, OIL_BLOCK_STATE, Block.UPDATE_ALL);
         world.scheduleTick(pos, OIL_FLUID, 0);
-
     }
 
     public enum ReplaceType {
@@ -106,9 +105,9 @@ public abstract class OilGenStructurePart {
             this.predicateArgs = predicateArgs;
             Predicate<BlockPos> tester;
             if (predicateArgs.length == 2) {
-                tester = p -> p.distSqr((BlockPos) predicateArgs[0]) <= (double) predicateArgs[1];
+                tester = p -> VecUtil.distanceSq(p, (BlockPos) predicateArgs[0]) <= (double) predicateArgs[1];
             } else if (predicateArgs.length == 4) {
-                tester = p -> VecUtil.replaceValue(p, (Axis) predicateArgs[0], (int) predicateArgs[1]).distSqr((BlockPos) predicateArgs[2]) <= (double) predicateArgs[3];
+                tester = p -> VecUtil.distanceSq(VecUtil.replaceValue(p, (Axis) predicateArgs[0], (int) predicateArgs[1]), (BlockPos) predicateArgs[2]) <= (double) predicateArgs[3];
             } else {
                 throw new RuntimeException("Unexpected Predict Type! Predict Types are Limited for NBT Serialize");
             }

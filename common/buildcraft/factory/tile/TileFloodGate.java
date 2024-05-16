@@ -103,7 +103,7 @@ public class TileFloodGate extends TileBC_Neptune implements ITickable, IDebugga
             nextPosesToCheck.clear();
             for (BlockPos toCheck : nextPosesToCheckCopy) {
 //                if (toCheck.distanceSq(pos) > 64 * 64)
-                if (toCheck.distSqr(worldPosition) > 64 * 64) {
+                if (VecUtil.distanceSq(toCheck, worldPosition) > 64 * 64) {
                     continue;
                 }
                 if (checked.add(toCheck)) {

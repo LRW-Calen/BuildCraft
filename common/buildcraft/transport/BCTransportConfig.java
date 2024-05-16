@@ -12,19 +12,18 @@ import buildcraft.api.transport.pipe.EnumPipeColourType;
 import buildcraft.api.transport.pipe.PipeApi;
 import buildcraft.api.transport.pipe.PipeApi.PowerTransferInfo;
 import buildcraft.api.transport.pipe.PipeDefinition;
-import buildcraft.core.BCCoreConfig;
+import buildcraft.lib.config.BCConfig;
 import buildcraft.lib.config.Configuration;
 import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.misc.MathUtil;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 import net.minecraftforge.common.ForgeConfigSpec.LongValue;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.ModLoadingStage;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class BCTransportConfig {
     public enum PowerLossMode {
@@ -35,6 +34,8 @@ public class BCTransportConfig {
         public static final PowerLossMode DEFAULT = LOSSLESS;
         public static final PowerLossMode[] VALUES = values();
     }
+
+    private static Configuration config;
 
     private static final long MJ_REQ_MILLIBUCKET_MIN = 100;
     private static final long MJ_REQ_ITEM_MIN = 50_000;
@@ -52,8 +53,21 @@ public class BCTransportConfig {
     private static EnumValue<PowerLossMode> propLossMode;
 
     public static void preInit() {
-        Configuration config = BCCoreConfig.config;
+//        Configuration config = BCCoreConfig.config;
+        BCModules module = BCModules.TRANSPORT;
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        config = new Configuration(builder, module);
+        createProps();
+        ForgeConfigSpec spec = config.build();
+        ModContainer container = ModList.get().getModContainerById(module.getModId()).get();
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, config.getFileName()));
 
+        reloadConfig();
+//        MinecraftForge.EVENT_BUS.register(BCTransportConfig.class);
+        BCConfig.registerReloadListener(module, BCTransportConfig::reloadConfig);
+    }
+
+    public static void createProps() {
         String general = "general";
         String display = "display";
         String experimental = "experimental";
@@ -87,58 +101,54 @@ public class BCTransportConfig {
                         "",
                         world,
                         "kinesisLossMode", PowerLossMode.LOSSLESS);
-
-        config.build();
-
-        MinecraftForge.EVENT_BUS.register(BCTransportConfig.class);
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted) {
-
-        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
-            mjPerMillibucket = propMjPerMillibucket.get();
-            if (mjPerMillibucket < MJ_REQ_MILLIBUCKET_MIN) {
-                mjPerMillibucket = MJ_REQ_MILLIBUCKET_MIN;
-            }
-
-            mjPerItem = propMjPerItem.get();
-            if (mjPerItem < MJ_REQ_ITEM_MIN) {
-                mjPerItem = MJ_REQ_ITEM_MIN;
-            }
-
-            baseFlowRate = MathUtil.clamp(propBaseFlowRate.get(), 1, 40);
-            int basePowerRate = 4;
-
-            fluidPipeColourBorder = propFluidPipeColourBorder.get();
-            PipeApi.flowFluids.fallbackColourType =
-                    fluidPipeColourBorder ? EnumPipeColourType.BORDER_INNER : EnumPipeColourType.TRANSLUCENT;
-
-            lossMode = propLossMode.get();
-
-            fluidTransfer(BCTransportPipes.cobbleFluid, baseFlowRate, 10);
-            fluidTransfer(BCTransportPipes.woodFluid, baseFlowRate, 10);
-
-            fluidTransfer(BCTransportPipes.stoneFluid, baseFlowRate * 2, 10);
-            fluidTransfer(BCTransportPipes.sandstoneFluid, baseFlowRate * 2, 10);
-
-            fluidTransfer(BCTransportPipes.clayFluid, baseFlowRate * 4, 10);
-            fluidTransfer(BCTransportPipes.ironFluid, baseFlowRate * 4, 10);
-            fluidTransfer(BCTransportPipes.quartzFluid, baseFlowRate * 4, 10);
-
-            fluidTransfer(BCTransportPipes.diamondFluid, baseFlowRate * 8, 10);
-            fluidTransfer(BCTransportPipes.diaWoodFluid, baseFlowRate * 8, 10);
-            fluidTransfer(BCTransportPipes.goldFluid, baseFlowRate * 8, 2);
-            fluidTransfer(BCTransportPipes.voidFluid, baseFlowRate * 8, 10);
-
-            powerTransfer(BCTransportPipes.cobblePower, basePowerRate, 16, false);
-            powerTransfer(BCTransportPipes.stonePower, basePowerRate * 2, 32, false);
-            powerTransfer(BCTransportPipes.woodPower, basePowerRate * 4, 128, true);
-            powerTransfer(BCTransportPipes.sandstonePower, basePowerRate * 4, 32, false);
-            powerTransfer(BCTransportPipes.quartzPower, basePowerRate * 8, 32, false);
-            // powerTransfer(BCTransportPipes.ironPower, basePowerRate * 8, false);
-            powerTransfer(BCTransportPipes.goldPower, basePowerRate * 16, 32, false);
-            // powerTransfer(BCTransportPipes.diamondPower, basePowerRate * 32, false);
+    // public static void reloadConfig(EnumRestartRequirement restarted)
+    public static void reloadConfig() {
+//        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
+        mjPerMillibucket = propMjPerMillibucket.get();
+        if (mjPerMillibucket < MJ_REQ_MILLIBUCKET_MIN) {
+            mjPerMillibucket = MJ_REQ_MILLIBUCKET_MIN;
         }
+
+        mjPerItem = propMjPerItem.get();
+        if (mjPerItem < MJ_REQ_ITEM_MIN) {
+            mjPerItem = MJ_REQ_ITEM_MIN;
+        }
+
+        baseFlowRate = MathUtil.clamp(propBaseFlowRate.get(), 1, 40);
+        int basePowerRate = 4;
+
+        fluidPipeColourBorder = propFluidPipeColourBorder.get();
+        PipeApi.flowFluids.fallbackColourType =
+                fluidPipeColourBorder ? EnumPipeColourType.BORDER_INNER : EnumPipeColourType.TRANSLUCENT;
+
+        lossMode = propLossMode.get();
+
+        fluidTransfer(BCTransportPipes.cobbleFluid, baseFlowRate, 10);
+        fluidTransfer(BCTransportPipes.woodFluid, baseFlowRate, 10);
+
+        fluidTransfer(BCTransportPipes.stoneFluid, baseFlowRate * 2, 10);
+        fluidTransfer(BCTransportPipes.sandstoneFluid, baseFlowRate * 2, 10);
+
+        fluidTransfer(BCTransportPipes.clayFluid, baseFlowRate * 4, 10);
+        fluidTransfer(BCTransportPipes.ironFluid, baseFlowRate * 4, 10);
+        fluidTransfer(BCTransportPipes.quartzFluid, baseFlowRate * 4, 10);
+
+        fluidTransfer(BCTransportPipes.diamondFluid, baseFlowRate * 8, 10);
+        fluidTransfer(BCTransportPipes.diaWoodFluid, baseFlowRate * 8, 10);
+        fluidTransfer(BCTransportPipes.goldFluid, baseFlowRate * 8, 2);
+        fluidTransfer(BCTransportPipes.voidFluid, baseFlowRate * 8, 10);
+
+        powerTransfer(BCTransportPipes.cobblePower, basePowerRate, 16, false);
+        powerTransfer(BCTransportPipes.stonePower, basePowerRate * 2, 32, false);
+        powerTransfer(BCTransportPipes.woodPower, basePowerRate * 4, 128, true);
+        powerTransfer(BCTransportPipes.sandstonePower, basePowerRate * 4, 32, false);
+        powerTransfer(BCTransportPipes.quartzPower, basePowerRate * 8, 32, false);
+        // powerTransfer(BCTransportPipes.ironPower, basePowerRate * 8, false);
+        powerTransfer(BCTransportPipes.goldPower, basePowerRate * 16, 32, false);
+        // powerTransfer(BCTransportPipes.diamondPower, basePowerRate * 32, false);
+//        }
     }
 
     private static void fluidTransfer(PipeDefinition def, int rate, int delay) {
@@ -151,17 +161,15 @@ public class BCTransportConfig {
         PipeApi.powerTransferData.put(def, PowerTransferInfo.createFromResistance(transfer, resistance, recv));
     }
 
-    @SubscribeEvent
-//    public static void onConfigChange(OnConfigChangedEvent cce)
-    public static void onConfigChange(ModConfigEvent.Reloading cce) {
-        if (BCModules.isBcMod(cce.getConfig().getModId())) {
-            EnumRestartRequirement req = EnumRestartRequirement.NONE;
-//            if (Loader.instance().isInState(LoaderState.AVAILABLE))
-            if (ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.COMPLETE) {
-                // The loaders state will be LoaderState.SERVER_STARTED when we are in a world
-                req = EnumRestartRequirement.WORLD;
-            }
-            reloadConfig(req);
-        }
-    }
+//    @SubscribeEvent
+//    public static void onConfigChange(OnConfigChangedEvent cce) {
+//        if (BCModules.isBcMod(cce.getModID())) {
+//            EnumRestartRequirement req = EnumRestartRequirement.NONE;
+//            if (Loader.instance().isInState(LoaderState.AVAILABLE)) {
+//                // The loaders state will be LoaderState.SERVER_STARTED when we are in a world
+//                req = EnumRestartRequirement.WORLD;
+//            }
+//            reloadConfig(req);
+//        }
+//    }
 }

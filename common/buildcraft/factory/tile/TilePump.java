@@ -173,7 +173,7 @@ public class TilePump extends TileMiner {
                 for (Direction side : directions) {
                     prof.startSection("check");
                     BlockPos offsetPos = posToCheck.relative(side);
-                    if (offsetPos.distSqr(targetPos) > maxLengthSquared) {
+                    if (VecUtil.distanceSq(offsetPos, targetPos) > maxLengthSquared) {
                         prof.endSection();
                         continue;
                     }
@@ -251,7 +251,7 @@ public class TilePump extends TileMiner {
                     oilSpringPos = springPositions.get(0);
                     break;
                 default:
-                    springPositions.sort(Comparator.comparingDouble(worldPosition::distSqr));
+                    springPositions.sort(Comparator.comparingDouble(pos -> VecUtil.distanceSq(worldPosition, pos)));
                     oilSpringPos = springPositions.get(0);
             }
 

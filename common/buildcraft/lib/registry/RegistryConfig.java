@@ -38,7 +38,7 @@ public class RegistryConfig {
         Configuration cfg = new Configuration(builder, file);
         ForgeConfigSpec spec = cfg.build();
         ModContainer container = ModList.get().getModContainerById(BCCore.MODID).get();
-        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, file));
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, cfg.getFileName()));
         return setRegistryConfig(modid, cfg);
     }
 

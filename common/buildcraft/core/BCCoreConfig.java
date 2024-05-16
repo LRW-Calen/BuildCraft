@@ -11,6 +11,7 @@ import buildcraft.lib.BCLibConfig;
 import buildcraft.lib.BCLibConfig.ChunkLoaderLevel;
 import buildcraft.lib.BCLibConfig.RenderRotation;
 import buildcraft.lib.BCLibConfig.TimeGap;
+import buildcraft.lib.config.BCConfig;
 import buildcraft.lib.config.Configuration;
 import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.config.FileConfigManager;
@@ -21,23 +22,15 @@ import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
 import net.minecraftforge.common.ForgeConfigSpec.EnumValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.ModLoadingStage;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 public class BCCoreConfig {
-    private static final List<Consumer<EnumRestartRequirement>> reloadListeners = new ArrayList<>();
+    // private static final List<Consumer<EnumRestartRequirement>> reloadListeners = new ArrayList<>();
 
     public static final Configuration config;
     public static Configuration objConfig;
@@ -87,18 +80,26 @@ public class BCCoreConfig {
     }
 
     static {
+        BCModules module = BCModules.CORE;
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        config = new Configuration(builder, "buildcraft/main.toml");
+        config = new Configuration(builder, module);
         createProps();
         ForgeConfigSpec spec = config.build();
-        ModContainer container = ModList.get().getModContainerById(BCCore.MODID).get();
-        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, "buildcraft/main.toml"));
+        ModContainer container = ModList.get().getModContainerById(module.getModId()).get();
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, config.getFileName()));
+
+//        reloadConfig(EnumRestartRequirement.GAME);
+        reloadConfig();
+//        addReloadListener(BCCoreConfig::reloadConfig);
+//        MinecraftForge.EVENT_BUS.register(BCCoreConfig.class);
+        BCConfig.registerReloadListener(module, BCCoreConfig::reloadConfig);
+
 
         File forgeConfigFolder = FMLPaths.CONFIGDIR.get().toFile();
         File buildCraftConfigFolder = new File(forgeConfigFolder, "buildcraft");
 
 //        config = new Configuration(new File(buildCraftConfigFolder, "main.cfg"));
-        objConfig = RegistryConfig.setRegistryConfig(BCCore.MODID, "buildcraft/objects.toml");
+        objConfig = RegistryConfig.setRegistryConfig(BCCore.MODID, "objects");
         // Calen: thread safety
 //        BCLibConfig.guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
         BCLibConfig.getGuiConfigFileAndEnsureCreated();
@@ -280,38 +281,25 @@ public class BCCoreConfig {
                                 + "\n(Note: values above 256 only have an effect if a mod like cubic chunks is installed).",
                         none,
                         "miningMaxDepth", 512, 32, 4096);
-
-        config.build();
-
-//        reloadConfig(EnumRestartRequirement.GAME);
-        reloadConfig(EnumRestartRequirement.WORLD);
-        addReloadListener(BCCoreConfig::reloadConfig);
-
-        // 1.18.2: ModConfigEvent is IModBusEvent
-//        MinecraftForge.EVENT_BUS.register(BCCoreConfig.class);
-        ((FMLModContainer) ModList.get().getModContainerById(BCCore.MODID).get()).getEventBus().register(BCCoreConfig.class);
     }
 
-    public static void addReloadListener(Consumer<EnumRestartRequirement> listener) {
-        reloadListeners.add(listener);
-    }
+//    public static void addReloadListener(Consumer<EnumRestartRequirement> listener) {
+//        reloadListeners.add(listener);
+//    }
 
-    @SubscribeEvent
-//    public static void onConfigChange(OnConfigChangedEvent cce)
-    public static void onConfigChange(ModConfigEvent cce) {
-//        if (BCModules.isBcMod(cce.getModID()))
-        if (BCModules.isBcMod(cce.getConfig().getModId())) {
-            EnumRestartRequirement req = EnumRestartRequirement.NONE;
-//            if (Loader.instance().isInState(LoaderState.AVAILABLE))
-            if (ModLoadingContext.get().getActiveContainer().getCurrentState() == ModLoadingStage.DONE) {
-                // The loaders state will be LoaderState.SERVER_STARTED when we are in a world
-                req = EnumRestartRequirement.WORLD;
-            }
-            for (Consumer<EnumRestartRequirement> listener : reloadListeners) {
-                listener.accept(req);
-            }
-        }
-    }
+//    @SubscribeEvent
+//    public static void onConfigChange(OnConfigChangedEvent cce) {
+//        if (BCModules.isBcMod(cce.getModID())) {
+//            EnumRestartRequirement req = EnumRestartRequirement.NONE;
+//            if (Loader.instance().isInState(LoaderState.AVAILABLE)) {
+//                // The loaders state will be LoaderState.SERVER_STARTED when we are in a world
+//                req = EnumRestartRequirement.WORLD;
+//            }
+//            for (Consumer<EnumRestartRequirement> listener : reloadListeners) {
+//                listener.accept(req);
+//            }
+//        }
+//    }
 
 //    public static void postInit() {
 //        ConfigUtil.setLang(config);
@@ -327,7 +315,8 @@ public class BCCoreConfig {
 //        }
 //    }
 
-    public static void reloadConfig(EnumRestartRequirement restarted) {
+    // public static void reloadConfig(EnumRestartRequirement restarted)
+    public static void reloadConfig() {
         minePlayerProtected = propMinePlayerProtected.get();
         BCLibConfig.useColouredLabels = propUseColouredLabels.get();
         BCLibConfig.useHighContrastLabelColours = propUseHighContrastColouredLabels.get();
@@ -349,15 +338,15 @@ public class BCCoreConfig {
         miningMultiplier = MathUtil.clamp(propMiningMultiplier.get(), 1, 200);
         miningMaxDepth = propMiningMaxDepth.get();
 
-        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
-            BCLibConfig.chunkLoadingLevel = propChunkLoadLevel.get();
+//        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
+        BCLibConfig.chunkLoadingLevel = propChunkLoadLevel.get();
 
 //            if (EnumRestartRequirement.GAME.hasBeenRestarted(restarted)) {
-            worldGen = propWorldGen.get();
-            worldGenWaterSpring = propWorldGenWaterSpring.get();
-            BCLibConfig.useSwappableSprites = propUseSwappableSprites.get();
+        worldGen = propWorldGen.get();
+        worldGenWaterSpring = propWorldGenWaterSpring.get();
+        BCLibConfig.useSwappableSprites = propUseSwappableSprites.get();
 //            }
-        }
+//        }
         BCLibConfig.refreshConfigs();
 //        saveConfigs();
     }

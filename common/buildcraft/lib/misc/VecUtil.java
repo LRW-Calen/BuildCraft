@@ -201,4 +201,14 @@ public class VecUtil {
     public static Vec3 max(Vec3 a, Vec3 b, Vec3 c, Vec3 d) {
         return max(max(a, b), max(c, d));
     }
+
+    /** {@link Vec3i#distanceSq(Vec3i)} in 1.12.2 and {@link Vec3i#distSqr(Vec3i)} in 1.18.2 returns the distance to the lower connor,
+     * but {@link Vector3i#distSqr(Vector3i)} in 1.16.5 returns the distance from the lower conner to the block center.
+     * What is bugjump doing??? */
+    public static double distanceSq(Vec3i pos1, Vec3i pos2) {
+        double d1 = ((double) pos1.getX()) - (double) pos2.getX();
+        double d2 = ((double) pos1.getY()) - (double) pos2.getY();
+        double d3 = ((double) pos1.getZ()) - (double) pos2.getZ();
+        return d1 * d1 + d2 * d2 + d3 * d3;
+    }
 }

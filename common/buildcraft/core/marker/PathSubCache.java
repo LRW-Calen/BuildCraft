@@ -9,6 +9,7 @@ import buildcraft.core.client.BuildCraftLaserManager;
 import buildcraft.lib.client.render.laser.LaserData_BC8.LaserType;
 import buildcraft.lib.marker.MarkerCache;
 import buildcraft.lib.marker.MarkerSubCache;
+import buildcraft.lib.misc.VecUtil;
 import buildcraft.lib.net.MessageMarker;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
@@ -85,7 +86,7 @@ public class PathSubCache extends MarkerSubCache<PathConnection> {
             if (pos.equals(from)) {
                 continue;
             }
-            if (pos.distSqr(from) > maxLengthSquared) {
+            if (VecUtil.distanceSq(pos, from) > maxLengthSquared) {
                 continue;
             }
             if (canConnect(from, pos) || canConnect(pos, from)) {

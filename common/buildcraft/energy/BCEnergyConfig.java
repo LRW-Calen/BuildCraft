@@ -1,11 +1,16 @@
 package buildcraft.energy;
 
+import buildcraft.api.BCModules;
 import buildcraft.api.core.BCLog;
-import buildcraft.core.BCCoreConfig;
+import buildcraft.lib.config.BCConfig;
 import buildcraft.lib.config.Configuration;
 import buildcraft.lib.config.EnumRestartRequirement;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.Level;
 
@@ -14,6 +19,7 @@ import java.time.MonthDay;
 import java.util.*;
 
 public class BCEnergyConfig {
+    private static Configuration config;
 
     public static boolean enableOilOceanBiome;
     public static boolean enableOilDesertBiome;
@@ -70,8 +76,22 @@ public class BCEnergyConfig {
     private static EnumValue<SpecialEventType> propChristmasEventType;
 
     public static void preInit() {
-        Configuration config = BCCoreConfig.config;
+//        Configuration config = BCCoreConfig.config;
+        BCModules module = BCModules.ENERGY;
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        config = new Configuration(builder, module);
+        createProps();
+        ForgeConfigSpec spec = config.build();
+        ModContainer container = ModList.get().getModContainerById(module.getModId()).get();
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, config.getFileName()));
 
+//        reloadConfig(EnumRestartRequirement.GAME);
+        reloadConfig();
+//        BCCoreConfig.addReloadListener(BCEnergyConfig::reloadConfig);
+        BCConfig.registerReloadListener(module, BCEnergyConfig::reloadConfig);
+    }
+
+    public static void createProps() {
         EnumRestartRequirement world = EnumRestartRequirement.WORLD;
 //        EnumRestartRequirement game = EnumRestartRequirement.GAME;
 
@@ -207,56 +227,51 @@ public class BCEnergyConfig {
                 .define("general",
                         "Should oil be dense and drag entities down?",
                         EnumRestartRequirement.NONE,
-                        "oilIsDense", false);
+                        "oilIsDense", true);
 
         propChristmasEventType = config
                 .defineEnum("events",
                         "",
                         world,
                         "christmas_chocolate", SpecialEventType.DAY_ONLY);
-
-        config.build();
-
-//        reloadConfig(EnumRestartRequirement.GAME);
-        reloadConfig(EnumRestartRequirement.WORLD);
-        BCCoreConfig.addReloadListener(BCEnergyConfig::reloadConfig);
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted) {
-        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
+    // public static void reloadConfig(EnumRestartRequirement restarted)
+    public static void reloadConfig() {
+//        if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
 
-            addBiomeNames(propExcludedBiomes, excludedBiomes);
-            addBiomeNames(propExcessiveBiomes, excessiveBiomes);
-            addBiomeNames(propSurfaceDepositBiomes, surfaceDepositBiomes);
-            excludedDimensions.clear();
-            excludedDimensions.addAll(propExcludedDimensions.get());
-            excludedBiomesIsBlackList = propExcludedBiomesIsBlacklist.get();
-            excludedDimensionsIsBlackList = propExcludedDimensionsIsBlacklist.get();
+        addBiomeNames(propExcludedBiomes, excludedBiomes);
+        addBiomeNames(propExcessiveBiomes, excessiveBiomes);
+        addBiomeNames(propSurfaceDepositBiomes, surfaceDepositBiomes);
+        excludedDimensions.clear();
+        excludedDimensions.addAll(propExcludedDimensions.get());
+        excludedBiomesIsBlackList = propExcludedBiomesIsBlacklist.get();
+        excludedDimensionsIsBlackList = propExcludedDimensionsIsBlacklist.get();
 
 //            if (EnumRestartRequirement.GAME.hasBeenRestarted(restarted)) {
-            enableOilOceanBiome = propEnableOilOceanBiome.get();
-            enableOilDesertBiome = propEnableOilDesertBiome.get();
+        enableOilOceanBiome = propEnableOilOceanBiome.get();
+        enableOilDesertBiome = propEnableOilDesertBiome.get();
 
-            enableOilGeneration = propEnableOilGeneration.get();
-            oilWellGenerationRate = propOilWellGenerationRate.get();
-            enableOilSpouts = propEnableOilSpouts.get();
-            enableOilBurn = propEnableOilBurn.get();
-            oilIsSticky = propOilIsSticky.get();
+        enableOilGeneration = propEnableOilGeneration.get();
+        oilWellGenerationRate = propOilWellGenerationRate.get();
+        enableOilSpouts = propEnableOilSpouts.get();
+        enableOilBurn = propEnableOilBurn.get();
+        oilIsSticky = propOilIsSticky.get();
 
-            smallSpoutMinHeight = propSmallSpoutMinHeight.get();
-            smallSpoutMaxHeight = propSmallSpoutMaxHeight.get();
-            largeSpoutMinHeight = propLargeSpoutMinHeight.get();
-            largeSpoutMaxHeight = propLargeSpoutMaxHeight.get();
+        smallSpoutMinHeight = propSmallSpoutMinHeight.get();
+        smallSpoutMaxHeight = propSmallSpoutMaxHeight.get();
+        largeSpoutMinHeight = propLargeSpoutMinHeight.get();
+        largeSpoutMaxHeight = propLargeSpoutMaxHeight.get();
 
-            smallOilGenProb = propSmallOilGenProb.get() / 100;
-            mediumOilGenProb = propMediumOilGenProb.get() / 100;
-            largeOilGenProb = propLargeOilGenProb.get() / 100;
+        smallOilGenProb = propSmallOilGenProb.get() / 100;
+        mediumOilGenProb = propMediumOilGenProb.get() / 100;
+        largeOilGenProb = propLargeOilGenProb.get() / 100;
 
-            christmasEventStatus = propChristmasEventType.get();
+        christmasEventStatus = propChristmasEventType.get();
 //            } else {
-            validateBiomeNames();
+        validateBiomeNames();
 //            }
-        }
+//        }
     }
 
     private static void addBiomeNames(ConfigValue<List<? extends String>> prop, Set<ResourceLocation> set) {
@@ -289,7 +304,7 @@ public class BCEnergyConfig {
         BCLog.logger.warn("****************************************************");
         BCLog.logger.warn("*");
         BCLog.logger.warn("* Unknown biome name detected in buildcraft config!");
-        BCLog.logger.warn("* (Config file = " + BCCoreConfig.config.getFileName() + ")");
+        BCLog.logger.warn("* (Config file = " + BCEnergyConfig.config.getFileName() + ")");
         BCLog.logger.warn("*");
         BCLog.logger.warn("* Unknown biomes: ");
         printList(Level.WARN, invalidList);

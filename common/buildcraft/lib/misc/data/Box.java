@@ -248,7 +248,7 @@ public class Box implements IBox {
 
     @Override
     public double distanceToSquared(BlockPos index) {
-        return closestInsideTo(index).distSqr(index);
+        return VecUtil.distanceSq(closestInsideTo(index), index);
     }
 
     public BlockPos closestInsideTo(BlockPos toTest) {

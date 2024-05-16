@@ -1,5 +1,6 @@
 package buildcraft.lib.config;
 
+import buildcraft.api.BCModules;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.*;
 
@@ -18,9 +19,14 @@ public class Configuration {
 
     private final List<ConfigValue<?>> all = new CopyOnWriteArrayList<>();
 
-    public Configuration(ForgeConfigSpec.Builder builder, String fileName) {
+    public Configuration(ForgeConfigSpec.Builder builder, BCModules module) {
         this.builder = builder;
-        this.fileName = fileName;
+        this.fileName = "buildcraft/" + module.lowerCaseName + ".toml";
+    }
+
+    public Configuration(ForgeConfigSpec.Builder builder, String name) {
+        this.builder = builder;
+        this.fileName = "buildcraft/" + name + ".toml";
     }
 
     public Builder getBuilder() {

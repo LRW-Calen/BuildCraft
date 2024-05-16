@@ -6,6 +6,7 @@
 
 package buildcraft.lib.config;
 
+@Deprecated
 public enum EnumRestartRequirement {
     // NONE(false, false),
     // WORLD(true, false),

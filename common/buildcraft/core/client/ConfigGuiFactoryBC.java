@@ -13,9 +13,9 @@ import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 // TODO Calen ConfigGui?
 //public class ConfigGuiFactoryBC implements ModGuiFactory
 public class ConfigGuiFactoryBC {
-    //    public static class GuiConfigManager extends GuiConfig
+    // public static class GuiConfigManager extends GuiConfig
     public static class GuiConfigManager {
-        //        public GuiConfigManager(GuiScreen parentScreen)
+        // public GuiConfigManager(GuiScreen parentScreen)
         public GuiConfigManager(Screen parentScreen) {
 //            super(parentScreen, new ArrayList<>(), "buildcraftcore", "config", false, false, new TranslatableComponent("config.buildcraftcore").getContents());
 

@@ -66,7 +66,7 @@ public class OilStructureRegistry {
         if (BCEnergyConfig.enableOilGeneration) {
             registerStructure(
                     registry,
-                    new ResourceLocation(BCEnergy.MODID, STRUCTURE_OIL_SPOUT),
+                    STRUCTURE_ID,
                     OilStructureRegistry.STRUCTURE_FEATURE,
                     Decoration.FLUID_SPRINGS
             );

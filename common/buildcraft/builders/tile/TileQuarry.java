@@ -91,7 +91,7 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
     private boolean firstChecked = false;
     private final Set<BlockPos> frameBreakBlockPoses = new TreeSet<>(
 //        BlockUtil.uniqueBlockPosComparator(Comparator.comparingDouble(p -> getBlockPos().distanceSq(p)))
-            BlockUtil.uniqueBlockPosComparator(Comparator.comparingDouble(p -> getBlockPos().distSqr(p)))
+            BlockUtil.uniqueBlockPosComparator(Comparator.comparingDouble(p -> VecUtil.distanceSq(getBlockPos(), p)))
     );
     private final Set<BlockPos> framePlaceFramePoses = new HashSet<>();
     public Task currentTask = null;
@@ -528,7 +528,7 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
         if (state.getBlock() == BCBuildersBlocks.quarry.get() && frameBox.isInitialized()) {
             List<BlockPos> blocksInArea = frameBox.getBlocksInArea();
 //            blocksInArea.sort(BlockUtil.uniqueBlockPosComparator(Comparator.comparingDouble(pos::distanceSq)));
-            blocksInArea.sort(BlockUtil.uniqueBlockPosComparator(Comparator.comparingDouble(worldPosition::distSqr)));
+            blocksInArea.sort(BlockUtil.uniqueBlockPosComparator(Comparator.comparingDouble(pos -> VecUtil.distanceSq(pos, worldPosition))));
             frameBoxPosesCount = blocksInArea.size();
             toCheck.addAll(blocksInArea);
             framePoses.addAll(getFramePositions());

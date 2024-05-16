@@ -12,7 +12,6 @@ import buildcraft.api.facades.FacadeAPI;
 import buildcraft.api.imc.BcImcMessage;
 import buildcraft.api.schematics.SchematicBlockFactoryRegistry;
 import buildcraft.core.BCCore;
-import buildcraft.lib.config.EnumRestartRequirement;
 import buildcraft.lib.registry.CreativeTabManager;
 import buildcraft.lib.registry.CreativeTabManager.CreativeTabBC;
 import buildcraft.lib.registry.RegistryConfig;
@@ -77,7 +76,7 @@ public class BCTransport {
 
         // Reload after all of the pipe defs have been created.
 //        BCTransportConfig.reloadConfig(EnumRestartRequirement.GAME);
-        BCTransportConfig.reloadConfig(EnumRestartRequirement.WORLD);
+        BCTransportConfig.reloadConfig();
 
         tabPipes.setItemPipe(BCTransportItems.pipeItemDiamond.get(null));
         tabPlugs.setItem(BCTransportItems.plugBlocker);

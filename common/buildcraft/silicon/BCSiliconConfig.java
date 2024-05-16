@@ -7,15 +7,17 @@
 package buildcraft.silicon;
 
 import buildcraft.api.BCModules;
-import buildcraft.core.BCCoreConfig;
+import buildcraft.lib.config.BCConfig;
 import buildcraft.lib.config.Configuration;
 import buildcraft.lib.config.EnumRestartRequirement;
+import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class BCSiliconConfig {
+    private static Configuration config;
 
     public static boolean renderLaserBeams = true;
     public static boolean differStatesOfNoteBlockForFacade = false;
@@ -24,8 +26,22 @@ public class BCSiliconConfig {
     private static BooleanValue propDifferStatesOfNoteBlockForFacade;
 
     public static void preInit() {
+//        Configuration config = BCCoreConfig.config;
+        BCModules module = BCModules.SILICON;
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        config = new Configuration(builder, module);
+        createProps();
+        ForgeConfigSpec spec = config.build();
+        ModContainer container = ModList.get().getModContainerById(module.getModId()).get();
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, config.getFileName()));
 
-        Configuration config = BCCoreConfig.config;
+//        reloadConfig(EnumRestartRequirement.NONE);
+        reloadConfig();
+//        MinecraftForge.EVENT_BUS.register(BCSiliconConfig.class);
+        BCConfig.registerReloadListener(module, BCSiliconConfig::reloadConfig);
+    }
+
+    public static void createProps() {
         String display = "display";
 
         propRenderLaserBeams = config
@@ -38,23 +54,18 @@ public class BCSiliconConfig {
                         "If different textures in resource packs are used for different instruments and notes, or whether powered, please set this [true]",
                         EnumRestartRequirement.WORLD,
                         "differStatesOfNoteBlockForFacade", false);
-
-        config.build();
-
-        reloadConfig(EnumRestartRequirement.NONE);
-        MinecraftForge.EVENT_BUS.register(BCSiliconConfig.class);
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted) {
+    // public static void reloadConfig(EnumRestartRequirement restarted)
+    public static void reloadConfig() {
         renderLaserBeams = propRenderLaserBeams.get();
         differStatesOfNoteBlockForFacade = propDifferStatesOfNoteBlockForFacade.get();
     }
 
-    @SubscribeEvent
-//    public static void onConfigChange(OnConfigChangedEvent cce)
-    public static void onConfigChange(ModConfigEvent.Reloading cce) {
-        if (BCModules.isBcMod(cce.getConfig().getModId())) {
-            reloadConfig(EnumRestartRequirement.NONE);
-        }
-    }
+//    @SubscribeEvent
+//    public static void onConfigChange(OnConfigChangedEvent cce) {
+//        if (BCModules.isBcMod(cce.getModID())) {
+//            reloadConfig(EnumRestartRequirement.NONE);
+//        }
+//    }
 }

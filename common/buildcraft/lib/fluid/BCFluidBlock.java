@@ -7,6 +7,7 @@
 package buildcraft.lib.fluid;
 
 
+import buildcraft.energy.BCEnergyConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.LazyLoadedValue;
@@ -77,7 +78,7 @@ public class BCFluidBlock extends LiquidBlock {
     // public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn)
     @Override
     public void entityInside(BlockState p_58180_, Level p_58181_, BlockPos p_58182_, Entity entityIn) {
-        if (sticky) {
+        if (BCEnergyConfig.oilIsSticky && sticky) {
             entityIn.makeStuckInBlock(p_58180_, new Vec3(0.25D, (double) 0.05F, 0.25D));
         }
     }
