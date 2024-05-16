@@ -6,42 +6,66 @@
 
 package buildcraft.silicon;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import buildcraft.api.BCModules;
-
+import buildcraft.lib.config.BCConfig;
+import buildcraft.lib.config.Configuration;
 import buildcraft.lib.config.EnumRestartRequirement;
-
-import buildcraft.core.BCCoreConfig;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.config.ModConfig;
 
 public class BCSiliconConfig {
+    private static Configuration config;
 
     public static boolean renderLaserBeams = true;
+    public static boolean differStatesOfNoteBlockForFacade = false;
 
-    private static Property propRenderLaserBeams;
+    private static BooleanValue propRenderLaserBeams;
+    private static BooleanValue propDifferStatesOfNoteBlockForFacade;
 
     public static void preInit() {
+//        Configuration config = BCCoreConfig.config;
+        BCModules module = BCModules.SILICON;
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        config = new Configuration(builder, module);
+        createProps();
+        ForgeConfigSpec spec = config.build();
+        ModContainer container = ModList.get().getModContainerById(module.getModId()).get();
+        container.addConfig(new ModConfig(ModConfig.Type.COMMON, spec, container, config.getFileName()));
 
-        Configuration config = BCCoreConfig.config;
-        propRenderLaserBeams = config.get("display", "renderLaserBeams", true,
-                "When false laser beams will not be visible while transmitting power without wearing Goggles");
-
-        reloadConfig(EnumRestartRequirement.NONE);
-        MinecraftForge.EVENT_BUS.register(BCSiliconConfig.class);
+//        reloadConfig(EnumRestartRequirement.NONE);
+        reloadConfig();
+//        MinecraftForge.EVENT_BUS.register(BCSiliconConfig.class);
+        BCConfig.registerReloadListener(module, BCSiliconConfig::reloadConfig);
     }
 
-    public static void reloadConfig(EnumRestartRequirement restarted) {
-        renderLaserBeams = propRenderLaserBeams.getBoolean();
+    public static void createProps() {
+        String display = "display";
+
+        propRenderLaserBeams = config
+                .define(display,
+                        "When false laser beams will not be visible while transmitting power without wearing Goggles",
+                        EnumRestartRequirement.NONE,
+                        "renderLaserBeams", true);
+        propDifferStatesOfNoteBlockForFacade = config
+                .define(display,
+                        "If different textures in resource packs are used for different instruments and notes, or whether powered, please set this [true]",
+                        EnumRestartRequirement.WORLD,
+                        "differStatesOfNoteBlockForFacade", false);
     }
 
-    @SubscribeEvent
-    public static void onConfigChange(OnConfigChangedEvent cce) {
-        if (BCModules.isBcMod(cce.getModID())) {
-            reloadConfig(EnumRestartRequirement.NONE);
-        }
+    // public static void reloadConfig(EnumRestartRequirement restarted)
+    public static void reloadConfig() {
+        renderLaserBeams = propRenderLaserBeams.get();
+        differStatesOfNoteBlockForFacade = propDifferStatesOfNoteBlockForFacade.get();
     }
+
+//    @SubscribeEvent
+//    public static void onConfigChange(OnConfigChangedEvent cce) {
+//        if (BCModules.isBcMod(cce.getModID())) {
+//            reloadConfig(EnumRestartRequirement.NONE);
+//        }
+//    }
 }

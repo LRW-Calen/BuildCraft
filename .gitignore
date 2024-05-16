@@ -1,20 +1,20 @@
-#eclipse
-.project
-.classpath
-.settings/
-.metadata
-*.launch
-org.*
+# eclipse
 bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+eclipse
 
-#idea
-*.iml
+# idea
+out
 *.ipr
 *.iws
+*.iml
 .idea
-out
 
-#gradle
+# gradle
 build
 .gradle
 modules
@@ -36,6 +36,9 @@ test-results
 license_checker/agreed.txt
 license_checker/unused_code.txt
 license_checker/out/**
+
+# Files from Forge MDK
+forge*changelog.txt
 
 # For some annoying reason the tests creates a log file in "/logs/latest.txt"
 logs

@@ -6,34 +6,52 @@
 
 package buildcraft.lib;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.item.EnumDyeColor;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.text.TextFormatting;
-
 import buildcraft.lib.chunkload.IChunkLoadingTile;
 import buildcraft.lib.chunkload.IChunkLoadingTile.LoadType;
 import buildcraft.lib.client.sprite.AtlasSpriteSwappable;
 import buildcraft.lib.client.sprite.AtlasSpriteVariants;
 import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.LocaleUtil;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.item.DyeColor;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Direction.Axis;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.loading.FMLPaths;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /** Configuration file for lib. In order to keep lib as close to being just a library mod as possible, these are not set
  * by a config file, but instead by BC Core. Feel free to set them yourself, from your own configs, if you do not depend
- * on BC COre itself, and it might not be loaded in the mod environment. */
+ * on BC Core itself, and it might not be loaded in the mod environment. */
 public class BCLibConfig {
 
-    public static File guiConfigFile = null;
+    // public static File guiConfigFile = null;
+    private static File guiConfigFile = null;
 
-    /** If true then items and blocks will display the colour of an item (one of {@link EnumDyeColor}) with the correct
+    // Calen
+
+    public static synchronized File getGuiConfigFileAndEnsureCreated() {
+        if (guiConfigFile == null) {
+            creatLibConfigFile();
+        }
+        return guiConfigFile;
+    }
+
+    private static synchronized void creatLibConfigFile() {
+        File forgeConfigFolder = FMLPaths.CONFIGDIR.get().toFile();
+        File buildCraftConfigFolder = new File(forgeConfigFolder, "buildcraft");
+
+        guiConfigFile = new File(buildCraftConfigFolder, "gui.json");
+    }
+
+    /** If true then items and blocks will display the colour of an item (one of {@link DyeColor}) with the correct
      * {@link TextFormatting} colour value.<br>
-     * This changes the behaviour of {@link ColourUtil#convertColourToTextFormat(EnumDyeColor)}. */
+     * This changes the behaviour of {@link ColourUtil#convertColourToTextFormat(DyeColor)}. */
     public static boolean useColouredLabels = true;
 
     /** If this and {@link #useColouredLabels} is true then only colours which strongly contrast with the base colour
@@ -58,7 +76,7 @@ public class BCLibConfig {
      * than "60mB/t") */
     public static boolean useLongLocalizedName = false;
 
-    /** If true then {@link AtlasSpriteVariants#createForConfig(net.minecraft.util.ResourceLocation)} will retun
+    /** If true then {@link AtlasSpriteVariants#createForConfig(ResourceLocation)} will retun
      * {@link AtlasSpriteSwappable}, allowing for instant reloads when switching between colourblind modes and other
      * changable things. If false it will return a normal {@link TextureAtlasSprite}. Disabling this might help if you
      * get sprite issues with mods like optifine. */
@@ -124,24 +142,24 @@ public class BCLibConfig {
     public enum RenderRotation {
         DISABLED {
             @Override
-            public EnumFacing changeFacing(EnumFacing dir) {
-                return EnumFacing.EAST;
+            public Direction changeFacing(Direction dir) {
+                return Direction.EAST;
             }
         },
         HORIZONTALS_ONLY {
             @Override
-            public EnumFacing changeFacing(EnumFacing dir) {
-                return dir.getAxis() == Axis.Y ? EnumFacing.EAST : dir;
+            public Direction changeFacing(Direction dir) {
+                return dir.getAxis() == Axis.Y ? Direction.EAST : dir;
             }
         },
         ENABLED {
             @Override
-            public EnumFacing changeFacing(EnumFacing dir) {
+            public Direction changeFacing(Direction dir) {
                 return dir;
             }
         };
 
-        public abstract EnumFacing changeFacing(EnumFacing dir);
+        public abstract Direction changeFacing(Direction dir);
     }
 
     public enum ChunkLoaderType {
@@ -161,7 +179,7 @@ public class BCLibConfig {
         NONE,
 
         /** {@link TileEntity}'s that implement the {@link IChunkLoadingTile} interface will be loaded, provided they
-         * return {@link buildcraft.lib.chunkload.IChunkLoadingTile.LoadType#HARD} */
+         * return {@link LoadType#HARD} */
         STRICT_TILES,
 
         /** {@link TileEntity}'s that implement the {@link IChunkLoadingTile} interface will be loaded, provided they

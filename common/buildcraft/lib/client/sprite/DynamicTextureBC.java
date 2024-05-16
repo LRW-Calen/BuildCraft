@@ -6,18 +6,17 @@
 
 package buildcraft.lib.client.sprite;
 
-import org.lwjgl.opengl.GL11;
-
+import buildcraft.lib.misc.SpriteUtil;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import org.lwjgl.opengl.GL11;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
-@SideOnly(Side.CLIENT)
+// TODO Calen: ZonePlanner TESR Texture
+@OnlyIn(Dist.CLIENT)
 public class DynamicTextureBC {
     public final int width, height;
     private final int[] colorMap;
@@ -25,13 +24,20 @@ public class DynamicTextureBC {
 
     private DynamicTexture dynamicTexture;
 
+    // Calen test
+//    private final ResourceLocation lightTextureLocation;
+
     public DynamicTextureBC(int iWidth, int iHeight) {
         width = iWidth;
         height = iHeight;
+//        widthPow2 = MathHelper.smallestEncompassingPowerOfTwo(iWidth);
         widthPow2 = MathHelper.smallestEncompassingPowerOfTwo(iWidth);
+//        heightPow2 = MathHelper.smallestEncompassingPowerOfTwo(iHeight);
         heightPow2 = MathHelper.smallestEncompassingPowerOfTwo(iHeight);
-        dynamicTexture = new DynamicTexture(widthPow2, heightPow2);
-        colorMap = dynamicTexture.getTextureData();
+//        dynamicTexture = new DynamicTexture(widthPow2, heightPow2);
+        dynamicTexture = new DynamicTexture(widthPow2, heightPow2, false);
+//        lightTextureLocation = Minecraft.getInstance().getTextureManager().register("bc_dynamic_" + dynamicTexture.getId(), dynamicTexture);
+        colorMap = dynamicTexture.getPixels().makePixelArray();
     }
 
     public void setColord(int x, int y, double r, double g, double b, double a) {
@@ -57,15 +63,19 @@ public class DynamicTextureBC {
     }
 
     public void updateTexture() {
-        dynamicTexture.updateDynamicTexture();
+//        TextureUtil.prepareImage(dynamicTexture.getId(), dynamicTexture.getPixels().getWidth(), dynamicTexture.getPixels().getHeight());
+        dynamicTexture.upload();
     }
 
     public void bindGlTexture() {
-        GlStateManager.bindTexture(dynamicTexture.getGlTextureId());
+//        GlStateManager.bindTexture(dynamicTexture.getId());
+        SpriteUtil.bindTexture(dynamicTexture.getId());
+//        RenderSystem.setShaderTexture(0, lightTextureLocation);
+//        Minecraft.getInstance().getTextureManager().bindForSetup(this.lightTextureLocation);
     }
 
     public void deleteGlTexture() {
-        dynamicTexture.deleteGlTexture();
+        dynamicTexture.releaseId();
     }
 
     public void draw(int screenX, int screenY, float zLevel) {
@@ -79,25 +89,30 @@ public class DynamicTextureBC {
     public float getMaxV() {
         return height / (float) heightPow2;
     }
-    
+
     public void draw(int screenX, int screenY, float zLevel, int clipX, int clipY, int clipWidth, int clipHeight) {
         updateTexture();
 
         float f = 1F / widthPow2;
         float f1 = 1F / heightPow2;
+//        Tessellator tessellator = Tessellator.getInstance();
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bb = tessellator.getBuffer();
+//        BufferBuilder bb = tessellator.getBuffer();
+        BufferBuilder bb = tessellator.getBuilder();
         bb.begin(GL11.GL_QUADS, bb.getVertexFormat());
         vertexUV(bb, screenX + 0, screenY + clipHeight, zLevel, (clipX + 0) * f, (clipY + clipHeight) * f1);
         vertexUV(bb, screenX + clipWidth, screenY + clipHeight, zLevel, (clipX + clipWidth) * f, (clipY + clipHeight) * f1);
         vertexUV(bb, screenX + clipWidth, screenY + 0, zLevel, (clipX + clipWidth) * f, (clipY + 0) * f1);
         vertexUV(bb, screenX + 0, screenY + 0, zLevel, (clipX + 0) * f, (clipY + 0) * f1);
-        tessellator.draw();
+//        tessellator.draw();
+        tessellator.end();
     }
 
     private static void vertexUV(BufferBuilder bb, double x, double y, double z, double u, double v) {
-        bb.pos(x, y, z);
-        bb.tex(u, v);
+//        bb.pos(x, y, z);
+        bb.vertex(x, y, z);
+//        bb.tex(u, v);
+        bb.uv((float) u, (float) v);
         bb.endVertex();
     }
 }

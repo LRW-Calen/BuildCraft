@@ -6,36 +6,32 @@
 
 package buildcraft.transport.client.render;
 
-import java.util.List;
-
-import javax.vecmath.Point3f;
-import javax.vecmath.Tuple3f;
-import javax.vecmath.Vector3f;
-
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
-
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import buildcraft.api.core.render.ISprite;
 import buildcraft.api.transport.pipe.IPipeFlowRenderer;
-
 import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.client.model.ModelUtil.UvFaceData;
 import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.client.render.ItemRenderUtil;
 import buildcraft.lib.misc.ColourUtil;
-
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.pipe.flow.PipeFlowItems;
 import buildcraft.transport.pipe.flow.TravellingItem;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+import javax.vecmath.Point3f;
+import javax.vecmath.Tuple3f;
+import javax.vecmath.Vector3f;
+import java.util.List;
+
+@OnlyIn(Dist.CLIENT)
 public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems> {
     INSTANCE;
 
@@ -52,7 +48,7 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems> {
         uvs.minV = (float) sprite.getInterpV(0);
         uvs.maxV = (float) sprite.getInterpV(1);
 
-        for (EnumFacing face : EnumFacing.VALUES) {
+        for (Direction face : Direction.values()) {
             MutableQuad q = ModelUtil.createFace(face, center, radius, uvs);
             q.setCalculatedDiffuse();
             COLOURED_QUADS[face.ordinal()] = q;
@@ -60,23 +56,28 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems> {
     }
 
     @Override
-    public void render(PipeFlowItems flow, double x, double y, double z, float partialTicks, BufferBuilder bb) {
+//    public void render(PipeFlowItems flow, double x, double y, double z, float partialTicks, BufferBuilder bb)
+    public void render(PipeFlowItems flow, float partialTicks, MatrixStack poseStack, IVertexBuilder bb, int lightc, int combinedOverlay) {
         World world = flow.pipe.getHolder().getPipeWorld();
-        long now = world.getTotalWorldTime();
-        int lightc = world.getCombinedLight(flow.pipe.getHolder().getPipePos(), 0);
+//        long now = world.getTotalWorldTime();
+        long now = world.getGameTime();
+//        int lightc = world.getCombinedLight(flow.pipe.getHolder().getPipePos(), 0);
 
         List<TravellingItem> toRender = flow.getAllItemsForRender();
 
         for (TravellingItem item : toRender) {
-            Vec3d pos = item.getRenderPosition(BlockPos.ORIGIN, now, partialTicks, flow);
+            Vector3d pos = item.getRenderPosition(BlockPos.ZERO, now, partialTicks, flow);
+
+            poseStack.pushPose();
+            poseStack.translate(pos.x, pos.y, pos.z);
 
             ItemStack stack = item.clientItemLink.get();
             if (stack != null && !stack.isEmpty()) {
-                ItemRenderUtil.renderItemStack(x + pos.x, y + pos.y, z + pos.z, //
-                    stack, item.stackSize, lightc, item.getRenderDirection(now, partialTicks), bb);
+//                ItemRenderUtil.renderItemStack(x + pos.x, y + pos.y, z + pos.z, stack, item.stackSize, lightc, item.getRenderDirection(now, partialTicks), bb);
+                ItemRenderUtil.renderItemStack(stack, item.stackSize, lightc, item.getRenderDirection(now, partialTicks), poseStack, bb);
             }
             if (item.colour != null) {
-                bb.setTranslation(x + pos.x, y + pos.y, z + pos.z);
+//                bb.setTranslation(x + pos.x, y + pos.y, z + pos.z);
                 int col = ColourUtil.getLightHex(item.colour);
                 int r = (col >> 16) & 0xFF;
                 int g = (col >> 8) & 0xFF;
@@ -85,12 +86,13 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems> {
                     MutableQuad q2 = new MutableQuad(q);
                     q2.lighti(lightc);
                     q2.multColouri(r, g, b, 255);
-                    q2.render(bb);
+                    q2.render(poseStack.last(), bb);
                 }
-                bb.setTranslation(0, 0, 0);
+//                bb.setTranslation(0, 0, 0);
             }
+            poseStack.popPose();
         }
 
-        ItemRenderUtil.endItemBatch();
+//        ItemRenderUtil.endItemBatch();
     }
 }

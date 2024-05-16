@@ -6,23 +6,23 @@
 
 package buildcraft.factory.block;
 
-import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.world.World;
-
+import buildcraft.factory.tile.TileMiningWell;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
-import buildcraft.lib.tile.TileBC_Neptune;
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.world.IBlockReader;
 
-import buildcraft.factory.tile.TileMiningWell;
+import javax.annotation.Nullable;
 
-public class BlockMiningWell extends BlockBCTile_Neptune implements IBlockWithFacing {
-    public BlockMiningWell(Material material, String id) {
-        super(material, id);
+public class BlockMiningWell extends BlockBCTile_Neptune<TileMiningWell> implements IBlockWithFacing {
+    public BlockMiningWell(String idBC, AbstractBlock.Properties props) {
+        super(idBC, props);
     }
 
+    @Nullable
     @Override
-    public TileBC_Neptune createTileEntity(World worldIn, IBlockState state) {
+//    public TileBC_Neptune createTileEntity(World worldIn, IBlockState state)
+    public TileMiningWell newBlockEntity(IBlockReader world) {
         return new TileMiningWell();
     }
 }

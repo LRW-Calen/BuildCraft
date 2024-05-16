@@ -6,59 +6,60 @@
 
 package buildcraft.core.client;
 
-import java.util.ArrayList;
-import java.util.Set;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.resources.I18n;
-
-import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.client.config.GuiConfig;
-
 import buildcraft.core.BCCoreConfig;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
-public class ConfigGuiFactoryBC implements IModGuiFactory {
-    public static class GuiConfigManager extends GuiConfig {
-        public GuiConfigManager(GuiScreen parentScreen) {
-            super(parentScreen, new ArrayList<>(), "buildcraftcore", "config", false, false, I18n.format("config.buildcraft"));
+// TODO Calen ConfigGui?
+//public class ConfigGuiFactoryBC implements ModGuiFactory
+public class ConfigGuiFactoryBC {
+    //    public static class GuiConfigManager extends GuiConfig
+    public static class GuiConfigManager {
+        //        public GuiConfigManager(GuiScreen parentScreen)
+        public GuiConfigManager(Screen parentScreen) {
+//            super(parentScreen, new ArrayList<>(), "buildcraftcore", "config", false, false, new TranslationTextComponent("config.buildcraftcore").getContents());
 
-            for (String s : BCCoreConfig.config.getCategoryNames()) {
-                if (!s.contains(".")) {
-                    configElements.add(new BCConfigElement(BCCoreConfig.config.getCategory(s)));
+//            for (String s : BCCoreConfig.config.getCategoryNames())
+            for (ConfigValue<?> s : BCCoreConfig.config.getAll()) {
+                if (s.getPath().size() == 1) {
+//                    configElements.add(new BCConfigElement(BCCoreConfig.config.getCategory(s)));
                 }
             }
 
-            for (String s : BCCoreConfig.objConfig.getCategoryNames()) {
-                if (!s.contains(".")) {
-                    configElements.add(new BCConfigElement(BCCoreConfig.objConfig.getCategory(s)));
+//            for (String s : BCCoreConfig.objConfig.getCategoryNames())
+            for (ConfigValue<?> s : BCCoreConfig.objConfig.getAll()) {
+                if (s.getPath().size() == 1) {
+//                    configElements.add(new BCConfigElement(BCCoreConfig.objConfig.getCategory(s)));
                 }
             }
         }
     }
 
-    /** Needed for forge IModGuiFactory */
-    public ConfigGuiFactoryBC() {}
-
-    @Override
-    public void initialize(Minecraft minecraftInstance) {
-        // We don't need to do anything
+    /**
+     * Needed for forge IModGuiFactory
+     */
+    public ConfigGuiFactoryBC() {
     }
 
+//    @Override
+//    public void initialize(Minecraft minecraftInstance) {
+//        // We don't need to do anything
+//    }
 
-    @Override
-    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
-        return null;
-    }
+
+//    @Override
+//    public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
+//        return null;
+//    }
 
 
-    @Override
-    public boolean hasConfigGui() {
-        return true;
-    }
+//    @Override
+//    public boolean hasConfigGui() {
+//        return true;
+//    }
 
-    @Override
-    public GuiScreen createConfigGui(GuiScreen parentScreen) {
-        return new GuiConfigManager(parentScreen);
-    }
+//    @Override
+//    public GuiScreen createConfigGui(AbstractGui parentScreen) {
+//        return new GuiConfigManager(parentScreen);
+//    }
 }

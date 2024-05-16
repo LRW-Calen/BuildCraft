@@ -6,49 +6,60 @@
 
 package buildcraft.silicon.tile;
 
-import java.io.IOException;
-import java.util.List;
-
-import com.google.common.collect.ImmutableList;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
-
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-
 import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.recipes.IngredientStack;
 import buildcraft.api.recipes.IntegrationRecipe;
-
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.net.PacketBufferBC;
-import buildcraft.lib.recipe.IntegrationRecipeRegistry;
+import buildcraft.lib.recipe.integration.IntegrationRecipeRegistry;
 import buildcraft.lib.tile.item.ItemHandlerManager;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
+import buildcraft.silicon.BCSiliconBlocks;
+import buildcraft.silicon.BCSiliconMenuTypes;
+import buildcraft.silicon.container.ContainerIntegrationTable;
+import com.google.common.collect.ImmutableList;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.container.Container;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.NetworkEvent;
+
+import javax.annotation.Nullable;
+import java.io.IOException;
+import java.util.List;
 
 public class TileIntegrationTable extends TileLaserTableBase {
     public final ItemHandlerSimple invTarget = itemManager.addInvHandler(
-        "target",
-        1,
-        ItemHandlerManager.EnumAccess.BOTH,
-        EnumPipePart.VALUES
+            "target",
+            1,
+            ItemHandlerManager.EnumAccess.BOTH,
+            EnumPipePart.VALUES
     );
     public final ItemHandlerSimple invToIntegrate = itemManager.addInvHandler(
-        "toIntegrate",
-        3 * 3 - 1,
-        ItemHandlerManager.EnumAccess.BOTH,
-        EnumPipePart.VALUES
+            "toIntegrate",
+            3 * 3 - 1,
+            ItemHandlerManager.EnumAccess.BOTH,
+            EnumPipePart.VALUES
     );
     public final ItemHandlerSimple invResult = itemManager.addInvHandler(
-        "result",
-        1,
-        ItemHandlerManager.EnumAccess.INSERT,
-        EnumPipePart.VALUES
+            "result",
+            1,
+            ItemHandlerManager.EnumAccess.INSERT,
+            EnumPipePart.VALUES
     );
     public IntegrationRecipe recipe;
+
+    public TileIntegrationTable() {
+        super(BCSiliconBlocks.integrationTableTile.get());
+    }
 
     private boolean extract(IngredientStack item, ImmutableList<IngredientStack> items, boolean simulate) {
         ItemStack targetStack = invTarget.getStackInSlot(0);
@@ -90,7 +101,7 @@ public class TileIntegrationTable extends TileLaserTableBase {
     public void update() {
         super.update();
 
-        if (world.isRemote) {
+        if (level.isClientSide) {
             return;
         }
 
@@ -114,18 +125,18 @@ public class TileIntegrationTable extends TileLaserTableBase {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
+    public CompoundNBT save(CompoundNBT nbt) {
+        super.save(nbt);
         if (recipe != null) {
-            nbt.setString("recipe", recipe.name.toString());
+            nbt.putString("recipe", recipe.name.toString());
         }
         return nbt;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        if (nbt.hasKey("recipe")) {
+    public void load(BlockState state, CompoundNBT nbt) {
+        super.load(state, nbt);
+        if (nbt.contains("recipe")) {
             recipe = lookupRecipe(nbt.getString("recipe"));
         } else {
             recipe = null;
@@ -133,19 +144,20 @@ public class TileIntegrationTable extends TileLaserTableBase {
     }
 
     @Override
-    public void writePayload(int id, PacketBufferBC buffer, Side side) {
+    public void writePayload(int id, PacketBufferBC buffer, Dist side) {
         super.writePayload(id, buffer, side);
 
         if (id == NET_GUI_DATA) {
             buffer.writeBoolean(recipe != null);
             if (recipe != null) {
-                buffer.writeString(recipe.name.toString());
+                buffer.writeUtf(recipe.name.toString());
             }
         }
     }
 
     @Override
-    public void readPayload(int id, PacketBufferBC buffer, Side side, MessageContext ctx) throws IOException {
+//    public void readPayload(int id, PacketBufferBC buffer, Dist side, MessageContext ctx) throws IOException
+    public void readPayload(int id, PacketBufferBC buffer, NetworkDirection side, NetworkEvent.Context ctx) throws IOException {
         super.readPayload(id, buffer, side, ctx);
 
         if (id == NET_GUI_DATA) {
@@ -158,13 +170,24 @@ public class TileIntegrationTable extends TileLaserTableBase {
     }
 
     @Override
-    public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
+//    public void getDebugInfo(List<String> left, List<String> right, Direction side)
+    public void getDebugInfo(List<ITextComponent> left, List<ITextComponent> right, Direction side) {
         super.getDebugInfo(left, right, side);
-        left.add("recipe - " + recipe);
-        left.add("target - " + getTarget());
+//        left.add("recipe - " + recipe);
+        left.add(new StringTextComponent("recipe - " + recipe));
+//        left.add("target - " + getTarget());
+        left.add(new StringTextComponent("target - " + getTarget()));
     }
 
     private IntegrationRecipe lookupRecipe(String name) {
         return IntegrationRecipeRegistry.INSTANCE.getRecipe(new ResourceLocation(name));
+    }
+
+    // INamedContainerProvider
+
+    @Nullable
+    @Override
+    public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
+        return new ContainerIntegrationTable(BCSiliconMenuTypes.INTEGRATION_TABLE, id, player, this);
     }
 }

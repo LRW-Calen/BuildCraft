@@ -7,8 +7,10 @@
 package buildcraft.lib.gui.slot;
 
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
+
+import javax.annotation.Nonnull;
 
 public class SlotValidated extends Slot {
 
@@ -17,7 +19,9 @@ public class SlotValidated extends Slot {
     }
 
     @Override
-    public boolean isItemValid(ItemStack itemStack) {
-        return inventory.isItemValidForSlot(this.getSlotIndex(), itemStack);
+//    public boolean isItemValid(ItemStack itemStack)
+    public boolean mayPlace(@Nonnull ItemStack itemStack) {
+//        return inventory.isItemValidForSlot(this.getSlotIndex(), itemStack);
+        return container.canPlaceItem(this.getSlotIndex(), itemStack);
     }
 }

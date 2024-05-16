@@ -1,18 +1,20 @@
 package buildcraft.core.tile;
 
-import java.util.List;
-
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
-
 import buildcraft.api.mj.IMjConnector;
 import buildcraft.api.mj.IMjReceiver;
 import buildcraft.api.mj.MjAPI;
 import buildcraft.api.mj.MjCapabilityHelper;
 import buildcraft.api.tiles.IDebuggable;
-
+import buildcraft.core.BCCoreBlocks;
 import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Direction;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
+
+import java.util.List;
 
 public class TilePowerConsumerTester extends TileBC_Neptune implements IMjReceiver, IDebuggable {
 
@@ -21,21 +23,26 @@ public class TilePowerConsumerTester extends TileBC_Neptune implements IMjReceiv
     private long totalReceived;
 
     public TilePowerConsumerTester() {
+        super(BCCoreBlocks.powerTesterTile.get());
         caps.addProvider(mjCaps);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
+//    public void readFromNBT(CompoundNBT nbt)
+    public void load(BlockState state, CompoundNBT nbt) {
+//        super.readFromNBT(nbt);
+        super.load(state, nbt);
         lastReceived = nbt.getLong("last");
         totalReceived = nbt.getLong("total");
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        nbt = super.writeToNBT(nbt);
-        nbt.setLong("last", lastReceived);
-        nbt.setLong("total", totalReceived);
+//    public CompoundNBT writeToNBT(CompoundNBT nbt)
+    public CompoundNBT save(CompoundNBT nbt) {
+//        nbt = super.writeToNBT(nbt);
+        super.save(nbt);
+        nbt.putLong("last", lastReceived);
+        nbt.putLong("total", totalReceived);
         return nbt;
     }
 
@@ -63,9 +70,13 @@ public class TilePowerConsumerTester extends TileBC_Neptune implements IMjReceiv
     // IDebuggable
 
     @Override
-    public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
-        left.add("");
-        left.add("Last received = " + LocaleUtil.localizeMj(lastReceived));
-        left.add("Total received = " + LocaleUtil.localizeMj(totalReceived));
+//    public void getDebugInfo(List<String> left, List<String> right, Direction side)
+    public void getDebugInfo(List<ITextComponent> left, List<ITextComponent> right, Direction side) {
+//        left.add("");
+        left.add(new StringTextComponent(""));
+//        left.add("Last received = " + LocaleUtil.localizeMj(lastReceived));
+        left.add(new StringTextComponent("Last received = ").append(LocaleUtil.localizeMjComponent(lastReceived)));
+//        left.add("Total received = " + LocaleUtil.localizeMj(totalReceived));
+        left.add(new StringTextComponent("Total received = ").append(LocaleUtil.localizeMjComponent(totalReceived)));
     }
 }
