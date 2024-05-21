@@ -52,7 +52,7 @@ public class PipeTabButton {
     static {
         try {
             // srg
-            m_addRenderableWidget = Screen.class.getDeclaredMethod("func_230480_a_", IGuiEventListener.class);
+            m_addRenderableWidget = Screen.class.getDeclaredMethod("func_230480_a_", Widget.class);
             m_addRenderableWidget.setAccessible(true);
         } catch (NoSuchMethodException e) {
             try {
