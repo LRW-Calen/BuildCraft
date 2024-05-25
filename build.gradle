@@ -173,6 +173,7 @@ sourceSets {
             // srcDir "src_old_license"
         }
         resources {
+            srcDir "mod_info"
             srcDir "buildcraft_resources"
             srcDir 'buildcraft_resources_generated'
             srcDir "BuildCraft-Localization"

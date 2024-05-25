@@ -90,17 +90,6 @@ displayURL="http://www.mod-buildcraft.com/"
 updateJSONURL=""
 authors="SpaceToad, BuildCraft Team"
 
-[[mods]]
-modId="buildcraftcompat"
-displayName="BuildCraft Compat"
-version="7.99.24.9"
-description="Compatibility add-on for BuildCraft"
-credits="Created by asie"
-logoFile="logo.png"
-displayURL="http://www.mod-buildcraft.com/"
-updateJSONURL=""
-authors="BuildCraft Team"
-
 [[dependencies.buildcraftcore]]
     modId="forge"
     mandatory=true
@@ -138,12 +127,6 @@ authors="BuildCraft Team"
     ordering="AFTER"
     side="BOTH"
 [[dependencies.buildcraftrobotics]]
-    modId="buildcraftcore"
-    mandatory=true
-    versionRange="[0.0.0,)"
-    ordering="AFTER"
-    side="BOTH"
-[[dependencies.buildcraftcompat]]
     modId="buildcraftcore"
     mandatory=true
     versionRange="[0.0.0,)"
