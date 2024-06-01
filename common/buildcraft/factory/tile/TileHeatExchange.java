@@ -619,7 +619,9 @@ public class TileHeatExchange extends TileBC_Neptune implements ITickable, IDebu
 
         @Override
         CompoundNBT writeToNbt() {
-            CompoundNBT nbt = new CompoundNBT();
+            // Calen FIX: fluid in start section will not be saved in 1.12.2
+//            NBTTagCompound nbt = new NBTTagCompound();
+            CompoundNBT nbt = super.writeToNbt();
             nbt.putBoolean("start", true);
             nbt.putInt("coolantCharge", inputCoolantAmountCharge);
             nbt.putInt("heatantCharge", inputHeatantAmountCharge);
@@ -759,8 +761,8 @@ public class TileHeatExchange extends TileBC_Neptune implements ITickable, IDebu
             // fluid == null => the fluid is consumed in the process (e.g. water, lava)
 //            int c_out_amount = c_out_f == null ? max_amount : c_out.fillInternal(c_out_f, false);
 //            int h_out_amount = h_out_f == null ? max_amount : h_out.fillInternal(h_out_f, false);
-            int c_out_amount = c_out_f == null ? max_amount : c_out.fill(c_out_f, IFluidHandler.FluidAction.SIMULATE);
-            int h_out_amount = h_out_f == null ? max_amount : h_out.fill(h_out_f, IFluidHandler.FluidAction.SIMULATE);
+            int c_out_amount = c_out_f.isEmpty() ? max_amount : c_out.fill(c_out_f, IFluidHandler.FluidAction.SIMULATE);
+            int h_out_amount = h_out_f.isEmpty() ? max_amount : h_out.fill(h_out_f, IFluidHandler.FluidAction.SIMULATE);
 
             int c_in_amount = drainableAmount(c_in, c_in_f);
             int h_in_amount = drainableAmount(h_in, h_in_f);

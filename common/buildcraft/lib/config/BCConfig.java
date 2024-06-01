@@ -6,14 +6,14 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.config.ModConfig.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLModContainer;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 // TODO Calen: In 1.18.2 config file is loaded after item/block/fluid/... registry, so the registries like propOilIsSticky/enableOilBurn/... is always default value.
 public class BCConfig {
-    private static Map<BCModules, List<Runnable>> reloadListeners = new HashMap<>();
+    private static Map<BCModules, List<Runnable>> reloadListeners = new ConcurrentHashMap<>();
 
     public static void registerReloadListener(BCModules module, Runnable reload) {
         reloadListeners.computeIfAbsent(module, m -> new LinkedList<>()).add(reload);
