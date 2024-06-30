@@ -56,7 +56,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
         }
 
 //        int id = world.provider.getDimension();
-        String id = world.dimension().getRegistryName().toString();
+        String id = world.dimension().location().toString();
         List<PipeExtensionRequest> rList = requests.get(id);
         if (rList == null) {
             requests.put(id, rList = new ArrayList<>());
@@ -78,7 +78,7 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
             return;
         }
 //        List<PipeExtensionRequest> rList = requests.get(event.world.provider.getDimension());
-        List<PipeExtensionRequest> rList = requests.get(event.world.dimension().getRegistryName().toString());
+        List<PipeExtensionRequest> rList = requests.get(event.world.dimension().location().toString());
         if (rList == null) {
             return;
         }
@@ -289,7 +289,8 @@ public enum PipeExtensionManager implements IPipeExtensionManager {
                     list.add(stack);
                 }
             }
-            if (canceled = result != ActionResultType.SUCCESS) {
+//            if (canceled = result != ActionResultType.SUCCESS)
+            if (canceled = (!result.consumesAction())) {
                 blockSnapshot1.restore(true);
                 TileEntity tile = w.getBlockEntity(r.pos);
                 if (tile != null) {
