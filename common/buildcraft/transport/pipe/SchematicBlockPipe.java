@@ -12,7 +12,9 @@ import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.schematics.ISchematicBlock;
 import buildcraft.api.schematics.SchematicBlockContext;
 import buildcraft.api.transport.EnumWirePart;
+import buildcraft.api.transport.pipe.IPipeHolder;
 import buildcraft.api.transport.pipe.PipeApi;
+import buildcraft.api.transport.pipe.PipeBehaviour;
 import buildcraft.api.transport.pipe.PipeDefinition;
 import buildcraft.api.transport.pluggable.PluggableDefinition;
 import buildcraft.lib.misc.ColourUtil;
@@ -21,10 +23,13 @@ import buildcraft.lib.misc.RotationUtil;
 import buildcraft.lib.registry.TagManager;
 import buildcraft.lib.registry.TagManager.EnumTagType;
 import buildcraft.transport.BCTransportBlocks;
+import buildcraft.transport.pipe.behaviour.PipeBehaviourDirectional;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
@@ -37,8 +42,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class SchematicBlockPipe implements ISchematicBlock {
     private CompoundTag tileNbt;
@@ -119,6 +123,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
 //        schematicBlock.tileNbt = tileNbt;
         schematicBlock.tileNbt = tileNbt.copy();
         rotatePlugs(schematicBlock.tileNbt, rotation);
+        rotatePipe(schematicBlock.tileNbt, rotation);
         // Calen 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
         // schematicBlock.tileRotation = tileRotation.add(rotation);
         return schematicBlock;
@@ -146,6 +151,8 @@ public class SchematicBlockPipe implements ISchematicBlock {
 //                if (tileRotation != Rotation.NONE) {
 //                    tileEntity.rotate(tileRotation);
 //                }
+                // Calen
+                checkDirectionalPipeDir(tileEntity, tileNbt);
                 return true;
             }
         }
@@ -169,6 +176,8 @@ public class SchematicBlockPipe implements ISchematicBlock {
 //                if (tileRotation != Rotation.NONE) {
 //                    tileEntity.rotate(tileRotation);
 //                }
+                // Calen
+                checkDirectionalPipeDir(tileEntity, tileNbt);
                 return true;
             }
         }
@@ -197,7 +206,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
     }
 
     // Calen FIX: builder rotates plugs on pipes
-    private void rotatePlugs(CompoundTag nbt, Rotation rotation) {
+    private static void rotatePlugs(CompoundTag nbt, Rotation rotation) {
         try {
             CompoundTag nbtPlugs = nbt.getCompound("plugs");
             // get plug tag of each facing
@@ -232,12 +241,12 @@ public class SchematicBlockPipe implements ISchematicBlock {
             }
             wireManagerNbt.putIntArray("parts", wiresArrayNew);
         } catch (Exception e) {
-            BCLog.logger.error("[transport.pipe.schematic] Failed to rotate PipeHolder[" + this.tileNbt.toString() + "], rotation = [" + rotation + "]");
+            BCLog.logger.error("[transport.pipe.schematic] Failed to rotate PipeHolder[" + nbt.toString() + "], rotation = [" + rotation + "]");
             BCLog.logger.error("[transport.pipe.schematic] ", e);
         }
     }
 
-    private void rotatePlugData(CompoundTag plugNbt, Rotation rotation) {
+    private static void rotatePlugData(CompoundTag plugNbt, Rotation rotation) {
         CompoundTag dataNbt = plugNbt.getCompound("data").getCompound("data");
         for (String subTagName : dataNbt.getAllKeys()) {
             CompoundTag subTag = dataNbt.getCompound(subTagName);
@@ -251,6 +260,64 @@ public class SchematicBlockPipe implements ISchematicBlock {
                         sNbt.putByte("side", newFacing);
                     }
                 }
+            }
+        }
+    }
+
+    private static void rotatePipe(CompoundTag nbt, Rotation rotation) {
+        // directional
+        CompoundTag pipeNbt = nbt.getCompound("pipe");
+        CompoundTag behNbt = pipeNbt.getCompound("beh");
+        if (!behNbt.isEmpty()) {
+            Direction currentDir = NBTUtilBC.readEnum(behNbt.get("currentDir"), Direction.class);
+            if (currentDir != null) {
+                Direction newDir = RotationUtil.rotateFacing(currentDir, rotation);
+                behNbt.putString("currentDir", newDir.name());
+            }
+            Direction direction = NBTUtilBC.readEnum(behNbt.get("direction"), Direction.class);
+            if (direction != null) {
+                Direction newDir = RotationUtil.rotateFacing(direction, rotation);
+                behNbt.putString("direction", newDir.name());
+            }
+        }
+        // filter
+        if (behNbt.contains("filters")) {
+            CompoundTag filtersNbt = behNbt.getCompound("filters");
+            if (filtersNbt.contains("items")) {
+                ListTag itemsNbt = filtersNbt.getList("items", Tag.TAG_COMPOUND);
+                Map<Direction, List<Tag>> oldFilters = new HashMap<>();
+                for (Direction dir : Direction.BY_2D_DATA) {
+                    int startPos = dir.get3DDataValue() * 9;
+                    List<Tag> filtersOfCurrentDir = new ArrayList<>(itemsNbt.subList(startPos, startPos + 9));
+                    oldFilters.put(dir, filtersOfCurrentDir);
+                }
+                for (Direction dirOld : Direction.BY_2D_DATA) {
+                    Direction dirNew = RotationUtil.rotateFacing(dirOld, rotation);
+                    List<Tag> filters = oldFilters.get(dirOld);
+                    int startPos = dirNew.get3DDataValue() * 9;
+                    for (int index = 0; index < 9; index++) {
+                        itemsNbt.set(startPos + index, filters.get(index));
+                    }
+                }
+            }
+        }
+    }
+
+    private static void checkDirectionalPipeDir(BlockEntity holder, CompoundTag nbt) {
+        PipeBehaviour behaviour = ((IPipeHolder) holder).getPipe().getBehaviour();
+        if (behaviour instanceof PipeBehaviourDirectional) {
+            Direction currentDir = ((PipeBehaviourDirectional) behaviour).getCurrentDir();
+            try {
+                Tag correctDirNbt = nbt.getCompound("pipe").getCompound("beh").get("currentDir");
+                Direction correctDir = NBTUtilBC.readEnum(correctDirNbt, Direction.class);
+                if (correctDir != null) {
+                    if (currentDir != correctDir) {
+                        ((PipeBehaviourDirectional) behaviour).setCurrentDir(correctDir);
+                    }
+                }
+            } catch (Exception e) {
+                BCLog.logger.error("[transport.pipe.schematic] Found a placed pipe[" + nbt.toString() + "] has wrong direction[" + currentDir + "], but failed to correct it.");
+                BCLog.logger.error("[transport.pipe.schematic] ", e);
             }
         }
     }
