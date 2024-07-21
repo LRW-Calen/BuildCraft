@@ -107,11 +107,11 @@ public abstract class PipeBehaviourDirectional extends PipeBehaviour {
     }
 
     @Nullable
-    protected Direction getCurrentDir() {
+    public Direction getCurrentDir() {
         return currentDir.face;
     }
 
-    protected void setCurrentDir(Direction setTo) {
+    public void setCurrentDir(Direction setTo) {
         if (this.currentDir.face == setTo) {
             return;
         }
