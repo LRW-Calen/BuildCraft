@@ -109,7 +109,7 @@ public class RenderSnapshotBuilder {
                                 )
                         )
 //                        .lighti(world.getCombinedLight(new BlockPos(robotPos), 0))
-                        .lighti((byte) world.getLightEngine().getRawBrightness(new BlockPos(robotPos), 0), (byte) world.getLightEmission(new BlockPos(robotPos)))
+                        .lighti(RenderUtil.getCombinedLight(world,new BlockPos(robotPos)))
                         .render(poseStack.last(), bb);
                 i++;
             }

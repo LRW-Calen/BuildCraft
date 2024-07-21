@@ -61,9 +61,9 @@ public class RenderBuilder extends TileEntityRenderer<TileBuilder> {
             for (BlockPos p : path) {
                 if (last != null) {
 //                    Vector3d from = new Vector3d(last).add(VecUtil.VEC_HALF);
-                    Vector3d from = Vector3d.atCenterOf(last).add(VecUtil.VEC_HALF);
+                    Vector3d from = Vector3d.atLowerCornerOf(last).add(VecUtil.VEC_HALF);
 //                    Vector3d to = new Vector3d(p).add(VecUtil.VEC_HALF);
-                    Vector3d to = Vector3d.atCenterOf(p).add(VecUtil.VEC_HALF);
+                    Vector3d to = Vector3d.atLowerCornerOf(p).add(VecUtil.VEC_HALF);
                     Vector3d one = offset(from, to);
                     Vector3d two = offset(to, from);
                     LaserData_BC8 data = new LaserData_BC8(BuildCraftLaserManager.STRIPES_WRITE_DIRECTION, one, two, 1 / 16.1);

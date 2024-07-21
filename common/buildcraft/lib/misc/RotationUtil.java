@@ -6,6 +6,7 @@
 
 package buildcraft.lib.misc;
 
+import buildcraft.api.transport.EnumWirePart;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
 import net.minecraft.util.Rotation;
@@ -165,5 +166,33 @@ public class RotationUtil {
         }
 
         return direction;
+    }
+
+    // Calen
+    public static Direction rotateFacing(Direction facing, Rotation rotation) {
+        return rotation.rotate(facing);
+    }
+
+    public static byte rotateFacing(byte facingIndex, Rotation rotation) {
+        Direction facing = Direction.from3DDataValue(facingIndex);
+        return (byte) rotateFacing(facing, rotation).get3DDataValue();
+    }
+
+    public static EnumWirePart rotateEnumWirePart(EnumWirePart old, Rotation rotation) {
+        String thisName = old.name();
+        String[] thisNamePieces = thisName.split("_");
+        Direction facing0 = Direction.valueOf(thisNamePieces[0]);
+        Direction facing1 = Direction.valueOf(thisNamePieces[1]);
+        Direction facing2 = Direction.valueOf(thisNamePieces[2]);
+        Direction facing0New = RotationUtil.rotateFacing(facing0, rotation);
+        Direction facing1New = facing1;
+        Direction facing2New = RotationUtil.rotateFacing(facing2, rotation);
+        String newName;
+        if (facing0New.getAxis() == Axis.X) {
+            newName = facing0New.name() + "_" + facing1New.name() + "_" + facing2New.name();
+        } else {
+            newName = facing2New.name() + "_" + facing1New.name() + "_" + facing0New.name();
+        }
+        return EnumWirePart.valueOf(newName);
     }
 }
