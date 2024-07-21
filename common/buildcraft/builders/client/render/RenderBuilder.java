@@ -60,9 +60,9 @@ public class RenderBuilder implements BlockEntityRenderer<TileBuilder> {
             for (BlockPos p : path) {
                 if (last != null) {
 //                    Vec3 from = new Vec3(last).add(VecUtil.VEC_HALF);
-                    Vec3 from = Vec3.atCenterOf(last).add(VecUtil.VEC_HALF);
+                    Vec3 from = Vec3.atLowerCornerOf(last).add(VecUtil.VEC_HALF);
 //                    Vec3 to = new Vec3(p).add(VecUtil.VEC_HALF);
-                    Vec3 to = Vec3.atCenterOf(p).add(VecUtil.VEC_HALF);
+                    Vec3 to = Vec3.atLowerCornerOf(p).add(VecUtil.VEC_HALF);
                     Vec3 one = offset(from, to);
                     Vec3 two = offset(to, from);
                     LaserData_BC8 data = new LaserData_BC8(BuildCraftLaserManager.STRIPES_WRITE_DIRECTION, one, two, 1 / 16.1);

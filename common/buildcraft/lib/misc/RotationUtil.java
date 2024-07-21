@@ -74,4 +74,14 @@ public class RotationUtil {
         }
         throw new IllegalArgumentException();
     }
+
+    // Calen
+    public static Direction rotateFacing(Direction facing, Rotation rotation) {
+        return rotation.rotate(facing);
+    }
+
+    public static byte rotateFacing(byte facingIndex, Rotation rotation) {
+        Direction facing = Direction.from3DDataValue(facingIndex);
+        return (byte) rotateFacing(facing, rotation).get3DDataValue();
+    }
 }

@@ -8,6 +8,7 @@ package buildcraft.transport.client.render;
 
 import buildcraft.api.transport.pipe.IPipeBehaviourRenderer;
 import buildcraft.lib.client.model.MutableQuad;
+import buildcraft.lib.misc.RenderUtil;
 import buildcraft.transport.BCTransportModels;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -27,7 +28,8 @@ public enum PipeBehaviourRendererStripes implements IPipeBehaviourRenderer<PipeB
         if (dir == null) return;
         MutableQuad[] quads = BCTransportModels.getStripesDynQuads(dir);
 //        bb.setTranslation(x, y, z);
-        int light = stripes.pipe.getHolder().getPipeWorld().getLightEngine().getRawBrightness(stripes.pipe.getHolder().getPipePos(), 0);
+//        int light = stripes.pipe.getHolder().getPipeWorld().getCombinedLight(stripes.pipe.getHolder().getPipePos(), 0);
+        int light = RenderUtil.getCombinedLight(stripes.pipe.getHolder().getPipeWorld(), stripes.pipe.getHolder().getPipePos());
         for (MutableQuad q : quads) {
             q.multShade();
             q.lighti(light);
