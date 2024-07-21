@@ -228,7 +228,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
             int[] wiresArray = wireManagerNbt.getIntArray("parts");
             int[] wiresArrayNew = wiresArray.clone();
             for (int i = 0; i < wiresArray.length; i += 2) {
-                wiresArrayNew[i] = EnumWirePart.VALUES[wiresArray[i]].getRotated(rotation).ordinal();
+                wiresArrayNew[i] = RotationUtil.rotateEnumWirePart(EnumWirePart.VALUES[wiresArray[i]], rotation).ordinal();
             }
             wireManagerNbt.putIntArray("parts", wiresArrayNew);
         } catch (Exception e) {
