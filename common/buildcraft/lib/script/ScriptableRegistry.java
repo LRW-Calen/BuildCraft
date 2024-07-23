@@ -98,7 +98,7 @@ public class ScriptableRegistry<E> extends SimpleReloadableRegistry<E> implement
 
         for (ModInfo container : LoadingModList.get().getMods()) {
             // Calen 1.18.2
-            if (container.getNamespace().equals("forge")) {
+            if ("forge".equals(container.getNamespace())) {
                 continue;
             }
             // 1.12.2

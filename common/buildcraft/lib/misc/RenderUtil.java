@@ -31,13 +31,13 @@ public class RenderUtil {
 
     private static final ThreadLocal<TessellatorQueue> threadLocalTessellators;
     // private static final MethodHandle HANDLE_FORGE_TESSELLATOR;
-    private static final MethodHandle HANDLE_IS_BUFFER_DRAWING;
+    // 1.16.5+: BufferBuilder provides getter
+    // private static final MethodHandle HANDLE_IS_BUFFER_DRAWING;
 
     static {
         threadLocalTessellators = ThreadLocal.withInitial(TessellatorQueue::new);
 //        HANDLE_FORGE_TESSELLATOR = createGetter(TileEntityRendererDispatcher.class, Tessellator.class, "batchBuffer");
 //        HANDLE_IS_BUFFER_DRAWING = createGetter(BufferBuilder.class, boolean.class, "isDrawing", "field_179010_r");
-        HANDLE_IS_BUFFER_DRAWING = createGetter(BufferBuilder.class, boolean.class, "building", "f_85661_");
     }
 
     private static MethodHandle createGetter(Class<?> owner, Class<?> type, String... names) {
@@ -154,11 +154,12 @@ public class RenderUtil {
     /** @return True if the given {@link BufferBuilder} is currently in the middle of drawing. Essentially returns true
      *         if {@link BufferBuilder#begin(int, VertexFormat)} would throw an exception. */
     public static boolean isDrawing(BufferBuilder bb) {
-        try {
-            return (boolean) HANDLE_IS_BUFFER_DRAWING.invokeExact(bb);
-        } catch (Throwable t) {
-            throw new Error(t);
-        }
+//        try {
+//            return (boolean) HANDLE_IS_BUFFER_DRAWING.invokeExact(bb);
+//        } catch (Throwable t) {
+//            throw new Error(t);
+//        }
+        return bb.building();
     }
 
     private static Tessellator newTessellator() {

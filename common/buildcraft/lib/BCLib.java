@@ -19,6 +19,7 @@ import buildcraft.lib.registry.MigrationManager;
 import buildcraft.lib.registry.TagManager;
 import buildcraft.lib.registry.TagManager.TagEntry;
 import buildcraft.lib.script.ReloadableRegistryManager;
+import cpw.mods.modlauncher.TransformingClassLoader;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraftforge.common.MinecraftForge;
@@ -33,8 +34,20 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLLoader;
+import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.fml.loading.LoadingModList;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 //@formatter:off
 //@Mod(
@@ -65,6 +78,9 @@ public class BCLib {
     public static ModContainer MOD_CONTAINER;
 
     static {
+        // load dependencies
+        loadJarInJarDependencies();
+
         // Calen: should before BCSiliconPlugs.preInit()
         BCLibRegistries.fmlPreInit();
     }
@@ -73,6 +89,68 @@ public class BCLib {
         INSTANCE = this;
 
         ExpressionCompat.setup();
+    }
+
+    // Calen
+    private static void loadJarInJarDependencies() {
+        try {
+            // jar in jar
+            TransformingClassLoader loader = FMLLoader.getLaunchClassLoader();
+            Path modPath = LoadingModList.get().getModFileById(MODID).getFile().getFilePath();
+
+            // dev env: mod dir is folder rather than jar, and no jarInJar
+            if (modPath.toFile().isDirectory()) {
+                return;
+            }
+
+            FileSystem modJarFS = FileSystems.newFileSystem(modPath, loader);
+            Path jarJarPath = modJarFS.getPath("META-INF").resolve("jarjar");
+
+            Path jarJarPath_trove4jPath = jarJarPath.resolve("trove4j-3.0.3.jar");
+            Path jarJarPath_vecmathPath = jarJarPath.resolve("vecmath-1.5.2.jar");
+
+            // target
+            Path bcDependenciesFolderPath = FMLPaths.GAMEDIR.get().resolve("buildcraft_dependencies");
+            bcDependenciesFolderPath.toFile().mkdirs();
+            Path trove4jPath = bcDependenciesFolderPath.resolve("trove4j-3.0.3.jar");
+            Path vecmathPath = bcDependenciesFolderPath.resolve("vecmath-1.5.2.jar");
+            if (!trove4jPath.toFile().exists()) {
+                Files.copy(jarJarPath_trove4jPath, trove4jPath);
+            }
+            if (!vecmathPath.toFile().exists()) {
+                Files.copy(jarJarPath_vecmathPath, vecmathPath);
+            }
+
+            // SKIP_PACKAGE_PREFIXES will make javax.vecmath skipped to be loaded, so...
+            Field f_targetPackageFilter = TransformingClassLoader.class.getDeclaredField("targetPackageFilter");
+            Field f_SKIP_PACKAGE_PREFIXES = TransformingClassLoader.class.getDeclaredField("SKIP_PACKAGE_PREFIXES");
+            f_targetPackageFilter.setAccessible(true);
+            f_SKIP_PACKAGE_PREFIXES.setAccessible(true);
+            Predicate<String> v_f_targetPackageFilter = (Predicate<String>) f_targetPackageFilter.get(loader);
+            f_targetPackageFilter.set(loader, (Predicate<String>) s ->
+            {
+                if (s.startsWith("javax.vecmath.")) {
+                    return true;
+                } else {
+                    return v_f_targetPackageFilter.test(s);
+                }
+            });
+
+            // add url
+            Field f_delegatedClassLoader = TransformingClassLoader.class.getDeclaredField("delegatedClassLoader");
+            f_delegatedClassLoader.setAccessible(true);
+            URLClassLoader delegatedClassLoader = (URLClassLoader) f_delegatedClassLoader.get(loader);
+            Method m_addURL = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
+            m_addURL.setAccessible(true);
+
+            URL trove4jURL = new URL("file:" + trove4jPath);
+            URL vecmathURL = new URL("file:" + vecmathPath);
+
+            m_addURL.invoke(delegatedClassLoader, trove4jURL);
+            m_addURL.invoke(delegatedClassLoader, vecmathURL);
+        } catch (Exception e) {
+            BCLog.logger.error("[lib.init.dependency.loading] Failed to load dependencies!", e);
+        }
     }
 
     // Calen: recipe type registry is frozen at FMLConstructModEvent
