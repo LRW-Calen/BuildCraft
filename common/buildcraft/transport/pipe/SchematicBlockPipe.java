@@ -25,6 +25,7 @@ import buildcraft.lib.registry.TagManager.EnumTagType;
 import buildcraft.transport.BCTransportBlocks;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourDirectional;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -39,7 +40,11 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.*;
@@ -66,6 +71,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
     @Override
     public List<ItemStack> computeRequiredItems() {
         try {
+            // pipe
             ImmutableList.Builder<ItemStack> builder = ImmutableList.builder();
             PipeDefinition definition = PipeRegistry.INSTANCE.loadDefinition(
                     tileNbt.getCompound("pipe").getString("def")
@@ -87,6 +93,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
 //                );
                 builder.add(new ItemStack(item, 1));
             }
+
             // plug
             CompoundTag plugs = tileNbt.getCompound("plugs");
             for (Direction face : Direction.values()) {
@@ -101,6 +108,7 @@ public class SchematicBlockPipe implements ISchematicBlock {
                 ItemStack plugItemStack = def.readFromNbt(null, Direction.NORTH, data).getPickStack();
                 builder.add(plugItemStack);
             }
+
             // wire
             ResourceLocation wireId = new ResourceLocation(TagManager.getTag("item.wire", EnumTagType.REGISTRY_NAME));
             Item wireItem = ForgeRegistries.ITEMS.getValue(wireId);
@@ -111,10 +119,42 @@ public class SchematicBlockPipe implements ISchematicBlock {
                 builder.add(ColourUtil.addColourTagToStack(wireStack, DyeColor.byId(wiresArray[i + 1])));
             }
 
+            // item flow
+            if (tileNbt.contains("pipe")) {
+                ListTag itemsNbt = tileNbt.getCompound("pipe").getCompound("flow").getList("items", Tag.TAG_COMPOUND);
+                for (int i = 0; i < itemsNbt.size(); i++) {
+                    CompoundTag itemNbt = itemsNbt.getCompound(i).getCompound("stack");
+                    if (!itemNbt.isEmpty()) {
+                        ItemStack stack = ItemStack.of(itemNbt);
+                        if (!stack.isEmpty()) {
+                            builder.add(stack);
+                        }
+                    }
+                }
+            }
+
             return builder.build();
         } catch (InvalidInputDataException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    // Calen
+    @NotNull
+    @Override
+    public List<FluidStack> computeRequiredFluids() {
+        // fluid flow
+        List<FluidStack> ret = Lists.newArrayList();
+        if (tileNbt.contains("pipe")) {
+            CompoundTag fluidNbt = tileNbt.getCompound("pipe").getCompound("flow").getCompound("fluid");
+            if (!fluidNbt.isEmpty()) {
+                FluidStack stack = FluidStack.loadFluidStackFromNBT(fluidNbt);
+                if (!stack.isEmpty()) {
+                    ret.add(stack);
+                }
+            }
+        }
+        return ret;
     }
 
     @Override
