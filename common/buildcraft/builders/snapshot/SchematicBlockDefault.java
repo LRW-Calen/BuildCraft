@@ -13,6 +13,7 @@ import buildcraft.api.schematics.ISchematicBlock;
 import buildcraft.api.schematics.SchematicBlockContext;
 import buildcraft.lib.misc.BlockUtil;
 import buildcraft.lib.misc.NBTUtilBC;
+import com.google.common.collect.Lists;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,6 +21,7 @@ import net.minecraft.block.FallingBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.state.Property;
 import net.minecraft.tileentity.TileEntity;
@@ -28,7 +30,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -56,6 +61,9 @@ public class SchematicBlockDefault implements ISchematicBlock {
     protected final Set<BlockPos> updateBlockOffsets = new HashSet<>();
     @SuppressWarnings("WeakerAccess")
     protected final Set<Block> canBeReplacedWithBlocks = new HashSet<>();
+    // Calen
+    private ListNBT items;
+    private ListNBT fluids;
 
     @SuppressWarnings("unused")
     public static boolean predicate(SchematicBlockContext context) {
@@ -117,7 +125,34 @@ public class SchematicBlockDefault implements ISchematicBlock {
             TileEntity tileEntity = context.world.getBlockEntity(context.pos);
             if (tileEntity != null) {
                 tileNbt = tileEntity.serializeNBT();
+                // Calen
+                // containing items
+                items = new ListNBT();
+                tileEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(c ->
+                {
+                    for (int index = 0; index < c.getSlots(); index++) {
+                        ItemStack stack = c.getStackInSlot(index);
+                        if (!stack.isEmpty()) {
+                            CompoundNBT itemNbt_i = new CompoundNBT();
+                            stack.save(itemNbt_i);
+                            items.add(itemNbt_i);
+                        }
+                    }
+                });
             }
+            // containing fluids
+            fluids = new ListNBT();
+            FluidUtil.getFluidHandler(context.world, context.pos, null).ifPresent(h ->
+            {
+                for (int index = 0; index < h.getTanks(); index++) {
+                    FluidStack stack = h.getFluidInTank(index);
+                    if (!stack.isEmpty()) {
+                        CompoundNBT fluidNbt_i = new CompoundNBT();
+                        stack.writeToNBT(fluidNbt_i);
+                        fluids.add(fluidNbt_i);
+                    }
+                }
+            });
         }
     }
 
@@ -197,27 +232,70 @@ public class SchematicBlockDefault implements ISchematicBlock {
                 .map(rule -> rule.requiredExtractors)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
-        return (
-                collect.isEmpty()
-                        ? Stream.of(new RequiredExtractorItemFromBlock())
-                        : collect.stream().flatMap(Collection::stream)
-        )
-                .flatMap(requiredExtractor -> requiredExtractor.extractItemsFromBlock(blockState, tileNbt).stream())
-                .filter(((Predicate<ItemStack>) ItemStack::isEmpty).negate())
-                .collect(Collectors.toList());
+//        return (
+//                collect.isEmpty()
+//                        ? Stream.of(new RequiredExtractorItemFromBlock())
+//                        : collect.stream().flatMap(Collection::stream)
+//        )
+//                .flatMap(requiredExtractor -> requiredExtractor.extractItemsFromBlock(blockState, tileNbt).stream())
+//                .filter(((Predicate<ItemStack>) ItemStack::isEmpty).negate())
+//                .collect(Collectors.toList());
+
+        // Calen: containing items
+        List<ItemStack> ret = Lists.newArrayList();
+        if (items != null) {
+            for (int index = 0; index < items.size(); index++) {
+                ItemStack stack_i = ItemStack.of(items.getCompound(index));
+                if (!stack_i.isEmpty()) {
+                    ret.add(stack_i);
+                }
+            }
+        }
+        ret.addAll(
+                (
+                        collect.isEmpty()
+                                ? Stream.of(new RequiredExtractorItemFromBlock())
+                                : collect.stream().flatMap(Collection::stream)
+                )
+                        .flatMap(requiredExtractor -> requiredExtractor.extractItemsFromBlock(blockState, tileNbt).stream())
+                        .filter(((Predicate<ItemStack>) ItemStack::isEmpty).negate())
+                        .collect(Collectors.toList())
+        );
+        return ret;
     }
 
     @Nonnull
     @Override
     public List<FluidStack> computeRequiredFluids() {
         Set<JsonRule> rules = RulesLoader.getRules(blockState, tileNbt);
-        return rules.stream()
-                .map(rule -> rule.requiredExtractors)
-                .filter(Objects::nonNull)
-                .flatMap(Collection::stream)
-                .flatMap(requiredExtractor -> requiredExtractor.extractFluidsFromBlock(blockState, tileNbt).stream())
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+//        return rules.stream()
+//                .map(rule -> rule.requiredExtractors)
+//                .filter(Objects::nonNull)
+//                .flatMap(Collection::stream)
+//                .flatMap(requiredExtractor -> requiredExtractor.extractFluidsFromBlock(blockState, tileNbt).stream())
+//                .filter(Objects::nonNull)
+//                .collect(Collectors.toList());
+
+        // Calen: containing fluids
+        List<FluidStack> ret = Lists.newArrayList();
+        if (fluids != null) {
+            for (int index = 0; index < fluids.size(); index++) {
+                FluidStack stack_i = FluidStack.loadFluidStackFromNBT(fluids.getCompound(index));
+                if (!stack_i.isEmpty()) {
+                    ret.add(stack_i);
+                }
+            }
+        }
+        ret.addAll(
+                rules.stream()
+                        .map(rule -> rule.requiredExtractors)
+                        .filter(Objects::nonNull)
+                        .flatMap(Collection::stream)
+                        .flatMap(requiredExtractor -> requiredExtractor.extractFluidsFromBlock(blockState, tileNbt).stream())
+                        .filter(Objects::nonNull)
+                        .collect(Collectors.toList())
+        );
+        return ret;
     }
 
     @Override
@@ -229,7 +307,10 @@ public class SchematicBlockDefault implements ISchematicBlock {
 //        schematicBlock.blockState = blockState.withRotation(rotation);
         schematicBlock.blockState = blockState.rotate(rotation);
         schematicBlock.ignoredProperties.addAll(ignoredProperties);
-        schematicBlock.tileNbt = tileNbt;
+//        schematicBlock.tileNbt = tileNbt;
+        schematicBlock.tileNbt = tileNbt == null ? null : tileNbt.copy();
+        schematicBlock.items = items == null ? null : items.copy();
+        schematicBlock.fluids = fluids == null ? null : fluids.copy();
         // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 ////        schematicBlock.tileRotation = tileRotation.add(rotation);
 //        schematicBlock.tileRotation = tileRotation.getRotated(rotation);
@@ -387,6 +468,14 @@ public class SchematicBlockDefault implements ISchematicBlock {
         if (tileNbt != null) {
             nbt.put("tileNbt", tileNbt);
         }
+        // Calen: containing items & fluids
+        if (items != null) {
+            nbt.put("items", items);
+        }
+        if (fluids != null) {
+            nbt.put("fluids", fluids);
+        }
+
         // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //        nbt.put("tileRotation", NBTUtilBC.writeEnum(tileRotation));
 //        nbt.putString("placeBlock", Block.REGISTRY.getNameForObject(placeBlock).toString());
@@ -427,6 +516,14 @@ public class SchematicBlockDefault implements ISchematicBlock {
         if (nbt.contains("tileNbt")) {
             tileNbt = nbt.getCompound("tileNbt");
         }
+        // Calen: containing items & fluids
+        if (nbt.contains("items")) {
+            items = nbt.getList("items", Constants.NBT.TAG_COMPOUND);
+        }
+        if (nbt.contains("fluids")) {
+            fluids = nbt.getList("fluids", Constants.NBT.TAG_COMPOUND);
+        }
+
         // Calen: 1.12.2 tileRotation -> 1.18.2 SkullBlock BlockState ROTATION_16
 //        tileRotation = NBTUtilBC.readEnum(nbt.get("tileRotation"), Rotation.class);
 //        placeBlock = Block.REGISTRY.getObject(new ResourceLocation(nbt.getString("placeBlock")));
