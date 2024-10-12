@@ -127,14 +127,20 @@ public class BCLib {
             f_targetPackageFilter.setAccessible(true);
             f_SKIP_PACKAGE_PREFIXES.setAccessible(true);
             Predicate<String> v_f_targetPackageFilter = (Predicate<String>) f_targetPackageFilter.get(loader);
-            f_targetPackageFilter.set(loader, (Predicate<String>) s ->
-            {
-                if (s.startsWith("javax.vecmath.")) {
-                    return true;
-                } else {
-                    return v_f_targetPackageFilter.test(s);
-                }
-            });
+            f_targetPackageFilter.set(
+                    loader,
+                    v_f_targetPackageFilter.or(
+                            s ->
+                            {
+                                if (s.startsWith("javax.vecmath.")) {
+                                    return true;
+                                } else if (s.startsWith("gnu.trove.")) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            })
+            );
 
             // add url
             Field f_delegatedClassLoader = TransformingClassLoader.class.getDeclaredField("delegatedClassLoader");
