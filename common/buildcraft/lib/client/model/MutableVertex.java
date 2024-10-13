@@ -164,34 +164,22 @@ public class MutableVertex {
 
     // public void render(BufferBuilder bb)
     public void render(MatrixStack.Entry pose, IVertexBuilder vertexConsumer) {
-        VertexFormat vf = ((BufferBuilder) vertexConsumer).getVertexFormat();
-        if (vf == DefaultVertexFormats.BLOCK) {
-            renderAsBlock(pose, vertexConsumer);
-        } else {
+//        VertexFormat vf = bb.getVertexFormat();
+//        if (vf == DefaultVertexFormats.BLOCK) {
+//            renderAsBlock(bb);
+//        } else {
 //            for (VertexFormatElement vfe : vf.getElements()) {
-//                if (vfe.getUsage() == Usage.POSITION)
-//                    renderPosition(vertexConsumer, pose.pose());
-//                else if (vfe.getUsage() == Usage.NORMAL)
-//                    renderNormal(pose.normal(), vertexConsumer);
-//                else if (vfe.getUsage() == Usage.COLOR)
-//                    renderColour(vertexConsumer);
-//                else if (vfe.getUsage() == Usage.UV) {
-//                    if (vfe.getIndex() == 0)
-//                        renderTex(vertexConsumer);
-//                    else if (vfe.getIndex() == 1)
-//                        renderLightMap(vertexConsumer);
-//                    // Calen add
-//                    else if (vfe.getIndex() == 2)
-//                        renderOverlay(vertexConsumer);
+//                if (vfe.getUsage() == EnumUsage.POSITION) renderPosition(bb);
+//                else if (vfe.getUsage() == EnumUsage.NORMAL) renderNormal(bb);
+//                else if (vfe.getUsage() == EnumUsage.COLOR) renderColour(bb);
+//                else if (vfe.getUsage() == EnumUsage.UV) {
+//                    if (vfe.getIndex() == 0) renderTex(bb);
+//                    else if (vfe.getIndex() == 1) renderLightMap(bb);
 //                }
 //            }
-            renderPosition(vertexConsumer, pose.pose());
-            renderColour(vertexConsumer);
-            renderTex(vertexConsumer);
-            renderOverlay(vertexConsumer);
-            renderLightMap(vertexConsumer);
-            renderNormal(pose.normal(), vertexConsumer);
-            vertexConsumer.endVertex();
+//            bb.endVertex();
+//        }
+        renderAsBlock(pose, vertexConsumer);
         }
     }
 
