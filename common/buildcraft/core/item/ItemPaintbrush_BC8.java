@@ -64,7 +64,8 @@ public class ItemPaintbrush_BC8 extends ItemBC_Neptune {
 
     @Override
 //    public InteractionResult onItemUse(Player player, Level world, BlockPos pos, InteractionHand hand, Direction facing, float hitX, float hitY, float hitZ)
-    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+    public InteractionResult useOn(UseOnContext context) {
+        ItemStack stack = context.getItemInHand();
         Player player = context.getPlayer();
         Level world = context.getLevel();
         BlockPos pos = context.getClickedPos();

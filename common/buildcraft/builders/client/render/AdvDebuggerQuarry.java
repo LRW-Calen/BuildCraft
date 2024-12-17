@@ -13,7 +13,7 @@ import buildcraft.lib.debug.DebugRenderHelper;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.AABB;
@@ -59,13 +59,11 @@ public class AdvDebuggerQuarry implements DetachedRenderer.IDetachedRenderer {
                                 )
                 )
         );
-////        GlStateManager.enableBlend();
-//        RenderSystem.enableBlend();
+//        GlStateManager.enableBlend();
 //        BufferBuilder bb = Tessellator.getInstance().getBuffer();
-//        BufferBuilder bb = Tesselator.getInstance().getBuilder();
 //        bb.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 //        bb.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
-        VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Sheets.translucentCullBlockSheet());
+        VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.translucent());
         for (ChunkPos chunkPos : chunkPoses) {
             DebugRenderHelper.renderAABB(
                     poseStack,
@@ -85,9 +83,7 @@ public class AdvDebuggerQuarry implements DetachedRenderer.IDetachedRenderer {
                     COLOUR_CHUNK
             );
         }
-////        Tessellator.getInstance().draw();
-////        Tesselator.getInstance().end();
-////        GlStateManager.disableBlend();
-//        RenderSystem.disableBlend();
+//        Tessellator.getInstance().draw();
+//        GlStateManager.disableBlend();
     }
 }

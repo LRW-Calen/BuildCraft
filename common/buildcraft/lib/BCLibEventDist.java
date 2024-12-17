@@ -84,8 +84,8 @@ public enum BCLibEventDist {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void renderWorldLast(RenderLevelStageEvent event) {
-        // Calen: AFTER_SKY is the correct state for this render
-        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_SKY) {
+        // Calen: AFTER_TRANSLUCENT_BLOCKS is the correct state for this render
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_TRANSLUCENT_BLOCKS) {
             return;
         }
         Minecraft mc = Minecraft.getInstance();

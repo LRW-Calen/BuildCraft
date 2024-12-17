@@ -1,6 +1,7 @@
 package buildcraft.datagen.energy;
 
 import buildcraft.datagen.base.BCBaseItemModelGenerator;
+import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyBlocks;
 import buildcraft.energy.BCEnergyItems;
 import net.minecraft.data.DataGenerator;
@@ -9,8 +10,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import javax.annotation.Nonnull;
 
 public class EnergyItemModelGenerator extends BCBaseItemModelGenerator {
-    public EnergyItemModelGenerator(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public EnergyItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCEnergy.MODID, existingFileHelper);
     }
 
     @Override

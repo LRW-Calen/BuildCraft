@@ -54,8 +54,7 @@ public class GuiReplacer extends GuiBC8<ContainerReplacer> {
                 topPos + 9,
 //                guiTop + 9,
                 160,
-                100,
-                poseStack
+                100
         );
     }
 

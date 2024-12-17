@@ -13,6 +13,7 @@ import buildcraft.lib.client.model.ModelUtil;
 import buildcraft.lib.client.render.DetachedRenderer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
@@ -26,7 +27,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.vecmath.Point3f;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -172,9 +172,9 @@ public enum RenderArchitectTables implements DetachedRenderer.IDetachedRenderer 
                 for (Direction face : Direction.values()) {
                     ModelUtil.createFace(
                                     face,
-                                    new Point3f(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F),
+                                    new Vector3f(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F),
 //                                    new Point3f(0.5F, 0.5F, 0.5F),
-                                    new Point3f(0.5F, 0.5F, 0.5F),
+                                    new Vector3f(0.5F, 0.5F, 0.5F),
 //                                    new ModelUtil.UvFaceData(0, 0, 1, 1)
                                     new ModelUtil.UvFaceData(u0, v0, u1, v1)
                             )

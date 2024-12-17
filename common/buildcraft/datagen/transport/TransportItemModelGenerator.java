@@ -1,6 +1,7 @@
 package buildcraft.datagen.transport;
 
 import buildcraft.datagen.base.BCBaseItemModelGenerator;
+import buildcraft.transport.BCTransport;
 import buildcraft.transport.BCTransportBlocks;
 import buildcraft.transport.BCTransportItems;
 import buildcraft.transport.pipe.PipeRegistry;
@@ -14,8 +15,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import javax.annotation.Nonnull;
 
 public class TransportItemModelGenerator extends BCBaseItemModelGenerator {
-    public TransportItemModelGenerator(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public TransportItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCTransport.MODID, existingFileHelper);
     }
 
     @Override

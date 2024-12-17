@@ -54,7 +54,8 @@ public class NetworkedFluidStackCache extends NetworkedObjectCache<FluidStack> {
 
     @Override
     protected void writeObject(FluidStack obj, PacketBufferBC buffer) {
-        Fluid f = obj.getFluid();
+//        Fluid f = obj.getFluid();
+        Fluid f = obj.getRawFluid();
 //        buffer.writeString(FluidRegistry.getFluidName(f));
         buffer.writeRegistryId(f); // Calen: just like FluidStack#writeToPacket
 //        if (obj.tag == null)

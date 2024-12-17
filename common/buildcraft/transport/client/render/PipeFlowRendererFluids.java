@@ -17,6 +17,7 @@ import buildcraft.transport.pipe.flow.PipeFlowFluids;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -33,7 +34,8 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
 
     @Override
 //    public void render(PipeFlowFluids flow, double x, double y, double z, float partialTicks, BufferBuilder vb)
-    public void render(PipeFlowFluids flow, float partialTicks, PoseStack poseStack, VertexConsumer fluidBuffer, int combinedLight, int combinedOverlay) {
+    public void render(PipeFlowFluids flow, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
+        VertexConsumer fluidBuffer = bufferSource.getBuffer(FluidRenderer.FROZEN_FLUID_RENDER_TYPE_TRANSLUCENT);
         FluidStack forRender = flow.getFluidStackForRender();
         if (forRender == null) {
             return;
@@ -86,14 +88,12 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
 
 //            Vec3 offset = offsets[face.getIndex()];
             Vec3 offset = offsets[face.get3DDataValue()];
-            // TODO Calen: when complete SpriteFluidFrozen.class, release the comments ##0-6/7
-            // TODO Calen: if force use FROZEN, the texture will flash
             if (offset == null) offset = Vec3.ZERO;
-//            center = center.add(offset); // TODO Calen ##0/7
+            center = center.add(offset);
 //            fluidBuffer.setTranslation(x - offset.x, y - offset.y, z - offset.z);
             poseStack.pushPose();
 
-//            poseStack.translate(-offset.x, -offset.y, -offset.z); // TODO Calen ##1/7
+            poseStack.translate(-offset.x, -offset.y, -offset.z);
 
             Vec3 min = center.subtract(radius);
             Vec3 max = center.add(radius);
@@ -114,15 +114,15 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
         if (offset == null) offset = Vec3.ZERO;
 //            fluidBuffer.setTranslation(x - offset.x, y - offset.y, z - offset.z);
         poseStack.pushPose();
-//        poseStack.translate(-offset.x, -offset.y, -offset.z); // TODO Calen ##2/7
+        poseStack.translate(-offset.x, -offset.y, -offset.z);
         PoseStack.Pose pose = poseStack.last();
 
         if (horizontal | !vertical) {
             Vec3 min = new Vec3(0.26, 0.26, 0.26);
             Vec3 max = new Vec3(0.74, 0.74, 0.74);
 
-//            min = min.add(offset); // TODO Calen ##3/7
-//            max = max.add(offset); // TODO Calen ##4/7
+            min = min.add(offset);
+            max = max.add(offset);
 
             FluidRenderer.renderFluid(FluidSpriteType.FROZEN, forRender, amount, flow.capacity, min, max, pose, fluidBuffer, sides);
             horizPos += (max.y - min.y) * amount / flow.capacity;
@@ -140,8 +140,8 @@ public enum PipeFlowRendererFluids implements IPipeFlowRenderer<PipeFlowFluids> 
 
             Vec3 min = new Vec3(minXZ, yMin, minXZ);
             Vec3 max = new Vec3(maxXZ, yMax, maxXZ);
-//            min = min.add(offset); // TODO Calen ##5/7
-//            max = max.add(offset); // TODO Calen ##6/7
+            min = min.add(offset);
+            max = max.add(offset);
 
             FluidRenderer.renderFluid(FluidSpriteType.FROZEN, forRender, 1, 1, min, max, pose, fluidBuffer, sides);
         }

@@ -23,12 +23,13 @@ import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.misc.VecUtil;
 import buildcraft.lib.misc.data.Box;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -43,9 +44,6 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import javax.annotation.Nonnull;
-import javax.vecmath.Matrix4f;
-import javax.vecmath.Point3d;
-import javax.vecmath.Point3f;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,12 +56,12 @@ public class RenderTickListener {
     private static final Box LAST_RENDERED_MAP_LOC = new Box();
 
     static {
-        double[][][] upFace = { // Comments for formatting
-                { { 0.5, 0.9, 0.5 }, { 0.5, 1.6, 0.5 } }, // Main line
-                { { 0.5, 0.9, 0.5 }, { 0.8, 1.2, 0.5 } }, // First arrow part (+X)
-                { { 0.5, 0.9, 0.5 }, { 0.2, 1.2, 0.5 } }, // Second arrow part (-X)
-                { { 0.5, 0.9, 0.5 }, { 0.5, 1.2, 0.8 } }, // Third arrow part (+Z)
-                { { 0.5, 0.9, 0.5 }, { 0.5, 1.2, 0.2 } }, // Forth arrow part (-Z)
+        float[][][] upFace = { // Comments for formatting
+                { { 0.5F, 0.9F, 0.5F }, { 0.5F, 1.6F, 0.5F } }, // Main line
+                { { 0.5F, 0.9F, 0.5F }, { 0.8F, 1.2F, 0.5F } }, // First arrow part (+X)
+                { { 0.5F, 0.9F, 0.5F }, { 0.2F, 1.2F, 0.5F } }, // Second arrow part (-X)
+                { { 0.5F, 0.9F, 0.5F }, { 0.5F, 1.2F, 0.8F } }, // Third arrow part (+Z)
+                { { 0.5F, 0.9F, 0.5F }, { 0.5F, 1.2F, 0.2F } }, // Forth arrow part (-Z)
         };
 
         for (Direction face : Direction.values()) {
@@ -71,10 +69,10 @@ public class RenderTickListener {
             Vec3[][] arr = new Vec3[5][2];
             for (int i = 0; i < 5; i++) {
                 for (int j = 0; j < 2; j++) {
-                    double[] from = upFace[i][j];
-                    Point3f point = new Point3f(new Point3d(from));
-                    matrix.transform(point);
-                    Vec3 to = new Vec3(point.x, point.y, point.z);
+                    float[] from = upFace[i][j];
+                    Vector4f point = new Vector4f(new Vector3f(from));
+                    point.transform(matrix);
+                    Vec3 to = new Vec3(point.x(), point.y(), point.z());
                     arr[i][j] = to;
                 }
             }
@@ -173,12 +171,10 @@ public class RenderTickListener {
         Item mainHandItem = mainHand.getItem();
         Item offHandItem = offHand.getItem();
 
-        VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(Sheets.solidBlockSheet());
-
         if (mainHandItem == BCCoreItems.mapLocation.get()) {
-            renderMapLocation(mainHand, poseStack, bb);
+            renderMapLocation(mainHand, poseStack);
         } else if (mainHandItem == BCCoreItems.markerConnector.get() || offHandItem == BCCoreItems.markerConnector.get()) {
-            renderMarkerConnector(world, player, poseStack, bb);
+            renderMarkerConnector(world, player, poseStack);
         }
 
         // Calen: pop
@@ -188,7 +184,7 @@ public class RenderTickListener {
         mc.getProfiler().pop();
     }
 
-    private static void renderMapLocation(@Nonnull ItemStack stack, PoseStack poseStack, VertexConsumer bb) {
+    private static void renderMapLocation(@Nonnull ItemStack stack, PoseStack poseStack) {
         MapLocationType type = MapLocationType.getFromStack(stack);
         if (type == MapLocationType.SPOT) {
             Direction face = ItemMapLocation.getPointFace(stack);
@@ -202,7 +198,7 @@ public class RenderTickListener {
                     LaserData_BC8 laser =
                             new LaserData_BC8(BuildCraftLaserManager.STRIPES_WRITE, vec[0], vec[1], 1 / 16.0);
 //                    LaserRenderer_BC8.renderLaserStatic(laser);
-                    LaserRenderer_BC8.renderLaserDynamic(laser, poseStack.last(), bb);
+                    LaserRenderer_BC8.renderLaserStatic(laser, poseStack.last());
                 }
                 poseStack.popPose();
             }
@@ -213,7 +209,7 @@ public class RenderTickListener {
             LAST_RENDERED_MAP_LOC.reset();
             LAST_RENDERED_MAP_LOC.initialize(box);
 //            LaserBoxRenderer.renderLaserBoxStatic(LAST_RENDERED_MAP_LOC, BuildCraftLaserManager.STRIPES_WRITE, true);
-            LaserBoxRenderer.renderLaserBoxDynamic(LAST_RENDERED_MAP_LOC, BuildCraftLaserManager.STRIPES_WRITE, poseStack.last(), bb, true);
+            LaserBoxRenderer.renderLaserBoxStatic(LAST_RENDERED_MAP_LOC, BuildCraftLaserManager.STRIPES_WRITE, poseStack.last(), true);
 
         } else if (type == MapLocationType.PATH) {
             List<BlockPos> path = BCCoreItems.mapLocation.get().getPath(stack);
@@ -232,18 +228,18 @@ public class RenderTickListener {
         }
     }
 
-    private static void renderMarkerConnector(ClientLevel world, Player player, PoseStack poseStack, VertexConsumer bb) {
+    private static void renderMarkerConnector(ClientLevel world, Player player, PoseStack poseStack) {
         ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("marker");
         for (MarkerCache<?> cache : MarkerCache.CACHES) {
             profiler.push(cache.name);
-            renderMarkerCache(player, cache.getSubCache(world), poseStack, bb);
+            renderMarkerCache(player, cache.getSubCache(world), poseStack);
             profiler.pop();
         }
         profiler.pop();
     }
 
-    private static void renderMarkerCache(Player player, MarkerSubCache<?> cache, PoseStack poseStack, VertexConsumer bb) {
+    private static void renderMarkerCache(Player player, MarkerSubCache<?> cache, PoseStack poseStack) {
         ProfilerFiller profiler = Minecraft.getInstance().getProfiler();
         profiler.push("compute");
         Set<LaserData_BC8> toRender = new HashSet<>();
@@ -274,7 +270,7 @@ public class RenderTickListener {
         profiler.popPush("render");
         for (LaserData_BC8 laser : toRender) {
 //            LaserRenderer_BC8.renderLaserStatic(laser);
-            LaserRenderer_BC8.renderLaserDynamic(laser, poseStack.last(), bb);
+            LaserRenderer_BC8.renderLaserStatic(laser, poseStack.last());
         }
         profiler.pop();
     }

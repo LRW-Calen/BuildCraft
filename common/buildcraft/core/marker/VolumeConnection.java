@@ -10,14 +10,8 @@ import buildcraft.core.client.BuildCraftLaserManager;
 import buildcraft.lib.client.render.laser.LaserBoxRenderer;
 import buildcraft.lib.marker.MarkerConnection;
 import buildcraft.lib.misc.PositionUtil;
-import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.lib.misc.data.Box;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -168,13 +162,10 @@ public class VolumeConnection extends MarkerConnection<VolumeConnection> {
     //
     // ###########
 
-    /** Wes should use {@link RenderType#solid()} in 1.16.5, not {@link Sheets#solidBlockSheet()}. This determines the render order of the world. */
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderInWorld(PoseStack poseStack) {
-        SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
-        VertexConsumer bb = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.solid()); // Calen: should not use Sheets.solidBlockSheet() in 1.16.5
 //        LaserBoxRenderer.renderLaserBoxStatic(box, BuildCraftLaserManager.MARKER_VOLUME_CONNECTED, true);
-        LaserBoxRenderer.renderLaserBoxDynamic(box, BuildCraftLaserManager.MARKER_VOLUME_CONNECTED, poseStack.last(), bb, true);
+        LaserBoxRenderer.renderLaserBoxStatic(box, BuildCraftLaserManager.MARKER_VOLUME_CONNECTED, poseStack.last(), true);
     }
 }

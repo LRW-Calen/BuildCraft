@@ -12,9 +12,6 @@ import buildcraft.lib.marker.MarkerSubCache;
 import buildcraft.lib.misc.VecUtil;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
@@ -207,32 +204,29 @@ public class PathConnection extends MarkerConnection<PathConnection> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderInWorld(PoseStack poseStack) {
-        // 1.18.2 add
-        VertexConsumer buffer = Minecraft.getInstance().renderBuffers().bufferSource().getBuffer(RenderType.solid());
-        // 1.12.2
         BlockPos last = null;
         for (BlockPos p : positions) {
             if (last == null) {
                 last = p;
             } else {
-                renderLaser(VecUtil.add(VEC_HALF, last), VecUtil.add(VEC_HALF, p), poseStack.last(), buffer);
+                renderLaser(VecUtil.add(VEC_HALF, last), VecUtil.add(VEC_HALF, p), poseStack.last());
                 last = p;
             }
         }
         if (loop) {
             BlockPos from = positions.getLast();
             BlockPos to = positions.getFirst();
-            renderLaser(VecUtil.add(VEC_HALF, from), VecUtil.add(VEC_HALF, to), poseStack.last(), buffer);
+            renderLaser(VecUtil.add(VEC_HALF, from), VecUtil.add(VEC_HALF, to), poseStack.last());
         }
     }
 
     @OnlyIn(Dist.CLIENT)
-    private static void renderLaser(Vec3 from, Vec3 to, PoseStack.Pose pose, VertexConsumer buffer) {
+    private static void renderLaser(Vec3 from, Vec3 to, PoseStack.Pose pose) {
         Vec3 one = offset(from, to);
         Vec3 two = offset(to, from);
         LaserData_BC8 data = new LaserData_BC8(BuildCraftLaserManager.MARKER_PATH_CONNECTED, one, two, RENDER_SCALE);
 //        LaserRenderer_BC8.renderLaserStatic(data);
-        LaserRenderer_BC8.renderLaserDynamic(data, pose, buffer);
+        LaserRenderer_BC8.renderLaserStatic(data, pose);
     }
 
     @OnlyIn(Dist.CLIENT)

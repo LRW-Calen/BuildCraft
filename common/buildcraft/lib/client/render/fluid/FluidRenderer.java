@@ -7,13 +7,18 @@
 package buildcraft.lib.client.render.fluid;
 
 import buildcraft.api.core.BCLog;
+import buildcraft.lib.BCLib;
 import buildcraft.lib.client.model.MutableVertex;
+import buildcraft.lib.client.sprite.TextureAtlasFrozen;
 import buildcraft.lib.misc.*;
+import com.google.common.collect.Maps;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
@@ -57,16 +62,36 @@ public class FluidRenderer {
     private static boolean invertU, invertV;
     private static double xTexDiff, yTexDiff, zTexDiff;
 
+    // Calen 1.20.1
+    public static final ResourceLocation TEXTURE_ATLAS_FROZEN_LOCATION = new ResourceLocation(BCLib.MODID, "textures/atlas/frozen.png");
+    public static final TextureAtlasFrozen FROZEN_ATLAS = new TextureAtlasFrozen(TEXTURE_ATLAS_FROZEN_LOCATION);
+    public static final RenderType FROZEN_FLUID_RENDER_TYPE_TRANSLUCENT = RenderType.create(
+            "buildcraft_frozen_fluid_translucent",
+            DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS,
+            RenderType.BIG_BUFFER_SIZE,
+            /*affectsCrumbling*/ true,
+            /*sortOnUpload*/ false,
+            RenderType.CompositeState.builder()
+                    .setLightmapState(RenderStateShard.LIGHTMAP)
+                    .setShaderState(RenderStateShard.RENDERTYPE_TRANSLUCENT_SHADER)
+                    .setTextureState(new RenderUtil.BCCustomizableTextureState(TEXTURE_ATLAS_FROZEN_LOCATION, () -> false, () -> false))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setCullState(RenderStateShard.NO_CULL)
+                    .setOutputState(RenderStateShard.MAIN_TARGET)
+                    .createCompositeState(true)
+    );
+
     static {
         // TODO: allow the caller to change the light level
         vertex.lighti((byte) (0xF >> 4), (byte) (0xF >> 4));
         for (FluidSpriteType type : FluidSpriteType.values()) {
             fluidSprites.put(type, new HashMap<>());
         }
+
+        Minecraft.getInstance().textureManager.register(FROZEN_ATLAS.location(), FROZEN_ATLAS);
     }
 
-    // TODO Calen frozen
-//    public static void onTextureStitchPre(TextureAtlas map)
+    // public static void onTextureStitchPre(TextureAtlas map)
     public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         for (FluidSpriteType type : FluidSpriteType.values()) {
             fluidSprites.get(type).clear();
@@ -88,11 +113,9 @@ public class FluidRenderer {
                 continue;
             }
             if (spritesStitched.containsKey(still)) {
-                // TODO Calen frozen?
 //                fluidSprites.get(FluidSpriteType.FROZEN).put(fluid.getRegistryName().toString(), spritesStitched.get(still));
 //                event.addSprite(frozen);
             } else {
-                // TODO Calen frozen
 //                try
 //                {
 //                    SpriteFluidFrozen spriteFrozen = new SpriteFluidFrozen(still);
@@ -102,7 +125,6 @@ public class FluidRenderer {
 //                {
 //                    BCLog.logger.error("[lib.fluid.renderder] Failed to create spriteFrozen", e);
 //                }
-                // TODO Calen frozen? how to create TextureAtlasSprite new instance?
 //                if (!map.setTextureEntry(spriteFrozen))
 //                {
 //                    throw new IllegalStateException("Failed to set the frozen variant of " + still + "!");
@@ -125,7 +147,8 @@ public class FluidRenderer {
         // or will get wrong texture
         TextureAtlas map = event.getAtlas();
         if (map.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-            // Calen: BC
+            Map<ResourceLocation, TextureAtlasSprite> srcSprites = Maps.newHashMap();
+            // Calen: BC 1.12.2
             for (Fluid fluid : ForgeRegistries.FLUIDS.getValues()) {
                 // Calen
                 if (fluid.getClass() == EmptyFluid.class) {
@@ -133,14 +156,25 @@ public class FluidRenderer {
                 }
                 ResourceLocation still = fluid.getAttributes().getStillTexture();
                 ResourceLocation flowing = fluid.getAttributes().getFlowingTexture();
+                ResourceLocation registryName = fluid.getRegistryName();
                 if (still == null || flowing == null) {
                     // Calen: for uncompleted fluid, continue
                     BCLog.logger.warn("[lib.fluid.renderder] Found fluid [" + fluid.getRegistryName() + "] has no still or flow textuer ResourceLocation, unable to get sprite.");
                     continue;
                 }
-                fluidSprites.get(FluidSpriteType.STILL).put(fluid.getRegistryName().toString(), map.getSprite(still));
-                fluidSprites.get(FluidSpriteType.FLOWING).put(fluid.getRegistryName().toString(), map.getSprite(flowing));
+                TextureAtlasSprite stillSprite = map.getSprite(still);
+                fluidSprites.get(FluidSpriteType.STILL).put(registryName.toString(), stillSprite);
+                fluidSprites.get(FluidSpriteType.FLOWING).put(registryName.toString(), map.getSprite(flowing));
+                srcSprites.put(registryName, stillSprite);
             }
+            FROZEN_ATLAS.setSrcSprites(srcSprites);
+            TextureAtlas.Preparations preparations = FROZEN_ATLAS.prepareToStitch(Minecraft.getInstance().getResourceManager(), srcSprites.keySet().stream(), Minecraft.getInstance().getProfiler(), Minecraft.getInstance().options.mipmapLevels);
+            FROZEN_ATLAS.reload(preparations);
+            FROZEN_ATLAS.texturesByName.values().forEach(sprite -> {
+                if (sprite instanceof SpriteFluidFrozen) {
+                    fluidSprites.get(FluidSpriteType.FROZEN).put(((SpriteFluidFrozen) sprite).srcRegistryName.toString(), sprite);
+                }
+            });
         }
     }
 
@@ -155,8 +189,7 @@ public class FluidRenderer {
      * @param sideRender A size 6 boolean array that determines if the face will be rendered. If it is null then all
      * faces will be rendered. The indexes are determined by what {@link Direction#ordinal()} returns.
      * @see #renderFluid(FluidSpriteType, FluidStack, double, double, Vec3, Vec3, PoseStack.Pose, VertexConsumer, boolean[]) */
-    public static void renderFluid(FluidSpriteType type, IFluidTank tank, Vec3 min, Vec3 max, PoseStack.Pose pose, VertexConsumer bbIn,
-                                   boolean[] sideRender) {
+    public static void renderFluid(FluidSpriteType type, IFluidTank tank, Vec3 min, Vec3 max, PoseStack.Pose pose, VertexConsumer bbIn, boolean[] sideRender) {
         renderFluid(type, tank.getFluid(), tank.getCapacity(), min, max, pose, bbIn, sideRender);
     }
 
@@ -247,7 +280,6 @@ public class FluidRenderer {
         final double yb = realMax.y;
         final double zb = realMax.z;
 
-        // TODO Calen FROZEN TextureAtlas
         if (type == FluidSpriteType.FROZEN) {
             if (min.x > 1) {
                 xTexDiff = Math.floor(min.x);
@@ -342,20 +374,6 @@ public class FluidRenderer {
             return SpriteUtil.missingSprite();
         }
         TextureAtlasSprite s = fluidSprites.get(type).get(fluid.getRegistryName().toString());
-        if (s == null) {
-            ResourceLocation spriteLocation;
-            spriteLocation = switch (type) {
-                case STILL -> fluid.getAttributes().getStillTexture();
-                case FLOWING -> fluid.getAttributes().getFlowingTexture();
-                // TODO Calen FROZEN??? 这个是临时的……
-//                case FROZEN -> null;
-                case FROZEN -> fluid.getAttributes().getStillTexture();
-            };
-            s = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(spriteLocation);
-            if (s != null) {
-                fluidSprites.get(type).put(fluid.getRegistryName().toString(), s);
-            }
-        }
         return s != null ? s : SpriteUtil.missingSprite();
     }
 
@@ -380,7 +398,7 @@ public class FluidRenderer {
 //        Minecraft.getInstance().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
 //        RenderUtil.setGLColorFromInt(fluid.getFluid().getColor(fluid));
-        RenderUtil.setGLColorFromInt(fluid.getFluid().getAttributes().getColor(fluid));
+        RenderUtil.setGLColorFromInt(fluid.getRawFluid().getAttributes().getColor(fluid));
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
 //        Tessellator tess = Tessellator.getInstance();
@@ -464,7 +482,6 @@ public class FluidRenderer {
     }
 
     private static void guiVertex(Matrix4f poseMatrix, double x, double y, double u, double v) {
-        // TODO Calen getUOffset?
 //        float ru = sprite.getInterpolatedU(u);
         float ru = sprite.getU(u);
 //        float rv = sprite.getInterpolatedV(v);

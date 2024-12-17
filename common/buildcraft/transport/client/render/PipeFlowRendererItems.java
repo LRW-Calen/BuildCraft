@@ -18,6 +18,9 @@ import buildcraft.transport.pipe.flow.PipeFlowItems;
 import buildcraft.transport.pipe.flow.TravellingItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
@@ -26,9 +29,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.vecmath.Point3f;
-import javax.vecmath.Tuple3f;
-import javax.vecmath.Vector3f;
 import java.util.List;
 
 @OnlyIn(Dist.CLIENT)
@@ -38,8 +38,8 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems> {
     private static final MutableQuad[] COLOURED_QUADS = new MutableQuad[6];
 
     public static void onModelBake() {
-        Tuple3f center = new Point3f();
-        Tuple3f radius = new Vector3f(0.2f, 0.2f, 0.2f);
+        Vector3f center = new Vector3f();
+        Vector3f radius = new Vector3f(0.2f, 0.2f, 0.2f);
 
         ISprite sprite = BCTransportSprites.COLOUR_ITEM_BOX;
         UvFaceData uvs = new UvFaceData();
@@ -57,7 +57,8 @@ public enum PipeFlowRendererItems implements IPipeFlowRenderer<PipeFlowItems> {
 
     @Override
 //    public void render(PipeFlowItems flow, double x, double y, double z, float partialTicks, BufferBuilder bb)
-    public void render(PipeFlowItems flow, float partialTicks, PoseStack poseStack, VertexConsumer bb, int lightc, int combinedOverlay) {
+    public void render(PipeFlowItems flow, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int lightc, int combinedOverlay) {
+        VertexConsumer bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
         Level world = flow.pipe.getHolder().getPipeWorld();
 //        long now = world.getTotalWorldTime();
         long now = world.getGameTime();

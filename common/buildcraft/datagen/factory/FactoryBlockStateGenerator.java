@@ -2,6 +2,7 @@ package buildcraft.datagen.factory;
 
 import buildcraft.api.properties.BuildCraftProperties;
 import buildcraft.datagen.base.BCBaseBlockStateGenerator;
+import buildcraft.factory.BCFactory;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.block.BlockTank;
 import buildcraft.factory.block.BlockWaterGel;
@@ -15,8 +16,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class FactoryBlockStateGenerator extends BCBaseBlockStateGenerator {
-    public FactoryBlockStateGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public FactoryBlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, BCFactory.MODID, exFileHelper);
     }
 
     @Override

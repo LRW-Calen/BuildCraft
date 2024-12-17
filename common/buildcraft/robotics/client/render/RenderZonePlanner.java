@@ -9,7 +9,6 @@ package buildcraft.robotics.client.render;
 import buildcraft.api.properties.BuildCraftProperties;
 import buildcraft.lib.client.model.MutableVertex;
 import buildcraft.lib.client.sprite.DynamicTextureBC;
-import buildcraft.lib.misc.RenderUtil;
 import buildcraft.lib.misc.data.WorldPos;
 import buildcraft.robotics.BCRoboticsBlocks;
 import buildcraft.robotics.tile.TileZonePlanner;
@@ -19,13 +18,10 @@ import buildcraft.robotics.zone.ZonePlannerMapDataClient;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.RemovalNotification;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
@@ -79,33 +75,22 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner> {
         if (texture == null) {
             return;
         }
-        poseStack.pushPose();
-//        try (AutoTessellator tessellator = RenderUtil.getThreadLocalUnusedTessellator())
-//        {
+//        try (RenderUtil.AutoTessellator tessellator = RenderUtil.getThreadLocalUnusedTessellator()) {
 //            BufferBuilder buffer = tessellator.tessellator.getBuffer();
-        VertexConsumer buffer = bufferSource.getBuffer(RenderType.translucent());
-        // TODO Calen: it seems that TileEntityRender only can use sprite in TextureAtlas.LOCATION_BLOCKS
+        VertexConsumer buffer = bufferSource.getBuffer(texture.getRenderType());
         texture.updateTexture();
-        texture.bindGlTexture();
+//            texture.bindGlTexture();
 //            GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-//        RenderSystem.activeTexture(33985);
-        // TODO Calen
-//        GlStateManager.disableTexture2D();
-//        GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
-//        RenderSystem.activeTexture(33984);
+//            GlStateManager.disableTexture2D();
+//            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 //            GlStateManager.disableBlend();
-        RenderUtil.disableBlend();
-        // TODO Calen
 //            GlStateManager.disableCull();
-//        if (Minecraft.isAmbientOcclusionEnabled())
-        if (Minecraft.useAmbientOcclusion()) {
-//            GlStateManager.shadeModel(GL11.GL_SMOOTH);
-            RenderSystem.setShader(GameRenderer::getRendertypeEntitySmoothCutoutShader);
-        } else {
-//            GlStateManager.shadeModel(GL11.GL_FLAT);
-            RenderSystem.setShader(GameRenderer::getBlockShader);
-        }
-
+//            if (Minecraft.isAmbientOcclusionEnabled()) {
+//                GlStateManager.shadeModel(GL11.GL_SMOOTH);
+//            } else {
+//                GlStateManager.shadeModel(GL11.GL_FLAT);
+//            }
+//
 //            buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 //            buffer.setTranslation(x, y, z);
 
@@ -153,9 +138,7 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner> {
 //            buffer.setTranslation(0, 0, 0);
 //            tessellator.tessellator.draw();
 //        }
-        // TODO Calen
 //        RenderHelper.enableStandardItemLighting();
-        poseStack.popPose();
 
         Minecraft.getInstance().getProfiler().pop();
         Minecraft.getInstance().getProfiler().pop();
@@ -172,7 +155,8 @@ public class RenderZonePlanner implements BlockEntityRenderer<TileZonePlanner> {
     }
 
     private static DynamicTextureBC createTexture(TileZonePlanner tile, Direction side) {
-        DynamicTextureBC texture = new DynamicTextureBC(TEXTURE_WIDTH, TEXTURE_HEIGHT);
+//        DynamicTextureBC texture = new DynamicTextureBC(TEXTURE_WIDTH, TEXTURE_HEIGHT);
+        DynamicTextureBC texture = new DynamicTextureBC(TEXTURE_WIDTH, TEXTURE_HEIGHT, tile.getBlockPos().getX() + "_" + tile.getBlockPos().getY() + "_" + tile.getBlockPos().getZ());
         for (int textureX = 0; textureX < TEXTURE_WIDTH; textureX++) {
             for (int textureY = 0; textureY < TEXTURE_HEIGHT; textureY++) {
                 int posX;

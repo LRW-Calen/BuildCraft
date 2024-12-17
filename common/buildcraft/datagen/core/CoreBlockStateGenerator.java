@@ -2,6 +2,7 @@ package buildcraft.datagen.core;
 
 import buildcraft.api.enums.EnumDecoratedBlock;
 import buildcraft.api.properties.BuildCraftProperties;
+import buildcraft.core.BCCore;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.block.BlockDecoration;
 import buildcraft.datagen.base.BCBaseBlockStateGenerator;
@@ -16,8 +17,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class CoreBlockStateGenerator extends BCBaseBlockStateGenerator {
-    public CoreBlockStateGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public CoreBlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, BCCore.MODID, exFileHelper);
     }
 
     @Override

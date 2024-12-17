@@ -1,14 +1,15 @@
 package buildcraft.datagen.robotics;
 
 import buildcraft.datagen.base.BCBaseBlockStateGenerator;
+import buildcraft.robotics.BCRobotics;
 import buildcraft.robotics.BCRoboticsBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class RoboticsBlockStateGenerator extends BCBaseBlockStateGenerator {
-    public RoboticsBlockStateGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public RoboticsBlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, BCRobotics.MODID, exFileHelper);
     }
 
     @Override

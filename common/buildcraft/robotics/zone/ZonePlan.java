@@ -9,13 +9,13 @@ package buildcraft.robotics.zone;
 import buildcraft.api.core.IZone;
 import buildcraft.lib.misc.NBTUtilBC;
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
 
-import javax.vecmath.Point2i;
 import java.util.*;
 
 public class ZonePlan implements IZone {
@@ -68,19 +68,19 @@ public class ZonePlan implements IZone {
         }
     }
 
-    public List<Point2i> getAll() {
-        ImmutableList.Builder<Point2i> builder = ImmutableList.builder();
+    public List<Pair<Integer, Integer>> getAll() {
+        ImmutableList.Builder<Pair<Integer, Integer>> builder = ImmutableList.builder();
         for (int zChunk = 0; zChunk < 16; zChunk++) {
             for (int xChunk = 0; xChunk < 16; xChunk++) {
                 if (get(xChunk, zChunk)) {
-                    builder.add(new Point2i(xChunk, zChunk));
+                    builder.add(Pair.of(xChunk, zChunk));
                 }
             }
         }
         chunkMapping.forEach((chunkPos, zoneChunk) ->
         {
-            List<Point2i> zoneChunkAll = zoneChunk.getAll();
-            zoneChunkAll.forEach(p -> p.add(new Point2i(chunkPos.getMaxBlockX(), chunkPos.getMinBlockZ())));
+            List<Pair<Integer, Integer>> zoneChunkAll = zoneChunk.getAll();
+            zoneChunkAll = zoneChunkAll.stream().map(p -> Pair.of(p.getFirst() + chunkPos.getMaxBlockX(), p.getSecond() + chunkPos.getMinBlockZ())).toList();
             builder.addAll(zoneChunkAll);
         });
         return builder.build();
@@ -88,7 +88,7 @@ public class ZonePlan implements IZone {
 
     public ZonePlan getWithOffset(int offsetX, int offsetY) {
         ZonePlan zonePlan = new ZonePlan();
-        getAll().forEach(p -> zonePlan.set(p.x + offsetX, p.y + offsetY, true));
+        getAll().forEach(p -> zonePlan.set(p.getFirst() + offsetX, p.getSecond() + offsetY, true));
         return zonePlan;
     }
 

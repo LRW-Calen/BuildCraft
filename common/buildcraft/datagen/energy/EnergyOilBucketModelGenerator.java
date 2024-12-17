@@ -1,6 +1,7 @@
 package buildcraft.datagen.energy;
 
 import buildcraft.datagen.base.BCBaseItemModelGenerator;
+import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyFluids;
 import buildcraft.energy.event.ChristmasHandler;
 import buildcraft.lib.fluid.BCFluid;
@@ -13,8 +14,8 @@ import net.minecraftforge.registries.RegistryObject;
 import javax.annotation.Nonnull;
 
 public class EnergyOilBucketModelGenerator extends BCBaseItemModelGenerator {
-    public EnergyOilBucketModelGenerator(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public EnergyOilBucketModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCEnergy.MODID, existingFileHelper);
     }
 
     @Override

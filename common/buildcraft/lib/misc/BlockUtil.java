@@ -92,7 +92,7 @@ public final class BlockUtil {
         LootContext.Builder lootcontext$builder = (new LootContext.Builder(world))
                 .withRandom(world.random)
                 .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-                .withParameter(LootContextParams.TOOL, ItemStack.EMPTY)
+                .withParameter(LootContextParams.TOOL, fakePlayer.getMainHandItem())
                 .withOptionalParameter(LootContextParams.BLOCK_ENTITY, world.getBlockEntity(pos))
                 .withParameter(LootContextParams.LAST_DAMAGE_PLAYER, fakePlayer);
         List<ItemStack> drops = state.getDrops(lootcontext$builder);
@@ -105,7 +105,6 @@ public final class BlockUtil {
 //        }
         returnList.addAll(drops);
         return returnList;
-
     }
 
     public static boolean breakBlock(ServerLevel world, BlockPos pos, BlockPos ownerPos, GameProfile owner) {

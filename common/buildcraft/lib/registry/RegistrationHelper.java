@@ -238,7 +238,6 @@ public final class RegistrationHelper {
     public <B extends BlockBCBase_Neptune, I extends Item & IItemBuildCraft> RegistryObject<B> addBlockAndItem(String idBCBlock, BlockBehaviour.Properties properties, BiFunction<String, BlockBehaviour.Properties, B> block, boolean force, BiFunction<B, Item.Properties, I> itemBlockConstructor) {
         RegistryObject<B> added = addBlock(idBCBlock, properties, block, force);
         if (added != null) {
-            String regName = TagManager.getTag(idBCBlock, EnumTagType.REGISTRY_NAME).replace(this.namespace + ":", "");
             String idBCItem = "item." + idBCBlock;
 //            addForcedItem(itemBlockConstructor.apply(added));
             addForcedBlockItem(idBCItem, () -> itemBlockConstructor.apply(added.get(), ItemPropertiesCreator.blockItem()));

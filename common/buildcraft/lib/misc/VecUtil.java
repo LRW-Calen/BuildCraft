@@ -6,6 +6,7 @@
 
 package buildcraft.lib.misc;
 
+import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -14,8 +15,6 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nonnull;
-import javax.vecmath.Tuple3f;
-import javax.vecmath.Vector3f;
 
 /** Class for dealing with {@link Vec3}, {@link Vec3i}, {@link Direction}, {@link Axis} conversions and additions.
  * This is for simple functions ONLY, {@link PositionUtil} is for complex interactions */
@@ -124,7 +123,7 @@ public class VecUtil {
         return new BlockPos(Math.ceil(vec.x), Math.ceil(vec.y), Math.ceil(vec.z));
     }
 
-    public static Tuple3f convertFloat(Vec3 vec) {
+    public static Vector3f convertFloat(Vec3 vec) {
         return new Vector3f((float) vec.x, (float) vec.y, (float) vec.z);
     }
 

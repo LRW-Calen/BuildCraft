@@ -308,6 +308,14 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
 
         boolean isDone = true;
 
+        // TODO Calen Builder #1
+        for (byte v : checkResults) {
+            if (v == CHECK_RESULT_UNKNOWN) {
+                isDone = false;
+                break;
+            }
+        }
+
         tile.getWorldBC().getProfiler().push("add tasks");
         tile.getWorldBC().getProfiler().push("break");
         if (tile.canExcavate()) {
@@ -433,6 +441,8 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
                     );
                     tile.getWorldBC().getProfiler().pop();
                 }
+                // TODO Calen Builder #2
+                isDone = false;
             }
         }
         tile.getWorldBC().getProfiler().pop();
@@ -452,12 +462,17 @@ public abstract class SnapshotBuilder<T extends ITileForSnapshotBuilder> impleme
                     tile.getWorldBC().getProfiler().push("work");
                     if (!doPlaceTask(placeTask)) {
                         cancelPlaceTask(placeTask);
+                        // TODO Calen Builder #3
+                        isDone = false;
                     }
                     tile.getWorldBC().getProfiler().pop();
                     if (check(placeTask.pos)) {
                         checkResultsChanged = true;
                     }
                     iterator.remove();
+                } else {
+                    // TODO Calen Builder #4
+                    isDone = false;
                 }
             }
         }

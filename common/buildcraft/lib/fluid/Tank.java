@@ -34,6 +34,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -202,19 +203,21 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
         }
     }
 
-    @Override
-    public boolean isFluidValid(FluidStack fluid) {
-//        return super.isFluidValid(fluid) && fluid != null && filter.test(fluid);
-        return super.isFluidValid(fluid) && !fluid.isEmpty() && filter.test(fluid);
+    public boolean canFillFluidType(FluidStack fluid) {
+        return this.canFill && super.isFluidValid(fluid) && !fluid.isEmpty() && filter.test(fluid);
     }
 
     @Override
 //    public int fill(FluidStack resource, boolean doFill)
     public int fill(FluidStack resource, FluidAction doFill) {
-        if (isFluidValid(resource)) {
-            return super.fill(resource, doFill);
+        if (canFillFluidType(resource)) {
+            return fillInternal(resource, doFill);
         }
         return 0;
+    }
+
+    public int fillInternal(FluidStack resource, FluidAction doFill) {
+        return super.fill(resource, doFill);
     }
 
     @Nonnull
@@ -231,6 +234,42 @@ public class Tank extends FluidTank implements IFluidHandlerAdv {
         }
 //        return null;
         return StackUtil.EMPTY_FLUID;
+    }
+
+    public boolean canDrainFluidType(@Nullable FluidStack fluid) {
+        return this.canDrain && super.isFluidValid(fluid) && !fluid.isEmpty();
+    }
+
+    // Calen 1.18.2
+    @Override
+    public @NotNull FluidStack drain(FluidStack resource, FluidAction action) {
+        if (!canDrainFluidType(getFluid())) {
+            return StackUtil.EMPTY_FLUID;
+        }
+        return drainInternal(resource, action);
+    }
+
+    // Calen 1.18.2
+    @Override
+    public @NotNull FluidStack drain(int maxDrain, FluidAction action) {
+        if (!canDrainFluidType(fluid)) {
+            return StackUtil.EMPTY_FLUID;
+        }
+        return drainInternal(maxDrain, action);
+    }
+
+    public FluidStack drainInternal(FluidStack resource, FluidAction action) {
+        if (resource == null || resource.isEmpty() || !resource.isFluidEqual(getFluid())) {
+            return StackUtil.EMPTY_FLUID;
+        }
+        return drainInternal(resource.getAmount(), action);
+    }
+
+    public FluidStack drainInternal(int maxDrain, FluidAction action) {
+        if (fluid == null || fluid.isEmpty() || maxDrain < 0) {
+            return StackUtil.EMPTY_FLUID;
+        }
+        return super.drain(maxDrain, action);
     }
 
     @Override

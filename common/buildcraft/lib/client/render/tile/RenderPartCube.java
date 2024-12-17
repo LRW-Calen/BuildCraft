@@ -9,12 +9,11 @@ package buildcraft.lib.client.render.tile;
 import buildcraft.lib.client.model.MutableVertex;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.ForgeModelBakery;
-
-import javax.vecmath.Point3f;
 
 /** A variable sized element (like LED) that can render somewhere in a TESR. Passing a resolver instance will let you
  * modify the location, colour, lightmap, and size of the single element. This does not allow for different textures. */
@@ -45,10 +44,10 @@ public class RenderPartCube {
      * of the vertex. */
 //    public void render(BufferBuilder bb)
     public void render(PoseStack poseStack, VertexConsumer bb) {
-        Point3f pos = center.positionvf();
-        double x = pos.x;
-        double y = pos.y;
-        double z = pos.z;
+        Vector3f pos = center.positionvf();
+        double x = pos.x();
+        double y = pos.y();
+        double z = pos.z();
 
         // Calen: add 0.001 to avoid black border caused by VertexConsumer#vertex: double->float->double
 //        double rX = sizeX / 2;

@@ -170,12 +170,26 @@ public enum BCBuildersEventDist {
             RenderSystem.enableTexture();
 
             poseStack.pushPose();
-            ClientSnapshots.INSTANCE.renderSnapshot(snapshot, pX, pY, sX, sY, poseStack);
+            ClientSnapshots.INSTANCE.renderSnapshot(snapshot, pX, pY, sX, sY);
+            Snapshot final_snapshot = snapshot;
+            int final_pY = pY;
+            snapshotRenderTask = () -> ClientSnapshots.INSTANCE.renderSnapshot(final_snapshot, pX, final_pY, sX, sY);
             poseStack.popPose();
 
             // Calen: recover the context in Screen#renderTooltipInternal
             RenderSystem.setShader(GameRenderer::getPositionColorShader);
             bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        }
+    }
+
+    private static Runnable snapshotRenderTask;
+
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public void onTickEvent$RenderTickEvent(TickEvent.RenderTickEvent event) {
+        if (snapshotRenderTask != null) {
+            snapshotRenderTask.run();
+            snapshotRenderTask = null;
         }
     }
 

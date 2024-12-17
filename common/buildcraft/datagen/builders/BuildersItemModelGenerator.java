@@ -1,9 +1,12 @@
 package buildcraft.datagen.builders;
 
+import buildcraft.builders.BCBuilders;
 import buildcraft.builders.BCBuildersBlocks;
 import buildcraft.builders.BCBuildersItems;
 import buildcraft.builders.client.BuildersItemModelPredicates;
 import buildcraft.datagen.base.BCBaseItemModelGenerator;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.Direction;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.resources.ResourceLocation;
@@ -12,8 +15,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import javax.annotation.Nonnull;
 
 public class BuildersItemModelGenerator extends BCBaseItemModelGenerator {
-    public BuildersItemModelGenerator(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public BuildersItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCBuilders.MODID, existingFileHelper);
     }
 
     @Override
@@ -21,7 +24,45 @@ public class BuildersItemModelGenerator extends BCBaseItemModelGenerator {
         // BlockItems
 
         // builder
-        withExistingParent(BCBuildersBlocks.builder.get().getRegistryName().toString(), new ResourceLocation("buildcraftbuilders:block/builder/main"));
+        getBuilder(BCBuildersBlocks.builder.get().getRegistryName().toString())
+                .element()
+                .from(0, 0, 0)
+                .to(16, 16, 16)
+                .face(Direction.DOWN).texture("#down").cullface(Direction.DOWN).end()
+                .face(Direction.UP).texture("#up").cullface(Direction.UP).end()
+                .face(Direction.NORTH).texture("#north").cullface(Direction.NORTH).end()
+                .face(Direction.SOUTH).texture("#south").cullface(Direction.SOUTH).end()
+                .face(Direction.WEST).texture("#west").cullface(Direction.WEST).end()
+                .face(Direction.EAST).texture("#east").cullface(Direction.EAST).end()
+                .end()
+                .element()
+                .from(3, 4, -2)
+                .to(13, 6, 8)
+                .face(Direction.DOWN).texture("#slot").uvs(3, 3, 13, 13).end()
+                .face(Direction.UP).texture("#slot").uvs(3, 3, 13, 13).end()
+                .face(Direction.NORTH).texture("#slot").uvs(3, 0, 13, 2).end()
+                .face(Direction.SOUTH).texture("#slot").uvs(3, 0, 13, 2).end()
+                .face(Direction.WEST).texture("#slot").uvs(3, 0, 13, 2).end()
+                .face(Direction.EAST).texture("#slot").uvs(3, 0, 13, 2).end()
+                .end()
+                .texture("particle", "buildcraftbuilders:blocks/builder/side")
+                .texture("down", "buildcraftbuilders:blocks/builder/bottom")
+                .texture("up", "buildcraftbuilders:blocks/builder/top")
+                .texture("north", "buildcraftbuilders:blocks/builder/front")
+                .texture("east", "buildcraftbuilders:blocks/builder/side")
+                .texture("south", "buildcraftbuilders:blocks/builder/back")
+                .texture("west", "buildcraftbuilders:blocks/builder/side")
+                .texture("slot", "buildcraftbuilders:blocks/builder/slot_blueprint")
+                .guiLight(BlockModel.GuiLight.SIDE)
+                .transforms()
+                .transform(ItemTransforms.TransformType.GUI).rotation(30, 225, 0).translation(0, 0, 0).scale(0.625F, 0.625F, 0.625F).end()
+                .transform(ItemTransforms.TransformType.GROUND).rotation(0, 0, 0).translation(0, 3, 0).scale(0.25F, 0.25F, 0.25F).end()
+                .transform(ItemTransforms.TransformType.FIXED).rotation(0, 0, 0).translation(0, 0, 0).scale(0.5F, 0.5F, 0.5F).end()
+                .transform(ItemTransforms.TransformType.THIRD_PERSON_RIGHT_HAND).rotation(75, 45, 0).translation(0, 2.5F, 0).scale(0.375F, 0.375F, 0.375F).end()
+                .transform(ItemTransforms.TransformType.FIRST_PERSON_RIGHT_HAND).rotation(0, 45, 0).translation(0, 0, 0).scale(0.40F, 0.40F, 0.40F).end()
+                .transform(ItemTransforms.TransformType.FIRST_PERSON_LEFT_HAND).rotation(0, 225, 0).translation(0, 0, 0).scale(0.40F, 0.40F, 0.40F).end()
+                .end()
+        ;
         // filler
         withExistingParent(BCBuildersBlocks.filler.get().getRegistryName().toString(), new ResourceLocation("buildcraftbuilders:block/filler/main"));
         // frame

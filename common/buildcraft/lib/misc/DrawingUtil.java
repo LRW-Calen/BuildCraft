@@ -6,9 +6,9 @@
 
 package buildcraft.lib.misc;
 
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 
-import javax.vecmath.Point2i;
 import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.function.BiConsumer;
@@ -85,8 +85,7 @@ public class DrawingUtil {
             drawPixel.accept(currentX, currentY);
             if (currentX == x2 && currentY == y2 ||
                     Math.abs(currentX - x1) > Math.abs(x2 - x1) ||
-                    Math.abs(currentY - y1) > Math.abs(y2 - y1))
-            {
+                    Math.abs(currentY - y1) > Math.abs(y2 - y1)) {
                 break;
             }
             if (error * 2 > -dx) {
@@ -137,8 +136,7 @@ public class DrawingUtil {
                     if (!filled) {
                         if ((nextNx * nextNx) + (ny * ny) + (nz * nz) <= 1 &&
                                 (nx * nx) + (nextNy * nextNy) + (nz * nz) <= 1 &&
-                                (nx * nx) + (ny * ny) + (nextNz * nextNz) <= 1)
-                        {
+                                (nx * nx) + (ny * ny) + (nextNz * nextNz) <= 1) {
                             continue;
                         }
                     }
@@ -158,21 +156,21 @@ public class DrawingUtil {
 
 
     public static void fill(boolean[][] data, int startX, int startY, int width, int height) {
-        Queue<Point2i> queue = new ArrayDeque<>();
-        queue.add(new Point2i(startX, startY));
+        Queue<Pair<Integer, Integer>> queue = new ArrayDeque<>();
+        queue.add(Pair.of(startX, startY));
         while (!queue.isEmpty()) {
-            Point2i point = queue.poll();
-            if (point.x < 0 || point.y < 0 || point.x >= width || point.y >= height) {
+            Pair<Integer, Integer> point = queue.poll();
+            if (point.getFirst() < 0 || point.getSecond() < 0 || point.getFirst() >= width || point.getSecond() >= height) {
                 continue;
             }
-            if (data[point.x][point.y]) {
+            if (data[point.getFirst()][point.getSecond()]) {
                 continue;
             }
-            data[point.x][point.y] = true;
-            queue.add(new Point2i(point.x - 1, point.y));
-            queue.add(new Point2i(point.x + 1, point.y));
-            queue.add(new Point2i(point.x, point.y - 1));
-            queue.add(new Point2i(point.x, point.y + 1));
+            data[point.getFirst()][point.getSecond()] = true;
+            queue.add(Pair.of(point.getFirst() - 1, point.getSecond()));
+            queue.add(Pair.of(point.getFirst() + 1, point.getSecond()));
+            queue.add(Pair.of(point.getFirst(), point.getSecond() - 1));
+            queue.add(Pair.of(point.getFirst(), point.getSecond() + 1));
         }
     }
 }

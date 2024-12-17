@@ -8,7 +8,6 @@ package buildcraft.lib.client.model;
 
 import buildcraft.lib.misc.SpriteUtil;
 import com.google.common.collect.ImmutableList;
-import com.mojang.math.Matrix3f;
 import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -102,12 +101,11 @@ public class ModelItemSimple implements BakedModel {
 
     private static ItemTransform translate(ItemTransform from, double dx, double dy, double dz) {
         Vector3f nTranslation = new Vector3f(from.translation.x(), from.translation.y(), from.translation.z());
-        nTranslation.transform(Matrix3f.createScaleMatrix((float) dx, (float) dy, (float) dz));
+        nTranslation.add((float) dx, (float) dy, (float) dz);
         return new ItemTransform(from.rotation, nTranslation, from.scale);
     }
 
-    private static ItemTransform def(double rx, double ry, double rz, double tx, double ty, double tz,
-                                     double scale) {
+    private static ItemTransform def(double rx, double ry, double rz, double tx, double ty, double tz, double scale) {
         return def((float) rx, (float) ry, (float) rz, (float) tx, (float) ty, (float) tz, (float) scale);
     }
 

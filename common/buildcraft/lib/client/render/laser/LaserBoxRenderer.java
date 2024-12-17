@@ -24,18 +24,18 @@ import java.util.List;
 public class LaserBoxRenderer {
     private static final double RENDER_SCALE = 1 / 16.05;
 
-    // Calen: seems GlList cannot be used in 1.18.2 world rendering
-//    public static void renderLaserBoxStatic(Box box, LaserType type, boolean center) {
-//        if (box == null || box.min() == null || box.max() == null) {
-//            return;
-//        }
-//
-//        makeLaserBox(box, type, center);
-//
-//        for (LaserData_BC8 data : box.laserData) {
+    public static void renderLaserBoxStatic(Box box, LaserType type, PoseStack.Pose modelViewMatrix, boolean center) {
+        if (box == null || box.min() == null || box.max() == null) {
+            return;
+        }
+
+        makeLaserBox(box, type, center);
+
+        for (LaserData_BC8 data : box.laserData) {
 //            LaserRenderer_BC8.renderLaserStatic(data);
-//        }
-//    }
+            LaserRenderer_BC8.renderLaserStatic(data, modelViewMatrix);
+        }
+    }
 
     public static void renderLaserBoxDynamic(Box box, LaserType type, PoseStack.Pose pose, VertexConsumer bb, boolean center) {
         if (box == null || box.min() == null || box.max() == null) {
@@ -51,8 +51,7 @@ public class LaserBoxRenderer {
 
     private static void makeLaserBox(Box box, LaserType type, boolean center) {
         if (box.min().equals(box.lastMin) && box.max().equals(box.lastMax) && box.lastType == type
-                && box.laserData != null)
-        {
+                && box.laserData != null) {
             return;
         }
 

@@ -18,6 +18,9 @@ import buildcraft.transport.pipe.flow.PipeFlowPower;
 import buildcraft.transport.pipe.flow.PipeFlowPower.Section;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.world.phys.AABB;
@@ -25,15 +28,14 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.vecmath.Point3f;
-
 @OnlyIn(Dist.CLIENT)
 public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
     INSTANCE;
 
     @Override
 //    public void render(PipeFlowPower flow, double x, double y, double z, float partialTicks, BufferBuilder bb)
-    public void render(PipeFlowPower flow, float partialTicks, PoseStack poseStack, VertexConsumer bb, int combinedLight, int combinedOverlay) {
+    public void render(PipeFlowPower flow, float partialTicks, PoseStack poseStack, MultiBufferSource bufferSource, int combinedLight, int combinedOverlay) {
+        VertexConsumer bb = bufferSource.getBuffer(Sheets.translucentCullBlockSheet());
         double centrePower = 0;
         double[] power = new double[6];
         for (Direction side : Direction.values()) {
@@ -82,8 +84,8 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
         Vec3 radiusV = new Vec3(radius, radius, radius);
         radiusV = VecUtil.replaceValue(radiusV, side.getAxis(), 0.125 + centreRadius / 2);
 
-        Point3f centreF = new Point3f((float) centre.x, (float) centre.y, (float) centre.z);
-        Point3f radiusF = new Point3f((float) radiusV.x, (float) radiusV.y, (float) radiusV.z);
+        Vector3f centreF = new Vector3f((float) centre.x, (float) centre.y, (float) centre.z);
+        Vector3f radiusF = new Vector3f((float) radiusV.x, (float) radiusV.y, (float) radiusV.z);
 
         UvFaceData uvs = new UvFaceData();
         for (Direction face : Direction.values()) {
@@ -114,8 +116,8 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
         TextureAtlasSprite sprite = (overload ? BCTransportSprites.POWER_FLOW_OVERLOAD : BCTransportSprites.POWER_FLOW)
                 .getSprite();
 
-        Point3f centre = new Point3f(0.5f, 0.5f, 0.5f);
-        Point3f radiusP = new Point3f(radius, radius, radius);
+        Vector3f centre = new Vector3f(0.5f, 0.5f, 0.5f);
+        Vector3f radiusP = new Vector3f(radius, radius, radius);
 
         UvFaceData uvs = new UvFaceData();
 

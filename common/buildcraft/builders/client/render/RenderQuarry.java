@@ -16,10 +16,8 @@ import buildcraft.lib.client.render.laser.LaserRenderer_BC8;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 import buildcraft.lib.misc.VecUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -113,7 +111,6 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
         if (tile.frameBox.isInitialized()) {
             double yOffset = 1 + 4 / 16D;
 
-            VertexConsumer buffer = bufferSource.getBuffer(Sheets.translucentCullBlockSheet()); // Calen
             profiler.push("laser");
             if (tile.currentTask != null && tile.currentTask instanceof TileQuarry.TaskBreakBlock taskBreakBlock) {
                 BlockPos pos = taskBreakBlock.breakPos;
@@ -125,7 +122,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
                         Vec3 to = VecUtil.convertCenter(pos);
                         LaserData_BC8 laser = new LaserData_BC8(LASER, from, to, 1 / 16.0);
 //                        LaserRenderer_BC8.renderLaserStatic(laser);
-                        LaserRenderer_BC8.renderLaserDynamic(laser, poseStack.last(), buffer);
+                        LaserRenderer_BC8.renderLaserStatic(laser, poseStack.last());
                     }
                 } else {
                     long power = (long) (
@@ -151,63 +148,45 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
             if (tile.clientDrillPos != null && tile.prevClientDrillPos != null) {
                 Vec3 interpolatedPos = tile.prevClientDrillPos.add(tile.clientDrillPos.subtract(tile.prevClientDrillPos).scale(partialTicks));
 
-//                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
-                LaserRenderer_BC8.renderLaserDynamic(
-                        new LaserData_BC8(FRAME,//
+                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
                                 new Vec3(interpolatedPos.x + 0.5, max.getY() + 0.5, interpolatedPos.z),//
                                 new Vec3(interpolatedPos.x + 0.5, max.getY() + 0.5, max.getZ() + 12 / 16D),//
                                 1 / 16D, true, true, 0),
-                        poseStack.last(),
-                        buffer
+                        poseStack.last()
                 );
-//                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
-                LaserRenderer_BC8.renderLaserDynamic(
-                        new LaserData_BC8(FRAME,//
+                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
                                 new Vec3(interpolatedPos.x + 0.5, max.getY() + 0.5, interpolatedPos.z),//
                                 new Vec3(interpolatedPos.x + 0.5, max.getY() + 0.5, min.getZ() + 4 / 16D),//
                                 1 / 16D, true, true, 0),
-                        poseStack.last(),
-                        buffer
+                        poseStack.last()
                 );
-//                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
-                LaserRenderer_BC8.renderLaserDynamic(
-                        new LaserData_BC8(FRAME,//
+                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
                                 new Vec3(interpolatedPos.x, max.getY() + 0.5, interpolatedPos.z + 0.5),//
                                 new Vec3(max.getX() + 12 / 16D, max.getY() + 0.5, interpolatedPos.z + 0.5),//
                                 1 / 16D, true, true, 0),
-                        poseStack.last(),
-                        buffer
+                        poseStack.last()
                 );
-//                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
-                LaserRenderer_BC8.renderLaserDynamic(
-                        new LaserData_BC8(FRAME,//
+                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME,//
                                 new Vec3(interpolatedPos.x, max.getY() + 0.5, interpolatedPos.z + 0.5),//
                                 new Vec3(min.getX() + 4 / 16D, max.getY() + 0.5, interpolatedPos.z + 0.5),//
                                 1 / 16D, true, true, 0),
-                        poseStack.last(),
-                        buffer
+                        poseStack.last()
                 );
-//                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME_BOTTOM,//
-                LaserRenderer_BC8.renderLaserDynamic(
-                        new LaserData_BC8(FRAME_BOTTOM,//
+                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(FRAME_BOTTOM,//
                                 new Vec3(interpolatedPos.x + 0.5, interpolatedPos.y + 1 + 4 / 16D, interpolatedPos.z + 0.5),//
                                 new Vec3(interpolatedPos.x + 0.5, max.getY() + 0.5, interpolatedPos.z + 0.5),//
                                 1 / 16D, true, true, 0),
-                        poseStack.last(),
-                        buffer
+                        poseStack.last()
                 );
-//                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(DRILL,//
-                LaserRenderer_BC8.renderLaserDynamic(
-                        new LaserData_BC8(DRILL,//
+                LaserRenderer_BC8.renderLaserStatic(new LaserData_BC8(DRILL,//
                                 new Vec3(interpolatedPos.x + 0.5, interpolatedPos.y + 1 + yOffset, interpolatedPos.z + 0.5),//
                                 new Vec3(interpolatedPos.x + 0.5, interpolatedPos.y + yOffset, interpolatedPos.z + 0.5),//
                                 1 / 16D, true, true, 0),
-                        poseStack.last(),
-                        buffer
+                        poseStack.last()
                 );
             } else {
 //                LaserBoxRenderer.renderLaserBoxStatic(tile.frameBox, BuildCraftLaserManager.STRIPES_WRITE, true);
-                LaserBoxRenderer.renderLaserBoxDynamic(tile.frameBox, BuildCraftLaserManager.STRIPES_WRITE, poseStack.last(), buffer, true);
+                LaserBoxRenderer.renderLaserBoxStatic(tile.frameBox, BuildCraftLaserManager.STRIPES_WRITE, poseStack.last(), true);
             }
             profiler.pop();
         }
@@ -291,7 +270,7 @@ public class RenderQuarry implements BlockEntityRenderer<TileQuarry> {
 //                GlStateManager.scale(3, 3, 3);
                 poseStack.scale(3, 3, 3);
 //                Minecraft.getMinecraft().getRenderItem().renderItem(stack, ItemCameraTransforms.TransformType.GROUND);
-                Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, combinedLight, combinedLight, poseStack, bufferSource, (int) tile.getBlockPos().asLong());
+                Minecraft.getInstance().getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.GROUND, combinedLight, combinedOverlay, poseStack, bufferSource, (int) tile.getBlockPos().asLong());
 
 //                GlStateManager.popMatrix();
                 poseStack.popPose();

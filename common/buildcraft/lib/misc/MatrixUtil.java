@@ -7,11 +7,13 @@
 package buildcraft.lib.misc;
 
 import com.google.common.collect.ImmutableMap;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.phys.AABB;
 
-import javax.vecmath.*;
 import java.util.Map;
 
 public class MatrixUtil {
@@ -28,31 +30,29 @@ public class MatrixUtil {
                 builder.put(face, mat);
                 continue;
             }
-            mat.setTranslation(new Vector3f(0.5f, 0.5f, 0.5f));
+            mat.setTranslation(0.5f, 0.5f, 0.5f);
             Matrix4f m2 = new Matrix4f();
             m2.setIdentity();
 
             if (face.getAxis() == Axis.Y) {
-                AxisAngle4f axisAngle = new AxisAngle4f(0, 0, 1, (float) Math.PI * 0.5f * -face.getStepY());
-                m2.setRotation(axisAngle);
-                mat.mul(m2);
+                m2.multiply(Vector3f.ZP.rotation((float) Math.PI * 0.5f * -face.getStepY()));
+                mat.multiply(m2);
 
                 m2.setIdentity();
-                m2.setRotation(new AxisAngle4f(1, 0, 0, (float) Math.PI * (1 + face.getStepY() * 0.5f)));
-                mat.mul(m2);
+                m2.multiply(Vector3f.XP.rotation((float) Math.PI * (1 + face.getStepY() * 0.5f)));
+                mat.multiply(m2);
             } else {
                 int ang;
                 if (face == Direction.EAST) ang = 2;
                 else if (face == Direction.NORTH) ang = 3;
                 else ang = 1;
-                AxisAngle4f axisAngle = new AxisAngle4f(0, 1, 0, (float) Math.PI * 0.5f * ang);
-                m2.setRotation(axisAngle);
-                mat.mul(m2);
+                m2.multiply(Vector3f.YP.rotation((float) Math.PI * 0.5f * ang));
+                mat.multiply(m2);
             }
 
             m2.setIdentity();
-            m2.setTranslation(new Vector3f(-0.5f, -0.5f, -0.5f));
-            mat.mul(m2);
+            m2.setTranslation(-0.5f, -0.5f, -0.5f);
+            mat.multiply(m2);
             builder.put(face, mat);
         }
         rotationMap = builder.build();
@@ -71,16 +71,18 @@ public class MatrixUtil {
 
         Matrix4f toMatrix = rotateTowardsFace(to);
         Matrix4f result = new Matrix4f(toMatrix);
-        result.mul(fromMatrix);
+        result.multiply(fromMatrix);
         return result;
     }
 
     public static AABB multiply(AABB box, Matrix4f matrix) {
-        Point3f min = new Point3f(new Point3d(box.minX, box.minY, box.minZ));
-        Point3f max = new Point3f(new Point3d(box.maxX, box.maxY, box.maxZ));
-        matrix.transform(min);
-        matrix.transform(max);
-        return new AABB(min.x, min.y, min.z, max.x, max.y, max.z);
+        Vector3f min = new Vector3f((float) box.minX, (float) box.minY, (float) box.minZ);
+        Vector3f max = new Vector3f((float) box.maxX, (float) box.maxY, (float) box.maxZ);
+        Vector4f min4f = new Vector4f(min);
+        Vector4f max4f = new Vector4f(max);
+        min4f.transform(matrix);
+        max4f.transform(matrix);
+        return new AABB(min4f.x(), min4f.y(), min4f.z(), max4f.x(), max4f.y(), max4f.z());
     }
 
     public static AABB[] multiplyAll(AABB[] boxes, Matrix4f matrix) {

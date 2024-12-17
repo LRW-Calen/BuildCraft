@@ -6,28 +6,34 @@
 
 package buildcraft.lib.client.sprite;
 
-import buildcraft.lib.misc.SpriteUtil;
+import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.MapRenderer;
+import net.minecraft.client.renderer.RenderStateShard;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.DynamicTexture;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.saveddata.maps.MapItemSavedData;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.ForgeRenderTypes;
 
-// TODO Calen: ZonePlanner TESR Texture
+/** See {@link MapRenderer.MapInstance} */
 @OnlyIn(Dist.CLIENT)
 public class DynamicTextureBC {
     public final int width, height;
-    private final int[] colorMap;
+    // private final int[] colorMap;
     private final int widthPow2, heightPow2;
+    private final DynamicTexture dynamicTexture;
+    private final RenderType renderType;
 
-    private DynamicTexture dynamicTexture;
-
-    // Calen test
-//    private final ResourceLocation lightTextureLocation;
-
-    public DynamicTextureBC(int iWidth, int iHeight) {
+    // public DynamicTextureBC(int iWidth, int iHeight)
+    public DynamicTextureBC(int iWidth, int iHeight, String id) {
         width = iWidth;
         height = iHeight;
 //        widthPow2 = MathHelper.smallestEncompassingPowerOfTwo(iWidth);
@@ -36,8 +42,11 @@ public class DynamicTextureBC {
         heightPow2 = Mth.smallestEncompassingPowerOfTwo(iHeight);
 //        dynamicTexture = new DynamicTexture(widthPow2, heightPow2);
         dynamicTexture = new DynamicTexture(widthPow2, heightPow2, false);
-//        lightTextureLocation = Minecraft.getInstance().getTextureManager().register("bc_dynamic_" + dynamicTexture.getId(), dynamicTexture);
-        colorMap = dynamicTexture.getPixels().makePixelArray();
+//        colorMap = dynamicTexture.getTextureData();
+
+        // Calen 1.20.1
+        ResourceLocation resourcelocation = Minecraft.getInstance().textureManager.register("zone_planner/" + id, this.dynamicTexture);
+        this.renderType = createRenderType(resourcelocation);
     }
 
     public void setColord(int x, int y, double r, double g, double b, double a) {
@@ -59,7 +68,8 @@ public class DynamicTextureBC {
     }
 
     public void setColor(int x, int y, int color) {
-        colorMap[x + y * widthPow2] = color;
+//        colorMap[x + y * widthPow2] = color;
+        this.dynamicTexture.getPixels().setPixelRGBA(x, y, color); // ABGR?????????
     }
 
     public void updateTexture() {
@@ -67,12 +77,10 @@ public class DynamicTextureBC {
         dynamicTexture.upload();
     }
 
-    public void bindGlTexture() {
-//        GlStateManager.bindTexture(dynamicTexture.getId());
-        SpriteUtil.bindTexture(dynamicTexture.getId());
-//        RenderSystem.setShaderTexture(0, lightTextureLocation);
-//        Minecraft.getInstance().getTextureManager().bindForSetup(this.lightTextureLocation);
-    }
+    // Calen 1.18.2: called in DynamicTexture#upload
+//    public void bindGlTexture() {
+//        GlStateManager.bindTexture(dynamicTexture.getGlTextureId());
+//    }
 
     public void deleteGlTexture() {
         dynamicTexture.releaseId();
@@ -114,5 +122,22 @@ public class DynamicTextureBC {
 //        bb.tex(u, v);
         bb.uv((float) u, (float) v);
         bb.endVertex();
+    }
+
+    // Calen 1.20.1
+    public RenderType getRenderType() {
+        return renderType;
+    }
+
+    /** See {@link RenderType#text(ResourceLocation)} in {@link MapRenderer.MapInstance#MapInstance(int, MapItemSavedData)}. */
+    private static RenderType createRenderType(ResourceLocation locationIn) {
+        RenderType.CompositeState rendertype$state = RenderType.CompositeState.builder()
+                .setShaderState(RenderStateShard.RENDERTYPE_TEXT_SHADER)
+                .setCullState(RenderStateShard.NO_CULL)
+                .setTextureState(new RenderUtil.BCCustomizableTextureState(locationIn, () -> ForgeRenderTypes.enableTextTextureLinearFiltering, () -> false))
+                .setTransparencyState(RenderStateShard.NO_TRANSPARENCY)
+                .setLightmapState(RenderStateShard.LIGHTMAP)
+                .createCompositeState(false);
+        return RenderType.create("buildcraft_zone_planner", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, true, rendertype$state);
     }
 }

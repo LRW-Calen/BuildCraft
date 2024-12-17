@@ -43,12 +43,40 @@ public class ItemWrench_Neptune extends ItemBC_Neptune implements IToolWrench {
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, LevelReader world, BlockPos pos, Player player) {
-        return false;
+        // Calen: if here is false, player.isShiftKeyDown() in PipeBehaviourLapis#onPipeActivate will always return false
+//        return false;
+        return true;
+    }
+
+    /**
+     * Calen: called before block#use
+     *
+     * <br> {@link Item#onItemUseFirst(ItemStack, UseOnContext)} // pipe_lapis color negative shift
+     * <br> if({@link Player#isShiftKeyDown()} && {@link Item#doesSneakBypassUse(ItemStack, LevelReader, BlockPos, Player)}) {
+     * <br>     result = {@link net.minecraft.world.level.block.Block#use(BlockState, Level, BlockPos, Player, InteractionHand, BlockHitResult)} // pipe_lapis color positive shift | chest open gui
+     * <br> }
+     * <br> if(!{@link InteractionResult#consumesAction()}) {
+     * <br>     {@link Item#useOn(UseOnContext)} // rotate block
+     * <br> }
+     * <br> to enable following all:
+     * <br> right click chest -> open
+     * <br> shift + right click chest -> rotate
+     * <br> right click pipe_lapis -> positive shift color
+     * <br> shift + right click pipe_lapis -> negative shift color
+     */
+    @Override
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx) {
+        Player player = ctx.getPlayer();
+        if (player.isShiftKeyDown()) {
+            return useOn(ctx);
+        } else {
+            return super.onItemUseFirst(stack, ctx);
+        }
     }
 
     @Override
 //    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
-    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx) {
+    public InteractionResult useOn(UseOnContext ctx) {
         Player player = ctx.getPlayer();
         Level world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();

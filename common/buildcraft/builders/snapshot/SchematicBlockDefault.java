@@ -323,7 +323,9 @@ public class SchematicBlockDefault implements ISchematicBlock {
 
     @Override
     public boolean canBuild(Level world, BlockPos blockPos) {
-        return world.isEmptyBlock(blockPos);
+//        return world.isEmptyBlock(blockPos);
+        // Calen
+        return world.isEmptyBlock(blockPos) || world.getBlockState(blockPos).getBlock() == Blocks.WATER;
     }
 
     @Override

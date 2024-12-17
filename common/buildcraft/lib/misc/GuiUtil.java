@@ -141,8 +141,7 @@ public class GuiUtil {
      *            width.
      * @param font the font for drawing the text in the tooltip box */
 //    public static int drawHoveringText(List<String> textLines, final int mouseX, final int mouseY,
-    public static int drawHoveringText(PoseStack poseStack, List<Component> textLines, final int mouseX, final int mouseY,
-                                       final int screenWidth, final int screenHeight, final int maxTextWidth, Font font) {
+    public static int drawHoveringText(PoseStack poseStack, List<Component> textLines, final int mouseX, final int mouseY, final int screenWidth, final int screenHeight, final int maxTextWidth, Font font) {
         if (!textLines.isEmpty()) {
 //            GlStateManager.disableRescaleNormal();
 //            RenderHelper.disableStandardItemLighting();
@@ -229,6 +228,7 @@ public class GuiUtil {
 //            final int zLevel = 300;
             final int zLevel = 400;
             final int backgroundColor = 0xF0100010;
+            // 1.18.2 GuiUtils.drawGradientRect(Matrix4f mat, int zLevel, int left, int top, int right, int bottom, int startColor, int endColor)
             GuiUtils.drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3,
                     backgroundColor, backgroundColor);
             GuiUtils.drawGradientRect(mat, zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3,
@@ -416,7 +416,7 @@ public class GuiUtil {
 //        int rx = (int) (x * scaleW);
         int rx = (int) (x * scaleFactor);
 //        int ry = (int) (mc.displayHeight - (y + height) * scaleH);
-        int ry = (int) ((window.getGuiScaledHeight() - height - y) * scaleFactor);
+        int ry = (int) (window.getHeight() - (y + height) * scaleFactor);
 //        GL11.glScissor(rx, ry, (int) (width * scaleW), (int) (height * scaleH));
         RenderSystem.enableScissor(rx, ry, (int) (width * scaleFactor), (int) (height * scaleFactor));
     }
@@ -445,8 +445,7 @@ public class GuiUtil {
         return new SpriteNineSliced(sprite, uMin, vMin, uMax, vMax, textureSize);
     }
 
-    public static SpriteNineSliced slice(ISprite sprite, double uMin, double vMin, double uMax, double vMax,
-                                         double scale) {
+    public static SpriteNineSliced slice(ISprite sprite, double uMin, double vMin, double uMax, double vMax, double scale) {
         return new SpriteNineSliced(sprite, uMin, vMin, uMax, vMax, scale);
     }
 

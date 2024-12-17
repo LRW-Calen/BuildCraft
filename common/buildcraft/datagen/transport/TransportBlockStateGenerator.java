@@ -1,6 +1,7 @@
 package buildcraft.datagen.transport;
 
 import buildcraft.datagen.base.BCBaseBlockStateGenerator;
+import buildcraft.transport.BCTransport;
 import buildcraft.transport.BCTransportBlocks;
 import net.minecraft.data.DataGenerator;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -8,8 +9,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class TransportBlockStateGenerator extends BCBaseBlockStateGenerator {
-    public TransportBlockStateGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public TransportBlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, BCTransport.MODID, exFileHelper);
     }
 
     @Override

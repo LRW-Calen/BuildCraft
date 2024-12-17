@@ -1,6 +1,7 @@
 package buildcraft.datagen.factory;
 
 import buildcraft.datagen.base.BCBaseItemModelGenerator;
+import buildcraft.factory.BCFactory;
 import buildcraft.factory.BCFactoryBlocks;
 import buildcraft.factory.BCFactoryItems;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -13,8 +14,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import javax.annotation.Nonnull;
 
 public class FactoryItemModelGenerator extends BCBaseItemModelGenerator {
-    public FactoryItemModelGenerator(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public FactoryItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCFactory.MODID, existingFileHelper);
     }
 
     @Override

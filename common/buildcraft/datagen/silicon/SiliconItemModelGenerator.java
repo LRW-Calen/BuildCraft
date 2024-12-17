@@ -1,6 +1,7 @@
 package buildcraft.datagen.silicon;
 
 import buildcraft.datagen.base.BCBaseItemModelGenerator;
+import buildcraft.silicon.BCSilicon;
 import buildcraft.silicon.BCSiliconBlocks;
 import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.client.SiliconItemModelPredicates;
@@ -12,8 +13,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import javax.annotation.Nonnull;
 
 public class SiliconItemModelGenerator extends BCBaseItemModelGenerator {
-    public SiliconItemModelGenerator(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public SiliconItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCSilicon.MODID, existingFileHelper);
     }
 
     @Override

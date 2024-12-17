@@ -7,11 +7,11 @@
 package buildcraft.robotics.zone;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 
-import javax.vecmath.Point2i;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
@@ -63,12 +63,12 @@ public class ZoneChunk {
         }
     }
 
-    public List<Point2i> getAll() {
-        ImmutableList.Builder<Point2i> builder = ImmutableList.builder();
+    public List<Pair<Integer, Integer>> getAll() {
+        ImmutableList.Builder<Pair<Integer, Integer>> builder = ImmutableList.builder();
         for (int zChunk = 0; zChunk < 16; zChunk++) {
             for (int xChunk = 0; xChunk < 16; xChunk++) {
                 if (get(xChunk, zChunk)) {
-                    builder.add(new Point2i(xChunk, zChunk));
+                    builder.add(Pair.of(xChunk, zChunk));
                 }
             }
         }

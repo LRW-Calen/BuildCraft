@@ -162,10 +162,10 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
 //                    world.notifyNeighborsRespectDebug(getPos(), getBlockType(), true);
                     return InteractionResult.SUCCESS;
                 }
-                return InteractionResult.FAIL;
+                return InteractionResult.PASS;
             }
         }
-        return InteractionResult.FAIL;
+        return InteractionResult.PASS;
     }
 
     private boolean isFacingReceiver(Direction dir) {

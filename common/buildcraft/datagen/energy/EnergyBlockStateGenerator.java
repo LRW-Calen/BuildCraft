@@ -1,6 +1,7 @@
 package buildcraft.datagen.energy;
 
 import buildcraft.datagen.base.BCBaseBlockStateGenerator;
+import buildcraft.energy.BCEnergy;
 import buildcraft.energy.BCEnergyBlocks;
 import buildcraft.energy.BCEnergyFluids;
 import buildcraft.lib.fluid.BCFluid;
@@ -10,8 +11,8 @@ import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 public class EnergyBlockStateGenerator extends BCBaseBlockStateGenerator {
-    public EnergyBlockStateGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public EnergyBlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, BCEnergy.MODID, exFileHelper);
     }
 
     @Override

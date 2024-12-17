@@ -13,10 +13,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 
 public class ItemVolumeBox extends ItemBC_Neptune {
     public ItemVolumeBox(String idBC, Item.Properties properties) {
@@ -25,11 +23,10 @@ public class ItemVolumeBox extends ItemBC_Neptune {
 
     @Override
 //    public EnumActionResult onItemUse(Player player, Level world, BlockPos pos, InteractionHand hand, Direction facing, float hitX, float hitY, float hitZ)
-    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext ctx) {
+    public InteractionResult useOn(UseOnContext ctx) {
         Level world = ctx.getLevel();
         BlockPos pos = ctx.getClickedPos();
         Direction facing = ctx.getClickedFace();
-        Vec3 vec3Pos = ctx.getClickLocation();
         if (world.isClientSide) {
 //            return EnumActionResult.PASS;
             return InteractionResult.PASS;

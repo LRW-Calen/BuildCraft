@@ -18,6 +18,7 @@ import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -130,7 +131,7 @@ public class PipeTabButton {
     }
 
     private static final TranslatableComponent ALL = new TranslatableComponent("gui.creativetab.pipe.button.all");
-    private static final TranslatableComponent FILTERED = new TranslatableComponent("gui.creativetab.pipe.button.filtered");
+    private static final String FILTERED_TRANSLATION_KEY = "gui.creativetab.pipe.button.filtered";
 
     private static void onPress(CreativeModeInventoryScreen screen, Button button, int pMouseButton) {
         if (pMouseButton == InputConstants.MOUSE_BUTTON_LEFT) {
@@ -178,7 +179,7 @@ public class PipeTabButton {
             return ALL;
         } else {
             DyeColor dyeColor = colour == 1 ? null : DyeColor.byId(colour - 2);
-            return ColourUtil.getTextFullTooltipComponent(FILTERED.copy(), dyeColor);
+            return new TextComponent(ColourUtil.getTextFullTooltipString(FILTERED_TRANSLATION_KEY, dyeColor));
         }
     }
 

@@ -9,12 +9,13 @@ package buildcraft.factory.block;
 import buildcraft.factory.tile.TileMiningWell;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithFacing;
+import buildcraft.lib.block.IBlockWithTickableTE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class BlockMiningWell extends BlockBCTile_Neptune<TileMiningWell> implements IBlockWithFacing {
+public class BlockMiningWell extends BlockBCTile_Neptune<TileMiningWell> implements IBlockWithFacing, IBlockWithTickableTE<TileMiningWell> {
     public BlockMiningWell(String idBC, BlockBehaviour.Properties props) {
         super(idBC, props);
     }

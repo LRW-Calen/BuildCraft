@@ -18,6 +18,7 @@ import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.transport.BCTransportSprites;
 import com.google.common.collect.ImmutableList;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
@@ -35,9 +36,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nullable;
-import javax.vecmath.Point3f;
-import javax.vecmath.Tuple3f;
-import javax.vecmath.Vector3f;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -54,8 +52,8 @@ public enum ModelPipeItem implements BakedModel {
         // Same sprite for all 3 sections
         {
             QUADS_SAME = new MutableQuad[6];
-            Tuple3f center = new Point3f(0.5f, 0.5f, 0.5f);
-            Tuple3f radius = new Vector3f(0.25f, 0.5f, 0.25f);
+            Vector3f center = new Vector3f(0.5f, 0.5f, 0.5f);
+            Vector3f radius = new Vector3f(0.25f, 0.5f, 0.25f);
             UvFaceData uvsY = UvFaceData.from16(4, 4, 12, 12);
             UvFaceData uvsXZ = UvFaceData.from16(4, 0, 12, 16);
             for (Direction face : Direction.values()) {
@@ -72,8 +70,8 @@ public enum ModelPipeItem implements BakedModel {
         // Translucent Coloured pipes
         {
             QUADS_COLOUR = new MutableQuad[6];
-            Tuple3f center = new Point3f(0.5f, 0.5f, 0.5f);
-            Tuple3f radius = new Vector3f(0.24f, 0.49f, 0.24f);
+            Vector3f center = new Vector3f(0.5f, 0.5f, 0.5f);
+            Vector3f radius = new Vector3f(0.24f, 0.49f, 0.24f);
             UvFaceData uvsY = UvFaceData.from16(4, 4, 12, 12);
             UvFaceData uvsXZ = UvFaceData.from16(4, 0, 12, 16);
             for (Direction face : Direction.values()) {

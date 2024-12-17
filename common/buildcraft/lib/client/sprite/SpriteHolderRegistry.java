@@ -10,7 +10,6 @@ import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
 import buildcraft.api.core.render.ISprite;
 import buildcraft.lib.misc.SpriteUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
@@ -69,12 +68,12 @@ public class SpriteHolderRegistry {
         }
     }
 
-    public static void exportTextureMap() {
+    // public static void exportTextureMap()
+    public static void exportTextureMap(TextureAtlas map) {
         if (!DEBUG) {
             return;
         }
 //        TextureAtlas map = Minecraft.getInstance().getTextureMapBlocks();
-        TextureAtlas map = Minecraft.getInstance().getModelManager().getAtlas(TextureAtlas.LOCATION_BLOCKS);
 //        GlStateManager.bindTexture(map.getGlTextureId());
         GL11.glBindTexture(3553, map.getId());
 
@@ -94,7 +93,8 @@ public class SpriteHolderRegistry {
             bufferedimage.setRGB(0, 0, width, height, aint, 0, width);
 
             try {
-                ImageIO.write(bufferedimage, "png", new File("bc_spritemap_" + l + ".png"));
+//                ImageIO.write(bufferedimage, "png", new File("bc_spritemap_" + l + ".png"));
+                ImageIO.write(bufferedimage, "png", new File("bc_spritemap_" + map.location().toString().replace(":", "_").replace("/", "_").replace("\\", "_") + "_" + l + ".png"));
             } catch (IOException io) {
                 BCLog.logger.warn(io);
             }

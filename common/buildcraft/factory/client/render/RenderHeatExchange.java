@@ -16,7 +16,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -153,12 +152,10 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
                 double otherEnd = flip ? p0 + length * progress : p1;
                 Vec3 vDiff = Vec3.atLowerCornerOf(diff);
                 // Inner Fluid
-                VertexConsumer bbForInnerFlow = bufferSource.getBuffer(RenderType.solid());
-                renderFlow(vDiff, face, poseStack, bbForInnerFlow, progressStart + 0.01, progressEnd - 0.01,
+                renderFlow(vDiff, face, poseStack, bufferSource, progressStart + 0.01, progressEnd - 0.01,
                         sectionEnd.smoothedTankInput.getFluidForRender(), combinedLight, combinedOverlay, 4, partialTicks);
                 // Outer Fluid
-                VertexConsumer bbForOuterFlow = bufferSource.getBuffer(RenderType.translucent());
-                renderFlow(vDiff, face.getOpposite(), poseStack, bbForOuterFlow, otherStart, otherEnd,
+                renderFlow(vDiff, face.getOpposite(), poseStack, bufferSource, otherStart, otherEnd,
                         section.smoothedTankInput.getFluidForRender(), combinedLight, combinedOverlay, 2, partialTicks);
             }
         }
@@ -202,7 +199,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
             Vec3 diff,
             Direction face,
             PoseStack poseStack,
-            VertexConsumer bb,
+            MultiBufferSource bufferSource,
             double s, double e,
             FluidStack fluid,
             int combinedLight,
@@ -210,6 +207,7 @@ public class RenderHeatExchange implements BlockEntityRenderer<TileHeatExchange>
             int point,
             float partialTicks
     ) {
+        VertexConsumer bb = bufferSource.getBuffer(FluidRenderer.FROZEN_FLUID_RENDER_TYPE_TRANSLUCENT);
 //        double tickTime = Minecraft.getMinecraft().world.getTotalWorldTime();
         double tickTime = Minecraft.getInstance().level.getGameTime();
         double offset = (tickTime + partialTicks) % 31 / 31.0;

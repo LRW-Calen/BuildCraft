@@ -28,11 +28,7 @@ public class ModelHolderRegistry {
     static final List<ModelHolder> HOLDERS = new CopyOnWriteArrayList<>();
 
     // public static void onTextureStitchPre(TextureMap map)
-    public static void onTextureStitchPre(TextureAtlas map, TextureStitchEvent.Pre event) {
-        // Calen test
-        if (!map.location().equals(TextureAtlas.LOCATION_BLOCKS)) {
-            return;
-        }
+    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         // Calen: Thread Safety
 //        Set<ResourceLocation> toStitch = new HashSet<>();
         CopyOnWriteArraySet<ResourceLocation> toStitch = new CopyOnWriteArraySet<>();

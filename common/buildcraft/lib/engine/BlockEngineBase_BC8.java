@@ -178,7 +178,7 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
                 case NORTH -> NORTH;
             };
         }
-        return Shapes.empty();
+        return Shapes.block();
     }
 
     @Override

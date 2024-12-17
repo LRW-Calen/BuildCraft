@@ -1,6 +1,7 @@
 package buildcraft.datagen.silicon;
 
 import buildcraft.datagen.base.BCBaseBlockStateGenerator;
+import buildcraft.silicon.BCSilicon;
 import buildcraft.silicon.BCSiliconBlocks;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.core.Direction;
@@ -12,8 +13,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class SiliconBlockStateGenerator extends BCBaseBlockStateGenerator {
-    public SiliconBlockStateGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public SiliconBlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, BCSilicon.MODID, exFileHelper);
     }
 
     @Override

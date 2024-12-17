@@ -1,6 +1,7 @@
 package buildcraft.datagen.core;
 
 import buildcraft.api.enums.EnumDecoratedBlock;
+import buildcraft.core.BCCore;
 import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.BCCoreItems;
 import buildcraft.core.block.BlockDecoration;
@@ -16,8 +17,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import javax.annotation.Nonnull;
 
 public class CoreItemModelGenerator extends BCBaseItemModelGenerator {
-    public CoreItemModelGenerator(DataGenerator generator, String modid, ExistingFileHelper existingFileHelper) {
-        super(generator, modid, existingFileHelper);
+    public CoreItemModelGenerator(DataGenerator generator, ExistingFileHelper existingFileHelper) {
+        super(generator, BCCore.MODID, existingFileHelper);
     }
 
     @Override

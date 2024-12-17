@@ -12,11 +12,11 @@ import buildcraft.lib.client.model.MutableQuad;
 import buildcraft.lib.misc.JsonUtil;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.GsonHelper;
 
-import javax.vecmath.Vector3f;
 import java.util.Arrays;
 
 public class JsonQuad {
@@ -44,7 +44,7 @@ public class JsonQuad {
         uvs.maxU = uv[2] / 16f;
         uvs.maxV = uv[3] / 16f;
         Vector3f radius = new Vector3f(to[0] - from[0], to[1] - from[1], to[2] - from[2]);
-        radius.scale(0.5f);
+        radius.mul(0.5f);
         Vector3f center = new Vector3f(from);
         center.add(radius);
         MutableQuad quad = ModelUtil.createFace(face, center, radius, uvs);

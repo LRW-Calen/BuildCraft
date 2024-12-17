@@ -78,7 +78,6 @@ public enum DetachedRenderer {
 
     public void renderWorldLastEvent(Player player, float partialTicks, PoseStack poseStack, Camera camera) {
 //        Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        SpriteUtil.bindTexture(TextureAtlas.LOCATION_BLOCKS);
 //        Minecraft.getInstance().entityRenderer.enableLightmap();
 
         for (RenderMatrixType type : RenderMatrixType.values()) {

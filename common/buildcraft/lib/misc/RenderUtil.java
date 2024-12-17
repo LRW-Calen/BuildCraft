@@ -14,11 +14,15 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.client.ForgeRenderTypes;
 import net.minecraftforge.client.MinecraftForgeClient;
 
 import javax.annotation.Nullable;
@@ -26,6 +30,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.util.*;
+import java.util.function.Supplier;
 
 public class RenderUtil {
 
@@ -229,6 +234,10 @@ public class RenderUtil {
         RenderSystem.colorMask(true, true, true, true);
     }
 
+    public static void disableAlpha() {
+        RenderSystem.colorMask(true, true, true, false);
+    }
+
     static class TessellatorQueue {
         // Max size of 20: if we go over this then something has gone very wrong
         // In theory this shouldn't even go above about 3.
@@ -270,6 +279,20 @@ public class RenderUtil {
         @Override
         public void close() {
             queue.tessellatorInUse[index] = false;
+        }
+    }
+
+    /** {@link ForgeRenderTypes.CustomizableTextureState} is private, so we create our own. */
+    public static class BCCustomizableTextureState extends RenderStateShard.TextureStateShard {
+        public BCCustomizableTextureState(ResourceLocation resLoc, Supplier<Boolean> blur, Supplier<Boolean> mipmap) {
+            super(resLoc, blur.get(), mipmap.get());
+            this.setupState = () -> {
+                this.blur = blur.get();
+                this.mipmap = mipmap.get();
+                TextureManager texturemanager = Minecraft.getInstance().getTextureManager();
+                texturemanager.getTexture(resLoc).setFilter(this.blur, this.mipmap);
+                RenderSystem.setShaderTexture(0, resLoc);
+            };
         }
     }
 }

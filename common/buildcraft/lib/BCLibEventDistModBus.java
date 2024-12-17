@@ -10,6 +10,7 @@ import buildcraft.lib.client.render.fluid.FluidRenderer;
 import buildcraft.lib.client.render.laser.LaserRenderer_BC8;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 import buildcraft.lib.misc.data.ModelVariableData;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,7 +25,9 @@ public enum BCLibEventDistModBus {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void modelBake(ModelBakeEvent event) {
-        SpriteHolderRegistry.exportTextureMap();
+//        SpriteHolderRegistry.exportTextureMap();
+        SpriteHolderRegistry.exportTextureMap((TextureAtlas) Minecraft.getInstance().textureManager.getTexture(TextureAtlas.LOCATION_BLOCKS));
+        SpriteHolderRegistry.exportTextureMap(FluidRenderer.FROZEN_ATLAS);
         LaserRenderer_BC8.clearModels();
         ModelHolderRegistry.onModelBake();
         ModelVariableData.onModelBake();
@@ -33,12 +36,14 @@ public enum BCLibEventDistModBus {
     @SubscribeEvent
     @OnlyIn(Dist.CLIENT)
     public void textureStitchPre(TextureStitchEvent.Pre event) {
+        if (!TextureAtlas.LOCATION_BLOCKS.equals(event.getAtlas().location())) {
+            return;
+        }
         ReloadManager.INSTANCE.preReloadResources();
 //        TextureMap map = event.getMap();
-        TextureAtlas map = event.getAtlas();
 //        SpriteHolderRegistry.onTextureStitchPre(map);
         SpriteHolderRegistry.onTextureStitchPre(event);
-        ModelHolderRegistry.onTextureStitchPre(map, event);
+        ModelHolderRegistry.onTextureStitchPre(event);
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

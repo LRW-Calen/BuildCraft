@@ -18,6 +18,7 @@ import buildcraft.transport.tile.TilePipeHolder;
 import buildcraft.transport.wire.EnumWireBetween;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Vector3f;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.core.Direction;
@@ -28,8 +29,6 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import javax.vecmath.Point3f;
-import javax.vecmath.Tuple3f;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -72,12 +71,12 @@ public class PipeWireRenderer {
     private static MutableQuad[] getQuads(EnumWirePart part) {
         MutableQuad[] quads = new MutableQuad[6];
 
-        Tuple3f center = new Point3f(//
+        Vector3f center = new Vector3f(//
                 0.5f + (part.x.getStep() * 4.51f / 16f), //
                 0.5f + (part.y.getStep() * 4.51f / 16f), //
                 0.5f + (part.z.getStep() * 4.51f / 16f) //
         );
-        Tuple3f radius = new Point3f(1 / 32f, 1 / 32f, 1 / 32f);
+        Vector3f radius = new Vector3f(1 / 32f, 1 / 32f, 1 / 32f);
         UvFaceData uvs = new UvFaceData();
         int off = func(part.x) * 4 + func(part.y) * 2 + func(part.z);
         uvs.minU = off / 16f;
@@ -143,8 +142,8 @@ public class PipeWireRenderer {
         uvBase.minV = 0;
         uvBase.maxV = 1 / 16f;
 
-        Tuple3f centerFloat = VecUtil.convertFloat(center);
-        Tuple3f radiusFloat = VecUtil.convertFloat(radius);
+        Vector3f centerFloat = VecUtil.convertFloat(center);
+        Vector3f radiusFloat = VecUtil.convertFloat(radius);
 
         for (Direction face : Direction.values()) {
             if (face.getAxis() == between.mainAxis) {

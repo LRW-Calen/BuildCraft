@@ -10,7 +10,6 @@ buildscript {
         // Mixin
         //classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
         classpath 'org.spongepowered:mixingradle:0.7.+'
-        classpath 'javax.vecmath:vecmath:1.5.2'
     }
 }
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
@@ -365,8 +364,6 @@ dependencies {
 
     // Examples using mod jars from ./libs
 
-    compileOnly fg.deobf("javax.vecmath:vecmath:1.5.2")
-    runtimeOnly fg.deobf("javax.vecmath:vecmath:1.5.2")
     compileOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
     runtimeOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
 
@@ -387,9 +384,6 @@ dependencies {
 
     jarJar(group: 'net.sf.trove4j', name: 'trove4j', version: '[3.0.3,)') {
         jarJar.pin(it, '3.0.3')
-    }
-    jarJar(group: 'javax.vecmath', name: 'vecmath', version: '[1.5.2,)') {
-        jarJar.pin(it, '1.5.2')
     }
 
     // Testing

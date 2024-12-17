@@ -20,8 +20,8 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 
 public class BuildersBlockStateGenerator extends BCBaseBlockStateGenerator {
-    public BuildersBlockStateGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper) {
-        super(gen, modid, exFileHelper);
+    public BuildersBlockStateGenerator(DataGenerator gen, ExistingFileHelper exFileHelper) {
+        super(gen, BCBuilders.MODID, exFileHelper);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class BuildersBlockStateGenerator extends BCBaseBlockStateGenerator {
                 models().getBuilder("buildcraftbuilders:block/builder/slot_empty")
                         .texture("all", "buildcraftbuilders:blocks/builder/slot_empty")
                         .element()
-                        .from(16, 6, 13)
-                        .to(6, 4, 3)
+                        .from(3, 4, -0.01F)
+                        .to(13, 6, 9.99F)
                         .face(Direction.DOWN).texture("#all").uvs(3, 3, 13, 13).end()
                         .face(Direction.UP).texture("#all").uvs(3, 3, 13, 13).end()
                         .face(Direction.NORTH).texture("#all").uvs(3, 0, 13, 2).end()

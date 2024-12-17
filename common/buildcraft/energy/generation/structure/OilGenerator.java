@@ -11,6 +11,7 @@ import buildcraft.lib.misc.data.Box;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
@@ -44,10 +45,7 @@ public class OilGenerator {
         NONE
     }
 
-    public static void generatePieces(
-            StructurePiecesBuilder piecesBuilder,
-            PieceGenerator.Context<OilFeatureConfiguration> context
-    ) {
+    public static void generatePieces(StructurePiecesBuilder piecesBuilder, PieceGenerator.Context<OilFeatureConfiguration> context) {
         int minHeight = context.heightAccessor().getMinBuildHeight();
         int maxHeight = context.heightAccessor().getMaxBuildHeight();
         ChunkPos chunkPos = context.chunkPos();
@@ -96,13 +94,14 @@ public class OilGenerator {
      * {@link GenType#NONE} means skipped and nothing for gen */
     @Nonnull
     public static GenType getPieceTypeByRand(Random rand, Biome biome, int cx, int cz, int x, int z, boolean log) {
+        ResourceLocation biomeRegistryName = biome.getRegistryName();
         // Do not generate oil in excluded biomes
-        boolean isExcludedBiome = BCEnergyConfig.excludedBiomes.contains(biome.getRegistryName());
+        boolean isExcludedBiome = BCEnergyConfig.excludedBiomes.contains(biomeRegistryName);
         if (isExcludedBiome == BCEnergyConfig.excludedBiomesIsBlackList) {
             if (DEBUG_OILGEN_BASIC & log) {
                 BCLog.logger.info(
                         "[energy.oilgen] Not generating oil in chunk " + cx + ", " + cz
-                                + " because the biome we found (" + biome.getRegistryName() + ") is disabled!"
+                                + " because the biome we found (" + biomeRegistryName + ") is disabled!"
                 );
             }
             return GenType.NONE;
@@ -118,11 +117,11 @@ public class OilGenerator {
             return GenType.NONE;
         }
 
-        boolean oilBiome = BCEnergyConfig.surfaceDepositBiomes.contains(biome.getRegistryName());
+        boolean oilBiome = BCEnergyConfig.surfaceDepositBiomes.contains(biomeRegistryName);
 
         double bonus = oilBiome ? 3.0 : 1.0;
         bonus *= BCEnergyConfig.oilWellGenerationRate;
-        if (BCEnergyConfig.excessiveBiomes.contains(biome.getRegistryName())) {
+        if (BCEnergyConfig.excessiveBiomes.contains(biomeRegistryName)) {
             bonus *= 30.0;
         }
         final GenType type;

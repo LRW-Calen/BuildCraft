@@ -117,7 +117,6 @@ public class LibFrozenFluidTextureProvider extends BCBaseTextureGenerator {
             }
         }
         save(bo, cache, pngOutputPath);
-
     }
 
     @Override

@@ -607,7 +607,7 @@ public class JsonUtil {
 
     public static JsonElement serializeFluidStack(FluidStack fluidStack) {
         JsonObject json = new JsonObject();
-        json.addProperty("fluid", fluidStack.getFluid().getRegistryName().toString());
+        json.addProperty("fluid", fluidStack.getRawFluid().getRegistryName().toString());
         json.addProperty("amount", fluidStack.getAmount());
         return json;
     }

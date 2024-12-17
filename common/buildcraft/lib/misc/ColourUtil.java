@@ -205,12 +205,56 @@ public class ColourUtil {
                 return base.append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
                         .append(new TextComponent(ChatFormatting.RESET.toString()));
             } else {
-                return base.append(new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour))).append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
+                return base.append(new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour)))
+                        .append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
                         .append(new TextComponent(ChatFormatting.RESET.toString()));
             }
         } else {
             return base.append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)));
         }
+    }
+
+    // Calen
+    public static MutableComponent getTextFullTooltipComponent(String translationKey, @Nullable DyeColor colour) {
+        MutableComponent v;
+        if (BCLibConfig.useColouredLabels) {
+            ChatFormatting formatColour = convertColourToTextFormat(colour);
+//            return base.append(Component.literal(formatColour.toString() + getTextFormatForBlack(formatColour))).append(Component.translatable(LocaleUtil.getColorTranslateKey(colour)))
+//                    .append(Component.literal(ChatFormatting.RESET.toString()));
+            if (formatColour == null) {
+                v = new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour))
+                        .append(new TextComponent(ChatFormatting.RESET.toString()));
+            } else {
+                v = new TextComponent(formatColour.toString() + getTextFormatForBlack(formatColour))
+                        .append(new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)))
+                        .append(new TextComponent(ChatFormatting.RESET.toString()));
+            }
+        } else {
+            v = new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour));
+        }
+        return new TranslatableComponent(translationKey, v);
+    }
+
+    // Calen
+    public static String getTextFullTooltipString(String translationKey, @Nullable DyeColor colour) {
+        String colorStr;
+        if (BCLibConfig.useColouredLabels) {
+            ChatFormatting formatColour = convertColourToTextFormat(colour);
+//            return base.append(Component.literal(formatColour.toString() + getTextFormatForBlack(formatColour))).append(Component.translatable(LocaleUtil.getColorTranslateKey(colour)))
+//                    .append(Component.literal(ChatFormatting.RESET.toString()));
+            if (formatColour == null) {
+                colorStr = new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)).getString()
+                        + ChatFormatting.RESET.toString();
+            } else {
+                colorStr = formatColour.toString()
+                        + getTextFormatForBlack(formatColour)
+                        + new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)).getString()
+                        + ChatFormatting.RESET.toString();
+            }
+        } else {
+            colorStr = new TranslatableComponent(LocaleUtil.getColorTranslateKey(colour)).getString();
+        }
+        return new TranslatableComponent(translationKey, colorStr).getString();
     }
 
     public static MutableComponent getTextFullTooltipComponent(DyeColor colour) {

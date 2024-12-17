@@ -10,13 +10,15 @@ import buildcraft.lib.expression.VecDouble;
 import buildcraft.lib.expression.VecLong;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.datafixers.util.Pair;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import com.mojang.math.Vector4f;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.world.phys.Vec3;
-
-import javax.vecmath.*;
 
 /** Holds all of the information necessary to make a {@link BakedQuad}. This provides a variety of methods to quickly
  * set or get different elements. This currently holds 4 {@link MutableVertex}. */
@@ -168,15 +170,14 @@ public class MutableQuad {
     }
 
     public Vector3f getCalculatedNormal() {
-        Vector3f a = new Vector3f(vertex_1.positionvf());
+        Vector3f a = vertex_1.positionvf().copy();
         a.sub(vertex_0.positionvf());
 
-        Vector3f b = new Vector3f(vertex_2.positionvf());
+        Vector3f b = vertex_2.positionvf().copy();
         b.sub(vertex_0.positionvf());
 
-        Vector3f c = new Vector3f();
-        c.cross(a, b);
-        return c;
+        a.cross(b);
+        return a;
     }
 
     public void setCalculatedNormal() {
@@ -184,7 +185,7 @@ public class MutableQuad {
     }
 
     public static float diffuseLight(Vector3f normal) {
-        return diffuseLight(normal.x, normal.y, normal.z);
+        return diffuseLight(normal.x(), normal.y(), normal.z());
     }
 
     public static float diffuseLight(float x, float y, float z) {
@@ -235,7 +236,7 @@ public class MutableQuad {
                 return this;
             }
             case 1: {
-                Point2f t = vertex_0.tex();
+                Pair<Float, Float> t = vertex_0.tex();
                 vertex_0.texv(vertex_1.tex());
                 vertex_1.texv(vertex_2.tex());
                 vertex_2.texv(vertex_3.tex());
@@ -243,8 +244,8 @@ public class MutableQuad {
                 return this;
             }
             case 2: {
-                Point2f t0 = vertex_0.tex();
-                Point2f t1 = vertex_1.tex();
+                Pair<Float, Float> t0 = vertex_0.tex();
+                Pair<Float, Float> t1 = vertex_1.tex();
                 vertex_0.texv(vertex_2.tex());
                 vertex_1.texv(vertex_3.tex());
                 vertex_2.texv(t0);
@@ -252,7 +253,7 @@ public class MutableQuad {
                 return this;
             }
             case 3: {
-                Point2f t = vertex_3.tex();
+                Pair<Float, Float> t = vertex_3.tex();
                 vertex_3.texv(vertex_2.tex());
                 vertex_2.texv(vertex_1.tex());
                 vertex_1.texv(vertex_0.tex());
@@ -296,7 +297,7 @@ public class MutableQuad {
 
     /** Sets the normal for all vertices to the specified {@link Vector3f}. */
     public MutableQuad normalvf(Vector3f vec) {
-        return normalf(vec.x, vec.y, vec.z);
+        return normalf(vec.x(), vec.y(), vec.z());
     }
 
     /** Sets the normal for all vertices to the specified {@link Vec3i}. */
@@ -357,8 +358,8 @@ public class MutableQuad {
         return colouri((int) vec.a, (int) vec.b, (int) vec.c, (int) vec.d);
     }
 
-    public MutableQuad colourvf(Tuple4f vec) {
-        return colourf(vec.x, vec.y, vec.z, vec.w);
+    public MutableQuad colourvf(Vector4f vec) {
+        return colourf(vec.x(), vec.y(), vec.z(), vec.w());
     }
 
     public MutableQuad multColourd(double r, double g, double b, double a) {
@@ -450,8 +451,8 @@ public class MutableQuad {
 //        return lighti((short)(((short) (block * 15))<<4), (short)(((short) (sky * 15))<<4));
     }
 
-    public MutableQuad lightvf(Tuple2f vec) {
-        return lightf(vec.x, vec.y);
+    public MutableQuad lightvf(Pair<Float, Float> vec) {
+        return lightf(vec.getFirst(), vec.getSecond());
     }
 
     /** Sets the current light value of every vertex to be the maximum of the given in value, and the current value */
@@ -504,7 +505,7 @@ public class MutableQuad {
     }
 
     public MutableQuad translatevf(Vector3f vec) {
-        return translatef(vec.x, vec.y, vec.z);
+        return translatef(vec.x(), vec.y(), vec.z());
     }
 
     public MutableQuad translatevd(Vec3 vec) {
