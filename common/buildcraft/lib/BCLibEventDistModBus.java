@@ -49,6 +49,9 @@ public enum BCLibEventDistModBus {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     @OnlyIn(Dist.CLIENT)
     public void textureStitchPreLow(TextureStitchEvent.Pre event) {
+        if (!TextureAtlas.LOCATION_BLOCKS.equals(event.getAtlas().location())) {
+            return;
+        }
 //        FluidRenderer.onTextureStitchPre(event.getAtlas());
         FluidRenderer.onTextureStitchPre(event);
     }
