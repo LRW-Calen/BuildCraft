@@ -5,6 +5,21 @@ plugins {
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
 }
 
+ext.configFile = file "build.properties"
+configFile.withReader {
+    // Load config. It shall from now be referenced as simply config or project.config
+    def prop = new Properties()
+    prop.load(it)
+    project.ext.config = new ConfigSlurper().parse prop
+}
+
+if (System.getenv("BUILD_NUMBER") != null) {
+    config.mod_version += "-${System.getenv("BUILD_NUMBER")}"
+}
+if (System.getenv("BUILD_VARIANT") != null) {
+    config.mod_version += "-${System.getenv("BUILD_VARIANT")}"
+}
+
 version = mod_version
 group = mod_group_id
 
@@ -85,6 +100,11 @@ minecraft {
         client {
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             property 'forge.enabledGameTestNamespaces', mod_id
+
+            jvmArgs += "-Dbuildcraft.dev=true"
+            for (String s :"-XX:+UseG1GC -Xmx2G -Xms2G -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M".split(" ")) {
+                jvmArgs += s
+            }
         }
 
         server {
@@ -165,14 +185,9 @@ task setupSubProjects(dependsOn: "sub_projects:expression:generateSources") {
     // Just an inter-dependency task
 }
 
-eclipseClasspath.dependsOn setupSubProjects
-ideaModule.dependsOn setupSubProjects
-compileJava.dependsOn setupSubProjects
-
-runClient.jvmArgs += "-Dbuildcraft.dev=true"
-for (String s :"-XX:+UseG1GC -Xmx2G -Xms2G -Dsun.rmi.dgc.server.gcInterval=2147483646 -XX:+UnlockExperimentalVMOptions -XX:G1NewSizePercent=20 -XX:G1ReservePercent=20 -XX:MaxGCPauseMillis=50 -XX:G1HeapRegionSize=32M".split(" ")) {
-    runClient.jvmArgs += s
-}
+//eclipseClasspath.dependsOn setupSubProjects
+//ideaModule.dependsOn setupSubProjects
+//compileJava.dependsOn setupSubProjects
 
 repositories {
     // Put repositories for dependencies here
