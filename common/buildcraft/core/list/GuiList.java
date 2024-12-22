@@ -38,6 +38,7 @@ import javax.annotation.Nonnull;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.DoubleSupplier;
 
 public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventListener {
     private static final ResourceLocation TEXTURE_BASE =
@@ -121,24 +122,28 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
         for (int sy = 0; sy < ListHandler.HEIGHT; sy++) {
             int bOff = sy * BUTTON_COUNT;
 //            int bOffX = this.guiLeft + 8 + ListHandler.WIDTH * 18 - BUTTON_COUNT * 11;
-            int bOffX = this.leftPos + 8 + ListHandler.WIDTH * 18 - BUTTON_COUNT * 11;
+            DoubleSupplier bOffX = () -> this.leftPos + 8 + ListHandler.WIDTH * 18 - BUTTON_COUNT * 11;
 //            int bOffY = this.guiTop + 32 + sy * 34 + 18;
-            int bOffY = this.topPos + 32 + sy * 34 + 18;
+            int sy_final = sy;
+            DoubleSupplier bOffY = () -> this.topPos + 32 + sy_final * 34 + 18;
 
             GuiImageButton buttonPrecise =
-                    new GuiImageButton(mainGui, bOff + 0, bOffX, bOffY, 11, TEXTURE_BASE, 176, 16, 176, 28);
+//                    new GuiImageButton(mainGui, bOff + 0, bOffX, bOffY, 11, TEXTURE_BASE, 176, 16, 176, 28);
+                    new GuiImageButton(mainGui, bOff + 0, bOffX, bOffY, () -> 11, TEXTURE_BASE, 176, 16, 176, 28);
             buttonPrecise.setToolTip(ToolTip.createLocalized("gui.list.nbt"));
             buttonPrecise.setBehaviour(IButtonBehaviour.TOGGLE);
             mainGui.shownElements.add(buttonPrecise);
 
             GuiImageButton buttonType =
-                    new GuiImageButton(mainGui, bOff + 1, bOffX + 11, bOffY, 11, TEXTURE_BASE, 176, 16, 185, 28);
+//                    new GuiImageButton(mainGui, bOff + 1, bOffX + 11, bOffY, 11, TEXTURE_BASE, 176, 16, 185, 28);
+                    new GuiImageButton(mainGui, bOff + 1, () -> bOffX.getAsDouble() + 11, bOffY, () -> 11, TEXTURE_BASE, 176, 16, 185, 28);
             buttonType.setToolTip(ToolTip.createLocalized("gui.list.metadata"));
             buttonType.setBehaviour(IButtonBehaviour.TOGGLE);
             mainGui.shownElements.add(buttonType);
 
             GuiImageButton buttonMaterial =
-                    new GuiImageButton(mainGui, bOff + 2, bOffX + 22, bOffY, 11, TEXTURE_BASE, 176, 16, 194, 28);
+//                    new GuiImageButton(mainGui, bOff + 2, bOffX + 22, bOffY, 11, TEXTURE_BASE, 176, 16, 194, 28);
+                    new GuiImageButton(mainGui, bOff + 2, () -> bOffX.getAsDouble() + 22, bOffY, () -> 11, TEXTURE_BASE, 176, 16, 194, 28);
             buttonMaterial.setToolTip(ToolTip.createLocalized("gui.list.oredict"));
             buttonMaterial.setBehaviour(IButtonBehaviour.TOGGLE);
             mainGui.shownElements.add(buttonMaterial);
@@ -287,5 +292,11 @@ public class GuiList extends GuiBC8<ContainerList> implements IButtonClickEventL
             exampleList.put(type, examples);
         }
         return exampleList.get(type);
+    }
+
+    // Calen 1.20.1
+    public void clientSetStackToServer(WidgetListSlot slot, ItemStack stack) {
+        slot.clientSetStackToServer(stack);
+        this.clearExamplesCache(slot.lineIndex);
     }
 }

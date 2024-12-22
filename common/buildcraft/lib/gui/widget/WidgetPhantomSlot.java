@@ -16,7 +16,6 @@ import buildcraft.lib.misc.RenderUtil;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.net.PacketBufferBC;
 import com.mojang.blaze3d.platform.InputConstants;
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +30,7 @@ import java.util.List;
 /** Defines a widget that represents a phantom slot. */
 public class WidgetPhantomSlot extends Widget_Neptune<ContainerBC_Neptune> {
     private static final byte NET_CLIENT_TO_SERVER_CLICK = 0;
+    private static final byte NET_CLIENT_TO_SERVER_STACK = 1; // Calen 1.20.1
     private static final byte NET_SERVER_TO_CLIENT_ITEM = 0;
 
     private static final byte CLICK_FLAG_SHIFT = 1;
@@ -50,6 +50,9 @@ public class WidgetPhantomSlot extends Widget_Neptune<ContainerBC_Neptune> {
         if (id == NET_CLIENT_TO_SERVER_CLICK) {
             byte flags = buffer.readByte();
             tryMouseClick(flags);
+        } else if (id == NET_CLIENT_TO_SERVER_STACK) {
+            ItemStack stack = buffer.readItem();
+            setStack(stack, true);
         }
         return null;
     }
@@ -122,6 +125,15 @@ public class WidgetPhantomSlot extends Widget_Neptune<ContainerBC_Neptune> {
     protected void onSetStack() {
     }
 
+    // Calen 1.20.1
+    public void clientSetStackToServer(ItemStack stack) {
+        this.sendWidgetData(buffer ->
+        {
+            buffer.writeByte(NET_CLIENT_TO_SERVER_STACK);
+            buffer.writeItem(stack);
+        });
+    }
+
     @OnlyIn(Dist.CLIENT)
     public class GuiElementPhantomSlot extends GuiElementSimple implements IInteractionElement {
         private final ToolTip tooltip = GuiUtil.createToolTip(this::getStack);
@@ -135,7 +147,7 @@ public class WidgetPhantomSlot extends Widget_Neptune<ContainerBC_Neptune> {
 //            RenderHelper.enableGUIStandardItemLighting();
             RenderUtil.enableGUIStandardItemLighting();
 //            gui.mc.getRenderItem().renderItemAndEffectIntoGUI(getStack(), (int) getX(), (int) getY());
-            guiGraphics.renderFakeItem(getStack(), (int) (getX() - gui.rootElement.getX()), (int) (getY() - gui.rootElement.getY()));
+            guiGraphics.renderFakeItem(getStack(), (int) getX(), (int) getY());
 //            RenderHelper.disableStandardItemLighting();
             RenderUtil.disableStandardItemLighting();
             if (contains(gui.mouse) && shouldDrawHighlight()) {

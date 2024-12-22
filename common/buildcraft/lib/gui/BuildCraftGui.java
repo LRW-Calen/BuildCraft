@@ -11,7 +11,7 @@ import buildcraft.lib.gui.pos.MousePosition;
 import buildcraft.lib.misc.GuiUtil;
 import buildcraft.lib.misc.RenderUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
-import gnu.trove.set.hash.TIntHashSet;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -276,7 +276,7 @@ public class BuildCraftGui {
             int x = 6;
             int y = 18;
             List<String> info = new ArrayList<>();
-            TIntHashSet xAxisFilled = new TIntHashSet();
+            IntOpenHashSet xAxisFilled = new IntOpenHashSet();
             Font fr = mc.font;
             for (IGuiElement elem : this.getElementsAt(mouse.getX(), mouse.getY())) {
                 String name = elem.getDebugInfo(info);

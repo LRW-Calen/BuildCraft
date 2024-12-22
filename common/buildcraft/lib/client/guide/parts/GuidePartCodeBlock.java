@@ -2,8 +2,8 @@ package buildcraft.lib.client.guide.parts;
 
 import buildcraft.lib.client.guide.GuiGuide;
 import buildcraft.lib.client.guide.font.IFontRenderer;
-import gnu.trove.list.TIntList;
-import gnu.trove.list.array.TIntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.client.gui.GuiGraphics;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class GuidePartCodeBlock extends GuidePart {
         IFontRenderer font = gui.getCurrentFont();
 
         List<String> wrappedLines = new ArrayList<>();
-        TIntList lineNumbers = new TIntArrayList();
+        IntList lineNumbers = new IntArrayList();
 
         int lineNumberWidth = font.getStringWidth(Integer.toString(lines.size() - 1));
         int widthForDecoration = 8 + lineNumberWidth;
@@ -79,7 +79,7 @@ public class GuidePartCodeBlock extends GuidePart {
 
     @Override
     public PagePosition handleMouseClick(GuiGraphics guiGraphics, int x, int y, int width, int height, PagePosition current, int index,
-                                         double mouseX, double mouseY) {
+            double mouseX, double mouseY) {
         return renderIntoArea(guiGraphics, x, y, width, height, current, -1);
     }
 }

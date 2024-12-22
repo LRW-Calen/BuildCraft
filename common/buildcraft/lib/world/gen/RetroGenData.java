@@ -8,8 +8,8 @@ package buildcraft.lib.world.gen;
 
 import buildcraft.api.core.BCDebugging;
 import buildcraft.api.core.BCLog;
-import gnu.trove.list.array.TByteArrayList;
-import gnu.trove.map.hash.TObjectByteHashMap;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.objects.Object2ByteOpenHashMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
@@ -104,7 +104,7 @@ public class RetroGenData extends SavedData {
         for (Set<String> used : gennedChunks.values()) {
             allNames.addAll(used);
         }
-        TObjectByteHashMap<String> map = new TObjectByteHashMap<>();
+        Object2ByteOpenHashMap<String> map = new Object2ByteOpenHashMap<>();
         List<String> list = new ArrayList<>(allNames);
         ListTag registry = new ListTag();
         for (int i = 0; i < list.size(); i++) {
@@ -118,12 +118,12 @@ public class RetroGenData extends SavedData {
         for (Entry<ChunkPos, Set<String>> entry : gennedChunks.entrySet()) {
             String key = serializeChunkPos(entry.getKey());
             Set<String> names = entry.getValue();
-            TByteArrayList ids = new TByteArrayList();
+            ByteArrayList ids = new ByteArrayList();
             for (String s : names) {
                 byte b = map.get(s);
                 ids.add(b);
             }
-            data.putByteArray(key, ids.toArray());
+            data.putByteArray(key, ids.toByteArray());
         }
         nbt.put("data", data);
 

@@ -167,7 +167,7 @@ public class CreativeTabManager {
 
         @Override
         public ResourceLocation getBackgroundLocation() {
-            return new net.minecraft.resources.ResourceLocation("textures/gui/container/creative_inventory/tab_" + "items.png");
+            return new ResourceLocation("textures/gui/container/creative_inventory/tab_" + "items.png");
         }
     }
 }

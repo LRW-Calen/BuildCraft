@@ -9,9 +9,9 @@ package buildcraft.lib.client.render.laser;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import gnu.trove.list.array.TDoubleArrayList;
-import gnu.trove.list.array.TFloatArrayList;
-import gnu.trove.list.array.TIntArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -65,9 +65,9 @@ public class LaserCompiledBuffer {
 
     public static class Builder implements ILaserRenderer {
         // private final boolean useNormalColour;
-        private final TDoubleArrayList doubleData = new TDoubleArrayList();
-        private final TIntArrayList intData = new TIntArrayList();
-        private final TFloatArrayList normalData = new TFloatArrayList();
+        private final DoubleArrayList doubleData = new DoubleArrayList();
+        private final IntArrayList intData = new IntArrayList();
+        private final FloatArrayList normalData = new FloatArrayList();
         private int vertices = 0;
 
         // public Builder(boolean useNormalColour)
@@ -116,7 +116,7 @@ public class LaserCompiledBuffer {
 
         public LaserCompiledBuffer build() {
 //            return new LaserCompiledBuffer(vertices, doubleData.toArray(), intData.toArray());
-            return new LaserCompiledBuffer(vertices, doubleData.toArray(), intData.toArray(), normalData.toArray());
+            return new LaserCompiledBuffer(vertices, doubleData.toDoubleArray(), intData.toIntArray(), normalData.toFloatArray());
         }
     }
 }

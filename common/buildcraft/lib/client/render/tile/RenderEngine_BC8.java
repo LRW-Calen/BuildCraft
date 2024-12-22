@@ -39,7 +39,7 @@ public abstract class RenderEngine_BC8<T extends TileEngineBase_BC8> implements 
 //        int lightc = engine.getLevel().getLightEngine().getRawBrightness(engine.getBlockPos(), 0);
         int light_block = (lightc >> 4) & 15;
         int light_sky = (lightc >> 20) & 15;
-        VertexConsumer vb = bufferSource.getBuffer(RenderType.solid());
+        VertexConsumer vb = bufferSource.getBuffer(RenderType.cutout());
         for (MutableQuad q : quads) {
             copy.copyFrom(q);
             copy.maxLighti((byte) light_block, (byte) light_sky);

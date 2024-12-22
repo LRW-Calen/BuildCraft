@@ -58,19 +58,22 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
     public void initGui() {
         super.initGui();
 
-        this.whiteListButton = new GuiImageButton(mainGui, WHITE_LIST_BUTTON_ID, this.leftPos + 7, this.topPos + 41, 18, TEXTURE_BUTTON, 19, 19);
+        // this.whiteListButton = new GuiImageButton(mainGui, WHITE_LIST_BUTTON_ID, this.leftPos + 7, this.topPos + 41, 18, TEXTURE_BUTTON, 19, 19);
+        this.whiteListButton = new GuiImageButton(mainGui, WHITE_LIST_BUTTON_ID, () -> this.leftPos + 7, () -> this.topPos + 41, () -> 18, TEXTURE_BUTTON, 19, 19);
         this.whiteListButton.setToolTip(ToolTip.createLocalized("tip.PipeItemsEmerald.whitelist"));
         this.whiteListButton.registerListener(this);
         this.mainGui.shownElements.add(this.whiteListButton);
 
-        this.blackListButton = new GuiImageButton(mainGui, BLACK_LIST_BUTTON_ID, this.leftPos + 7 + 18, this.topPos + 41, 18, TEXTURE_BUTTON, 37, 19);
+        // this.blackListButton = new GuiImageButton(mainGui, BLACK_LIST_BUTTON_ID, this.leftPos + 7 + 18, this.topPos + 41, 18, TEXTURE_BUTTON, 37, 19);
+        this.blackListButton = new GuiImageButton(mainGui, BLACK_LIST_BUTTON_ID, () -> this.leftPos + 7 + 18, () -> this.topPos + 41, () -> 18, TEXTURE_BUTTON, 37, 19);
         this.blackListButton.setToolTip(ToolTip.createLocalized("tip.PipeItemsEmerald.blacklist"));
         this.blackListButton.registerListener(this);
         this.mainGui.shownElements.add(this.blackListButton);
 
         if (pipe.pipe.getFlow() instanceof IFlowItems) {
             // Don't show round robin for the fluid pipe - its not yet implemented
-            this.roundRobinButton = new GuiImageButton(mainGui, ROUND_ROBIN_BUTTON_ID, this.leftPos + 7 + 36, this.topPos + 41, 18, TEXTURE_BUTTON, 55, 19);
+            // this.roundRobinButton = new GuiImageButton(mainGui, ROUND_ROBIN_BUTTON_ID, this.leftPos + 7 + 36, this.topPos + 41, 18, TEXTURE_BUTTON, 55, 19);
+            this.roundRobinButton = new GuiImageButton(mainGui, ROUND_ROBIN_BUTTON_ID, () -> this.leftPos + 7 + 36, () -> this.topPos + 41, () -> 18, TEXTURE_BUTTON, 55, 19);
             this.roundRobinButton.setToolTip(ToolTip.createLocalized("tip.PipeItemsEmerald.roundrobin"));
             this.roundRobinButton.registerListener(this);
             this.mainGui.shownElements.add(this.roundRobinButton);

@@ -8,9 +8,20 @@ package buildcraft.lib.nbt;
 
 import buildcraft.api.data.NbtSquishConstants;
 import buildcraft.lib.misc.data.CompactingBitSet;
-import gnu.trove.list.array.*;
-import gnu.trove.map.hash.TIntIntHashMap;
-import gnu.trove.set.hash.TIntHashSet;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.bytes.ByteComparators;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleComparators;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
+import it.unimi.dsi.fastutil.floats.FloatComparators;
+import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntComparators;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.longs.LongComparators;
+import it.unimi.dsi.fastutil.shorts.ShortArrayList;
+import it.unimi.dsi.fastutil.shorts.ShortComparators;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -58,14 +69,14 @@ class NbtSquishMapWriter {
 
         type.writeType(to);
 
-        TByteArrayList bytes = map.bytes;
-        TShortArrayList shorts = map.shorts;
-        TIntArrayList ints = map.ints;
-        TLongArrayList longs = map.longs;
-        TFloatArrayList floats = map.floats;
-        TDoubleArrayList doubles = map.doubles;
-        List<TByteArrayList> byteArrays = map.byteArrays;
-        List<TIntArrayList> intArrays = map.intArrays;
+        ByteArrayList bytes = map.bytes;
+        ShortArrayList shorts = map.shorts;
+        IntArrayList ints = map.ints;
+        LongArrayList longs = map.longs;
+        FloatArrayList floats = map.floats;
+        DoubleArrayList doubles = map.doubles;
+        List<ByteArrayList> byteArrays = map.byteArrays;
+        List<IntArrayList> intArrays = map.intArrays;
         List<String> strings = map.strings;
         List<Tag> complex = map.complex;
 
@@ -87,54 +98,54 @@ class NbtSquishMapWriter {
         profiler.popPush("bytes");
         if (!bytes.isEmpty()) {
             if (debug) log("\nByte dictionary size = " + bytes.size());
-            if (sort) bytes.sort();
+            if (sort) bytes.sort(ByteComparators.NATURAL_COMPARATOR);
             writeVarInt(to, bytes.size());
-            for (byte b : bytes.toArray()) {
+            for (byte b : bytes.toByteArray()) {
                 to.writeByte(b);
             }
         }
         profiler.popPush("shorts");
         if (!shorts.isEmpty()) {
             if (debug) log("\nShort dictionary size = " + shorts.size());
-            if (sort) shorts.sort();
+            if (sort) shorts.sort(ShortComparators.NATURAL_COMPARATOR);
             writeVarInt(to, shorts.size());
-            for (short s : shorts.toArray()) {
+            for (short s : shorts.toShortArray()) {
                 to.writeShort(s);
             }
         }
         profiler.popPush("integers");
         if (!ints.isEmpty()) {
             if (debug) log("\nInt dictionary size = " + ints.size());
-            if (sort) ints.sort();
+            if (sort) ints.sort(IntComparators.NATURAL_COMPARATOR);
             writeVarInt(to, ints.size());
-            for (int i : ints.toArray()) {
+            for (int i : ints.toIntArray()) {
                 to.writeInt(i);
             }
         }
         profiler.popPush("longs");
         if (!longs.isEmpty()) {
             if (debug) log("\nLong dictionary size = " + longs.size());
-            if (sort) longs.sort();
+            if (sort) longs.sort(LongComparators.NATURAL_COMPARATOR);
             writeVarInt(to, longs.size());
-            for (long l : longs.toArray()) {
+            for (long l : longs.toLongArray()) {
                 to.writeLong(l);
             }
         }
         profiler.popPush("floats");
         if (!floats.isEmpty()) {
             if (debug) log("\nFloat dictionary size = " + floats.size());
-            if (sort) floats.sort();
+            if (sort) floats.sort(FloatComparators.NATURAL_COMPARATOR);
             writeVarInt(to, floats.size());
-            for (float f : floats.toArray()) {
+            for (float f : floats.toFloatArray()) {
                 to.writeFloat(f);
             }
         }
         profiler.popPush("doubles");
         if (!doubles.isEmpty()) {
             if (debug) log("\nDouble dictionary size = " + doubles.size());
-            if (sort) doubles.sort();
+            if (sort) doubles.sort(DoubleComparators.NATURAL_COMPARATOR);
             writeVarInt(to, doubles.size());
-            for (double d : doubles.toArray()) {
+            for (double d : doubles.toDoubleArray()) {
                 to.writeDouble(d);
             }
         }
@@ -142,9 +153,9 @@ class NbtSquishMapWriter {
         if (!byteArrays.isEmpty()) {
             if (debug) log("\nByte Array dictionary size = " + byteArrays.size());
             writeVarInt(to, byteArrays.size());
-            for (TByteArrayList ba : byteArrays) {
+            for (ByteArrayList ba : byteArrays) {
                 to.writeShort(ba.size());
-                for (byte b : ba.toArray()) {
+                for (byte b : ba.toByteArray()) {
                     to.writeByte(b);
                 }
             }
@@ -153,9 +164,9 @@ class NbtSquishMapWriter {
         if (!intArrays.isEmpty()) {
             if (debug) log("\nInt Array dictionary size = " + intArrays.size());
             writeVarInt(to, intArrays.size());
-            for (TIntArrayList ia : intArrays) {
+            for (IntArrayList ia : intArrays) {
                 to.writeShort(ia.size());
-                for (int i : ia.toArray()) {
+                for (int i : ia.toIntArray()) {
                     to.writeInt(i);
                 }
             }
@@ -214,7 +225,7 @@ class NbtSquishMapWriter {
     private boolean shouldPackList(ListTag list) {
         if (packList != null) return packList;
         profiler.push("should_pack");
-        TIntHashSet indexes = new TIntHashSet();
+        IntOpenHashSet indexes = new IntOpenHashSet();
 //        for (int i = 0; i < list.tagCount(); i++)
         for (int i = 0; i < list.size(); i++) {
             indexes.add(map.indexOfTag(list.get(i)));
@@ -277,7 +288,7 @@ class NbtSquishMapWriter {
         profiler.push("init");
 //        int[] data = new int[list.tagCount()];
         int[] data = new int[list.size()];
-        TIntIntHashMap indexes = new TIntIntHashMap();
+        Int2IntOpenHashMap indexes = new Int2IntOpenHashMap();
 //        for (int i = 0; i < list.tagCount(); i++)
         for (int i = 0; i < list.size(); i++) {
             profiler.push("entry");
@@ -285,9 +296,10 @@ class NbtSquishMapWriter {
             int index = map.indexOfTag(list.get(i));
             profiler.pop();
             data[i] = index;
-            if (!indexes.increment(index)) {
-                indexes.put(index, 1);
-            }
+//            if (!indexes.increment(index)) {
+//                indexes.put(index, 1);
+//            }
+            indexes.addTo(index, 1);
             profiler.pop();
         }
         // First try to make a simple table
@@ -295,7 +307,7 @@ class NbtSquishMapWriter {
         // First sort the indexes into highest count first
         profiler.popPush("sort");
         List<IndexEntry> entries = new ArrayList<>();
-        for (int index : indexes.keys()) {
+        for (int index : indexes.keySet()) {
             int count = indexes.get(index);
             IndexEntry entry = new IndexEntry(index, count);
             entries.add(entry);
@@ -305,7 +317,7 @@ class NbtSquishMapWriter {
         writeVarInt(to, entries.size());
         profiler.popPush("write");
 
-        TIntArrayList sortedIndexes = new TIntArrayList();
+        IntArrayList sortedIndexes = new IntArrayList();
         int i = 0;
         for (IndexEntry entry : entries) {
             final int j = i;
@@ -319,8 +331,8 @@ class NbtSquishMapWriter {
             i++;
         }
 
-        TIntArrayList nextData = new TIntArrayList();
-        nextData.add(data);
+        IntArrayList nextData = new IntArrayList();
+        nextData.addElements(nextData.size(), data);
         writeVarInt(to, data.length);
         profiler.pop();
         profiler.popPush("contents");
@@ -328,10 +340,10 @@ class NbtSquishMapWriter {
             profiler.push("entry");
             CompactingBitSet bitset = new CompactingBitSet(b);
             bitset.ensureCapacityValues(nextData.size());
-            TIntArrayList nextNextData = new TIntArrayList();
+            IntArrayList nextNextData = new IntArrayList();
             int maxVal = (1 << b) - 1;
             profiler.push("iter");
-            for (int d : nextData.toArray()) {
+            for (int d : nextData.toIntArray()) {
                 // profiler.startSection("entry");
                 // profiler.startSection("index");
                 int index = sortedIndexes.indexOf(d);
@@ -350,7 +362,7 @@ class NbtSquishMapWriter {
                 // profiler.endSection();
             }
             profiler.pop();
-            sortedIndexes.remove(0, Math.min(sortedIndexes.size(), maxVal));
+            sortedIndexes.removeElements(0, 0 + Math.min(sortedIndexes.size(), maxVal));
             byte[] bitsetBytes = bitset.getBytes();
             if (debug) log("\n List bitset #" + (bitset.bits - 1));
             writeVarInt(to, bitsetBytes.length);

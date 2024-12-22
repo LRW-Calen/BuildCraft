@@ -16,11 +16,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -198,19 +196,19 @@ public final class ListHandler {
                 }
             }
             if (handlersCustom.size() > 0) {
-                for (Item i : ForgeRegistries.ITEMS) {
+//                for (Item i : ForgeRegistries.ITEMS) {
 //                    NonNullList<ItemStack> examples = NonNullList.create();
 //                    i.getSubItems(CreativeModeTab.TAB_SEARCH, examples);
-                    Collection<ItemStack> examples = BuiltInRegistries.CREATIVE_MODE_TAB.get(CreativeModeTabs.SEARCH).getDisplayItems();
-                    for (ItemStack s : examples) {
-                        for (ListMatchHandler mh : handlersCustom) {
-                            if (mh.matches(type, firstStack, s, false)) {
-                                stackList.add(s);
-                                break;
-                            }
+                Collection<ItemStack> examples = BuiltInRegistries.CREATIVE_MODE_TAB.get(CreativeModeTabs.SEARCH).getDisplayItems();
+                for (ItemStack s : examples) {
+                    for (ListMatchHandler mh : handlersCustom) {
+                        if (mh.matches(type, firstStack, s, false)) {
+                            stackList.add(s);
+                            break;
                         }
                     }
                 }
+//                }
             }
             Collections.shuffle(stackList);
             return stackList;

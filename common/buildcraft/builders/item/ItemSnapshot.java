@@ -115,14 +115,11 @@ public class ItemSnapshot extends ItemBC_Neptune {
 
     // Calen: not still useful in 1.18.2
 //    @Override
-//    @OnlyIn(Dist.CLIENT)
-//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants)
-//    {
-////        for (EnumItemSnapshotType type : EnumItemSnapshotType.values())
-////        {
-//////            addVariant(variants, type.ordinal(), type.getName());
-////            addVariant(variants, type.ordinal(), type.getSerializedName());
-////        }
+//    @SideOnly(Side.CLIENT)
+//    public void addModelVariants(TIntObjectHashMap<ModelResourceLocation> variants) {
+//        for (EnumItemSnapshotType type : EnumItemSnapshotType.values()) {
+//            addVariant(variants, type.ordinal(), type.getName());
+//        }
 //    }
 
     @Override

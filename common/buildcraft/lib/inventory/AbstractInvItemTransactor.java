@@ -10,7 +10,7 @@ import buildcraft.api.core.IStackFilter;
 import buildcraft.api.inventory.IItemTransactor;
 import buildcraft.lib.inventory.filter.StackFilter;
 import buildcraft.lib.misc.StackUtil;
-import gnu.trove.list.array.TIntArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 
@@ -52,7 +52,7 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
     @Nonnull
     private ItemStack insertAnyAmount(@Nonnull ItemStack stack, boolean simulate) {
         int slotCount = getSlots();
-        TIntArrayList emptySlots = new TIntArrayList(slotCount);
+        IntArrayList emptySlots = new IntArrayList(slotCount);
         for (int slot = 0; slot < getSlots(); slot++) {
             if (isEmpty(slot)) {
                 emptySlots.add(slot);
@@ -61,7 +61,7 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
                 if (stack.isEmpty()) return StackUtil.EMPTY;
             }
         }
-        for (int slot : emptySlots.toArray()) {
+        for (int slot : emptySlots.toIntArray()) {
             stack = insert(slot, stack, simulate);
             if (stack.isEmpty()) return StackUtil.EMPTY;
         }
@@ -71,8 +71,8 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
     @Nonnull
     private ItemStack insertAllAtOnce(@Nonnull ItemStack stack, boolean simulate) {
         ItemStack before = asValid(stack);
-        TIntArrayList insertedSlots = new TIntArrayList(getSlots());
-        TIntArrayList emptySlots = new TIntArrayList(getSlots());
+        IntArrayList insertedSlots = new IntArrayList(getSlots());
+        IntArrayList emptySlots = new IntArrayList(getSlots());
         for (int slot = 0; slot < getSlots(); slot++) {
             if (isEmpty(slot)) {
                 emptySlots.add(slot);
@@ -82,7 +82,7 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
                 if (stack.isEmpty()) break;
             }
         }
-        for (int slot : emptySlots.toArray()) {
+        for (int slot : emptySlots.toIntArray()) {
             stack = insert(slot, stack, true);
             insertedSlots.add(slot);
             if (stack.isEmpty()) break;
@@ -91,7 +91,7 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
             return stack;
         }
         if (simulate) return StackUtil.EMPTY;
-        for (int slot : insertedSlots.toArray()) {
+        for (int slot : insertedSlots.toIntArray()) {
             before = insert(slot, before, false);
         }
         if (!before.isEmpty()) {
@@ -121,7 +121,7 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
         }
 
         int slots = getSlots();
-        TIntArrayList valids = new TIntArrayList();
+        IntArrayList valids = new IntArrayList();
         int totalSize = 0;
         ItemStack toExtract = StackUtil.EMPTY;
 
@@ -143,7 +143,7 @@ public abstract class AbstractInvItemTransactor implements IItemTransactor {
 
         ItemStack total = StackUtil.EMPTY;
         if (min <= totalSize) {
-            for (int slot : valids.toArray()) {
+            for (int slot : valids.toIntArray()) {
                 ItemStack extracted = extract(slot, filter, 1, max - total.getCount(), simulate);
                 if (total.isEmpty()) {
                     total = extracted.copy();

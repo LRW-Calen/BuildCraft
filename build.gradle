@@ -149,6 +149,7 @@ sourceSets {
             srcDir "BuildCraftGuide/guide_resources"
             exclude "**/.md" // exclude readme from localization repo
             exclude "pack.png" // exclude from the guide repo
+            exclude '.cache'
             // Calen: we should not exclude the pack.mcmeta file in buildcraft_resources, or all the resources will be lost
 //            exclude "pack.mcmeta" // exclude from the guide repo
         }
@@ -218,12 +219,6 @@ dependencies {
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-    compileOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
-    runtimeOnly fg.deobf("net.sf.trove4j:trove4j:3.0.3")
-
-    jarJar(group: 'net.sf.trove4j', name: 'trove4j', version: '[3.0.3,)') {
-        jarJar.pin(it, '3.0.3')
-    }
 
     // Testing
     testImplementation "junit:junit:4.12"

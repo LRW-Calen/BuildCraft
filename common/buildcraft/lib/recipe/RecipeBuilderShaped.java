@@ -8,7 +8,7 @@ package buildcraft.lib.recipe;
 
 import buildcraft.lib.misc.ItemUtil;
 import buildcraft.lib.misc.StackUtil;
-import gnu.trove.map.hash.TCharObjectHashMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +24,7 @@ public class RecipeBuilderShaped {
     @Nonnull
     private ItemStack result = StackUtil.EMPTY;
     private final List<String> shape = new ArrayList<>();
-    private final TCharObjectHashMap<Object> objects = new TCharObjectHashMap<>();
+    private final Char2ObjectOpenHashMap<Object> objects = new Char2ObjectOpenHashMap<>();
 
     public void clear() {
         result = StackUtil.EMPTY;
@@ -75,7 +75,7 @@ public class RecipeBuilderShaped {
         for (String s : shape) {
             objs[offset++] = s;
         }
-        for (char c : objects.keys()) {
+        for (char c : objects.keySet()) {
             objs[offset++] = c;
             objs[offset++] = objects.get(c);
         }

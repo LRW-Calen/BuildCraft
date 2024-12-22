@@ -10,6 +10,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -20,9 +21,11 @@ import java.util.stream.Collectors;
 
 public class Configuration {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+    private static final Path bcConfigFolderPath = FMLPaths.CONFIGDIR.relative().resolve("buildcraft");
 
     private JsonObject configJson;
     private boolean changed;
+    private final String name;
     private final Path configFilePath;
     private final List<ConfigCategory<?>> all = Lists.newArrayList();
     private final Lock lock = new ReentrantLock();
@@ -32,21 +35,21 @@ public class Configuration {
     }
 
     public Configuration(String name) {
-        Path bcConfigFolderPath = FMLPaths.CONFIGDIR.relative().resolve("buildcraft");
-        configFilePath = bcConfigFolderPath.resolve(name + ".json");
+        this.name = name;
+        this.configFilePath = bcConfigFolderPath.resolve(name + ".json");
         try {
             bcConfigFolderPath.toFile().mkdirs();
             if (!configFilePath.toFile().exists()) {
                 configFilePath.toFile().createNewFile();
             }
             try (Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFilePath.toFile()), StandardCharsets.UTF_8))) {
-                configJson = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+                this.configJson = GsonHelper.fromJson(GSON, reader, JsonObject.class);
             } catch (Exception e) {
                 throw e;
             }
         } catch (Exception e) {
             BCLog.logger.warn("[lib.config] Failed to open config file [" + configFilePath + "]", e);
-            configJson = new JsonObject();
+            this.configJson = new JsonObject();
         }
     }
 
@@ -313,6 +316,12 @@ public class Configuration {
             } catch (IOException e) {
                 BCLog.logger.error("[lib.config] Failed to create config file [" + this.configFilePath + "]", e);
                 return;
+            }
+        } else {
+            try {
+                Files.copy(configFilePath, bcConfigFolderPath.resolve(name + ".bak.json"));
+            } catch (IOException e) {
+                BCLog.logger.error("[lib.config] Failed to backup old config file [" + this.configFilePath + "]", e);
             }
         }
         try (JsonWriter jsonwriter = new JsonWriter(new OutputStreamWriter(new FileOutputStream(configFilePath.toFile()), StandardCharsets.UTF_8))) {
