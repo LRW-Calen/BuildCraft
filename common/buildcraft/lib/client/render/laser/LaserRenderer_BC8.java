@@ -171,7 +171,6 @@ public class LaserRenderer_BC8 {
         profiler.push("compute");
         LaserCompiledList compiled = COMPILED_STATIC_LASERS.getUnchecked(data);
         profiler.popPush("render");
-        SpriteUtil.bindBlockTextureMap();
         compiled.render(modelViewMatrix);
         profiler.pop();
     }

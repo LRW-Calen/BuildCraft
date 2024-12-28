@@ -19,8 +19,7 @@ public class SpriteFluidFrozen extends TextureAtlasSprite {
 //    public final ResourceLocation srcLocation;
     public final ResourceLocation srcRegistryName;
 //    private int[][] data = null;
-
-
+    
     public SpriteFluidFrozen(TextureAtlas atlas, TextureAtlasSprite.Info info, int mipmapLevel, int atlasWidth, int atlasHeight, int x, int y, NativeImage nativeImage, ResourceLocation srcRegistryName) {
         super(atlas, info, mipmapLevel, atlasWidth, atlasHeight, x, y, nativeImage);
         this.srcRegistryName = srcRegistryName;
