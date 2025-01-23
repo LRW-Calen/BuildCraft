@@ -38,13 +38,12 @@ public class BCCoreBlocks {
     public static RegistryObject<BlockEngine_BC8> engineCreative;
     public static RegistryObject<BlockSpring> springWater;
     public static RegistryObject<BlockSpring> springOil;
-    //    public static RegistryObject<BlockDecoration> decorated;
+    // public static RegistryObject<BlockDecoration> decorated;
     public static final Map<EnumDecoratedBlock, RegistryObject<BlockDecoration>> decoratedMap = new HashMap<>();
     public static RegistryObject<BlockMarkerVolume> markerVolume;
     public static RegistryObject<BlockMarkerPath> markerPath;
     public static RegistryObject<BlockPowerConsumerTester> powerTester;
 
-    public static final Map<EnumEngineType, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(EnumEngineType.class);
     public static RegistryObject<BlockEntityType<TileEngineRedstone_BC8>> engineWoodTile;
     public static RegistryObject<BlockEntityType<TileEngineCreative>> engineCreativeTile;
     public static RegistryObject<BlockEntityType<TileMarkerVolume>> markerVolumeTile;
@@ -106,23 +105,22 @@ public class BCCoreBlocks {
 
     }
 
-    public static RegistryObject<BlockEngine_BC8> registerEngine(EnumEngineType type, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor) {
+    public static RegistryObject<BlockEngine_BC8> registerEngine(EnumEngineType type, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> engineTileConstructor) {
         RegistryObject<BlockEngine_BC8> engine = null;
-        String regName = TagManager.getTag("block.engine.bc." + type.unlocalizedTag, TagManager.EnumTagType.REGISTRY_NAME).replace(BCCore.MODID + ":", "");
+        String regName = TagManager.getTag("block.engine.bc." + type.getSerializedName(), TagManager.EnumTagType.REGISTRY_NAME).replace(BCCore.MODID + ":", "");
         if (RegistryConfig.isEnabled(
                 "engines",
                 type.name().toLowerCase(Locale.ROOT),
-                TagManager.getTag("block.engine.bc." + type.unlocalizedTag, TagManager.EnumTagType.UNLOCALIZED_NAME)
+                TagManager.getTag("block.engine.bc." + type.getSerializedName(), TagManager.EnumTagType.UNLOCALIZED_NAME)
         )) {
-            String id = "block.engine.bc." + type.unlocalizedTag;
+            String id = "block.engine.bc." + type.getSerializedName();
 //            engine = HELPER.addBlockAndItem(id, ENGINE_PROPERTIES, (idBC, properties) -> new BlockEngine_BC8(idBC, properties, type), ItemEngine_BC8::new);
             engine = HELPER.addBlockAndItem(id,
                     BlockPropertiesCreator.metal()
                             .strength(5.0F, 10.0F)
                             .sound(SoundType.METAL)
                             .noOcclusion()
-                    , (idBC, properties) -> new BlockEngine_BC8(idBC, properties, type), ItemEngine_BC8::new);
-            engineTileConstructors.put(type, constructor);
+                    , (idBC, properties) -> new BlockEngine_BC8(idBC, properties, type, engineTileConstructor), ItemEngine_BC8::new);
             engineBlockMap.put(type, engine);
         }
         return engine;

@@ -9,12 +9,19 @@ package buildcraft.lib.engine;
 
 import buildcraft.api.blocks.ICustomRotationHandler;
 import buildcraft.api.core.IEngineType;
-import buildcraft.core.BCCoreBlocks;
 import buildcraft.lib.block.BlockBCTile_Neptune;
 import buildcraft.lib.block.IBlockWithTickableTE;
+import buildcraft.lib.client.model.ModelHolderVariable;
+import buildcraft.lib.client.model.MutableQuad;
+import buildcraft.lib.misc.SpriteUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.particle.TerrainParticle;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.LazyLoadedValue;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -24,22 +31,32 @@ import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> extends BlockBCTile_Neptune<TileEngineBase_BC8> implements ICustomRotationHandler, IBlockWithTickableTE<TileEngineBase_BC8> {
     public final E engineType;
 
     // Calen: moved to BCCoreBlocks.engineTileConstructors
 //    private final Map<E, Supplier<? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(getEngineProperty().getValueClass());
+    private final BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> engineTileConstructor;
 
-    public BlockEngineBase_BC8(String idBC, BlockBehaviour.Properties props, E type) {
+    public BlockEngineBase_BC8(String idBC, BlockBehaviour.Properties props, E type, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> engineTileConstructor) {
         super(idBC, props);
         this.engineType = type;
+        this.engineTileConstructor = engineTileConstructor;
     }
 
     // Engine directly related methods
@@ -187,7 +204,7 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 //        E engineType = state.getValue(getEngineProperty());
         E engineType = this.engineType;
 //        BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor = engineTileConstructors.get(engineType);
-        BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor = BCCoreBlocks.engineTileConstructors.get(engineType);
+        BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor = this.engineTileConstructor;
         if (constructor == null) {
             return null;
         }
@@ -232,5 +249,106 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
             return engine.attemptRotation();
         }
         return InteractionResult.FAIL;
+    }
+
+    public static final Map<IEngineType, ModelHolderVariable> engineModels = new HashMap<>();
+
+    @OnlyIn(Dist.CLIENT)
+    public static void setModel(IEngineType engineType, ModelHolderVariable model) {
+        engineModels.put(engineType, model);
+    }
+
+    private static final Map<IEngineType, LazyLoadedValue<TextureAtlasSprite>> engineParticles = new HashMap<>();
+
+    @OnlyIn(Dist.CLIENT)
+    private TextureAtlasSprite getEngineParticle(IEngineType engineType) {
+        return engineParticles.computeIfAbsent(engineType, (e) ->
+                new LazyLoadedValue<>(
+                        () ->
+                        {
+                            for (MutableQuad quad : engineModels.get(e).getCutoutQuads()) {
+                                if (quad.getFace() == Direction.DOWN) {
+                                    return quad.getSprite();
+                                }
+                            }
+                            return SpriteUtil.missingSprite().get();
+                        }
+                )
+
+        ).get();
+    }
+
+    // Calen for particles instead of missingno
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+        consumer.accept(new IClientBlockExtensions() {
+            @Override
+            public boolean addHitEffects(BlockState state, Level worldIn, HitResult hitIn, ParticleEngine manager) {
+                if (hitIn.getType() != HitResult.Type.BLOCK) {
+                    return false;
+                }
+                BlockHitResult target = (BlockHitResult) hitIn;
+                ClientLevel world = (ClientLevel) worldIn;
+                BlockEntity te = world.getBlockEntity(target.getBlockPos());
+                if (te instanceof TileEngineBase_BC8) {
+                    double x = Math.random();
+                    double y = Math.random();
+                    double z = Math.random();
+
+                    x += target.getLocation().x;
+                    y += target.getLocation().y;
+                    z += target.getLocation().z;
+
+                    TerrainParticle particle = new TerrainParticle(world, x, y, z, 0, 0, 0, state);
+                    particle.setPos(x, y, z);
+                    TextureAtlasSprite texture = getEngineParticle(engineType);
+                    if (texture == null) {
+                        return false;
+                    }
+                    particle.setSprite(texture);
+                    particle.setPower(0.2F);
+                    particle.scale(0.6F);
+                    manager.add(particle);
+
+                    return true;
+                }
+
+                return false;
+            }
+
+            @Override
+            public boolean addDestroyEffects(BlockState state, Level worldIn, BlockPos pos, ParticleEngine manager) {
+                ClientLevel world = (ClientLevel) worldIn;
+                BlockEntity te = world.getBlockEntity(pos);
+                if (te instanceof TileEngineBase_BC8) {
+                    int countX = 2;
+                    int countY = 2;
+                    int countZ = 2;
+
+                    TextureAtlasSprite texture = getEngineParticle(engineType);
+                    if (texture == null) {
+                        return false;
+                    }
+
+                    for (int x = 0; x < countX; x++) {
+                        for (int y = 0; y < countY; y++) {
+                            for (int z = 0; z < countZ; z++) {
+                                double _x = pos.getX() + 0.5;
+                                double _y = pos.getY() + 0.5;
+                                double _z = pos.getZ() + 0.5;
+
+                                TerrainParticle particle = new TerrainParticle(world, _x, _y, _z, 0, 0, 0, state);
+                                particle.setPos(_x, _y, _z);
+                                particle.setSprite(texture);
+                                manager.add(particle);
+                            }
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 }

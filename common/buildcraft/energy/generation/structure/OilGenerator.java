@@ -6,12 +6,13 @@ import buildcraft.core.BCCoreBlocks;
 import buildcraft.energy.BCEnergyConfig;
 import buildcraft.energy.generation.structure.OilGenStructurePart.GenByPredicate;
 import buildcraft.energy.generation.structure.OilGenStructurePart.ReplaceType;
-import buildcraft.lib.misc.BiomeUtil;
 import buildcraft.lib.misc.VecUtil;
 import buildcraft.lib.misc.data.Box;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
@@ -20,7 +21,6 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.levelgen.WorldgenRandom;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -97,8 +97,8 @@ public class OilGenerator {
     /** To find out which type to gen
      * {@link GenType#NONE} means skipped and nothing for gen */
     @Nonnull
-    public static GenType getPieceTypeByRand(RandomSource rand, Biome biome, int cx, int cz, int x, int z, boolean log) {
-        ResourceLocation biomeRegistryName = BiomeUtil.getRegistryName(biome);
+    public static GenType getPieceTypeByRand(RandomSource rand, Holder<Biome> biome, int cx, int cz, int x, int z, boolean log) {
+        ResourceLocation biomeRegistryName = biome.unwrapKey().map(ResourceKey::location).orElse(null);
         // Do not generate oil in excluded biomes
         boolean isExcludedBiome = BCEnergyConfig.excludedBiomes.contains(biomeRegistryName);
         if (isExcludedBiome == BCEnergyConfig.excludedBiomesIsBlackList) {
@@ -111,7 +111,7 @@ public class OilGenerator {
             return GenType.NONE;
         }
 
-        if (ForgeRegistries.BIOMES.tags().getTag(BiomeTags.IS_END).contains(biome) && (Math.abs(x) < 1200 || Math.abs(z) < 1200)) {
+        if (biome.containsTag(BiomeTags.IS_END) && (Math.abs(x) < 1200 || Math.abs(z) < 1200)) {
             if (DEBUG_OILGEN_BASIC & log) {
                 BCLog.logger.info(
                         "[energy.oilgen] Not generating oil in chunk " + cx + ", " + cz

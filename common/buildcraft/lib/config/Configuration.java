@@ -8,7 +8,10 @@ import com.google.gson.stream.JsonWriter;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.io.*;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,7 +45,7 @@ public class Configuration {
             if (!configFilePath.toFile().exists()) {
                 configFilePath.toFile().createNewFile();
             }
-            try (Reader reader = new BufferedReader(new InputStreamReader(new FileInputStream(configFilePath.toFile()), StandardCharsets.UTF_8))) {
+            try (Reader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
                 this.configJson = GsonHelper.fromJson(GSON, reader, JsonObject.class);
             } catch (Exception e) {
                 throw e;
@@ -198,7 +201,7 @@ public class Configuration {
                 this.setChanged();
                 j.addProperty("value", defaultValue);
             } else {
-                gotValue = j.get("value").getAsLong();
+                gotValue = j.get("value").getAsDouble();
                 if (gotValue < min || gotValue > max) {
                     this.setChanged();
                     j.addProperty("value", defaultValue);

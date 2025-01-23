@@ -19,6 +19,7 @@
 package buildcraft.energy.generation.structure;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.core.Holder;
 import net.minecraft.core.QuartPos;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.biome.Biome;
@@ -58,12 +59,12 @@ public class OilStructureFeature extends Structure {
         // shift to world coordinates
         int xForGen = cx * 16 + 8 + rand.nextInt(16);
         int zForGen = cz * 16 + 8 + rand.nextInt(16);
-        Biome biome = context.chunkGenerator().getBiomeSource().getNoiseBiome(
+        Holder<Biome> biome = context.chunkGenerator().getBiomeSource().getNoiseBiome(
                 QuartPos.fromBlock(xForGen),
                 QuartPos.fromBlock(63), // Calen: 63?
                 QuartPos.fromBlock(zForGen),
                 context.randomState().sampler()
-        ).value();
+        );
         OilGenerator.GenType type = OilGenerator.getPieceTypeByRand(rand, biome, cx, cz, xForGen, zForGen, true);
         if (type == OilGenerator.GenType.NONE) {
             return Optional.empty();
