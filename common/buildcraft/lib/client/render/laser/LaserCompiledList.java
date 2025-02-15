@@ -44,7 +44,7 @@ public abstract class LaserCompiledList {
             tess = RenderUtil.getThreadLocalUnusedTessellator();
             BufferBuilder bufferBuilder = tess.tessellator.getBuilder();
 //            bufferBuilder.begin(VertexFormat.Mode.QUADS, useNormalColour ? LaserRenderer_BC8.FORMAT_ALL : LaserRenderer_BC8.FORMAT_LESS);
-            bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.BLOCK);
+            bufferBuilder.begin(VertexFormat.Mode.QUADS, LaserRenderer_BC8.FORMAT_ALL);
         }
 
         @Override
@@ -67,10 +67,8 @@ public abstract class LaserCompiledList {
 //            }
             // bufferBuilder.tex(u, v);
             bufferBuilder.uv((float) u, (float) v);
-            bufferBuilder.overlayCoords(overlay);
             // bufferBuilder.lightmap((lmap >> 16) & 0xFFFF, lmap & 0xFFFF);
             bufferBuilder.uv2(lmap);
-            bufferBuilder.normal(nx, ny, nz);
             bufferBuilder.endVertex();
         }
 
@@ -137,7 +135,7 @@ public abstract class LaserCompiledList {
             LASER_RENDER_TYPE_FORMAT_ALL.setupRenderState();
             RenderSystem.setShaderColor(1, 1, 1, 1);
             vertexBuffer.bind();
-            vertexBuffer.drawWithShader(modelViewMatrix.pose(), RenderSystem.getProjectionMatrix(), GameRenderer.getRendertypeCutoutShader());
+            vertexBuffer.drawWithShader(modelViewMatrix.pose(), RenderSystem.getProjectionMatrix(), GameRenderer.getPositionColorTexLightmapShader());
             VertexBuffer.unbind();
             LASER_RENDER_TYPE_FORMAT_ALL.clearRenderState();
         }

@@ -49,8 +49,7 @@ import java.util.function.Consumer;
 public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> extends BlockBCTile_Neptune<TileEngineBase_BC8> implements ICustomRotationHandler, IBlockWithTickableTE<TileEngineBase_BC8> {
     public final E engineType;
 
-    // Calen: moved to BCCoreBlocks.engineTileConstructors
-//    private final Map<E, Supplier<? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(getEngineProperty().getValueClass());
+    // private final Map<E, Supplier<? extends TileEngineBase_BC8>> engineTileConstructors = new EnumMap<>(getEngineProperty().getValueClass());
     private final BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> engineTileConstructor;
 
     public BlockEngineBase_BC8(String idBC, BlockBehaviour.Properties props, E type, BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> engineTileConstructor) {
@@ -202,7 +201,6 @@ public abstract class BlockEngineBase_BC8<E extends Enum<E> & IEngineType> exten
 //    public TileBC_Neptune createTileEntity(Level world, BlockState state)
     public TileBC_Neptune newBlockEntity(BlockPos pos, BlockState state) {
 //        E engineType = state.getValue(getEngineProperty());
-        E engineType = this.engineType;
 //        BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor = engineTileConstructors.get(engineType);
         BiFunction<BlockPos, BlockState, ? extends TileEngineBase_BC8> constructor = this.engineTileConstructor;
         if (constructor == null) {

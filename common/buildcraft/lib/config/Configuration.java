@@ -4,19 +4,16 @@ import buildcraft.api.BCModules;
 import buildcraft.api.core.BCLog;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import com.google.gson.stream.JsonWriter;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.io.FileOutputStream;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -24,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class Configuration {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-    private static final Path bcConfigFolderPath = FMLPaths.CONFIGDIR.relative().resolve("buildcraft");
+    private static final Path BC_CONFIG_FOLDER_PATH = FMLPaths.CONFIGDIR.relative().resolve("buildcraft");
 
     private JsonObject configJson;
     private boolean changed;
@@ -39,16 +36,17 @@ public class Configuration {
 
     public Configuration(String name) {
         this.name = name;
-        this.configFilePath = bcConfigFolderPath.resolve(name + ".json");
+        this.configFilePath = BC_CONFIG_FOLDER_PATH.resolve(name + ".json");
         try {
-            bcConfigFolderPath.toFile().mkdirs();
-            if (!configFilePath.toFile().exists()) {
-                configFilePath.toFile().createNewFile();
-            }
-            try (Reader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
-                this.configJson = GsonHelper.fromJson(GSON, reader, JsonObject.class);
-            } catch (Exception e) {
-                throw e;
+            BC_CONFIG_FOLDER_PATH.toFile().mkdirs();
+            if (configFilePath.toFile().exists()) {
+                try (Reader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
+                    this.configJson = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+                } catch (Exception e) {
+                    throw e;
+                }
+            } else {
+                this.configJson = new JsonObject();
             }
         } catch (Exception e) {
             BCLog.logger.warn("[lib.config] Failed to open config file [" + configFilePath + "]", e);
@@ -313,24 +311,16 @@ public class Configuration {
     public void save() {
         this.lock.lock();
         this.changed = false;
-        if (!configFilePath.toFile().exists()) {
+        if (configFilePath.toFile().exists()) {
             try {
-                configFilePath.toFile().createNewFile();
-            } catch (IOException e) {
-                BCLog.logger.error("[lib.config] Failed to create config file [" + this.configFilePath + "]", e);
-                return;
-            }
-        } else {
-            try {
-                Files.copy(configFilePath, bcConfigFolderPath.resolve(name + ".bak.json"));
+                Files.copy(configFilePath, BC_CONFIG_FOLDER_PATH.resolve(name + ".bak.json"));
             } catch (IOException e) {
                 BCLog.logger.error("[lib.config] Failed to backup old config file [" + this.configFilePath + "]", e);
             }
         }
-        try (JsonWriter jsonwriter = new JsonWriter(new OutputStreamWriter(new FileOutputStream(configFilePath.toFile()), StandardCharsets.UTF_8))) {
-            jsonwriter.setSerializeNulls(false);
-            jsonwriter.setIndent("  ");
-            GsonHelper.writeValue(jsonwriter, this.configJson, Comparator.naturalOrder());
+        try (BufferedWriter bufferedwriter = Files.newBufferedWriter(configFilePath)) {
+            String s = GSON.toJson(this.configJson);
+            bufferedwriter.write(s);
         } catch (IOException e) {
             BCLog.logger.error("[lib.config] Failed to save config [" + this.configFilePath + "]", e);
         } finally {
