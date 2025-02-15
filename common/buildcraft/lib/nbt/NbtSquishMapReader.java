@@ -9,8 +9,8 @@ package buildcraft.lib.nbt;
 import buildcraft.api.core.InvalidInputDataException;
 import buildcraft.api.data.NbtSquishConstants;
 import buildcraft.lib.misc.data.DecompactingBitSet;
-import gnu.trove.list.array.TByteArrayList;
-import gnu.trove.list.array.TIntArrayList;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -79,7 +79,7 @@ class NbtSquishMapReader {
             int count = readVarInt(in);
             for (int i = 0; i < count; i++) {
                 int arraySize = in.readUnsignedShort();
-                TByteArrayList list = new TByteArrayList();
+                ByteArrayList list = new ByteArrayList();
                 for (int j = 0; j < arraySize; j++) {
                     list.add(in.readByte());
                 }
@@ -91,7 +91,7 @@ class NbtSquishMapReader {
             int count = readVarInt(in);
             for (int i = 0; i < count; i++) {
                 int arraySize = in.readUnsignedShort();
-                TIntArrayList list = new TIntArrayList();
+                IntArrayList list = new IntArrayList();
                 for (int j = 0; j < arraySize; j++) {
                     list.add(in.readInt());
                 }
@@ -187,7 +187,7 @@ class NbtSquishMapReader {
             dictionary.add(nbt);
         }
         List<Tag> list = new ArrayList<>();
-        TIntArrayList left = new TIntArrayList();
+        IntArrayList left = new IntArrayList();
         int bits = 1;
         int entries = readVarInt(in);
 
@@ -202,10 +202,10 @@ class NbtSquishMapReader {
             in.readFully(bitsetData);
             DecompactingBitSet decompactor = new DecompactingBitSet(bits, bitsetData);
 
-            TIntArrayList nextLeft = new TIntArrayList();
+            IntArrayList nextLeft = new IntArrayList();
 
             int maxVal = (1 << bits) - 1;
-            for (int i : left.toArray()) {
+            for (int i : left.toIntArray()) {
                 int index = decompactor.next();
                 if (index < maxVal) {
                     list.set(i, dictionary.get(index));

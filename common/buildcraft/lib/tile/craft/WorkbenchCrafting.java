@@ -13,8 +13,7 @@ import buildcraft.lib.misc.ItemStackKey;
 import buildcraft.lib.misc.StackUtil;
 import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
-import gnu.trove.map.TObjectIntMap;
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -51,7 +50,7 @@ public class WorkbenchCrafting extends CraftingContainer {
     private EnumRecipeType recipeType = null;
 
     public WorkbenchCrafting(int width, int height, TileBC_Neptune tile, ItemHandlerSimple invBlueprint,
-                             ItemHandlerSimple invMaterials, ItemHandlerSimple invResult) {
+            ItemHandlerSimple invMaterials, ItemHandlerSimple invResult) {
         super(CONTAINER_EVENT_HANDLER, width, height);
         this.tile = tile;
         this.invBlueprint = invBlueprint;
@@ -157,7 +156,7 @@ public class WorkbenchCrafting extends CraftingContainer {
     }
 
     private boolean hasExactStacks() {
-        TObjectIntMap<ItemStackKey> required = new TObjectIntHashMap<>(getContainerSize());
+        Object2IntOpenHashMap<ItemStackKey> required = new Object2IntOpenHashMap<>(getContainerSize());
         for (int s = 0; s < getContainerSize(); s++) {
             ItemStack req = invBlueprint.getStackInSlot(s);
             if (!req.isEmpty()) {
@@ -167,11 +166,18 @@ public class WorkbenchCrafting extends CraftingContainer {
                     req.setCount(1);
                 }
                 ItemStackKey key = new ItemStackKey(req);
-                required.adjustOrPutValue(key, count, count);
+                // required.adjustOrPutValue(key, count, count);
+                required.addTo(key, count);
             }
         }
-        return required.forEachEntry((stack, count) ->
-        {
+//        return required.forEachEntry((stack, count) -> {
+//            ArrayStackFilter filter = new ArrayStackFilter(stack.baseStack);
+//            ItemStack inInventory = invMaterials.extract(filter, count, count, true);
+//            return !inInventory.isEmpty() && inInventory.getCount() == count;
+//        });
+        return required.object2IntEntrySet().stream().allMatch(entry -> {
+            ItemStackKey stack = entry.getKey();
+            int count = entry.getIntValue();
             ArrayStackFilter filter = new ArrayStackFilter(stack.baseStack);
             ItemStack inInventory = invMaterials.extract(filter, count, count, true);
             return !inInventory.isEmpty() && inInventory.getCount() == count;

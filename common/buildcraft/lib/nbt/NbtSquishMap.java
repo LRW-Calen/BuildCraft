@@ -7,7 +7,12 @@
 package buildcraft.lib.nbt;
 
 import buildcraft.api.core.InvalidInputDataException;
-import gnu.trove.list.array.*;
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.longs.LongArrayList;
+import it.unimi.dsi.fastutil.shorts.ShortArrayList;
 import net.minecraft.nbt.*;
 
 import java.io.IOException;
@@ -22,16 +27,16 @@ public class NbtSquishMap {
 
     // I'm not completely convinced that this one is necessary.
     // However it completes the set so, meh
-    final TByteArrayList bytes = new TByteArrayList();
+    final ByteArrayList bytes = new ByteArrayList();
 
-    final TShortArrayList shorts = new TShortArrayList();
-    final TIntArrayList ints = new TIntArrayList();
-    final TLongArrayList longs = new TLongArrayList();
-    final TFloatArrayList floats = new TFloatArrayList();
-    final TDoubleArrayList doubles = new TDoubleArrayList();
+    final ShortArrayList shorts = new ShortArrayList();
+    final IntArrayList ints = new IntArrayList();
+    final LongArrayList longs = new LongArrayList();
+    final FloatArrayList floats = new FloatArrayList();
+    final DoubleArrayList doubles = new DoubleArrayList();
 
-    final List<TByteArrayList> byteArrays = new ArrayList<>();
-    final List<TIntArrayList> intArrays = new ArrayList<>();
+    final List<ByteArrayList> byteArrays = new ArrayList<>();
+    final List<IntArrayList> intArrays = new ArrayList<>();
 
     final List<String> strings = new ArrayList<>();
     final List<Tag> complex = new ArrayList<>();
@@ -78,13 +83,13 @@ public class NbtSquishMap {
             }
         } else if (nbt instanceof ByteArrayTag) {
             byte[] val = ((ByteArrayTag) nbt).getAsByteArray();
-            TByteArrayList array = new TByteArrayList(val);
+            ByteArrayList array = new ByteArrayList(val);
             if (!byteArrays.contains(array)) {
                 byteArrays.add(array);
             }
         } else if (nbt instanceof IntArrayTag) {
             int[] val = ((IntArrayTag) nbt).getAsIntArray();
-            TIntArrayList array = new TIntArrayList(val);
+            IntArrayList array = new IntArrayList(val);
             if (!intArrays.contains(array)) {
                 intArrays.add(array);
             }
@@ -148,14 +153,14 @@ public class NbtSquishMap {
         }
         if (nbt instanceof ByteArrayTag) {
             byte[] val = ((ByteArrayTag) nbt).getAsByteArray();
-            TByteArrayList array = new TByteArrayList(val);
+            ByteArrayList array = new ByteArrayList(val);
             return offset + byteArrays.indexOf(array);
         } else {
             offset += byteArrays.size();
         }
         if (nbt instanceof IntArrayTag) {
             int[] val = ((IntArrayTag) nbt).getAsIntArray();
-            TIntArrayList array = new TIntArrayList(val);
+            IntArrayList array = new IntArrayList(val);
             return offset + intArrays.indexOf(array);
         } else {
             offset += intArrays.size();
@@ -215,12 +220,12 @@ public class NbtSquishMap {
         index -= doubles.size();
 
         if (index < byteArrays.size()) {
-            return new ByteArrayTag(byteArrays.get(index).toArray());
+            return new ByteArrayTag(byteArrays.get(index).toByteArray());
         }
         index -= byteArrays.size();
 
         if (index < intArrays.size()) {
-            return new IntArrayTag(intArrays.get(index).toArray());
+            return new IntArrayTag(intArrays.get(index).toIntArray());
         }
         index -= intArrays.size();
 

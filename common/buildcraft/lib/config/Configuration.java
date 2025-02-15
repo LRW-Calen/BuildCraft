@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 public class Configuration {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
-    private static final Path bcConfigFolderPath = FMLPaths.CONFIGDIR.relative().resolve("buildcraft");
+    private static final Path BC_CONFIG_FOLDER_PATH = FMLPaths.CONFIGDIR.relative().resolve("buildcraft");
 
     private JsonObject configJson;
     private boolean changed;
@@ -36,16 +36,17 @@ public class Configuration {
 
     public Configuration(String name) {
         this.name = name;
-        this.configFilePath = bcConfigFolderPath.resolve(name + ".json");
+        this.configFilePath = BC_CONFIG_FOLDER_PATH.resolve(name + ".json");
         try {
-            bcConfigFolderPath.toFile().mkdirs();
-            if (!configFilePath.toFile().exists()) {
-                configFilePath.toFile().createNewFile();
-            }
-            try (Reader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
-                this.configJson = GsonHelper.fromJson(GSON, reader, JsonObject.class);
-            } catch (Exception e) {
-                throw e;
+            BC_CONFIG_FOLDER_PATH.toFile().mkdirs();
+            if (configFilePath.toFile().exists()) {
+                try (Reader reader = Files.newBufferedReader(configFilePath, StandardCharsets.UTF_8)) {
+                    this.configJson = GsonHelper.fromJson(GSON, reader, JsonObject.class);
+                } catch (Exception e) {
+                    throw e;
+                }
+            } else {
+                this.configJson = new JsonObject();
             }
         } catch (Exception e) {
             BCLog.logger.warn("[lib.config] Failed to open config file [" + configFilePath + "]", e);
@@ -198,7 +199,7 @@ public class Configuration {
                 this.setChanged();
                 j.addProperty("value", defaultValue);
             } else {
-                gotValue = j.get("value").getAsLong();
+                gotValue = j.get("value").getAsDouble();
                 if (gotValue < min || gotValue > max) {
                     this.setChanged();
                     j.addProperty("value", defaultValue);
@@ -310,16 +311,9 @@ public class Configuration {
     public void save() {
         this.lock.lock();
         this.changed = false;
-        if (!configFilePath.toFile().exists()) {
+        if (configFilePath.toFile().exists()) {
             try {
-                configFilePath.toFile().createNewFile();
-            } catch (IOException e) {
-                BCLog.logger.error("[lib.config] Failed to create config file [" + this.configFilePath + "]", e);
-                return;
-            }
-        } else {
-            try {
-                Files.copy(configFilePath, bcConfigFolderPath.resolve(name + ".bak.json"));
+                Files.copy(configFilePath, BC_CONFIG_FOLDER_PATH.resolve(name + ".bak.json"));
             } catch (IOException e) {
                 BCLog.logger.error("[lib.config] Failed to backup old config file [" + this.configFilePath + "]", e);
             }

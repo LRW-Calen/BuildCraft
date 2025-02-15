@@ -137,7 +137,7 @@ public abstract class LaserCompiledList {
         public void render(PoseStack.Pose modelViewMatrix) {
             LASER_RENDER_TYPE_FORMAT_ALL.setupRenderState();
             RenderSystem.setShaderColor(1, 1, 1, 1);
-            vertexBuffer.drawWithShader(modelViewMatrix.pose(), RenderSystem.getProjectionMatrix(), GameRenderer.getRendertypeCutoutShader());
+            vertexBuffer.drawWithShader(modelViewMatrix.pose(), RenderSystem.getProjectionMatrix(), GameRenderer.getPositionColorTexLightmapShader());
             LASER_RENDER_TYPE_FORMAT_ALL.clearRenderState();
         }
 
